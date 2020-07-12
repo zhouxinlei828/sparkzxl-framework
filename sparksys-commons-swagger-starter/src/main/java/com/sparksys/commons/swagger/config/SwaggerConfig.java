@@ -3,7 +3,6 @@ package com.sparksys.commons.swagger.config;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.sparksys.commons.core.entity.GlobalAuthUser;
 import com.sparksys.commons.swagger.properties.SwaggerProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,13 +29,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfig {
 
-    @Autowired
-    private SwaggerProperties swaggerProperties;
-
     @Bean(value = "defaultApi2")
-    public Docket defaultApi2() {
+    public Docket defaultApi2(SwaggerProperties swaggerProperties) {
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfo(swaggerProperties))
                 .groupName(swaggerProperties.getGroupName())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
@@ -47,7 +43,7 @@ public class SwaggerConfig {
 
 
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfo(SwaggerProperties swaggerProperties) {
         return new ApiInfoBuilder()
                 .title(swaggerProperties.getApiInfo().getTitle())
                 .description(swaggerProperties.getApiInfo().getDescription())

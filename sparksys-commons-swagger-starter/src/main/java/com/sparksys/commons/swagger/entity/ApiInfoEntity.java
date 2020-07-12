@@ -1,4 +1,4 @@
-package com.sparksys.commons.swagger;
+package com.sparksys.commons.swagger.entity;
 
 import lombok.Data;
 

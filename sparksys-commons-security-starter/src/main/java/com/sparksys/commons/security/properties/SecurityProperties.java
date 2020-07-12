@@ -1,10 +1,10 @@
-package com.sparksys.commons.security.props;
+package com.sparksys.commons.security.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "sparksys.security")
+@ConfigurationProperties(value = "sparksys.security")
 public class SecurityProperties {
 
     private boolean enableJwtFilter;

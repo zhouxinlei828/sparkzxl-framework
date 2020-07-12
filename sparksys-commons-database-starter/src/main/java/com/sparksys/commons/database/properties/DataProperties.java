@@ -17,6 +17,4 @@ public class DataProperties {
     private long workerId;
 
     private long dataCenterId;
-
-    private String mapperScan;
 }

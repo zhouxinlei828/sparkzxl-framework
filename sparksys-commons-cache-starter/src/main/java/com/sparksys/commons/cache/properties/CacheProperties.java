@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
  * @author zhouxinlei
  * @date 2020/6/10 0010
  */
-@ConfigurationProperties(prefix = "cache")
+
 @Component
 @Data
+@ConfigurationProperties(value = "cache")
 public class CacheProperties {
 
     private Redisson redisson;

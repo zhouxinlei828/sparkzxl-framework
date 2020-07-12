@@ -1,7 +1,6 @@
-package com.sparksys.commons.security.props;
+package com.sparksys.commons.security.properties;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -12,9 +11,8 @@ import java.util.List;
  * @author zhouxinlei
  * @date 2020-05-24 13:38:12
  */
-@Getter
-@Setter
-@ConfigurationProperties(prefix = "security.ignored")
+@Data
+@ConfigurationProperties(value = "security.ignored")
 public class IgnoreUrlsProperties {
 
     private List<String> urls;

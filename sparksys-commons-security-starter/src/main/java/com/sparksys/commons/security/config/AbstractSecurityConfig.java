@@ -7,7 +7,7 @@ import com.sparksys.commons.security.component.JwtAuthenticationTokenFilter;
 import com.sparksys.commons.security.component.RestAuthenticationEntryPoint;
 import com.sparksys.commons.security.component.RestfulAccessDeniedHandler;
 import com.sparksys.commons.security.filter.DynamicSecurityFilter;
-import com.sparksys.commons.security.props.IgnoreUrlsProperties;
+import com.sparksys.commons.security.properties.IgnoreUrlsProperties;
 import com.sparksys.commons.security.registry.SecurityRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

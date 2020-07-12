@@ -1,7 +1,7 @@
 package com.sparksys.commons.zookeeper.config;
 
 import com.sparksys.commons.zookeeper.lock.ZkDistributedLock;
-import com.sparksys.commons.zookeeper.prop.CuratorProperties;
+import com.sparksys.commons.zookeeper.properties.CuratorProperties;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryNTimes;

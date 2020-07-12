@@ -1,7 +1,7 @@
 package com.sparksys.commons.swagger.properties;
 
 
-import com.sparksys.commons.swagger.ApiInfoEntity;
+import com.sparksys.commons.swagger.entity.ApiInfoEntity;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

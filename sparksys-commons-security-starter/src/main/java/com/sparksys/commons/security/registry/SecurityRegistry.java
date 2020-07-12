@@ -1,7 +1,7 @@
 package com.sparksys.commons.security.registry;
 
 import com.sparksys.commons.core.utils.collection.ListUtils;
-import com.sparksys.commons.security.props.IgnoreUrlsProperties;
+import com.sparksys.commons.security.properties.IgnoreUrlsProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
