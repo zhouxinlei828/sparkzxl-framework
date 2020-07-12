@@ -127,25 +127,9 @@ public class RestTemplateConfiguration {
                 .build();
     }
 
-//    /**
-//     * 支持负载均衡的 LbRestTemplate
-//     *
-//     * @param httpClient  OkHttpClient
-//     * @param interceptor RestTemplateHeaderInterceptor
-//     * @return LbRestTemplate
-//     */
-//    @Bean
-//    @LoadBalanced
-//    @ConditionalOnMissingBean(LbRestTemplate.class)
-//    public LbRestTemplate lbRestTemplate(okhttp3.OkHttpClient httpClient, RestTemplateHeaderInterceptor interceptor) {
-//        LbRestTemplate lbRestTemplate = new LbRestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
-//        lbRestTemplate.setInterceptors(Collections.singletonList(interceptor));
-//        this.configMessageConverters(lbRestTemplate.getMessageConverters());
-//        return lbRestTemplate;
-//    }
-
     /**
-     * 普通的 RestTemplate，不透传请求头，一般只做外部 http 调用
+     * 普通的 RestTemplate
+     * 不透传请求头，一般只做外部 http 调用
      *
      * @param httpClient OkHttpClient
      * @return RestTemplate

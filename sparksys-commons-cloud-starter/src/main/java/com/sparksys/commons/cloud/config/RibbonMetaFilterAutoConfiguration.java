@@ -1,7 +1,6 @@
 package com.sparksys.commons.cloud.config;
 
-import com.sparksys.commons.cloud.ribbon.DiscoveryEnabledRule;
-import com.sparksys.commons.cloud.ribbon.MetadataAwareRule;
+import com.sparksys.commons.cloud.ribbon.GrayRule;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,12 +22,12 @@ public class RibbonMetaFilterAutoConfiguration {
     /**
      * 灰度发布 规则
      *
-     * @return GrayRule
+     * @return
      */
     @Bean
     @ConditionalOnMissingBean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public DiscoveryEnabledRule metadataAwareRule() {
-        return new MetadataAwareRule();
+    public GrayRule metadataAwareRule() {
+        return new GrayRule();
     }
 }

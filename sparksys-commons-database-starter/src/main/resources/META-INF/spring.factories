@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.commons.mybatis.config.MyBatisAutoConfiguration
+    com.sparksys.commons.datdbase.config.MyBatisAutoConfiguration
