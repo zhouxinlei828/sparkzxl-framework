@@ -21,6 +21,8 @@
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR5</spring-cloud-dependencies.version>
 
+        <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
+
         <servlet-api.version>4.0.1</servlet-api.version>
         <!-- maven -->
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
@@ -137,6 +139,11 @@
                         <artifactId>spring-boot-starter-tomcat</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
             </dependency>
             <!-- sparksys-commons 组件-->
             <dependency>
