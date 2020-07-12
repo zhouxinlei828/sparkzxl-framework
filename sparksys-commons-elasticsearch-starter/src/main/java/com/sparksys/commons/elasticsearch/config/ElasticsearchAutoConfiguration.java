@@ -1,7 +1,7 @@
 package com.sparksys.commons.elasticsearch.config;
 
 import cn.hutool.core.lang.Assert;
-import com.sparksys.commons.elasticsearch.prop.ElasticsearchProperties;
+import com.sparksys.commons.elasticsearch.properties.ElasticsearchProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

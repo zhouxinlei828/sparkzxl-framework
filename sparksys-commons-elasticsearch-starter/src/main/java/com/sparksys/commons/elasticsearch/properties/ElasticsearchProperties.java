@@ -1,4 +1,4 @@
-package com.sparksys.commons.elasticsearch.prop;
+package com.sparksys.commons.elasticsearch.properties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

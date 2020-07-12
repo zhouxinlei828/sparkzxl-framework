@@ -1,7 +1,7 @@
 package com.sparksys.commons.elasticsearch.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.sparksys.commons.elasticsearch.prop.ElasticsearchProperties;
+import com.sparksys.commons.elasticsearch.properties.ElasticsearchProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
