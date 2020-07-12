@@ -550,12 +550,12 @@
         <snapshotRepository>
             <id>maven-snapshots</id>
             <name>maven-snapshots-repository</name>
-            <url>http://47.116.52.58:8085/repository/maven-snapshots/</url>
+            <url>http://101.200.80.154:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>maven-releases</id>
             <name>maven-releases-repository</name>
-            <url>http://47.116.52.58:8085/repository/maven-releases/</url>
+            <url>http://101.200.80.154:8081/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
