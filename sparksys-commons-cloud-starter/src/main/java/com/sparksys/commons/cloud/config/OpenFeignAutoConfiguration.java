@@ -5,7 +5,6 @@ import com.sparksys.commons.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.sparksys.commons.cloud.interceptor.FeignAddHeaderRequestInterceptor;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
@@ -23,11 +22,9 @@ import java.util.List;
  * @date: 2020-07-12 16:32:22
  */
 @Configuration
-@Slf4j
 public class OpenFeignAutoConfiguration {
 
     public OpenFeignAutoConfiguration() {
-        log.info("OpenFeignAutoConfiguration 自动注入");
     }
 
     /**
