@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.commons.web.config.JacksonConfig
+    com.sparksys.commons.web.config.GlobalWebConfig, \
+    com.sparksys.commons.web.config.RedisConfig

@@ -2,6 +2,7 @@ package com.sparksys.commons.web.config;
 
 import com.sparksys.commons.web.component.ResponseResultInterceptor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author zhouxinlei
  * @date 2020-05-24 13:43:12
  */
+@Configuration
 public class GlobalWebConfig implements WebMvcConfigurer {
 
     @Override

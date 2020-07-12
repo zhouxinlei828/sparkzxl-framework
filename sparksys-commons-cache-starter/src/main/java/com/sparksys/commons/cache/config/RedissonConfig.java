@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 /**
  * description：Redisson配置
@@ -24,16 +24,12 @@ import org.springframework.core.annotation.Order;
 @Configuration
 @ConditionalOnClass(Config.class)
 @ConditionalOnProperty(name = "cache.redisson.enable", havingValue = "true")
-@Order(2)
+@EnableConfigurationProperties(CacheProperties.class)
 public class RedissonConfig {
 
 
-    @Autowired
-    private CacheProperties cacheProperties;
-
-
     @Bean
-    public RedissonClient redissonClient() {
+    public RedissonClient redissonClient(CacheProperties cacheProperties) {
         Config config = new Config();
         SingleServerConfig serverConfig = config.useSingleServer()
                 .setAddress(cacheProperties.getRedisson().getAddress())
