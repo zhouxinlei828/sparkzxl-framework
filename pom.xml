@@ -322,7 +322,7 @@
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>1.2.13</version>
+                <version>${pagehelper-spring-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>p6spy</groupId>
