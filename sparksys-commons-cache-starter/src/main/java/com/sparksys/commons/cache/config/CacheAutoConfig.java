@@ -18,8 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @date: 2020-07-09 12:05:47
  */
 @Configuration
-@Order(3)
-public class CacheConfig {
+public class CacheAutoConfig {
 
     @Bean
     @ConditionalOnProperty(name = "cache.redis.enable", havingValue = "false")
@@ -33,11 +32,6 @@ public class CacheConfig {
     public CacheRepository redisCacheRepository(RedisTemplate<String, Object> redisTemplate) {
         return new RedisRepositoryImpl(redisTemplate);
     }
-
-    /*@Bean
-    public CacheRepository guavaCacheRepository() {
-        return new GuavaCacheRepositoryImpl();
-    }*/
 
     @Bean
     public TokenUtil tokenUtil(CacheRepository cacheRepository) {

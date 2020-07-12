@@ -1,7 +1,5 @@
-package com.sparksys.commons.web.utils;
+package com.sparksys.commons.core.utils;
 
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.system.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,7 +16,7 @@ import java.net.UnknownHostException;
  * @date 2020-05-24 13:45:00
  */
 @Slf4j
-public class HttpUtils {
+public class HttpCommonUtils {
 
     public static HttpServletRequest getRequest() {
         return getRequestAttributes().getRequest();
@@ -30,6 +28,7 @@ public class HttpUtils {
     }
 
     public static ServletRequestAttributes getRequestAttributes() {
+        RequestContextHolder.currentRequestAttributes();
         return (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     }
 

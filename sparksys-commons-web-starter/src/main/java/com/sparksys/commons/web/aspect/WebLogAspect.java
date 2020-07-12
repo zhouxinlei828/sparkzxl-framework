@@ -1,7 +1,6 @@
 package com.sparksys.commons.web.aspect;
 
-import com.sparksys.commons.web.utils.HttpUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparksys.commons.core.utils.HttpCommonUtils;
 import com.sparksys.commons.web.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -38,8 +37,8 @@ public class WebLogAspect {
      * @return void
      */
     @Before("pointCut()")
-    public void before(JoinPoint joinPoint) throws JsonProcessingException {
-        HttpServletRequest request = HttpUtils.getRequest();
+    public void before(JoinPoint joinPoint) {
+        HttpServletRequest request = HttpCommonUtils.getRequest();
         Long start = System.currentTimeMillis();
         request.setAttribute(START_TIME, start);
         StringBuilder stringBuilder = new StringBuilder();
@@ -62,7 +61,7 @@ public class WebLogAspect {
             stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
         }
         String method = joinPoint.getTarget().getClass().getName().concat(".").concat(joinPoint.getSignature().getName());
-        log.info("请求URL：[{}]，请求IP：[{}]", request.getRequestURL(), HttpUtils.getIpAddress());
+        log.info("请求URL：[{}]，请求IP：[{}]", request.getRequestURL(), HttpCommonUtils.getIpAddress());
         log.info("请求类型：[{}]，请求方法：[{}]", request.getMethod(), method);
         log.info("请求参数：{}", stringBuilder.toString());
     }
@@ -102,7 +101,7 @@ public class WebLogAspect {
     }
 
     private Long interfaceConsume() {
-        HttpServletRequest request = HttpUtils.getRequest();
+        HttpServletRequest request = HttpCommonUtils.getRequest();
         Long start = (Long) request.getAttribute(START_TIME);
         Long end = System.currentTimeMillis();
         return end - start;

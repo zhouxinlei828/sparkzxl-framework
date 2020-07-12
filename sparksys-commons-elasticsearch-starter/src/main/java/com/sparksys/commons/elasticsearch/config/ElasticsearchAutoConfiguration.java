@@ -11,7 +11,6 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,14 +29,11 @@ import java.util.List;
 @EnableConfigurationProperties(ElasticsearchProperties.class)
 public class ElasticsearchAutoConfiguration {
 
-    @Autowired
-    private ElasticsearchProperties elasticsearchProperties;
-
     private final List<HttpHost> httpHosts = new ArrayList<>();
 
     @Bean
     @ConditionalOnMissingBean
-    public RestHighLevelClient restHighLevelClient() {
+    public RestHighLevelClient restHighLevelClient(ElasticsearchProperties elasticsearchProperties) {
         List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
         clusterNodes.forEach(node -> {
             try {

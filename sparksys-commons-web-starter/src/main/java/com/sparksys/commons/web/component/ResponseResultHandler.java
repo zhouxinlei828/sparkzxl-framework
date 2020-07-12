@@ -2,9 +2,9 @@ package com.sparksys.commons.web.component;
 
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.core.base.api.result.ApiResult;
+import com.sparksys.commons.core.utils.HttpCommonUtils;
 import com.sparksys.commons.web.annotation.ResponseResult;
 import com.sparksys.commons.web.constant.WebConstant;
-import com.sparksys.commons.web.utils.HttpUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        HttpServletRequest servletRequest = HttpUtils.getRequest();
+        HttpServletRequest servletRequest = HttpCommonUtils.getRequest();
         ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(WebConstant.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
@@ -44,7 +44,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<?
             extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        HttpServletResponse servletResponse = HttpUtils.getResponse();
+        HttpServletResponse servletResponse = HttpCommonUtils.getResponse();
         servletResponse.setCharacterEncoding("UTF-8");
         servletResponse.setContentType("application/json");
         if (body instanceof Boolean) {

@@ -3,9 +3,9 @@ package com.sparksys.commons.web.support;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.core.base.api.result.ApiResult;
 import com.sparksys.commons.core.support.BusinessException;
+import com.sparksys.commons.core.utils.HttpCommonUtils;
 import com.sparksys.commons.web.annotation.ResponseResult;
 import com.sparksys.commons.web.constant.WebConstant;
-import com.sparksys.commons.web.utils.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ import java.sql.SQLException;
 public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
-        HttpServletRequest servletRequest = HttpUtils.getRequest();
+        HttpServletRequest servletRequest = HttpCommonUtils.getRequest();
         ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(WebConstant.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {

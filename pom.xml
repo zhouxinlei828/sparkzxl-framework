@@ -87,6 +87,7 @@
         <module>sparksys-commons-swagger-starter</module>
         <module>sparksys-commons-web-starter</module>
         <module>sparksys-commons-zookeeper-starter</module>
+        <module>sparksys-commons-cloud-starter</module>
     </modules>
 
     <dependencies>
@@ -571,6 +572,13 @@
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.factories</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>

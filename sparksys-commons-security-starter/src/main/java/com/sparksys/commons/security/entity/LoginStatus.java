@@ -1,15 +1,9 @@
 package com.sparksys.commons.security.entity;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
-import com.sparksys.commons.core.utils.ip2region.AddressUtil;
-import com.sparksys.commons.web.utils.HttpUtils;
+import com.sparksys.commons.core.entity.UserAgentEntity;
+import com.sparksys.commons.core.utils.UserAgentUtils;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
@@ -45,18 +39,7 @@ public class LoginStatus implements Serializable {
      */
     private String description;
 
-    /**
-     * 登录浏览器
-     */
-    private String ua;
-    /**
-     * 登录IP
-     */
-    private String ip;
-    /**
-     * 登录地址
-     */
-    private String location;
+    private UserAgentEntity userAgentEntity;
 
     public static LoginStatus success(Long id) {
         LoginStatus loginStatus = LoginStatus.builder()
@@ -96,16 +79,7 @@ public class LoginStatus implements Serializable {
     }
 
     private LoginStatus setInfo() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes == null) {
-            return this;
-        }
-        HttpServletRequest request = HttpUtils.getRequest();
-        String ua = StrUtil.sub(request.getHeader("user-agent"), 0, 500);
-        String ip = ServletUtil.getClientIP(request);
-        this.ua = ua;
-        this.ip = ip;
-        this.location = AddressUtil.getRegion(ip);
+        this.userAgentEntity = UserAgentUtils.getUserAgentEntity();
         return this;
     }
 
