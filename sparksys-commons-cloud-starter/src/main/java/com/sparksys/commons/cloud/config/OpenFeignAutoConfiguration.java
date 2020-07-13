@@ -6,7 +6,10 @@ import com.sparksys.commons.cloud.interceptor.FeignAddHeaderRequestInterceptor;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +25,7 @@ import java.util.List;
  * @date: 2020-07-12 16:32:22
  */
 @Configuration
+@ConditionalOnClass(FeignAutoConfiguration.class)
 public class OpenFeignAutoConfiguration {
 
     public OpenFeignAutoConfiguration() {
