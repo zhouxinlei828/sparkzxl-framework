@@ -34,6 +34,7 @@ public class RedisDistributedLock extends AbstractDistributedLock {
     }
 
 
+    @Override
     public boolean releaseLock(String key) {
         RLock lock = redissonClient.getLock(key);
         lock.unlock();
