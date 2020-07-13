@@ -21,10 +21,6 @@
                     <groupId>org.projectlombok</groupId>
                     <artifactId>lombok</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
