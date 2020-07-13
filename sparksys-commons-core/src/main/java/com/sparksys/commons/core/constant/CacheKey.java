@@ -2,6 +2,12 @@ package com.sparksys.commons.core.constant;
 
 import cn.hutool.core.util.StrUtil;
 
+/**
+ * description: 缓存key前缀
+ *
+ * @author: zhouxinlei
+ * @date: 2020-07-13 14:07:32
+ */
 public class CacheKey {
 
     /**
