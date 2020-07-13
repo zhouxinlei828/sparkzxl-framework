@@ -1,6 +1,7 @@
 package com.sparksys.commons.oauth.component;
 
-import com.sparksys.commons.web.utils.HttpResponseUtils;
+import com.sparksys.commons.core.utils.ResponseResultUtils;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class OauthRestfulAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
-                       AccessDeniedException e) throws IOException, ServletException {
-        HttpResponseUtils.forbidden(response);
+                       AccessDeniedException exception) {
+        ResponseResultUtils.forbidden(response);
     }
 }

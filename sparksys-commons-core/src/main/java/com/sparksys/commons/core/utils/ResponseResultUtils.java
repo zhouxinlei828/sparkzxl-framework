@@ -1,6 +1,7 @@
-package com.sparksys.commons.web.utils;
+package com.sparksys.commons.core.utils;
 
 
+import cn.hutool.json.JSONUtil;
 import com.sparksys.commons.core.base.api.result.ApiResult;
 import com.sparksys.commons.core.constant.CoreConstant;
 import com.sparksys.commons.core.support.ResponseResultStatus;
@@ -18,7 +19,7 @@ import java.io.IOException;
  * @date 2020-05-24 13:40:03
  */
 @Slf4j
-public class HttpResponseUtils {
+public class ResponseResultUtils {
 
     public static String getAuthHeader(HttpServletRequest httpRequest) {
         String header = httpRequest.getHeader(CoreConstant.JwtTokenConstant.JWT_TOKEN_HEADER);
@@ -29,7 +30,7 @@ public class HttpResponseUtils {
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
-            response.getWriter().println(JacksonUtils.writeJsonAsString(ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED)));
+            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -40,7 +41,7 @@ public class HttpResponseUtils {
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
-            response.getWriter().println(JacksonUtils.writeJsonAsString(ApiResult.apiResult(ResponseResultStatus.REQ_REJECT)));
+            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.REQ_REJECT)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {
             log.error(e.getMessage());

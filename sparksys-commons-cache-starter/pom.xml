@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparksys-commons-cache-starter</artifactId>
+    <version>${sparksys-project.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

@@ -1,6 +1,7 @@
 package com.sparksys.commons.oauth.component;
 
-import com.sparksys.commons.web.utils.HttpResponseUtils;
+import com.sparksys.commons.core.utils.ResponseResultUtils;
+
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class OauthRestAuthenticationEntryPoint implements AuthenticationEntryPoi
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) {
-        HttpResponseUtils.unauthorized(response);
+        ResponseResultUtils.unauthorized(response);
     }
 
 }

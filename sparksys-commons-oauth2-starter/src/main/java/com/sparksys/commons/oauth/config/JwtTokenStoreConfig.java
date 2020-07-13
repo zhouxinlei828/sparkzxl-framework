@@ -1,10 +1,9 @@
 package com.sparksys.commons.oauth.config;
 
+import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 /**
  * description: 使用Jwt存储token的配置

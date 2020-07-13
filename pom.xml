@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <sparksys-project.version>1.0</sparksys-project.version>
+        <sparksys-project.version>1.0-RELEASES</sparksys-project.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
         <spring-cloud-alibaba-dependencies.version>2.2.0.RELEASE</spring-cloud-alibaba-dependencies.version>
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR5</spring-cloud-dependencies.version>
-
+        <spring-webmvc.version>5.2.6.RELEASE</spring-webmvc.version>
         <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
@@ -91,7 +91,19 @@
         <module>sparksys-commons-web-starter</module>
         <module>sparksys-commons-zookeeper-starter</module>
         <module>sparksys-commons-cloud-starter</module>
+        <module>sparksys-commons-user-starter</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>alfresco</id>
+            <name>Activiti Releases</name>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -123,6 +135,11 @@
                 <version>${spring-cloud-alibaba-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring-webmvc.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -288,6 +305,21 @@
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-web</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.sparksys</groupId>
+                <artifactId>sparksys-commons-user-starter</artifactId>
+                <version>${sparksys-project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sparksys</groupId>
+                        <artifactId>sparksys-commons-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

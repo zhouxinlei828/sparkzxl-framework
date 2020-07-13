@@ -10,6 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparksys-commons-core</artifactId>
+    <version>${sparksys-project.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

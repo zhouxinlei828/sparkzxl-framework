@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sparksys-commons-log-starter</artifactId>
+    <version>${sparksys-project.version}</version>
 
 
     <dependencies>

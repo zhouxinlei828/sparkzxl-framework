@@ -1,12 +1,11 @@
 package com.sparksys.commons.security.service;
 
 import com.sparksys.commons.core.constant.CacheKey;
-import com.sparksys.commons.core.repository.CacheRepository;
 import com.sparksys.commons.core.entity.GlobalAuthUser;
+import com.sparksys.commons.core.repository.CacheRepository;
 import com.sparksys.commons.security.entity.AuthUserDetail;
 import com.sparksys.commons.security.event.LoginEvent;
 import com.sparksys.commons.security.entity.LoginStatus;
-import com.sparksys.commons.core.service.AbstractAuthService;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.web.component.SpringContextUtils;
 import com.sparksys.commons.core.constant.CoreConstant;
@@ -15,9 +14,9 @@ import com.sparksys.commons.core.utils.crypto.MD5Utils;
 import com.sparksys.commons.security.entity.AuthToken;
 import com.sparksys.commons.security.request.AuthRequest;
 import com.sparksys.commons.core.utils.jwt.JwtTokenUtil;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -28,10 +27,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @date 2020-05-24 13:39:06
  */
 @Slf4j
-public abstract class AbstractAuthSecurityService extends AbstractAuthService {
+public abstract class AbstractAuthSecurityService {
 
-    @Autowired
-    protected CacheRepository cacheRepository;
+    @Reference
+    private CacheRepository cacheRepository;
 
     /**
      * 登录

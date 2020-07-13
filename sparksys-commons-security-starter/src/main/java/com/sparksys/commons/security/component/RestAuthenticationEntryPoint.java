@@ -1,6 +1,7 @@
 package com.sparksys.commons.security.component;
 
-import com.sparksys.commons.web.utils.HttpResponseUtils;
+import com.sparksys.commons.core.utils.ResponseResultUtils;
+
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -18,7 +19,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) {
-        HttpResponseUtils.unauthorized(response);
+        ResponseResultUtils.unauthorized(response);
     }
 
 }

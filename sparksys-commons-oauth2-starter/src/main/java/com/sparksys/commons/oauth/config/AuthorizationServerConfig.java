@@ -1,7 +1,7 @@
 package com.sparksys.commons.oauth.config;
 
+import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
 import com.sparksys.commons.oauth.enums.GrantTypeEnum;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,22 +30,22 @@ import java.util.List;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
+    @Resource
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
 
-    @Autowired
+    @Resource
     private UserDetailsService userDetailsService;
 
-    @Autowired
+    @Resource
     private TokenStore redisTokenStore;
 
-    @Autowired
+    @Resource
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Autowired
+    @Resource
     private JwtTokenEnhancer jwtTokenEnhancer;
 
     /**

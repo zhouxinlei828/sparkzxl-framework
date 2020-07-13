@@ -8,8 +8,9 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>sparksys-commons-swagger-starter</artifactId>
+    <version>${sparksys-project.version}</version>
+
     <dependencies>
         <dependency>
             <groupId>com.sparksys</groupId>

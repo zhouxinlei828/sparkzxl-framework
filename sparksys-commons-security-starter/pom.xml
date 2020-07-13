@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparksys-commons-security-starter</artifactId>
+    <version>${sparksys-project.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -29,6 +30,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-commons-user-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

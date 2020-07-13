@@ -1,20 +1,22 @@
 package com.sparksys.commons.security.component;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
+import com.sparksys.commons.core.utils.ResponseResultUtils;
 import com.sparksys.commons.security.entity.AuthUserDetail;
 import com.sparksys.commons.security.registry.SecurityRegistry;
 import com.sparksys.commons.security.service.AbstractAuthSecurityService;
 import com.sparksys.commons.core.utils.jwt.JwtTokenUtil;
-import com.sparksys.commons.web.utils.HttpResponseUtils;
+
+import com.sparksys.commons.user.service.IGlobalUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,10 +30,13 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
+    @Resource
     private AbstractAuthSecurityService abstractSecurityAuthDetailService;
 
-    @Autowired
+    @Resource
+    private IGlobalUserService globalUserService;
+
+    @Resource
     private SecurityRegistry securityRegistry;
 
     @Override
@@ -41,11 +46,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             log.info("请求地址：{}", request.getRequestURI());
             if (!securityRegistry.isIgnoreToken(request.getRequestURI())) {
-                String accessToken = HttpResponseUtils.getAuthHeader(request);
+                String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
                     String username = JwtTokenUtil.getUserNameFromToken(accessToken);
                     log.info("checking username:{}", username);
-                    GlobalAuthUser authUser = abstractSecurityAuthDetailService.getUserInfo(accessToken);
+                    GlobalAuthUser authUser = globalUserService.getUserInfo(accessToken);
                     if (StringUtils.equals(authUser.getAccount(), username)) {
                         AuthUserDetail authUserDetail = abstractSecurityAuthDetailService.getAuthUserDetail(username);
                         if (JwtTokenUtil.validateToken(accessToken, authUserDetail.getUsername())) {
@@ -61,7 +66,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (Exception e) {
             log.error(e.getMessage());
-            HttpResponseUtils.unauthorized(response);
+            ResponseResultUtils.unauthorized(response);
         }
     }
 }

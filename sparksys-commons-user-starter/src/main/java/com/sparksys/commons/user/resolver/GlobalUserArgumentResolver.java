@@ -1,8 +1,9 @@
-package com.sparksys.commons.web.component;
+package com.sparksys.commons.user.resolver;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
-import com.sparksys.commons.core.service.AbstractAuthService;
-import com.sparksys.commons.web.utils.HttpResponseUtils;
+import com.sparksys.commons.core.utils.ResponseResultUtils;
+import com.sparksys.commons.user.service.IGlobalUserService;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -17,12 +18,12 @@ import javax.servlet.http.HttpServletRequest;
  * @author zhouxinlei
  * @date 2020-05-24 13:41:46
  */
-public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
+public class GlobalUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AbstractAuthService abstractAuthUserRequest;
+    private final IGlobalUserService globalUserService;
 
-    public AuthUserArgumentResolver(AbstractAuthService abstractAuthUserRequest) {
-        this.abstractAuthUserRequest = abstractAuthUserRequest;
+    public GlobalUserArgumentResolver(IGlobalUserService globalUserService) {
+        this.globalUserService = globalUserService;
     }
 
     @Override
@@ -33,10 +34,10 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest
-            , WebDataBinderFactory binderFactory) throws Exception {
+            , WebDataBinderFactory binderFactory) {
         HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         assert servletRequest != null;
-        String accessToken = HttpResponseUtils.getAuthHeader(servletRequest);
-        return abstractAuthUserRequest.getUserInfo(accessToken);
+        String accessToken = ResponseResultUtils.getAuthHeader(servletRequest);
+        return globalUserService.getUserInfo(accessToken);
     }
 }
