@@ -104,7 +104,16 @@
             </releases>
         </repository>
     </repositories>
-
+    <distributionManagement>
+        <repository>
+            <id>rdc-releases</id>
+            <url>https://packages.aliyun.com/maven/repository/2016387-release-VIYY8W/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://packages.aliyun.com/maven/repository/2016387-snapshot-RAGz5b/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -585,19 +594,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <name>maven-snapshots-repository</name>
-            <url>http://101.200.80.154:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>maven-releases</id>
-            <name>maven-releases-repository</name>
-            <url>http://101.200.80.154:8081/repository/maven-releases/</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <resources>
