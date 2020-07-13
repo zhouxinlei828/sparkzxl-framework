@@ -94,16 +94,6 @@
         <module>sparksys-commons-user-starter</module>
     </modules>
 
-    <repositories>
-        <repository>
-            <id>alfresco</id>
-            <name>Activiti Releases</name>
-            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
     <distributionManagement>
         <repository>
             <id>rdc-releases</id>
