@@ -10,6 +10,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.core.support.SparkSysExceptionAssert;
+import com.sparksys.commons.core.utils.crypto.MD5Utils;
 import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
 import com.sparksys.commons.jwt.config.properties.JwtProperties;
 import com.sparksys.commons.jwt.config.service.JwtTokenService;
@@ -37,7 +38,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public String createTokenByRsa(JwtUserInfo jwtUserInfo, String data) {
+    public String createTokenByRsa(JwtUserInfo jwtUserInfo) {
         //创建JWS头，设置签名算法和类型
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
@@ -52,7 +53,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         //创建RSA签名器
         JWSSigner jwsSigner;
         try {
-            jwsSigner = new RSASSASigner(getRsaKey(data), true);
+            jwsSigner = new RSASSASigner(getRsaKey(jwtProperties.getSecret()), true);
             //签名
             jwsObject.sign(jwsSigner);
         } catch (JOSEException e) {
@@ -63,12 +64,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public JwtUserInfo verifyTokenByRsa(String token, String data) {
+    public JwtUserInfo verifyTokenByRsa(String token) {
         JwtUserInfo payloadDto = null;
         try {
             //从token中解析JWS对象
             JWSObject jwsObject = JWSObject.parse(token);
-            RSAKey publicRsaKey = getRsaKey(data).toPublicJWK();
+            RSAKey publicRsaKey = getRsaKey(jwtProperties.getSecret()).toPublicJWK();
             //使用RSA公钥创建RSA验证器
             JWSVerifier jwsVerifier = new RSASSAVerifier(publicRsaKey);
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
@@ -84,7 +85,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public String createTokenByHmac(JwtUserInfo jwtUserInfo, String secret) {
+    public String createTokenByHmac(JwtUserInfo jwtUserInfo) {
         //创建JWS头，设置签名算法和类型
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
                 type(JOSEObjectType.JWT)
@@ -96,7 +97,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
         try {
             //创建HMAC签名器
-            JWSSigner jwsSigner = new MACSigner(secret);
+            JWSSigner jwsSigner = new MACSigner(MD5Utils.encrypt(jwtProperties.getSecret()));
             //签名
             jwsObject.sign(jwsSigner);
         } catch (Exception e) {
@@ -107,18 +108,17 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public JwtUserInfo verifyTokenByHmac(String token, String secret) {
+    public JwtUserInfo verifyTokenByHmac(String token) {
         JwtUserInfo payloadDto = null;
         try {
             //从token中解析JWS对象
             JWSObject jwsObject = JWSObject.parse(token);
             //创建HMAC验证器
-            JWSVerifier jwsVerifier = new MACVerifier(secret);
+            JWSVerifier jwsVerifier = new MACVerifier(MD5Utils.encrypt(jwtProperties.getSecret()));
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
             String payload = jwsObject.getPayload().toString();
             payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
             ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire(), System.currentTimeMillis());
-            return payloadDto;
         } catch (Exception e) {
             log.warn("根据HMAC校验token失败：{}", e.getMessage());
             SparkSysExceptionAssert.businessFail(e.getMessage());

@@ -22,4 +22,6 @@ public class JwtProperties {
      */
     private Long refreshExpire = 28800L;
 
+    private String secret;
+
 }

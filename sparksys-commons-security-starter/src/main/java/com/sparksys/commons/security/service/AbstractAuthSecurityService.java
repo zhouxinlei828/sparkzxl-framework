@@ -74,17 +74,18 @@ public abstract class AbstractAuthSecurityService {
                 .authorities(globalAuthUser.getPermissions())
                 .username(globalAuthUser.getAccount())
                 .build();
-        return jwtTokenService.createTokenByHmac(jwtUserInfo, MD5Utils.encrypt("123456"));
+        return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
     private void checkPasswordError(AuthRequest authRequest, String password, GlobalAuthUser authUser) {
         String encryptPassword = MD5Utils.encrypt(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", password, encryptPassword);
         //数据库密码比对
-        if (!StringUtils.equals(encryptPassword, authUser.getPassword())) {
+        boolean verifyResult = StringUtils.equals(encryptPassword, authUser.getPassword());
+        if (!verifyResult) {
             SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUser.getId(),
                     ResponseResultStatus.PASSWORD_ERROR.getMessage())));
-            ResponseResultStatus.PASSWORD_ERROR.newException(password);
+            ResponseResultStatus.PASSWORD_ERROR.assertNotTrue(false);
         }
     }
 

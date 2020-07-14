@@ -15,35 +15,31 @@ public interface JwtTokenService {
      * 根据RSA算法生成token
      *
      * @param jwtUserInfo 负载信息
-     * @param data        rsa加密
      * @return String
      */
-    String createTokenByRsa(JwtUserInfo jwtUserInfo, String data);
+    String createTokenByRsa(JwtUserInfo jwtUserInfo);
 
     /**
      * 根据RSA校验token
      *
      * @param token token
-     * @param data  rsa加密
      * @return PayloadDto
      */
-    JwtUserInfo verifyTokenByRsa(String token, String data);
+    JwtUserInfo verifyTokenByRsa(String token);
 
     /**
      * 根据HMAC算法生成token
      *
      * @param jwtUserInfo 负载信息
-     * @param secret     密钥
      * @return String
      */
-    String createTokenByHmac(JwtUserInfo jwtUserInfo, String secret);
+    String createTokenByHmac(JwtUserInfo jwtUserInfo);
 
     /**
      * 根据HMAC校验token
      *
      * @param token  token
-     * @param secret 密钥
      * @return PayloadDto
      */
-    JwtUserInfo verifyTokenByHmac(String token, String secret);
+    JwtUserInfo verifyTokenByHmac(String token);
 }

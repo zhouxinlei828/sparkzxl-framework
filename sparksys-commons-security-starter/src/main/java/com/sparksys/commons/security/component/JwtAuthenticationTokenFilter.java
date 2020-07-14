@@ -53,8 +53,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (!securityRegistry.isIgnoreToken(request.getRequestURI())) {
                 String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
-                    jwtTokenService.verifyTokenByHmac(accessToken, MD5Utils.encrypt("123456"));
-                    JwtUserInfo jwtUserInfo  = jwtTokenService.verifyTokenByHmac(accessToken, MD5Utils.encrypt("123456"));
+                    JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
                     String username = jwtUserInfo.getUsername();
                     log.info("checking username:{}", username);
                     GlobalAuthUser authUser = globalUserService.getUserInfo(accessToken);
