@@ -2,10 +2,12 @@ package com.sparksys.commons.security.component;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
 import com.sparksys.commons.core.utils.ResponseResultUtils;
+import com.sparksys.commons.core.utils.crypto.MD5Utils;
+import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
+import com.sparksys.commons.jwt.config.service.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;
 import com.sparksys.commons.security.registry.SecurityRegistry;
 import com.sparksys.commons.security.service.AbstractAuthSecurityService;
-import com.sparksys.commons.core.utils.jwt.JwtTokenUtil;
 
 import com.sparksys.commons.user.service.IGlobalUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private IGlobalUserService globalUserService;
 
     @Resource
+    private JwtTokenService jwtTokenService;
+
+    @Resource
     private SecurityRegistry securityRegistry;
 
     @Override
@@ -48,18 +53,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (!securityRegistry.isIgnoreToken(request.getRequestURI())) {
                 String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
-                    String username = JwtTokenUtil.getUserNameFromToken(accessToken);
+                    jwtTokenService.verifyTokenByHmac(accessToken, MD5Utils.encrypt("123456"));
+                    JwtUserInfo jwtUserInfo  = jwtTokenService.verifyTokenByHmac(accessToken, MD5Utils.encrypt("123456"));
+                    String username = jwtUserInfo.getUsername();
                     log.info("checking username:{}", username);
                     GlobalAuthUser authUser = globalUserService.getUserInfo(accessToken);
                     if (StringUtils.equals(authUser.getAccount(), username)) {
                         AuthUserDetail authUserDetail = abstractSecurityAuthDetailService.getAuthUserDetail(username);
-                        if (JwtTokenUtil.validateToken(accessToken, authUserDetail.getUsername())) {
-                            UsernamePasswordAuthenticationToken authentication =
-                                    new UsernamePasswordAuthenticationToken(authUserDetail, null, authUserDetail.getAuthorities());
-                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                            log.info("authenticated user:{}", username);
-                            SecurityContextHolder.getContext().setAuthentication(authentication);
-                        }
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(authUserDetail, null, authUserDetail.getAuthorities());
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        log.info("authenticated user:{}", username);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
             }

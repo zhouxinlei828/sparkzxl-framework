@@ -192,6 +192,11 @@
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
+                <artifactId>sparksys-commons-jwt-starter</artifactId>
+                <version>${sparksys-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-commons-log-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>

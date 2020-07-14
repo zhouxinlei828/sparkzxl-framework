@@ -3,6 +3,8 @@ package com.sparksys.commons.security.service;
 import com.sparksys.commons.core.constant.CacheKey;
 import com.sparksys.commons.core.entity.GlobalAuthUser;
 import com.sparksys.commons.core.repository.CacheRepository;
+import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
+import com.sparksys.commons.jwt.config.service.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;
 import com.sparksys.commons.security.event.LoginEvent;
 import com.sparksys.commons.security.entity.LoginStatus;
@@ -13,12 +15,12 @@ import com.sparksys.commons.core.support.BusinessException;
 import com.sparksys.commons.core.utils.crypto.MD5Utils;
 import com.sparksys.commons.security.entity.AuthToken;
 import com.sparksys.commons.security.request.AuthRequest;
-import com.sparksys.commons.core.utils.jwt.JwtTokenUtil;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import javax.annotation.Resource;
 
 /**
  * description: 登录授权Service
@@ -29,8 +31,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 public abstract class AbstractAuthSecurityService {
 
-    @Reference
+    @Resource
     private CacheRepository cacheRepository;
+    @Resource
+    private JwtTokenService jwtTokenService;
 
     /**
      * 登录
@@ -51,7 +55,7 @@ public abstract class AbstractAuthSecurityService {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                 null, adminUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        token = JwtTokenUtil.generateToken(account);
+        token = createJwtToken(authUser);
         authUser.setPassword(null);
         AuthToken authToken = new AuthToken();
         authToken.setToken(token);
@@ -61,6 +65,16 @@ public abstract class AbstractAuthSecurityService {
         accessToken(authToken, authUser);
         SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUser.getId())));
         return authToken;
+    }
+
+    private String createJwtToken(GlobalAuthUser globalAuthUser) {
+        JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
+                .sub(globalAuthUser.getAccount())
+                .iat(System.currentTimeMillis())
+                .authorities(globalAuthUser.getPermissions())
+                .username(globalAuthUser.getAccount())
+                .build();
+        return jwtTokenService.createTokenByHmac(jwtUserInfo, MD5Utils.encrypt("123456"));
     }
 
     private void checkPasswordError(AuthRequest authRequest, String password, GlobalAuthUser authUser) {

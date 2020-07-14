@@ -1,5 +1,6 @@
 package com.sparksys.commons.jwt.config.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -42,6 +43,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .type(JOSEObjectType.JWT)
                 .build();
         jwtUserInfo.setExpire(jwtProperties.getExpire());
+        jwtUserInfo.setJti(UUID.fromString(jwtUserInfo.getUsername()).toString());
         //将负载信息封装到Payload中
         String payloadStr = JSONUtil.toJsonPrettyStr(jwtUserInfo);
         Payload payload = new Payload(payloadStr);

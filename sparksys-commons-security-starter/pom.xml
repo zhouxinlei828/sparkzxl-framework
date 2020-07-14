@@ -52,6 +52,10 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-commons-jwt-starter</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
