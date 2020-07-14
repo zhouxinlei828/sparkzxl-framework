@@ -1,4 +1,4 @@
-package com.sparksys.commons.security.request;
+package com.sparksys.commons.security.dto;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
  * @date 2020-05-24 13:38:55
  */
 @Data
-public class AuthRequest {
+public class LoginDTO {
 
     @NotEmpty(message = "账户不能为空")
     private String account;

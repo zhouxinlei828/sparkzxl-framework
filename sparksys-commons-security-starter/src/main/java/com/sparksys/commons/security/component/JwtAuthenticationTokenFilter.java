@@ -2,11 +2,11 @@ package com.sparksys.commons.security.component;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
 import com.sparksys.commons.core.utils.ResponseResultUtils;
-import com.sparksys.commons.core.utils.crypto.MD5Utils;
 import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
 import com.sparksys.commons.jwt.config.service.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;
-import com.sparksys.commons.security.registry.SecurityRegistry;
+import com.sparksys.commons.security.properties.SecurityProperties;
+import com.sparksys.commons.security.registry.SecurityIgnoreUrl;
 import com.sparksys.commons.security.service.AbstractAuthSecurityService;
 
 import com.sparksys.commons.user.service.IGlobalUserService;
@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * description: JWT登录授权过滤器
@@ -32,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
+    private final SecurityProperties securityProperties;
+
     @Resource
     private AbstractAuthSecurityService abstractSecurityAuthDetailService;
 
@@ -41,8 +44,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private JwtTokenService jwtTokenService;
 
-    @Resource
-    private SecurityRegistry securityRegistry;
+    public JwtAuthenticationTokenFilter(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -50,7 +54,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain chain) {
         try {
             log.info("请求地址：{}", request.getRequestURI());
-            if (!securityRegistry.isIgnoreToken(request.getRequestURI())) {
+            List<String> ignoreUrls = securityProperties.getIgnoreUrls().getUrls();
+            if (!SecurityIgnoreUrl.isIgnore(ignoreUrls,request.getRequestURI())) {
                 String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
                     JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);

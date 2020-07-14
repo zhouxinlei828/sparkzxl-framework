@@ -11,6 +11,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -23,7 +24,7 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
 
     private static Map<String, ConfigAttribute> configAttributeMap = null;
 
-    @Autowired
+    @Resource
     private DynamicSecurityService dynamicSecurityService;
 
     @PostConstruct

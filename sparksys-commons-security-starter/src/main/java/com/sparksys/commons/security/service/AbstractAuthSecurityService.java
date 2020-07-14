@@ -14,7 +14,7 @@ import com.sparksys.commons.core.constant.CoreConstant;
 import com.sparksys.commons.core.support.BusinessException;
 import com.sparksys.commons.core.utils.crypto.MD5Utils;
 import com.sparksys.commons.security.entity.AuthToken;
-import com.sparksys.commons.security.request.AuthRequest;
+import com.sparksys.commons.security.dto.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +43,7 @@ public abstract class AbstractAuthSecurityService {
      * @return java.lang.String
      * @throws Exception 异常
      */
-    public AuthToken login(AuthRequest authRequest) {
+    public AuthToken login(LoginDTO authRequest) {
         String account = authRequest.getAccount();
         String password = authRequest.getPassword();
         String token;
@@ -77,7 +77,7 @@ public abstract class AbstractAuthSecurityService {
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(AuthRequest authRequest, String password, GlobalAuthUser authUser) {
+    private void checkPasswordError(LoginDTO authRequest, String password, GlobalAuthUser authUser) {
         String encryptPassword = MD5Utils.encrypt(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", password, encryptPassword);
         //数据库密码比对

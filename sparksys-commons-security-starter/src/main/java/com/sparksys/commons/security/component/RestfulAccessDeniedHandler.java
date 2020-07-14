@@ -4,6 +4,7 @@ import com.sparksys.commons.core.utils.ResponseResultUtils;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import java.io.IOException;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:14
  */
+@Component
 public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override

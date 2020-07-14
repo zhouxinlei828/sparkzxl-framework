@@ -7,12 +7,13 @@ import com.sparksys.commons.security.component.JwtAuthenticationTokenFilter;
 import com.sparksys.commons.security.component.RestAuthenticationEntryPoint;
 import com.sparksys.commons.security.component.RestfulAccessDeniedHandler;
 import com.sparksys.commons.security.filter.DynamicSecurityFilter;
-import com.sparksys.commons.security.properties.IgnoreUrlsProperties;
-import com.sparksys.commons.security.registry.SecurityRegistry;
-import org.springframework.beans.factory.annotation.Value;
+import com.sparksys.commons.security.properties.SecurityProperties;
+import com.sparksys.commons.security.registry.SecurityIgnoreUrl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,35 +27,33 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 /**
- * description: Spring Security 抽象配置，具体可在实际业务中注入
+ * description: Spring Security 配置
  *
  * @author zhouxinlei
  * @date 2020-05-24 13:35:26
  */
-public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableConfigurationProperties(SecurityProperties.class)
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
+    @Resource
+    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
-    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
+    @Resource
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Value("${sparksys.security.enableJwtFilter}")
-    private boolean enableJwtFilter;
+    @Resource
+    private SecurityProperties securityProperties;
 
-    @Value("${sparksys.security.dynamicSecurity}")
-    private boolean dynamicSecurity;
-
-    /**
-     * Security api放行配置
-     *
-     * @return SecurityRegistry
-     */
-    protected abstract SecurityRegistry securityRegistry();
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        String[] excludeStaticPatterns = ListUtils.stringToArray(SecurityRegistry.excludeStaticPatterns);
+        String[] excludeStaticPatterns = ListUtils.stringToArray(SecurityIgnoreUrl.excludeStaticPatterns);
         web.ignoring().antMatchers(excludeStaticPatterns);
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
@@ -65,8 +64,8 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
-        SecurityRegistry securityRegistry = securityRegistry();
-        for (String url : securityRegistry.getExcludePatterns()) {
+        List<String> excludePatterns = securityProperties.getIgnoreUrls().getUrls();
+        for (String url : excludePatterns) {
             registry.antMatchers(url).permitAll();
         }
         // 任何请求需要身份认证
@@ -86,17 +85,17 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
 
-        if (dynamicSecurity) {
+        if (securityProperties.isDynamicSecurity()) {
             registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
         }
-        if (enableJwtFilter) {
+        if (securityProperties.isEnableJwtFilter()) {
             registry.and().addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         }
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -107,7 +106,7 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
     @Bean
     @ConditionalOnProperty(name = {"sparksys.security.enableJwtFilter"}, havingValue = "true")
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-        return new JwtAuthenticationTokenFilter();
+        return new JwtAuthenticationTokenFilter(securityProperties);
     }
 
     @Bean
@@ -115,14 +114,6 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-    /**
-     * Security忽略请求
-     *
-     * @return IgnoreUrlsProperties
-     */
-    public abstract IgnoreUrlsProperties ignoreUrlsProperties();
-
 
     @ConditionalOnBean(name = "dynamicSecurityService")
     @ConditionalOnProperty(name = {"sparksys.security.dynamicSecurity"}, havingValue = "true")

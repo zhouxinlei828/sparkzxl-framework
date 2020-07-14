@@ -2,8 +2,10 @@ package com.sparksys.commons.security.component;
 
 import com.sparksys.commons.core.utils.ResponseResultUtils;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:00
  */
+@Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
