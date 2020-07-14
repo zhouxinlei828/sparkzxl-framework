@@ -2,8 +2,8 @@ package com.sparksys.commons.oauth.config;
 
 import com.sparksys.commons.oauth.component.OauthRestAuthenticationEntryPoint;
 import com.sparksys.commons.oauth.component.OauthRestfulAccessDeniedHandler;
+import com.sparksys.commons.oauth.properties.Oauth2Properties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -19,14 +19,16 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableResourceServer
-@Order(6)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Resource
-    private OauthRestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private OauthRestAuthenticationEntryPoint oauthRestAuthenticationEntryPoint;
 
     @Resource
     private OauthRestfulAccessDeniedHandler oauthRestfulAccessDeniedHandler;
+
+    @Resource
+    private Oauth2Properties oauth2Properties;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -36,15 +38,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .requestMatchers()
                 //配置需要保护的资源路径
-                .antMatchers("/**")
+                .antMatchers(oauth2Properties.getProtectPatterns())
                 .and()
                 .csrf()
                 .disable();
     }
 
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.authenticationEntryPoint(restAuthenticationEntryPoint)
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources.authenticationEntryPoint(oauthRestAuthenticationEntryPoint)
                 .accessDeniedHandler(oauthRestfulAccessDeniedHandler);
     }
 }

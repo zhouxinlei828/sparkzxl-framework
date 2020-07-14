@@ -1,6 +1,7 @@
 package com.sparksys.commons.oauth.config;
 
 import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2SsoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;

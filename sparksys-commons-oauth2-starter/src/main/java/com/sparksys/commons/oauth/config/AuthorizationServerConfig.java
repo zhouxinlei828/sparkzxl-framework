@@ -1,7 +1,10 @@
 package com.sparksys.commons.oauth.config;
 
+import cn.hutool.json.JSONUtil;
 import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
-import com.sparksys.commons.oauth.enums.GrantTypeEnum;
+import com.sparksys.commons.oauth.properties.Oauth2Properties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +30,9 @@ import java.util.List;
  * @date 2020-05-24 13:23:36
  */
 @Configuration
+@EnableConfigurationProperties(Oauth2Properties.class)
 @EnableAuthorizationServer
+@Slf4j
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Resource
@@ -47,6 +52,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Resource
     private JwtTokenEnhancer jwtTokenEnhancer;
+
+    @Resource
+    private Oauth2Properties oAuth2Properties;
 
     /**
      * 使用密码模式需要配置
@@ -70,23 +78,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        log.info("OAuth2Properties：{}", JSONUtil.toJsonPrettyStr(oAuth2Properties));
         clients.inMemory()
                 //配置client_id
-                .withClient("sparksys")
+                .withClient(oAuth2Properties.getClientId())
                 //配置client_secret
-                .secret(passwordEncoder.encode("123456"))
+                .secret(passwordEncoder.encode(oAuth2Properties.getClientSecret()))
                 //配置访问token的有效期
-                .accessTokenValiditySeconds(3600)
+                .accessTokenValiditySeconds(oAuth2Properties.getAccessTokenValiditySeconds())
                 //配置刷新token的有效期
-                .refreshTokenValiditySeconds(864000)
+                .refreshTokenValiditySeconds(oAuth2Properties.getRefreshTokenValiditySeconds())
                 //配置redirect_uri，用于授权成功后跳转
-                .redirectUris("https://www.sparksys.top")
+                .redirectUris(oAuth2Properties.getRegisteredRedirectUris())
                 //配置申请的权限范围
-                .scopes("all")
+                .scopes(oAuth2Properties.getScopes())
                 //配置grant_type，表示授权类型
-                .authorizedGrantTypes(GrantTypeEnum.AUTHORIZATION_CODE.getType(),
-                        GrantTypeEnum.PASSWORD.getType(),
-                        GrantTypeEnum.REFRESH_TOKEN.getType());
+                .authorizedGrantTypes(oAuth2Properties.getAuthorizedGrantTypes());
     }
 
     @Override
