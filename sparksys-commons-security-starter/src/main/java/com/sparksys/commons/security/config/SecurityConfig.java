@@ -9,6 +9,7 @@ import com.sparksys.commons.security.component.RestfulAccessDeniedHandler;
 import com.sparksys.commons.security.filter.DynamicSecurityFilter;
 import com.sparksys.commons.security.properties.SecurityProperties;
 import com.sparksys.commons.security.registry.SecurityIgnoreUrl;
+import com.sparksys.commons.security.service.AbstractAuthSecurityService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,11 +17,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
@@ -36,8 +40,11 @@ import java.util.List;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:26
  */
-@EnableConfigurationProperties(SecurityProperties.class)
+
 @Configuration
+@EnableConfigurationProperties(SecurityProperties.class)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
@@ -49,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private SecurityProperties securityProperties;
 
+    @Resource
+    private AbstractAuthSecurityService abstractAuthSecurityService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -64,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
-        List<String> excludePatterns = securityProperties.getIgnoreUrls().getUrls();
+        List<String> excludePatterns = securityProperties.getIgnoreUrls();
         for (String url : excludePatterns) {
             registry.antMatchers(url).permitAll();
         }
@@ -106,13 +115,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @ConditionalOnProperty(name = {"sparksys.security.enableJwtFilter"}, havingValue = "true")
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-        return new JwtAuthenticationTokenFilter(securityProperties);
+        return new JwtAuthenticationTokenFilter();
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Override
+    @Bean
+    public UserDetailsService userDetailsService() {
+        //获取登录用户信息
+        return username -> abstractAuthSecurityService.getAuthUserDetail(username);
     }
 
     @ConditionalOnBean(name = "dynamicSecurityService")
@@ -126,7 +142,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @ConditionalOnProperty(name = {"sparksys.security.dynamicSecurity"}, havingValue = "true")
     @Bean
     public DynamicSecurityFilter dynamicSecurityFilter() {
-        return new DynamicSecurityFilter(dynamicSecurityMetadataSource());
+        return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
     }
 
     @ConditionalOnBean(name = "dynamicSecurityService")

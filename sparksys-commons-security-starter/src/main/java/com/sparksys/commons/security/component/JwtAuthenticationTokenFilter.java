@@ -33,7 +33,9 @@ import java.util.List;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private final SecurityProperties securityProperties;
+
+    @Resource
+    private SecurityProperties securityProperties;
 
     @Resource
     private AbstractAuthSecurityService abstractSecurityAuthDetailService;
@@ -44,9 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private JwtTokenService jwtTokenService;
 
-    public JwtAuthenticationTokenFilter(SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
-    }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -54,7 +54,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain chain) {
         try {
             log.info("请求地址：{}", request.getRequestURI());
-            List<String> ignoreUrls = securityProperties.getIgnoreUrls().getUrls();
+            log.info("securityProperties：{}", securityProperties.getIgnoreUrls());
+            List<String> ignoreUrls = securityProperties.getIgnoreUrls();
             if (!SecurityIgnoreUrl.isIgnore(ignoreUrls,request.getRequestURI())) {
                 String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
