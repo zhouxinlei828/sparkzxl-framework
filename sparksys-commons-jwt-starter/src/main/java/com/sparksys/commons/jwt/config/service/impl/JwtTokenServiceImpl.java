@@ -53,7 +53,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         //创建RSA签名器
         JWSSigner jwsSigner;
         try {
-            jwsSigner = new RSASSASigner(getRsaKey(jwtProperties.getSecret()), true);
+            jwsSigner = new RSASSASigner(getRsaKey(), true);
             //签名
             jwsObject.sign(jwsSigner);
         } catch (JOSEException e) {
@@ -69,7 +69,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         try {
             //从token中解析JWS对象
             JWSObject jwsObject = JWSObject.parse(token);
-            RSAKey publicRsaKey = getRsaKey(jwtProperties.getSecret()).toPublicJWK();
+            RSAKey publicRsaKey = getRsaKey().toPublicJWK();
             //使用RSA公钥创建RSA验证器
             JWSVerifier jwsVerifier = new RSASSAVerifier(publicRsaKey);
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
@@ -126,10 +126,10 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         return payloadDto;
     }
 
-    private RSAKey getRsaKey(String data) {
+    private RSAKey getRsaKey() {
         //从classpath下获取RSA秘钥对
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), data.toCharArray());
-        KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", data.toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456".toCharArray());
+        KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
         //获取RSA公钥
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         //获取RSA私钥
