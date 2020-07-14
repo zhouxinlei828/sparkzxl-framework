@@ -1,0 +1,137 @@
+package com.sparksys.commons.jwt.config.service.impl;
+
+import cn.hutool.json.JSONUtil;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.sparksys.commons.core.support.ResponseResultStatus;
+import com.sparksys.commons.core.support.SparkSysExceptionAssert;
+import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
+import com.sparksys.commons.jwt.config.properties.JwtProperties;
+import com.sparksys.commons.jwt.config.service.JwtTokenService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
+
+import java.security.KeyPair;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
+/**
+ * description: jwtToken 服务实现类
+ *
+ * @author: zhouxinlei
+ * @date: 2020-07-14 08:03:30
+ */
+@Slf4j
+public class JwtTokenServiceImpl implements JwtTokenService {
+
+    private final JwtProperties jwtProperties;
+
+    public JwtTokenServiceImpl(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
+    }
+
+    @Override
+    public String createTokenByRsa(JwtUserInfo jwtUserInfo, String data) {
+        //创建JWS头，设置签名算法和类型
+        JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
+                .type(JOSEObjectType.JWT)
+                .build();
+        jwtUserInfo.setExpire(jwtProperties.getExpire());
+        //将负载信息封装到Payload中
+        String payloadStr = JSONUtil.toJsonPrettyStr(jwtUserInfo);
+        Payload payload = new Payload(payloadStr);
+        //创建JWS对象
+        JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+        //创建RSA签名器
+        JWSSigner jwsSigner;
+        try {
+            jwsSigner = new RSASSASigner(getRsaKey(data), true);
+            //签名
+            jwsObject.sign(jwsSigner);
+        } catch (JOSEException e) {
+            log.warn("根据RSA算法生成token失败：{}", e.getMessage());
+            SparkSysExceptionAssert.businessFail(e.getMessage());
+        }
+        return jwsObject.serialize();
+    }
+
+    @Override
+    public JwtUserInfo verifyTokenByRsa(String token, String data) {
+        JwtUserInfo payloadDto = null;
+        try {
+            //从token中解析JWS对象
+            JWSObject jwsObject = JWSObject.parse(token);
+            RSAKey publicRsaKey = getRsaKey(data).toPublicJWK();
+            //使用RSA公钥创建RSA验证器
+            JWSVerifier jwsVerifier = new RSASSAVerifier(publicRsaKey);
+            ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
+            String payload = jwsObject.getPayload().toString();
+            payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
+            ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire(), System.currentTimeMillis());
+            return payloadDto;
+        } catch (Exception e) {
+            log.warn("根据RSA校验token失败：{}", e.getMessage());
+            SparkSysExceptionAssert.businessFail(e.getMessage());
+        }
+        return payloadDto;
+    }
+
+    @Override
+    public String createTokenByHmac(JwtUserInfo jwtUserInfo, String secret) {
+        //创建JWS头，设置签名算法和类型
+        JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
+                type(JOSEObjectType.JWT)
+                .build();
+        //将负载信息封装到Payload中
+        String payloadStr = JSONUtil.toJsonPrettyStr(jwtUserInfo);
+        Payload payload = new Payload(payloadStr);
+        //创建JWS对象
+        JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+        try {
+            //创建HMAC签名器
+            JWSSigner jwsSigner = new MACSigner(secret);
+            //签名
+            jwsObject.sign(jwsSigner);
+        } catch (Exception e) {
+            log.warn("根据HMAC算法生成token失败：{}", e.getMessage());
+            SparkSysExceptionAssert.businessFail(e.getMessage());
+        }
+        return jwsObject.serialize();
+    }
+
+    @Override
+    public JwtUserInfo verifyTokenByHmac(String token, String secret) {
+        JwtUserInfo payloadDto = null;
+        try {
+            //从token中解析JWS对象
+            JWSObject jwsObject = JWSObject.parse(token);
+            //创建HMAC验证器
+            JWSVerifier jwsVerifier = new MACVerifier(secret);
+            ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
+            String payload = jwsObject.getPayload().toString();
+            payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
+            ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire(), System.currentTimeMillis());
+            return payloadDto;
+        } catch (Exception e) {
+            log.warn("根据HMAC校验token失败：{}", e.getMessage());
+            SparkSysExceptionAssert.businessFail(e.getMessage());
+        }
+        return payloadDto;
+    }
+
+    private RSAKey getRsaKey(String data) {
+        //从classpath下获取RSA秘钥对
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), data.toCharArray());
+        KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", data.toCharArray());
+        //获取RSA公钥
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        //获取RSA私钥
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        return new RSAKey.Builder(publicKey).privateKey(privateKey).build();
+    }
+}

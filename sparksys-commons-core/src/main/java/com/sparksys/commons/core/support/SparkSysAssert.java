@@ -23,6 +23,28 @@ public interface SparkSysAssert {
      */
     BaseException newException(Throwable t, Object... args);
 
+    /**
+     * 断言对象obj是否为True
+     *
+     * @param obj 入参
+     */
+    default void assertNotTrue(Boolean obj) {
+        if (!obj) {
+            throw newException(false);
+        }
+    }
+
+    /**
+     * 断言对象比较大小，start<end 抛出异常
+     *
+     * @param start start
+     * @param end   end
+     */
+    default void assertCompare(long start, long end) {
+        if (start < end) {
+            throw newException(-1);
+        }
+    }
 
     /**
      * 断言对象obj非空。如果对象obj为空，则抛出异常

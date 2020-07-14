@@ -44,9 +44,10 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.7</commons-io.version>
         <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
+        <spring-security-rsa.version>1.0.7.RELEASE</spring-security-rsa.version>
         <spring-data-commos.version>2.2.6.RELEASE</spring-data-commos.version>
         <!-- jwt组件-->
-        <jwt.version>0.9.1</jwt.version>
+        <jwt.version>8.16</jwt.version>
 
         <aliyun-sdk-oss.version>3.8.1</aliyun-sdk-oss.version>
         <!-- google-->
@@ -92,6 +93,7 @@
         <module>sparksys-commons-zookeeper-starter</module>
         <module>sparksys-commons-cloud-starter</module>
         <module>sparksys-commons-user-starter</module>
+        <module>sparksys-commons-jwt-starter</module>
     </modules>
 
     <distributionManagement>
@@ -281,9 +283,15 @@
                 <artifactId>bcprov-jdk16</artifactId>
                 <version>${bcprov-jdk16.version}</version>
             </dependency>
+            <!--Spring Security RSA工具类-->
             <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-rsa</artifactId>
+                <version>${spring-security-rsa.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
                 <version>${jwt.version}</version>
             </dependency>
             <dependency>
