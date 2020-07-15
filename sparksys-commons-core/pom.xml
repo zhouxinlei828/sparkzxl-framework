@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sparksys-commons</artifactId>
         <groupId>com.sparksys</groupId>
-        <version>1.1.0.RELEASE</version>
+        <version>1.2.0.RELEASE</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -93,6 +93,16 @@
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
+        </dependency>
+        <!--JWT解析库-->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+        </dependency>
+        <!--Spring Security RSA工具类-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-rsa</artifactId>
         </dependency>
     </dependencies>
 </project>

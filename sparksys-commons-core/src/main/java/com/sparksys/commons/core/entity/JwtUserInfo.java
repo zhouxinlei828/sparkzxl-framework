@@ -1,4 +1,4 @@
-package com.sparksys.commons.jwt.entity;
+package com.sparksys.commons.core.entity;
 
 import lombok.Builder;
 import lombok.Data;

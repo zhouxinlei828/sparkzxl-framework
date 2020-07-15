@@ -1,10 +1,10 @@
 package com.sparksys.commons.security.component;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
+import com.sparksys.commons.core.entity.JwtUserInfo;
 import com.sparksys.commons.core.utils.ResponseResultUtils;
-import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
-import com.sparksys.commons.jwt.service.impl.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;
+import com.sparksys.commons.security.properties.JwtProperties;
 import com.sparksys.commons.security.properties.SecurityProperties;
 import com.sparksys.commons.security.registry.SecurityIgnoreUrl;
 import com.sparksys.commons.security.service.AbstractAuthSecurityService;
@@ -23,7 +23,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-
+import com.sparksys.commons.core.utils.jwt.JwtTokenUtils;
 /**
  * description: JWT登录授权过滤器
  *
@@ -44,7 +44,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private IGlobalUserService globalUserService;
 
     @Resource
-    private JwtTokenService jwtTokenService;
+    private JwtProperties jwtProperties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -57,7 +57,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (!SecurityIgnoreUrl.isIgnore(ignoreUrls,request.getRequestURI())) {
                 String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
-                    JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
+                    JwtUserInfo jwtUserInfo = JwtTokenUtils.verifyTokenByHmac(accessToken,jwtProperties.getSecret());
                     String username = jwtUserInfo.getUsername();
                     log.info("checking username:{}", username);
                     GlobalAuthUser authUser = globalUserService.getUserInfo(accessToken);
