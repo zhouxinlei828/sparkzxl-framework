@@ -2,6 +2,7 @@ package com.sparksys.commons.user.config;
 
 import com.sparksys.commons.user.resolver.GlobalUserArgumentResolver;
 import com.sparksys.commons.user.service.IGlobalUserService;
+import com.sparksys.commons.user.service.impl.GlobalUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +23,15 @@ import java.util.List;
 @Slf4j
 public class GlobalUserConfig implements WebMvcConfigurer {
 
-    @Resource
-    private IGlobalUserService globalUserService;
+    @Bean
+    public IGlobalUserService globalUserService() {
+        return new GlobalUserServiceImpl();
+    }
 
     @Bean
     public GlobalUserArgumentResolver globalUserArgumentResolver() {
         log.info("全局用户信息获取");
-        return new GlobalUserArgumentResolver(globalUserService);
+        return new GlobalUserArgumentResolver(globalUserService());
     }
 
     @Override

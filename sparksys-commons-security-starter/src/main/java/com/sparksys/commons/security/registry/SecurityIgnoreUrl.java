@@ -1,6 +1,6 @@
 package com.sparksys.commons.security.registry;
 
-import com.sparksys.commons.core.utils.collection.ListUtils;
+import com.sparksys.commons.core.utils.ListUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

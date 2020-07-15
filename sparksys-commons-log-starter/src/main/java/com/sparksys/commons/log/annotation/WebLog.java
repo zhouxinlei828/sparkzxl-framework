@@ -6,14 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * description: API幂等性注解
+ * description: web请求日志注解
  *
  * @author zhouxinlei
  * @date 2020-05-24 13:40:39
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SysLog {
-
-    String value() default "head";
+public @interface WebLog {
 }

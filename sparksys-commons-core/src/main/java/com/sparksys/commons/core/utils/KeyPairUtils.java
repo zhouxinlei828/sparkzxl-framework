@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.crypto;
+package com.sparksys.commons.core.utils;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;

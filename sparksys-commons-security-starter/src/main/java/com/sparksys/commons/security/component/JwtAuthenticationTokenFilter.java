@@ -1,7 +1,7 @@
 package com.sparksys.commons.security.component;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
-import com.sparksys.commons.core.utils.ResponseResultUtils;
+import com.sparksys.commons.core.base.api.ResponseResultUtils;
 import com.sparksys.commons.jwt.entity.JwtUserInfo;
 import com.sparksys.commons.jwt.service.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;

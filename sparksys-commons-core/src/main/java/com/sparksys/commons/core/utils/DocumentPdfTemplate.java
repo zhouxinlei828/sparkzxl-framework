@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.pdf;
+package com.sparksys.commons.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
 

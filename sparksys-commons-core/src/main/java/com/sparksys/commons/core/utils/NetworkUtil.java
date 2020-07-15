@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.network;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.core.net.NetUtil;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
+/**
  * description：Network工具类
  *
  * @author zhouxinlei

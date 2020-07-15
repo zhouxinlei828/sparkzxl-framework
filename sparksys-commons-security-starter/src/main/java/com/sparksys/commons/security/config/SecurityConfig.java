@@ -1,6 +1,6 @@
 package com.sparksys.commons.security.config;
 
-import com.sparksys.commons.core.utils.collection.ListUtils;
+import com.sparksys.commons.core.utils.ListUtils;
 import com.sparksys.commons.security.authorization.DynamicAccessDecisionManager;
 import com.sparksys.commons.security.component.DynamicSecurityMetadataSource;
 import com.sparksys.commons.security.component.JwtAuthenticationTokenFilter;
@@ -47,17 +47,23 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Resource
-    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
-
-    @Resource
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Resource
     private SecurityProperties securityProperties;
 
     @Resource
     private AbstractAuthSecurityService abstractAuthSecurityService;
+
+
+    @Bean
+    public RestfulAccessDeniedHandler restfulAccessDeniedHandler(){
+        return new RestfulAccessDeniedHandler();
+    }
+
+    @Bean
+    public RestAuthenticationEntryPoint restAuthenticationEntryPoint(){
+        return new RestAuthenticationEntryPoint();
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -91,8 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拒绝处理类
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(restfulAccessDeniedHandler)
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
+                .accessDeniedHandler(restfulAccessDeniedHandler())
+                .authenticationEntryPoint(restAuthenticationEntryPoint());
 
         if (securityProperties.isDynamicSecurity()) {
             registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);

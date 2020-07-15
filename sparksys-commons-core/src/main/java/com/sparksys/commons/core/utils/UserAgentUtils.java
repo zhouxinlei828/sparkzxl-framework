@@ -3,7 +3,6 @@ package com.sparksys.commons.core.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.sparksys.commons.core.entity.UserAgentEntity;
-import com.sparksys.commons.core.utils.ip2region.AddressUtil;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;

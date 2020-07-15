@@ -1,15 +1,12 @@
-package com.sparksys.commons.oauth.component;
+package com.sparksys.commons.oauth.rest;
 
-import com.sparksys.commons.core.utils.ResponseResultUtils;
+import com.sparksys.commons.core.base.api.ResponseResultUtils;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * description: 当访问接口没有权限时，自定义的返回结果
@@ -17,7 +14,6 @@ import java.io.IOException;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:14
  */
-@Component
 public class OauthRestfulAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override

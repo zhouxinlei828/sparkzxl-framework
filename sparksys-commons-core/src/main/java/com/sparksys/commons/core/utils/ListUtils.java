@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.collection;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;

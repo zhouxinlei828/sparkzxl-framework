@@ -1,7 +1,7 @@
-package com.sparksys.commons.web.aspect;
+package com.sparksys.commons.log.aspect;
 
+import cn.hutool.json.JSONUtil;
 import com.sparksys.commons.core.utils.HttpCommonUtils;
-import com.sparksys.commons.web.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -26,7 +26,7 @@ public class WebLogAspect {
 
     private static final String START_TIME = "request-start";
 
-    @Pointcut("execution(* com.sparksys.*.interfaces.*..*(..))")
+    @Pointcut("@annotation(com.sparksys.commons.log.annotation.WebLog)")
     public void pointCut() {
     }
 
@@ -52,7 +52,7 @@ public class WebLogAspect {
                         continue;
                     }
                     stringBuilder
-                            .append(JacksonUtils.writeJsonAsString(object))
+                            .append(JSONUtil.toJsonPrettyStr(object))
                             .append("\n").append(",");
                 }
             }
@@ -76,7 +76,7 @@ public class WebLogAspect {
     @Around("pointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = point.proceed();
-        log.info("返回结果：[{}]", JacksonUtils.writeJsonAsString(result));
+        log.info("返回结果：[{}]", JSONUtil.toJsonPrettyStr(result));
         return result;
     }
 

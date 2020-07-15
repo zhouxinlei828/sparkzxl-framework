@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.ip2region;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;

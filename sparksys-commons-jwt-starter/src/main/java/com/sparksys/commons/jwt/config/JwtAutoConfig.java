@@ -1,18 +1,14 @@
 package com.sparksys.commons.jwt.config;
 
-import com.sparksys.commons.core.utils.crypto.KeyPairUtils;
+import com.sparksys.commons.core.utils.KeyPairUtils;
 import com.sparksys.commons.jwt.properties.JwtProperties;
 import com.sparksys.commons.jwt.service.JwtTokenService;
 import com.sparksys.commons.jwt.service.impl.JwtTokenServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.security.KeyPair;
 

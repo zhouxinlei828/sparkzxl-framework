@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.exception;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 

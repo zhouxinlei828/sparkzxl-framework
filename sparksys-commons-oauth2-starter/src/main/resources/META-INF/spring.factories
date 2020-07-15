@@ -1,6 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.sparksys.commons.oauth.config.AuthorizationServerConfig, \
-    com.sparksys.commons.oauth.config.JwtTokenStoreConfig, \
-    com.sparksys.commons.oauth.config.RedisTokenStoreConfig, \
     com.sparksys.commons.oauth.config.ResourceServerConfig
   

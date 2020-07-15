@@ -1,6 +1,6 @@
 package com.sparksys.commons.cache.config;
 
-import com.sparksys.commons.cache.components.TokenUtil;
+import com.sparksys.commons.cache.utils.TokenUtil;
 import com.sparksys.commons.core.repository.CacheRepository;
 import com.sparksys.commons.cache.repository.CaffeineRepositoryImpl;
 import com.sparksys.commons.cache.repository.RedisRepositoryImpl;
@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**

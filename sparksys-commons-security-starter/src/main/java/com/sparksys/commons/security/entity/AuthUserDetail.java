@@ -2,7 +2,7 @@ package com.sparksys.commons.security.entity;
 
 import com.google.common.collect.Lists;
 import com.sparksys.commons.core.entity.GlobalAuthUser;
-import com.sparksys.commons.core.utils.collection.ListUtils;
+import com.sparksys.commons.core.utils.ListUtils;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

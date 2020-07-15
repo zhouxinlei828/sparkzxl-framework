@@ -4,8 +4,12 @@ import cn.hutool.json.JSONUtil;
 import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
 import com.sparksys.commons.oauth.properties.Oauth2Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +22,10 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,16 +51,34 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private UserDetailsService userDetailsService;
 
     @Resource
-    private TokenStore redisTokenStore;
-
-    @Resource
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
-
-    @Resource
-    private JwtTokenEnhancer jwtTokenEnhancer;
-
-    @Resource
     private Oauth2Properties oAuth2Properties;
+
+
+    @Resource
+    private KeyPair keyPair;
+
+    @Resource
+    private RedisConnectionFactory redisConnectionFactory;
+
+    @Bean
+    public TokenStore redisTokenStore() {
+        return new RedisTokenStore(redisConnectionFactory);
+    }
+
+    @Bean
+    @DependsOn("keyPair")
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        if (ObjectUtils.isNotEmpty(keyPair)){
+            jwtAccessTokenConverter.setKeyPair(keyPair);
+        }
+        return jwtAccessTokenConverter;
+    }
+
+    @Bean
+    public JwtTokenEnhancer jwtTokenEnhancer() {
+        return new JwtTokenEnhancer();
+    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -89,6 +113,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
+        JwtAccessTokenConverter jwtAccessTokenConverter = jwtAccessTokenConverter();
+        JwtTokenEnhancer jwtTokenEnhancer = jwtTokenEnhancer();
         //配置JWT的内容增强器
         delegates.add(jwtTokenEnhancer);
         delegates.add(jwtAccessTokenConverter);
@@ -96,7 +122,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
                 //配置令牌存储策略
-                .tokenStore(redisTokenStore)
+                .tokenStore(redisTokenStore())
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(enhancerChain);
 

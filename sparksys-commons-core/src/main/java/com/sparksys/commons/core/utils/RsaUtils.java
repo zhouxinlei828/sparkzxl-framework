@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.crypto;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;

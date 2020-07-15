@@ -6,10 +6,8 @@ import com.sparksys.commons.core.repository.CacheRepository;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.user.service.IGlobalUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.function.Function;
 
 
 /**
@@ -19,7 +17,6 @@ import java.util.function.Function;
  * @date: 2020-07-13 14:27:12
  */
 @Slf4j
-@Service
 public class GlobalUserServiceImpl implements IGlobalUserService {
 
     @Resource

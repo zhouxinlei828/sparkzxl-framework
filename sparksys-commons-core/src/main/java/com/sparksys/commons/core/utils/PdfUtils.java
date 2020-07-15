@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.pdf;
+package com.sparksys.commons.core.utils;
 
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;

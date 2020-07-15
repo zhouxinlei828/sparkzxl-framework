@@ -10,7 +10,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.core.support.SparkSysExceptionAssert;
-import com.sparksys.commons.core.utils.crypto.MD5Utils;
+import com.sparksys.commons.core.utils.MD5Utils;
 import com.sparksys.commons.jwt.entity.JwtUserInfo;
 import com.sparksys.commons.jwt.properties.JwtProperties;
 import com.sparksys.commons.jwt.service.JwtTokenService;

@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.crypto;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;

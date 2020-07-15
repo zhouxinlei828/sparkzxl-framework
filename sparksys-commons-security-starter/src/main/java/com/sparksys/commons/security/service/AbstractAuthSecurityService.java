@@ -13,7 +13,7 @@ import com.sparksys.commons.security.entity.LoginStatus;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.core.constant.CoreConstant;
 import com.sparksys.commons.core.support.BusinessException;
-import com.sparksys.commons.core.utils.crypto.MD5Utils;
+import com.sparksys.commons.core.utils.MD5Utils;
 import com.sparksys.commons.security.entity.AuthToken;
 import com.sparksys.commons.security.dto.LoginDTO;
 import lombok.extern.slf4j.Slf4j;

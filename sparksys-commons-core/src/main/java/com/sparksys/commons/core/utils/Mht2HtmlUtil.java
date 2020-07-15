@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.pdf;
+package com.sparksys.commons.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

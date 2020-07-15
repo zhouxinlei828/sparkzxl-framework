@@ -1,7 +1,7 @@
 package com.sparksys.commons.user.resolver;
 
 import com.sparksys.commons.core.entity.GlobalAuthUser;
-import com.sparksys.commons.core.utils.ResponseResultUtils;
+import com.sparksys.commons.core.base.api.ResponseResultUtils;
 import com.sparksys.commons.user.service.IGlobalUserService;
 
 import org.springframework.core.MethodParameter;

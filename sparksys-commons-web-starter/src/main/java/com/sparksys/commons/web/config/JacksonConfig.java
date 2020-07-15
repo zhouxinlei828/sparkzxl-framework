@@ -45,8 +45,8 @@ public class JacksonConfig {
     @Bean
     @Primary
     @ConditionalOnMissingBean(ObjectMapper.class)
-    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+    public ObjectMapper jacksonObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));

@@ -1,4 +1,4 @@
-package com.sparksys.commons.core.utils.date;
+package com.sparksys.commons.core.utils;
 
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
