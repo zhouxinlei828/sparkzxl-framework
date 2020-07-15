@@ -84,6 +84,7 @@
         <module>sparksys-commons-core</module>
         <module>sparksys-commons-database-starter</module>
         <module>sparksys-commons-elasticsearch-starter</module>
+        <module>sparksys-commons-jwt-starter</module>
         <module>sparksys-commons-log-starter</module>
         <module>sparksys-commons-mail-starter</module>
         <module>sparksys-commons-oauth2-starter</module>
