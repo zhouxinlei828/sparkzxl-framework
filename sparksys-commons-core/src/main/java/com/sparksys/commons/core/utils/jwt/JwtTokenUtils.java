@@ -38,7 +38,7 @@ public class JwtTokenUtils {
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
                 .build();
-        jwtUserInfo.setJti(UUID.fromString(jwtUserInfo.getUsername()).toString());
+        jwtUserInfo.setJti(MD5Utils.encrypt(jwtUserInfo.getUsername()));
         //将负载信息封装到Payload中
         String payloadStr = JSONUtil.toJsonPrettyStr(jwtUserInfo);
         Payload payload = new Payload(payloadStr);
