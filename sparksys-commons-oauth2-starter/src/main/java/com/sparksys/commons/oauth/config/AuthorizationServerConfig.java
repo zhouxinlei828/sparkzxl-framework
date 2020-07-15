@@ -56,26 +56,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Resource
     private Oauth2Properties oAuth2Properties;
 
-    /**
-     * 使用密码模式需要配置
-     */
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
-        List<TokenEnhancer> delegates = new ArrayList<>();
-        //配置JWT的内容增强器
-        delegates.add(jwtTokenEnhancer);
-        delegates.add(jwtAccessTokenConverter);
-        enhancerChain.setTokenEnhancers(delegates);
-        endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                //配置令牌存储策略
-                .tokenStore(redisTokenStore)
-                .accessTokenConverter(jwtAccessTokenConverter)
-                .tokenEnhancer(enhancerChain);
-
-    }
-
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         log.info("OAuth2Properties：{}", JSONUtil.toJsonPrettyStr(oAuth2Properties));
@@ -102,4 +82,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         security.tokenKeyAccess("isAuthenticated()");
     }
 
+    /**
+     * 使用密码模式需要配置
+     */
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+        List<TokenEnhancer> delegates = new ArrayList<>();
+        //配置JWT的内容增强器
+        delegates.add(jwtTokenEnhancer);
+        delegates.add(jwtAccessTokenConverter);
+        enhancerChain.setTokenEnhancers(delegates);
+        endpoints.authenticationManager(authenticationManager)
+                .userDetailsService(userDetailsService)
+                //配置令牌存储策略
+                .tokenStore(redisTokenStore)
+                .accessTokenConverter(jwtAccessTokenConverter)
+                .tokenEnhancer(enhancerChain);
+
+    }
 }

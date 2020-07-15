@@ -1,10 +1,12 @@
 package com.sparksys.commons.oauth.config;
 
 import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2SsoProperties;
+import com.sparksys.commons.web.component.SpringContextUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import java.security.KeyPair;
 
 /**
  * description: 使用Jwt存储token的配置
@@ -17,10 +19,10 @@ public class JwtTokenStoreConfig {
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        //配置JWT使用的秘钥
-        accessTokenConverter.setSigningKey("sparksys");
-        return accessTokenConverter;
+        KeyPair keyPair = SpringContextUtils.getBean(KeyPair.class);
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setKeyPair(keyPair);
+        return jwtAccessTokenConverter;
     }
 
     @Bean

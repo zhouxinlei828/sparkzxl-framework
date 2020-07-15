@@ -3,7 +3,7 @@ package com.sparksys.commons.security.component;
 import com.sparksys.commons.core.entity.GlobalAuthUser;
 import com.sparksys.commons.core.utils.ResponseResultUtils;
 import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
-import com.sparksys.commons.jwt.config.service.JwtTokenService;
+import com.sparksys.commons.jwt.service.impl.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;
 import com.sparksys.commons.security.properties.SecurityProperties;
 import com.sparksys.commons.security.registry.SecurityIgnoreUrl;

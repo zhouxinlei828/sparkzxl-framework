@@ -1,7 +1,6 @@
-package com.sparksys.commons.jwt.config.service;
+package com.sparksys.commons.jwt.service;
 
-import com.nimbusds.jose.jwk.RSAKey;
-import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
+import com.sparksys.commons.jwt.entity.JwtUserInfo;
 
 /**
  * description: jwtToken 服务类

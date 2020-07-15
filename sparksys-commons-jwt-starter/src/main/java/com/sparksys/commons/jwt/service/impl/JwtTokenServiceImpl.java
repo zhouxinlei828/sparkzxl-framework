@@ -1,4 +1,4 @@
-package com.sparksys.commons.jwt.config.service.impl;
+package com.sparksys.commons.jwt.service.impl;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
@@ -11,12 +11,10 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.sparksys.commons.core.support.ResponseResultStatus;
 import com.sparksys.commons.core.support.SparkSysExceptionAssert;
 import com.sparksys.commons.core.utils.crypto.MD5Utils;
-import com.sparksys.commons.jwt.config.entity.JwtUserInfo;
-import com.sparksys.commons.jwt.config.properties.JwtProperties;
-import com.sparksys.commons.jwt.config.service.JwtTokenService;
+import com.sparksys.commons.jwt.entity.JwtUserInfo;
+import com.sparksys.commons.jwt.properties.JwtProperties;
+import com.sparksys.commons.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
@@ -32,9 +30,11 @@ import java.security.interfaces.RSAPublicKey;
 public class JwtTokenServiceImpl implements JwtTokenService {
 
     private final JwtProperties jwtProperties;
+    private final KeyPair keyPair;
 
-    public JwtTokenServiceImpl(JwtProperties jwtProperties) {
+    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyPair keyPair) {
         this.jwtProperties = jwtProperties;
+        this.keyPair = keyPair;
     }
 
     @Override
@@ -127,9 +127,6 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     private RSAKey getRsaKey() {
-        //从classpath下获取RSA秘钥对
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456".toCharArray());
-        KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
         //获取RSA公钥
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         //获取RSA私钥
