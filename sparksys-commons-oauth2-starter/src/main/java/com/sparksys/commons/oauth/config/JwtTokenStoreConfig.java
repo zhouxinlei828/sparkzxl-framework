@@ -1,7 +1,7 @@
 package com.sparksys.commons.oauth.config;
 
+import com.sparksys.commons.core.utils.crypto.KeyPairUtils;
 import com.sparksys.commons.oauth.enhancer.JwtTokenEnhancer;
-import com.sparksys.commons.web.component.SpringContextUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -19,7 +19,7 @@ public class JwtTokenStoreConfig {
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        KeyPair keyPair = SpringContextUtils.getBean(KeyPair.class);
+        KeyPair keyPair = KeyPairUtils.keyPair("jwt.jks", "123456");
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         jwtAccessTokenConverter.setKeyPair(keyPair);
         return jwtAccessTokenConverter;

@@ -1,4 +1,4 @@
-package com.sparksys.commons.jwt.properties;
+package com.sparksys.commons.security.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -2,13 +2,13 @@ package com.sparksys.commons.security.service;
 
 import com.sparksys.commons.core.constant.CacheKey;
 import com.sparksys.commons.core.entity.GlobalAuthUser;
+import com.sparksys.commons.core.entity.JwtUserInfo;
 import com.sparksys.commons.core.repository.CacheRepository;
-import com.sparksys.commons.jwt.entity.JwtUserInfo;
-import com.sparksys.commons.jwt.service.JwtTokenService;
 import com.sparksys.commons.security.entity.AuthUserDetail;
 import com.sparksys.commons.security.event.LoginEvent;
 import com.sparksys.commons.security.entity.LoginStatus;
 import com.sparksys.commons.core.support.ResponseResultStatus;
+import com.sparksys.commons.security.properties.JwtProperties;
 import com.sparksys.commons.web.component.SpringContextUtils;
 import com.sparksys.commons.core.constant.CoreConstant;
 import com.sparksys.commons.core.support.BusinessException;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import com.sparksys.commons.core.utils.jwt.JwtTokenUtils;
 import javax.annotation.Resource;
 
 /**
@@ -34,7 +34,7 @@ public abstract class AbstractAuthSecurityService {
     @Resource
     private CacheRepository cacheRepository;
     @Resource
-    private JwtTokenService jwtTokenService;
+    private JwtProperties jwtProperties;
 
     /**
      * 登录
@@ -73,8 +73,9 @@ public abstract class AbstractAuthSecurityService {
                 .iat(System.currentTimeMillis())
                 .authorities(globalAuthUser.getPermissions())
                 .username(globalAuthUser.getAccount())
+                .expire(jwtProperties.getExpire())
                 .build();
-        return jwtTokenService.createTokenByHmac(jwtUserInfo);
+        return JwtTokenUtils.createTokenByHmac(jwtUserInfo,jwtProperties.getSecret());
     }
 
     private void checkPasswordError(LoginDTO authRequest, String password, GlobalAuthUser authUser) {

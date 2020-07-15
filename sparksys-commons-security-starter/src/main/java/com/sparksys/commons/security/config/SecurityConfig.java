@@ -8,10 +8,10 @@ import com.sparksys.commons.security.component.RestAuthenticationEntryPoint;
 import com.sparksys.commons.security.component.RestfulAccessDeniedHandler;
 import com.sparksys.commons.security.filter.DynamicSecurityFilter;
 import com.sparksys.commons.security.properties.SecurityProperties;
+import com.sparksys.commons.security.properties.JwtProperties;
 import com.sparksys.commons.security.registry.SecurityIgnoreUrl;
 import com.sparksys.commons.security.service.AbstractAuthSecurityService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +43,7 @@ import java.util.List;
  */
 
 @Configuration
-@EnableConfigurationProperties(SecurityProperties.class)
+@EnableConfigurationProperties({SecurityProperties.class,JwtProperties.class})
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
