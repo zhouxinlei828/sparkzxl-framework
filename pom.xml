@@ -97,12 +97,12 @@
 
     <distributionManagement>
         <repository>
-            <id>rdc-releases</id>
-            <url>https://packages.aliyun.com/maven/repository/2016387-release-VIYY8W/</url>
+            <id>maven-releases</id>
+            <url>http://101.200.80.154:8081/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>rdc-snapshots</id>
-            <url>https://packages.aliyun.com/maven/repository/2016387-snapshot-RAGz5b/</url>
+            <id>maven-snapshots</id>
+            <url>http://101.200.80.154:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <dependencies>
@@ -623,12 +623,12 @@
             </build>
             <distributionManagement>
                 <repository>
-                    <id>rdc-releases</id>
-                    <url>https://packages.aliyun.com/maven/repository/2016387-release-VIYY8W/</url>
+                    <id>maven-releases</id>
+                    <url>http://101.200.80.154:8081/repository/maven-releases/</url>
                 </repository>
                 <snapshotRepository>
-                    <id>rdc-snapshots</id>
-                    <url>https://packages.aliyun.com/maven/repository/2016387-snapshot-RAGz5b/</url>
+                    <id>maven-snapshots</id>
+                    <url>http://101.200.80.154:8081/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
             <activation>
