@@ -1,6 +1,6 @@
 package com.sparksys.commons.oauth.enhancer;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import com.sparksys.commons.security.entity.AuthUserDetail;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -21,9 +21,9 @@ public class JwtTokenEnhancer implements TokenEnhancer {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
-        UserDetails userDetails = (UserDetails) oAuth2Authentication.getPrincipal();
+        AuthUserDetail userDetails = (AuthUserDetail) oAuth2Authentication.getPrincipal();
         Map<String, Object> info = new HashMap<>(1);
-        info.put("username", userDetails.getUsername());
+        info.put("userId", userDetails.getAuthUser().getId());
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(info);
         return oAuth2AccessToken;
     }

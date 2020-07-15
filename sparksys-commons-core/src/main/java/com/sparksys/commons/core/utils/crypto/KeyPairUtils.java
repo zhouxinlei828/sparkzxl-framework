@@ -6,23 +6,16 @@ import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import java.security.KeyPair;
 
 /**
- * description: 获取keyPair工具类
+ * description: 加载读取资源文件
  *
  * @author: zhouxinlei
- * @date: 2020-07-15 16:05:02
+ * @date: 2020-07-15 20:25:16
  */
 public class KeyPairUtils {
 
-    public static KeyPair keyPair(String path, String password) {
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(path), password.toCharArray());
-        return keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
+    public static KeyPair keyPair(String path, String alias, String password) {
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(path),
+                password.toCharArray());
+        return keyStoreKeyFactory.getKeyPair(alias, password.toCharArray());
     }
-
-
-
-
-    public static void main(String[] args) {
-        KeyPairUtils.keyPair("D:\\ideaProjects\\sparksys-commons\\jwt.jks","123456");
-    }
-
 }

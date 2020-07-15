@@ -94,6 +94,7 @@
         <module>sparksys-commons-zookeeper-starter</module>
         <module>sparksys-commons-cloud-starter</module>
         <module>sparksys-commons-user-starter</module>
+        <module>sparksys-commons-boot-starter</module>
     </modules>
 
     <distributionManagement>
@@ -188,6 +189,11 @@
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-commons-elasticsearch-starter</artifactId>
+                <version>${sparksys-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sparksys</groupId>
+                <artifactId>sparksys-commons-jwt-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>

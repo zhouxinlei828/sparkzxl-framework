@@ -19,26 +19,10 @@
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-commons-cache-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sparksys</groupId>
-            <artifactId>sparksys-commons-database-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.sparksys</groupId>
-            <artifactId>sparksys-commons-web-starter</artifactId>
+            <artifactId>sparksys-commons-security-starter</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.projectlombok</groupId>

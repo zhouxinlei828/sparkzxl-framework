@@ -3,7 +3,6 @@ package com.sparksys.commons.security.component;
 import cn.hutool.core.util.URLUtil;
 import com.google.common.collect.Lists;
 import com.sparksys.commons.security.service.DynamicSecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;

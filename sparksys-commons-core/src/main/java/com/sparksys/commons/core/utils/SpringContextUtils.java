@@ -1,4 +1,4 @@
-package com.sparksys.commons.web.component;
+package com.sparksys.commons.core.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

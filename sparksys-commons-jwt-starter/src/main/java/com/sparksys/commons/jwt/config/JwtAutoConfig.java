@@ -1,8 +1,11 @@
 package com.sparksys.commons.jwt.config;
 
+import com.sparksys.commons.core.utils.crypto.KeyPairUtils;
 import com.sparksys.commons.jwt.properties.JwtProperties;
 import com.sparksys.commons.jwt.service.JwtTokenService;
 import com.sparksys.commons.jwt.service.impl.JwtTokenServiceImpl;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,15 +33,15 @@ public class JwtAutoConfig {
 
     /**
      * 读取固定的公钥和私钥来进行签名和验证
+     *
      * @return
      */
     @Bean
+    @ConditionalOnMissingBean(KeyPair.class)
     @ConditionalOnProperty(name = "sparksys.jwt.keyStore.enable", havingValue = "true")
     public KeyPair keyPair(JwtProperties jwtProperties) {
         //从classpath下的证书中获取秘钥对
         JwtProperties.KeyStore keyStore = jwtProperties.getKeyStore();
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(keyStore.getPath()),
-                keyStore.getPassword().toCharArray());
-        return keyStoreKeyFactory.getKeyPair("jwt", keyStore.getPassword().toCharArray());
+        return KeyPairUtils.keyPair(keyStore.getPath(), "jwt", keyStore.getPassword());
     }
 }

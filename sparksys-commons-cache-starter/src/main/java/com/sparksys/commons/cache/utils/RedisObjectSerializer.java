@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.sparksys.commons.core.converter.EnumDeserializer;
+import com.sparksys.commons.cache.converter.EnumDeserializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 /**

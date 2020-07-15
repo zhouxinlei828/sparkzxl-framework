@@ -44,9 +44,9 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .type(JOSEObjectType.JWT)
                 .build();
         jwtUserInfo.setExpire(jwtProperties.getExpire());
-        jwtUserInfo.setJti(UUID.fromString(jwtUserInfo.getUsername()).toString());
+        jwtUserInfo.setJti(UUID.randomUUID().toString());
         //将负载信息封装到Payload中
-        String payloadStr = JSONUtil.toJsonPrettyStr(jwtUserInfo);
+        String payloadStr = JSONUtil.toJsonStr(jwtUserInfo);
         Payload payload = new Payload(payloadStr);
         //创建JWS对象
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
@@ -91,7 +91,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 type(JOSEObjectType.JWT)
                 .build();
         //将负载信息封装到Payload中
-        String payloadStr = JSONUtil.toJsonPrettyStr(jwtUserInfo);
+        String payloadStr = JSONUtil.toJsonStr(jwtUserInfo);
         Payload payload = new Payload(payloadStr);
         //创建JWS对象
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
@@ -132,5 +132,9 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         //获取RSA私钥
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         return new RSAKey.Builder(publicKey).privateKey(privateKey).build();
+    }
+
+    public static void main(String[] args) {
+        UUID.randomUUID().toString();
     }
 }
