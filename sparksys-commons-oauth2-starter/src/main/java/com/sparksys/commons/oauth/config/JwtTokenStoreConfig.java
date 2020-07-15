@@ -19,10 +19,7 @@ public class JwtTokenStoreConfig {
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        KeyPair keyPair = KeyPairUtils.keyPair("jwt.jks", "123456");
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setKeyPair(keyPair);
-        return jwtAccessTokenConverter;
+        return new JwtAccessTokenConverter();
     }
 
     @Bean

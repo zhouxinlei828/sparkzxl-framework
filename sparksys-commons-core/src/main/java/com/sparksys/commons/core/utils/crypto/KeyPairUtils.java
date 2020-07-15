@@ -18,4 +18,11 @@ public class KeyPairUtils {
         return keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
     }
 
+
+
+
+    public static void main(String[] args) {
+        KeyPairUtils.keyPair("D:\\ideaProjects\\sparksys-commons\\jwt.jks","123456");
+    }
+
 }

@@ -6,11 +6,11 @@
 
     <groupId>com.sparksys</groupId>
     <artifactId>sparksys-commons</artifactId>
-    <version>1.1.0.RELEASE</version>
+    <version>1.2.0.RELEASE</version>
     <packaging>pom</packaging>
 
     <properties>
-        <sparksys-project.version>1.1.0.RELEASE</sparksys-project.version>
+        <sparksys-project.version>1.2.0.RELEASE</sparksys-project.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -469,6 +469,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -484,18 +485,10 @@
                 </includes>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.factories</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
         </resources>
 
         <pluginManagement>
             <plugins>
-                <!-- 提供给 mapstruct 使用 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -506,17 +499,12 @@
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
                 </plugin>
-
                 <!-- resources资源插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                     <configuration>
-                        <delimiters>
-                            <delimiter>@</delimiter>
-                        </delimiters>
-                        <useDefaultDelimiters>false</useDefaultDelimiters>
                         <encoding>UTF-8</encoding>
                         <!-- 后缀为pem、pfx的证书文件 -->
                         <nonFilteredFileExtensions>
@@ -527,12 +515,14 @@
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
+                <!-- java文档插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${maven-javadoc-plugin.version}</version>
                     <configuration>
                         <encoding>UTF-8</encoding>
+                        <!--                        <aggregate>true</aggregate>-->
                         <charset>UTF-8</charset>
                         <docencoding>UTF-8</docencoding>
                     </configuration>
@@ -598,7 +588,52 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <!-- 打包的 -P参数 -->
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>rdc-releases</id>
+                    <url>https://packages.aliyun.com/maven/repository/2016387-release-VIYY8W/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>rdc-snapshots</id>
+                    <url>https://packages.aliyun.com/maven/repository/2016387-snapshot-RAGz5b/</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 </project>
