@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(value = "cache")
+@ConfigurationProperties(prefix = "cache")
 public class CacheProperties {
 
     private Redisson redisson;

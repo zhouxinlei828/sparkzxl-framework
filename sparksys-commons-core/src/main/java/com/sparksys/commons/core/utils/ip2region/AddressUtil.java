@@ -70,7 +70,7 @@ public class AddressUtil {
 
     static {
         try {
-            String dbPath = "./data/ip2region/ip2region.db";
+            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
             File file = new File(dbPath);
             if (!file.exists()) {
                 String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
@@ -86,7 +86,7 @@ public class AddressUtil {
             config = new DbConfig();
             searcher = new DbSearcher(config, dbPath);
         } catch (Exception var5) {
-            log.error("init ip region error:{}", var5);
+            log.warn("init ip region error:{}", var5.getMessage());
         }
 
     }

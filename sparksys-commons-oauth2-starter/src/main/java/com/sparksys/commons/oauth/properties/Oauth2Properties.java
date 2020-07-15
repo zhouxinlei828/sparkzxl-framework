@@ -12,7 +12,7 @@ import java.util.List;
  * @date: 2020-07-14 16:24:55
  */
 @Data
-@ConfigurationProperties(value = "sparksys.oauth2")
+@ConfigurationProperties(prefix = "sparksys.oauth2")
 public class Oauth2Properties {
 
     /**
