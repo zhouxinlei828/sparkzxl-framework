@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.jwt.config.JwtAutoConfig
+    com.sparksys.jwt.config.JwtAutoConfiguration

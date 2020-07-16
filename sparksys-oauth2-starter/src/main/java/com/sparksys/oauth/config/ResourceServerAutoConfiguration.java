@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAdapter {
 
     @Resource
     private Oauth2Properties oauth2Properties;

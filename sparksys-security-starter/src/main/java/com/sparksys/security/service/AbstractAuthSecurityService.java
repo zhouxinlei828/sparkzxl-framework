@@ -53,7 +53,7 @@ public abstract class AbstractAuthSecurityService {
         ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(adminUserDetails);
         GlobalAuthUser authUser = adminUserDetails.getAuthUser();
         //校验密码输入是否正确
-        checkPasswordError(authRequest, password, authUser);
+        checkPasswordError(authRequest, authUser);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                 null, adminUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -80,9 +80,9 @@ public abstract class AbstractAuthSecurityService {
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(LoginDTO authRequest, String password, GlobalAuthUser authUser) {
+    private void checkPasswordError(LoginDTO authRequest,GlobalAuthUser authUser) {
         String encryptPassword = MD5Utils.encrypt(authRequest.getPassword());
-        log.info("密码加密 = {}，数据库密码={}", password, encryptPassword);
+        log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUser.getPassword());
         //数据库密码比对
         boolean verifyResult = StringUtils.equals(encryptPassword, authUser.getPassword());
         if (!verifyResult) {

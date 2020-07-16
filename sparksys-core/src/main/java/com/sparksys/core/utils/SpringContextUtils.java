@@ -3,7 +3,6 @@ package com.sparksys.core.utils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Map;
  * @author zhouxinlei
  * @date 2020-05-24 13:42:56
  */
-@Component
 public class SpringContextUtils implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;

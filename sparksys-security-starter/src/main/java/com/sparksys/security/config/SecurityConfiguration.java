@@ -45,7 +45,7 @@ import java.util.List;
 @EnableConfigurationProperties({SecurityProperties.class})
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Resource

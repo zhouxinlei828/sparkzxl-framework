@@ -30,7 +30,7 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(ElasticsearchProperties.class)
 @Slf4j
-public class ElasticsearchAutoConfig {
+public class ElasticsearchAutoConfiguration {
 
     private final List<HttpHost> httpHosts = new ArrayList<>();
 

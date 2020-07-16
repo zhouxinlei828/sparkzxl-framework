@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @date: 2020-07-09 12:05:47
  */
 @Configuration
-public class CacheAutoConfig {
+public class CacheAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "cache.redis.enable", havingValue = "false")

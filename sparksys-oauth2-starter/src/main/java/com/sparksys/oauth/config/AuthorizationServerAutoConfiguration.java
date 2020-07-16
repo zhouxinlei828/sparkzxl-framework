@@ -39,7 +39,7 @@ import java.util.List;
 @EnableConfigurationProperties(Oauth2Properties.class)
 @EnableAuthorizationServer
 @Slf4j
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Resource
     private PasswordEncoder passwordEncoder;

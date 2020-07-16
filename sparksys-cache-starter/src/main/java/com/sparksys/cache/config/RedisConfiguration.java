@@ -20,7 +20,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 @ConditionalOnProperty(name = "cache.redis.enable", havingValue = "true")
-public class RedisConfig {
+public class RedisConfiguration {
 
     /**
      * redisTemplate设置

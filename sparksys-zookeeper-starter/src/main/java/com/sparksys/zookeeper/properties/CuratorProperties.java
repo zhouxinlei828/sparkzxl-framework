@@ -2,7 +2,6 @@ package com.sparksys.zookeeper.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * description: zookeeper属性配置
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @date 2020-05-24 13:45:52
  */
 @Data
-@Component
 @ConfigurationProperties(value = "sparksys.zookeeper.curator")
 public class CuratorProperties {
 

@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  */
 @Configuration
 @AutoConfigureAfter(MailSenderAutoConfiguration.class)
-public class MainAutoConfig {
+public class MainAutoConfiguration {
 
     @Resource
     private JavaMailSender mailSender;

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.mail.config.MainAutoConfig
+    com.sparksys.mail.config.MainAutoConfiguration

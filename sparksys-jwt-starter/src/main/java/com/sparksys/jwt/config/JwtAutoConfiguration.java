@@ -20,7 +20,7 @@ import java.security.KeyPair;
  */
 @Configuration
 @EnableConfigurationProperties(JwtProperties.class)
-public class JwtAutoConfig {
+public class JwtAutoConfiguration {
 
     @Bean
     public JwtTokenService jwtTokenService(JwtProperties jwtProperties) {

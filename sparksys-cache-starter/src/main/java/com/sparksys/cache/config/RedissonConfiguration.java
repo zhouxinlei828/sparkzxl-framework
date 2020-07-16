@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "cache.redisson.enable", havingValue = "true")
 @EnableConfigurationProperties(CacheProperties.class)
 @Slf4j
-public class RedissonConfig {
+public class RedissonConfiguration {
 
     @Bean
     public RedissonClient redissonClient(CacheProperties cacheProperties) {

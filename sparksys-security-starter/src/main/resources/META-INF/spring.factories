@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.security.config.SecurityConfig
+    com.sparksys.security.config.SecurityConfiguration
   

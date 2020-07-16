@@ -1,4 +1,4 @@
-package com.sparksys.web.component;
+package com.sparksys.web.support;
 
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.base.api.result.ApiResult;

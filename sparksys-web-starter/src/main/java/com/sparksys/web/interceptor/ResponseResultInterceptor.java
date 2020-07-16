@@ -1,4 +1,4 @@
-package com.sparksys.web.component;
+package com.sparksys.web.interceptor;
 
 import com.sparksys.web.annotation.ResponseResult;
 import com.sparksys.web.constant.WebConstant;
