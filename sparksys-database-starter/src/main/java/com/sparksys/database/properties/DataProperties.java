@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sparksys.data")
 public class DataProperties {
 
-    private long workerId;
+    private long workerId = 0;
 
-    private long dataCenterId;
+    private long dataCenterId = 0;
 }
