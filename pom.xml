@@ -79,22 +79,22 @@
     </properties>
 
     <modules>
-        <module>sparksys-commons-activiti-starter</module>
-        <module>sparksys-commons-boot-starter</module>
-        <module>sparksys-commons-cache-starter</module>
-        <module>sparksys-commons-cloud-starter</module>
-        <module>sparksys-commons-core</module>
-        <module>sparksys-commons-database-starter</module>
-        <module>sparksys-commons-elasticsearch-starter</module>
-        <module>sparksys-commons-jwt-starter</module>
-        <module>sparksys-commons-log-starter</module>
-        <module>sparksys-commons-mail-starter</module>
-        <module>sparksys-commons-oauth2-starter</module>
-        <module>sparksys-commons-security-starter</module>
-        <module>sparksys-commons-swagger-starter</module>
-        <module>sparksys-commons-user-starter</module>
-        <module>sparksys-commons-web-starter</module>
-        <module>sparksys-commons-zookeeper-starter</module>
+        <module>sparksys-activiti-starter</module>
+        <module>sparksys-boot-starter</module>
+        <module>sparksys-cache-starter</module>
+        <module>sparksys-cloud-starter</module>
+        <module>sparksys-core</module>
+        <module>sparksys-database-starter</module>
+        <module>sparksys-elasticsearch-starter</module>
+        <module>sparksys-jwt-starter</module>
+        <module>sparksys-log-starter</module>
+        <module>sparksys-mail-starter</module>
+        <module>sparksys-oauth2-starter</module>
+        <module>sparksys-security-starter</module>
+        <module>sparksys-swagger-starter</module>
+        <module>sparksys-user-starter</module>
+        <module>sparksys-web-starter</module>
+        <module>sparksys-zookeeper-starter</module>
     </modules>
 
     <distributionManagement>
@@ -168,72 +168,72 @@
             <!-- sparksys-commons 组件-->
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-activiti-starter</artifactId>
+                <artifactId>sparksys-activiti-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-cache-starter</artifactId>
+                <artifactId>sparksys-cache-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-core</artifactId>
+                <artifactId>sparksys-core</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-database-starter</artifactId>
+                <artifactId>sparksys-database-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-elasticsearch-starter</artifactId>
+                <artifactId>sparksys-elasticsearch-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-jwt-starter</artifactId>
+                <artifactId>sparksys-jwt-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-log-starter</artifactId>
+                <artifactId>sparksys-log-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-mail-starter</artifactId>
+                <artifactId>sparksys-mail-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-oauth2-starter</artifactId>
+                <artifactId>sparksys-oauth2-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-security-starter</artifactId>
+                <artifactId>sparksys-security-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-swagger-starter</artifactId>
+                <artifactId>sparksys-swagger-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-user-starter</artifactId>
+                <artifactId>sparksys-user-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-web-starter</artifactId>
+                <artifactId>sparksys-web-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-commons-zookeeper-starter</artifactId>
+                <artifactId>sparksys-zookeeper-starter</artifactId>
                 <version>${sparksys-project.version}</version>
             </dependency>
             <!-- mybatis-plus -->

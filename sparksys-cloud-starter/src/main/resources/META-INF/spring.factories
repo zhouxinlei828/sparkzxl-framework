@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.sparksys.cloud.config.OpenFeignAutoConfiguration , \
+    com.sparksys.cloud.config.RibbonMetaFilterAutoConfiguration

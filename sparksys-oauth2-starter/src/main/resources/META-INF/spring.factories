@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.sparksys.oauth.config.AuthorizationServerConfig, \
+    com.sparksys.oauth.config.ResourceServerConfig
+  

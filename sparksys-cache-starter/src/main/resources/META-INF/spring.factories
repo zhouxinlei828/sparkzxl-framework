@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.sparksys.cache.config.CacheAutoConfig , \
+    com.sparksys.cache.config.RedisConfig , \
+    com.sparksys.cache.config.RedissonConfig
