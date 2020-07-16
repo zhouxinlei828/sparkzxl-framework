@@ -1,6 +1,7 @@
 package com.sparksys.commons.log.aspect;
 
 import cn.hutool.json.JSONUtil;
+import com.google.common.base.Stopwatch;
 import com.sparksys.commons.core.utils.HttpCommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 /**
  * description: web请求日志切面
@@ -24,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class WebLogAspect {
 
-    private static final String START_TIME = "request-start";
+    private final Stopwatch stopWatch = Stopwatch.createStarted();
 
-    @Pointcut("@annotation(com.sparksys.commons.log.annotation.WebLog)")
+    @Pointcut("@within(com.sparksys.commons.log.annotation.WebLog)")
     public void pointCut() {
     }
 
@@ -38,9 +40,9 @@ public class WebLogAspect {
      */
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) {
+        stopwatch.reset();
+        stopWatch.start();
         HttpServletRequest request = HttpCommonUtils.getRequest();
-        Long start = System.currentTimeMillis();
-        request.setAttribute(START_TIME, start);
         StringBuilder stringBuilder = new StringBuilder();
         Object[] args = joinPoint.getArgs();
         if (args != null || args.length > 0) {
@@ -87,7 +89,8 @@ public class WebLogAspect {
      */
     @AfterReturning("pointCut()")
     public void afterReturning() {
-        log.info("接口请求耗时：{}毫秒", interfaceConsume());
+        stopWatch.stop();
+        log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     /**
@@ -97,13 +100,7 @@ public class WebLogAspect {
      */
     @AfterThrowing(pointcut = "pointCut()")
     public void afterThrowing() {
-        log.info("接口请求耗时：{}毫秒", interfaceConsume());
-    }
-
-    private Long interfaceConsume() {
-        HttpServletRequest request = HttpCommonUtils.getRequest();
-        Long start = (Long) request.getAttribute(START_TIME);
-        Long end = System.currentTimeMillis();
-        return end - start;
+        stopWatch.stop();
+        log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
     }
 }

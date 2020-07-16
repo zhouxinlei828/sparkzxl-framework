@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @author zhouxinlei
  * @date 2020-05-24 13:40:39
  */
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WebLog {
 }
