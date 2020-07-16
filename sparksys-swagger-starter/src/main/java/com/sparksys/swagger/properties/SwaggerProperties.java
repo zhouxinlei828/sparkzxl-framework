@@ -1,7 +1,6 @@
 package com.sparksys.swagger.properties;
 
 
-import com.sparksys.swagger.entity.ApiInfoEntity;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -19,7 +18,16 @@ public class SwaggerProperties {
 
     private String basePackage;
 
-    private ApiInfoEntity apiInfo;
+    private ApiInfo apiInfo;
+
+
+    @Data
+    public static class ApiInfo {
+        private String title;
+        private String description;
+        private String version;
+        private String termsOfServiceUrl;
+    }
 
 
 }
