@@ -80,7 +80,9 @@
 
     <modules>
         <module>sparksys-commons-activiti-starter</module>
+        <module>sparksys-commons-boot-starter</module>
         <module>sparksys-commons-cache-starter</module>
+        <module>sparksys-commons-cloud-starter</module>
         <module>sparksys-commons-core</module>
         <module>sparksys-commons-database-starter</module>
         <module>sparksys-commons-elasticsearch-starter</module>
@@ -90,11 +92,9 @@
         <module>sparksys-commons-oauth2-starter</module>
         <module>sparksys-commons-security-starter</module>
         <module>sparksys-commons-swagger-starter</module>
+        <module>sparksys-commons-user-starter</module>
         <module>sparksys-commons-web-starter</module>
         <module>sparksys-commons-zookeeper-starter</module>
-        <module>sparksys-commons-cloud-starter</module>
-        <module>sparksys-commons-user-starter</module>
-        <module>sparksys-commons-boot-starter</module>
     </modules>
 
     <distributionManagement>

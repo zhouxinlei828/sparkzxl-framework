@@ -56,12 +56,12 @@ public abstract class AbstractTaskService {
     /**
      * 查询当前运行时任务id
      *
-     * @param procInstId
+     * @param processInstanceId
      * @return String
      * @throws
      * @author zhouxinlei
      * @date 2020-05-09 18:02:03
      */
-    public abstract String findCurrentTaskId(String procInstId);
+    public abstract String findCurrentTaskId(String processInstanceId);
 }
 

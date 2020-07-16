@@ -40,7 +40,7 @@ public class WebLogAspect {
      */
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) {
-        stopwatch.reset();
+        stopWatch.reset();
         stopWatch.start();
         HttpServletRequest request = HttpCommonUtils.getRequest();
         StringBuilder stringBuilder = new StringBuilder();
