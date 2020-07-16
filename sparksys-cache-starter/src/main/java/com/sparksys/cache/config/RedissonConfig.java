@@ -1,7 +1,9 @@
 package com.sparksys.cache.config;
 
+import cn.hutool.json.JSONUtil;
 import com.sparksys.cache.lock.RedisDistributedLock;
 import com.sparksys.cache.properties.CacheProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -24,11 +26,12 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(Config.class)
 @ConditionalOnProperty(name = "cache.redisson.enable", havingValue = "true")
 @EnableConfigurationProperties(CacheProperties.class)
+@Slf4j
 public class RedissonConfig {
-
 
     @Bean
     public RedissonClient redissonClient(CacheProperties cacheProperties) {
+        log.info("自动注入RedissonClient CacheProperties：{}", JSONUtil.toJsonPrettyStr(cacheProperties));
         Config config = new Config();
         SingleServerConfig serverConfig = config.useSingleServer()
                 .setAddress(cacheProperties.getRedisson().getAddress())

@@ -34,7 +34,7 @@ public class JwtAutoConfig {
      */
     @Bean
     @ConditionalOnMissingBean(KeyPair.class)
-    @ConditionalOnProperty(name = "sparksys.jwt.keyStore.enable", havingValue = "true")
+    @ConditionalOnProperty(name = "sparksys.jwt.key-store.enable", havingValue = "true")
     public KeyPair keyPair(JwtProperties jwtProperties) {
         //从classpath下的证书中获取秘钥对
         JwtProperties.KeyStore keyStore = jwtProperties.getKeyStore();

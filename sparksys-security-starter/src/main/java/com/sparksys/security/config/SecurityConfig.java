@@ -54,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private AbstractAuthSecurityService abstractAuthSecurityService;
 
-
     @Bean
     public RestfulAccessDeniedHandler restfulAccessDeniedHandler(){
         return new RestfulAccessDeniedHandler();
@@ -119,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparksys.security.enableJwtFilter"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"sparksys.security.enable-jwt-filter"}, havingValue = "true")
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter();
     }
@@ -138,21 +137,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @ConditionalOnBean(name = "dynamicSecurityService")
-    @ConditionalOnProperty(name = {"sparksys.security.dynamicSecurity"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"sparksys.security.dynamic-security"}, havingValue = "true")
     @Bean
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         return new DynamicAccessDecisionManager();
     }
 
     @ConditionalOnBean(name = "dynamicSecurityService")
-    @ConditionalOnProperty(name = {"sparksys.security.dynamicSecurity"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"sparksys.security.dynamic-security"}, havingValue = "true")
     @Bean
     public DynamicSecurityFilter dynamicSecurityFilter() {
         return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
     }
 
     @ConditionalOnBean(name = "dynamicSecurityService")
-    @ConditionalOnProperty(name = {"sparksys.security.dynamicSecurity"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"sparksys.security.dynamic-security"}, havingValue = "true")
     @Bean
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
         return new DynamicSecurityMetadataSource();

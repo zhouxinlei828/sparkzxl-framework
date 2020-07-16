@@ -26,7 +26,6 @@ public class MyBatisAutoConfiguration {
         return new MetaDataHandler(dataProperties.getWorkerId(), dataProperties.getDataCenterId());
     }
 
-
     @Bean
     public BaseSqlInjector sqlInjector() {
         return new BaseSqlInjector();

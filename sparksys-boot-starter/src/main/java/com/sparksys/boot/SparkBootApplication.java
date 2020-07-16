@@ -1,6 +1,9 @@
 package com.sparksys.boot;
 
+import com.sparksys.boot.application.event.ApplicationRunner;
 import com.sparksys.core.utils.SpringContextUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
@@ -13,5 +16,10 @@ import org.springframework.context.annotation.Import;
 @Import(SpringContextUtils.class)
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class SparkBootApplication {
+
+    @Bean
+    public ApplicationRunner applicationRunner(ApplicationContext applicationContext){
+        return new ApplicationRunner(applicationContext);
+    }
 
 }

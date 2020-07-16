@@ -6,7 +6,6 @@ import com.sparksys.activiti.dto.TaskStepDTO;
 import com.sparksys.activiti.entity.TaskDefineProperty;
 import com.sparksys.activiti.service.AbstractTaskService;
 import com.sparksys.activiti.utils.ActTaskUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
@@ -41,8 +40,6 @@ public class ActWorkflowApi {
     private IdentityService identityService;
     @Autowired
     private TaskService taskService;
-    @Autowired
-    private ObjectMapper objectMapper;
     @Autowired
     private ActTaskUtil actTaskUtil;
 
@@ -100,12 +97,11 @@ public class ActWorkflowApi {
      */
     private int startRuntimeProcess(String bpmnId, Long userId,
                                     Long businessKey, String message, Map<String, Object> variables, ActWorkflowDTO actWorkflowDTO) throws Exception {
-        int ret;
         identityService.setAuthenticatedUserId(String.valueOf(userId));
         ProcessInstance instance = runtimeService.startProcessInstanceByKey(bpmnId, businessKey.toString(), variables);
         String taskId = abstractTaskService.getTaskIdByProcessInstanceId(instance.getProcessInstanceId());
-        ret = promoteProcess(taskId, userId, message, variables, actWorkflowDTO);
-        log.info("--------启动流程 ProcessInstance = {}--------", objectMapper.writeValueAsString(instance));
+        int ret = promoteProcess(taskId, userId, message, variables, actWorkflowDTO);
+        log.info("--------启动流程 ProcessInstance processDefinitionId = {}--------", instance.getProcessDefinitionId());
         return ret;
     }
 

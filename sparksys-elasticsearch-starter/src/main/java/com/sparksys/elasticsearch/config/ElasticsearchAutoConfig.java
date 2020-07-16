@@ -1,7 +1,9 @@
 package com.sparksys.elasticsearch.config;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.json.JSONUtil;
 import com.sparksys.elasticsearch.properties.ElasticsearchProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -27,13 +29,15 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties(ElasticsearchProperties.class)
-public class ElasticsearchAutoConfiguration {
+@Slf4j
+public class ElasticsearchAutoConfig {
 
     private final List<HttpHost> httpHosts = new ArrayList<>();
 
     @Bean
     @ConditionalOnMissingBean
     public RestHighLevelClient restHighLevelClient(ElasticsearchProperties elasticsearchProperties) {
+        log.info("自动注入Elasticsearch ElasticsearchProperties：{}", JSONUtil.toJsonPrettyStr(elasticsearchProperties));
         List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
         clusterNodes.forEach(node -> {
             try {
