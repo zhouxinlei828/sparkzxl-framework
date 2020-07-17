@@ -19,9 +19,9 @@ public class CuratorProperties {
     private Integer retryCount;
 
     /**
-     * 重试间隔时间
+     * 超时时间(毫秒)，默认1000
      */
-    private Integer elapsedTimeMs;
+    private Integer timeout = 1000;
 
     /**
      * zookeeper 地址

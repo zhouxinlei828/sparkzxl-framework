@@ -1,7 +1,7 @@
 package com.sparksys.oauth.config;
 
-import com.sparksys.oauth.rest.OauthRestAuthenticationEntryPoint;
-import com.sparksys.oauth.rest.OauthRestfulAccessDeniedHandler;
+import com.sparksys.oauth.handler.OauthRestAuthenticationEntryPoint;
+import com.sparksys.oauth.handler.OauthRestfulAccessDeniedHandler;
 import com.sparksys.oauth.properties.Oauth2Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

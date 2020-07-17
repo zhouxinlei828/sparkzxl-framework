@@ -95,7 +95,9 @@ public class ZkDistributedLock implements InitializingBean, DistributedLock {
         });
     }
 
-    //创建父节点，并创建永久节点
+    /**
+     * 创建父节点，并创建永久节点
+     */
     @Override
     public void afterPropertiesSet() {
         curatorFramework = curatorFramework.usingNamespace("lock-namespace");

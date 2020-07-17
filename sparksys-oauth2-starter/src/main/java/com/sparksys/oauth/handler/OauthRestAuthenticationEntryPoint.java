@@ -1,4 +1,4 @@
-package com.sparksys.oauth.rest;
+package com.sparksys.oauth.handler;
 
 import com.sparksys.core.base.api.ResponseResultUtils;
 
