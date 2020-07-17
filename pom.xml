@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <sparksys-project.version>1.2.0.RELEASE</sparksys-project.version>
+        <sparksys.version>1.2.0.RELEASE</sparksys.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -169,72 +169,72 @@
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-activiti-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-cache-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-core</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-database-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-elasticsearch-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-jwt-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-log-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-mail-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-oauth2-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-security-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-swagger-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-user-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-web-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sparksys</groupId>
                 <artifactId>sparksys-zookeeper-starter</artifactId>
-                <version>${sparksys-project.version}</version>
+                <version>${sparksys.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>
@@ -512,6 +512,10 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                     <configuration>
+                        <delimiters>
+                            <delimiter>@</delimiter>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
                         <encoding>UTF-8</encoding>
                         <!-- 后缀为pem、pfx的证书文件 -->
                         <nonFilteredFileExtensions>
@@ -521,6 +525,7 @@
                             <nonFilteredFileExtension>key</nonFilteredFileExtension>
                             <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                             <nonFilteredFileExtension>db</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>txt</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>

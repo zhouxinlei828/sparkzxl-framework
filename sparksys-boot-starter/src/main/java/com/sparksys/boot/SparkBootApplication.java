@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Import;
  *
  * @author: zhouxinlei
  * @date: 2020-07-15 21:49:59
-*/
+ */
 @Import(SpringContextUtils.class)
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class SparkBootApplication {
 
     @Bean
-    public ApplicationRunner applicationRunner(ApplicationContext applicationContext){
+    public ApplicationRunner applicationRunner(ApplicationContext applicationContext) {
         return new ApplicationRunner(applicationContext);
     }
 
