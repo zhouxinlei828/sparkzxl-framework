@@ -2,7 +2,7 @@ package com.sparksys.cache.config;
 
 import cn.hutool.json.JSONUtil;
 import com.sparksys.cache.lock.RedisDistributedLock;
-import com.sparksys.cache.properties.CacheProperties;
+import com.sparksys.cache.properties.CacheRedissonProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
@@ -25,21 +25,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnClass(Config.class)
 @ConditionalOnProperty(name = "cache.redisson.enable", havingValue = "true")
-@EnableConfigurationProperties(CacheProperties.class)
+@EnableConfigurationProperties(CacheRedissonProperties.class)
 @Slf4j
 public class RedissonConfiguration {
 
     @Bean
-    public RedissonClient redissonClient(CacheProperties cacheProperties) {
-        log.info("自动注入RedissonClient CacheProperties：{}", JSONUtil.toJsonPrettyStr(cacheProperties));
+    public RedissonClient redissonClient(CacheRedissonProperties cacheProperties) {
+        log.info("automatic injection RedissonClient CacheRedissonProperties：{}", JSONUtil.toJsonPrettyStr(cacheProperties));
         Config config = new Config();
         SingleServerConfig serverConfig = config.useSingleServer()
-                .setAddress(cacheProperties.getRedisson().getAddress())
-                .setTimeout(cacheProperties.getRedisson().getTimeout())
-                .setConnectionPoolSize(cacheProperties.getRedisson().getConnectionPoolSize())
-                .setConnectionMinimumIdleSize(cacheProperties.getRedisson().getConnectionMinimumIdleSize());
-        if (StringUtils.isNotBlank(cacheProperties.getRedisson().getPassword())) {
-            serverConfig.setPassword(cacheProperties.getRedisson().getPassword());
+                .setAddress(cacheProperties.getAddress())
+                .setTimeout(cacheProperties.getTimeout())
+                .setConnectionPoolSize(cacheProperties.getConnectionPoolSize())
+                .setConnectionMinimumIdleSize(cacheProperties.getConnectionMinimumIdleSize());
+        if (StringUtils.isNotBlank(cacheProperties.getPassword())) {
+            serverConfig.setPassword(cacheProperties.getPassword());
         }
         return Redisson.create(config);
     }

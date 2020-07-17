@@ -1,15 +1,22 @@
-
 package com.sparksys.cache.properties;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 /**
- * description:
+ * description：
  *
- * @author: zhouxinlei
- * @date: 2020-07-09 11:31:52
-*/
+ * @author zhouxinlei
+ * @date 2020/6/10 0010
+ */
+
 @Data
-public class Redisson {
+@ConfigurationProperties(prefix = CacheRedissonProperties.PREFIX)
+public class CacheRedissonProperties {
+
+    public static final String PREFIX = "cache.redisson";
+
+    private boolean enable = Boolean.FALSE;
 
     private int timeout;
 

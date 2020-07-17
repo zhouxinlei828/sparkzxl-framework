@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2020-05-24 13:45:52
  */
 @Data
-@ConfigurationProperties(value = "sparksys.zookeeper.curator")
+@ConfigurationProperties(prefix = "sparksys.zookeeper.curator")
 public class CuratorProperties {
 
     /**

@@ -20,7 +20,6 @@ public class SwaggerProperties {
 
     private ApiInfo apiInfo;
 
-
     @Data
     public static class ApiInfo {
         private String title;

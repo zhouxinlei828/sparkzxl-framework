@@ -5,10 +5,9 @@ import com.sparksys.core.base.api.result.ApiResult;
 import com.sparksys.core.utils.HttpCommonUtils;
 import com.sparksys.web.annotation.ResponseResult;
 import com.sparksys.web.constant.WebConstant;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparksys.web.utils.JacksonUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -30,9 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = HttpCommonUtils.getRequest();
@@ -53,7 +49,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
                 return ApiResult.apiResult(ResponseResultStatus.FAILURE, body);
             }
         } else if (body instanceof String) {
-            return objectMapper.writeValueAsString(ApiResult.apiResult(ResponseResultStatus.SUCCESS, body));
+            return JacksonUtils.writeJsonAsString(ApiResult.apiResult(ResponseResultStatus.SUCCESS, body));
         }
         return ApiResult.apiResult(ResponseResultStatus.SUCCESS, body);
     }

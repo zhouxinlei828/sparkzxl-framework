@@ -37,7 +37,7 @@ public class ElasticsearchAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RestHighLevelClient restHighLevelClient(ElasticsearchProperties elasticsearchProperties) {
-        log.info("自动注入Elasticsearch ElasticsearchProperties：{}", JSONUtil.toJsonPrettyStr(elasticsearchProperties));
+        log.info("automatic injection Elasticsearch ElasticsearchProperties：{}", JSONUtil.toJsonPrettyStr(elasticsearchProperties));
         List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
         clusterNodes.forEach(node -> {
             try {

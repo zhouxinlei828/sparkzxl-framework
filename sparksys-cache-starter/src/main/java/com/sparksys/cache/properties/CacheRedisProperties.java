@@ -11,10 +11,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 
 @Data
-@ConfigurationProperties(prefix = "cache")
-public class CacheProperties {
+@ConfigurationProperties(prefix = CacheRedisProperties.PREFIX)
+public class CacheRedisProperties {
 
-    private Redisson redisson;
+    public static final String PREFIX = "cache.redis";
 
+    private boolean enable = Boolean.FALSE;
 
 }

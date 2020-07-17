@@ -28,7 +28,7 @@ public class GlobalUserAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
     public GlobalUserArgumentResolver globalUserArgumentResolver() {
-        log.info("全局用户信息获取");
+        log.info("Automatic injection of global user information acquisition");
         return new GlobalUserArgumentResolver(globalUserService());
     }
 

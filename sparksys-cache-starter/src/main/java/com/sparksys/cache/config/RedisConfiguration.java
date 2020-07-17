@@ -1,9 +1,11 @@
 package com.sparksys.cache.config;
 
+import com.sparksys.cache.properties.CacheRedisProperties;
 import com.sparksys.cache.utils.RedisObjectSerializer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -20,6 +22,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 @ConditionalOnProperty(name = "cache.redis.enable", havingValue = "true")
+@EnableConfigurationProperties(CacheRedisProperties.class)
 public class RedisConfiguration {
 
     /**
