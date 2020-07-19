@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.database.config.MyBatisAutoConfiguration
+    com.sparksys.database.config.MyBatisAutoConfiguration,\
+    com.sparksys.database.config.InjectionDataAutoConfiguration

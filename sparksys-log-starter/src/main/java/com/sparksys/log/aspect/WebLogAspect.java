@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -22,7 +21,6 @@ import java.util.concurrent.TimeUnit;
  * @date 2020-05-24 13:41:01
  */
 @Aspect
-@Component
 @Slf4j
 public class WebLogAspect {
 
