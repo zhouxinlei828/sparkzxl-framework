@@ -177,7 +177,7 @@ public class InjectionCore {
                 "java.lang.Short".equals(typeName) ||
                 "java.lang.Boolean".equals(typeName) ||
                 "java.lang.String".equals(typeName) ||
-                "com.github.zuihou.model.RemoteData".equals(typeName)
+                "com.sparksys.database.model.RemoteData".equals(typeName)
         ) {
             return false;
         } else {
