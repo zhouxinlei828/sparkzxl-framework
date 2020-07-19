@@ -1,8 +1,8 @@
 package com.sparksys.user.config;
 
-import com.sparksys.user.resolver.GlobalUserArgumentResolver;
-import com.sparksys.user.service.IGlobalUserService;
-import com.sparksys.user.service.impl.GlobalUserServiceImpl;
+import com.sparksys.user.resolver.AuthUserArgumentResolver;
+import com.sparksys.user.service.IAuthUserInfoService;
+import com.sparksys.user.service.impl.AuthUserInfoServiceServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,17 +19,17 @@ import java.util.List;
  */
 @Configuration
 @Slf4j
-public class GlobalUserAutoConfiguration implements WebMvcConfigurer {
+public class AuthUserAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
-    public IGlobalUserService globalUserService() {
-        return new GlobalUserServiceImpl();
+    public IAuthUserInfoService authUserInfoService() {
+        return new AuthUserInfoServiceServiceImpl();
     }
 
     @Bean
-    public GlobalUserArgumentResolver globalUserArgumentResolver() {
+    public AuthUserArgumentResolver globalUserArgumentResolver() {
         log.info("Automatic injection of global user information acquisition");
-        return new GlobalUserArgumentResolver(globalUserService());
+        return new AuthUserArgumentResolver(authUserInfoService());
     }
 
     @Override

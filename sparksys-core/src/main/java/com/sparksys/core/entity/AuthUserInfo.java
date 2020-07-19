@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2020-05-24 12:47:33
  */
 @Data
-public class GlobalAuthUser implements Serializable {
+public class AuthUserInfo implements Serializable {
 
     private static final long serialVersionUID = -6592610263703423919L;
 
@@ -26,8 +26,8 @@ public class GlobalAuthUser implements Serializable {
 
     private Boolean status;
 
-    private List<String> roles;
+    private List<String> roleList;
 
-    private List<String> permissions;
+    private List<String> authorityList;
 
 }

@@ -1,6 +1,6 @@
 package com.sparksys.user.service;
 
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 
 /**
  * description: 全局用户获取 服务类
@@ -8,7 +8,7 @@ import com.sparksys.core.entity.GlobalAuthUser;
  * @author: zhouxinlei
  * @date: 2020-07-13 14:25:46
  */
-public interface IGlobalUserService {
+public interface IAuthUserInfoService {
 
     /**
      * 根据token获取认证用户
@@ -16,7 +16,7 @@ public interface IGlobalUserService {
      * @param accessToken token
      * @return GlobalAuthUser
      */
-    GlobalAuthUser getUserInfo(String accessToken);
+    AuthUserInfo getUserInfo(String accessToken);
 
     /**
      * 缓存中获取用户信息
@@ -24,5 +24,5 @@ public interface IGlobalUserService {
      * @param key      缓存key
      * @return GlobalAuthUser
      */
-    GlobalAuthUser getCache(String key);
+    AuthUserInfo getCache(String key);
 }

@@ -1,7 +1,7 @@
 package com.sparksys.security.service;
 
 import com.sparksys.core.constant.CacheKey;
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.utils.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.core.repository.CacheRepository;
@@ -51,42 +51,42 @@ public abstract class AbstractAuthSecurityService {
         String token;
         AuthUserDetail adminUserDetails = getAuthUserDetail(account);
         ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(adminUserDetails);
-        GlobalAuthUser authUser = adminUserDetails.getAuthUser();
+        AuthUserInfo authUserInfo = adminUserDetails.getAuthUserInfo();
         //校验密码输入是否正确
-        checkPasswordError(authRequest, authUser);
+        checkPasswordError(authRequest, authUserInfo);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                 null, adminUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        token = createJwtToken(authUser);
-        authUser.setPassword(null);
+        token = createJwtToken(authUserInfo);
+        authUserInfo.setPassword(null);
         AuthToken authToken = new AuthToken();
         authToken.setToken(token);
         authToken.setExpiration(CoreConstant.JwtTokenConstant.JWT_EXPIRATION);
-        authToken.setAuthUser(authUser);
+        authToken.setAuthUser(authUserInfo);
         //设置accessToken缓存
-        accessToken(authToken, authUser);
-        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUser.getId())));
+        accessToken(authToken, authUserInfo);
+        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserInfo.getId())));
         return authToken;
     }
 
-    private String createJwtToken(GlobalAuthUser globalAuthUser) {
+    private String createJwtToken(AuthUserInfo globalAuthUser) {
         JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
                 .sub(globalAuthUser.getAccount())
                 .iat(System.currentTimeMillis())
-                .authorities(globalAuthUser.getPermissions())
+                .authorities(globalAuthUser.getAuthorityList())
                 .username(globalAuthUser.getAccount())
                 .expire(jwtProperties.getExpire())
                 .build();
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(LoginDTO authRequest,GlobalAuthUser authUser) {
+    private void checkPasswordError(LoginDTO authRequest, AuthUserInfo authUserInfo) {
         String encryptPassword = MD5Utils.encrypt(authRequest.getPassword());
-        log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUser.getPassword());
+        log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserInfo.getPassword());
         //数据库密码比对
-        boolean verifyResult = StringUtils.equals(encryptPassword, authUser.getPassword());
+        boolean verifyResult = StringUtils.equals(encryptPassword, authUserInfo.getPassword());
         if (!verifyResult) {
-            SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUser.getId(),
+            SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUserInfo.getId(),
                     ResponseResultStatus.PASSWORD_ERROR.getMessage())));
             ResponseResultStatus.PASSWORD_ERROR.assertNotTrue(false);
         }
@@ -99,7 +99,7 @@ public abstract class AbstractAuthSecurityService {
      * @param authUser  认证用户
      * @return void
      */
-    private void accessToken(AuthToken authToken, GlobalAuthUser authUser) {
+    private void accessToken(AuthToken authToken, AuthUserInfo authUser) {
         String token = authToken.getToken();
         cacheRepository.set(CacheKey.buildKey(CacheKey.AUTH_USER, token), authUser,
                 authToken.getExpiration());

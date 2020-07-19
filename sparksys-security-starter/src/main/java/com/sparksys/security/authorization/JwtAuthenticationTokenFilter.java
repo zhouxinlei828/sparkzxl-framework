@@ -1,6 +1,6 @@
 package com.sparksys.security.authorization;
 
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.base.api.ResponseResultUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.jwt.service.JwtTokenService;
@@ -9,7 +9,7 @@ import com.sparksys.security.properties.SecurityProperties;
 import com.sparksys.security.registry.SecurityIgnoreUrl;
 import com.sparksys.security.service.AbstractAuthSecurityService;
 
-import com.sparksys.user.service.IGlobalUserService;
+import com.sparksys.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
@@ -41,7 +41,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private AbstractAuthSecurityService abstractSecurityAuthDetailService;
 
     @Resource
-    private IGlobalUserService globalUserService;
+    private IAuthUserInfoService globalUserService;
 
     @Resource
     private JwtTokenService jwtTokenService;
@@ -60,7 +60,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
                     String username = jwtUserInfo.getUsername();
                     log.info("checking username:{}", username);
-                    GlobalAuthUser authUser = globalUserService.getUserInfo(accessToken);
+                    AuthUserInfo authUser = globalUserService.getUserInfo(accessToken);
                     if (StringUtils.equals(authUser.getAccount(), username)) {
                         AuthUserDetail authUserDetail = abstractSecurityAuthDetailService.getAuthUserDetail(username);
                         UsernamePasswordAuthenticationToken authentication =

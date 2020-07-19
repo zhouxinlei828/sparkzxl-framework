@@ -1,7 +1,7 @@
 package com.sparksys.security.entity;
 
 import com.google.common.collect.Lists;
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.utils.ListUtils;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,28 +19,28 @@ import java.util.Collection;
 @Getter
 public class AuthUserDetail implements UserDetails {
 
-    private final GlobalAuthUser authUser;
+    private final AuthUserInfo authUserInfo;
 
-    public AuthUserDetail(GlobalAuthUser authUser) {
-        this.authUser = authUser;
+    public AuthUserDetail(AuthUserInfo authUserInfo) {
+        this.authUserInfo = authUserInfo;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (ListUtils.isNotEmpty(authUser.getPermissions())){
-            return AuthorityUtils.createAuthorityList(ListUtils.listToString(authUser.getPermissions()));
+        if (ListUtils.isNotEmpty(authUserInfo.getAuthorityList())){
+            return AuthorityUtils.createAuthorityList(ListUtils.listToString(authUserInfo.getAuthorityList()));
         }
         return Lists.newArrayList();
     }
 
     @Override
     public String getPassword() {
-        return authUser.getPassword();
+        return authUserInfo.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return authUser.getAccount();
+        return authUserInfo.getAccount();
     }
 
     @Override
@@ -60,6 +60,6 @@ public class AuthUserDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return authUser.getStatus();
+        return authUserInfo.getStatus();
     }
 }

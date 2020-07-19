@@ -1,7 +1,7 @@
 package com.sparksys.swagger.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.swagger.properties.SwaggerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class SwaggerAutoConfiguration {
                 .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build()
-                .ignoredParameterTypes(GlobalAuthUser.class);
+                .ignoredParameterTypes(AuthUserInfo.class);
     }
 
 

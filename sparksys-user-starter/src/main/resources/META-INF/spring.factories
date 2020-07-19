@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.sparksys.user.config.GlobalUserAutoConfiguration
+    com.sparksys.user.config.AuthUserAutoConfiguration

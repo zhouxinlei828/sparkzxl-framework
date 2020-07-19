@@ -1,6 +1,6 @@
 package com.sparksys.security.entity;
 
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -29,7 +29,7 @@ public class AuthToken implements Serializable {
     /**
      * 登录用户信息
      */
-    private GlobalAuthUser authUser;
+    private AuthUserInfo authUser;
 
     private String loginIp;
 

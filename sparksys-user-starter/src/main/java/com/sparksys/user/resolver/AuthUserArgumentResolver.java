@@ -1,8 +1,8 @@
 package com.sparksys.user.resolver;
 
-import com.sparksys.core.entity.GlobalAuthUser;
+import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.base.api.ResponseResultUtils;
-import com.sparksys.user.service.IGlobalUserService;
+import com.sparksys.user.service.IAuthUserInfoService;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -18,18 +18,18 @@ import javax.servlet.http.HttpServletRequest;
  * @author zhouxinlei
  * @date 2020-05-24 13:41:46
  */
-public class GlobalUserArgumentResolver implements HandlerMethodArgumentResolver {
+public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final IGlobalUserService globalUserService;
+    private final IAuthUserInfoService globalUserService;
 
-    public GlobalUserArgumentResolver(IGlobalUserService globalUserService) {
+    public AuthUserArgumentResolver(IAuthUserInfoService globalUserService) {
         this.globalUserService = globalUserService;
     }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         Class<?> clazz = parameter.getParameterType();
-        return clazz == GlobalAuthUser.class;
+        return clazz == AuthUserInfo.class;
     }
 
     @Override
