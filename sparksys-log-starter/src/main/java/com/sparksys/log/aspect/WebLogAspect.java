@@ -51,9 +51,15 @@ public class WebLogAspect {
                             || object instanceof MultipartFile) {
                         continue;
                     }
-                    stringBuilder
-                            .append(JSONUtil.toJsonPrettyStr(object))
-                            .append("\n").append(",");
+                    if (object instanceof String) {
+                        stringBuilder
+                                .append(object)
+                                .append("\n").append(",");
+                    } else {
+                        stringBuilder
+                                .append(JSONUtil.toJsonPrettyStr(JSONUtil.parse(object)))
+                                .append("\n").append(",");
+                    }
                 }
             }
         }
@@ -76,7 +82,11 @@ public class WebLogAspect {
     @Around("pointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = point.proceed();
-        log.info("返回结果：[{}]", JSONUtil.toJsonPrettyStr(result));
+        if (result instanceof String) {
+            log.info("返回结果：[{}]", result);
+        } else {
+            log.info("返回结果：[{}]", JSONUtil.toJsonPrettyStr(result));
+        }
         return result;
     }
 
@@ -101,4 +111,5 @@ public class WebLogAspect {
         stopWatch.stop();
         log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
     }
+
 }
