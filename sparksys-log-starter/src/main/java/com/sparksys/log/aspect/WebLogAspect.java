@@ -1,17 +1,22 @@
 package com.sparksys.log.aspect;
 
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Stopwatch;
 import com.sparksys.core.utils.HttpCommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,35 +46,11 @@ public class WebLogAspect {
         stopWatch.reset();
         stopWatch.start();
         HttpServletRequest request = HttpCommonUtils.getRequest();
-        StringBuilder stringBuilder = new StringBuilder();
-        Object[] args = joinPoint.getArgs();
-        if (args != null || args.length > 0) {
-            for (Object object : args) {
-                if (object != null) {
-                    if (object instanceof ServletRequest
-                            || object instanceof ServletResponse
-                            || object instanceof MultipartFile) {
-                        continue;
-                    }
-                    if (object instanceof String) {
-                        stringBuilder
-                                .append(object)
-                                .append("\n").append(",");
-                    } else {
-                        stringBuilder
-                                .append(JSONUtil.toJsonPrettyStr(JSONUtil.parse(object)))
-                                .append("\n").append(",");
-                    }
-                }
-            }
-        }
-        if (!"".contentEquals(stringBuilder)) {
-            stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
-        }
+        JSONObject parameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs());
         String method = joinPoint.getTarget().getClass().getName().concat(".").concat(joinPoint.getSignature().getName());
         log.info("请求URL：[{}]，请求IP：[{}]", request.getRequestURL(), HttpCommonUtils.getIpAddress());
         log.info("请求类型：[{}]，请求方法：[{}]", request.getMethod(), method);
-        log.info("请求参数：{}", stringBuilder.toString());
+        log.info("请求参数：{}", JSONUtil.toJsonPrettyStr(parameterJson));
     }
 
     /**
@@ -112,7 +93,24 @@ public class WebLogAspect {
             stopWatch.stop();
             log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
         }
-
     }
 
+    public JSONObject getRequestParameterJson(Signature signature, Object[] args) {
+        MethodSignature methodSignature = (MethodSignature) signature;
+        Method method = methodSignature.getMethod();
+        LocalVariableTableParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+        String[] paramNames = parameterNameDiscoverer.getParameterNames(method);
+        JSONObject parameterJson = JSONUtil.createObj();
+        if (args != null && paramNames != null) {
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof ServletRequest
+                        || args[i] instanceof ServletResponse
+                        || args[i] instanceof MultipartFile) {
+                    continue;
+                }
+                parameterJson.putOpt(paramNames[i], args[i]);
+            }
+        }
+        return parameterJson;
+    }
 }
