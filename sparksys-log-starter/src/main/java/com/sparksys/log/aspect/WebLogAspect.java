@@ -108,8 +108,11 @@ public class WebLogAspect {
      */
     @AfterThrowing(pointcut = "pointCut()")
     public void afterThrowing() {
-        stopWatch.stop();
-        log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
+        if (stopWatch.isRunning()) {
+            stopWatch.stop();
+            log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
+        }
+
     }
 
 }

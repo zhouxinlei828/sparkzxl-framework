@@ -1,6 +1,6 @@
 package com.sparksys.database.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
 /**
  * description: 分页入参
@@ -8,21 +8,16 @@ import lombok.Getter;
  * @author zhouxinlei
  * @date 2020-05-24 13:21:22
  */
-@Getter
+@Data
 public class PageDTO {
-
     /**
      * 当前页
      */
-    private final Integer pageNum;
+    private int pageNum = 1;
 
     /**
      * 每页显示条数
      */
-    private final Integer pageSize;
+    private int pageSize = 10;
 
-    public PageDTO(Integer pageNum, Integer pageSize) {
-        this.pageNum = pageNum == null ? 1 : pageNum;
-        this.pageSize = pageSize == null ? 10 : pageSize;
-    }
 }
