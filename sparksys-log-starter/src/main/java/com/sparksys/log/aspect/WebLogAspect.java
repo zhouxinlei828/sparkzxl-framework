@@ -65,7 +65,7 @@ public class WebLogAspect {
         Object result = point.proceed();
         JSONObject resultJson = JSONUtil.createObj();
         resultJson.putOpt("result", result);
-        log.info("返回结果：[{}]", JSONUtil.toJsonPrettyStr(resultJson));
+        log.info("返回结果：{}", JSONUtil.toJsonPrettyStr(resultJson));
         return result;
     }
 
