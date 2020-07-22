@@ -63,11 +63,9 @@ public class WebLogAspect {
     @Around("pointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = point.proceed();
-        if (result instanceof String) {
-            log.info("返回结果：[{}]", result);
-        } else {
-            log.info("返回结果：[{}]", JSONUtil.toJsonPrettyStr(result));
-        }
+        JSONObject resultJson = JSONUtil.createObj();
+        resultJson.putOpt("result", result);
+        log.info("返回结果：[{}]", JSONUtil.toJsonPrettyStr(resultJson));
         return result;
     }
 
