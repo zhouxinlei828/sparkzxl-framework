@@ -17,4 +17,5 @@ public class LogAutoConfiguration {
     public WebLogAspect webLogAspect() {
         return new WebLogAspect();
     }
+
 }
