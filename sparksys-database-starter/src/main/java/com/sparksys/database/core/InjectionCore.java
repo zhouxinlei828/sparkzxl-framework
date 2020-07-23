@@ -376,7 +376,7 @@ public class InjectionCore {
                 RemoteData remoteData = (RemoteData) curField;
 
                 // feign 接口序列化 丢失类型
-                if (newVal != null && newVal instanceof Map && !Object.class.equals(type.getBeanClass())) {
+                if (newVal instanceof Map && !Object.class.equals(type.getBeanClass())) {
                     //BeanUtil 无法转换 枚举类型
 //                    newVal = BeanUtil.mapToBean((Map<?, ?>) newVal, type.getBeanClass(), true);
                     String s = JSONUtil.toJsonStr(newVal);

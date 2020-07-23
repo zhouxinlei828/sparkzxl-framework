@@ -6,7 +6,6 @@
         <artifactId>sparksys-commons</artifactId>
         <groupId>com.sparksys</groupId>
         <version>1.2.0.RELEASE</version>
-        <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparksys-core</artifactId>
@@ -98,6 +97,10 @@
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
 </project>
