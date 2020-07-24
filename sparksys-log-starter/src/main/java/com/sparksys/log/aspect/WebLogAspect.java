@@ -39,7 +39,6 @@ public class WebLogAspect {
      * 前置通知
      *
      * @param joinPoint 切入点
-     * @return void
      */
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) {
@@ -72,8 +71,6 @@ public class WebLogAspect {
 
     /**
      * 后置通知
-     *
-     * @return void
      */
     @AfterReturning("pointCut()")
     public void afterReturning() {
@@ -82,8 +79,6 @@ public class WebLogAspect {
 
     /**
      * 异常通知，拦截记录异常日志
-     *
-     * @return void
      */
     @AfterThrowing(pointcut = "pointCut()")
     public void afterThrowing() {
