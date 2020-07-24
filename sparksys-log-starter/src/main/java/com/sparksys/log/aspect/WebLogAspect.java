@@ -66,6 +66,7 @@ public class WebLogAspect {
         JSONObject resultJson = JSONUtil.createObj();
         resultJson.putOpt("result", result);
         log.info("返回结果：{}", JSONUtil.toJsonPrettyStr(resultJson));
+        stopWatch.stop();
         return result;
     }
 
@@ -76,7 +77,6 @@ public class WebLogAspect {
      */
     @AfterReturning("pointCut()")
     public void afterReturning() {
-        stopWatch.stop();
         log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
@@ -87,10 +87,7 @@ public class WebLogAspect {
      */
     @AfterThrowing(pointcut = "pointCut()")
     public void afterThrowing() {
-        if (stopWatch.isRunning()) {
-            stopWatch.stop();
-            log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
-        }
+        log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     public JSONObject getRequestParameterJson(Signature signature, Object[] args) {
