@@ -5,6 +5,8 @@ import cn.hutool.json.JSONUtil;
 import com.google.common.base.Stopwatch;
 import com.sparksys.core.utils.HttpCommonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -29,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class WebLogAspect {
 
-    private final Stopwatch stopWatch = Stopwatch.createStarted();
+    private ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
 
     @Pointcut("@within(com.sparksys.log.annotation.WebLog)")
     public void pointCut() {
@@ -42,8 +44,9 @@ public class WebLogAspect {
      */
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) {
-        stopWatch.reset();
-        stopWatch.start();
+        Stopwatch stopwatch = get();
+        stopwatch.reset();
+        stopwatch.start();
         HttpServletRequest request = HttpCommonUtils.getRequest();
         JSONObject parameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs());
         String method = joinPoint.getTarget().getClass().getName().concat(".").concat(joinPoint.getSignature().getName());
@@ -65,7 +68,7 @@ public class WebLogAspect {
         JSONObject resultJson = JSONUtil.createObj();
         resultJson.putOpt("result", result);
         log.info("返回结果：{}", JSONUtil.toJsonPrettyStr(resultJson));
-        stopWatch.stop();
+        get().stop();
         return result;
     }
 
@@ -74,7 +77,7 @@ public class WebLogAspect {
      */
     @AfterReturning("pointCut()")
     public void afterReturning() {
-        log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
+        log.info("接口请求耗时：{}毫秒", get().elapsed(TimeUnit.MILLISECONDS));
     }
 
     /**
@@ -82,7 +85,7 @@ public class WebLogAspect {
      */
     @AfterThrowing(pointcut = "pointCut()")
     public void afterThrowing() {
-        log.info("接口请求耗时：{}毫秒", stopWatch.elapsed(TimeUnit.MILLISECONDS));
+        log.info("接口请求耗时：{}毫秒", get().elapsed(TimeUnit.MILLISECONDS));
     }
 
     public JSONObject getRequestParameterJson(Signature signature, Object[] args) {
@@ -102,5 +105,18 @@ public class WebLogAspect {
             }
         }
         return parameterJson;
+    }
+
+    public Stopwatch get() {
+        Stopwatch stopwatch = stopwatchThreadLocal.get();
+        if (ObjectUtils.isEmpty(stopwatch)) {
+            stopwatch = Stopwatch.createStarted();
+            set(stopwatch);
+        }
+        return stopwatch;
+    }
+
+    public void set(Stopwatch stopwatch) {
+        stopwatchThreadLocal.set(stopwatch);
     }
 }
