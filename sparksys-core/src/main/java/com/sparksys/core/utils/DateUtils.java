@@ -3,6 +3,7 @@ package com.sparksys.core.utils;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -75,13 +76,48 @@ public class DateUtils extends DateUtil {
 
     public static boolean isThisTime(Date date, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        String param = sdf.format(date);//参数时间
-        String now = sdf.format(new Date());//当前时间
+        //参数时间
+        String param = sdf.format(date);
+        //当前时间
+        String now = sdf.format(new Date());
         return param.equals(now);
+    }
+
+    public static String getDatePoor(Date endDate, Date nowDate) {
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        return getDatePoor(diff);
+    }
+
+    /**
+     * 获取时间差天数：小时：分钟
+     *
+     * @param diff 时间差
+     * @return String
+     */
+    public static String getDatePoor(Long diff) {
+        if (ObjectUtils.isEmpty(diff)) {
+            return null;
+        }
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        return day + "天" + hour + "小时" + min + "分钟";
     }
 
     public static void main(String[] args) {
         String date = "2020-04-29 10:54:00";
         System.out.println(DateUtil.between(new Date(), DateUtil.parseDate(date), DateUnit.SECOND, false));
+        System.out.println(getDatePoor(450372L));
+        System.out.println(getDatePoor(new Date(), DateUtil.parseDate(date)));
     }
 }
