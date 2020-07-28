@@ -28,7 +28,6 @@ public class ResponseResultUtils {
 
     public static void unauthorized(HttpServletResponse response) {
         try {
-            response.setStatus(ResponseResultStatus.UN_AUTHORIZED.getCode());
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED)).toStringPretty());
@@ -40,7 +39,6 @@ public class ResponseResultUtils {
 
     public static void forbidden(HttpServletResponse response) {
         try {
-            response.setStatus(ResponseResultStatus.REQ_REJECT.getCode());
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.REQ_REJECT)).toStringPretty());

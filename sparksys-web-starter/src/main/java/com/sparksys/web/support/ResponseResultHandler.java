@@ -51,15 +51,11 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         if (body instanceof Boolean) {
             boolean data = (Boolean) body;
             if (!data) {
-                response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
                 return ApiResult.apiResult(ResponseResultStatus.FAILURE, body);
             }
         } else if (body instanceof String) {
-            response.setStatusCode(HttpStatus.OK);
             return objectMapper.writeValueAsString(ApiResult.apiResult(ResponseResultStatus.SUCCESS, body));
         }
-
-        response.setStatusCode(HttpStatus.OK);
         return ApiResult.apiResult(ResponseResultStatus.SUCCESS, body);
     }
 }
