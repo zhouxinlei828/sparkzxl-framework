@@ -22,22 +22,15 @@ public class ApiResult<T> implements Serializable {
 
     private static final long serialVersionUID = -219969750248052449L;
     private int code;
+    private boolean success;
     private String msg;
     private T data;
-    private long timestamp = System.currentTimeMillis();
 
-    private ApiResult(int code, String msg, T data) {
+    public ApiResult(int code, boolean success, String msg, T data) {
         this.code = code;
+        this.success = success;
         this.msg = msg;
         this.data = data;
-    }
-
-    public boolean ok() {
-        return this.code == ResponseResultStatus.SUCCESS.getCode();
-    }
-
-    public boolean error() {
-        return !ok();
     }
 
     public static <T> ApiResultBuilder<T> builder() {
@@ -75,6 +68,7 @@ public class ApiResult<T> implements Serializable {
 
     public static class ApiResultBuilder<T> {
         private int code;
+        private boolean success;
         private String msg;
         private T data;
 
@@ -98,7 +92,7 @@ public class ApiResult<T> implements Serializable {
         }
 
         public ApiResult<T> build() {
-            return new ApiResult<T>(this.code, this.msg, this.data);
+            return new ApiResult<>(this.code, this.code == ResponseResultStatus.SUCCESS.getCode(), this.msg, this.data);
         }
     }
 }

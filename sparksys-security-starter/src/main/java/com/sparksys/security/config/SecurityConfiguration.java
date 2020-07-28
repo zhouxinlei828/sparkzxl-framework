@@ -8,7 +8,7 @@ import com.sparksys.security.authorization.RestAuthenticationEntryPoint;
 import com.sparksys.security.authorization.RestfulAccessDeniedHandler;
 import com.sparksys.security.filter.DynamicSecurityFilter;
 import com.sparksys.security.properties.SecurityProperties;
-import com.sparksys.security.registry.SecurityIgnoreUrl;
+import com.sparksys.security.resource.IgnoreStaticResource;
 import com.sparksys.security.service.AbstractAuthSecurityService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -67,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        String[] excludeStaticPatterns = ListUtils.stringToArray(SecurityIgnoreUrl.excludeStaticPatterns);
+        String[] excludeStaticPatterns = ListUtils.stringToArray(IgnoreStaticResource.EXCLUDE_STATIC_PATTERNS);
         web.ignoring().antMatchers(excludeStaticPatterns);
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);

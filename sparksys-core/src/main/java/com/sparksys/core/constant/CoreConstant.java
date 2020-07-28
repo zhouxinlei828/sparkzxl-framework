@@ -8,6 +8,12 @@ package com.sparksys.core.constant;
  */
 public class CoreConstant {
 
+
+    /**
+     * 空null
+     */
+    public static String NULL_STRING = "null";
+
     /**
      * description: jwt常量
      *
@@ -20,10 +26,7 @@ public class CoreConstant {
          * JWT存储的请求头
          */
         public static final String JWT_TOKEN_HEADER = "Authorization";
-        /**
-         * JWT加解密使用的密钥
-         */
-        public static final String JWT_SECRET = "secret";
+
         /**
          * JWT的超期限时间(60*60*24)
          */
@@ -34,8 +37,5 @@ public class CoreConstant {
          */
         public static final String JWT_TOKEN_HEAD = "Bearer ";
 
-        public static final String CLAIM_KEY_USERNAME = "sub";
-
-        public static final String CLAIM_KEY_CREATED = "created";
     }
 }

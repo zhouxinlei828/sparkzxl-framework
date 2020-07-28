@@ -2,11 +2,12 @@ package com.sparksys.security.authorization;
 
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.base.api.ResponseResultUtils;
+import com.sparksys.core.utils.StringHandleUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.jwt.service.JwtTokenService;
 import com.sparksys.security.entity.AuthUserDetail;
 import com.sparksys.security.properties.SecurityProperties;
-import com.sparksys.security.registry.SecurityIgnoreUrl;
+import com.sparksys.security.resource.IgnoreStaticResource;
 import com.sparksys.security.service.AbstractAuthSecurityService;
 
 import com.sparksys.user.service.IAuthUserInfoService;
@@ -54,7 +55,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             log.info("请求地址：{}", request.getRequestURI());
             log.info("securityProperties：{}", securityProperties.getIgnoreUrls());
             List<String> ignoreUrls = securityProperties.getIgnoreUrls();
-            if (!SecurityIgnoreUrl.isIgnore(ignoreUrls, request.getRequestURI())) {
+            if (!StringHandleUtils.isIgnore(ignoreUrls, request.getRequestURI())) {
                 String accessToken = ResponseResultUtils.getAuthHeader(request);
                 if (StringUtils.isNotEmpty(accessToken)) {
                     JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);

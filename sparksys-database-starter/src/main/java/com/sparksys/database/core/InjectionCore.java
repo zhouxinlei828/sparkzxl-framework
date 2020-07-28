@@ -18,6 +18,7 @@ import com.sparksys.database.model.RemoteData;
 import com.sparksys.database.properties.InjectionProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -52,7 +53,8 @@ public class InjectionCore {
             this.backgroundRefreshPools = MoreExecutors.listeningDecorator(
                     new ThreadPoolExecutor(guavaCache.getRefreshThreadPoolSize(), guavaCache.getRefreshThreadPoolSize(),
                             0L, TimeUnit.MILLISECONDS,
-                            new LinkedBlockingQueue<>())
+                            new LinkedBlockingQueue<>(20),
+                            new CustomizableThreadFactory())
             );
             this.caches = CacheBuilder.newBuilder()
                     .maximumSize(guavaCache.getMaximumSize())
