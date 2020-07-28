@@ -5,6 +5,7 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -43,6 +44,8 @@ import java.util.List;
 @Slf4j
 public class PdfUtils {
 
+
+    private final String WINDOWS = "Window";
     public float top = 785;
     /**
      * 总宽度
@@ -88,7 +91,7 @@ public class PdfUtils {
     public void initPdfData() {
         try {
             String osName = System.getProperty("os.name");
-            if (osName.contains("Window")) {
+            if (osName.contains(WINDOWS)) {
                 fontPath = "C:/Windows/Fonts/simfang.ttf";
             } else {
                 fontPath = "/usr/share/fonts/chinese/simfang.ttf";
@@ -169,7 +172,7 @@ public class PdfUtils {
         paragraph.setMarginTop(50);
         paragraph.setTextAlignment(TextAlignment.CENTER);
         canvas.add(paragraph);
-        pdfCanvas.setStrokeColor(Color.BLACK).setLineWidth(0.7f).moveTo(left, top - 40).lineTo(totalWidth, top - 40)
+        pdfCanvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(0.7f).moveTo(left, top - 40).lineTo(totalWidth, top - 40)
                 .stroke();
         pdfCanvas.moveTo(left, top - 43).lineTo(totalWidth, top - 43).stroke();
     }
@@ -181,7 +184,7 @@ public class PdfUtils {
      * @param @
      */
     public void addFooter(String data, float top) {
-        pdfCanvas.setStrokeColor(Color.BLACK).setLineWidth(1.5f).moveTo(left, top).lineTo(totalWidth, top).stroke();
+        pdfCanvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(1.5f).moveTo(left, top).lineTo(totalWidth, top).stroke();
     }
 
     /**
@@ -193,7 +196,7 @@ public class PdfUtils {
      */
     public void addFullLine(float lineWidth, float left, float top) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(Color.BLACK).setLineWidth(lineWidth).moveTo(left, top).lineTo(totalWidth, top).stroke();
+        canvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(lineWidth).moveTo(left, top).lineTo(totalWidth, top).stroke();
     }
 
     /**
@@ -201,7 +204,7 @@ public class PdfUtils {
      */
     public void addBindingLine() {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(Color.BLACK);
+        canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
         canvas.setLineDash(3, 3, 10);
         canvas.setLineWidth(0.5f).moveTo(bindLeft, 680).lineTo(bindLeft, 552).stroke();
         addPrintText(537, bindLeft - 6, 13, "装");
@@ -222,7 +225,7 @@ public class PdfUtils {
      */
     public void addVerticalLine(float lineWidth, float left, float topStart, float topEnd) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(Color.BLACK);
+        canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
         canvas.setLineWidth(lineWidth).moveTo(left, topStart).lineTo(left, topEnd).stroke();
     }
 
@@ -236,7 +239,7 @@ public class PdfUtils {
      */
     public void addLine(float lineWidth, float left, float right, float top) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(Color.BLACK).setLineWidth(lineWidth).moveTo(left, top).lineTo(right, top).stroke();
+        canvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(lineWidth).moveTo(left, top).lineTo(right, top).stroke();
     }
 
     /**
@@ -249,19 +252,18 @@ public class PdfUtils {
      * @param hight（高度）
      */
     public void addRectLine(float lineWidth, float left, float right, float top, float hight) {
-        float topStart = top;
         float topEnd = top - hight;
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(Color.BLACK);
+        canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
         canvas.setLineWidth(lineWidth);
 
         canvas.moveTo(left, top).lineTo(right, top).stroke();
 
         canvas.moveTo(left, topEnd).lineTo(right, topEnd).stroke();
 
-        canvas.setLineWidth(lineWidth).moveTo(left, topStart).lineTo(left, topEnd).stroke();
+        canvas.setLineWidth(lineWidth).moveTo(left, top).lineTo(left, topEnd).stroke();
 
-        canvas.setLineWidth(lineWidth).moveTo(right, topStart).lineTo(right, topEnd).stroke();
+        canvas.setLineWidth(lineWidth).moveTo(right, top).lineTo(right, topEnd).stroke();
 
     }
 
@@ -283,6 +285,10 @@ public class PdfUtils {
         paragraph.setWidth(510);
         paragraph.setFont(font).setFontSize(fontSize);
         paragraph.setMarginTop(top);
+        setParagraphStyle(left, isBlod, isCenter, lineIndent, paragraph);
+    }
+
+    private void setParagraphStyle(float left, boolean isBlod, boolean isCenter, boolean lineIndent, Paragraph paragraph) {
         if (isBlod) {
             paragraph.setBold();
         }
@@ -318,21 +324,7 @@ public class PdfUtils {
         paragraph.setWidth(500);
         paragraph.setFont(font).setFontSize(fontSize);
         paragraph.setFixedPosition(left, top, 500);
-        if (isBlod) {
-            paragraph.setBold();
-        }
-        if (left == 0) {
-            paragraph.setMarginLeft(45);
-        } else {
-            paragraph.setMarginLeft(left);
-        }
-        if (isCenter) {
-            paragraph.setTextAlignment(TextAlignment.CENTER);
-        }
-        if (lineIndent) {
-            paragraph.setFirstLineIndent(50);
-        }
-        canvas.add(paragraph);
+        setParagraphStyle(left, isBlod, isCenter, lineIndent, paragraph);
     }
 
     /**
@@ -416,40 +408,40 @@ public class PdfUtils {
 
     public void imageMerging(List<BufferedImage> pnglist, String outPath) throws IOException {
         int height = 0,
-                _width = 0,
+                extWidth = 0,
                 maxWidth = 0,
-                _height,
-                __height,
+                extHeight,
+                extHeight1,
                 picNum = pnglist.size();
         int[] heightArray = new int[picNum];
         int[] widthArray = new int[picNum];
         BufferedImage buffer;
-        List<int[]> imgRGB = new ArrayList<>();
-        int[] _imgRGB;
-        for (int i = 0; i < picNum; i++) {
-            buffer = pnglist.get(i);
+        List<int[]> imgRgb = new ArrayList<>();
+        int[] extImgRgb;
+        for (BufferedImage bufferedImage : pnglist) {
+            buffer = bufferedImage;
             if (buffer.getWidth() > maxWidth) {
                 maxWidth = buffer.getWidth();
             }
         }
         for (int i = 0; i < picNum; i++) {
             buffer = pnglist.get(i);
-            heightArray[i] = _height = buffer.getHeight();
-            widthArray[i] = _width = buffer.getWidth();
-            height += _height;
-            _imgRGB = new int[_width * _height];
-            _imgRGB = buffer.getRGB(0, 0, _width, _height, _imgRGB, 0, _width);
-            imgRGB.add(_imgRGB);
+            heightArray[i] = extHeight = buffer.getHeight();
+            widthArray[i] = extWidth = buffer.getWidth();
+            height += extHeight;
+            extImgRgb = new int[extWidth * extHeight];
+            extImgRgb = buffer.getRGB(0, 0, extWidth, extHeight, extImgRgb, 0, extWidth);
+            imgRgb.add(extImgRgb);
         }
-        _height = 0;
-        BufferedImage imageResult = new BufferedImage(_width, height, BufferedImage.TYPE_INT_RGB);
+        extHeight = 0;
+        BufferedImage imageResult = new BufferedImage(extWidth, height, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < picNum; i++) {
-            __height = heightArray[i];
-            _width = widthArray[i];
+            extHeight1 = heightArray[i];
+            extWidth = widthArray[i];
             if (i != 0) {
-                _height += heightArray[i - 1];
+                extHeight += heightArray[i - 1];
             }
-            imageResult.setRGB((maxWidth - _width) / 2, _height, _width, __height, imgRGB.get(i), 0, _width);
+            imageResult.setRGB((maxWidth - extWidth) / 2, extHeight, extWidth, extHeight1, imgRgb.get(i), 0, extWidth);
         }
         File outFile = new File(outPath);
         ImageIO.write(imageResult, "png", outFile);

@@ -12,13 +12,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 负载均衡策略：可用于灰度发布 & 访问指定服务
+ * description: 负载均衡策略：可用于灰度发布 & 访问指定服务
  * <p>
- * 若请求头中的 grayversion 若为空， 则优先从服务元数据中
- * 没有设置 grayversion 的服务中获取，若所有服务均设置了 grayversion，
- * 则从设置了 grayversion 的服务列表轮训
- * 若请求头中的 grayversion 若不为空， 则优先从服务元数据中 设置了 grayversion 的服务中获取，
- * 若所有服务均没有了 grayversion， 则从 所有的服务列表轮训
+ * 若请求头中的 grayVersion 若为空， 则优先从服务元数据中
+ * 没有设置 grayVersion 的服务中获取，若所有服务均设置了 grayVersion，
+ * 则从设置了 grayVersion 的服务列表轮训
+ * 若请求头中的 grayVersion 若不为空， 则优先从服务元数据中 设置了 grayVersion 的服务中获取，
+ * 若所有服务均没有了 grayVersion， 则从 所有的服务列表轮训
+ * </p>
+ *
+ * @author: zhouxinlei
+ * @date: 2020-07-28 17:56:12
  */
 @Slf4j
 public class GrayRule extends AvailabilityFilteringRule {
@@ -26,7 +30,7 @@ public class GrayRule extends AvailabilityFilteringRule {
     /**
      * 灰度发布版本号
      */
-    public static final String GRAY_VERSION = "grayversion";
+    public static final String GRAY_VERSION = "grayVersion";
 
     @Override
     public Server choose(Object key) {

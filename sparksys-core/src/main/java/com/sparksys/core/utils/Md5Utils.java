@@ -9,14 +9,10 @@ import cn.hutool.crypto.digest.MD5;
  * @author zhouxinlei
  * @date 2020-05-24 12:51:43
  */
-public class MD5Utils {
+public class Md5Utils {
 
     public static String encrypt(String str) {
         MD5 md5 = new MD5();
         return md5.digestHex(str, CharsetUtil.CHARSET_UTF_8).toUpperCase();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(MD5Utils.encrypt("zhouxinlei"));
     }
 }

@@ -283,7 +283,8 @@ public class GuavaCacheRepositoryImpl implements CacheRepository {
      **/
     private Long getExpireTime(Long expireTime) {
         Long result = expireTime;
-        if (expireTime == null || expireTime < CACHE_MINUTE / 10) {
+        int time = 10;
+        if (expireTime == null || expireTime < CACHE_MINUTE / time) {
             result = CACHE_MINUTE;
         }
         return result;

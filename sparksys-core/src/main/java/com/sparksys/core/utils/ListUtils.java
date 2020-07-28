@@ -3,13 +3,13 @@ package com.sparksys.core.utils;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -214,8 +214,7 @@ public class ListUtils extends ListUtil {
      * @date 2019-11-20 11:21:13
      */
     public static <T> Predicate<T> distinctById(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> map = new ConcurrentHashMap<>();
-        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+        return t -> Maps.newConcurrentMap().putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
 

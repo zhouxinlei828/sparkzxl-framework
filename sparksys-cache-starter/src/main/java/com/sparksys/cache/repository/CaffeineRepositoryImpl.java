@@ -9,7 +9,12 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.sparksys.core.repository.CacheRepository;
 import org.springframework.util.StringUtils;
 
-
+/**
+ * description: Caffeine本地缓存实现
+ *
+ * @author: zhouxinlei
+ * @date: 2020-07-28 17:46:50
+ */
 @SuppressWarnings("unchecked")
 public class CaffeineRepositoryImpl implements CacheRepository {
 

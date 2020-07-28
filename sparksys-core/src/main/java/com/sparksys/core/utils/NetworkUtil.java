@@ -11,13 +11,13 @@ import java.util.List;
  * description：Network工具类
  *
  * @author zhouxinlei
- * @date  2020/6/9 0009
+ * @date 2020/6/9 0009
  */
 public class NetworkUtil extends NetUtil {
 
     private static InetAddress localINetAddress;
 
-    public static InetAddress getLocalINetAddress() {
+    public static InetAddress getLocalInetAddress() {
         if (localINetAddress == null) {
             load();
         }
@@ -44,11 +44,8 @@ public class NetworkUtil extends NetUtil {
 
     private static InetAddress findValidateIp(List<Address> addresses) {
         InetAddress local = null;
-        int size = addresses.size();
         int maxWeight = -1;
-
-        for (int i = 0; i < size; i++) {
-            Address address = addresses.get(i);
+        for (Address address : addresses) {
             if (address.isInet4Address()) {
                 int weight = 0;
 
@@ -126,16 +123,15 @@ public class NetworkUtil extends NetUtil {
     }
 
     static class Address {
-        private InetAddress m_address;
+        private final InetAddress address;
 
-        private boolean m_loopback;
+        private boolean loopback;
 
         public Address(InetAddress address, NetworkInterface ni) {
-            m_address = address;
-
+            this.address = address;
             try {
                 if (ni != null && ni.isLoopback()) {
-                    m_loopback = true;
+                    loopback = true;
                 }
             } catch (SocketException e) {
                 // ignore it
@@ -143,33 +139,33 @@ public class NetworkUtil extends NetUtil {
         }
 
         public InetAddress getAddress() {
-            return m_address;
+            return address;
         }
 
         public boolean hasHostName() {
-            return !m_address.getHostName().equals(m_address.getHostAddress());
+            return !address.getHostName().equals(address.getHostAddress());
         }
 
         public boolean isLinkLocalAddress() {
-            return !m_loopback && m_address.isLinkLocalAddress();
+            return !loopback && address.isLinkLocalAddress();
         }
 
         public boolean isLoopbackAddress() {
-            return m_loopback || m_address.isLoopbackAddress();
+            return loopback || address.isLoopbackAddress();
         }
 
         public boolean isSiteLocalAddress() {
-            return !m_loopback && m_address.isSiteLocalAddress();
+            return !loopback && address.isSiteLocalAddress();
         }
 
         public boolean isInet4Address() {
-            return m_address instanceof Inet4Address;
+            return address instanceof Inet4Address;
         }
     }
 
     public static void main(String[] args) {
         System.out.println(NetworkUtil.getLocalHostAddress());
         System.out.println(NetworkUtil.getLocalHostName());
-        System.out.println(NetworkUtil.getLocalINetAddress());
+        System.out.println(NetworkUtil.getLocalInetAddress());
     }
 }

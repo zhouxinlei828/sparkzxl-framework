@@ -15,6 +15,11 @@ public class CoreConstant {
     public static String NULL_STRING = "null";
 
     /**
+     * 空格
+     */
+    public static String BLANK_SPACE = "　";
+
+    /**
      * description: jwt常量
      *
      * @author zhouxinlei

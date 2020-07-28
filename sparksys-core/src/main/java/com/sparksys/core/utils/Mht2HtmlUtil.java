@@ -28,7 +28,7 @@ import javax.mail.internet.MimePartDataSource;
  * description: Mht2Html转换工具类
  *
  * @author zhouxinlei
- * @date  2020-05-24 13:13:53
+ * @date 2020-05-24 13:13:53
  */
 @Slf4j
 public class Mht2HtmlUtil {
@@ -99,11 +99,11 @@ public class Mht2HtmlUtil {
     /**
      * 获取mht文件内容中资源文件的名称
      *
-     * @param strName
-     * @param ID
-     * @return
+     * @param strName 字符串
+     * @param id      下标
+     * @return String
      */
-    public static String getName(String strName, int ID) {
+    public static String getName(String strName, int id) {
         char separator1 = '/';
         char separator2 = '\\';
         //将换行替换

@@ -10,7 +10,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.support.SparkSysExceptionAssert;
-import com.sparksys.core.utils.MD5Utils;
+import com.sparksys.core.utils.Md5Utils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.jwt.properties.JwtProperties;
 import com.sparksys.jwt.service.JwtTokenService;
@@ -97,7 +97,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
         try {
             //创建HMAC签名器
-            JWSSigner jwsSigner = new MACSigner(MD5Utils.encrypt(jwtProperties.getSecret()));
+            JWSSigner jwsSigner = new MACSigner(Md5Utils.encrypt(jwtProperties.getSecret()));
             //签名
             jwsObject.sign(jwsSigner);
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             //从token中解析JWS对象
             JWSObject jwsObject = JWSObject.parse(token);
             //创建HMAC验证器
-            JWSVerifier jwsVerifier = new MACVerifier(MD5Utils.encrypt(jwtProperties.getSecret()));
+            JWSVerifier jwsVerifier = new MACVerifier(Md5Utils.encrypt(jwtProperties.getSecret()));
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
             String payload = jwsObject.getPayload().toString();
             payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);

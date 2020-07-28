@@ -13,11 +13,11 @@ public class PageDTO {
     /**
      * 当前页
      */
-    private int pageNum = 1;
+    private Integer pageNum = 1;
 
     /**
      * 每页显示条数
      */
-    private int pageSize = 10;
+    private Integer pageSize = 10;
 
 }

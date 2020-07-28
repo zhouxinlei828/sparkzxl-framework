@@ -41,11 +41,4 @@ public class DesUtils {
     public static String decrypt(String content) {
         return new String(des.decrypt(content));
     }
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            String content = "123456";
-            System.out.println(DesUtils.encryptHex(content));
-        }
-    }
 }

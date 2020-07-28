@@ -14,53 +14,48 @@ import java.util.List;
 public interface PersonService {
 
     /**
-     * create Index
+     * 创建索引
      *
-     * @param index elasticsearch index name
-     * @author fxbin
+     * @param index 索引
      */
     void createIndex(String index);
 
     /**
      * delete Index
      *
-     * @param index elasticsearch index name
-     * @author fxbin
+     * @param index 索引
      */
     void deleteIndex(String index);
 
     /**
-     * insert document source
+     * 保存
      *
-     * @param index elasticsearch index name
-     * @param list  data source
-     * @author fxbin
+     * @param index 索引
+     * @param list  对象列表
      */
     void insert(String index, List<Person> list);
 
     /**
-     * update document source
+     * 更新
      *
-     * @param index elasticsearch index name
-     * @param list  data source
-     * @author fxbin
+     * @param index 索引
+     * @param list  对象列表
      */
     void update(String index, List<Person> list);
 
     /**
-     * delete document source
+     * 删除
      *
-     * @param person delete data source and allow null object
-     * @author fxbin
+     * @param index  索引
+     * @param person 对象
      */
     void delete(String index, @Nullable Person person);
 
     /**
      * search all doc records
      *
-     * @param index elasticsearch index name
-     * @return person list
-     * @author fxbin
+     * @param index 索引
+     * @return List<Person>
      */
     List<Person> searchList(String index);
 

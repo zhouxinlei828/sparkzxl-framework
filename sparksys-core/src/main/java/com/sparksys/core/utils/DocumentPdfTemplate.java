@@ -1,5 +1,7 @@
 package com.sparksys.core.utils;
 
+import com.google.common.collect.Maps;
+import com.sparksys.core.constant.CoreConstant;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -493,11 +495,13 @@ public class DocumentPdfTemplate extends PdfUtils {
      * @param first
      */
     public void addRightBottomContent(String lContent, String bContent, boolean first) {
-        /*************** 文书右侧内容(联名) ******************/
+        /**
+         * 文书右侧内容(联名)
+         */
         float length = getStrWidth(lContent, fontWidth, numWidth) * 2;
         float end = (580 - length) / 2;
         float top = (380 - getStrWidth(lContent, fontWidth, numWidth)) / 2;
-        if (!"".equals(lContent) && !"　".equals(lContent)) {
+        if (!"".equals(lContent) && !CoreConstant.BLANK_SPACE.equals(lContent)) {
             addVerticalLine(0.5f, 565, 680, 690 - end);
             addVerticalText(end + 120, 558, fontSize, lContent);
             addVerticalLine(0.5f, 565, 680 - end - length, 100);
@@ -521,7 +525,9 @@ public class DocumentPdfTemplate extends PdfUtils {
         addText("页");
     }
 
-    //是否退出文本打印
+    /**
+     * 是否退出文本打印
+     */
     public boolean isQuit = false;
 
     /***
@@ -574,7 +580,7 @@ public class DocumentPdfTemplate extends PdfUtils {
                 }
             } else {
                 // 不换行的情况下
-                if (!isCenter) {// 不要求末行为整行
+                if (!isCenter) {
                     //超出值加页
                     nextPageContent(str, writTop);
                     //当打印的文本超出本页时退出，停止打印。
@@ -667,7 +673,7 @@ public class DocumentPdfTemplate extends PdfUtils {
 
     private Map<String, Float> getFontFloatMap(float[] fontSize, float[] topSpacing, float[] fontWidth, float[] numWidth, float[] rowSpacing,
                                                int index) {
-        Map<String, Float> map = new HashMap<>();
+        Map<String, Float> map = Maps.newHashMap();
         map.put("fontSize", fontSize[index]);
         map.put("topSpacing", topSpacing[index]);
         map.put("fontWidth", fontWidth[index]);
@@ -908,7 +914,7 @@ public class DocumentPdfTemplate extends PdfUtils {
             //打印剩下的文本
             addLineText(arrText.get(1), 0, isFullLine, isCenter);
         } else { //不换行的情况下
-            if (!isFullLine) {//不要求末行为整行
+            if (!isFullLine) {
                 //打印
                 printLineOne(arrText.get(0), currWidth, false, isCenter, false);
             } else {//要求末行为整行
@@ -933,8 +939,8 @@ public class DocumentPdfTemplate extends PdfUtils {
      * @param input String.
      * @return 全角字符串.
      */
-    public static String toSBC(String input) {
-        char c[] = input.toCharArray();
+    public static String toSbc(String input) {
+        char[] c = input.toCharArray();
         for (int i = 0; i < c.length; i++) {
             if (c[i] == ' ') {
                 c[i] = '\u3000';
@@ -951,12 +957,10 @@ public class DocumentPdfTemplate extends PdfUtils {
      * @param input String.
      * @return 半角字符串
      */
-    public static String toDBC(String input) {
-        char c[] = input.toCharArray();
+    public static String toDbc(String input) {
+        char[] c = input.toCharArray();
         for (int i = 0; i < c.length; i++) {
-            if (c[i] == '\u3000') {
-
-            } else if (c[i] > '\uFF00' && c[i] < '\uFF5F') {
+            if (c[i] > '\uFF00' && c[i] < '\uFF5F') {
                 c[i] = (char) (c[i] - 65248);
 
             }

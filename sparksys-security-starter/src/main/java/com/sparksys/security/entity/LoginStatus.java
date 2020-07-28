@@ -4,6 +4,7 @@ import com.sparksys.core.entity.UserAgentEntity;
 import com.sparksys.core.utils.UserAgentUtils;
 import lombok.*;
 import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 
 /**
@@ -85,6 +86,9 @@ public class LoginStatus implements Serializable {
 
     @Getter
     public enum Type {
+        /**
+         * 登录态
+         */
         SUCCESS,
         PWD_ERROR,
         FAIL;

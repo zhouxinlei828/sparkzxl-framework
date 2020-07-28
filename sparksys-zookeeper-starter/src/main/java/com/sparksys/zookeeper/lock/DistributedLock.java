@@ -8,7 +8,18 @@ package com.sparksys.zookeeper.lock;
  */
 public interface DistributedLock {
 
+    /**
+     * 加锁
+     * @param key key值
+     * @return boolean
+     */
     boolean lock(String key);
 
+    /**
+     * 释放锁
+     *
+     * @param key key值
+     * @return boolean
+     */
     boolean releaseLock(String key);
 }

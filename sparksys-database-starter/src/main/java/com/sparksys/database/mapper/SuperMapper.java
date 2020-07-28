@@ -19,42 +19,62 @@ import java.util.List;
 public interface SuperMapper<T> extends BaseMapper<T> {
 
     /**
-     * 以下定义的 4个 default method, copy from {@link com.baomidou.mybatisplus.extension.toolkit.ChainWrappers}
+     * 查询链
+     *
+     * @return QueryChainWrapper<T>
      */
     default QueryChainWrapper<T> queryChain() {
         return new QueryChainWrapper<>(this);
     }
 
+    /**
+     * lambda查询链
+     *
+     * @return LambdaQueryChainWrapper<T>
+     */
     default LambdaQueryChainWrapper<T> lambdaQueryChain() {
         return new LambdaQueryChainWrapper<>(this);
     }
 
+    /**
+     * 更新链
+     *
+     * @return UpdateChainWrapper<T>
+     */
     default UpdateChainWrapper<T> updateChain() {
         return new UpdateChainWrapper<>(this);
     }
 
+    /**
+     * lambda更新链
+     *
+     * @return UpdateChainWrapper<T>
+     */
     default LambdaUpdateChainWrapper<T> lambdaUpdateChain() {
         return new LambdaUpdateChainWrapper<>(this);
     }
 
     /**
-     * 以下定义的 4个 method 其中 3 个是内置的选装件
+     * 批量新增
+     *
+     * @param entityList 实体列表
+     * @return int
      */
     int insertBatchSomeColumn(List<T> entityList);
 
     /**
      * 更新公共字段
      *
-     * @param entity
-     * @return
+     * @param entity 实体
+     * @return int
      */
     int alwaysUpdateSomeColumnById(@Param(Constants.ENTITY) T entity);
 
     /**
      * 根据主键删除
      *
-     * @param entity
-     * @return
+     * @param entity 实体
+     * @return int
      */
     int deleteByIdWithFill(T entity);
 

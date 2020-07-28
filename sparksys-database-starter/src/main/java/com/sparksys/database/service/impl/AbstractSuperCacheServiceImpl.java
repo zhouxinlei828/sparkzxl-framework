@@ -24,6 +24,11 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     @Autowired(required = false)
     protected CacheRepository cacheRepository;
 
+    /**
+     * 缓存key模板
+     *
+     * @return String
+     */
     protected abstract String getRegion();
 
     @Override

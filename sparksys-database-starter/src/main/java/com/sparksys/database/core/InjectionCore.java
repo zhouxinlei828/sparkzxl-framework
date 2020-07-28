@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -17,6 +18,7 @@ import com.sparksys.database.annonation.InjectionResult;
 import com.sparksys.database.model.RemoteData;
 import com.sparksys.database.properties.InjectionProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
@@ -36,11 +38,11 @@ import java.util.concurrent.TimeUnit;
  * @author: zhouxinlei
  * @date: 2020-07-19 08:49:48
  */
+@SuppressWarnings("ALL")
 @Slf4j
 public class InjectionCore {
 
     private static final int MAX_DEPTH = 2;
-
 
     private final InjectionProperties injectionProperties;
     private ListeningExecutorService backgroundRefreshPools;
@@ -61,7 +63,7 @@ public class InjectionCore {
                     .refreshAfterWrite(guavaCache.getRefreshWriteTime(), TimeUnit.MINUTES)
                     .build(new CacheLoader<InjectionFieldExtPo, Map<Serializable, Object>>() {
                         @Override
-                        public Map<Serializable, Object> load(InjectionFieldExtPo type) throws Exception {
+                        public Map<Serializable, Object> load(InjectionFieldExtPo type) {
                             log.info("首次读取缓存: " + type);
                             return loadMap(type);
                         }
@@ -84,8 +86,7 @@ public class InjectionCore {
             bean = SpringContextUtils.getBean(type.getFeign());
             log.info("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getFeign().toString(), type.getMethod());
         }
-        Map<Serializable, Object> value = ReflectUtil.invoke(bean, type.getMethod(), type.getKeys());
-        return value;
+        return ReflectUtil.invoke(bean, type.getMethod(), type.getKeys());
     }
 
     /**
@@ -98,7 +99,7 @@ public class InjectionCore {
         try {
             // key 为远程查询的对象
             // value 为 待查询的数据
-            Map<InjectionFieldPo, Map<Serializable, Object>> typeMap = new HashMap();
+            Map<InjectionFieldPo, Map<Serializable, Object>> typeMap = Maps.newHashMap();
 
             long parseStart = System.currentTimeMillis();
             //1. 通过反射将obj的字段上标记了@InjectionFiled注解的字段解析出来
@@ -164,27 +165,21 @@ public class InjectionCore {
     /**
      * 判断是否为基本类型
      *
-     * @param obj
      * @param field 字段
      * @return
      */
     private boolean isNotBaseType(Object obj, Field field) {
         String typeName = field.getType().getName();
-        if ("java.lang.Integer".equals(typeName) ||
-                "java.lang.Byte".equals(typeName) ||
-                "java.lang.Long".equals(typeName) ||
-                "java.lang.Double".equals(typeName) ||
-                "java.lang.Float".equals(typeName) ||
-                "java.lang.Character".equals(typeName) ||
-                "java.lang.Short".equals(typeName) ||
-                "java.lang.Boolean".equals(typeName) ||
-                "java.lang.String".equals(typeName) ||
-                "com.sparksys.database.model.RemoteData".equals(typeName)
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+        return !StringUtils.equals(Integer.class.getName(), typeName) &&
+                !StringUtils.equals(Byte.class.getName(), typeName) &&
+                !StringUtils.equals(Long.class.getName(), typeName) &&
+                !StringUtils.equals(Double.class.getName(), typeName) &&
+                !StringUtils.equals(Float.class.getName(), typeName) &&
+                !StringUtils.equals(Character.class.getName(), typeName) &&
+                !StringUtils.equals(Short.class.getName(), typeName) &&
+                !StringUtils.equals(Boolean.class.getName(), typeName) &&
+                !StringUtils.equals(String.class.getName(), typeName) &&
+                !StringUtils.equals(RemoteData.class.getName(), typeName);
     }
 
 
@@ -204,7 +199,7 @@ public class InjectionCore {
             return;
         }
         if (typeMap == null) {
-            typeMap = new HashMap();
+            typeMap = Maps.newHashMap();
         }
 
         if (obj instanceof IPage) {
@@ -245,7 +240,7 @@ public class InjectionCore {
             InjectionFieldPo type = new InjectionFieldPo(anno);
             Map<Serializable, Object> valueMap;
             if (typeMap.get(type) == null) {
-                valueMap = new HashMap();
+                valueMap = Maps.newHashMap();
             } else {
                 valueMap = typeMap.get(type);
             }
@@ -321,6 +316,10 @@ public class InjectionCore {
         }
 
         //解析方法上的注解，计算出obj对象中所有需要查询的数据
+        parseAnnotationsAndGetata(obj, typeMap, depth);
+    }
+
+    private void parseAnnotationsAndGetata(Object obj, Map<InjectionFieldPo, Map<Serializable, Object>> typeMap, int depth) throws Exception {
         Field[] fields = ReflectUtil.getFields(obj.getClass());
         for (Field field : fields) {
             //是否使用MyAnno注解
@@ -380,11 +379,9 @@ public class InjectionCore {
                 // feign 接口序列化 丢失类型
                 if (newVal instanceof Map && !Object.class.equals(type.getBeanClass())) {
                     //BeanUtil 无法转换 枚举类型
-//                    newVal = BeanUtil.mapToBean((Map<?, ?>) newVal, type.getBeanClass(), true);
                     String s = JSONUtil.toJsonStr(newVal);
                     newVal = JSONUtil.toBean(s, type.getBeanClass());
                 }
-
                 remoteData.setData(newVal);
             } else {
                 ReflectUtil.setFieldValue(obj, field, newVal);
@@ -397,5 +394,4 @@ public class InjectionCore {
             injection(item, typeMap, 1, MAX_DEPTH);
         }
     }
-
 }

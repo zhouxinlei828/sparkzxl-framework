@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class WebLogAspect {
 
-    private ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
+    private final ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
 
     @Pointcut("@within(com.sparksys.log.annotation.WebLog)")
     public void pointCut() {
@@ -78,6 +78,7 @@ public class WebLogAspect {
     @AfterReturning("pointCut()")
     public void afterReturning() {
         log.info("接口请求耗时：{}毫秒", get().elapsed(TimeUnit.MILLISECONDS));
+        remove();
     }
 
     /**
@@ -86,6 +87,7 @@ public class WebLogAspect {
     @AfterThrowing(pointcut = "pointCut()")
     public void afterThrowing() {
         log.info("接口请求耗时：{}毫秒", get().elapsed(TimeUnit.MILLISECONDS));
+        remove();
     }
 
     public JSONObject getRequestParameterJson(Signature signature, Object[] args) {
@@ -118,5 +120,9 @@ public class WebLogAspect {
 
     public void set(Stopwatch stopwatch) {
         stopwatchThreadLocal.set(stopwatch);
+    }
+
+    public void remove() {
+        stopwatchThreadLocal.remove();
     }
 }

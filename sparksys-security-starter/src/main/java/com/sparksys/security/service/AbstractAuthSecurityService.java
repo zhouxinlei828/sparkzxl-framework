@@ -14,7 +14,7 @@ import com.sparksys.security.entity.LoginStatus;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.support.BusinessException;
-import com.sparksys.core.utils.MD5Utils;
+import com.sparksys.core.utils.Md5Utils;
 import com.sparksys.security.entity.AuthToken;
 import com.sparksys.security.dto.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +82,7 @@ public abstract class AbstractAuthSecurityService {
     }
 
     private void checkPasswordError(LoginDTO authRequest, AuthUserInfo authUserInfo) {
-        String encryptPassword = MD5Utils.encrypt(authRequest.getPassword());
+        String encryptPassword = Md5Utils.encrypt(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserInfo.getPassword());
         //数据库密码比对
         boolean verifyResult = StringUtils.equals(encryptPassword, authUserInfo.getPassword());
