@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -50,11 +51,15 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         if (body instanceof Boolean) {
             boolean data = (Boolean) body;
             if (!data) {
+                response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
                 return ApiResult.apiResult(ResponseResultStatus.FAILURE, body);
             }
         } else if (body instanceof String) {
+            response.setStatusCode(HttpStatus.OK);
             return objectMapper.writeValueAsString(ApiResult.apiResult(ResponseResultStatus.SUCCESS, body));
         }
+
+        response.setStatusCode(HttpStatus.OK);
         return ApiResult.apiResult(ResponseResultStatus.SUCCESS, body);
     }
 }
