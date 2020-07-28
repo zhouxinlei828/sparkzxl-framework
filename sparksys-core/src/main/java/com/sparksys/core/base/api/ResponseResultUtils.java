@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * description: SecurityResponse工具类
+ * description: ResponseResult工具类
  *
  * @author zhouxinlei
  * @date 2020-05-24 13:40:03
