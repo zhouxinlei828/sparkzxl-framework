@@ -30,7 +30,7 @@ public class JwtAutoConfiguration {
     /**
      * 读取固定的公钥和私钥来进行签名和验证
      *
-     * @return
+     * @return KeyPair
      */
     @Bean
     @ConditionalOnMissingBean(KeyPair.class)
