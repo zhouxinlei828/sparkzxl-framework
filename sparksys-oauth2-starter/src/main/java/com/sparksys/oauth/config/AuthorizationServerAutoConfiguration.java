@@ -53,7 +53,6 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
     @Resource
     private Oauth2Properties oAuth2Properties;
 
-
     @Resource
     private KeyPair keyPair;
 
