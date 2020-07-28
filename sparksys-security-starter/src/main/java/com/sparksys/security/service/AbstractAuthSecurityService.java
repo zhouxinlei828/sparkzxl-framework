@@ -1,12 +1,13 @@
 package com.sparksys.security.service;
 
-import com.sparksys.core.constant.CacheKey;
+import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.utils.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.core.repository.CacheRepository;
 import com.sparksys.jwt.properties.JwtProperties;
 import com.sparksys.jwt.service.JwtTokenService;
+import com.sparksys.security.constant.AuthConstant;
 import com.sparksys.security.entity.AuthUserDetail;
 import com.sparksys.security.event.LoginEvent;
 import com.sparksys.security.entity.LoginStatus;
@@ -101,7 +102,7 @@ public abstract class AbstractAuthSecurityService {
      */
     private void accessToken(AuthToken authToken, AuthUserInfo authUser) {
         String token = authToken.getToken();
-        cacheRepository.set(CacheKey.buildKey(CacheKey.AUTH_USER, token), authUser,
+        cacheRepository.set(KeyUtils.buildKey(AuthConstant.AUTH_USER, token), authUser,
                 authToken.getExpiration());
     }
 

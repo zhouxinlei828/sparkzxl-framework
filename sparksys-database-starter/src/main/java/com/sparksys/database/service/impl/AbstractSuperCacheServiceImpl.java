@@ -1,7 +1,7 @@
 package com.sparksys.database.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.sparksys.core.constant.CacheKey;
+import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.repository.CacheRepository;
 import com.sparksys.database.entity.SuperEntity;
 import com.sparksys.database.mapper.SuperMapper;
@@ -35,7 +35,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     @Transactional(rollbackFor = {Exception.class})
     public boolean removeById(Serializable id) {
         boolean bool = super.removeById(id);
-        this.cacheRepository.remove(CacheKey.buildKey(this.getRegion(), id));
+        this.cacheRepository.remove(KeyUtils.buildKey(this.getRegion(), id));
         return bool;
     }
 
@@ -46,7 +46,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
             return true;
         } else {
             boolean flag = super.removeByIds(idList);
-            idList.forEach(id -> this.cacheRepository.remove(CacheKey.buildKey(this.getRegion(), id)));
+            idList.forEach(id -> this.cacheRepository.remove(KeyUtils.buildKey(this.getRegion(), id)));
             return flag;
         }
     }
@@ -56,7 +56,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     public boolean save(T model) {
         boolean result = super.save(model);
         if (model instanceof SuperEntity) {
-            String key = CacheKey.buildKey(this.getRegion(), ((SuperEntity) model).getId());
+            String key = KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId());
             this.cacheRepository.set(key, model);
         }
         return result;
@@ -67,7 +67,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     public boolean updateById(T model) {
         boolean updateBool = super.updateById(model);
         if (model instanceof SuperEntity) {
-            this.cacheRepository.remove(CacheKey.buildKey(this.getRegion(), ((SuperEntity) model).getId()));
+            this.cacheRepository.remove(KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId()));
         }
         return updateBool;
     }
