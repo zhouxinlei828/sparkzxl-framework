@@ -1,4 +1,4 @@
-package com.sparksys.database.injector;
+package com.sparksys.database.mybatis.injector;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.extension.injector.methods.AlwaysUpdateSomeColumnById;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
 import com.baomidou.mybatisplus.extension.injector.methods.LogicDeleteByIdWithFill;
-import com.sparksys.database.methods.DeleteAll;
+import com.sparksys.database.mybatis.methods.DeleteAll;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.sparksys.database.hander;
+package com.sparksys.database.mybatis.hander;
 
 import com.sparksys.database.model.RemoteData;
 import org.apache.ibatis.type.BaseTypeHandler;

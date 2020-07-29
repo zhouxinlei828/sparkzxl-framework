@@ -1,7 +1,7 @@
 package com.sparksys.database.config;
 
-import com.sparksys.database.hander.MetaDataHandler;
-import com.sparksys.database.injector.BaseSqlInjector;
+import com.sparksys.database.mybatis.hander.MetaDataHandler;
+import com.sparksys.database.mybatis.injector.BaseSqlInjector;
 import com.sparksys.database.properties.DataProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

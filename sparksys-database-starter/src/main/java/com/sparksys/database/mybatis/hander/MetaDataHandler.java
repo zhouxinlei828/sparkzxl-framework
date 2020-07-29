@@ -1,4 +1,4 @@
-package com.sparksys.database.hander;
+package com.sparksys.database.mybatis.hander;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;

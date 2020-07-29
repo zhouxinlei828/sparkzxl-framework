@@ -47,7 +47,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
     /**
      * 查询字段
      */
-    private SharedString sqlSelect = new SharedString();
+    private final SharedString sqlSelect = new SharedString();
 
     public QueryWrap() {
         this(null);
@@ -267,13 +267,17 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
      * @param val 参数值
      */
     private boolean checkCondition(Object val) {
-        if (val instanceof String && this.skipEmpty) {
+        return checkType(val, this.skipEmpty);
+    }
+
+    public static boolean checkType(Object val, boolean skipEmpty) {
+        if (val instanceof String && skipEmpty) {
             return StringUtils.isNotBlank((String) val);
         }
-        if (val instanceof Collection && this.skipEmpty) {
+        if (val instanceof Collection && skipEmpty) {
             return !((Collection) val).isEmpty();
         }
-        if (val instanceof RemoteData && this.skipEmpty) {
+        if (val instanceof RemoteData && skipEmpty) {
             RemoteData value = (RemoteData) val;
             return ObjectUtil.isNotEmpty(value.getKey());
         }

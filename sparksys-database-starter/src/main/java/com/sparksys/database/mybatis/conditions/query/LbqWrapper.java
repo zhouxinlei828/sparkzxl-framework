@@ -280,17 +280,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
      * @param val 参数值
      */
     private boolean checkCondition(Object val) {
-        if (val instanceof String && this.skipEmpty) {
-            return StringUtils.isNotBlank((String) val);
-        }
-        if (val instanceof Collection && this.skipEmpty) {
-            return !((Collection) val).isEmpty();
-        }
-        if (val instanceof RemoteData && this.skipEmpty) {
-            RemoteData value = (RemoteData) val;
-            return ObjectUtil.isNotEmpty(value.getKey());
-        }
-        return val != null;
+        return QueryWrap.checkType(val, this.skipEmpty);
     }
 
     /**
@@ -299,7 +289,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
      *
      * @param <A>       这个是传入的待忽略字段的set方法
      * @param setColumn 列
-     * @return
+     * @return LbqWrapper<T>
      */
     public <A extends Object> LbqWrapper<T> ignore(BiFunction<T, A, ?> setColumn) {
         setColumn.apply(this.getEntity(), null);

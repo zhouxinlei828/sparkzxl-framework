@@ -2,7 +2,7 @@ package com.sparksys.database.config;
 
 import com.sparksys.database.aspect.InjectionResultAspect;
 import com.sparksys.database.injection.InjectionCore;
-import com.sparksys.database.hander.RemoteDataTypeHandler;
+import com.sparksys.database.mybatis.hander.RemoteDataTypeHandler;
 import com.sparksys.database.properties.InjectionProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,7 +37,7 @@ public class InjectionDataAutoConfiguration {
     /**
      * Mybatis 类型处理器： 处理 RemoteData 类型的字段
      *
-     * @return
+     * @return RemoteDataTypeHandler
      */
     @Bean
     @ConditionalOnMissingBean

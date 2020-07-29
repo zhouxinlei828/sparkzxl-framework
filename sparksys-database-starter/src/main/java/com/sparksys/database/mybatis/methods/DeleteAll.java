@@ -1,4 +1,4 @@
-package com.sparksys.database.methods;
+package com.sparksys.database.mybatis.methods;
 
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
