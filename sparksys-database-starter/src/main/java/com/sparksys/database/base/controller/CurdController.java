@@ -6,9 +6,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
 import com.sparksys.core.utils.DateUtils;
-import com.sparksys.core.utils.ListUtils;
 import com.sparksys.database.dto.PageParams;
 import com.sparksys.database.mybatis.conditions.Wraps;
 import com.sparksys.database.mybatis.conditions.query.QueryWrap;
@@ -16,6 +14,7 @@ import com.sparksys.database.utils.PageInfoUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -112,7 +111,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * 自定义删除
      *
      * @param ids ids
-     * @return 返回Strue, 调用默认更新, 返回其他不调用默认更新
+     * @return 返回true, 调用默认更新, 返回其他不调用默认更新
      */
     default boolean handlerDelete(List<Id> ids) {
         return true;
@@ -140,14 +139,14 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         QueryWrap<Entity> wrapper = handlerWrapper(model, params);
         params.buildPage();
         List<Entity> entityList = getBaseService().list(wrapper);
+        PageInfo<Entity> pageInfo = PageInfoUtils.pageInfo(entityList);
         // 处理结果
-        List<?> list = handlerResult(entityList);
-        if (ListUtils.isNotEmpty(list)) {
-            return PageInfoUtils.pageInfo(list);
-        } else if (ListUtils.isNotEmpty(entityList)) {
-            return PageInfoUtils.pageInfo(entityList);
+        PageInfo<?> pageInfoDto = handlerResult(pageInfo);
+        if (ObjectUtils.isNotEmpty(pageInfoDto)) {
+            return pageInfoDto;
+        } else {
+            return pageInfo;
         }
-        return PageInfoUtils.pageInfo(Lists.newArrayList());
     }
 
     /**
@@ -185,12 +184,12 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     /**
      * 自定义处理返回结果
      *
-     * @param entityList 数据返回list
+     * @param pageInfo 数据返回list
      * @return List<?>
      */
-    default List<?> handlerResult(List<Entity> entityList) {
+    default PageInfo<?> handlerResult(PageInfo<Entity> pageInfo) {
         // 调用注入方法
-        return Lists.newArrayList();
+        return null;
     }
 
     /**
