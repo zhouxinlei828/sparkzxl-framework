@@ -1,9 +1,9 @@
-package com.sparksys.database.service;
+package com.sparksys.database.base.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.sparksys.core.support.ResponseResultStatus;
-import com.sparksys.database.mapper.SuperMapper;
+import com.sparksys.database.base.mapper.SuperMapper;
 
 import java.util.List;
 

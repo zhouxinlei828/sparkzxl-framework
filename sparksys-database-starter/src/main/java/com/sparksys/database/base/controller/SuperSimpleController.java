@@ -1,6 +1,6 @@
-package com.sparksys.database.controller;
+package com.sparksys.database.base.controller;
 
-import com.sparksys.database.service.SuperService;
+import com.sparksys.database.base.service.SuperService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;

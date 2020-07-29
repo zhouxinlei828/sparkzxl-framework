@@ -1,7 +1,7 @@
 package com.sparksys.database.mybatis.typehandler;
 
 import cn.hutool.core.util.StrUtil;
-import com.sparksys.database.model.RemoteData;
+import com.sparksys.database.entity.RemoteData;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

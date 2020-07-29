@@ -1,4 +1,4 @@
-package com.sparksys.database.model;
+package com.sparksys.database.entity;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.sparksys.database.validation.IValidatable;

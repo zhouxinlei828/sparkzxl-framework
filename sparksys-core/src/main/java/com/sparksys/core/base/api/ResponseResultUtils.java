@@ -3,6 +3,7 @@ package com.sparksys.core.base.api;
 
 import cn.hutool.json.JSONUtil;
 import com.sparksys.core.base.api.result.ApiResult;
+import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.support.ResponseResultStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,8 @@ import java.io.IOException;
 public class ResponseResultUtils {
 
     public static String getAuthHeader(HttpServletRequest httpRequest) {
-        String header = httpRequest.getHeader(CoreConstant.JwtTokenConstant.JWT_TOKEN_HEADER);
-        return StringUtils.removeStart(header, CoreConstant.JwtTokenConstant.JWT_TOKEN_HEAD);
+        String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);
+        return StringUtils.removeStart(header, BaseContextConstants.JWT_TOKEN_HEAD);
     }
 
     public static void unauthorized(HttpServletResponse response) {

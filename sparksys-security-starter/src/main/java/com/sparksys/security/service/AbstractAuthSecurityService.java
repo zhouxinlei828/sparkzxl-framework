@@ -1,5 +1,6 @@
 package com.sparksys.security.service;
 
+import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.utils.SpringContextUtils;
@@ -7,7 +8,6 @@ import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.core.repository.CacheRepository;
 import com.sparksys.jwt.properties.JwtProperties;
 import com.sparksys.jwt.service.JwtTokenService;
-import com.sparksys.security.constant.AuthConstant;
 import com.sparksys.security.entity.AuthUserDetail;
 import com.sparksys.security.event.LoginEvent;
 import com.sparksys.security.entity.LoginStatus;
@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.annotation.Resource;
 
 /**
@@ -62,7 +63,7 @@ public abstract class AbstractAuthSecurityService {
         authUserInfo.setPassword(null);
         AuthToken authToken = new AuthToken();
         authToken.setToken(token);
-        authToken.setExpiration(CoreConstant.JwtTokenConstant.JWT_EXPIRATION);
+        authToken.setExpiration(jwtProperties.getExpire());
         authToken.setAuthUser(authUserInfo);
         //设置accessToken缓存
         accessToken(authToken, authUserInfo);
@@ -98,11 +99,10 @@ public abstract class AbstractAuthSecurityService {
      *
      * @param authToken 用户token
      * @param authUser  认证用户
-     * @return void
      */
     private void accessToken(AuthToken authToken, AuthUserInfo authUser) {
         String token = authToken.getToken();
-        cacheRepository.set(KeyUtils.buildKey(AuthConstant.AUTH_USER, token), authUser,
+        cacheRepository.set(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, token), authUser,
                 authToken.getExpiration());
     }
 

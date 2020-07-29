@@ -15,7 +15,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.sparksys.core.utils.SpringContextUtils;
 import com.sparksys.database.annonation.InjectionField;
 import com.sparksys.database.annonation.InjectionResult;
-import com.sparksys.database.model.RemoteData;
+import com.sparksys.database.entity.RemoteData;
 import com.sparksys.database.properties.InjectionProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

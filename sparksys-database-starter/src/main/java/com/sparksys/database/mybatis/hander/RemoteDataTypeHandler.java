@@ -1,6 +1,6 @@
 package com.sparksys.database.mybatis.hander;
 
-import com.sparksys.database.model.RemoteData;
+import com.sparksys.database.entity.RemoteData;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

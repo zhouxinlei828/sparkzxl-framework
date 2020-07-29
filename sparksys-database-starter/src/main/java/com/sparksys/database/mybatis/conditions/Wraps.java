@@ -3,7 +3,7 @@ package com.sparksys.database.mybatis.conditions;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.sparksys.database.model.RemoteData;
+import com.sparksys.database.entity.RemoteData;
 import com.sparksys.database.mybatis.conditions.query.LbqWrapper;
 import com.sparksys.database.mybatis.conditions.query.QueryWrap;
 import com.sparksys.database.mybatis.conditions.update.LbuWrapper;

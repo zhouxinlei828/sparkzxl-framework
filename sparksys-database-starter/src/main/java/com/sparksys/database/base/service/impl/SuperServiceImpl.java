@@ -1,8 +1,8 @@
-package com.sparksys.database.service.impl;
+package com.sparksys.database.base.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sparksys.database.mapper.SuperMapper;
-import com.sparksys.database.service.SuperService;
+import com.sparksys.database.base.mapper.SuperMapper;
+import com.sparksys.database.base.service.SuperService;
 
 /**
  * description:

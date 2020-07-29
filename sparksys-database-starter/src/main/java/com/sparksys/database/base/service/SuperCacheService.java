@@ -1,4 +1,4 @@
-package com.sparksys.database.service;
+package com.sparksys.database.base.service;
 
 import java.io.Serializable;
 

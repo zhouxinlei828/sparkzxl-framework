@@ -1,4 +1,4 @@
-package com.sparksys.database.mapper;
+package com.sparksys.database.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;

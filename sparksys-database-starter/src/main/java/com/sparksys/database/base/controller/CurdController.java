@@ -1,4 +1,4 @@
-package com.sparksys.database.controller;
+package com.sparksys.database.base.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;

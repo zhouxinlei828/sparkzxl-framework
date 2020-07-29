@@ -1,9 +1,12 @@
 package com.sparksys.database.config;
 
+import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.database.context.BaseContextHandler;
 import com.sparksys.database.mybatis.hander.MetaDataHandler;
 import com.sparksys.database.mybatis.injector.BaseSqlInjector;
 import com.sparksys.database.properties.DataProperties;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +24,19 @@ import org.springframework.context.annotation.Configuration;
 public class MyBatisAutoConfiguration {
 
     @Bean
+    @ConditionalOnBean(CacheRepository.class)
+    public BaseContextHandler baseContextHandler(CacheRepository cacheRepository) {
+        BaseContextHandler baseContextHandler = new BaseContextHandler();
+        baseContextHandler.setCacheRepository(cacheRepository);
+        return baseContextHandler;
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public MetaDataHandler metaDateHandler(DataProperties dataProperties) {
         return new MetaDataHandler(dataProperties.getWorkerId(), dataProperties.getDataCenterId());
     }
+
 
     @Bean
     public BaseSqlInjector sqlInjector() {

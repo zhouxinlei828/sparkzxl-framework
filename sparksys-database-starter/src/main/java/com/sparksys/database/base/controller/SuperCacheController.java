@@ -1,6 +1,6 @@
-package com.sparksys.database.controller;
+package com.sparksys.database.base.controller;
 
-import com.sparksys.database.service.SuperCacheService;
+import com.sparksys.database.base.service.SuperCacheService;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.Serializable;

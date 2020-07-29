@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.sparksys.database.model.RemoteData;
+import com.sparksys.database.entity.RemoteData;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
