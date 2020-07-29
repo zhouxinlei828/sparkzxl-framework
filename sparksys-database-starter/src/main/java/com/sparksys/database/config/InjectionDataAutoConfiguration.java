@@ -1,7 +1,7 @@
 package com.sparksys.database.config;
 
 import com.sparksys.database.aspect.InjectionResultAspect;
-import com.sparksys.database.core.InjectionCore;
+import com.sparksys.database.injection.InjectionCore;
 import com.sparksys.database.hander.RemoteDataTypeHandler;
 import com.sparksys.database.properties.InjectionProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

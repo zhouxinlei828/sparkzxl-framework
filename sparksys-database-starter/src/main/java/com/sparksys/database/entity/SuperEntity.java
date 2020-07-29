@@ -41,4 +41,5 @@ public class SuperEntity<T> implements Serializable {
 
     @TableField(value = CREATE_USER_COLUMN, fill = FieldFill.INSERT)
     protected T createUser;
+
 }

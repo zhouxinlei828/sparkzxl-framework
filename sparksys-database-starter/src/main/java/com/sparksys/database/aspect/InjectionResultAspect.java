@@ -1,7 +1,7 @@
 package com.sparksys.database.aspect;
 
 import com.sparksys.database.annonation.InjectionResult;
-import com.sparksys.database.core.InjectionCore;
+import com.sparksys.database.injection.InjectionCore;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

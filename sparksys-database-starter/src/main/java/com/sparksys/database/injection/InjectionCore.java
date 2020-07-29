@@ -1,4 +1,4 @@
-package com.sparksys.database.core;
+package com.sparksys.database.injection;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
