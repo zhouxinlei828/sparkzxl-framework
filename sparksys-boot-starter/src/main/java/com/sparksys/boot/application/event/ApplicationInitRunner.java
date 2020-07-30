@@ -2,8 +2,10 @@ package com.sparksys.boot.application.event;
 
 import cn.hutool.system.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 
 import java.net.InetAddress;
@@ -16,27 +18,35 @@ import java.net.InetAddress;
  * @date 2020-06-05 20:31:48
  */
 @Slf4j
-public class ApplicationRunner implements CommandLineRunner {
+public class ApplicationInitRunner implements ApplicationRunner, Ordered {
 
     private final ApplicationContext applicationContext;
 
-    public ApplicationRunner(ApplicationContext applicationContext) {
+    public ApplicationInitRunner(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(ApplicationArguments args) throws Exception {
         Environment env = applicationContext.getEnvironment();
         log.info("\n______________________________________________________________\n\t" +
                         "Java Version: {} \n\t" +
-                        "运行环境: {} \n\t" +
-                        "应用: {} 运行成功! 访问连接:\n\t" +
-                        "Swagger文档: \t\thttp://{}:{}/doc.html\n" +
+                        "运行系统: {} \n\t" +
+                        "application: {} \n\t" +
+                        "访问连接: http://{}:{}\n\t" +
+                        "API接口文档：http://{}:{}/doc.html\n" +
                         "______________________________________________________________",
                 SystemUtil.getJavaInfo().getVersion(),
                 SystemUtil.getOsInfo().getName(),
                 env.getProperty("spring.application.name"),
                 InetAddress.getLocalHost().getHostAddress(),
+                env.getProperty("server.port"),
+                InetAddress.getLocalHost().getHostAddress(),
                 env.getProperty("server.port"));
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE + 1;
     }
 }

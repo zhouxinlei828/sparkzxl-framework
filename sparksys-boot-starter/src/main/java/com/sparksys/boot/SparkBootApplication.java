@@ -1,6 +1,6 @@
 package com.sparksys.boot;
 
-import com.sparksys.boot.application.event.ApplicationRunner;
+import com.sparksys.boot.application.event.ApplicationInitRunner;
 import com.sparksys.core.utils.SpringContextUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ import org.springframework.context.annotation.Import;
 public class SparkBootApplication {
 
     @Bean
-    public ApplicationRunner applicationRunner(ApplicationContext applicationContext) {
-        return new ApplicationRunner(applicationContext);
+    public ApplicationInitRunner applicationRunner(ApplicationContext applicationContext) {
+        return new ApplicationInitRunner(applicationContext);
     }
 
 }

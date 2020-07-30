@@ -1,14 +1,15 @@
 package com.sparksys.web.config;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.google.common.collect.ImmutableMap;
+import com.sparksys.web.enums.Enumerator;
 import com.sparksys.web.utils.JacksonUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -17,11 +18,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 /**
  * description: Jackson全局配置
@@ -34,9 +37,20 @@ public class JacksonConfig {
 
     @Bean("jackson2ObjectMapperBuilderCustomizer")
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializerByType(Long.class, ToStringSerializer.instance)
-                .serializerByType(Long.TYPE, ToStringSerializer.instance)
-                .featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        Map<Class<?>, JsonSerializer<?>> jsonSerializerMap = ImmutableMap.<Class<?>, JsonSerializer<?>>builder()
+                .put(Long.class, ToStringSerializer.instance)
+                .put(Long.TYPE, ToStringSerializer.instance)
+                .put(Enumerator.class, new JsonSerializer<Enumerator>() {
+                    @Override
+                    public void serialize(Enumerator enumerator, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+                        jsonGenerator.writeStartObject();
+                        jsonGenerator.writeNumberField("code", enumerator.getCode());
+                        jsonGenerator.writeStringField("desc", enumerator.getDesc());
+                        jsonGenerator.writeEndObject();
+                    }
+                })
+                .build();
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializersByType(jsonSerializerMap);
     }
 
     @Bean
