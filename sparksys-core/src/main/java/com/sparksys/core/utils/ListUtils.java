@@ -1,6 +1,5 @@
 package com.sparksys.core.utils;
 
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 
 import com.google.common.collect.Maps;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
  * @date 2020-05-24 12:49:53
  */
 @Slf4j
-public class ListUtils extends ListUtil {
+public class ListUtils {
 
     public static <T> List<T> emptyList() {
         return Collections.emptyList();
