@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
@@ -24,12 +29,6 @@
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-user-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

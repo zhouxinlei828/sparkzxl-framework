@@ -1,7 +1,7 @@
-package com.sparksys.cache.repository;
+package com.sparksys.cache.template;
 
 import com.sparksys.cache.utils.RedisObjectSerializer;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,19 +21,19 @@ import java.util.function.Function;
  */
 @Slf4j
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class RedisRepositoryImpl implements CacheRepository {
+public class RedisCacheTemplateImpl implements CacheTemplate {
 
-    private static final Charset DEFAULT_CHARSET;
-    private static final RedisObjectSerializer OBJECT_SERIALIZER;
-
+    private static Charset DEFAULT_CHARSET;
+    private static RedisObjectSerializer OBJECT_SERIALIZER;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    static {
+    @Override
+    public void initCacheTemplate() {
         DEFAULT_CHARSET = StandardCharsets.UTF_8;
         OBJECT_SERIALIZER = new RedisObjectSerializer();
     }
 
-    public RedisRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
+    public RedisCacheTemplateImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

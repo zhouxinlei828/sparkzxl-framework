@@ -22,13 +22,12 @@
         </dependency>
         <dependency>
             <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sparksys</groupId>
             <artifactId>sparksys-security-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

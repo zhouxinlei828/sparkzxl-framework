@@ -1,14 +1,18 @@
 package com.sparksys.cache.utils;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.sparksys.cache.converter.EnumDeserializer;
+import com.sparksys.core.enums.Enumerator;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 /**
@@ -42,6 +47,15 @@ public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        javaTimeModule.addSerializer(Enumerator.class, new JsonSerializer<Enumerator>() {
+            @Override
+            public void serialize(Enumerator enumerator, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+                jsonGenerator.writeStartObject();
+                jsonGenerator.writeNumberField("code", enumerator.getCode());
+                jsonGenerator.writeStringField("desc", enumerator.getDesc());
+                jsonGenerator.writeEndObject();
+            }
+        });
         objectMapper.registerModule(javaTimeModule);
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

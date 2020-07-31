@@ -1,7 +1,7 @@
 package com.sparksys.database.context;
 
 import com.sparksys.core.constant.BaseContextConstants;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 
 /**
  * description: 上下文全局获取
@@ -11,7 +11,7 @@ import com.sparksys.core.repository.CacheRepository;
  */
 public class BaseContextHandler {
 
-    public static CacheRepository cacheRepository;
+    public static CacheTemplate cacheRepository;
 
     public static Long getUserId() {
         return cacheRepository.get(BaseContextConstants.APPLICATION_AUTH_USER_ID);
@@ -25,7 +25,7 @@ public class BaseContextHandler {
         return cacheRepository.get(BaseContextConstants.APPLICATION_AUTH_NAME);
     }
 
-    public void setCacheRepository(CacheRepository cacheRepository) {
+    public void setCacheRepository(CacheTemplate cacheRepository) {
         BaseContextHandler.cacheRepository = cacheRepository;
     }
 }

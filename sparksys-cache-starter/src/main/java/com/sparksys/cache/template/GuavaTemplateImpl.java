@@ -1,10 +1,10 @@
-package com.sparksys.cache.repository;
+package com.sparksys.cache.template;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  * @date 2020/6/17 0017
  */
 @Slf4j
-public class GuavaCacheRepositoryImpl implements CacheRepository {
+public class GuavaTemplateImpl implements CacheTemplate {
 
     private static final Map<String, Cache<String, Object>> CACHE_CONCURRENT_MAP = Maps.newConcurrentMap();
 

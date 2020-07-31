@@ -29,12 +29,7 @@
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

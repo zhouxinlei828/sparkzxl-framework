@@ -2,7 +2,7 @@ package com.sparksys.database.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.sparksys.core.utils.KeyUtils;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import com.sparksys.database.entity.SuperEntity;
 import com.sparksys.database.base.mapper.SuperMapper;
 import com.sparksys.database.base.service.SuperCacheService;
@@ -22,7 +22,7 @@ import java.util.Collection;
 public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
     @Autowired(required = false)
-    protected CacheRepository cacheRepository;
+    protected CacheTemplate cacheRepository;
 
     /**
      * 缓存key模板

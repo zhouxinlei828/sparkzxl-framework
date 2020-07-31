@@ -1,9 +1,8 @@
 package com.sparksys.oauth.config;
 
-import com.sparksys.oauth.handler.OauthRestAuthenticationEntryPoint;
-import com.sparksys.oauth.handler.OauthRestfulAccessDeniedHandler;
 import com.sparksys.oauth.properties.Oauth2Properties;
-import org.springframework.context.annotation.Bean;
+import com.sparksys.security.authorization.RestAuthenticationEntryPoint;
+import com.sparksys.security.authorization.RestfulAccessDeniedHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -25,17 +24,6 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
     @Resource
     private Oauth2Properties oauth2Properties;
 
-
-    @Bean
-    public OauthRestfulAccessDeniedHandler oauthRestfulAccessDeniedHandler(){
-        return new OauthRestfulAccessDeniedHandler();
-    }
-
-    @Bean
-    public OauthRestAuthenticationEntryPoint oauthRestAuthenticationEntryPoint(){
-        return new OauthRestAuthenticationEntryPoint();
-    }
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -52,8 +40,8 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.authenticationEntryPoint(oauthRestAuthenticationEntryPoint())
-                .accessDeniedHandler(oauthRestfulAccessDeniedHandler());
+        resources.authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .accessDeniedHandler(new RestfulAccessDeniedHandler());
     }
 
 }

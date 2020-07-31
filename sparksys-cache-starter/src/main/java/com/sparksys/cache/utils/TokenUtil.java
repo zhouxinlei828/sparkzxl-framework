@@ -1,7 +1,7 @@
 package com.sparksys.cache.utils;
 
 import cn.hutool.core.util.IdUtil;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import org.springframework.util.StringUtils;
 
 /**
@@ -12,9 +12,9 @@ import org.springframework.util.StringUtils;
  */
 public class TokenUtil {
 
-    private final CacheRepository cacheRepository;
+    private final CacheTemplate cacheRepository;
 
-    public TokenUtil(CacheRepository cacheRepository) {
+    public TokenUtil(CacheTemplate cacheRepository) {
         this.cacheRepository = cacheRepository;
     }
 

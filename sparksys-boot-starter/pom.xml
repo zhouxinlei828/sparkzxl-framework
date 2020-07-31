@@ -14,59 +14,23 @@
     <dependencies>
         <dependency>
             <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sparksys</groupId>
             <artifactId>sparksys-database-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sparksys</groupId>
-                    <artifactId>sparksys-swagger-starter</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-log-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-swagger-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sparksys</groupId>
-                    <artifactId>sparksys-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-aop</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-web-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sparksys</groupId>
-                    <artifactId>sparksys-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.lianjiatech</groupId>

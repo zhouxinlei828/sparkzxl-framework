@@ -3,7 +3,7 @@ package com.sparksys.user.service.impl;
 import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
     @Resource
-    public CacheRepository cacheRepository;
+    public CacheTemplate cacheRepository;
 
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {

@@ -1,4 +1,4 @@
-package com.sparksys.cache.repository;
+package com.sparksys.cache.template;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.LongAdder;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import org.springframework.util.StringUtils;
 
 /**
@@ -16,12 +16,12 @@ import org.springframework.util.StringUtils;
  * @date: 2020-07-28 17:46:50
  */
 @SuppressWarnings("unchecked")
-public class CaffeineRepositoryImpl implements CacheRepository {
+public class CacheCaffeineTemplateImpl implements CacheTemplate {
 
     long maxSize = 1000L;
     private final Cache<String, Cache<String, Object>> cacheMap;
 
-    public CaffeineRepositoryImpl() {
+    public CacheCaffeineTemplateImpl() {
         this.cacheMap = Caffeine.newBuilder().maximumSize(this.maxSize).build();
     }
 
@@ -149,7 +149,7 @@ public class CaffeineRepositoryImpl implements CacheRepository {
     }
 
     public static void main(String[] args) {
-        CaffeineRepositoryImpl caffeineRepository = new CaffeineRepositoryImpl();
+        CacheCaffeineTemplateImpl caffeineRepository = new CacheCaffeineTemplateImpl();
         Long data = caffeineRepository.increment("hahha", 10);
         System.out.println(data);
         Long datav = caffeineRepository.get("hahha");

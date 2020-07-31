@@ -1,5 +1,6 @@
 package com.sparksys.jwt.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import com.nimbusds.jose.*;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Date;
 
 /**
  * description: jwtToken 服务实现类
@@ -43,7 +45,8 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
                 .build();
-        jwtUserInfo.setExpire(jwtProperties.getExpire());
+        Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
+        jwtUserInfo.setExpire(expire);
         jwtUserInfo.setJti(UUID.randomUUID().toString());
         //将负载信息封装到Payload中
         String payloadStr = JSONUtil.toJsonStr(jwtUserInfo);
@@ -75,7 +78,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
             String payload = jwsObject.getPayload().toString();
             payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
-            ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire(), System.currentTimeMillis());
+            ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire().getTime(), System.currentTimeMillis());
             return payloadDto;
         } catch (Exception e) {
             log.warn("根据RSA校验token失败：{}", e.getMessage());
@@ -118,7 +121,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
             String payload = jwsObject.getPayload().toString();
             payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
-            ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire(), System.currentTimeMillis());
+            ResponseResultStatus.JWT_EXPIRED_ERROR.assertCompare(payloadDto.getExpire().getTime(), System.currentTimeMillis());
         } catch (Exception e) {
             log.warn("根据HMAC校验token失败：{}", e.getMessage());
             SparkSysExceptionAssert.businessFail(e.getMessage());

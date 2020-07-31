@@ -17,12 +17,7 @@
         <dependency>
             <groupId>com.sparksys</groupId>
             <artifactId>sparksys-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>provided</scope>
         </dependency>
         <!-- Spring Boot 邮件依赖 -->
         <dependency>

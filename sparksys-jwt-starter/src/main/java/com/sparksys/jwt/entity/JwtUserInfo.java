@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class JwtUserInfo {
     /**
      * 过期时间
      */
-    private Long expire;
+    private Date expire;
     /**
      * JWT的ID
      */

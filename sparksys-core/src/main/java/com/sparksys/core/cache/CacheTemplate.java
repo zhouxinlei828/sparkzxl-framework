@@ -1,4 +1,4 @@
-package com.sparksys.core.repository;
+package com.sparksys.core.cache;
 
 import java.util.function.Function;
 
@@ -8,7 +8,15 @@ import java.util.function.Function;
  * @author zhouxinlei
  * @date 2020-05-24 13:25:06
  */
-public interface CacheRepository {
+public interface CacheTemplate {
+
+
+    /**
+     * 初始化缓存模板类型
+     */
+    default void initCacheTemplate() {
+
+    }
 
     /**
      * 查询缓存
@@ -82,7 +90,7 @@ public interface CacheRepository {
     /**
      * 自增长
      *
-     * @param key   key值
+     * @param key key值
      * @return Long
      */
     Long increment(String key);
@@ -99,7 +107,7 @@ public interface CacheRepository {
     /**
      * 自减
      *
-     * @param key   key值
+     * @param key key值
      * @return Long
      * @author zhouxinlei
      * @date 2019-10-11 16:23:58

@@ -7,7 +7,6 @@ import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.jwt.service.JwtTokenService;
 import com.sparksys.security.entity.AuthUserDetail;
 import com.sparksys.security.properties.SecurityProperties;
-import com.sparksys.security.resource.IgnoreStaticResource;
 import com.sparksys.security.service.AbstractAuthSecurityService;
 
 import com.sparksys.user.service.IAuthUserInfoService;

@@ -1,18 +1,19 @@
 package com.sparksys.security.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.utils.DateUtils;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.utils.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
-import com.sparksys.core.repository.CacheRepository;
+import com.sparksys.core.cache.CacheTemplate;
 import com.sparksys.jwt.properties.JwtProperties;
 import com.sparksys.jwt.service.JwtTokenService;
 import com.sparksys.security.entity.AuthUserDetail;
 import com.sparksys.security.event.LoginEvent;
 import com.sparksys.security.entity.LoginStatus;
 import com.sparksys.core.support.ResponseResultStatus;
-import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.support.BusinessException;
 import com.sparksys.core.utils.Md5Utils;
 import com.sparksys.security.entity.AuthToken;
@@ -23,6 +24,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * description: 登录授权Service
@@ -34,7 +36,7 @@ import javax.annotation.Resource;
 public abstract class AbstractAuthSecurityService {
 
     @Resource
-    private CacheRepository cacheRepository;
+    private CacheTemplate cacheRepository;
     @Resource
     private JwtProperties jwtProperties;
     @Resource
@@ -86,12 +88,13 @@ public abstract class AbstractAuthSecurityService {
 
 
     private String createJwtToken(AuthUserInfo globalAuthUser) {
+        Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
         JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
                 .sub(globalAuthUser.getAccount())
                 .iat(System.currentTimeMillis())
                 .authorities(globalAuthUser.getAuthorityList())
                 .username(globalAuthUser.getAccount())
-                .expire(jwtProperties.getExpire())
+                .expire(expire)
                 .build();
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
@@ -117,7 +120,7 @@ public abstract class AbstractAuthSecurityService {
     private void accessToken(AuthToken authToken, AuthUserInfo authUser) {
         String token = authToken.getToken();
         cacheRepository.set(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, token), authUser,
-                authToken.getExpiration());
+                (long) authToken.getExpiration());
     }
 
     /**
@@ -129,4 +132,8 @@ public abstract class AbstractAuthSecurityService {
      */
     public abstract AuthUserDetail getAuthUserDetail(String account);
 
+    public static void main(String[] args) {
+        Date exp = DateUtil.offsetSecond(new Date(), 60 * 60 * 24);
+        System.out.println(DateUtils.format(exp, "yyyy-MM-dd HH:mm:ss"));
+    }
 }

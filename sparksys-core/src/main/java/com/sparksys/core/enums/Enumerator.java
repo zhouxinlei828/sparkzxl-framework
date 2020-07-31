@@ -1,4 +1,4 @@
-package com.sparksys.web.enums;
+package com.sparksys.core.enums;
 
 /**
  * description: 枚举通用接口
