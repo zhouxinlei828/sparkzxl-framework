@@ -56,6 +56,20 @@ public abstract class AbstractAuthSecurityService {
         AuthUserInfo authUserInfo = adminUserDetails.getAuthUserInfo();
         //校验密码输入是否正确
         checkPasswordError(authRequest, authUserInfo);
+        AuthToken authToken = authorization(adminUserDetails, authUserInfo);
+        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserInfo.getId())));
+        return authToken;
+    }
+
+    /**
+     * 授权登录获取token
+     *
+     * @param adminUserDetails 授权用户
+     * @param authUserInfo     全局用户信息
+     * @return AuthToken
+     */
+    public AuthToken authorization(AuthUserDetail adminUserDetails, AuthUserInfo authUserInfo) {
+        String token;
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                 null, adminUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -67,9 +81,9 @@ public abstract class AbstractAuthSecurityService {
         authToken.setAuthUser(authUserInfo);
         //设置accessToken缓存
         accessToken(authToken, authUserInfo);
-        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserInfo.getId())));
         return authToken;
     }
+
 
     private String createJwtToken(AuthUserInfo globalAuthUser) {
         JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
