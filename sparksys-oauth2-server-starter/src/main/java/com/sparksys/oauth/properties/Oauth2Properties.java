@@ -12,7 +12,7 @@ import java.util.List;
  * @date: 2020-07-14 16:24:55
  */
 @Data
-@ConfigurationProperties(prefix = "sparksys.oauth2")
+@ConfigurationProperties(prefix = "sparksys.oauth2.server")
 public class Oauth2Properties {
 
     /**
@@ -50,8 +50,4 @@ public class Oauth2Properties {
      */
     private String[] authorizedGrantTypes;
 
-    /**
-     * 需要保护的资源路径
-     */
-    private String[] protectPatterns;
 }

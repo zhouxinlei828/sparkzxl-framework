@@ -23,12 +23,11 @@ import java.util.function.Function;
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class RedisCacheTemplateImpl implements CacheTemplate {
 
-    private static Charset DEFAULT_CHARSET;
-    private static RedisObjectSerializer OBJECT_SERIALIZER;
+    private static final Charset DEFAULT_CHARSET;
+    private static final RedisObjectSerializer OBJECT_SERIALIZER;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @Override
-    public void initCacheTemplate() {
+    static {
         DEFAULT_CHARSET = StandardCharsets.UTF_8;
         OBJECT_SERIALIZER = new RedisObjectSerializer();
     }

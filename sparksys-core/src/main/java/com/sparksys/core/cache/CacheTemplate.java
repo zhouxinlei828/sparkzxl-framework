@@ -10,14 +10,6 @@ import java.util.function.Function;
  */
 public interface CacheTemplate {
 
-
-    /**
-     * 初始化缓存模板类型
-     */
-    default void initCacheTemplate() {
-
-    }
-
     /**
      * 查询缓存
      *

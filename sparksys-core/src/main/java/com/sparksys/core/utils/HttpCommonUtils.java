@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
@@ -30,6 +31,19 @@ public class HttpCommonUtils {
     public static ServletRequestAttributes getRequestAttributes() {
         RequestContextHolder.currentRequestAttributes();
         return (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    }
+
+
+    public static void setAttribute(String name, Object o) {
+        getRequestAttributes().getRequest().setAttribute(name, o);
+    }
+
+    public static String getAttributeStr(String name) {
+        return String.valueOf(getRequestAttributes().getRequest().getAttribute(name));
+    }
+
+    public static Object getAttribute(String name) {
+        return getRequestAttributes().getRequest().getAttribute(name);
     }
 
     /**

@@ -89,12 +89,13 @@
         <module>sparksys-jwt-starter</module>
         <module>sparksys-log-starter</module>
         <module>sparksys-mail-starter</module>
-        <module>sparksys-oauth2-starter</module>
+        <module>sparksys-oauth2-server-starter</module>
         <module>sparksys-security-starter</module>
         <module>sparksys-swagger-starter</module>
         <module>sparksys-user-starter</module>
         <module>sparksys-web-starter</module>
         <module>sparksys-zookeeper-starter</module>
+        <module>sparksys-oauth2-resource-starter</module>
     </modules>
 
     <distributionManagement>

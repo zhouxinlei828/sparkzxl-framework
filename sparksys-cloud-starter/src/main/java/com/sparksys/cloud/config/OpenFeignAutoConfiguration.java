@@ -28,6 +28,7 @@ import java.util.List;
 public class OpenFeignAutoConfiguration {
 
     public OpenFeignAutoConfiguration() {
+
     }
 
     /**
@@ -38,18 +39,6 @@ public class OpenFeignAutoConfiguration {
     @Bean
     public DateFormatRegister dateFormatRegister() {
         return new DateFormatRegister();
-    }
-
-    /**
-     * feign 表单编码
-     *
-     * @return Encoder
-     */
-    @Bean
-    public Encoder feignFormEncoder() {
-        List<HttpMessageConverter<?>> converters = new RestTemplate().getMessageConverters();
-        ObjectFactory<HttpMessageConverters> factory = () -> new HttpMessageConverters(converters);
-        return new SpringFormEncoder(new SpringEncoder(factory));
     }
 
     /**

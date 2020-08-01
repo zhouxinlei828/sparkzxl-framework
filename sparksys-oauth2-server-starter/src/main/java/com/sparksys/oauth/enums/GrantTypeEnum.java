@@ -25,7 +25,7 @@ public enum GrantTypeEnum {
      */
     REFRESH_TOKEN("refresh_token");
 
-    private String type;
+    private final String type;
 
     GrantTypeEnum(String type) {
         this.type = type;

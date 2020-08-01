@@ -9,8 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sparksys-oauth2-starter</artifactId>
+    <artifactId>sparksys-oauth2-server-starter</artifactId>
     <version>${sparksys.version}</version>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

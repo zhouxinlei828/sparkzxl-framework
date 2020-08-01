@@ -120,7 +120,7 @@ public abstract class AbstractAuthSecurityService {
     private void accessToken(AuthToken authToken, AuthUserInfo authUser) {
         String token = authToken.getToken();
         cacheRepository.set(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, token), authUser,
-                (long) authToken.getExpiration());
+                authToken.getExpiration());
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.sparksys.database.context;
 
 import com.sparksys.core.constant.BaseContextConstants;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.core.utils.HttpCommonUtils;
 
 /**
  * description: 上下文全局获取
@@ -11,21 +11,16 @@ import com.sparksys.core.cache.CacheTemplate;
  */
 public class BaseContextHandler {
 
-    public static CacheTemplate cacheRepository;
-
     public static Long getUserId() {
-        return cacheRepository.get(BaseContextConstants.APPLICATION_AUTH_USER_ID);
+        return (Long) HttpCommonUtils.getAttribute(BaseContextConstants.APPLICATION_AUTH_USER_ID);
     }
 
     public static String getAccount() {
-        return cacheRepository.get(BaseContextConstants.APPLICATION_AUTH_ACCOUNT);
+        return HttpCommonUtils.getAttributeStr(BaseContextConstants.APPLICATION_AUTH_ACCOUNT);
     }
 
     public static String getUserName() {
-        return cacheRepository.get(BaseContextConstants.APPLICATION_AUTH_NAME);
+        return HttpCommonUtils.getAttributeStr(BaseContextConstants.APPLICATION_AUTH_NAME);
     }
 
-    public void setCacheRepository(CacheTemplate cacheRepository) {
-        BaseContextHandler.cacheRepository = cacheRepository;
-    }
 }
