@@ -6,5 +6,4 @@ _________________________________________________
 /____/ .___/\__,_/_/  /_/|_/____/\__, /____/
     /_/                         /____/
 _________________________________________________
-${AnsiColor.BRIGHT_BLUE}Application Version:  @project.version@
 ${AnsiColor.BRIGHT_MAGENTA}Spring Boot Version: ${spring-boot.formatted-version}

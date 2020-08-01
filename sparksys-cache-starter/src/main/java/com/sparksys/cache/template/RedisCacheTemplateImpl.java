@@ -1,16 +1,17 @@
 package com.sparksys.cache.template;
 
-import com.sparksys.cache.utils.RedisObjectSerializer;
+import com.google.common.collect.Lists;
 import com.sparksys.core.cache.CacheTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
 /**
@@ -24,20 +25,21 @@ import java.util.function.Function;
 public class RedisCacheTemplateImpl implements CacheTemplate {
 
     private static final Charset DEFAULT_CHARSET;
-    private static final RedisObjectSerializer OBJECT_SERIALIZER;
     private final RedisTemplate<String, Object> redisTemplate;
+    private ValueOperations<String, Object> valueOperations;
+
 
     static {
         DEFAULT_CHARSET = StandardCharsets.UTF_8;
-        OBJECT_SERIALIZER = new RedisObjectSerializer();
+    }
+
+    @PostConstruct
+    public void initRedisOperation() {
+        valueOperations = redisTemplate.opsForValue();
     }
 
     public RedisCacheTemplateImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
-    }
-
-    protected RedisSerializer<String> getRedisSerializer() {
-        return this.redisTemplate.getStringSerializer();
     }
 
     @Override
@@ -67,12 +69,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
             return null;
         }
         try {
-            obj = this.redisTemplate.execute((RedisCallback<T>) redisConnection -> {
-                byte[] keys = this.getRedisSerializer().serialize(key);
-                assert keys != null;
-                byte[] values = redisConnection.get(keys);
-                return (T) OBJECT_SERIALIZER.deserialize(values);
-            });
+            obj = (T) valueOperations.get(key);
             if (obj == null && function != null) {
                 obj = function.apply(funcParam);
                 if (obj != null) {
@@ -92,60 +89,46 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
 
     @Override
     public void set(String key, Object value, Long expireTime) {
-        this.redisTemplate.execute((RedisCallback<Long>) (connection) -> {
-            byte[] keys = this.getRedisSerializer().serialize(key);
-            byte[] values = OBJECT_SERIALIZER.serialize(value);
-            assert keys != null;
-            assert values != null;
-            connection.set(keys, values);
-            if (expireTime == null) {
-                connection.set(keys, values);
-            } else {
-                connection.setEx(keys, expireTime, values);
-            }
-            return 1L;
-        });
+        if (ObjectUtils.isNotEmpty(expireTime)) {
+            valueOperations.set(key, value, expireTime);
+        } else {
+            valueOperations.set(key, value);
+        }
     }
 
     @Override
     public Long increment(String key) {
-        return this.redisTemplate.execute((RedisCallback<Long>) (connection) -> connection.incr(this.getRedisSerializer().serialize(key)));
+        return valueOperations.increment(key);
     }
 
     @Override
     public Long increment(String key, long delta) {
-        return this.redisTemplate.execute((RedisCallback<Long>) (connection) -> connection.incrBy(this.getRedisSerializer().serialize(key), delta));
+        return valueOperations.increment(key, delta);
     }
 
     @Override
     public Long decrement(String key) {
-        return this.redisTemplate.execute((RedisCallback<Long>) (connection) -> connection.decr(this.getRedisSerializer().serialize(key)));
+        return valueOperations.decrement(key);
     }
 
     @Override
     public Long decrement(String key, long delta) {
-        return this.redisTemplate.execute((RedisCallback<Long>) (connection) -> connection.decrBy(this.getRedisSerializer().serialize(key), delta));
+        return valueOperations.decrement(key, delta);
     }
 
     @Override
     public Long remove(String... keys) {
-        LongAdder count = new LongAdder();
-        return this.redisTemplate.execute((RedisCallback<Long>) (connection) -> {
-            for (String key : keys) {
-                count.add(connection.del(new byte[][]{key.getBytes(DEFAULT_CHARSET)}));
-            }
-            return count.longValue();
-        });
+        return redisTemplate.delete(Lists.newArrayList(keys));
     }
 
     @Override
     public boolean exists(String key) {
-        return this.redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.exists(key.getBytes(DEFAULT_CHARSET)));
+        return redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.exists(key.getBytes(DEFAULT_CHARSET)));
     }
 
     @Override
     public void flushDb() {
-        this.redisTemplate.execute((RedisCallback<String>) (connection) -> {
+        redisTemplate.execute((RedisCallback<String>) (connection) -> {
             connection.flushDb();
             return "ok";
         });
