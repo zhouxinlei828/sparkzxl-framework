@@ -45,4 +45,15 @@ public class BaseContextConstants {
      */
     public static final String APPLICATION_AUTH_ACCOUNT = "current_request_account";
 
+
+    /**
+     * resource 资源
+     */
+    public static final String AUTHORITY_PREFIX = "ROLE_";
+
+    /**
+     * 权限
+     */
+    public static final String AUTHORITY_CLAIM_NAME = "authorities";
+
 }

@@ -1,14 +1,14 @@
 package com.sparksys.security.config;
 
+import com.sparksys.core.resource.SwaggerStaticResource;
 import com.sparksys.core.utils.ListUtils;
 import com.sparksys.security.authorization.DynamicAccessDecisionManager;
 import com.sparksys.security.authorization.DynamicSecurityMetadataSource;
 import com.sparksys.security.authorization.JwtAuthenticationTokenFilter;
-import com.sparksys.security.authorization.RestAuthenticationEntryPoint;
-import com.sparksys.security.authorization.RestfulAccessDeniedHandler;
+import com.sparksys.security.component.RestAuthenticationEntryPoint;
+import com.sparksys.security.component.RestfulAccessDeniedHandler;
 import com.sparksys.security.filter.DynamicSecurityFilter;
 import com.sparksys.security.properties.SecurityProperties;
-import com.sparksys.security.resource.IgnoreStaticResource;
 import com.sparksys.security.service.AbstractAuthSecurityService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -54,20 +54,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource
     private AbstractAuthSecurityService abstractAuthSecurityService;
 
-    @Bean
-    public RestfulAccessDeniedHandler restfulAccessDeniedHandler(){
-        return new RestfulAccessDeniedHandler();
-    }
-
-    @Bean
-    public RestAuthenticationEntryPoint restAuthenticationEntryPoint(){
-        return new RestAuthenticationEntryPoint();
-    }
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        String[] excludeStaticPatterns = ListUtils.stringToArray(IgnoreStaticResource.EXCLUDE_STATIC_PATTERNS);
+        String[] excludeStaticPatterns = ListUtils.stringToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
         web.ignoring().antMatchers(excludeStaticPatterns);
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
@@ -82,6 +72,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         for (String url : excludePatterns) {
             registry.antMatchers(url).permitAll();
         }
+        RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
+        RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
         // 任何请求需要身份认证
         registry.and()
                 .authorizeRequests()
@@ -96,9 +88,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // 自定义权限拒绝处理类
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(restfulAccessDeniedHandler())
-                .authenticationEntryPoint(restAuthenticationEntryPoint());
-
+                .accessDeniedHandler(restfulAccessDeniedHandler)
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
         if (securityProperties.isDynamicSecurity()) {
             registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
         }

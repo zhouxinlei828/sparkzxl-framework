@@ -12,7 +12,7 @@ import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.sparksys.core.utils.SpringContextUtils;
+import com.sparksys.core.spring.SpringContextUtils;
 import com.sparksys.database.annonation.InjectionField;
 import com.sparksys.database.annonation.InjectionResult;
 import com.sparksys.database.entity.RemoteData;

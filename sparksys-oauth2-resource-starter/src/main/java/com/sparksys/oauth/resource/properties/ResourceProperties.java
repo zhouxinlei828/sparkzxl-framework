@@ -14,12 +14,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ResourceProperties {
 
     /**
-     * 需要保护的资源路径
-     */
-    private String[] protectPatterns;
-
-    /**
      * 需要放行的资源路径
      */
     private String[] ignorePatterns;
+
+    /**
+     * 需要保护的资源路径
+     */
+    private String[] protectPatterns;
 }

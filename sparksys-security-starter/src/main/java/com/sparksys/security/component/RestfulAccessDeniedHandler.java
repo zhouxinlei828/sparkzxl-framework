@@ -1,7 +1,8 @@
-package com.sparksys.security.authorization;
+package com.sparksys.security.component;
 
 import com.sparksys.core.base.api.ResponseResultUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:14
  */
+@Slf4j
 public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override

@@ -5,7 +5,7 @@ import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.utils.DateUtils;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
-import com.sparksys.core.utils.SpringContextUtils;
+import com.sparksys.core.spring.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.core.cache.CacheTemplate;
 import com.sparksys.jwt.properties.JwtProperties;

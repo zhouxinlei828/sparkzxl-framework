@@ -4,11 +4,11 @@ import cn.hutool.json.JSONUtil;
 import com.sparksys.oauth.enhancer.JwtTokenEnhancer;
 import com.sparksys.oauth.properties.Oauth2Properties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,7 +39,7 @@ import java.util.List;
 @EnableConfigurationProperties(Oauth2Properties.class)
 @EnableAuthorizationServer
 @Slf4j
-public class AuthorizationServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
+public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -54,24 +54,11 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
     private Oauth2Properties oAuth2Properties;
 
     @Resource
-    private KeyPair keyPair;
-
-    @Resource
     private RedisConnectionFactory redisConnectionFactory;
 
     @Bean
     public TokenStore redisTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
-    }
-
-    @Bean
-    @DependsOn("keyPair")
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        if (ObjectUtils.isNotEmpty(keyPair)){
-            jwtAccessTokenConverter.setKeyPair(keyPair);
-        }
-        return jwtAccessTokenConverter;
     }
 
     @Bean
@@ -99,12 +86,6 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
                 .authorizedGrantTypes(oAuth2Properties.getAuthorizedGrantTypes());
     }
 
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) {
-        // 获取密钥需要身份认证，使用单点登录时必须配置
-        security.tokenKeyAccess("isAuthenticated()");
-    }
-
     /**
      * 使用密码模式需要配置
      */
@@ -112,18 +93,38 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
-        JwtAccessTokenConverter jwtAccessTokenConverter = jwtAccessTokenConverter();
         JwtTokenEnhancer jwtTokenEnhancer = jwtTokenEnhancer();
         //配置JWT的内容增强器
         delegates.add(jwtTokenEnhancer);
-        delegates.add(jwtAccessTokenConverter);
+        delegates.add(accessTokenConverter());
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
                 //配置令牌存储策略
                 .tokenStore(redisTokenStore())
-                .accessTokenConverter(jwtAccessTokenConverter)
+                .accessTokenConverter(accessTokenConverter())
                 .tokenEnhancer(enhancerChain);
 
     }
+
+    @Bean
+    @ConditionalOnClass(value = KeyPair.class)
+    public JwtAccessTokenConverter accessTokenConverter(KeyPair keyPair) {
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setKeyPair(keyPair);
+        return jwtAccessTokenConverter;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(value = KeyPair.class)
+    public JwtAccessTokenConverter accessTokenConverter() {
+        return new JwtAccessTokenConverter();
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        // 获取密钥需要身份认证，使用单点登录时必须配置
+        security.tokenKeyAccess("isAuthenticated()");
+    }
+
 }

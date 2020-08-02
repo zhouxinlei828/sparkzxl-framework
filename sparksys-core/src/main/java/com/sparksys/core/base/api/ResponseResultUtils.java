@@ -31,7 +31,9 @@ public class ResponseResultUtils {
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
+            response.setStatus(ResponseResultStatus.UN_AUTHORIZED.getCode());
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED)).toStringPretty());
+            log.info("");
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -42,6 +44,7 @@ public class ResponseResultUtils {
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
+            response.setStatus(ResponseResultStatus.REQ_REJECT.getCode());
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.REQ_REJECT)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {

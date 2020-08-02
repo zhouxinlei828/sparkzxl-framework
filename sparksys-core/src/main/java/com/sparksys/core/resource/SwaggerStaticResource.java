@@ -1,4 +1,4 @@
-package com.sparksys.security.resource;
+package com.sparksys.core.resource;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 @Slf4j
-public class IgnoreStaticResource {
+public class SwaggerStaticResource {
 
     public static final List<String> EXCLUDE_STATIC_PATTERNS = Arrays.asList(
             "/swagger-ui.html",
@@ -27,7 +27,7 @@ public class IgnoreStaticResource {
             "/**/*.css",
             "/**/*.png",
             "/**/*.ico",
-            "/webjars/springfox-swagger-ui/**",
+            "/webjars/**",
             "/doc.html",
             "/actuator/**"
     );

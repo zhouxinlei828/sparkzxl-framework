@@ -1,7 +1,8 @@
-package com.sparksys.security.authorization;
+package com.sparksys.security.component;
 
 import com.sparksys.core.base.api.ResponseResultUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:00
  */
+@Slf4j
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override

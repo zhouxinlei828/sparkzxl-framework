@@ -28,4 +28,5 @@ public class GlobalWebConfig implements WebMvcConfigurer {
     public ResponseResultInterceptor responseResultInterceptor() {
         return new ResponseResultInterceptor();
     }
+
 }
