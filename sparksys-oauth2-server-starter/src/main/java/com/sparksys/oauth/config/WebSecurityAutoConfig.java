@@ -3,8 +3,11 @@ package com.sparksys.oauth.config;
 import cn.hutool.core.util.ArrayUtil;
 import com.sparksys.core.resource.SwaggerStaticResource;
 import com.sparksys.core.utils.ListUtils;
+import com.sparksys.oauth.authorization.DynamicAccessDecisionManager;
 import com.sparksys.oauth.component.RestAuthenticationEntryPoint;
 import com.sparksys.oauth.component.RestfulAccessDeniedHandler;
+import com.sparksys.oauth.filter.DynamicSecurityFilter;
+import com.sparksys.oauth.intercept.DynamicSecurityMetadataSource;
 import com.sparksys.oauth.properties.SecurityProperties;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,8 +18,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import java.util.List;
@@ -56,7 +61,14 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 .antMatchers(ArrayUtil.toArray(securityProperties.getIgnorePatterns(), String.class)).permitAll()
                 .anyRequest().authenticated()
+                // 关闭跨站请求防护及不使用session
                 .and()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class)
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
@@ -72,6 +84,21 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
+        return new DynamicAccessDecisionManager();
+    }
+
+    @Bean
+    public DynamicSecurityFilter dynamicSecurityFilter() {
+        return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
+    }
+
+    @Bean
+    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
+        return new DynamicSecurityMetadataSource();
     }
 
 }
