@@ -96,6 +96,8 @@
         <module>sparksys-web-starter</module>
         <module>sparksys-zookeeper-starter</module>
         <module>sparksys-oauth2-resource-starter</module>
+        <module>sparksys-redisson-starter</module>
+        <module>sparksys-patterns-starter</module>
     </modules>
 
     <distributionManagement>

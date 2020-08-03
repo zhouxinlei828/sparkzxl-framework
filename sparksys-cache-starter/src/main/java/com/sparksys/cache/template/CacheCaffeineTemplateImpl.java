@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.sparksys.core.cache.CacheTemplate;
 import org.springframework.util.StringUtils;
 
 /**

@@ -1,6 +1,9 @@
 package com.sparksys.jwt.service;
 
+import com.nimbusds.jose.jwk.RSAKey;
 import com.sparksys.jwt.entity.JwtUserInfo;
+
+import java.security.interfaces.RSAPublicKey;
 
 /**
  * description: jwtToken 服务类
@@ -37,8 +40,15 @@ public interface JwtTokenService {
     /**
      * 根据HMAC校验token
      *
-     * @param token  token
+     * @param token token
      * @return PayloadDto
      */
     JwtUserInfo verifyTokenByHmac(String token);
+
+    /**
+     * 获取公钥
+     *
+     * @return RSAKey
+     */
+    RSAKey getRsaPublicKey();
 }

@@ -1,15 +1,15 @@
 package com.sparksys.user.service.impl;
 
 import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.support.SparkSysExceptionAssert;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.cache.template.CacheTemplate;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.Resource;
-
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * description: 全局用户获取 服务类
@@ -20,8 +20,8 @@ import javax.annotation.Resource;
 @Slf4j
 public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
-    @Resource
-    public CacheTemplate cacheRepository;
+    @Autowired(required = false)
+    public CacheTemplate cacheTemplate;
 
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
@@ -33,6 +33,10 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
     @Override
     public AuthUserInfo getCache(String key) {
-        return cacheRepository.get(key);
+        if (ObjectUtils.isNotEmpty(cacheTemplate)) {
+            return cacheTemplate.get(key);
+        }
+        SparkSysExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存支持");
+        return null;
     }
 }

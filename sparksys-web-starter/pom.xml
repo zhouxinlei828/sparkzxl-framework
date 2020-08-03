@@ -31,5 +31,10 @@
             <artifactId>sparksys-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-cache-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

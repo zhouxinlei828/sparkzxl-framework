@@ -137,7 +137,10 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         return new RSAKey.Builder(publicKey).privateKey(privateKey).build();
     }
 
-    public static void main(String[] args) {
-        UUID.randomUUID().toString();
+    @Override
+    public RSAKey getRsaPublicKey() {
+        //获取RSA公钥
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        return new RSAKey.Builder(publicKey).build();
     }
 }

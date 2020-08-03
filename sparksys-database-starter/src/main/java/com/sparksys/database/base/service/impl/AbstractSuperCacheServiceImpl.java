@@ -2,7 +2,7 @@ package com.sparksys.database.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.sparksys.core.utils.KeyUtils;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.cache.template.CacheTemplate;
 import com.sparksys.database.entity.SuperEntity;
 import com.sparksys.database.base.mapper.SuperMapper;
 import com.sparksys.database.base.service.SuperCacheService;
@@ -22,7 +22,7 @@ import java.util.Collection;
 public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
     @Autowired(required = false)
-    protected CacheTemplate cacheRepository;
+    protected CacheTemplate cacheTemplate;
 
     /**
      * 缓存key模板
@@ -33,14 +33,14 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
 
     @Override
     public T getByIdCache(Serializable id) {
-        return this.cacheRepository.get(this.getRegion(), (x) -> super.getById(id));
+        return this.cacheTemplate.get(this.getRegion(), (x) -> super.getById(id));
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public boolean removeById(Serializable id) {
         boolean bool = super.removeById(id);
-        this.cacheRepository.remove(KeyUtils.buildKey(this.getRegion(), id));
+        this.cacheTemplate.remove(KeyUtils.buildKey(this.getRegion(), id));
         return bool;
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
             return true;
         } else {
             boolean flag = super.removeByIds(idList);
-            idList.forEach(id -> this.cacheRepository.remove(KeyUtils.buildKey(this.getRegion(), id)));
+            idList.forEach(id -> this.cacheTemplate.remove(KeyUtils.buildKey(this.getRegion(), id)));
             return flag;
         }
     }
@@ -62,7 +62,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
         boolean result = super.save(model);
         if (model instanceof SuperEntity) {
             String key = KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId());
-            this.cacheRepository.set(key, model);
+            this.cacheTemplate.set(key, model);
         }
         return result;
     }
@@ -72,7 +72,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     public boolean updateById(T model) {
         boolean updateBool = super.updateById(model);
         if (model instanceof SuperEntity) {
-            this.cacheRepository.remove(KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId()));
+            this.cacheTemplate.remove(KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId()));
         }
         return updateBool;
     }

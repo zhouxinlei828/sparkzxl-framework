@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.sparksys.oauth.config.WebSecurityAutoConfig, \
     com.sparksys.oauth.config.Oauth2ServerAutoConfiguration

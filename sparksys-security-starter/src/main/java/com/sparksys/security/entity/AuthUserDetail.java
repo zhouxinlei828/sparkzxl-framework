@@ -1,13 +1,12 @@
 package com.sparksys.security.entity;
 
-import com.google.common.collect.Lists;
 import com.sparksys.core.entity.AuthUserInfo;
-import com.sparksys.core.utils.ListUtils;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -16,31 +15,57 @@ import java.util.Collection;
  * @author： zhouxinlei
  * @date： 2020-06-24 16:35:11
  */
-@Getter
+@Data
 public class AuthUserDetail implements UserDetails {
+
+    /**
+     * ID
+     */
+    private Long id;
+    /**
+     * 用户名
+     */
+    private String username;
+    /**
+     * 用户密码
+     */
+    private String password;
+    /**
+     * 用户状态
+     */
+    private Boolean enabled;
+    /**
+     * 权限数据
+     */
+    private Collection<SimpleGrantedAuthority> authorities;
 
     private final AuthUserInfo authUserInfo;
 
     public AuthUserDetail(AuthUserInfo authUserInfo) {
         this.authUserInfo = authUserInfo;
+        this.setId(authUserInfo.getId());
+        this.setUsername(authUserInfo.getAccount());
+        this.setPassword(authUserInfo.getPassword());
+        this.setEnabled(authUserInfo.getStatus());
+        if (authUserInfo.getAuthorityList() != null) {
+            authorities = new ArrayList<>();
+            authUserInfo.getAuthorityList().forEach(item -> authorities.add(new SimpleGrantedAuthority(item)));
+        }
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (ListUtils.isNotEmpty(authUserInfo.getAuthorityList())){
-            return AuthorityUtils.createAuthorityList(ListUtils.listToString(authUserInfo.getAuthorityList()));
-        }
-        return Lists.newArrayList();
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return authUserInfo.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return authUserInfo.getAccount();
+        return this.username;
     }
 
     @Override
@@ -60,6 +85,6 @@ public class AuthUserDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return authUserInfo.getStatus();
+        return this.enabled;
     }
 }

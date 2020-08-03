@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.sparksys.oauth.enhancer.JwtTokenEnhancer;
 import com.sparksys.oauth.properties.Oauth2Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,7 +25,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
-import javax.annotation.Resource;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,61 +41,37 @@ import java.util.List;
 @Slf4j
 public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    @Resource
+
+    @Autowired(required = false)
     private PasswordEncoder passwordEncoder;
-
-    @Resource
-    private AuthenticationManager authenticationManager;
-
-    @Resource
+    @Autowired(required = false)
     private UserDetailsService userDetailsService;
-
-    @Resource
+    @Autowired(required = false)
+    private AuthenticationManager authenticationManager;
+    @Autowired(required = false)
     private Oauth2Properties oAuth2Properties;
-
-    @Resource
+    @Autowired(required = false)
     private RedisConnectionFactory redisConnectionFactory;
-
-    @Bean
-    public TokenStore redisTokenStore() {
-        return new RedisTokenStore(redisConnectionFactory);
-    }
-
-    @Bean
-    public JwtTokenEnhancer jwtTokenEnhancer() {
-        return new JwtTokenEnhancer();
-    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         log.info("OAuth2Properties：{}", JSONUtil.toJsonPrettyStr(oAuth2Properties));
         clients.inMemory()
-                //配置client_id
                 .withClient(oAuth2Properties.getClientId())
-                //配置client_secret
                 .secret(passwordEncoder.encode(oAuth2Properties.getClientSecret()))
-                //配置访问token的有效期
                 .accessTokenValiditySeconds(oAuth2Properties.getAccessTokenValiditySeconds())
-                //配置刷新token的有效期
                 .refreshTokenValiditySeconds(oAuth2Properties.getRefreshTokenValiditySeconds())
-                //配置redirect_uri，用于授权成功后跳转
                 .redirectUris(oAuth2Properties.getRegisteredRedirectUris())
-                //配置申请的权限范围
                 .scopes(oAuth2Properties.getScopes())
-                //配置grant_type，表示授权类型
                 .authorizedGrantTypes(oAuth2Properties.getAuthorizedGrantTypes());
     }
 
-    /**
-     * 使用密码模式需要配置
-     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
-        JwtTokenEnhancer jwtTokenEnhancer = jwtTokenEnhancer();
+        delegates.add(jwtTokenEnhancer());
         //配置JWT的内容增强器
-        delegates.add(jwtTokenEnhancer);
         delegates.add(accessTokenConverter());
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)
@@ -105,6 +81,21 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
                 .accessTokenConverter(accessTokenConverter())
                 .tokenEnhancer(enhancerChain);
 
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        security.allowFormAuthenticationForClients();
+    }
+
+    @Bean
+    public JwtTokenEnhancer jwtTokenEnhancer() {
+        return new JwtTokenEnhancer();
+    }
+
+    @Bean
+    public TokenStore redisTokenStore() {
+        return new RedisTokenStore(redisConnectionFactory);
     }
 
     @Bean
@@ -119,12 +110,6 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     @ConditionalOnMissingBean(value = KeyPair.class)
     public JwtAccessTokenConverter accessTokenConverter() {
         return new JwtAccessTokenConverter();
-    }
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) {
-        // 获取密钥需要身份认证，使用单点登录时必须配置
-        security.tokenKeyAccess("isAuthenticated()");
     }
 
 }

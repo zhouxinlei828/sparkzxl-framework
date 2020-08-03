@@ -4,7 +4,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.sparksys.core.cache.CacheTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 

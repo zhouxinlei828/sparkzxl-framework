@@ -1,6 +1,6 @@
 package com.sparksys.security.component;
 
-import com.sparksys.core.base.api.ResponseResultUtils;
+import com.sparksys.core.base.ResponseResultUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;

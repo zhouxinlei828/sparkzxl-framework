@@ -1,7 +1,7 @@
 package com.sparksys.user.resolver;
 
 import com.sparksys.core.entity.AuthUserInfo;
-import com.sparksys.core.base.api.ResponseResultUtils;
+import com.sparksys.core.base.ResponseResultUtils;
 import com.sparksys.user.service.IAuthUserInfoService;
 
 import org.springframework.core.MethodParameter;

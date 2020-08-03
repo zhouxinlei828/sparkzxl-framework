@@ -15,10 +15,6 @@ import java.util.List;
 @ConfigurationProperties(prefix = "sparksys.security")
 public class SecurityProperties {
 
-    private boolean enableJwtFilter;
-
-    private boolean dynamicSecurity;
-
     private List<String> ignoreUrls;
 
 }

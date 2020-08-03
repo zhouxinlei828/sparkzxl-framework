@@ -1,7 +1,6 @@
 package com.sparksys.cache.template;
 
 import com.google.common.collect.Lists;
-import com.sparksys.core.cache.CacheTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.redis.core.RedisCallback;

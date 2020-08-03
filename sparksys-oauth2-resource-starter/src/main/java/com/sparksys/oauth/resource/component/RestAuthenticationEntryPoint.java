@@ -1,7 +1,7 @@
 package com.sparksys.oauth.resource.component;
 
 import cn.hutool.json.JSONUtil;
-import com.sparksys.core.base.api.result.ApiResult;
+import com.sparksys.core.base.result.ApiResult;
 import com.sparksys.core.support.ResponseResultStatus;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;

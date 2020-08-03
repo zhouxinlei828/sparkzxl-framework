@@ -1,10 +1,10 @@
 package com.sparksys.web.interceptor;
 
-import com.sparksys.core.base.api.ResponseResultUtils;
+import com.sparksys.core.base.ResponseResultUtils;
 import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.entity.AuthUserInfo;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.cache.template.CacheTemplate;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.web.annotation.ResponseResult;
 import com.sparksys.web.constant.WebConstant;
@@ -29,14 +29,14 @@ import java.lang.reflect.Method;
 public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired(required = false)
-    public CacheTemplate cacheRepository;
+    public CacheTemplate cacheTemplate;
 
     @SuppressWarnings("NullableProblems")
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (ObjectUtils.isNotEmpty(cacheRepository)) {
+        if (ObjectUtils.isNotEmpty(cacheTemplate)) {
             String accessToken = ResponseResultUtils.getAuthHeader(request);
-            AuthUserInfo authUser = cacheRepository.get(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, accessToken));
+            AuthUserInfo authUser = cacheTemplate.get(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, accessToken));
             if (ObjectUtils.isNotEmpty(authUser)) {
                 request.setAttribute(BaseContextConstants.APPLICATION_AUTH_USER_ID, authUser.getId());
                 request.setAttribute(BaseContextConstants.APPLICATION_AUTH_ACCOUNT, authUser.getAccount());

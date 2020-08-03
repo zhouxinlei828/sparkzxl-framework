@@ -1,7 +1,7 @@
 package com.sparksys.cache.utils;
 
 import cn.hutool.core.util.IdUtil;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.cache.template.CacheTemplate;
 import org.springframework.util.StringUtils;
 
 /**

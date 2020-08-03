@@ -1,7 +1,7 @@
 package com.sparksys.cache.config;
 
 import com.sparksys.cache.template.CacheCaffeineTemplateImpl;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.cache.template.CacheTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

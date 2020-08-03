@@ -1,13 +1,9 @@
 package com.sparksys.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.sparksys.core.constant.BaseContextConstants;
-import com.sparksys.core.utils.DateUtils;
-import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.spring.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
-import com.sparksys.core.cache.CacheTemplate;
 import com.sparksys.jwt.properties.JwtProperties;
 import com.sparksys.jwt.service.JwtTokenService;
 import com.sparksys.security.entity.AuthUserDetail;
@@ -22,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -33,10 +32,8 @@ import java.util.Date;
  * @date 2020-05-24 13:39:06
  */
 @Slf4j
-public abstract class AbstractAuthSecurityService {
+public abstract class AbstractAuthSecurityService implements UserDetailsService {
 
-    @Resource
-    private CacheTemplate cacheRepository;
     @Resource
     private JwtProperties jwtProperties;
     @Resource
@@ -117,11 +114,7 @@ public abstract class AbstractAuthSecurityService {
      * @param authToken 用户token
      * @param authUser  认证用户
      */
-    private void accessToken(AuthToken authToken, AuthUserInfo authUser) {
-        String token = authToken.getToken();
-        cacheRepository.set(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, token), authUser,
-                authToken.getExpiration());
-    }
+    public abstract void accessToken(AuthToken authToken, AuthUserInfo authUser);
 
     /**
      * 根据用户名获取用户信息
@@ -132,8 +125,8 @@ public abstract class AbstractAuthSecurityService {
      */
     public abstract AuthUserDetail getAuthUserDetail(String account);
 
-    public static void main(String[] args) {
-        Date exp = DateUtil.offsetSecond(new Date(), 60 * 60 * 24);
-        System.out.println(DateUtils.format(exp, "yyyy-MM-dd HH:mm:ss"));
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        return getAuthUserDetail(userName);
     }
 }

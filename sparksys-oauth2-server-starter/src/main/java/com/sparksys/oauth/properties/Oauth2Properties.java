@@ -18,22 +18,22 @@ public class Oauth2Properties {
     /**
      * client_id
      */
-    private String clientId;
+    private String clientId = "admin";
 
     /**
      * client_secret
      */
-    private String clientSecret;
+    private String clientSecret = "123456";
 
     /**
      * 访问token的有效期
      */
-    private int accessTokenValiditySeconds = 3600;
+    private int accessTokenValiditySeconds = 864000;
 
     /**
      * 刷新token的有效期
      */
-    private int refreshTokenValiditySeconds = 864000;
+    private int refreshTokenValiditySeconds = 2592000;
 
     /**
      * redirect_uri，用于授权成功后跳转

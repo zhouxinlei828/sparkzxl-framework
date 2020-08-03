@@ -3,7 +3,7 @@ package com.sparksys.cache.config;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.sparksys.cache.template.RedisCacheTemplateImpl;
 import com.sparksys.cache.utils.TokenUtil;
-import com.sparksys.core.cache.CacheTemplate;
+import com.sparksys.cache.template.CacheTemplate;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;

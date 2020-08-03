@@ -1,7 +1,7 @@
 package com.sparksys.web.support;
 
 import com.sparksys.core.support.ResponseResultStatus;
-import com.sparksys.core.base.api.result.ApiResult;
+import com.sparksys.core.base.result.ApiResult;
 import com.sparksys.core.support.BusinessException;
 import com.sparksys.core.utils.HttpCommonUtils;
 import com.sparksys.web.annotation.ResponseResult;

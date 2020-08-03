@@ -32,6 +32,10 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-cache-starter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
