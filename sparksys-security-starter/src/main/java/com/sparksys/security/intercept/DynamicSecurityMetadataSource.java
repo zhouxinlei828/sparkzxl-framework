@@ -1,8 +1,8 @@
-package com.sparksys.oauth.intercept;
+package com.sparksys.security.intercept;
 
 import cn.hutool.core.util.URLUtil;
 import com.google.common.collect.Lists;
-import com.sparksys.oauth.service.DynamicSecurityService;
+import com.sparksys.security.service.DynamicSecurityService;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;

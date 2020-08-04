@@ -15,6 +15,6 @@ import java.util.List;
 @ConfigurationProperties(prefix = "sparksys.security")
 public class SecurityProperties {
 
-    private List<String> ignoreUrls;
+    private List<String> ignorePatterns;
 
 }

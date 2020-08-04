@@ -1,10 +1,10 @@
 package com.sparksys.oauth.service;
 
+import com.sparksys.oauth.entity.AuthorizationRequest;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.security.Principal;
-import java.util.Map;
 
 /**
  * description: Oauth认证 服务类
@@ -17,23 +17,21 @@ public interface OauthService {
     /**
      * get请求授权登录
      *
-     * @param principal
-     * @param parameters
+     * @param principal            认证主体
+     * @param authorizationRequest 认证请求
      * @return OAuth2AccessToken
-     * @throws HttpRequestMethodNotSupportedException
+     * @throws HttpRequestMethodNotSupportedException 请求方法异常
      */
-    OAuth2AccessToken getAccessToken(Principal principal, Map<String, String> parameters)
-            throws HttpRequestMethodNotSupportedException;
+    OAuth2AccessToken getAccessToken(Principal principal, AuthorizationRequest authorizationRequest) throws HttpRequestMethodNotSupportedException;
 
     /**
      * POST请求授权登录
      *
-     * @param principal
-     * @param parameters
-     * @return
-     * @throws HttpRequestMethodNotSupportedException
+     * @param principal            认证主体
+     * @param authorizationRequest 认证请求
+     * @return OAuth2AccessToken
+     * @throws HttpRequestMethodNotSupportedException 请求方法异常
      */
-    OAuth2AccessToken postAccessToken(Principal principal, Map<String, String> parameters)
-            throws HttpRequestMethodNotSupportedException;
+    OAuth2AccessToken postAccessToken(Principal principal, AuthorizationRequest authorizationRequest) throws HttpRequestMethodNotSupportedException;
 
 }

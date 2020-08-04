@@ -1,6 +1,7 @@
 package com.sparksys.security.service;
 
 import cn.hutool.core.date.DateUtil;
+import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.spring.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
@@ -10,7 +11,6 @@ import com.sparksys.security.entity.AuthUserDetail;
 import com.sparksys.security.event.LoginEvent;
 import com.sparksys.security.entity.LoginStatus;
 import com.sparksys.core.support.ResponseResultStatus;
-import com.sparksys.core.support.BusinessException;
 import com.sparksys.core.utils.Md5Utils;
 import com.sparksys.security.entity.AuthToken;
 import com.sparksys.security.dto.LoginDTO;
@@ -18,11 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import javax.annotation.Resource;
 import java.util.Date;
 
 /**
@@ -32,12 +29,26 @@ import java.util.Date;
  * @date 2020-05-24 13:39:06
  */
 @Slf4j
-public abstract class AbstractAuthSecurityService implements UserDetailsService {
+public abstract class AbstractSecurityLoginService {
 
-    @Resource
+
     private JwtProperties jwtProperties;
-    @Resource
+
     private JwtTokenService jwtTokenService;
+
+    private UserDetailsService userDetailsService;
+
+    public void setJwtProperties(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
+    }
+
+    public void setJwtTokenService(JwtTokenService jwtTokenService) {
+        this.jwtTokenService = jwtTokenService;
+    }
+
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      * 登录
@@ -48,9 +59,7 @@ public abstract class AbstractAuthSecurityService implements UserDetailsService 
      */
     public AuthToken login(LoginDTO authRequest) {
         String account = authRequest.getAccount();
-        String password = authRequest.getPassword();
-        String token;
-        AuthUserDetail adminUserDetails = getAuthUserDetail(account);
+        AuthUserDetail adminUserDetails = (AuthUserDetail) userDetailsService.loadUserByUsername(account);
         ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(adminUserDetails);
         AuthUserInfo authUserInfo = adminUserDetails.getAuthUserInfo();
         //校验密码输入是否正确
@@ -68,16 +77,15 @@ public abstract class AbstractAuthSecurityService implements UserDetailsService 
      * @return AuthToken
      */
     public AuthToken authorization(AuthUserDetail adminUserDetails, AuthUserInfo authUserInfo) {
-        String token;
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                 null, adminUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        token = createJwtToken(authUserInfo);
         authUserInfo.setPassword(null);
         AuthToken authToken = new AuthToken();
-        authToken.setToken(token);
+        authToken.setToken(createJwtToken(authUserInfo));
         authToken.setExpiration(jwtProperties.getExpire());
-        authToken.setAuthUser(authUserInfo);
+        authToken.setAuthUserInfo(authUserInfo);
+        authToken.setTokenHead(BaseContextConstants.JWT_TOKEN_HEAD);
         //设置accessToken缓存
         accessToken(authToken, authUserInfo);
         return authToken;
@@ -116,17 +124,4 @@ public abstract class AbstractAuthSecurityService implements UserDetailsService 
      */
     public abstract void accessToken(AuthToken authToken, AuthUserInfo authUser);
 
-    /**
-     * 根据用户名获取用户信息
-     *
-     * @param account 用户名
-     * @return AdminUserDetails
-     * @throws BusinessException 异常
-     */
-    public abstract AuthUserDetail getAuthUserDetail(String account);
-
-    @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return getAuthUserDetail(userName);
-    }
 }

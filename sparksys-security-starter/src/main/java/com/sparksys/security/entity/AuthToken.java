@@ -29,10 +29,12 @@ public class AuthToken implements Serializable {
     /**
      * 登录用户信息
      */
-    private AuthUserInfo authUser;
+    private AuthUserInfo authUserInfo;
 
-    private String loginIp;
+    /**
+     * 访问令牌头前缀
+     */
+    private String tokenHead;
 
-    private String location;
 
 }

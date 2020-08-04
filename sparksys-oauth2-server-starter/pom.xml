@@ -35,6 +35,11 @@
             <artifactId>sparksys-jwt-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.sparksys</groupId>
+            <artifactId>sparksys-swagger-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>

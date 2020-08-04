@@ -3,11 +3,8 @@ package com.sparksys.oauth.config;
 import cn.hutool.core.util.ArrayUtil;
 import com.sparksys.core.resource.SwaggerStaticResource;
 import com.sparksys.core.utils.ListUtils;
-import com.sparksys.oauth.authorization.DynamicAccessDecisionManager;
 import com.sparksys.oauth.component.RestAuthenticationEntryPoint;
 import com.sparksys.oauth.component.RestfulAccessDeniedHandler;
-import com.sparksys.oauth.filter.DynamicSecurityFilter;
-import com.sparksys.oauth.intercept.DynamicSecurityMetadataSource;
 import com.sparksys.oauth.properties.SecurityProperties;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,10 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
-
-import java.util.List;
 
 /**
  * description: SpringSecurity配置
@@ -68,7 +62,6 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class)
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
@@ -84,21 +77,6 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
-        return new DynamicAccessDecisionManager();
-    }
-
-    @Bean
-    public DynamicSecurityFilter dynamicSecurityFilter() {
-        return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
-    }
-
-    @Bean
-    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
-        return new DynamicSecurityMetadataSource();
     }
 
 }

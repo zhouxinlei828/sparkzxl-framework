@@ -2,12 +2,14 @@ package com.sparksys.security.config;
 
 import com.sparksys.core.resource.SwaggerStaticResource;
 import com.sparksys.core.utils.ListUtils;
+import com.sparksys.security.authorization.DynamicAccessDecisionManager;
 import com.sparksys.security.component.RestAuthenticationEntryPoint;
 import com.sparksys.security.component.RestfulAccessDeniedHandler;
-import com.sparksys.security.filter.JwtAuthenticationTokenFilter;
+import com.sparksys.security.filter.DynamicSecurityFilter;
+import com.sparksys.security.intercept.DynamicSecurityMetadataSource;
 import com.sparksys.security.properties.SecurityProperties;
-import com.sparksys.security.service.AbstractAuthSecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +21,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
@@ -42,9 +44,6 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
 
-    @Autowired(required = false)
-    private AbstractAuthSecurityService abstractAuthSecurityService;
-
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }
@@ -63,7 +62,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
-        List<String> excludePatterns = securityProperties.getIgnoreUrls();
+        List<String> excludePatterns = securityProperties.getIgnorePatterns();
         for (String url : excludePatterns) {
             registry.antMatchers(url).permitAll();
         }
@@ -85,7 +84,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and().addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
     }
 
     @Override
@@ -104,15 +103,18 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Override
     @Bean
-    public UserDetailsService userDetailsService() {
-        //获取登录用户信息
-        return username -> abstractAuthSecurityService.getAuthUserDetail(username);
+    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
+        return new DynamicAccessDecisionManager();
     }
 
     @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-        return new JwtAuthenticationTokenFilter();
+    public DynamicSecurityFilter dynamicSecurityFilter() {
+        return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
+    }
+
+    @Bean
+    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
+        return new DynamicSecurityMetadataSource();
     }
 }

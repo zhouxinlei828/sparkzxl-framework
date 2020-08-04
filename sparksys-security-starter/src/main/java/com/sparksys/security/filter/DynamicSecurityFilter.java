@@ -1,8 +1,8 @@
-package com.sparksys.oauth.filter;
+package com.sparksys.security.filter;
 
-import com.sparksys.oauth.authorization.DynamicAccessDecisionManager;
-import com.sparksys.oauth.intercept.DynamicSecurityMetadataSource;
-import com.sparksys.oauth.properties.SecurityProperties;
+import com.sparksys.security.authorization.DynamicAccessDecisionManager;
+import com.sparksys.security.intercept.DynamicSecurityMetadataSource;
+import com.sparksys.security.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.SecurityMetadataSource;

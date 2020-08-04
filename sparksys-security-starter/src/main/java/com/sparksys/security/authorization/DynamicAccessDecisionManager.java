@@ -1,4 +1,4 @@
-package com.sparksys.oauth.authorization;
+package com.sparksys.security.authorization;
 
 import cn.hutool.core.collection.CollUtil;
 import com.sparksys.core.support.ResponseResultStatus;
