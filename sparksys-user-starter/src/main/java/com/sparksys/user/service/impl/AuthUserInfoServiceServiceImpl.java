@@ -36,11 +36,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
     @Override
     public AuthUserInfo getCache(String key) {
         if (ObjectUtils.isNotEmpty(cacheTemplate)) {
-            String authUserJson = cacheTemplate.get(key);
-            if (StringUtils.isNotEmpty(authUserJson)) {
-                return JSONObject.parseObject(authUserJson, AuthUserInfo.class);
-            }
-            return null;
+            return cacheTemplate.get(key);
         }
         SparkSysExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存支持");
         return null;

@@ -1,7 +1,6 @@
 package com.sparksys.core.entity;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * description: UserAgent信息
@@ -10,7 +9,6 @@ import lombok.experimental.Accessors;
  * @date: 2020-07-28 17:47:18
  */
 @Data
-@Accessors(chain = true)
 public class UserAgentEntity {
 
     private String ua;

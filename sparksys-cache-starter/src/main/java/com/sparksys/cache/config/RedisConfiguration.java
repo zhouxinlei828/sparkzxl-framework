@@ -1,6 +1,7 @@
 package com.sparksys.cache.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.sparksys.cache.serializer.FastJson2JsonRedisSerializer;
 import com.sparksys.cache.template.RedisCacheTemplateImpl;
 import com.sparksys.cache.utils.TokenUtil;
 import com.sparksys.cache.template.CacheTemplate;
@@ -37,13 +38,18 @@ public class RedisConfiguration {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        RedisSerializer<Object> fastJsonSerializer = new GenericFastJsonRedisSerializer();
+        RedisSerializer<Object> fastJson2JsonRedisSerializer = fastJson2JsonRedisSerializer();
         redisTemplate.setKeySerializer(stringSerializer);
         redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonSerializer);
-        redisTemplate.setValueSerializer(fastJsonSerializer);
+        redisTemplate.setHashValueSerializer(fastJson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(fastJson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    @Bean
+    public FastJson2JsonRedisSerializer<Object> fastJson2JsonRedisSerializer() {
+        return new FastJson2JsonRedisSerializer<>(Object.class);
     }
 
     @Bean

@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
@@ -89,7 +90,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
     @Override
     public void set(String key, Object value, Long expireTime) {
         if (ObjectUtils.isNotEmpty(expireTime)) {
-            valueOperations.set(key, value, expireTime);
+            valueOperations.set(key, value, expireTime, TimeUnit.SECONDS);
         } else {
             valueOperations.set(key, value);
         }
