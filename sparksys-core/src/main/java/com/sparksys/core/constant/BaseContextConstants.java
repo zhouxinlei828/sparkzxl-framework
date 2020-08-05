@@ -16,9 +16,11 @@ public class BaseContextConstants {
     /**
      * JWT负载中拿到开头
      */
+    public static final String BEARER_TOKEN = "Bearer ";
+
     public static final String JWT_TOKEN_HEAD = "Bearer ";
 
-
+    public static final String BASIC_AUTH = "Basic";
     /**
      * 登录账户 前缀
      * 完整key: authUser:{key} -> str

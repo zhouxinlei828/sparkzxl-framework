@@ -85,7 +85,7 @@ public abstract class AbstractSecurityLoginService {
         authToken.setToken(createJwtToken(authUserInfo));
         authToken.setExpiration(jwtProperties.getExpire());
         authToken.setAuthUserInfo(authUserInfo);
-        authToken.setTokenHead(BaseContextConstants.JWT_TOKEN_HEAD);
+        authToken.setTokenHead(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
         accessToken(authToken, authUserInfo);
         return authToken;

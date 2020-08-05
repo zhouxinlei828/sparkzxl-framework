@@ -8,7 +8,6 @@ import com.sparksys.oauth.resource.properties.ResourceProperties;
 import com.sparksys.core.resource.SwaggerStaticResource;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,8 +39,7 @@ public class ResourceServerConfig {
 
     private final ResourceProperties resourceProperties;
 
-    @Autowired(required = false)
-    private ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager;
+    private final ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager;
 
     @Bean
     public IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter() {

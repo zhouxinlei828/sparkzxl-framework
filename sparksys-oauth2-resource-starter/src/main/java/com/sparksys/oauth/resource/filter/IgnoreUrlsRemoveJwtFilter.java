@@ -32,7 +32,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String header = WebFluxUtils.getHeader(BaseContextConstants.JWT_TOKEN_HEADER, request);
-        if (header.startsWith("Basic")) {
+        if (header.startsWith(BaseContextConstants.BASIC_AUTH)) {
             return chain.filter(exchange);
         }
         URI uri = request.getURI();
@@ -42,7 +42,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
         if (ArrayUtils.isNotEmpty(ignoreUrls)) {
             for (String ignoreUrl : ignoreUrls) {
                 if (pathMatcher.match(ignoreUrl, uri.getPath())) {
-                    request = exchange.getRequest().mutate().header("Authorization", "").build();
+                    request = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
                     exchange = exchange.mutate().request(request).build();
                     return chain.filter(exchange);
                 }

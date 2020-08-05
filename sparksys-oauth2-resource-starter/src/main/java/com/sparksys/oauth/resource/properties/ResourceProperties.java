@@ -18,8 +18,4 @@ public class ResourceProperties {
      */
     private String[] ignorePatterns;
 
-    /**
-     * 需要保护的资源路径
-     */
-    private String[] protectPatterns;
 }

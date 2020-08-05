@@ -2,6 +2,8 @@ package com.sparksys.security.entity;
 
 import com.sparksys.core.entity.AuthUserInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -12,9 +14,11 @@ import java.io.Serializable;
  * @date 2020-05-24 13:38:01
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class AuthToken implements Serializable {
 
-    private static final long serialVersionUID = 6385548035127824037L;
+    private static final long serialVersionUID = 7794601812288371305L;
 
     /**
      * token
