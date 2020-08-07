@@ -16,6 +16,7 @@ import com.sparksys.security.entity.AuthToken;
 import com.sparksys.security.dto.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,20 +33,23 @@ import java.util.Date;
 public abstract class AbstractSecurityLoginService {
 
 
-    private JwtProperties jwtProperties;
+    public JwtProperties jwtProperties;
 
-    private JwtTokenService jwtTokenService;
+    public JwtTokenService jwtTokenService;
 
-    private UserDetailsService userDetailsService;
+    public UserDetailsService userDetailsService;
 
+    @Autowired
     public void setJwtProperties(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
 
+    @Autowired
     public void setJwtTokenService(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
 
+    @Autowired
     public void setUserDetailsService(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }

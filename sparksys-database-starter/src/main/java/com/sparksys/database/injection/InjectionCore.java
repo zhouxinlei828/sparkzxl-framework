@@ -105,16 +105,14 @@ public class InjectionCore {
             //1. 通过反射将obj的字段上标记了@InjectionFiled注解的字段解析出来
             parse(obj, typeMap, 1, MAX_DEPTH);
             long parseEnd = System.currentTimeMillis();
-
             log.info("解析耗时={} ms", (parseEnd - parseStart));
             if (typeMap.isEmpty()) {
                 return;
             }
-
             // 2. 依次查询待注入的数据
-            for (Map.Entry<InjectionFieldPo, Map<Serializable, Object>> entries : typeMap.entrySet()) {
-                InjectionFieldPo type = entries.getKey();
-                Map<Serializable, Object> valueMap = entries.getValue();
+            typeMap.entrySet().forEach(item -> {
+                InjectionFieldPo type = item.getKey();
+                Map<Serializable, Object> valueMap = item.getValue();
                 Set<Serializable> keys = valueMap.keySet();
                 try {
                     InjectionFieldExtPo extPo = new InjectionFieldExtPo(type, keys);
@@ -124,8 +122,7 @@ public class InjectionCore {
                 } catch (Exception e) {
                     log.error("远程调用方法 [{}({}).{}] 失败， 请确保系统存在该方法", type.getApi(), type.getFeign().toString(), type.getMethod(), e);
                 }
-            }
-
+            });
             long injectionStart = System.currentTimeMillis();
             log.info("批量查询耗时={} ms", (injectionStart - parseEnd));
 

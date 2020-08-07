@@ -43,11 +43,11 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
         String path = URLUtil.getPath(url);
         PathMatcher pathMatcher = new AntPathMatcher();
         //获取访问该路径所需资源
-        for (String pattern : configAttributeMap.keySet()) {
+        configAttributeMap.keySet().forEach(pattern->{
             if (pathMatcher.match(pattern, path)) {
                 configAttributes.add(configAttributeMap.get(pattern));
             }
-        }
+        });
         // 未设置操作请求权限，返回空集合
         return configAttributes;
     }

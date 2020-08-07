@@ -39,4 +39,9 @@ public class BaseException extends RuntimeException {
         this.args = args;
         this.message = message;
     }
+
+    @Override
+    public Throwable fillInStackTrace() {
+        return this;
+    }
 }

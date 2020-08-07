@@ -22,4 +22,9 @@ public class JwtInvalidException extends BaseException {
         super(baseEnumCode, args, message, cause);
     }
 
+    @Override
+    public Throwable fillInStackTrace() {
+        return this;
+    }
+
 }

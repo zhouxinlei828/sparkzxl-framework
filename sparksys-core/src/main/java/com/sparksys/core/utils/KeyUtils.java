@@ -1,11 +1,8 @@
 package com.sparksys.core.utils;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.ZipUtil;
 import com.sparksys.core.constant.BaseContextConstants;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 /**
  * description: 缓存key前缀

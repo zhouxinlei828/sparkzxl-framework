@@ -61,8 +61,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     public boolean save(T model) {
         boolean result = super.save(model);
         if (model instanceof SuperEntity) {
-            String key = KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId());
-            this.cacheTemplate.set(key, model);
+            this.cacheTemplate.set(KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId()), model);
         }
         return result;
     }

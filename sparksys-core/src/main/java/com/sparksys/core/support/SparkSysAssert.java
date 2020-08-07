@@ -69,4 +69,12 @@ public interface SparkSysAssert {
             throw newException(args);
         }
     }
+
+    /**
+     * 默认断言异常
+     * 常用于处理已知异常
+     */
+    default void assertException() {
+        throw newException();
+    }
 }

@@ -2,14 +2,15 @@ package com.sparksys.security.config;
 
 import com.sparksys.core.resource.SwaggerStaticResource;
 import com.sparksys.core.utils.ListUtils;
+import com.sparksys.jwt.service.JwtTokenService;
 import com.sparksys.security.authorization.DynamicAccessDecisionManager;
 import com.sparksys.security.component.RestAuthenticationEntryPoint;
 import com.sparksys.security.component.RestfulAccessDeniedHandler;
 import com.sparksys.security.filter.DynamicSecurityFilter;
+import com.sparksys.security.filter.JwtAuthenticationTokenFilter;
 import com.sparksys.security.intercept.DynamicSecurityMetadataSource;
 import com.sparksys.security.properties.SecurityProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
@@ -41,8 +43,13 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
-
     private final SecurityProperties securityProperties;
+
+    @Autowired(required = false)
+    private JwtTokenService jwtTokenService;
+
+    @Autowired(required = false)
+    private UserDetailsService userDetailsService;
 
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
@@ -84,7 +91,8 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
+                .and().addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
     }
 
     @Override
@@ -101,6 +109,11 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
+        return new JwtAuthenticationTokenFilter(jwtTokenService, userDetailsService);
     }
 
     @Bean
