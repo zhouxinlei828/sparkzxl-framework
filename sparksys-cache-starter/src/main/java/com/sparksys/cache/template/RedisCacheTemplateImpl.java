@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -72,9 +73,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
             obj = (T) valueOperations.get(key);
             if (obj == null && function != null) {
                 obj = function.apply(funcParam);
-                if (obj != null) {
-                    set(key, obj, expireTime);
-                }
+                Optional.ofNullable(obj).ifPresent(value->set(key, value, expireTime));
             }
         } catch (Exception e) {
             log.error(e.getMessage());

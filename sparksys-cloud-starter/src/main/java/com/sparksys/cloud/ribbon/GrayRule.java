@@ -2,6 +2,7 @@ package com.sparksys.cloud.ribbon;
 
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.netflix.loadbalancer.AvailabilityFilteringRule;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.slf4j.Slf4j;
@@ -43,18 +44,17 @@ public class GrayRule extends AvailabilityFilteringRule {
         String serviceVersion = "";
         log.debug("======>GrayMetadataRule:  serviceVersionTL{}", serviceVersion);
 
-        List<Server> noMetaServerList = new ArrayList<>();
-        List<Server> metaServerList = new ArrayList<>();
-        for (Server server : serverList) {
+        List<Server> noMetaServerList = Lists.newArrayList();
+        List<Server> metaServerList = Lists.newArrayList();
+        serverList.forEach(server -> {
             Map<String, String> metadata = ((NacosServer) server).getInstance().getMetadata();
-            // version策略
             String metaVersion = metadata.get(GRAY_VERSION);
             if (StringUtils.isNotEmpty(metaVersion)) {
                 metaServerList.add(server);
             } else {
                 noMetaServerList.add(server);
             }
-        }
+        });
 
         if (StringUtils.isEmpty(serviceVersion)) {
             if (noMetaServerList.isEmpty()) {
