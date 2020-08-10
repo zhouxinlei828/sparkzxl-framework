@@ -21,7 +21,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 /**
  * description: 判断是否需要返回值包装，如果需要就直接包装
@@ -50,7 +49,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = HttpCommonUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (ObjectUtils.isNotEmpty(HttpCommonUtils.getAttribute("fallback"))) {
+        if (ObjectUtils.isNotEmpty(HttpCommonUtils.getAttribute(WebConstant.FALLBACK))) {
             return ApiResult.apiResult(ResponseResultStatus.SERVICE_DEGRADATION);
         }
         if (body instanceof Boolean) {

@@ -10,4 +10,6 @@ public class WebConstant {
 
     public static final String RESPONSE_RESULT_ANN = "response_result_ann";
 
+    public static final String FALLBACK = "fallback";
+
 }
