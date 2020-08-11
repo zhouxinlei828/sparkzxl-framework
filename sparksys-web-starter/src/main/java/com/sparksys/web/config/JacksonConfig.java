@@ -50,7 +50,8 @@ public class JacksonConfig {
                     }
                 })
                 .build();
-        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializersByType(jsonSerializerMap);
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializersByType(jsonSerializerMap)
+                .featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
     }
 
     @Bean
