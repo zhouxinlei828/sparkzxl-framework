@@ -123,16 +123,4 @@ public class DateUtils extends DateUtil {
         System.out.println(getDatePoor(new Date(), DateUtil.parseDate(date)));
     }
 
-    /**
-     * localDateTime 转化为Date
-     *
-     * @param localDateTime localDateTime
-     * @return Date
-     */
-    public static Date localDateTime2Date(LocalDateTime localDateTime) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zdt = localDateTime.atZone(zoneId);
-        return Date.from(zdt.toInstant());
-    }
-
 }
