@@ -7,6 +7,8 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -120,4 +122,17 @@ public class DateUtils extends DateUtil {
         System.out.println(getDatePoor(450372L));
         System.out.println(getDatePoor(new Date(), DateUtil.parseDate(date)));
     }
+
+    /**
+     * localDateTime 转化为Date
+     *
+     * @param localDateTime localDateTime
+     * @return Date
+     */
+    public static Date localDateTime2Date(LocalDateTime localDateTime) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        return Date.from(zdt.toInstant());
+    }
+
 }
