@@ -1,5 +1,7 @@
 package com.sparksys.database.config;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.sparksys.database.mybatis.hander.MetaDataHandler;
 import com.sparksys.database.mybatis.injector.BaseSqlInjector;
 import com.sparksys.database.properties.DataProperties;
@@ -21,9 +23,14 @@ import org.springframework.context.annotation.Configuration;
 public class MyBatisAutoConfiguration {
 
     @Bean
+    public Snowflake snowflake(DataProperties dataProperties) {
+        return IdUtil.createSnowflake(dataProperties.getWorkerId(), dataProperties.getDataCenterId());
+    }
+
+    @Bean
     @ConditionalOnMissingBean
-    public MetaDataHandler metaDateHandler(DataProperties dataProperties) {
-        return new MetaDataHandler(dataProperties.getWorkerId(), dataProperties.getDataCenterId());
+    public MetaDataHandler metaDateHandler(Snowflake snowflake) {
+        return new MetaDataHandler(snowflake);
     }
 
 

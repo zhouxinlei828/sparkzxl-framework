@@ -49,7 +49,6 @@ public class GlobalExceptionHandler {
     public ApiResult businessException(BusinessException e) {
         handleResponseResult();
         log.error(e.getMessage());
-        log.error(e.getMessage());
         int code = e.getBaseEnumCode().getCode();
         String message = e.getMessage() == null ? e.getBaseEnumCode().getMessage() : e.getMessage();
         return ApiResult.apiResult(code, message);

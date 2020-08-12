@@ -1,7 +1,6 @@
 package com.sparksys.database.mybatis.hander;
 
 import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.sparksys.database.context.BaseContextHandler;
@@ -21,14 +20,12 @@ import java.time.LocalDateTime;
 @Slf4j
 public class MetaDataHandler implements MetaObjectHandler {
 
-    private final long workerId;
+    private final Snowflake snowflake;
 
-    private final long dataCenterId;
-
-    public MetaDataHandler(long workerId, long dataCenterId) {
-        this.workerId = workerId;
-        this.dataCenterId = dataCenterId;
+    public MetaDataHandler(Snowflake snowflake) {
+        this.snowflake = snowflake;
     }
+
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -55,12 +52,9 @@ public class MetaDataHandler implements MetaObjectHandler {
             this.update(metaObject, entity);
         }
         if (flag) {
-            Snowflake snowflake = IdUtil.createSnowflake(this.workerId, this.dataCenterId);
             Long id = snowflake.nextId();
-            if (metaObject.hasGetter(SuperEntity.FIELD_ID)) {
-                idVal = "java.lang.String".equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
-                this.setFieldValByName("id", idVal, metaObject);
-            }
+            idVal = "java.lang.String".equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
+            this.setFieldValByName("id", idVal, metaObject);
         }
     }
 
