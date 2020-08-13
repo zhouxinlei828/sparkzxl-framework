@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.sparksys.core.entity.AuthUserInfo;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +25,9 @@ public class ReflexObjectUtils {
      */
     public static Map<String, Object> getKeyAndValue(Object obj) {
         Map<String, Object> map = Maps.newHashMap();
-        // 得到类对象
         Class userCla = obj.getClass();
         Field[] fs = userCla.getDeclaredFields();
         handleField(obj, map, fs);
-        System.out.println("单个对象的所有键值==反射==" + map.toString());
         return map;
     }
 
@@ -53,22 +52,18 @@ public class ReflexObjectUtils {
      * @return
      */
     public static Object getValueByKey(Object obj, String key) {
-        // 得到类对象
         Class userCla = obj.getClass();
-        /* 得到类中的所有属性集合 */
         Field[] fs = userCla.getDeclaredFields();
         for (Field f : fs) {
             f.setAccessible(true);
             try {
-                if (f.getName().endsWith(key)) {
-                    System.out.println("单个对象的某个键的值==反射==" + f.get(obj));
+                if (f.getName().equalsIgnoreCase(key)) {
                     return f.get(obj);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        // 没有查到时返回空字符串
         return "";
     }
 
@@ -82,15 +77,12 @@ public class ReflexObjectUtils {
         List<Map<String, Object>> list = Lists.newArrayList();
         for (Object obj : object) {
             Class userCla;
-            // 得到类对象
             userCla = obj.getClass();
-            /* 得到类中的所有属性集合 */
             Field[] fs = userCla.getDeclaredFields();
             Map<String, Object> listChild = Maps.newHashMap();
             handleField(obj, listChild, fs);
             list.add(listChild);
         }
-        System.out.println("多个（列表）对象的所有键值====" + list.toString());
         return list;
     }
 
@@ -104,14 +96,12 @@ public class ReflexObjectUtils {
     public static List<Object> getValuesByKey(List<Object> object, String key) {
         List<Object> list = Lists.newArrayList();
         for (Object obj : object) {
-            // 得到类对象
             Class userCla = obj.getClass();
-            /* 得到类中的所有属性集合 */
             Field[] fs = userCla.getDeclaredFields();
             for (Field f : fs) {
                 f.setAccessible(true);
                 try {
-                    if (f.getName().endsWith(key)) {
+                    if (f.getName().equalsIgnoreCase(key)) {
                         list.add(f.get(obj));
                     }
                 } catch (Exception e) {
@@ -119,34 +109,30 @@ public class ReflexObjectUtils {
                 }
             }
         }
-        System.out.println("多个（列表）对象的某个键的值列表====" + list.toString());
         return list;
     }
 
 
-    public static Class getPropertyType(Object obj, String key) {
-        // 得到类对象
+    public static Type getPropertyType(Object obj, String key) {
         Class userCla = obj.getClass();
-        /* 得到类中的所有属性集合 */
         Field[] fs = userCla.getDeclaredFields();
         for (Field f : fs) {
             f.setAccessible(true);
             try {
-                if (f.getName().endsWith(key)) {
-                    System.out.println("单个对象的某个键的值==反射==" + f.get(obj));
-                    return f.get(obj).getClass();
+                if (f.getName().equalsIgnoreCase(key)) {
+                    return f.getGenericType();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        // 没有查到时返回空字符串
         return null;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         AuthUserInfo authUserInfo = new AuthUserInfo();
-        authUserInfo.setName("1212");
-        System.out.println(getPropertyType(authUserInfo, "name").getName());
-    }
+        authUserInfo.setId(123123123L);
+        Object o = authUserInfo;
+        System.out.println(getPropertyType(o, "id").getTypeName().equals(Long.class.getName()));
+    }*/
 }
