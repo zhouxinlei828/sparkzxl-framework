@@ -3,10 +3,9 @@ package com.sparksys.log.aspect;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Stopwatch;
-import com.sparksys.core.utils.HttpCommonUtils;
+import com.sparksys.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -47,10 +46,10 @@ public class WebLogAspect {
         Stopwatch stopwatch = get();
         stopwatch.reset();
         stopwatch.start();
-        HttpServletRequest request = HttpCommonUtils.getRequest();
+        HttpServletRequest request = RequestContextHolderUtils.getRequest();
         JSONObject parameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs());
         String method = joinPoint.getTarget().getClass().getName().concat(".").concat(joinPoint.getSignature().getName());
-        log.info("请求URL：[{}]，请求IP：[{}]", request.getRequestURL(), HttpCommonUtils.getIpAddress());
+        log.info("请求URL：[{}]，请求IP：[{}]", request.getRequestURL(), RequestContextHolderUtils.getIpAddress());
         log.info("请求类型：[{}]，请求方法：[{}]", request.getMethod(), method);
         log.info("请求参数：{}", JSONUtil.toJsonPrettyStr(parameterJson));
     }

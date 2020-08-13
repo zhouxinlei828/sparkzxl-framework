@@ -45,9 +45,9 @@ public class UserAgentUtils extends UserAgentUtil {
 
     public static UserAgentEntity getUserAgentEntity() {
         UserAgentEntity userAgentEntity = new UserAgentEntity();
-        HttpServletRequest request = HttpCommonUtils.getRequest();
+        HttpServletRequest request = RequestContextHolderUtils.getRequest();
         String ua = StrUtil.sub(request.getHeader("user-agent"), 0, 500);
-        String ip = HttpCommonUtils.getIpAddress();
+        String ip = RequestContextHolderUtils.getIpAddress();
         UserAgent userAgent = UserAgent.parseUserAgentString(ua);
         Browser browser = userAgent.getBrowser();
         Version browserVersion = userAgent.getBrowserVersion();

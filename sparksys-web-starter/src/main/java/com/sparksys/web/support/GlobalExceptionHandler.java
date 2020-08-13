@@ -3,7 +3,7 @@ package com.sparksys.web.support;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.base.result.ApiResult;
 import com.sparksys.core.support.BusinessException;
-import com.sparksys.core.utils.HttpCommonUtils;
+import com.sparksys.core.utils.RequestContextHolderUtils;
 import com.sparksys.web.annotation.ResponseResult;
 import com.sparksys.web.constant.WebConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import java.sql.SQLException;
 public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
-        HttpServletRequest servletRequest = HttpCommonUtils.getRequest();
+        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
         ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(WebConstant.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {

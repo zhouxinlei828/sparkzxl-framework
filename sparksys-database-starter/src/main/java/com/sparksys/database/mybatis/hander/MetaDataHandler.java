@@ -3,7 +3,7 @@ package com.sparksys.database.mybatis.hander;
 import cn.hutool.core.lang.Snowflake;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.sparksys.core.utils.ReflexObjectUtils;
+import com.sparksys.core.utils.ReflectObjectUtils;
 import com.sparksys.database.context.BaseContextHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
@@ -44,8 +44,8 @@ public class MetaDataHandler implements MetaObjectHandler {
     public void insertCommonColumn(MetaObject metaObject) {
         Object targetObject = metaObject.getOriginalObject();
         // 主键
-        Type idClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.ID);
-        Object idVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.ID);
+        Type idClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.ID);
+        Object idVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.ID);
         if (ObjectUtils.isNotEmpty(idClass)) {
             if (ObjectUtils.isEmpty(idVal)) {
                 Long id = snowflake.nextId();
@@ -55,8 +55,8 @@ public class MetaDataHandler implements MetaObjectHandler {
         }
 
         // 创建人
-        Type createUserClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER);
-        Object createUserVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER);
+        Type createUserClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER);
+        Object createUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER);
         if (ObjectUtils.isNotEmpty(createUserClass)) {
             if (ObjectUtils.isEmpty(createUserVal) || createUserVal.equals(0)) {
                 createUserVal = String.class.getName().equals(createUserClass.getTypeName()) ?
@@ -65,8 +65,8 @@ public class MetaDataHandler implements MetaObjectHandler {
             }
         }
 
-        Type createUserIdClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER_ID);
-        Object createUserIdVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_ID);
+        Type createUserIdClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER_ID);
+        Object createUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_ID);
         if (ObjectUtils.isNotEmpty(createUserIdClass)) {
             if (ObjectUtils.isEmpty(createUserIdVal) || createUserIdVal.equals(0)) {
                 createUserIdVal = String.class.getName().equals(createUserIdClass.getTypeName()) ?
@@ -76,8 +76,8 @@ public class MetaDataHandler implements MetaObjectHandler {
         }
 
         // 创建时间
-        Type createTimeClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_TIME);
-        Object createTimeVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_TIME);
+        Type createTimeClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_TIME);
+        Object createTimeVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_TIME);
         if (ObjectUtils.isNotEmpty(createTimeClass)) {
             if (ObjectUtils.isEmpty(createTimeVal)) {
                 createTimeVal = Date.class.getName().equals(createTimeClass.getTypeName()) ?
@@ -108,8 +108,8 @@ public class MetaDataHandler implements MetaObjectHandler {
     public void updateCommonColumn(MetaObject metaObject) {
         Object targetObject = metaObject.getOriginalObject();
         //更新人
-        Type updateUserClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER);
-        Object updateUserVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER);
+        Type updateUserClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER);
+        Object updateUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER);
         if (ObjectUtils.isNotEmpty(updateUserClass)) {
             if (ObjectUtils.isEmpty(updateUserVal) || updateUserVal.equals(0)) {
                 updateUserVal = String.class.getName().equals(updateUserClass.getTypeName()) ?
@@ -118,8 +118,8 @@ public class MetaDataHandler implements MetaObjectHandler {
             }
         }
 
-        Type updateUserIdClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER_Id);
-        Object updateUserIdVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_Id);
+        Type updateUserIdClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER_Id);
+        Object updateUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_Id);
         if (ObjectUtils.isNotEmpty(updateUserIdClass)) {
             if (ObjectUtils.isEmpty(updateUserIdVal) || updateUserIdVal.equals(0)) {
                 updateUserIdVal = String.class.getName().equals(updateUserIdClass.getTypeName()) ?
@@ -129,8 +129,8 @@ public class MetaDataHandler implements MetaObjectHandler {
         }
 
         //更新时间
-        Type updateTimeClass = ReflexObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_TIME);
-        Object updateTimeVal = ReflexObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_TIME);
+        Type updateTimeClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_TIME);
+        Object updateTimeVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_TIME);
         if (ObjectUtils.isNotEmpty(updateTimeClass)) {
             if (ObjectUtils.isEmpty(updateTimeVal)) {
                 updateTimeVal = Date.class.getName().equals(updateTimeClass.getTypeName()) ?

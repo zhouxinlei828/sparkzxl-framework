@@ -13,7 +13,7 @@ import java.util.List;
  * @date: 2020-07-27 21:14:20
  */
 @Slf4j
-public class StringHandleUtils {
+public class StringHandlerUtils {
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 

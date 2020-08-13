@@ -2,7 +2,7 @@ package com.sparksys.cloud.interceptor;
 
 import com.sparksys.core.constant.BaseContextConstants;
 import com.sparksys.core.constant.CoreConstant;
-import com.sparksys.core.utils.HttpCommonUtils;
+import com.sparksys.core.utils.RequestContextHolderUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         template.header(CoreConstant.REQUEST_TYPE, CoreConstant.REQUEST_TYPE);
-        HttpServletRequest request = HttpCommonUtils.getRequest();
+        HttpServletRequest request = RequestContextHolderUtils.getRequest();
         if (request == null) {
             log.warn("path={}, 在FeignClient API接口未配置FeignConfiguration类， 故而无法在远程调用时获取请求头中的参数!", template.path());
             return;

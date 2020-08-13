@@ -2,7 +2,6 @@ package com.sparksys.core.utils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sparksys.core.entity.AuthUserInfo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author: zhouxinlei
  * @date: 2020-08-13 11:42:30
  */
-public class ReflexObjectUtils {
+public class ReflectObjectUtils {
 
     /**
      * 单个对象的所有键值

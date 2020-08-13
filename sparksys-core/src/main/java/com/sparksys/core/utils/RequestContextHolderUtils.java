@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
  * @date 2020-05-24 13:45:00
  */
 @Slf4j
-public class HttpCommonUtils {
+public class RequestContextHolderUtils {
 
     public static HttpServletRequest getRequest() {
         return getRequestAttributes().getRequest();
