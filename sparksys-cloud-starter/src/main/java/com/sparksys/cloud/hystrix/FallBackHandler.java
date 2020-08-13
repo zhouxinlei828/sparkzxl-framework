@@ -1,7 +1,6 @@
 package com.sparksys.cloud.hystrix;
 
 import com.sparksys.core.constant.CoreConstant;
-import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.utils.RequestContextHolderUtils;
 
 /**
@@ -14,7 +13,6 @@ public class FallBackHandler {
 
     public static void fallBack() {
         RequestContextHolderUtils.setAttribute(CoreConstant.FALLBACK, true);
-        ResponseResultStatus.SERVICE_DEGRADATION.assertException();
     }
 
 }
