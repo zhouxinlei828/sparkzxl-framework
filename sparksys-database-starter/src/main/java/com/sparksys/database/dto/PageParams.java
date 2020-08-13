@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
+import com.sparksys.database.constant.EntityConstant;
 import com.sparksys.database.entity.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,7 +32,7 @@ public class PageParams<T> {
     private int pageSize = 10;
 
     @ApiModelProperty(value = "排序,默认createTime", allowableValues = "id,createTime,updateTime", example = "id")
-    private String sort = SuperEntity.FIELD_ID;
+    private String sort = EntityConstant.ID;
 
     @ApiModelProperty("扩展参数")
     private Map<String, String> map = Maps.newHashMap();

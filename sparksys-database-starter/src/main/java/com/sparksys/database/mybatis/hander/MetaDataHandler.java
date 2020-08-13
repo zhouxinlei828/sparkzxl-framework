@@ -2,14 +2,14 @@ package com.sparksys.database.mybatis.hander;
 
 import cn.hutool.core.lang.Snowflake;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.sparksys.database.context.BaseContextHandler;
-import com.sparksys.database.entity.Entity;
-import com.sparksys.database.entity.SuperEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import com.sparksys.database.constant.EntityConstant;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * description: mybatis-plus自动注入处理器
@@ -29,32 +29,48 @@ public class MetaDataHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        boolean flag = true;
-        Object idVal;
-        if (metaObject.getOriginalObject() instanceof SuperEntity) {
-            Object oldId = ((SuperEntity) metaObject.getOriginalObject()).getId();
-            if (oldId != null) {
-                flag = false;
-            }
-            SuperEntity entity = (SuperEntity) metaObject.getOriginalObject();
-            if (entity.getCreateTime() == null) {
-                this.setFieldValByName(SuperEntity.CREATE_TIME, LocalDateTime.now(), metaObject);
-            }
-            if (entity.getCreateUser() == null || entity.getCreateUser().equals(0)) {
-                Object userIdVal = String.class.getName().equals(metaObject.getGetterType(SuperEntity.CREATE_USER).getName()) ?
-                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
-                this.setFieldValByName(Entity.CREATE_USER, userIdVal, metaObject);
+        insertCommonColumn(metaObject);
+        updateCommonColumn(metaObject);
+    }
+
+
+    /**
+     * 新增相关字段自动填充
+     *
+     * @param metaObject
+     */
+    public void insertCommonColumn(MetaObject metaObject) {
+        // 主键
+        Class idClass = metaObject.getGetterType(EntityConstant.ID);
+        Object idVal = metaObject.getValue(EntityConstant.ID);
+        if (ObjectUtils.isNotEmpty(idClass)) {
+            if (ObjectUtils.isEmpty(idVal)) {
+                Long id = snowflake.nextId();
+                idVal = String.class.equals(idClass) ? String.valueOf(id) : snowflake.nextId();
+                this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
             }
         }
 
-        if (metaObject.getOriginalObject() instanceof Entity) {
-            Entity entity = (Entity) metaObject.getOriginalObject();
-            this.update(metaObject, entity);
+        // 创建人
+        Class createUserClass = metaObject.getGetterType(EntityConstant.CREATE_USER);
+        Object createUserVal = metaObject.getValue(EntityConstant.CREATE_USER);
+        if (ObjectUtils.isNotEmpty(createUserClass)) {
+            if (ObjectUtils.isEmpty(createUserVal) || createUserVal.equals(0)) {
+                createUserVal = String.class.equals(createUserClass) ?
+                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+                this.setFieldValByName(EntityConstant.CREATE_USER, createUserVal, metaObject);
+            }
         }
-        if (flag) {
-            Long id = snowflake.nextId();
-            idVal = "java.lang.String".equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
-            this.setFieldValByName("id", idVal, metaObject);
+
+        // 创建时间
+        Class createTimeClass = metaObject.getGetterType(EntityConstant.CREATE_TIME);
+        Object createTimeVal = metaObject.getValue(EntityConstant.CREATE_TIME);
+        if (ObjectUtils.isNotEmpty(createTimeClass)) {
+            if (ObjectUtils.isEmpty(createTimeVal)) {
+                createTimeVal = Date.class.equals(createTimeClass) ?
+                        new Date() : LocalDateTime.now();
+                this.setFieldValByName(EntityConstant.CREATE_TIME, createTimeVal, metaObject);
+            }
         }
     }
 
@@ -68,31 +84,36 @@ public class MetaDataHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         log.debug("start update fill ....");
-        if (metaObject.getOriginalObject() instanceof Entity) {
-            Entity entity = (Entity) metaObject.getOriginalObject();
-            this.update(metaObject, entity);
-        } else {
-            Object et = metaObject.getValue(Constants.ENTITY);
-            if (et != null && et instanceof Entity) {
-                Entity entity = (Entity) et;
-                update(metaObject, entity, Constants.ENTITY + ".");
+        updateCommonColumn(metaObject);
+    }
+
+    /**
+     * 更新相关字段自动填充
+     *
+     * @param metaObject
+     */
+    public void updateCommonColumn(MetaObject metaObject) {
+
+        //更新人
+        Class updateUserClass = metaObject.getGetterType(EntityConstant.UPDATE_USER);
+        Object updateUserVal = metaObject.getValue(EntityConstant.UPDATE_USER);
+        if (ObjectUtils.isNotEmpty(updateUserClass)) {
+            if (ObjectUtils.isEmpty(updateUserVal) || updateUserVal.equals(0)) {
+                updateUserVal = String.class.equals(updateUserClass) ?
+                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+                this.setFieldValByName(EntityConstant.UPDATE_USER, updateUserVal, metaObject);
+            }
+        }
+
+        //更新时间
+        Class updateTimeClass = metaObject.getGetterType(EntityConstant.UPDATE_TIME);
+        Object updateTimeVal = metaObject.getValue(EntityConstant.UPDATE_TIME);
+        if (ObjectUtils.isNotEmpty(updateTimeClass)) {
+            if (ObjectUtils.isEmpty(updateTimeVal)) {
+                updateTimeVal = Date.class.equals(updateTimeClass) ?
+                        new Date() : LocalDateTime.now();
+                this.setFieldValByName(EntityConstant.UPDATE_TIME, updateTimeVal, metaObject);
             }
         }
     }
-
-    private void update(MetaObject metaObject, Entity entity, String et) {
-        if (entity.getUpdateUser() == null || entity.getUpdateUser().equals(0)) {
-            Object userIdVal = String.class.getName().equals(metaObject.getGetterType(et + Entity.UPDATE_USER).getName()) ?
-                    String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
-            this.setFieldValByName(Entity.UPDATE_USER, userIdVal, metaObject);
-        }
-        if (entity.getUpdateTime() == null) {
-            this.setFieldValByName(Entity.UPDATE_TIME, LocalDateTime.now(), metaObject);
-        }
-    }
-
-    private void update(MetaObject metaObject, Entity entity) {
-        update(metaObject, entity, "");
-    }
-
 }

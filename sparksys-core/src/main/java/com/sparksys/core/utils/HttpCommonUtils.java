@@ -29,8 +29,9 @@ public class HttpCommonUtils {
     }
 
     public static ServletRequestAttributes getRequestAttributes() {
-        RequestContextHolder.currentRequestAttributes();
-        return (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        RequestContextHolder.setRequestAttributes(servletRequestAttributes, true);
+        return servletRequestAttributes;
     }
 
 
