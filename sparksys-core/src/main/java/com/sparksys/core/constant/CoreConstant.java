@@ -20,5 +20,7 @@ public class CoreConstant {
     public static String BLANK_SPACE = "　";
 
     public static String REQUEST_TYPE = "feign";
+
+    public static final String FALLBACK = "fallback";
     
 }
