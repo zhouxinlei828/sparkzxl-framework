@@ -1,6 +1,6 @@
 package com.sparksys.database.context;
 
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.core.utils.RequestContextHolderUtils;
 
 /**
@@ -12,15 +12,15 @@ import com.sparksys.core.utils.RequestContextHolderUtils;
 public class BaseContextHandler {
 
     public static Long getUserId() {
-        return (Long) RequestContextHolderUtils.getAttribute(BaseContextConstants.APPLICATION_AUTH_USER_ID);
+        return (Long) RequestContextHolderUtils.getAttribute(BaseContextConstant.APPLICATION_AUTH_USER_ID);
     }
 
     public static String getAccount() {
-        return RequestContextHolderUtils.getAttributeStr(BaseContextConstants.APPLICATION_AUTH_ACCOUNT);
+        return RequestContextHolderUtils.getAttributeStr(BaseContextConstant.APPLICATION_AUTH_ACCOUNT);
     }
 
     public static String getUserName() {
-        return RequestContextHolderUtils.getAttributeStr(BaseContextConstants.APPLICATION_AUTH_NAME);
+        return RequestContextHolderUtils.getAttributeStr(BaseContextConstant.APPLICATION_AUTH_NAME);
     }
 
 }

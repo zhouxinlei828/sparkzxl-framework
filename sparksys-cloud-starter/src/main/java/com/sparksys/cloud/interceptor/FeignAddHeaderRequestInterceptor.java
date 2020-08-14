@@ -1,6 +1,6 @@
 package com.sparksys.cloud.interceptor;
 
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.utils.RequestContextHolderUtils;
 import feign.RequestInterceptor;
@@ -22,8 +22,8 @@ import java.util.List;
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     private static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            BaseContextConstants.APPLICATION_AUTH_USER_ID, BaseContextConstants.APPLICATION_AUTH_NAME,
-            BaseContextConstants.APPLICATION_AUTH_ACCOUNT
+            BaseContextConstant.APPLICATION_AUTH_USER_ID, BaseContextConstant.APPLICATION_AUTH_NAME,
+            BaseContextConstant.APPLICATION_AUTH_ACCOUNT
     );
 
     public FeignAddHeaderRequestInterceptor() {

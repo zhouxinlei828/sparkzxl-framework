@@ -1,7 +1,7 @@
 package com.sparksys.web.interceptor;
 
 import com.sparksys.core.base.ResponseResultUtils;
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.cache.template.CacheTemplate;
@@ -36,11 +36,11 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (ObjectUtils.isNotEmpty(cacheTemplate)) {
             String accessToken = ResponseResultUtils.getAuthHeader(request);
-            AuthUserInfo authUser = cacheTemplate.get(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, accessToken));
+            AuthUserInfo authUser = cacheTemplate.get(KeyUtils.buildKey(BaseContextConstant.AUTH_USER, accessToken));
             if (ObjectUtils.isNotEmpty(authUser)) {
-                request.setAttribute(BaseContextConstants.APPLICATION_AUTH_USER_ID, authUser.getId());
-                request.setAttribute(BaseContextConstants.APPLICATION_AUTH_ACCOUNT, authUser.getAccount());
-                request.setAttribute(BaseContextConstants.APPLICATION_AUTH_NAME, authUser.getName());
+                request.setAttribute(BaseContextConstant.APPLICATION_AUTH_USER_ID, authUser.getId());
+                request.setAttribute(BaseContextConstant.APPLICATION_AUTH_ACCOUNT, authUser.getAccount());
+                request.setAttribute(BaseContextConstant.APPLICATION_AUTH_NAME, authUser.getName());
             }
         }
         String feign = request.getHeader(CoreConstant.REQUEST_TYPE);

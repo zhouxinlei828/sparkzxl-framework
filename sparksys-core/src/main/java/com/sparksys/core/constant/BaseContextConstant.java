@@ -6,7 +6,7 @@ package com.sparksys.core.constant;
  * @author: zhouxinlei
  * @date: 2020-07-29 13:24:58
  */
-public class BaseContextConstants {
+public class BaseContextConstant {
 
     /**
      * JWT存储的请求头

@@ -1,7 +1,7 @@
 package com.sparksys.core.utils;
 
 import cn.hutool.core.util.StrUtil;
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 
 
 /**
@@ -43,7 +43,7 @@ public class KeyUtils {
     }
 
     public static void main(String[] args) {
-        String tokenKey = KeyUtils.buildKey(BaseContextConstants.AUTH_USER, "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9" +
+        String tokenKey = KeyUtils.buildKey(BaseContextConstant.AUTH_USER, "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9" +
                 ".eyJ1c2VyX25hbWUiOiJ6aG91eGlubGVpIiwic2NvcGUiOlsiYWxsIl0sImlkIjoxMjQ4MDg0MTA5NDUyOTAyNDAwLCJleHAiOjE1OTc0NzY2NjIsImF1dGhvcml0aWVzIjpbIlRFU1QiLCJBRE1JTiJdLCJqdGkiOiI5MzA2MGYyZS00NGY2LTQ4YWYtYjQ2ZC0zYzY5ZDliMTk3N2EiLCJjbGllbnRfaWQiOiJzcGFya3N5cyJ9.gAidBNyb4rr3kzTIdFU6XaPU99G0PuD3So5dRFtbyjRvV_Ke5x4Gk1q97GO3O3qCiWBSha-vpXJ1vAyHw-3_amKexXAlJXihKQxpSIIYpN4rG0nmB4dMZQ5lIAED0Z4lt3DlRHPmVrzTQEJm2tNDKy9pqPXFMC8krwpD1iJoOHtDo7gv-qMswZyWeL6xmqexmjLnV_ctf3dFpB4z0EPeTZxHry5e0KWzbLfjuQXufnTscjC3K6t0g-15eqr1pl7RsprkXfJvh9aWBWhKdAOZ1emVWDexUU7y-iwnU7oWqjBDM82O2Mgi-4OGNjHoIuX-8OmH9zXAQx8mlE4sjRqehA");
         System.out.println(Md5Utils.encrypt(tokenKey));
     }

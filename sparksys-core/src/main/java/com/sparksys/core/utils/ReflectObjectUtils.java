@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,19 +25,18 @@ public class ReflectObjectUtils {
      */
     public static Map<String, Object> getKeyAndValue(Object obj) {
         Map<String, Object> map = Maps.newHashMap();
-        Class userCla = obj.getClass();
-        Field[] fs = userCla.getDeclaredFields();
-        handleField(obj, map, fs);
+        List<Field> fields = getAllField(obj);
+        handleField(obj, map, fields);
         return map;
     }
 
-    private static void handleField(Object obj, Map<String, Object> map, Field[] fs) {
-        for (Field f : fs) {
-            f.setAccessible(true);
+    private static void handleField(Object obj, Map<String, Object> map, List<Field> fields) {
+        for (Field field : fields) {
+            field.setAccessible(true);
             Object val;
             try {
-                val = f.get(obj);
-                map.putIfAbsent(f.getName(), val);
+                val = field.get(obj);
+                map.putIfAbsent(field.getName(), val);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -51,13 +51,12 @@ public class ReflectObjectUtils {
      * @return
      */
     public static Object getValueByKey(Object obj, String key) {
-        Class userCla = obj.getClass();
-        Field[] fs = userCla.getDeclaredFields();
-        for (Field f : fs) {
-            f.setAccessible(true);
+        List<Field> fields = getAllField(obj);
+        for (Field field : fields) {
+            field.setAccessible(true);
             try {
-                if (f.getName().equalsIgnoreCase(key)) {
-                    return f.get(obj);
+                if (field.getName().equalsIgnoreCase(key)) {
+                    return field.get(obj);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -70,16 +69,14 @@ public class ReflectObjectUtils {
      * 多个（列表）对象的所有键值
      *
      * @param object
-     * @return
+     * @return List<Map < String, Object>>
      */
     public static List<Map<String, Object>> getKeysAndValues(List<Object> object) {
         List<Map<String, Object>> list = Lists.newArrayList();
         for (Object obj : object) {
-            Class userCla;
-            userCla = obj.getClass();
-            Field[] fs = userCla.getDeclaredFields();
+            List<Field> fields = getAllField(obj);
             Map<String, Object> listChild = Maps.newHashMap();
-            handleField(obj, listChild, fs);
+            handleField(obj, listChild, fields);
             list.add(listChild);
         }
         return list;
@@ -95,13 +92,12 @@ public class ReflectObjectUtils {
     public static List<Object> getValuesByKey(List<Object> object, String key) {
         List<Object> list = Lists.newArrayList();
         for (Object obj : object) {
-            Class userCla = obj.getClass();
-            Field[] fs = userCla.getDeclaredFields();
-            for (Field f : fs) {
-                f.setAccessible(true);
+            List<Field> fields = getAllField(obj);
+            for (Field field : fields) {
+                field.setAccessible(true);
                 try {
-                    if (f.getName().equalsIgnoreCase(key)) {
-                        list.add(f.get(obj));
+                    if (field.getName().equalsIgnoreCase(key)) {
+                        list.add(field.get(obj));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -113,13 +109,12 @@ public class ReflectObjectUtils {
 
 
     public static Type getPropertyType(Object obj, String key) {
-        Class userCla = obj.getClass();
-        Field[] fs = userCla.getDeclaredFields();
-        for (Field f : fs) {
-            f.setAccessible(true);
+        List<Field> fields = getAllField(obj);
+        for (Field field : fields) {
+            field.setAccessible(true);
             try {
-                if (f.getName().equalsIgnoreCase(key)) {
-                    return f.getGenericType();
+                if (field.getName().equalsIgnoreCase(key)) {
+                    return field.getGenericType();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -128,10 +123,13 @@ public class ReflectObjectUtils {
         return null;
     }
 
-    /*public static void main(String[] args) {
-        AuthUserInfo authUserInfo = new AuthUserInfo();
-        authUserInfo.setId(123123123L);
-        Object o = authUserInfo;
-        System.out.println(getPropertyType(o, "id").getTypeName().equals(Long.class.getName()));
-    }*/
+    private static List<Field> getAllField(Object model) {
+        Class clazz = model.getClass();
+        List<Field> fields = Lists.newArrayList();
+        while (clazz != null) {
+            fields.addAll(Lists.newArrayList(Arrays.asList(clazz.getDeclaredFields())));
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
+    }
 }

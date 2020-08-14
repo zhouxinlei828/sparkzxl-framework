@@ -1,6 +1,6 @@
 package com.sparksys.oauth.resource.config;
 
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.oauth.resource.filter.IgnoreUrlsRemoveJwtFilter;
 import com.sparksys.oauth.resource.component.RestAuthenticationEntryPoint;
 import com.sparksys.oauth.resource.component.RestfulAccessDeniedHandler;
@@ -74,8 +74,8 @@ public class ResourceServerConfig {
     @Bean
     public Converter<Jwt, ? extends Mono<? extends AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix(BaseContextConstants.AUTHORITY_PREFIX);
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(BaseContextConstants.AUTHORITY_CLAIM_NAME);
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix(BaseContextConstant.AUTHORITY_PREFIX);
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(BaseContextConstant.AUTHORITY_CLAIM_NAME);
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);

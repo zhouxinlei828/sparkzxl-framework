@@ -1,9 +1,8 @@
 package com.sparksys.core.utils;
 
-import cn.hutool.core.date.DateUnit;
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.*;
+import com.sparksys.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -12,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * description: DateUtils工具类
@@ -48,14 +48,24 @@ public class DateUtils extends DateUtil {
      * @return
      */
     public static boolean isToday(Date date) {
-        return isThisTime(date, "yyyy-MM-dd");
+        return isSameDay(date, new Date());
+    }
+
+    /**
+     * 判断选择的日期是否是今天
+     *
+     * @param localDateTime
+     * @return boolean
+     */
+    public static boolean isToday(LocalDateTime localDateTime) {
+        return isSameDay(localDateTime2Date(localDateTime), new Date());
     }
 
     /**
      * 判断选择的日期是否是本周
      *
      * @param time
-     * @return
+     * @return boolean
      */
     public static boolean isThisWeek(long time) {
         Calendar calendar = Calendar.getInstance();
@@ -65,15 +75,52 @@ public class DateUtils extends DateUtil {
         return paramWeek == currentWeek;
     }
 
+    /**
+     * 判断选择的日期是否是本周
+     *
+     * @param date
+     * @return boolean
+     */
+    public static boolean isThisWeek(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        calendar.setTime(date);
+        int paramWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        return paramWeek == currentWeek;
+    }
+
+    /**
+     * 判断选择的日期是否是本周
+     *
+     * @param localDateTime
+     * @return boolean
+     */
+    public static boolean isThisWeek(LocalDateTime localDateTime) {
+        Calendar calendar = Calendar.getInstance();
+        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        calendar.setTime(localDateTime2Date(localDateTime));
+        int paramWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        return paramWeek == currentWeek;
+    }
 
     /**
      * 判断选择的日期是否是本月
      *
      * @param date
-     * @return
+     * @return boolean
      */
     public static boolean isThisMonth(Date date) {
         return isThisTime(date, "yyyy-MM");
+    }
+
+    /**
+     * 判断选择的日期是否是本月
+     *
+     * @param localDateTime
+     * @return boolean
+     */
+    public static boolean isThisMonth(LocalDateTime localDateTime) {
+        return isThisTime(localDateTime2Date(localDateTime), "yyyy-MM");
     }
 
     public static boolean isThisTime(Date date, String pattern) {
@@ -85,42 +132,27 @@ public class DateUtils extends DateUtil {
         return param.equals(now);
     }
 
-    public static String getDatePoor(Date endDate, Date nowDate) {
-        // long ns = 1000;
-        // 获得两个时间的毫秒时间差异
-        long diff = endDate.getTime() - nowDate.getTime();
-        return getDatePoor(diff);
+    public static Date localDateTime2Date(LocalDateTime localDateTime) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        return Date.from(zdt.toInstant());
     }
 
-    /**
-     * 获取时间差天数：小时：分钟
-     *
-     * @param diff 时间差
-     * @return String
-     */
-    public static String getDatePoor(Long diff) {
-        if (ObjectUtils.isEmpty(diff)) {
-            return null;
-        }
-        long nd = 1000 * 24 * 60 * 60;
-        long nh = 1000 * 60 * 60;
-        long nm = 1000 * 60;
-        // 计算差多少天
-        long day = diff / nd;
-        // 计算差多少小时
-        long hour = diff % nd / nh;
-        // 计算差多少分钟
-        long min = diff % nd % nh / nm;
-        // 计算差多少秒//输出结果
-        // long sec = diff % nd % nh % nm / ns;
-        return day + "天" + hour + "小时" + min + "分钟";
+    public static DateInfo getDateInfo(Date startDate, Date endDate) {
+        DateInfo dateInfo = new DateInfo();
+        Optional.ofNullable(startDate).ifPresent(value -> {
+            dateInfo.setStartTime(beginOfDay(startDate).toString(DatePattern.NORM_DATETIME_PATTERN));
+            dateInfo.setStartDate(startDate);
+        });
+        String endTime =
+                Optional.ofNullable(endDate).map(value -> endOfDay(value).toString(DatePattern.NORM_DATETIME_PATTERN)).orElseGet(DateUtil::now);
+        dateInfo.setEndTime(endTime);
+        dateInfo.setEndDate(parse(endTime));
+        return dateInfo;
     }
 
-    public static void main(String[] args) {
-        String date = "2020-04-29 10:54:00";
-        System.out.println(DateUtil.between(new Date(), DateUtil.parseDate(date), DateUnit.SECOND, false));
-        System.out.println(getDatePoor(450372L));
-        System.out.println(getDatePoor(new Date(), DateUtil.parseDate(date)));
+    public static String formatBetween(LocalDateTime localDateTime, Date endDate, BetweenFormater.Level level) {
+        return formatBetween(DateUtils.localDateTime2Date(localDateTime), endDate, level);
     }
 
 }

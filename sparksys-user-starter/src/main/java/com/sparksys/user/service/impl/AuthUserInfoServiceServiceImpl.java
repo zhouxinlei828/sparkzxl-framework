@@ -1,7 +1,6 @@
 package com.sparksys.user.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.core.support.SparkSysExceptionAssert;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.core.entity.AuthUserInfo;
@@ -10,7 +9,6 @@ import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -28,7 +26,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
         log.info("accessToken is {}", accessToken);
-        AuthUserInfo authUser = getCache(KeyUtils.buildKey(BaseContextConstants.AUTH_USER, accessToken));
+        AuthUserInfo authUser = getCache(KeyUtils.buildKey(BaseContextConstant.AUTH_USER, accessToken));
         ResponseResultStatus.UN_AUTHORIZED.assertNotNull(authUser);
         return authUser;
     }

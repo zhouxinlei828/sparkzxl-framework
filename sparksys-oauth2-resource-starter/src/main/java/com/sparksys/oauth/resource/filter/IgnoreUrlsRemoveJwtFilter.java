@@ -1,6 +1,6 @@
 package com.sparksys.oauth.resource.filter;
 
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.oauth.resource.properties.ResourceProperties;
 import com.sparksys.oauth.resource.utils.WebFluxUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -31,8 +31,8 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        String header = WebFluxUtils.getHeader(BaseContextConstants.JWT_TOKEN_HEADER, request);
-        if (header.startsWith(BaseContextConstants.BASIC_AUTH)) {
+        String header = WebFluxUtils.getHeader(BaseContextConstant.JWT_TOKEN_HEADER, request);
+        if (header.startsWith(BaseContextConstant.BASIC_AUTH)) {
             return chain.filter(exchange);
         }
         URI uri = request.getURI();
@@ -42,7 +42,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
         if (ArrayUtils.isNotEmpty(ignoreUrls)) {
             for (String ignoreUrl : ignoreUrls) {
                 if (pathMatcher.match(ignoreUrl, uri.getPath())) {
-                    request = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
+                    request = exchange.getRequest().mutate().header(BaseContextConstant.JWT_TOKEN_HEADER, "").build();
                     exchange = exchange.mutate().request(request).build();
                     return chain.filter(exchange);
                 }

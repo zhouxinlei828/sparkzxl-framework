@@ -1,7 +1,7 @@
 package com.sparksys.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.sparksys.core.constant.BaseContextConstants;
+import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.core.spring.SpringContextUtils;
 import com.sparksys.jwt.entity.JwtUserInfo;
@@ -89,7 +89,7 @@ public abstract class AbstractSecurityLoginService {
         authToken.setToken(createJwtToken(authUserInfo));
         authToken.setExpiration(jwtProperties.getExpire());
         authToken.setAuthUserInfo(authUserInfo);
-        authToken.setTokenHead(BaseContextConstants.BEARER_TOKEN);
+        authToken.setTokenHead(BaseContextConstant.BEARER_TOKEN);
         //设置accessToken缓存
         accessToken(authToken, authUserInfo);
         return authToken;
