@@ -155,4 +155,7 @@ public class DateUtils extends DateUtil {
         return formatBetween(DateUtils.localDateTime2Date(localDateTime), endDate, level);
     }
 
+    public static void main(String[] args) {
+        System.out.println(DateUtil.formatBetween(377820));
+    }
 }
