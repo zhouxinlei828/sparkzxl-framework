@@ -7,7 +7,6 @@ import com.sparksys.core.entity.AuthUserInfo;
 import com.sparksys.cache.template.CacheTemplate;
 import com.sparksys.core.utils.KeyUtils;
 import com.sparksys.web.annotation.ResponseResult;
-import com.sparksys.web.constant.WebConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,9 +51,9 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
             final Class<?> classz = handlerMethod.getBeanType();
             final Method method = handlerMethod.getMethod();
             if (classz.isAnnotationPresent(ResponseResult.class)) {
-                request.setAttribute(WebConstant.RESPONSE_RESULT_ANN, classz.getAnnotation(ResponseResult.class));
+                request.setAttribute(CoreConstant.RESPONSE_RESULT_ANN, classz.getAnnotation(ResponseResult.class));
             } else if (method.isAnnotationPresent(ResponseResult.class)) {
-                request.setAttribute(WebConstant.RESPONSE_RESULT_ANN, method.getAnnotation(ResponseResult.class));
+                request.setAttribute(CoreConstant.RESPONSE_RESULT_ANN, method.getAnnotation(ResponseResult.class));
             }
         }
         return true;

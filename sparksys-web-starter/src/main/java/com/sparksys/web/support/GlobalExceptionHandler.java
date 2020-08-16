@@ -1,11 +1,11 @@
 package com.sparksys.web.support;
 
+import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.base.result.ApiResult;
 import com.sparksys.core.support.BusinessException;
 import com.sparksys.core.utils.RequestContextHolderUtils;
 import com.sparksys.web.annotation.ResponseResult;
-import com.sparksys.web.constant.WebConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.http.HttpStatus;
@@ -38,10 +38,10 @@ public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(WebConstant.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(CoreConstant.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
-            servletRequest.removeAttribute(WebConstant.RESPONSE_RESULT_ANN);
+            servletRequest.removeAttribute(CoreConstant.RESPONSE_RESULT_ANN);
         }
     }
 

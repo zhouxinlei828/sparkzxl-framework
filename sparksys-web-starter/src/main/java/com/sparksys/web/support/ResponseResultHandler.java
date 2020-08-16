@@ -1,11 +1,11 @@
 package com.sparksys.web.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.base.result.ApiResult;
 import com.sparksys.core.utils.RequestContextHolderUtils;
 import com.sparksys.web.annotation.ResponseResult;
-import com.sparksys.web.constant.WebConstant;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -38,7 +38,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(WebConstant.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(CoreConstant.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
 
@@ -49,7 +49,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(WebConstant.FALLBACK))) {
+        if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(CoreConstant.FALLBACK))) {
             return ApiResult.apiResult(ResponseResultStatus.SERVICE_DEGRADATION);
         }
         if (body instanceof Boolean) {
