@@ -18,8 +18,6 @@ public class BaseContextConstant {
      */
     public static final String BEARER_TOKEN = "Bearer ";
 
-    public static final String JWT_TOKEN_HEAD = "Bearer ";
-
     public static final String BASIC_AUTH = "Basic";
     /**
      * 登录账户 前缀
