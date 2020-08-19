@@ -75,6 +75,15 @@ public class MetaDataHandler implements MetaObjectHandler {
             }
         }
 
+        Type createUserNameClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER_NAME);
+        Object createUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_NAME);
+        if (ObjectUtils.isNotEmpty(createUserNameClass)) {
+            if (ObjectUtils.isEmpty(createUserNameVal)) {
+                createUserNameVal = BaseContextHandler.getUserName();
+                this.setFieldValByName(EntityConstant.CREATE_USER_NAME, createUserNameVal, metaObject);
+            }
+        }
+
         // 创建时间
         Type createTimeClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_TIME);
         Object createTimeVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_TIME);
@@ -125,6 +134,15 @@ public class MetaDataHandler implements MetaObjectHandler {
                 updateUserIdVal = String.class.getName().equals(updateUserIdClass.getTypeName()) ?
                         String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
                 this.setFieldValByName(EntityConstant.UPDATE_USER_Id, updateUserIdVal, metaObject);
+            }
+        }
+
+        Type updateUserNameClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER_NAME);
+        Object updateUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_NAME);
+        if (ObjectUtils.isNotEmpty(updateUserNameClass)) {
+            if (ObjectUtils.isEmpty(updateUserNameVal)) {
+                updateUserNameVal = BaseContextHandler.getUserName();
+                this.setFieldValByName(EntityConstant.UPDATE_USER_NAME, updateUserNameVal, metaObject);
             }
         }
 
