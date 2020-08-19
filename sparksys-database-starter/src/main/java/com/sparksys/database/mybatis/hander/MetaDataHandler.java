@@ -39,7 +39,7 @@ public class MetaDataHandler implements MetaObjectHandler {
     /**
      * 新增相关字段自动填充
      *
-     * @param metaObject
+     * @param metaObject 元数据
      */
     public void insertCommonColumn(MetaObject metaObject) {
         Object targetObject = metaObject.getOriginalObject();
