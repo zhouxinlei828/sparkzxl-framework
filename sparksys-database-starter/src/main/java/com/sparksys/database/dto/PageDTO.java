@@ -1,5 +1,6 @@
 package com.sparksys.database.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -10,14 +11,11 @@ import lombok.Data;
  */
 @Data
 public class PageDTO {
-    /**
-     * 当前页
-     */
-    private Integer pageNum = 1;
 
-    /**
-     * 每页显示条数
-     */
-    private Integer pageSize = 10;
+    @ApiModelProperty(value = "当前页", example = "1")
+    private int pageNum = 1;
+
+    @ApiModelProperty(value = "页面大小", example = "10")
+    private int pageSize = 10;
 
 }
