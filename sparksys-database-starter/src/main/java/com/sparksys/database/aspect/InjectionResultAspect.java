@@ -14,7 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
  *
  * @author: zhouxinlei
  * @date: 2020-07-19 08:49:08
-*/
+ */
 @Aspect
 @AllArgsConstructor
 @Slf4j
@@ -27,12 +27,12 @@ public class InjectionResultAspect {
     }
 
 
-    @Around("methodPointcut()&&@annotation(anno)")
-    public Object interceptor(ProceedingJoinPoint pjp, InjectionResult anno) throws Throwable {
+    @Around("methodPointcut()&&@annotation(injectionResult)")
+    public Object interceptor(ProceedingJoinPoint pjp, InjectionResult injectionResult) throws Throwable {
         try {
-            return injectionCore.injection(pjp, anno);
+            return injectionCore.injection(pjp, injectionResult);
         } catch (Exception e) {
-            log.error("AOP拦截@RemoteResult出错", e);
+            log.error("AOP拦截@InjectionResult出错", e);
             return pjp.proceed();
         }
     }

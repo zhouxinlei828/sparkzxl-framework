@@ -12,8 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author zuihou
- * @date 2020年02月03日18:48:15
+ * description: 字段表增强属性
+ *
+ * @author: zhouxinlei
+ * @date: 2020-08-21 18:00:28
  */
 @Data
 @NoArgsConstructor

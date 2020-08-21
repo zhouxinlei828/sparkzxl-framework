@@ -1,5 +1,7 @@
 package com.sparksys.cloud.utils;
 
+import com.google.common.collect.Maps;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,7 @@ public class ThreadLocalUtils {
     public static Map<String, String> getLocalMap() {
         Map<String, String> map = THREAD_LOCAL.get();
         if (map == null) {
-            map = new HashMap<>(10);
+            map = Maps.newConcurrentMap();
             THREAD_LOCAL.set(map);
         }
         return map;
