@@ -77,6 +77,7 @@
         <fastjson.version>1.2.72</fastjson.version>
         <easy-excel.version>2.2.6</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.0.2</retrofit-spring-boot-starter.version>
+        <xxl-job.version>2.2.0</xxl-job.version>
     </properties>
 
     <modules>
@@ -98,6 +99,7 @@
         <module>sparksys-oauth2-resource-starter</module>
         <module>sparksys-redisson-starter</module>
         <module>sparksys-patterns-starter</module>
+        <module>sparksys-job-executor-starter</module>
     </modules>
 
     <distributionManagement>
@@ -469,6 +471,12 @@
                 <groupId>com.github.lianjiatech</groupId>
                 <artifactId>retrofit-spring-boot-starter</artifactId>
                 <version>${retrofit-spring-boot-starter.version}</version>
+            </dependency>
+            <!-- xxl-job-core -->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
