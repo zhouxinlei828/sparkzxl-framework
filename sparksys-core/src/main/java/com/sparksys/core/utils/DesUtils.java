@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
  */
 public class DesUtils {
 
-    private static DES des;
+    private static final DES des;
 
     private DesUtils() {
 

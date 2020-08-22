@@ -3,7 +3,6 @@ package com.sparksys.core.utils;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
-import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AesUtils {
 
-    private static AES aes;
+    private static final AES aes;
 
     private AesUtils() {
 
@@ -35,18 +34,5 @@ public class AesUtils {
     public static String decryptStr(String content) {
         return aes.decryptStr(content, CharsetUtil.CHARSET_UTF_8);
     }
-
-    public static void main(String[] args) {
-        String content = "123456";
-        String encryptHex = AesUtils.encryptHex(content);
-        System.out.println(encryptHex);
-        System.out.println(AesUtils.decryptStr(encryptHex));
-        System.out.println(md5("123456"));
-    }
-
-    public static String md5(String str) {
-        return SecureUtil.md5(str).toUpperCase();
-    }
-
 
 }

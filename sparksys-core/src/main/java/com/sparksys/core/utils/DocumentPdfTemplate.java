@@ -325,7 +325,7 @@ public class DocumentPdfTemplate extends PdfUtils {
         // 定义初始文本宽度
         float subStringWidth = 0;
         // 定义初始截取字符串
-        String subString = "";
+        StringBuilder subString = new StringBuilder();
         // 定义初始字符下标
         int index = 0;
         String regEx = "[(a-zA-Z0-9)]";
@@ -338,7 +338,7 @@ public class DocumentPdfTemplate extends PdfUtils {
             matcher = pattern.matcher(c);
             boolean rs = matcher.find();
             // 追加到截取字符串
-            subString += c;
+            subString.append(c);
             // 判断是否是英文数字或者空格 针对不同的类型追加宽度
             if (rs) {
                 subStringWidth += numWidth;
@@ -352,11 +352,11 @@ public class DocumentPdfTemplate extends PdfUtils {
         // 去掉截取字符超出的一位
         if (subStringWidth - width > reserveWidth) {
             subStringLength -= 1;
-            subString = subString.substring(0, subStringLength);
+            subString = new StringBuilder(subString.substring(0, subStringLength));
         }
         String leftStr = str.substring(subStringLength, str.length());
         // 加入文本List
-        list.add(subString);
+        list.add(subString.toString());
         // 将剩余文本加入文本List
         list.add(leftStr);
         return list;
@@ -650,8 +650,6 @@ public class DocumentPdfTemplate extends PdfUtils {
      * @param str   字符串
      * @param width 宽度
      * @return Map<String, Float>
-     * @author zhouxinlei
-     * @date 2020-05-08 16:28:26
      */
     public Map<String, Float> runSize(String str, float width) {
         float[] fontSize = {13, 12, 11, 10, 9, 8, 7, 6};
@@ -688,7 +686,7 @@ public class DocumentPdfTemplate extends PdfUtils {
      *
      * @param str     字符串
      * @param downTop 下边距高度
-     * @return
+     * @return Map<String, Float>
      */
     public Map<String, Float> runHeightWidthSize(String str, float downTop) {
         float[] fontSize = {13, 12, 11, 10, 9, 8, 7, 6};
@@ -723,9 +721,9 @@ public class DocumentPdfTemplate extends PdfUtils {
     /**
      * 求页数
      *
-     * @param textCount
-     * @param rows
-     * @param str
+     * @param textCount 文本统计
+     * @param rows      行数
+     * @param str       字符串
      */
     public void getPageCount(float textCount, float rows, String str) {
         arrText.clear();
@@ -759,8 +757,8 @@ public class DocumentPdfTemplate extends PdfUtils {
     /**
      * 添加底部内容
      *
-     * @param content
-     * @param isPage
+     * @param content 文本
+     * @param isPage  是否加页数
      */
     public void addFootContent(String content, boolean isPage, Float currentTop) {
         if (content != null && !"".equals(content)) {
@@ -843,16 +841,15 @@ public class DocumentPdfTemplate extends PdfUtils {
     /**
      * text文本大小适配
      *
-     * @param str
-     * @param leftLine
-     * @param rightLine
-     * @param downLine
+     * @param str       字符串
+     * @param leftLine  左间距
+     * @param rightLine 右间距
+     * @param downLine  下边距
      */
     public void autoAddTopText(String str, float leftLine, float rightLine, float downLine) {
-        if (str == null || str == "") {
+        if (StringUtils.isEmpty(str)) {
             str = "";
         }
-        str = str.toString();
         //求出字符串所占宽度
         Float width = getStrWidth(str, fontWidth, numWidth);
         //得到当前行剩余宽度
@@ -881,16 +878,15 @@ public class DocumentPdfTemplate extends PdfUtils {
     /**
      * 添加行文本自动大小
      *
-     * @param str
-     * @param minTextCount
-     * @param isFullLine
-     * @param isCenter
+     * @param str          字符串
+     * @param minTextCount 最小下划线长度
+     * @param isFullLine   是否整行
+     * @param isCenter     是否居中
      */
     public void addAutoLineText(String str, int minTextCount, boolean isFullLine, boolean isCenter) {
-        if (str == null || str == "") {
+        if (StringUtils.isEmpty(str)) {
             str = "";
         }
-        str = str.toString();
         //有要求最小下划线长度的情况下
         if (minTextCount != 0) {
             str = fullText(str, minTextCount * fontWidth);
@@ -937,7 +933,7 @@ public class DocumentPdfTemplate extends PdfUtils {
      * 半角转全角
      *
      * @param input String.
-     * @return 全角字符串.
+     * @return String
      */
     public static String toSbc(String input) {
         char[] c = input.toCharArray();
@@ -954,8 +950,8 @@ public class DocumentPdfTemplate extends PdfUtils {
     /**
      * 全角转半角
      *
-     * @param input String.
-     * @return 半角字符串
+     * @param input String
+     * @return String
      */
     public static String toDbc(String input) {
         char[] c = input.toCharArray();

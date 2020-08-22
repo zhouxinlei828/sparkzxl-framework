@@ -20,8 +20,8 @@ public class ReflectObjectUtils {
     /**
      * 单个对象的所有键值
      *
-     * @param obj
-     * @return
+     * @param obj 参数
+     * @return Map<String, Object>
      */
     public static Map<String, Object> getKeyAndValue(Object obj) {
         Map<String, Object> map = Maps.newHashMap();
@@ -46,9 +46,9 @@ public class ReflectObjectUtils {
     /**
      * 单个对象的某个键的值
      *
-     * @param obj
-     * @param key
-     * @return
+     * @param obj 对象
+     * @param key  属性值
+     * @return Object
      */
     public static Object getValueByKey(Object obj, String key) {
         List<Field> fields = getAllField(obj);
@@ -68,7 +68,7 @@ public class ReflectObjectUtils {
     /**
      * 多个（列表）对象的所有键值
      *
-     * @param object
+     * @param object 对象
      * @return List<Map < String, Object>>
      */
     public static List<Map<String, Object>> getKeysAndValues(List<Object> object) {
@@ -85,9 +85,9 @@ public class ReflectObjectUtils {
     /**
      * 多个（列表）对象的某个键的值
      *
-     * @param object
-     * @param key
-     * @return
+     * @param object 对象
+     * @param key 属性key
+     * @return List<Object>
      */
     public static List<Object> getValuesByKey(List<Object> object, String key) {
         List<Object> list = Lists.newArrayList();

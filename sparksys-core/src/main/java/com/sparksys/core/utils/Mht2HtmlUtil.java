@@ -33,10 +33,6 @@ import javax.mail.internet.MimePartDataSource;
 @Slf4j
 public class Mht2HtmlUtil {
 
-    public static void main(String[] args) {
-        mht2html("http://www.en2hr.com/Resume/20180411/b22ff028-bae7-46a7-b94a-7d76d1b5b599.mht", "C:\\test2\\test.html");
-    }
-
     /**
      * 将 mht文件转换成 html文件
      *
@@ -123,9 +119,9 @@ public class Mht2HtmlUtil {
     /**
      * 将提取出来的html内容写入保存的路径中
      *
-     * @param htmlText
-     * @param htmlPath
-     * @param encode
+     * @param htmlText html文本
+     * @param htmlPath html路径
+     * @param encode   编码类型
      * @author zhouxinlei
      * @date 2020-05-15 15:21:02
      */
@@ -191,7 +187,7 @@ public class Mht2HtmlUtil {
     /**
      * 获取mht文件里资源文件的URL路径
      *
-     * @param bp
+     * @param bp  MimeBodyPart
      * @return String
      * @author zhouxinlei
      * @date 2020-05-15 15:19:21
@@ -218,7 +214,7 @@ public class Mht2HtmlUtil {
     /**
      * 获取mht文件中的内容代码
      *
-     * @param bp
+     * @param bp MimeBodyPart
      * @param strEncoding mht文件编码
      * @return String
      * @author zhouxinlei
@@ -265,7 +261,7 @@ public class Mht2HtmlUtil {
     /**
      * 获取mht网页文件中内容代码的编码
      *
-     * @param bp
+     * @param bp MimeBodyPart
      * @return
      */
     private static String getEncoding(MimeBodyPart bp) {

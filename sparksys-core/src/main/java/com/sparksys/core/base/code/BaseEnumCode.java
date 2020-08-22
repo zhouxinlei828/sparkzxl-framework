@@ -11,8 +11,6 @@ public interface BaseEnumCode {
      * code
      *
      * @return long
-     * @author zhouxinlei
-     * @date 2019-09-27 16:56:40
      */
     int getCode();
 
@@ -20,8 +18,6 @@ public interface BaseEnumCode {
      * getMessage
      *
      * @return String
-     * @author zhouxinlei
-     * @date 2019-09-27 16:56:49
      */
     String getMessage();
 }

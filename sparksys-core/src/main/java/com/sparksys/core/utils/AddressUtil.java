@@ -13,13 +13,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
-/*
- * description：
+/**
+ * description：获取ip地址
  *
  * @author zhouxinlei
- * @date  2020/6/17 0017
+ * @date 2020/6/17 0017
  */
-
 @Slf4j
 public class AddressUtil {
 
@@ -62,8 +61,8 @@ public class AddressUtil {
             } else {
                 log.error("DbSearcher is null");
             }
-        } catch (Exception var9) {
-            log.error("error:{}", var9);
+        } catch (Exception e) {
+            log.error("error:{}", e.getMessage());
         }
         return "";
     }
@@ -82,7 +81,6 @@ public class AddressUtil {
                     FileUtils.copyInputStreamToFile(resourceAsStream, file);
                 }
             }
-
             config = new DbConfig();
             searcher = new DbSearcher(config, dbPath);
         } catch (Exception var5) {

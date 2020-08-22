@@ -2,6 +2,7 @@ package com.sparksys.core.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
+import com.google.common.collect.Lists;
 import com.sparksys.core.entity.UserAgentEntity;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -9,6 +10,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import eu.bitwalker.useragentutils.Version;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * description: 用户代理工具类
@@ -18,12 +20,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UserAgentUtils extends UserAgentUtil {
 
-    private final static String[] BROWSER = new String[]{
+    private final static List<String> BROWSER = Lists.newArrayList(
             "Chrome", "Firefox", "Microsoft Edge", "Safari", "Opera"
-    };
-    private final static String[] OPERATING_SYSTEM = new String[]{
-            "Android", "Linux", "Mac OS X", "Ubuntu", "Windows 10", "Windows 8", "Windows 7", "Windows XP", "Windows Vista"
-    };
+    );
+
+    private final static List<String> OPERATING_SYSTEM =
+            Lists.newArrayList("Android", "Linux", "Mac OS X", "Ubuntu", "Windows 10", "Windows 8", "Windows 7", "Windows XP",
+                    "Windows Vista");
 
     private static String simplifyOperatingSystem(String operatingSystem) {
         for (String b : OPERATING_SYSTEM) {

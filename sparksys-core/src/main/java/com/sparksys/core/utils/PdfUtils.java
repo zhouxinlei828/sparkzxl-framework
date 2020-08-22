@@ -270,12 +270,12 @@ public class PdfUtils {
     /**
      * 添加一个段落 exemple 比如一段文字或者少于一行的可以使用
      *
-     * @param data
-     * @param fontSize
-     * @param left
-     * @param top
-     * @param isBlod
-     * @param isCenter
+     * @param data       文本
+     * @param fontSize   字体大小
+     * @param left       左边距
+     * @param top        上边距
+     * @param isBlod     是否加粗
+     * @param isCenter   是否居中
      * @param lineIndent @
      */
     public void addParagraphText(String data, float fontSize, float left, float top, boolean isBlod, boolean isCenter,
@@ -309,12 +309,12 @@ public class PdfUtils {
     /**
      * 指定位置添加文本内容
      *
-     * @param data
-     * @param fontSize
-     * @param left
-     * @param top
-     * @param isBlod
-     * @param isCenter
+     * @param data       文本
+     * @param fontSize   字体大小
+     * @param left       左边距
+     * @param top        上边距
+     * @param isBlod     是否加粗
+     * @param isCenter   是否居中
      * @param lineIndent @
      */
     public void addFixedPositionText(String data, float fontSize, float left, float top, boolean isBlod,
@@ -332,8 +332,8 @@ public class PdfUtils {
      *
      * @param top      上边距（y坐标）
      * @param left     左边距（x坐标）
-     * @param fontSize
-     * @param str      @
+     * @param fontSize 字体大小
+     * @param str      文本
      */
     public void addPrintText(float top, float left, float fontSize, Object str) {
         pdfCanvas.beginText().setFontAndSize(font, fontSize).moveText(left, top).showText(String.valueOf(str))
@@ -343,10 +343,10 @@ public class PdfUtils {
     /**
      * 垂直文本添加
      *
-     * @param top
-     * @param left
-     * @param fontSize
-     * @param str
+     * @param top      上边距（y坐标）
+     * @param left     左边距（x坐标）
+     * @param fontSize 字体大小
+     * @param str      文本
      */
     public void addVerticalText(float top, float left, float fontSize, String str) {
         Paragraph paragraph = new Paragraph();
@@ -361,11 +361,11 @@ public class PdfUtils {
     /**
      * 添加图片
      *
-     * @param left
-     * @param top
-     * @param width
-     * @param imagePath
-     * @throws MalformedURLException
+     * @param left      左边距（x坐标）
+     * @param top       上边距（y坐标）
+     * @param width     宽度
+     * @param imagePath 图片路径
+     * @throws MalformedURLException 异常
      */
     public void addImage(float left, float top, float width, String imagePath) throws MalformedURLException {
         Image fox = new Image(ImageDataFactory.create(imagePath));
@@ -406,26 +406,26 @@ public class PdfUtils {
         }
     }
 
-    public void imageMerging(List<BufferedImage> pnglist, String outPath) throws IOException {
+    public void imageMerging(List<BufferedImage> pngList, String outPath) throws IOException {
         int height = 0,
                 extWidth = 0,
                 maxWidth = 0,
                 extHeight,
                 extHeight1,
-                picNum = pnglist.size();
+                picNum = pngList.size();
         int[] heightArray = new int[picNum];
         int[] widthArray = new int[picNum];
         BufferedImage buffer;
         List<int[]> imgRgb = new ArrayList<>();
         int[] extImgRgb;
-        for (BufferedImage bufferedImage : pnglist) {
+        for (BufferedImage bufferedImage : pngList) {
             buffer = bufferedImage;
             if (buffer.getWidth() > maxWidth) {
                 maxWidth = buffer.getWidth();
             }
         }
         for (int i = 0; i < picNum; i++) {
-            buffer = pnglist.get(i);
+            buffer = pngList.get(i);
             heightArray[i] = extHeight = buffer.getHeight();
             widthArray[i] = extWidth = buffer.getWidth();
             height += extHeight;

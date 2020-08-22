@@ -23,20 +23,33 @@ import java.util.Optional;
 public class DateUtils extends DateUtil {
 
     /**
-     * @param dateTimeFormatter 格式化日期
+     * 格式化日期
+     *
+     * @param dateTimeFormatter 格式
      * @return String
-     * @author zhouxinlei
-     * @date 2020-01-21 09:59:33
-     * @see DateTimeFormatter
      */
     public static String now(DateTimeFormatter dateTimeFormatter) {
         return formatDate(LocalDateTime.now(), dateTimeFormatter);
     }
 
+    /**
+     * 格式化时间
+     *
+     * @param date              时间
+     * @param dateTimeFormatter 格式
+     * @return LocalDateTime
+     */
     public static LocalDateTime formatDate(String date, DateTimeFormatter dateTimeFormatter) {
         return LocalDateTime.parse(date, dateTimeFormatter);
     }
 
+    /**
+     * 格式化时间
+     *
+     * @param localDateTime     时间
+     * @param dateTimeFormatter 格式
+     * @return String
+     */
     public static String formatDate(LocalDateTime localDateTime, DateTimeFormatter dateTimeFormatter) {
         return localDateTime.format(dateTimeFormatter);
     }
@@ -44,8 +57,8 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是今天
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return boolean
      */
     public static boolean isToday(Date date) {
         return isSameDay(date, new Date());
@@ -54,7 +67,7 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是今天
      *
-     * @param localDateTime
+     * @param localDateTime 时间
      * @return boolean
      */
     public static boolean isToday(LocalDateTime localDateTime) {
@@ -64,7 +77,7 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是本周
      *
-     * @param time
+     * @param time 时间
      * @return boolean
      */
     public static boolean isThisWeek(long time) {
@@ -78,7 +91,7 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是本周
      *
-     * @param date
+     * @param date 日期
      * @return boolean
      */
     public static boolean isThisWeek(Date date) {
@@ -92,7 +105,7 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是本周
      *
-     * @param localDateTime
+     * @param localDateTime 时间
      * @return boolean
      */
     public static boolean isThisWeek(LocalDateTime localDateTime) {
@@ -106,7 +119,7 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是本月
      *
-     * @param date
+     * @param date 时间
      * @return boolean
      */
     public static boolean isThisMonth(Date date) {
@@ -116,7 +129,7 @@ public class DateUtils extends DateUtil {
     /**
      * 判断选择的日期是否是本月
      *
-     * @param localDateTime
+     * @param localDateTime 时间
      * @return boolean
      */
     public static boolean isThisMonth(LocalDateTime localDateTime) {
@@ -132,29 +145,47 @@ public class DateUtils extends DateUtil {
         return param.equals(now);
     }
 
+    /**
+     * LocalDateTime转换为Date格式
+     *
+     * @param localDateTime 时间
+     * @return Date
+     */
     public static Date localDateTime2Date(LocalDateTime localDateTime) {
         ZoneId zoneId = ZoneId.systemDefault();
         ZonedDateTime zdt = localDateTime.atZone(zoneId);
         return Date.from(zdt.toInstant());
     }
 
+    /**
+     * 获取开始时间结束时间信息
+     *
+     * @param startDate 开始时间
+     * @param endDate   结束时间
+     * @return DateInfo
+     */
     public static DateInfo getDateInfo(Date startDate, Date endDate) {
         DateInfo dateInfo = new DateInfo();
         Optional.ofNullable(startDate).ifPresent(value -> {
             dateInfo.setStartTime(beginOfDay(startDate).toString(DatePattern.NORM_DATETIME_PATTERN));
             dateInfo.setStartDate(startDate);
         });
-        String endTime =
-                Optional.ofNullable(endDate).map(value -> endOfDay(value).toString(DatePattern.NORM_DATETIME_PATTERN)).orElseGet(DateUtil::now);
+        String endTime = Optional.ofNullable(endDate).map(value -> endOfDay(value).toString(DatePattern.NORM_DATETIME_PATTERN))
+                .orElseGet(DateUtil::now);
         dateInfo.setEndTime(endTime);
         dateInfo.setEndDate(parse(endTime));
         return dateInfo;
     }
 
+    /**
+     * 计算时间差
+     *
+     * @param localDateTime 开始时间
+     * @param endDate       结束时间
+     * @param level         格式化类型
+     * @return String
+     */
     public static String formatBetween(LocalDateTime localDateTime, Date endDate, BetweenFormater.Level level) {
         return formatBetween(DateUtils.localDateTime2Date(localDateTime), endDate, level);
-    }
-
-    public static void main(String[] args) {
     }
 }
