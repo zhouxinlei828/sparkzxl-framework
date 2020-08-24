@@ -542,7 +542,6 @@
                     <version>${maven-javadoc-plugin.version}</version>
                     <configuration>
                         <encoding>UTF-8</encoding>
-                        <!--                        <aggregate>true</aggregate>-->
                         <charset>UTF-8</charset>
                         <docencoding>UTF-8</docencoding>
                     </configuration>
@@ -553,7 +552,7 @@
                                 <goal>jar</goal>
                             </goals>
                             <configuration>
-                                <additionalJOption>-Xdoclint:none</additionalJOption>
+                                <doclint>none</doclint>
                             </configuration>
                         </execution>
                     </executions>

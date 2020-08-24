@@ -188,4 +188,17 @@ public class DateUtils extends DateUtil {
     public static String formatBetween(LocalDateTime localDateTime, Date endDate, BetweenFormater.Level level) {
         return formatBetween(DateUtils.localDateTime2Date(localDateTime), endDate, level);
     }
+
+    /**
+     * 查询指定日期月份总天数
+     *
+     * @param date 指定日期
+     * @return int
+     */
+    public static int getDaysOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
 }
