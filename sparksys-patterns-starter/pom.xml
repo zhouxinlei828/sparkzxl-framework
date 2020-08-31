@@ -13,10 +13,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sparksys</groupId>
-            <artifactId>sparksys-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <groupId>com.sparksys</groupId>
+        <artifactId>sparksys-core</artifactId>
+        <scope>provided</scope>
+    </dependency>
     </dependencies>
 
 </project>
