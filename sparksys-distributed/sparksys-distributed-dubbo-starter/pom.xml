@@ -3,20 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sparksys-commons</artifactId>
+        <artifactId>sparksys-distributed</artifactId>
         <groupId>com.sparksys</groupId>
         <version>1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sparksys-patterns-starter</artifactId>
+    <artifactId>sparksys-distributed-dubbo-starter</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.sparksys</groupId>
-            <artifactId>sparksys-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
 </project>

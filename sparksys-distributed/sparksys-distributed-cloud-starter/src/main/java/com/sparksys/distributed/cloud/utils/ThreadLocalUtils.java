@@ -1,4 +1,4 @@
-package com.sparksys.cloud.utils;
+package com.sparksys.distributed.cloud.utils;
 
 import com.google.common.collect.Maps;
 

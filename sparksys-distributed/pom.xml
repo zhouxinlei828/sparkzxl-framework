@@ -8,15 +8,12 @@
         <version>1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>sparksys-patterns-starter</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.sparksys</groupId>
-            <artifactId>sparksys-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <artifactId>sparksys-distributed</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>sparksys-distributed-cloud-starter</module>
+        <module>sparksys-distributed-dubbo-starter</module>
+        <module>sparksys-distributed-grpc-starter</module>
+    </modules>
 
 </project>

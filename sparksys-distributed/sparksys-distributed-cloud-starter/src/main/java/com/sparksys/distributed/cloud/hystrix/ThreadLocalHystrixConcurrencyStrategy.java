@@ -1,4 +1,4 @@
-package com.sparksys.cloud.hystrix;
+package com.sparksys.distributed.cloud.hystrix;
 
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
@@ -11,7 +11,7 @@ import com.netflix.hystrix.strategy.executionhook.HystrixCommandExecutionHook;
 import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
-import com.sparksys.cloud.utils.ThreadLocalUtils;
+import com.sparksys.distributed.cloud.utils.ThreadLocalUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

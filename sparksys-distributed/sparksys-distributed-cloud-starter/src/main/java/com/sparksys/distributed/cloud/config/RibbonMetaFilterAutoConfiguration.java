@@ -1,6 +1,6 @@
-package com.sparksys.cloud.config;
+package com.sparksys.distributed.cloud.config;
 
-import com.sparksys.cloud.ribbon.GrayRule;
+import com.sparksys.distributed.cloud.ribbon.GrayRule;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -1,4 +1,4 @@
-package com.sparksys.cloud.interceptor;
+package com.sparksys.distributed.cloud.interceptor;
 
 import com.sparksys.core.constant.BaseContextConstant;
 import com.sparksys.core.constant.CoreConstant;

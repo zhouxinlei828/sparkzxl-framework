@@ -1,4 +1,4 @@
-package com.sparksys.cloud.hystrix;
+package com.sparksys.distributed.cloud.hystrix;
 
 import com.sparksys.core.constant.CoreConstant;
 import com.sparksys.core.utils.RequestContextHolderUtils;

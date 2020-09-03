@@ -1,8 +1,8 @@
-package com.sparksys.cloud.config;
+package com.sparksys.distributed.cloud.config;
 
-import com.sparksys.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
-import com.sparksys.cloud.interceptor.FeignAddHeaderRequestInterceptor;
-import com.sparksys.cloud.utils.DateFormatRegister;
+import com.sparksys.distributed.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
+import com.sparksys.distributed.cloud.interceptor.FeignAddHeaderRequestInterceptor;
+import com.sparksys.distributed.cloud.utils.DateFormatRegister;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
@@ -14,8 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * description: OpenFeign 配置

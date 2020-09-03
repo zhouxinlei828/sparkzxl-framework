@@ -1,4 +1,4 @@
-package com.sparksys.cloud.ribbon;
+package com.sparksys.distributed.cloud.ribbon;
 
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.google.common.base.Optional;
