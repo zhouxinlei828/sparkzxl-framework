@@ -12,8 +12,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>sparksys-distributed-cloud-starter</module>
-        <module>sparksys-distributed-dubbo-starter</module>
-        <module>sparksys-distributed-grpc-starter</module>
     </modules>
 
 </project>
