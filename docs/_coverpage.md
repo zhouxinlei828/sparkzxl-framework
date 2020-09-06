@@ -1,4 +1,4 @@
-  ![logo](images/logo.png)
+  ![logo](logo.png)
   # sparksys-commons
   > spring boot 框架的封装，适用于企业级的脚手架
 
