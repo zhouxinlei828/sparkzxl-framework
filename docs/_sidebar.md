@@ -3,7 +3,7 @@
  * 组件功能篇
 	* [sparksys-boot-starter组件](222)
 	* [sparksys-cache-starter组件](222)
-	* [sparksys-core组件](222)
+	* [sparksys-core组件](foreword/sparksys-core.md)
 	* [sparksys-database-starter组件](222)
 	* [sparksys-distributed-cloud-starter组件](222)
 	* [sparksys-elasticsearch-starter组件](222)
