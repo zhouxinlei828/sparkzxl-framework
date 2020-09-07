@@ -4,7 +4,7 @@
 	* [sparksys-boot-starter组件](222)
 	* [sparksys-cache-starter组件](222)
 	* [sparksys-core组件](foreword/sparksys-core.md)
-	* [sparksys-database-starter组件](222)
+	* [sparksys-database-starter组件](foreword/sparksys-database.md)
 	* [sparksys-distributed-cloud-starter组件](222)
 	* [sparksys-elasticsearch-starter组件](222)
 	* [sparksys-job-executor-starter组件](222)

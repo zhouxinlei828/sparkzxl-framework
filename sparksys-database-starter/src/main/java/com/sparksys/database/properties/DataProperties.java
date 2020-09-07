@@ -19,8 +19,4 @@ public class DataProperties {
 
     private long dataCenterId = 0;
 
-    private List<String> injectionInsertModel;
-
-    private List<String> injectionUpdateModel;
-
 }
