@@ -57,7 +57,6 @@ public class DocumentPdfTemplate extends PdfUtils {
     public List<String> arrText = new ArrayList<>();
 
     public DocumentPdfTemplate() {
-        initPdfData();
     }
 
     /**
