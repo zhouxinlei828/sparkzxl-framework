@@ -198,27 +198,6 @@ sparksys:
  // 标记了该注解的字段 @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = DictionaryType.AREA_LEVEL) 需要实现的
  示例
  ```java
-package com.sparksys.authority.infrastructure.repository;
-
-
-import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sparksys.core.utils.MapHelper;
-import com.sparksys.authority.domain.repository.ICoreOrgRepository;
-import com.sparksys.authority.infrastructure.entity.CoreOrg;
-import com.sparksys.authority.infrastructure.mapper.CoreOrgMapper;
-import org.springframework.stereotype.Repository;
-
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
-
-/**
- * description: 组织 仓储层实现类
- *
- * @author zhouxinlei
- * @date 2020-06-07 13:32:24
- */
 @Repository
 public class CoreOrgRepository implements ICoreOrgRepository {
 
