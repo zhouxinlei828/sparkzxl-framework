@@ -32,7 +32,7 @@ sparksys-commons                               -- 核心组件模块
 ├── sparksys-zookeeper-starter                    -- zookeeper组件
 ```
 ## 组件功能
-- [sparksys-boot-starter组件](222)
+- [sparksys-boot-starter组件](forward/sparksys-boot.md)
 - [sparksys-cache-starter组件](forward/sparksys-cache.md)
 - [sparksys-core组件](forward/sparksys-core.md)
 - [sparksys-database-starter组件](forward/sparksys-database.md)

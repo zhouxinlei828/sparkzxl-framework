@@ -1,7 +1,7 @@
  * 首页
     * [sparksys-commons功能概览](forward/main.md)
  * 组件功能篇
-	* [sparksys-boot-starter组件](222)
+	* [sparksys-boot-starter组件](forward/sparksys-boot.md)
 	* [sparksys-cache-starter组件](forward/sparksys-cache.md)
 	* [sparksys-core组件](forward/sparksys-core.md)
 	* [sparksys-database-starter组件](forward/sparksys-database.md)
