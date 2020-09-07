@@ -40,3 +40,22 @@
 
 ## 更多
 > 减少搭建框架的时间，让开发人员专注于业务系统的开发
+
+## 使用方法
+1. 引入依赖
+```xml
+<dependency>
+    <groupId>com.sparksys</groupId>
+    <artifactId>sparksys-boot-starter</artifactId>
+    <version>${sparksys.version}</version>
+</dependency>
+```
+2. 继承SparkBootApplication
+```java
+@SpringBootApplication(scanBasePackages = {"com.sparksys.authority"})
+public class AuthorityApplication extends SparkBootApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(AuthorityApplication.class, args);
+    }
+}
+```

@@ -249,5 +249,12 @@ sparksys:
 ```
 雪花算法的数据id生成号段，不填默认
 
-
-
+## 使用方法
+1. 引入依赖
+```xml
+<dependency>
+    <groupId>com.sparksys</groupId>
+    <artifactId>sparksys-database-starter</artifactId>
+    <version>${sparksys.version}</version>
+</dependency>
+```

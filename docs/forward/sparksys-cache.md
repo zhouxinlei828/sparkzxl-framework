@@ -237,3 +237,13 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 ```
 ## 拓展
 > 实际业务场景比较复杂，如果多种缓存并用，必然会出现不同步问题，如何才能设计出通用的缓存接口，具体可以参考[设计模式设计模式之抽象工厂模式：「替换多种缓存，代理抽象场景」](https://www.sparksys.top/archives/42)
+
+## 使用方法
+1. 引入依赖
+```xml
+<dependency>
+    <groupId>com.sparksys</groupId>
+    <artifactId>sparksys-cache-starter</artifactId>
+    <version>${sparksys.version}</version>
+</dependency>
+```

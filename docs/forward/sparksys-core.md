@@ -139,3 +139,13 @@ public class PdfTest {
 ## 更多
 > 更多详细内容请下载查看代码文档
 >[sparksys-core-1.2.0.RELEASE-javadoc.jar](http://47.116.52.58:8085/repository/maven-releases/com/sparksys/sparksys-core/1.2.0.RELEASE/sparksys-core-1.2.0.RELEASE-javadoc.jar)
+
+## 使用方法
+1. 引入依赖
+```xml
+<dependency>
+    <groupId>com.sparksys</groupId>
+    <artifactId>sparksys-core</artifactId>
+    <version>${sparksys.version}</version>
+</dependency>
+```
