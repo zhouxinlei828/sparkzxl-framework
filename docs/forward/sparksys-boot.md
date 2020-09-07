@@ -37,6 +37,8 @@
 - 聚合企业级开发脚手架基本的组件
 - 启动后的初始化操作，例如，操作系统，依赖环境，访问地址，接口文档地址等
 - EnableSpringUtil注解的自动装载
+- 高性能的http调用框架retrofit，使用文档：[retrofit-spring-boot-starter](https://github.com/LianjiaTech/retrofit-spring-boot-starter)
+
 
 ## 更多
 > 减少搭建框架的时间，让开发人员专注于业务系统的开发
