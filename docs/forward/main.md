@@ -33,7 +33,7 @@ sparksys-commons                               -- 核心组件模块
 ```
 ## 组件功能
 - [sparksys-boot-starter组件](222)
-- [sparksys-cache-starter组件](222)
+- [sparksys-cache-starter组件](foreword/sparksys-cache.md)
 - [sparksys-core组件](foreword/sparksys-core.md)
 - [sparksys-database-starter组件](foreword/sparksys-database.md)
 - [sparksys-distributed-cloud-starter组件](222)
