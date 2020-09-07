@@ -179,7 +179,7 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
     <artifactId>sparksys-database-starter</artifactId>
 </dependency>
 ```
-**使用方式**
+2. 使用方式
 ```yaml
 sparksys:
   injection:
