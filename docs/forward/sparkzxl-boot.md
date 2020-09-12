@@ -7,23 +7,23 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-core</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-database-starter</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-log-starter</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-swagger-starter</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-web-starter</artifactId>
     </dependency>
     <dependency>
@@ -47,14 +47,14 @@
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparkzxl</groupId>
+    <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-boot-starter</artifactId>
     <version>${sparkzxl.version}</version>
 </dependency>
 ```
 2. 继承SparkBootApplication
 ```java
-@SpringBootApplication(scanBasePackages = {"com.sparkzxl.authority"})
+@SpringBootApplication(scanBasePackages = {"com.github.sparkzxl.authority"})
 public class AuthorityApplication extends SparkBootApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthorityApplication.class, args);

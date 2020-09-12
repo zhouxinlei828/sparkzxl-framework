@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>sparkzxl-component</artifactId>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <version>1.2.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sparkzxl</groupId>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-core</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -23,11 +23,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sparkzxl</groupId>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-jwt-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sparkzxl</groupId>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-user-starter</artifactId>
         </dependency>
         <dependency>

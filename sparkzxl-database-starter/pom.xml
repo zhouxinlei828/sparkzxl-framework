@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>sparkzxl-component</artifactId>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <version>1.2.0.RELEASE</version>
         <relativePath>../</relativePath>
     </parent>
@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sparkzxl</groupId>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-core</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -32,7 +32,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.sparkzxl</groupId>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-cache-starter</artifactId>
         </dependency>
         <dependency>
@@ -58,7 +58,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.sparkzxl</groupId>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-swagger-starter</artifactId>
             <scope>provided</scope>
         </dependency>

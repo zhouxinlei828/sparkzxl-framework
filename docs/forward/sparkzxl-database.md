@@ -7,7 +7,7 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-core</artifactId>
         <scope>provided</scope>
     </dependency>
@@ -23,7 +23,7 @@
         </exclusions>
     </dependency>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-cache-starter</artifactId>
     </dependency>
     <dependency>
@@ -49,7 +49,7 @@
         <optional>true</optional>
     </dependency>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-swagger-starter</artifactId>
         <scope>provided</scope>
     </dependency>
@@ -87,7 +87,7 @@
 ```
 RemoteData 对象主要有2个字段：key、data
 ```java
-package com.sparkzxl.database.entity;
+package com.github.sparkzxl.database.entity;
 
 import cn.hutool.core.util.ObjectUtil;
 import IValidatable;
@@ -175,7 +175,7 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparkzxl</groupId>
+    <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-database-starter</artifactId>
 </dependency>
 ```
@@ -253,7 +253,7 @@ sparkzxl:
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparkzxl</groupId>
+    <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-database-starter</artifactId>
     <version>${sparkzxl.version}</version>
 </dependency>

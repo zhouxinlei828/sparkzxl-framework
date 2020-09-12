@@ -22,7 +22,7 @@ public class InjectionResultAspect {
     private final InjectionCore injectionCore;
 
 
-    @Pointcut("@annotation(com.sparkzxl.database.annonation.InjectionResult)")
+    @Pointcut("@annotation(com.github.sparkzxl.database.annonation.InjectionResult)")
     public void methodPointcut() {
     }
 

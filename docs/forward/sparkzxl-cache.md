@@ -7,7 +7,7 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.sparkzxl</groupId>
+        <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-core</artifactId>
         <scope>provided</scope>
     </dependency>
@@ -242,7 +242,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparkzxl</groupId>
+    <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-cache-starter</artifactId>
     <version>${sparkzxl.version}</version>
 </dependency>

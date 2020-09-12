@@ -144,7 +144,7 @@ public class PdfTest {
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparkzxl</groupId>
+    <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-core</artifactId>
     <version>${sparkzxl.version}</version>
 </dependency>
