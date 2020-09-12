@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.github.sparkzxl.cache.config.RedisConfiguration, \
+    com.github.sparkzxl.cache.config.CacheAutoConfiguration

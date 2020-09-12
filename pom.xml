@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sparksys</groupId>
-    <artifactId>sparksys-commons</artifactId>
+    <groupId>com.sparkzxl</groupId>
+    <artifactId>sparkzxl-component</artifactId>
     <version>1.2.0.RELEASE</version>
     <packaging>pom</packaging>
 
     <properties>
-        <sparksys.version>1.2.0.RELEASE</sparksys.version>
+        <sparkzxl.version>1.2.0.RELEASE</sparkzxl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -79,25 +79,25 @@
     </properties>
 
     <modules>
-        <module>sparksys-boot-starter</module>
-        <module>sparksys-cache-starter</module>
-        <module>sparksys-core</module>
-        <module>sparksys-database-starter</module>
-        <module>sparksys-elasticsearch-starter</module>
-        <module>sparksys-jwt-starter</module>
-        <module>sparksys-log-starter</module>
-        <module>sparksys-mail-starter</module>
-        <module>sparksys-oauth2-server-starter</module>
-        <module>sparksys-security-starter</module>
-        <module>sparksys-swagger-starter</module>
-        <module>sparksys-user-starter</module>
-        <module>sparksys-web-starter</module>
-        <module>sparksys-zookeeper-starter</module>
-        <module>sparksys-oauth2-resource-starter</module>
-        <module>sparksys-redisson-starter</module>
-        <module>sparksys-patterns-starter</module>
-        <module>sparksys-job-executor-starter</module>
-        <module>sparksys-distributed</module>
+        <module>sparkzxl-boot-starter</module>
+        <module>sparkzxl-cache-starter</module>
+        <module>sparkzxl-core</module>
+        <module>sparkzxl-database-starter</module>
+        <module>sparkzxl-elasticsearch-starter</module>
+        <module>sparkzxl-jwt-starter</module>
+        <module>sparkzxl-log-starter</module>
+        <module>sparkzxl-mail-starter</module>
+        <module>sparkzxl-oauth2-server-starter</module>
+        <module>sparkzxl-security-starter</module>
+        <module>sparkzxl-swagger-starter</module>
+        <module>sparkzxl-user-starter</module>
+        <module>sparkzxl-web-starter</module>
+        <module>sparkzxl-zookeeper-starter</module>
+        <module>sparkzxl-oauth2-resource-starter</module>
+        <module>sparkzxl-redisson-starter</module>
+        <module>sparkzxl-patterns-starter</module>
+        <module>sparkzxl-job-executor-starter</module>
+        <module>sparkzxl-distributed</module>
     </modules>
 
     <distributionManagement>
@@ -164,64 +164,64 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-cache-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-cache-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-core</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-core</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-database-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-database-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-elasticsearch-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-elasticsearch-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-jwt-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-jwt-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-log-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-log-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-mail-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-mail-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-security-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-security-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-swagger-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-swagger-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-user-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-user-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-web-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-web-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sparksys</groupId>
-                <artifactId>sparksys-zookeeper-starter</artifactId>
-                <version>${sparksys.version}</version>
+                <groupId>com.sparkzxl</groupId>
+                <artifactId>sparkzxl-zookeeper-starter</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>

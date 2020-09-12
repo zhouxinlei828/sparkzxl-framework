@@ -1,4 +1,4 @@
-# sparksys-core
+# sparkzxl-core
 > 职能：
 > 项目开发过程中所涉及的工具类，包含hutools（糊涂一点也不糊涂的工具类），集合，guava包，itext7 pdf生成工具类，
 > mapstruct 实体转换工具类，excel工具类
@@ -132,20 +132,20 @@ public class PdfTest {
 }
 ```
 - 生成结果
-![pdfTest](https://oss.sparksys.top/images/pdfTest.jpg)
+![pdfTest](https://oss.sparkzxl.top/images/pdfTest.jpg)
 ## mapstruct 实体转换工具
 > 使用方法：[Spring Boot 对象转换 MapStruct 入门](http://www.iocoder.cn/Spring-Boot/MapStruct/?self)
 
 ## 更多
 > 更多详细内容请下载查看代码文档
->[sparksys-core-1.2.0.RELEASE-javadoc.jar](http://47.116.52.58:8085/repository/maven-releases/com/sparksys/sparksys-core/1.2.0.RELEASE/sparksys-core-1.2.0.RELEASE-javadoc.jar)
+>[sparkzxl-core-1.2.0.RELEASE-javadoc.jar](http://47.116.52.58:8085/repository/maven-releases/com/sparkzxl/sparkzxl-core/1.2.0.RELEASE/sparkzxl-core-1.2.0.RELEASE-javadoc.jar)
 
 ## 使用方法
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparksys</groupId>
-    <artifactId>sparksys-core</artifactId>
-    <version>${sparksys.version}</version>
+    <groupId>com.sparkzxl</groupId>
+    <artifactId>sparkzxl-core</artifactId>
+    <version>${sparkzxl.version}</version>
 </dependency>
 ```

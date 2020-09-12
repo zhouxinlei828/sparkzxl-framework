@@ -1,4 +1,4 @@
-# sparksys-data-starter
+# sparkzxl-data-starter
 > 职能：
 > 使用mybatis-plus作为curd增强框架，同时对跨库、库表、库服务 关联数据自动注入的支持，解决解决分页数据的属性或单个对象的属性 回显关联数据之痛, 支持对静态数据属性(数据字典)、动态主键数据进行自动注入，对db之上一层做了缓存，减轻对db
 >的频繁访问，对curd的接口自动生成
@@ -7,8 +7,8 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-core</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-core</artifactId>
         <scope>provided</scope>
     </dependency>
     <!-- mybatis-plus -->
@@ -23,8 +23,8 @@
         </exclusions>
     </dependency>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-cache-starter</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-cache-starter</artifactId>
     </dependency>
     <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -49,8 +49,8 @@
         <optional>true</optional>
     </dependency>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-swagger-starter</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-swagger-starter</artifactId>
         <scope>provided</scope>
     </dependency>
     <dependency>
@@ -87,10 +87,10 @@
 ```
 RemoteData 对象主要有2个字段：key、data
 ```java
-package com.sparksys.database.entity;
+package com.sparkzxl.database.entity;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.sparksys.database.validation.IValidatable;
+import IValidatable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -175,13 +175,13 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparksys</groupId>
-    <artifactId>sparksys-database-starter</artifactId>
+    <groupId>com.sparkzxl</groupId>
+    <artifactId>sparkzxl-database-starter</artifactId>
 </dependency>
 ```
 2. 使用方式
 ```yaml
-sparksys:
+sparkzxl:
   injection:
     # 是否启用 远程数据 手动注入
     enabled: true
@@ -229,7 +229,7 @@ public class CoreOrgRepository implements ICoreOrgRepository {
     }
 }
 ```
-使用demo可参考sparksys-cloud中sparksys-authority-server 用户的查询
+使用demo可参考sparkzxl-cloud中sparkzxl-authority-server 用户的查询
 
 - 分页查询：
 >使用pagehelper组件具体可参考[pagehelper官网](https://pagehelper.github.io/)
@@ -242,7 +242,7 @@ public class CoreOrgRepository implements ICoreOrgRepository {
 目的主要对自动填充的字段，创建时间，更新时间，创建人，更新人字段的自动填充功能，创建人和更新人的这都能过填充是通过request请求域内的用户进行传递，自动填充，可通过BaseContextHandler.getUserId()获取，具体可参考BaseContextHandler类当中的方法进行选择
 - 自动配置属性
 ```yaml
-sparksys:
+sparkzxl:
   data:
     worker-id: 0
     data-center-id: 10
@@ -253,8 +253,8 @@ sparksys:
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparksys</groupId>
-    <artifactId>sparksys-database-starter</artifactId>
-    <version>${sparksys.version}</version>
+    <groupId>com.sparkzxl</groupId>
+    <artifactId>sparkzxl-database-starter</artifactId>
+    <version>${sparkzxl.version}</version>
 </dependency>
 ```

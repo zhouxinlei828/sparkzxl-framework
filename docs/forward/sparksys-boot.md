@@ -1,4 +1,4 @@
-# sparksys-boot-starter
+# sparkzxl-boot-starter
 > 职能：
 > 聚合开发脚手架的基本功能，包含spring boot基本环境，工具类，database，日志，API接口文档，web层以及高性能的http调用框架retrofit
 
@@ -7,24 +7,24 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-core</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-core</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-database-starter</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-database-starter</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-log-starter</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-log-starter</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-swagger-starter</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-swagger-starter</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.sparksys</groupId>
-        <artifactId>sparksys-web-starter</artifactId>
+        <groupId>com.sparkzxl</groupId>
+        <artifactId>sparkzxl-web-starter</artifactId>
     </dependency>
     <dependency>
         <groupId>com.github.lianjiatech</groupId>
@@ -47,14 +47,14 @@
 1. 引入依赖
 ```xml
 <dependency>
-    <groupId>com.sparksys</groupId>
-    <artifactId>sparksys-boot-starter</artifactId>
-    <version>${sparksys.version}</version>
+    <groupId>com.sparkzxl</groupId>
+    <artifactId>sparkzxl-boot-starter</artifactId>
+    <version>${sparkzxl.version}</version>
 </dependency>
 ```
 2. 继承SparkBootApplication
 ```java
-@SpringBootApplication(scanBasePackages = {"com.sparksys.authority"})
+@SpringBootApplication(scanBasePackages = {"com.sparkzxl.authority"})
 public class AuthorityApplication extends SparkBootApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthorityApplication.class, args);
