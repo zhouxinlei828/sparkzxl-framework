@@ -1,14 +1,11 @@
 package com.sparksys.jwt.config;
 
-import com.sparksys.core.utils.KeyPairUtils;
 import com.sparksys.jwt.properties.JwtProperties;
-import com.sparksys.jwt.service.JwtTokenService;
+import com.sparksys.jwt.properties.KeyStoreProperties;
 import com.sparksys.jwt.service.impl.JwtTokenServiceImpl;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.security.KeyPair;
 
 /**
  * description: jwt自动装配
@@ -17,23 +14,11 @@ import java.security.KeyPair;
  * @date: 2020-07-14 08:08:02
  */
 @Configuration
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, KeyStoreProperties.class})
 public class JwtAutoConfiguration {
 
     @Bean
-    public JwtTokenService jwtTokenService(JwtProperties jwtProperties) {
-        return new JwtTokenServiceImpl(jwtProperties, keyPair(jwtProperties));
-    }
-
-    /**
-     * 读取固定的公钥和私钥来进行签名和验证
-     *
-     * @return KeyPair
-     */
-    @Bean
-    public KeyPair keyPair(JwtProperties jwtProperties) {
-        //从classpath下的证书中获取秘钥对
-        JwtProperties.KeyStore keyStore = jwtProperties.getKeyStore();
-        return KeyPairUtils.keyPair(keyStore.getPath(), "jwt", keyStore.getPassword());
+    public JwtTokenServiceImpl jwtTokenService(JwtProperties jwtProperties, KeyStoreProperties KeyStoreProperties) {
+        return new JwtTokenServiceImpl(jwtProperties,KeyStoreProperties);
     }
 }

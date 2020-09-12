@@ -10,18 +10,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date: 2020-07-14 07:56:59
  */
 @Data
-@ConfigurationProperties(prefix = "sparksys.jwt")
-public class JwtProperties {
+@ConfigurationProperties(prefix = "sparksys.key-store")
+public class KeyStoreProperties {
 
     /**
-     * 过期时间 2h
+     * 是否启用
      */
-    private Long expire = 7200L;
-    /**
-     * 刷新token的过期时间 8h
-     */
-    private Long refreshExpire = 28800L;
+    private boolean enable;
 
-    private String secret = "123456";
+    /**
+     * 密钥文件路径
+     */
+    private String path;
+
+    /**
+     * 密钥密码
+     */
+    private String password;
 
 }

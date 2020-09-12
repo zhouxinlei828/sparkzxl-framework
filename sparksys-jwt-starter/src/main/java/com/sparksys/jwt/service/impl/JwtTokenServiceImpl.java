@@ -3,6 +3,7 @@ package com.sparksys.jwt.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Maps;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -11,16 +12,20 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.sparksys.core.support.ResponseResultStatus;
 import com.sparksys.core.support.SparkSysExceptionAssert;
+import com.sparksys.core.utils.KeyPairUtils;
 import com.sparksys.core.utils.Md5Utils;
 import com.sparksys.jwt.entity.JwtUserInfo;
 import com.sparksys.jwt.properties.JwtProperties;
+import com.sparksys.jwt.properties.KeyStoreProperties;
 import com.sparksys.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * description: jwtToken 服务实现类
@@ -32,11 +37,12 @@ import java.util.Date;
 public class JwtTokenServiceImpl implements JwtTokenService {
 
     private final JwtProperties jwtProperties;
-    private final KeyPair keyPair;
+    private final KeyStoreProperties KeyStoreProperties;
+    private Map<String, KeyPair> keyPairMap = Maps.newConcurrentMap();
 
-    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyPair keyPair) {
+    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties) {
         this.jwtProperties = jwtProperties;
-        this.keyPair = keyPair;
+        KeyStoreProperties = keyStoreProperties;
     }
 
     @Override
@@ -129,7 +135,18 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         return payloadDto;
     }
 
+    private KeyPair getKeyPair() {
+        KeyPair keyPair = keyPairMap.get("keyPair");
+        if (ObjectUtils.isNotEmpty(keyPair)) {
+            return keyPair;
+        }
+        keyPair = KeyPairUtils.keyPair(KeyStoreProperties.getPath(), "jwt", KeyStoreProperties.getPassword());
+        keyPairMap.put("keyPair", keyPair);
+        return keyPair;
+    }
+
     private RSAKey getRsaKey() {
+        KeyPair keyPair = getKeyPair();
         //获取RSA公钥
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         //获取RSA私钥
@@ -140,7 +157,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     @Override
     public RSAKey getRsaPublicKey() {
         //获取RSA公钥
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAPublicKey publicKey = (RSAPublicKey) getKeyPair().getPublic();
         return new RSAKey.Builder(publicKey).build();
     }
 }

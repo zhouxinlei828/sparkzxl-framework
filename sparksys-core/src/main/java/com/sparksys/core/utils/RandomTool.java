@@ -1,5 +1,7 @@
 package com.sparksys.core.utils;
 
+import cn.hutool.core.util.URLUtil;
+
 import java.util.Random;
 
 /**
@@ -36,5 +38,6 @@ public class RandomTool {
     public static void main(String[] args) {
         System.out.println(RandomTool.randomNumber(10));
         System.out.println(RandomTool.randomStr(10));
+        System.out.println(URLUtil.normalize("www.baidu.com"));
     }
 }

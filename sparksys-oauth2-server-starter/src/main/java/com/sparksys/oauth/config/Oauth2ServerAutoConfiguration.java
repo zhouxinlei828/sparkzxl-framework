@@ -1,12 +1,13 @@
 package com.sparksys.oauth.config;
 
 import cn.hutool.json.JSONUtil;
+import com.sparksys.core.utils.KeyPairUtils;
+import com.sparksys.jwt.properties.KeyStoreProperties;
 import com.sparksys.oauth.enhancer.JwtTokenEnhancer;
 import com.sparksys.oauth.properties.Oauth2Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * description: 认证服务器配置
@@ -50,6 +52,8 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     private AuthenticationManager authenticationManager;
     @Autowired(required = false)
     private Oauth2Properties oAuth2Properties;
+    @Autowired(required = false)
+    private KeyStoreProperties keyStoreProperties;
     @Autowired(required = false)
     private RedisConnectionFactory redisConnectionFactory;
 
@@ -99,17 +103,13 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     }
 
     @Bean
-    @ConditionalOnClass(value = KeyPair.class)
-    public JwtAccessTokenConverter accessTokenConverter(KeyPair keyPair) {
+    public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setKeyPair(keyPair);
+        if (ObjectUtils.isNotEmpty(keyStoreProperties) && keyStoreProperties.isEnable()) {
+            KeyPair keyPair = KeyPairUtils.keyPair(keyStoreProperties.getPath(),
+                    "jwt", keyStoreProperties.getPassword());
+            Optional.ofNullable(keyPair).ifPresent(jwtAccessTokenConverter::setKeyPair);
+        }
         return jwtAccessTokenConverter;
     }
-
-    @Bean
-    @ConditionalOnMissingBean(value = KeyPair.class)
-    public JwtAccessTokenConverter accessTokenConverter() {
-        return new JwtAccessTokenConverter();
-    }
-
 }
