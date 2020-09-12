@@ -10,7 +10,7 @@ import java.text.MessageFormat;
  * @author zhouxinlei
  * @date 2020-06-04 22:45:18
  */
-public interface BusinessEnumSysAssert extends BaseEnumCode, SparkSysAssert {
+public interface BusinessEnumSysAssert extends BaseEnumCode, SparkZxlAssert {
 
     /**
      * 创建异常

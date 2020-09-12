@@ -5,7 +5,7 @@ package com.github.sparkzxl.core.support;
  *
  * @author zhouxinlei
  */
-public interface sparkzxlAssert {
+public interface SparkZxlAssert {
     /**
      * 创建异常
      *
