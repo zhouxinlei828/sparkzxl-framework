@@ -47,7 +47,8 @@
         <!-- jwt组件-->
         <jwt.version>8.16</jwt.version>
 
-        <aliyun-sdk-oss.version>3.8.1</aliyun-sdk-oss.version>
+        <aliyun-sdk-oss.version>3.10.2</aliyun-sdk-oss.version>
+        <minio.version>3.0.10</minio.version>
         <!-- google-->
         <zxing.core.version>3.3.3</zxing.core.version>
         <guava.version>28.2-jre</guava.version>
@@ -98,6 +99,7 @@
         <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-job-executor-starter</module>
         <module>sparkzxl-distributed</module>
+        <module>sparkzxl-oss-starter</module>
     </modules>
 
     <distributionManagement>
@@ -250,6 +252,11 @@
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun-sdk-oss.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.logstash.logback</groupId>
