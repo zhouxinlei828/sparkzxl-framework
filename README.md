@@ -1,15 +1,15 @@
-# sparksys-commons
+# sparksys-component
 ## 简介
-> sparksys-commons包含springboot项目的封装，主要功能是统一了对外接口的api访问格式，web模块进行了封装，基于DDD领域驱动模型设计代码，具体落地实施，对常用的工具类包进行封装，简单易用，elasticsearch，mybatis组件。集成了oauth2，redis缓存，本地缓存的构建，分布式锁的封装等等，是快速开发的脚手架，简易适用于企业级框架搭建
+> sparksys-component包含springboot项目的封装，主要功能是统一了对外接口的api访问格式，web模块进行了封装，基于DDD领域驱动模型设计代码，具体落地实施，对常用的工具类包进行封装，简单易用，elasticsearch，mybatis组件。集成了oauth2，redis缓存，本地缓存的构建，分布式锁的封装等等，是快速开发的脚手架，简易适用于企业级框架搭建
 
 ## 项目地址
-[sparksys-commons](https://github.com/zhouxinlei298/sparksys-commons.git)
+[sparksys-component](https://github.com/zhouxinlei298/sparksys-component.git)
 
 **落地最佳实践**：[sparksys-cloud](https://github.com/zhouxinlei298/sparksys-cloud.git)
 
 ## 组件简介
 ```Text
-sparksys-commons                               -- 核心组件模块
+sparksys-component                               -- 核心组件模块
 ├── sparksys-boot-starter                         -- sparksys boot引导
 ├── sparksys-cache-starter                        -- cache组件封装
 ├── sparksys-core                                 -- 工具类组件
