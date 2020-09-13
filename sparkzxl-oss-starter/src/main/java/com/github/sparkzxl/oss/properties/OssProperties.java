@@ -55,31 +55,4 @@ public class OssProperties {
      */
     private String bucketName = "sparkzxl";
 
-
-    private Aliyun aliyun;
-    private Minio minio;
-
-    /**
-     * Minio OSS.
-     */
-    @Data
-    public static class Minio {
-        private boolean active;
-        private String endpoint;
-        private String accessKey;
-        private String secretKey;
-    }
-
-    /**
-     * Aliyun OSS.
-     */
-    @Data
-    public static class Aliyun {
-        private boolean active;
-        private String domain;
-        private String endpoint;
-        private String accessKeyId;
-        private String accessKeySecret;
-    }
-
 }

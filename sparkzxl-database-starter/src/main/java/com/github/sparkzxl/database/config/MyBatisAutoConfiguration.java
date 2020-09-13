@@ -29,10 +29,9 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MetaDataHandler metaDateHandler(Snowflake snowflake) {
+    public MetaDataHandler metaDataHandler(Snowflake snowflake) {
         return new MetaDataHandler(snowflake);
     }
-
 
     @Bean
     public BaseSqlInjector sqlInjector() {

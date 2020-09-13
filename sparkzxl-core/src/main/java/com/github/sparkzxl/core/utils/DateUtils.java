@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.date.*;
+import cn.hutool.core.util.URLUtil;
 import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -200,19 +201,6 @@ public class DateUtils extends DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-    }
-
-    public static void main(String[] args) {
-        System.out.println((int) ((Math.random() * 9 + 1) * 100000));
-        for (int i = 0; i <= 100; i++) {
-            String sources = "0123456789";
-            Random rand = new Random();
-            StringBuffer flag = new StringBuffer();
-            for (int j = 0; j < 6; j++) {
-                flag.append(sources.charAt(rand.nextInt(9)) + "");
-            }
-            System.out.println(flag.toString());
-        }
     }
 
 }

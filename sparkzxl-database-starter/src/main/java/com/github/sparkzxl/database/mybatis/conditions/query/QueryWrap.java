@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.SharedString;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
+import com.baomidou.mybatisplus.core.enums.WrapperKeyword;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
@@ -23,7 +24,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.BRACKET;
 import static com.github.sparkzxl.database.mybatis.conditions.Wraps.replace;
 
 /**
@@ -141,7 +141,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         final QueryWrap<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, BRACKET, instance);
+            return doIt(true, WrapperKeyword.APPLY, instance);
         }
         return this;
     }

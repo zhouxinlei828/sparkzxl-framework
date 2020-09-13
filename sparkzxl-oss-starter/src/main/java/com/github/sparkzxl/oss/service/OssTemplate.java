@@ -1,5 +1,7 @@
 package com.github.sparkzxl.oss.service;
 
+import cn.hutool.core.net.url.UrlBuilder;
+import cn.hutool.core.util.URLUtil;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
@@ -11,9 +13,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.github.sparkzxl.core.constant.FileConstant;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.*;
@@ -139,7 +143,32 @@ public class OssTemplate implements InitializingBean {
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, expires);
         URL url = amazonS3.generatePresignedUrl(bucketName, objectName, calendar.getTime());
-        return url.toString();
+        String urlStr = url.toString();
+        if (StringUtils.isNotEmpty(ossProperties.getCustomDomain())) {
+            String domain = ossProperties.getBucketName().concat(".").concat(ossProperties.getEndpoint());
+            urlStr = urlStr.replace(domain, ossProperties.getCustomDomain());
+        }
+        return urlStr;
+    }
+
+    @SneakyThrows
+    public String getObjectURL(String bucketName, String objectName) {
+        String buildUrl;
+        String path = FileConstant.URL_SEPARATOR.concat(objectName);
+        if (StringUtils.isNotEmpty(ossProperties.getCustomDomain())) {
+            buildUrl = UrlBuilder.create()
+                    .setScheme("https")
+                    .setHost(ossProperties.getCustomDomain())
+                    .addPath(path)
+                    .build();
+            return URLUtil.decode(buildUrl);
+        }
+        String domain = bucketName.concat(".").concat(ossProperties.getEndpoint());
+        buildUrl = UrlBuilder.create()
+                .setHost(domain)
+                .addPath(path)
+                .build();
+        return URLUtil.decode(buildUrl);
     }
 
     /**
@@ -162,10 +191,11 @@ public class OssTemplate implements InitializingBean {
      * @param bucketName bucket名称
      * @param objectName 文件名称
      * @param stream     文件流
+     * @return PutObjectResult
      * @throws Exception
      */
-    public void putObject(String bucketName, String objectName, InputStream stream) throws Exception {
-        putObject(bucketName, objectName, stream, stream.available(), "application/octet-stream");
+    public PutObjectResult putObject(String bucketName, String objectName, InputStream stream) throws Exception {
+        return putObject(bucketName, objectName, stream, stream.available(), "application/octet-stream");
     }
 
     /**
