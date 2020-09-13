@@ -1,5 +1,6 @@
 package com.github.sparkzxl.job.config;
 
+import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.job.properties.XxlJobProperties;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class XxlJobConfig {
 
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor(XxlJobProperties xxlJobProperties) {
-        log.info(">>>>>>>>>>> xxl-job config init.");
+        log.info(">>>>>>>>>>> xxl-job config init XxlJobProperties：{}", JSONUtil.toJsonPrettyStr(xxlJobProperties));
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(xxlJobProperties.getAdminAddresses());
         xxlJobSpringExecutor.setAppname(xxlJobProperties.getAppName());

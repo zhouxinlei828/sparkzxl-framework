@@ -19,6 +19,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @AllArgsConstructor
 @Slf4j
 public class InjectionResultAspect {
+
     private final InjectionCore injectionCore;
 
 

@@ -6,7 +6,7 @@ package com.github.sparkzxl.core.support;
  * @author zhouxinlei
  * @date 2020/6/4 10:10 下午
  */
-public class SparkSysExceptionAssert {
+public class SparkZxlExceptionAssert {
 
 
     public static void businessFail(String message) {

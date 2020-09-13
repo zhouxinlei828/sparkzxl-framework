@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.github.sparkzxl.core.utils.ReflectObjectUtils;
 import com.github.sparkzxl.database.constant.EntityConstant;
 import com.github.sparkzxl.database.context.BaseContextHandler;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -20,14 +21,10 @@ import java.util.Date;
  * @date 2020-05-24 13:22:30
  */
 @Slf4j
+@AllArgsConstructor
 public class MetaDataHandler implements MetaObjectHandler {
 
     private final Snowflake snowflake;
-
-    public MetaDataHandler(Snowflake snowflake) {
-        this.snowflake = snowflake;
-    }
-
 
     @Override
     public void insertFill(MetaObject metaObject) {

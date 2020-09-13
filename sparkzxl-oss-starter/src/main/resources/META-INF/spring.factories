@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.oss.config.OSSAutoConfiguration
+    com.github.sparkzxl.oss.config.OssAutoConfiguration

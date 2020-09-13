@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
-import com.github.sparkzxl.core.support.SparkSysExceptionAssert;
+import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -32,7 +32,7 @@ public class MapHelper {
         try {
             return builder.build();
         } catch (IllegalArgumentException var6) {
-            SparkSysExceptionAssert.businessFail(var6.getMessage() + ".若要在键下索引多个值，请使用: Multimaps.index.");
+            SparkZxlExceptionAssert.businessFail(var6.getMessage() + ".若要在键下索引多个值，请使用: Multimaps.index.");
         }
         return null;
     }

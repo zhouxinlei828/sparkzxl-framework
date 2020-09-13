@@ -3,6 +3,7 @@ package com.github.sparkzxl.elasticsearch.config;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
@@ -32,7 +33,7 @@ import java.util.List;
 @Slf4j
 public class ElasticsearchAutoConfiguration {
 
-    private final List<HttpHost> httpHosts = new ArrayList<>();
+    private final List<HttpHost> httpHosts = Lists.newArrayList();
 
     @Bean
     @ConditionalOnMissingBean
@@ -60,7 +61,6 @@ public class ElasticsearchAutoConfiguration {
      * @param builder                 RestClientBuilder
      * @param elasticsearchProperties elasticsearch default properties
      * @return {@link org.elasticsearch.client.RestHighLevelClient}
-     * @author fxbin
      */
     private static RestHighLevelClient getRestHighLevelClient(RestClientBuilder builder, ElasticsearchProperties elasticsearchProperties) {
         builder.setRequestConfigCallback(requestConfigBuilder -> {

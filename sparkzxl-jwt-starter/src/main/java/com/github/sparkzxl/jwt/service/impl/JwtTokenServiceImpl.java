@@ -14,10 +14,11 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
-import com.github.sparkzxl.core.support.SparkSysExceptionAssert;
+import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.KeyPairUtils;
 import com.github.sparkzxl.core.utils.Md5Utils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -34,16 +35,12 @@ import java.util.Map;
  * @date: 2020-07-14 08:03:30
  */
 @Slf4j
+@AllArgsConstructor
 public class JwtTokenServiceImpl implements JwtTokenService {
 
     private final JwtProperties jwtProperties;
-    private final com.github.sparkzxl.jwt.properties.KeyStoreProperties KeyStoreProperties;
-    private Map<String, KeyPair> keyPairMap = Maps.newConcurrentMap();
-
-    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties) {
-        this.jwtProperties = jwtProperties;
-        KeyStoreProperties = keyStoreProperties;
-    }
+    private final KeyStoreProperties KeyStoreProperties;
+    private Map<String, KeyPair> keyPairMap;
 
     @Override
     public String createTokenByRsa(JwtUserInfo jwtUserInfo) {
@@ -67,7 +64,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             jwsObject.sign(jwsSigner);
         } catch (JOSEException e) {
             log.warn("根据RSA算法生成token失败：{}", e.getMessage());
-            SparkSysExceptionAssert.businessFail(e.getMessage());
+            SparkZxlExceptionAssert.businessFail(e.getMessage());
         }
         return jwsObject.serialize();
     }
@@ -88,7 +85,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             return payloadDto;
         } catch (Exception e) {
             log.warn("根据RSA校验token失败：{}", e.getMessage());
-            SparkSysExceptionAssert.businessFail(e.getMessage());
+            SparkZxlExceptionAssert.businessFail(e.getMessage());
         }
         return payloadDto;
     }
@@ -111,7 +108,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             jwsObject.sign(jwsSigner);
         } catch (Exception e) {
             log.warn("根据HMAC算法生成token失败：{}", e.getMessage());
-            SparkSysExceptionAssert.businessFail(e.getMessage());
+            SparkZxlExceptionAssert.businessFail(e.getMessage());
         }
         return jwsObject.serialize();
     }
@@ -130,7 +127,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             ResponseResultStatus.JWT_EXPIRED_ERROR.assertCompare(payloadDto.getExpire().getTime(), System.currentTimeMillis());
         } catch (Exception e) {
             log.warn("根据HMAC校验token失败：{}", e.getMessage());
-            SparkSysExceptionAssert.businessFail(e.getMessage());
+            SparkZxlExceptionAssert.businessFail(e.getMessage());
         }
         return payloadDto;
     }
