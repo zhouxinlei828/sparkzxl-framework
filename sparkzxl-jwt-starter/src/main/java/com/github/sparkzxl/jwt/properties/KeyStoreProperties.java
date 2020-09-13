@@ -22,6 +22,10 @@ public class KeyStoreProperties {
      * 密钥文件路径
      */
     private String path;
+    /**
+     * 别名
+     */
+    private String alias;
 
     /**
      * 密钥密码

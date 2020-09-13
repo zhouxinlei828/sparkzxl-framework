@@ -107,7 +107,7 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         if (ObjectUtils.isNotEmpty(keyStoreProperties) && keyStoreProperties.isEnable()) {
             KeyPair keyPair = KeyPairUtils.keyPair(keyStoreProperties.getPath(),
-                    "jwt", keyStoreProperties.getPassword());
+                    keyStoreProperties.getAlias(), keyStoreProperties.getPassword());
             Optional.ofNullable(keyPair).ifPresent(jwtAccessTokenConverter::setKeyPair);
         }
         return jwtAccessTokenConverter;
