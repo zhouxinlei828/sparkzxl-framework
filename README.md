@@ -7,6 +7,16 @@
 
 **落地最佳实践**：[sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
 
+## 推荐阅读文档
+[sparkzxl-component使用文档](https://sparkzxl.github.io/sparkzxl-component)
+## 文档更新记录
+
+- [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
+- [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
+- [sparkzxl-core组件](forward/sparkzxl-core.md)
+- [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
+- [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
+
 ## 组件简介
 ```Text
 sparkzxl-component                               -- 核心组件模块
@@ -23,6 +33,7 @@ sparkzxl-component                               -- 核心组件模块
 ├── sparkzxl-mail-starter                         -- 邮件组件
 ├── sparkzxl-oauth2-resource-starter	          -- oauth2资源保护组件
 ├── sparkzxl-oauth2-server-starter                -- oauth2授权组件
+├── sparkzxl-oss-starter                          -- 对象存储（兼容阿里云oss，minio等）组件
 ├── sparkzxl-patterns-starter                     -- 设计模式组件
 ├── sparkzxl-redisson-starter                     -- redisson分布式锁组件
 ├── sparkzxl-security-starter                     -- 权限控制组件
@@ -32,10 +43,10 @@ sparkzxl-component                               -- 核心组件模块
 ├── sparkzxl-zookeeper-starter                    -- zookeeper组件
 ```
 ## 组件功能
-- [sparkzxl-boot-starter组件](222)
-- [sparkzxl-cache-starter组件](222)
-- [sparkzxl-core组件](222)
-- [sparkzxl-database-starter组件](222)
+- [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
+- [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
+- [sparkzxl-core组件](forward/sparkzxl-core.md)
+- [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
 - [sparkzxl-distributed-cloud-starter组件](222)
 - [sparkzxl-elasticsearch-starter组件](222)
 - [sparkzxl-job-executor-starter组件](222)
@@ -43,11 +54,12 @@ sparkzxl-component                               -- 核心组件模块
 - [sparkzxl-log-starter组件](222)
 - [sparkzxl-mail-starter组件](222)
 - [sparkzxl-oauth2-resource-starter组件](222)
+- [sparkzxl-oss-starter组件](222)
 - [sparkzxl-oauth2-server-starter组件](222)
 - [sparkzxl-patterns-starter组件](222)
 - [sparkzxl-redisson-starter组件](222)
 - [sparkzxl-security-starter组件](222)
 - [sparkzxl-swagger-starter组件](222)
-- [sparkzxl-user-starter组件](222)
+- [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
 - [sparkzxl-web-starter组件](222)
 - [sparkzxl-zookeeper-starter组件](222)
