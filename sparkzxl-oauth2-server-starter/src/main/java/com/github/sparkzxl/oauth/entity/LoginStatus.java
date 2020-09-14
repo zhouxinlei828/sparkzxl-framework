@@ -20,12 +20,14 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Builder
-public class LoginStatus implements Serializable {
+public class LoginStatus<T> implements Serializable {
+
     private static final long serialVersionUID = -3124612657759050173L;
+
     /***
      * 用户id
      */
-    private Long id;
+    private T id;
     /**
      * 账号
      */
@@ -42,40 +44,31 @@ public class LoginStatus implements Serializable {
 
     private UserAgentEntity userAgentEntity;
 
-    public static LoginStatus success(Long id) {
+    public static <T> LoginStatus success(T id, String account) {
         LoginStatus loginStatus = LoginStatus.builder()
                 .id(id)
-                .type(Type.SUCCESS).description("登录成功")
+                .account(account)
+                .type(Type.SUCCESS)
+                .description("登录成功")
                 .build().setInfo();
         return loginStatus;
     }
 
-    public static LoginStatus success(String account) {
-        LoginStatus loginStatus = LoginStatus.builder()
-                .account(account)
-                .type(Type.SUCCESS).description("登录成功")
-                .build().setInfo();
-        return loginStatus;
-    }
 
-    public static LoginStatus fail(Long id, String description) {
+    public static <T> LoginStatus fail(T id, String account, String description) {
         return LoginStatus.builder()
                 .id(id)
-                .type(Type.FAIL).description(description)
-                .build().setInfo();
-    }
-
-    public static LoginStatus fail(String account, String description) {
-        return LoginStatus.builder()
                 .account(account)
-                .type(Type.FAIL).description(description)
+                .type(Type.FAIL)
+                .description(description)
                 .build().setInfo();
     }
 
-    public static LoginStatus pwdError(Long id, String description) {
+    public static <T> LoginStatus pwdError(T id, String description) {
         return LoginStatus.builder()
                 .id(id)
-                .type(Type.PWD_ERROR).description(description)
+                .type(Type.PWD_ERROR)
+                .description(description)
                 .build().setInfo();
     }
 
@@ -93,5 +86,4 @@ public class LoginStatus implements Serializable {
         PWD_ERROR,
         FAIL;
     }
-
 }

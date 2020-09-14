@@ -1,16 +1,17 @@
 package com.github.sparkzxl.oauth.entity;
 
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.google.common.collect.Lists;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
- * description：security用户
+ * description：授权登录用户
  *
  * @author： zhouxinlei
  * @date： 2020-06-24 16:35:11
@@ -39,17 +40,17 @@ public class AuthUserDetail implements UserDetails {
      */
     private Collection<SimpleGrantedAuthority> authorities;
 
-    private final AuthUserInfo authUserInfo;
+    private List<String> authorityList;
 
-    public AuthUserDetail(AuthUserInfo authUserInfo) {
-        this.authUserInfo = authUserInfo;
-        this.setId(authUserInfo.getId());
-        this.setUsername(authUserInfo.getAccount());
-        this.setPassword(authUserInfo.getPassword());
-        this.setEnabled(authUserInfo.getStatus());
-        if (authUserInfo.getAuthorityList() != null) {
-            authorities = new ArrayList<>();
-            authUserInfo.getAuthorityList().forEach(item -> authorities.add(new SimpleGrantedAuthority(item)));
+    public AuthUserDetail(Long id, String username, String password, Boolean enabled, List<String> authorityList) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.authorityList = authorityList;
+        if (CollectionUtils.isNotEmpty(authorityList)) {
+            this.authorities = Lists.newArrayList();
+            authorityList.forEach(item -> this.authorities.add(new SimpleGrantedAuthority(item)));
         }
     }
 

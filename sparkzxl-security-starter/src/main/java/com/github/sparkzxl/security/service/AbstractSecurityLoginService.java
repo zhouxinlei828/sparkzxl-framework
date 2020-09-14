@@ -18,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * description: 登录授权Service
@@ -63,58 +65,55 @@ public abstract class AbstractSecurityLoginService {
      */
     public AuthToken login(LoginDTO authRequest) {
         String account = authRequest.getAccount();
-        AuthUserDetail adminUserDetails = (AuthUserDetail) userDetailsService.loadUserByUsername(account);
-        ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(adminUserDetails);
-        AuthUserInfo authUserInfo = adminUserDetails.getAuthUserInfo();
+        AuthUserDetail authUserDetail = (AuthUserDetail) userDetailsService.loadUserByUsername(account);
+        ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(authUserDetail);
         //校验密码输入是否正确
-        checkPasswordError(authRequest, authUserInfo);
-        AuthToken authToken = authorization(adminUserDetails, authUserInfo);
-        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserInfo.getId())));
+        checkPasswordError(authRequest, authUserDetail);
+        AuthToken authToken = authorization(authUserDetail);
+        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserDetail.getId(), authUserDetail.getUsername())));
         return authToken;
     }
 
     /**
      * 授权登录获取token
      *
-     * @param adminUserDetails 授权用户
-     * @param authUserInfo     全局用户信息
+     * @param authUserDetail 授权用户
      * @return AuthToken
      */
-    public AuthToken authorization(AuthUserDetail adminUserDetails, AuthUserInfo authUserInfo) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
-                null, adminUserDetails.getAuthorities());
+    public AuthToken authorization(AuthUserDetail authUserDetail) {
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
+                null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        authUserInfo.setPassword(null);
         AuthToken authToken = new AuthToken();
-        authToken.setToken(createJwtToken(authUserInfo));
+        authToken.setToken(createJwtToken(authUserDetail));
         authToken.setExpiration(jwtProperties.getExpire());
-        authToken.setAuthUserInfo(authUserInfo);
+        authToken.setAuthUserDetail(authUserDetail);
         authToken.setTokenHead(BaseContextConstant.BEARER_TOKEN);
         //设置accessToken缓存
-        accessToken(authToken, authUserInfo);
+        accessToken(authToken, authUserDetail);
         return authToken;
     }
 
 
-    private String createJwtToken(AuthUserInfo globalAuthUser) {
+    private String createJwtToken(AuthUserDetail authUserDetail) {
         Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
         JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
-                .sub(globalAuthUser.getAccount())
+                .sub(authUserDetail.getUsername())
                 .iat(System.currentTimeMillis())
-                .authorities(globalAuthUser.getAuthorityList())
-                .username(globalAuthUser.getAccount())
+                .authorities(authUserDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .username(authUserDetail.getUsername())
                 .expire(expire)
                 .build();
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(LoginDTO authRequest, AuthUserInfo authUserInfo) {
+    private void checkPasswordError(LoginDTO authRequest, AuthUserDetail authUserDetail) {
         String encryptPassword = Md5Utils.encrypt(authRequest.getPassword());
-        log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserInfo.getPassword());
+        log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserDetail.getPassword());
         //数据库密码比对
-        boolean verifyResult = StringUtils.equals(encryptPassword, authUserInfo.getPassword());
+        boolean verifyResult = StringUtils.equals(encryptPassword, authUserDetail.getPassword());
         if (!verifyResult) {
-            SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUserInfo.getId(),
+            SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUserDetail.getId(),
                     ResponseResultStatus.PASSWORD_ERROR.getMessage())));
             ResponseResultStatus.PASSWORD_ERROR.assertNotTrue(false);
         }
@@ -123,9 +122,9 @@ public abstract class AbstractSecurityLoginService {
     /**
      * 设置accessToken缓存
      *
-     * @param authToken 用户token
-     * @param authUser  认证用户
+     * @param authToken      用户token
+     * @param authUserDetail 认证用户
      */
-    public abstract void accessToken(AuthToken authToken, AuthUserInfo authUser);
+    public abstract void accessToken(AuthToken authToken, AuthUserDetail authUserDetail);
 
 }

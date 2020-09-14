@@ -36,7 +36,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
         if (ObjectUtils.isNotEmpty(cacheTemplate)) {
             return cacheTemplate.get(key);
         }
-        SparkZxlExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存支持");
+        SparkZxlExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存");
         return null;
     }
 }

@@ -11,8 +11,8 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
  */
 public class BaseContextHandler {
 
-    public static Long getUserId() {
-        return (Long) RequestContextHolderUtils.getAttribute(BaseContextConstant.APPLICATION_AUTH_USER_ID);
+    public static <T> T getUserId() {
+        return (T) RequestContextHolderUtils.getAttribute(BaseContextConstant.APPLICATION_AUTH_USER_ID);
     }
 
     public static String getAccount() {

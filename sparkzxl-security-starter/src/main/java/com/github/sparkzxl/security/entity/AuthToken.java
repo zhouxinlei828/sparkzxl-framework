@@ -29,7 +29,7 @@ public class AuthToken implements Serializable {
     /**
      * 登录用户信息
      */
-    private AuthUserInfo authUserInfo;
+    private AuthUserDetail authUserDetail;
 
     /**
      * 访问令牌头前缀
