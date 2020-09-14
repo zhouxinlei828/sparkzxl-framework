@@ -31,6 +31,7 @@ sparkzxl-component                               -- 核心组件模块
 ├── sparkzxl-mail-starter                         -- 邮件组件
 ├── sparkzxl-oauth2-resource-starter	          -- oauth2资源保护组件
 ├── sparkzxl-oauth2-server-starter                -- oauth2授权组件
+├── sparkzxl-oss-starter                          -- 对象存储（兼容阿里云oss，minio等）组件
 ├── sparkzxl-patterns-starter                     -- 设计模式组件
 ├── sparkzxl-redisson-starter                     -- redisson分布式锁组件
 ├── sparkzxl-security-starter                     -- 权限控制组件
@@ -51,6 +52,7 @@ sparkzxl-component                               -- 核心组件模块
 - [sparkzxl-log-starter组件](222)
 - [sparkzxl-mail-starter组件](222)
 - [sparkzxl-oauth2-resource-starter组件](222)
+- [sparkzxl-oss-starter组件](222)
 - [sparkzxl-oauth2-server-starter组件](222)
 - [sparkzxl-patterns-starter组件](222)
 - [sparkzxl-redisson-starter组件](222)

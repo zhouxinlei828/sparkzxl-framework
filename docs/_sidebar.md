@@ -13,6 +13,7 @@
 	* [sparkzxl-mail-starter组件](222)
 	* [sparkzxl-oauth2-resource-starter组件](222)
 	* [sparkzxl-oauth2-server-starter组件](222)
+	* [sparkzxl-oss-starter组件](222)
 	* [sparkzxl-patterns-starter组件](222)
 	* [sparkzxl-redisson-starter组件](222)
 	* [sparkzxl-security-starter组件](222)
