@@ -19,5 +19,5 @@
 	* [sparkzxl-security-starter组件](222)
 	* [sparkzxl-swagger-starter组件](222)
 	* [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
-	* [sparkzxl-web-starter组件](222)
+	* [sparkzxl-web-starter组件](forward/sparkzxl-web.md)
 	* [sparkzxl-zookeeper-starter组件](222)

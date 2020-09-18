@@ -14,6 +14,7 @@
 - [sparkzxl-core组件](forward/sparkzxl-core.md)
 - [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
 - [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
+- [sparkzxl-web-starter组件](forward/sparkzxl-web.md)
 
 ## 组件简介
 ```Text
@@ -59,5 +60,5 @@ sparkzxl-component                               -- 核心组件模块
 - [sparkzxl-security-starter组件](222)
 - [sparkzxl-swagger-starter组件](222)
 - [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
-- [sparkzxl-web-starter组件](222)
+- [sparkzxl-web-starter组件](forward/sparkzxl-web.md)
 - [sparkzxl-zookeeper-starter组件](222)

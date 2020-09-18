@@ -1,6 +1,8 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.date.*;
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.URLUtil;
 import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -203,4 +205,10 @@ public class DateUtils extends DateUtil {
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
+    public static void main(String[] args) {
+        Snowflake snowflake = IdUtil.createSnowflake(0, 10);
+        for (int i = 0; i < 3; i++) {
+            System.out.println(snowflake.nextId());
+        }
+    }
 }
