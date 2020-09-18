@@ -119,9 +119,14 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
      */
     PARAM_FLOW(1003, "热点参数访问限制，请稍后再试"),
 
-
+    /**
+     * token签名不合法
+     */
     JWT_VALID_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token签名不合法"),
 
+    /**
+     * token已过期
+     */
     JWT_EXPIRED_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token已过期");
 
     final int code;
