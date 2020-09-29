@@ -1,22 +1,17 @@
 package com.github.sparkzxl.web.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.google.common.collect.ImmutableMap;
 import com.github.sparkzxl.core.enums.Enumerator;
-import com.github.sparkzxl.web.utils.JacksonUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -24,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -40,6 +36,10 @@ public class JacksonConfig {
         Map<Class<?>, JsonSerializer<?>> jsonSerializerMap = ImmutableMap.<Class<?>, JsonSerializer<?>>builder()
                 .put(Long.class, ToStringSerializer.instance)
                 .put(Long.TYPE, ToStringSerializer.instance)
+                .put(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .put(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .put(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")))
+                .put(Date.class, new DateSerializer(false, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")))
                 .put(Enumerator.class, new JsonSerializer<Enumerator>() {
                     @Override
                     public void serialize(Enumerator enumerator, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
@@ -53,28 +53,4 @@ public class JacksonConfig {
         return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializersByType(jsonSerializerMap)
                 .featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
     }
-
-    @Bean
-    @Primary
-    @ConditionalOnMissingBean(ObjectMapper.class)
-    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        objectMapper.registerModule(javaTimeModule);
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-        // 通过该方法对mapper对象进行设置，所有序列化的对象都将按改规则进行系列化
-        // Include.Include.ALWAYS 默认
-        // Include.NON_DEFAULT 属性为默认值不序列化
-        // Include.NON_EMPTY 属性为 空（""） 或者为 NULL 都不序列化，则返回的json是没有这个字段的。这样对移动端会更省流量
-        // Include.NON_NULL 属性为NULL 不序列化
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // 允许出现单引号
-        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        JacksonUtils.setObjectMapper(objectMapper);
-        return objectMapper;
-    }
-
 }

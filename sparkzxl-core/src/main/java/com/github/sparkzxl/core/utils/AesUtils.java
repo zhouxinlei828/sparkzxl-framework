@@ -34,5 +34,4 @@ public class AesUtils {
     public static String decryptStr(String content) {
         return aes.decryptStr(content, CharsetUtil.CHARSET_UTF_8);
     }
-
 }

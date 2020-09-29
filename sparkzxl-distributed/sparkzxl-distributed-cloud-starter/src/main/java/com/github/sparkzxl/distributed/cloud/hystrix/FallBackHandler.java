@@ -14,5 +14,4 @@ public class FallBackHandler {
     public static void fallBack() {
         RequestContextHolderUtils.setAttribute(CoreConstant.FALLBACK, true);
     }
-
 }
