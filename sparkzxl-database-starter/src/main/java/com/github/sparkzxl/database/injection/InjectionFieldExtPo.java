@@ -1,8 +1,8 @@
 package com.github.sparkzxl.database.injection;
 
 import cn.hutool.core.util.StrUtil;
-import com.google.common.base.Objects;
 import com.github.sparkzxl.database.annonation.InjectionField;
+import com.google.common.base.Objects;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,10 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * description: 字段表增强属性
- *
- * @author: zhouxinlei
- * @date: 2020-08-21 18:00:28
+ * @author zuihou
+ * @date 2020年02月03日18:48:15
  */
 @Data
 @NoArgsConstructor
@@ -27,17 +25,17 @@ public class InjectionFieldExtPo extends InjectionFieldPo {
      */
     private Set<Serializable> keys = new HashSet<>();
 
-
     public InjectionFieldExtPo(InjectionField rf) {
         super(rf);
     }
 
     public InjectionFieldExtPo(InjectionFieldPo po, Set<Serializable> keys) {
         this.api = po.getApi();
-        this.feign = po.getFeign();
+        this.apiClass = po.getApiClass();
         this.key = po.getKey();
         this.method = po.getMethod();
         this.beanClass = po.getBeanClass();
+        this.type = po.getType();
         this.keys = keys;
     }
 
@@ -62,7 +60,7 @@ public class InjectionFieldExtPo extends InjectionFieldPo {
         if (StrUtil.isNotEmpty(api)) {
             isEquals = isEquals && Objects.equal(api, that.api);
         } else {
-            isEquals = isEquals && Objects.equal(feign, that.feign);
+            isEquals = isEquals && Objects.equal(apiClass, that.apiClass);
         }
 
         boolean isEqualsKeys = keys.size() == that.keys.size() && keys.containsAll(that.keys);
@@ -72,6 +70,6 @@ public class InjectionFieldExtPo extends InjectionFieldPo {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(api, feign, method, keys);
+        return Objects.hashCode(api, apiClass, method, keys);
     }
 }

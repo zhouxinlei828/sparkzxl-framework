@@ -1,18 +1,16 @@
 package com.github.sparkzxl.database.injection;
 
 import cn.hutool.core.util.StrUtil;
-import com.google.common.base.Objects;
 import com.github.sparkzxl.database.annonation.InjectionField;
+import com.google.common.base.Objects;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * description:
- *
- * @author: zhouxinlei
- * @date: 2020-07-19 08:54:07
-*/
+ * @author zuihou
+ * @date 2020年02月03日18:48:29
+ */
 @Data
 @NoArgsConstructor
 @ToString
@@ -43,7 +41,7 @@ public class InjectionFieldPo {
      * 如： @InjectionField(api="userServiceImpl") 等价于 @InjectionField(feign=UserService.class)
      * 如： @InjectionField(api="userController") 等价于 @InjectionField(feign=UserApi.class)
      */
-    protected Class<? extends Object> feign;
+    protected Class<? extends Object> apiClass;
 
     protected Class<? extends Object> beanClass;
 
@@ -53,13 +51,18 @@ public class InjectionFieldPo {
      * @return
      */
     protected String method;
+    /**
+     * 字典类型
+     */
+    protected String type;
 
     public InjectionFieldPo(InjectionField rf) {
         this.api = rf.api();
-        this.feign = rf.feign();
+        this.apiClass = rf.apiClass();
         this.key = rf.key();
         this.method = rf.method();
         this.beanClass = rf.beanClass();
+        this.type = rf.dictType();
     }
 
     @Override
@@ -77,7 +80,7 @@ public class InjectionFieldPo {
         if (StrUtil.isNotEmpty(api)) {
             isEquals = isEquals && Objects.equal(api, that.api);
         } else {
-            isEquals = isEquals && Objects.equal(feign, that.feign);
+            isEquals = isEquals && Objects.equal(apiClass, that.apiClass);
         }
 
         return isEquals;
@@ -85,6 +88,6 @@ public class InjectionFieldPo {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(api, feign, method);
+        return Objects.hashCode(api, apiClass, method);
     }
 }

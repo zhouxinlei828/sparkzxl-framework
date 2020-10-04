@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties("sparkzxl.injection")
 public class InjectionProperties {
+
     /**
      * 是否启用远程查询
      */
@@ -25,6 +26,14 @@ public class InjectionProperties {
      * 本地缓存配置信息
      */
     private GuavaCache guavaCache = new GuavaCache();
+    /**
+     * 字典类型 和 code 的分隔符
+     */
+    private String dictSeparator = "###";
+    /**
+     * 递归最大深度
+     */
+    private Integer maxDepth = 3;
 
     @Data
     public static class GuavaCache {

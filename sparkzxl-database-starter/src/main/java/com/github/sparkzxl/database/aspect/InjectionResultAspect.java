@@ -10,10 +10,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * description: InjectionResult 注解的 AOP 工具
+ * InjectionResult 注解的 AOP 工具
  *
- * @author: zhouxinlei
- * @date: 2020-07-19 08:49:08
+ * @author zuihou
+ * @create 2020年01月19日09:27:41
  */
 @Aspect
 @AllArgsConstructor
@@ -29,12 +29,13 @@ public class InjectionResultAspect {
 
 
     @Around("methodPointcut()&&@annotation(injectionResult)")
-    public Object interceptor(ProceedingJoinPoint pjp, InjectionResult injectionResult) throws Throwable {
+    public Object interceptor(ProceedingJoinPoint joinPoint, InjectionResult injectionResult) throws Throwable {
+        Object proceed = joinPoint.proceed();
         try {
-            return injectionCore.injection(pjp, injectionResult);
+            injectionCore.injection(proceed, injectionResult.isUseCache());
         } catch (Exception e) {
-            log.error("AOP拦截@InjectionResult出错", e);
-            return pjp.proceed();
+            log.error("AOP拦截@RemoteResult出错", e);
         }
+        return proceed;
     }
 }
