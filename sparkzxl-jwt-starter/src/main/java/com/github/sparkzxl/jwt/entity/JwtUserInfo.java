@@ -1,8 +1,6 @@
 package com.github.sparkzxl.jwt.entity;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.List;
@@ -14,9 +12,9 @@ import java.util.List;
  * @date: 2020-07-14 07:51:20
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Builder
 public class JwtUserInfo {
+
+    private Long id;
     /**
      * 主题
      */

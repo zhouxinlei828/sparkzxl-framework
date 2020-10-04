@@ -2,8 +2,10 @@ package com.github.sparkzxl.jwt.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
@@ -72,24 +74,48 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public JwtUserInfo verifyTokenByRsa(String token) {
-        JwtUserInfo payloadDto = null;
         try {
             //从token中解析JWS对象
-            JWSObject jwsObject = JWSObject.parse(token);
-            RSAKey publicRsaKey = getRsaKey().toPublicJWK();
-            //使用RSA公钥创建RSA验证器
-            JWSVerifier jwsVerifier = new RSASSAVerifier(publicRsaKey);
-            ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
-            String payload = jwsObject.getPayload().toString();
-            payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
-            ResponseResultStatus.JWT_VALID_ERROR.assertCompare(payloadDto.getExpire().getTime(), System.currentTimeMillis());
-            return payloadDto;
+            JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
+            assert jwtUserInfo != null;
+            ResponseResultStatus.JWT_EXPIRED_ERROR.assertCompare(jwtUserInfo.getExpire().getTime(), System.currentTimeMillis());
+            return jwtUserInfo;
         } catch (Exception e) {
             log.warn("根据RSA校验token失败：{}", e.getMessage());
             SparkZxlExceptionAssert.businessFail(e.getMessage());
         }
-        return payloadDto;
+        return null;
     }
+
+    @Override
+    public JwtUserInfo getJwtUserInfo(String token) {
+        try {
+            JwtUserInfo jwtUserInfo = new JwtUserInfo();
+            JWSObject jwsObject = JWSObject.parse(token);
+            RSAKey publicRsaKey = getRsaKey().toPublicJWK();
+            JWSVerifier jwsVerifier = new RSASSAVerifier(publicRsaKey);
+            ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
+            String payload = jwsObject.getPayload().toString();
+            JSONObject jsonObject = JSONUtil.parseObj(payload);
+            Long id = jsonObject.getLong("id");
+            String sub = jsonObject.getStr("sub");
+            String username = jsonObject.getStr("user_name");
+            Long exp = jsonObject.getLong("exp");
+            Long iat = jsonObject.getLong("iat");
+            jwtUserInfo.setId(id);
+            jwtUserInfo.setSub(sub);
+            jwtUserInfo.setUsername(username);
+            jwtUserInfo.setIat(iat);
+            if (ObjectUtils.isNotEmpty(exp)){
+                jwtUserInfo.setExpire(DateUtils.date(exp));
+            }
+            return jwtUserInfo;
+        } catch (Exception e) {
+            log.warn("根据RSA校验token失败：{}", e.getMessage());
+        }
+        return null;
+    }
+
 
     @Override
     public String createTokenByHmac(JwtUserInfo jwtUserInfo) {

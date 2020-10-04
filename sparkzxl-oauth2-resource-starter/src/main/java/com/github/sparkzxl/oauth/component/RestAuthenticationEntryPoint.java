@@ -3,6 +3,7 @@ package com.github.sparkzxl.oauth.component;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,12 @@ import java.nio.charset.StandardCharsets;
  * @author zhouxinlei
  * @date 2020-05-24 13:35:00
  */
+@Slf4j
 public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
 
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
+        log.error("AuthenticationException：{}",e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);

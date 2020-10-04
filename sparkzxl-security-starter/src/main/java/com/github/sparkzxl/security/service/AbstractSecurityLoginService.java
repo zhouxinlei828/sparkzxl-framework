@@ -97,13 +97,12 @@ public abstract class AbstractSecurityLoginService {
 
     private String createJwtToken(AuthUserDetail authUserDetail) {
         Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
-        JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
-                .sub(authUserDetail.getUsername())
-                .iat(System.currentTimeMillis())
-                .authorities(authUserDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .username(authUserDetail.getUsername())
-                .expire(expire)
-                .build();
+        JwtUserInfo jwtUserInfo = new JwtUserInfo();
+        jwtUserInfo.setSub(authUserDetail.getUsername());
+        jwtUserInfo.setIat(System.currentTimeMillis());
+        jwtUserInfo.setAuthorities(authUserDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        jwtUserInfo.setUsername(authUserDetail.getUsername());
+        jwtUserInfo.setExpire(expire);
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 

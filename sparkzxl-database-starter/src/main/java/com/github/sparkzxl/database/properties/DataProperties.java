@@ -17,6 +17,6 @@ public class DataProperties {
 
     private long workerId = 0;
 
-    private long dataCenterId = 0;
+    private long dataCenterId = 10;
 
 }

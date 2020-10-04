@@ -3,9 +3,12 @@ package com.github.sparkzxl.oauth.config;
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.utils.ListUtils;
+import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
+import com.github.sparkzxl.oauth.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.oauth.properties.SecurityProperties;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +19,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 /**
@@ -26,6 +31,7 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
  * @author: zhouxinlei
  * @date: 2020-08-03 12:29:21
  */
+@AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties({SecurityProperties.class})
 @EnableWebSecurity
@@ -33,8 +39,24 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
 
-    public WebSecurityAutoConfig(SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
+    private final JwtTokenService jwtTokenService;
+
+    private final UserDetailsService userDetailsService;
+
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
+        return new JwtAuthenticationTokenFilter(jwtTokenService, userDetailsService);
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -64,19 +86,9 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and().addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 }

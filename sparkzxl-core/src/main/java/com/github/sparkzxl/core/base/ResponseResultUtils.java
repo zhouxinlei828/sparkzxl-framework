@@ -28,12 +28,13 @@ public class ResponseResultUtils {
         return StringUtils.removeStartIgnoreCase(header, BaseContextConstant.BEARER_TOKEN);
     }
 
-    public static void unauthorized(HttpServletResponse response) {
+    public static void unauthorized(HttpServletResponse response, String msg) {
         try {
+            int code = ResponseResultStatus.UN_AUTHORIZED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(ResponseResultStatus.UN_AUTHORIZED.getCode());
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED)).toStringPretty());
+            response.setStatus(code);
+            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
             log.info("");
             response.getWriter().flush();
         } catch (IOException e) {
@@ -41,12 +42,13 @@ public class ResponseResultUtils {
         }
     }
 
-    public static void forbidden(HttpServletResponse response) {
+    public static void forbidden(HttpServletResponse response, String msg) {
         try {
+            int code = ResponseResultStatus.REQ_REJECT.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(ResponseResultStatus.REQ_REJECT.getCode());
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(ResponseResultStatus.REQ_REJECT)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {
             log.error(e.getMessage());

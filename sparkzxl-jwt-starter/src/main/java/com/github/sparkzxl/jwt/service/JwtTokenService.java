@@ -28,6 +28,14 @@ public interface JwtTokenService {
     JwtUserInfo verifyTokenByRsa(String token);
 
     /**
+     * 根据token获取信息
+     *
+     * @param token token
+     * @return JwtUserInfo
+     */
+    JwtUserInfo getJwtUserInfo(String token);
+
+    /**
      * 根据HMAC算法生成token
      *
      * @param jwtUserInfo 负载信息
