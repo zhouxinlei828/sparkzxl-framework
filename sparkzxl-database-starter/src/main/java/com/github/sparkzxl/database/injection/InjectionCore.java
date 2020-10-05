@@ -5,6 +5,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageInfo;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.database.annonation.InjectionField;
 import com.github.sparkzxl.database.entity.RemoteData;
@@ -202,8 +203,8 @@ public class InjectionCore {
             typeMap = Maps.newConcurrentMap();
         }
 
-        if (obj instanceof IPage) {
-            List records = ((IPage) obj).getRecords();
+        if (obj instanceof PageInfo) {
+            List records = ((PageInfo) obj).getList();
             parseList(records, typeMap, depth);
             return;
         }
