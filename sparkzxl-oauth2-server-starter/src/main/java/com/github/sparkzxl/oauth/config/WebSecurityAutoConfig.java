@@ -8,7 +8,7 @@ import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.oauth.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.oauth.properties.SecurityProperties;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,17 +31,19 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
  * @author: zhouxinlei
  * @date: 2020-08-03 12:29:21
  */
-@AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties({SecurityProperties.class})
 @EnableWebSecurity
 public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
 
-    private final SecurityProperties securityProperties;
+    @Autowired(required = false)
+    private SecurityProperties securityProperties;
 
-    private final JwtTokenService jwtTokenService;
+    @Autowired(required = false)
+    private JwtTokenService jwtTokenService;
 
-    private final UserDetailsService userDetailsService;
+    @Autowired(required = false)
+    private UserDetailsService userDetailsService;
 
     @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
