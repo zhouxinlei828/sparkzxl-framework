@@ -40,7 +40,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @return 实体
      */
     @ApiOperation(value = "新增数据")
-    @PostMapping
+    @PostMapping("/save")
     default boolean save(@RequestBody @Validated SaveDTO saveDTO) {
         boolean result = handlerSave(saveDTO);
         if (result) {
@@ -68,7 +68,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @return boolean
      */
     @ApiOperation(value = "修改数据")
-    @PutMapping
+    @PutMapping("/update")
     default boolean update(@RequestBody @Validated UpdateDTO updateDTO) {
         boolean result = handlerUpdate(updateDTO);
         if (result) {
@@ -96,7 +96,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @return boolean
      */
     @ApiOperation(value = "删除数据")
-    @DeleteMapping
+    @DeleteMapping("/delete")
     @ApiImplicitParams({@ApiImplicitParam(name = "ids[]", value = "主键id", dataType = "array", paramType = "query"),
     })
     default boolean delete(@RequestParam("ids[]") List<Id> ids) {
@@ -211,9 +211,15 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         return StrUtil.EMPTY;
     }
 
+    /**
+     * 查询对象
+     *
+     * @param id 主键
+     * @return Entity
+     */
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "主键", dataType = "long", paramType = "query")})
     @ApiOperation(value = "查询数据", notes = "查询")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     default Entity get(@PathVariable Id id) {
         return getBaseService().getById(id);
     }
