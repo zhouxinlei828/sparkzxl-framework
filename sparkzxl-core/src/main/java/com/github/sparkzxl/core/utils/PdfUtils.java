@@ -179,8 +179,8 @@ public class PdfUtils {
     /**
      * 页尾
      *
-     * @param data
-     * @param @
+     * @param data 字符串
+     * @param top 上边距
      */
     public void addFooter(String data, float top) {
         pdfCanvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(1.5f).moveTo(left, top).lineTo(totalWidth, top).stroke();
@@ -248,10 +248,10 @@ public class PdfUtils {
      * @param left（左边距）
      * @param right（右边距）
      * @param top（上边距）
-     * @param hight（高度）
+     * @param height（高度）
      */
-    public void addRectLine(float lineWidth, float left, float right, float top, float hight) {
-        float topEnd = top - hight;
+    public void addRectLine(float lineWidth, float left, float right, float top, float height) {
+        float topEnd = top - height;
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
         canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
         canvas.setLineWidth(lineWidth);
