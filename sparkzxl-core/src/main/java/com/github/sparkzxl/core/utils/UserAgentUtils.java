@@ -63,7 +63,6 @@ public class UserAgentUtils extends UserAgentUtil {
         userAgentEntity.setOperatingSystem(simplifyOperatingSystem(operatingSystem.getName()));
         userAgentEntity.setUa(ua);
         return userAgentEntity;
-
     }
 
 }
