@@ -13,7 +13,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import com.github.sparkzxl.core.constant.FileConstant;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -92,8 +91,7 @@ public class OssTemplate implements InitializingBean {
      */
     public List<Grant> getGrantsAsList(String bucketName) {
         AccessControlList acl = amazonS3.getBucketAcl(bucketName);
-        List<Grant> grants = acl.getGrantsAsList();
-        return grants;
+        return acl.getGrantsAsList();
     }
 
     /**
@@ -154,7 +152,7 @@ public class OssTemplate implements InitializingBean {
     @SneakyThrows
     public String getObjectURL(String bucketName, String objectName) {
         String buildUrl;
-        String path = FileConstant.URL_SEPARATOR.concat(objectName);
+        String path = "/".concat(objectName);
         if (StringUtils.isNotEmpty(ossProperties.getCustomDomain())) {
             buildUrl = UrlBuilder.create()
                     .setScheme("https")

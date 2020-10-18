@@ -12,14 +12,14 @@ public class CoreConstant {
     /**
      * 空null
      */
-    public static String NULL_STRING = "null";
+    public static final String NULL_STRING = "null";
 
     /**
      * 空格
      */
-    public static String BLANK_SPACE = "　";
+    public static final String BLANK_SPACE = "　";
 
-    public static String REQUEST_TYPE = "feign";
+    public static final String REQUEST_TYPE = "feign";
 
     public static final String FALLBACK = "fallback";
 

@@ -47,7 +47,6 @@ public class RsaUtils {
 
     public static void main(String[] args) {
         KeyPair pair = SecureUtil.generateKeyPair("RSA");
-
         System.out.println(pair.getPrivate());
         System.out.println(pair.getPublic());
     }

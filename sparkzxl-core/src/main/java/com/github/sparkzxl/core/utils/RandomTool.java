@@ -15,9 +15,9 @@ public class RandomTool {
     public static String randomNumber(int length) {
         String sources = "0123456789";
         Random rand = new Random();
-        StringBuffer flag = new StringBuffer();
+        StringBuilder flag = new StringBuilder();
         for (int j = 0; j < length; j++) {
-            flag.append(sources.charAt(rand.nextInt(9)) + "");
+            flag.append(sources.charAt(rand.nextInt(9)));
         }
         return flag.toString();
     }
