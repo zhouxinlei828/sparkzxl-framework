@@ -1,12 +1,7 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.MD5;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
-import cn.hutool.crypto.symmetric.SymmetricCrypto;
-
-import java.util.Arrays;
 
 /**
  * description: MD5加密
