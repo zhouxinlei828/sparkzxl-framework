@@ -4,12 +4,11 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.DateUtils;
+import com.github.sparkzxl.core.utils.HuSecretKeyUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
-import com.google.common.collect.Maps;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -19,7 +18,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.KeyPairUtils;
-import com.github.sparkzxl.core.utils.Md5Utils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,7 +128,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
         try {
             //创建HMAC签名器
-            JWSSigner jwsSigner = new MACSigner(Md5Utils.encrypt(jwtProperties.getSecret()));
+            JWSSigner jwsSigner = new MACSigner(HuSecretKeyUtils.encryptMd5(jwtProperties.getSecret()));
             //签名
             jwsObject.sign(jwsSigner);
         } catch (Exception e) {
@@ -147,7 +145,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             //从token中解析JWS对象
             JWSObject jwsObject = JWSObject.parse(token);
             //创建HMAC验证器
-            JWSVerifier jwsVerifier = new MACVerifier(Md5Utils.encrypt(jwtProperties.getSecret()));
+            JWSVerifier jwsVerifier = new MACVerifier(HuSecretKeyUtils.encryptMd5(jwtProperties.getSecret()));
             ResponseResultStatus.JWT_VALID_ERROR.assertNotTrue(jwsObject.verify(jwsVerifier));
             String payload = jwsObject.getPayload().toString();
             payloadDto = JSONUtil.toBean(payload, JwtUserInfo.class);
