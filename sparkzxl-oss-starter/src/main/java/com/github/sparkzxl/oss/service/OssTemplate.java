@@ -14,10 +14,12 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.github.sparkzxl.oss.properties.OssProperties;
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URL;
@@ -278,6 +280,74 @@ public class OssTemplate implements InitializingBean {
         // 如果需要在完成文件上传的同时设置文件访问权限，请参考以下示例代码。
         // completeMultipartUploadRequest.setObjectACL(CannedAccessControlList.PublicRead);
         return amazonS3.completeMultipartUpload(completeMultipartUploadRequest);
+    }
+
+    @SneakyThrows
+    public CompleteMultipartUploadResult multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
+        //创建InitiateMultipartUploadRequest对象
+        InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(bucketName, objectName);
+        // 初始化分片
+        InitiateMultipartUploadResult initiateMultipartUploadResult = amazonS3.initiateMultipartUpload(initiateMultipartUploadRequest);
+        // 返回uploadId，它是分片上传事件的唯一标识，您可以根据这个uploadId发起相关的操作，如取消分片上传、查询分片上传等。
+        String uploadId = initiateMultipartUploadResult.getUploadId();
+
+        // partETags是PartETag的集合。PartETag由分片的ETag和分片号组成。
+        List<PartETag> partTagList = Lists.newArrayList();
+        // 计算文件有多少个分片。
+        // 1MB
+        final long partSize = 1024 * 1024L;
+        long fileSize = multipartFile.getSize();
+        int partCount = (int) (fileSize / partSize);
+        if (fileSize % partSize != 0) {
+            partCount++;
+        }
+        InputStream inputStream = multipartFile.getInputStream();
+        // 遍历分片上传。
+        return completeMultipartUploadResult(bucketName, objectName, uploadId, partTagList, partSize, fileSize, partCount, inputStream);
+    }
+
+    private CompleteMultipartUploadResult completeMultipartUploadResult(String bucketName, String objectName, String uploadId,
+                                                                        List<PartETag> partTagList, long partSize, long fileSize, int partCount,
+                                                                        InputStream inputStream) throws IOException {
+        for (int i = 0; i < partCount; i++) {
+            long startPos = i * partSize;
+            long curPartSize = (i + 1 == partCount) ? (fileSize - startPos) : partSize;
+            inputStream.skip(startPos);
+            UploadPartRequest uploadPartRequest = new UploadPartRequest();
+            uploadPartRequest.setBucketName(bucketName);
+            uploadPartRequest.setKey(objectName);
+            uploadPartRequest.setUploadId(uploadId);
+            uploadPartRequest.setInputStream(inputStream);
+            uploadPartRequest.setPartSize(curPartSize);
+            uploadPartRequest.setPartNumber(i + 1);
+            UploadPartResult uploadPartResult = uploadPart(uploadPartRequest);
+            partTagList.add(uploadPartResult.getPartETag());
+        }
+        CompleteMultipartUploadRequest completeMultipartUploadRequest =
+                new CompleteMultipartUploadRequest(bucketName, objectName, uploadId, partTagList);
+        return amazonS3.completeMultipartUpload(completeMultipartUploadRequest);
+    }
+
+    @SneakyThrows
+    public CompleteMultipartUploadResult multipartUpload(String bucketName, String objectName, InputStream inputStream, long fileLength) {
+        //创建InitiateMultipartUploadRequest对象
+        InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(bucketName, objectName);
+        // 初始化分片
+        InitiateMultipartUploadResult initiateMultipartUploadResult = amazonS3.initiateMultipartUpload(initiateMultipartUploadRequest);
+        // 返回uploadId，它是分片上传事件的唯一标识，您可以根据这个uploadId发起相关的操作，如取消分片上传、查询分片上传等。
+        String uploadId = initiateMultipartUploadResult.getUploadId();
+
+        // partETags是PartETag的集合。PartETag由分片的ETag和分片号组成。
+        List<PartETag> partETags = Lists.newArrayList();
+        // 计算文件有多少个分片。
+        // 1MB
+        final long partSize = 1024 * 1024L;
+        int partCount = (int) (fileLength / partSize);
+        if (fileLength % partSize != 0) {
+            partCount++;
+        }
+        // 遍历分片上传。
+        return completeMultipartUploadResult(bucketName, objectName, uploadId, partETags, partSize, fileLength, partCount, inputStream);
     }
 
     /**
