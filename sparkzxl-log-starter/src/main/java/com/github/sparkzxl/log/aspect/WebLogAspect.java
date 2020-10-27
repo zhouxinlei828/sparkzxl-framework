@@ -1,6 +1,5 @@
 package com.github.sparkzxl.log.aspect;
 
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.log.entity.RequestErrorInfo;
 import com.github.sparkzxl.log.entity.RequestInfo;
@@ -15,8 +14,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;

@@ -152,7 +152,7 @@ public class OssTemplate implements InitializingBean {
     @SneakyThrows
     public String getObjectURL(String bucketName, String objectName) {
         String buildUrl;
-        String path = "/".concat(objectName);
+        String path = bucketName.concat("/").concat(objectName);
         if (StringUtils.isNotEmpty(ossProperties.getCustomDomain())) {
             buildUrl = UrlBuilder.create()
                     .setScheme("https")
@@ -161,11 +161,15 @@ public class OssTemplate implements InitializingBean {
                     .build();
             return URLUtil.decode(buildUrl);
         }
-        String domain = bucketName.concat(".").concat(ossProperties.getEndpoint());
-        buildUrl = UrlBuilder.create()
-                .setHost(domain)
-                .addPath(path)
-                .build();
+        String endpoint = ossProperties.getEndpoint();
+        if (StringUtils.startsWith(endpoint, "http")) {
+            buildUrl = endpoint.concat("/").concat(path);
+        } else {
+            buildUrl = UrlBuilder.create()
+                    .setHost(endpoint)
+                    .addPath(path)
+                    .build();
+        }
         return URLUtil.decode(buildUrl);
     }
 
