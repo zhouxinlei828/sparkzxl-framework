@@ -49,17 +49,17 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        ResponseResultStatus responseResultStatus = ResponseResultStatus.SUCCESS;
         if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(CoreConstant.FALLBACK))) {
-            return ApiResult.apiResult(ResponseResultStatus.SERVICE_DEGRADATION);
+            responseResultStatus = ResponseResultStatus.SERVICE_DEGRADATION;
         }
-        if (body instanceof Boolean) {
-            boolean data = (Boolean) body;
-            if (!data) {
-                return ApiResult.apiResult(ResponseResultStatus.FAILURE, body);
-            }
-        } else if (body instanceof String) {
-            return objectMapper.writeValueAsString(ApiResult.apiResult(ResponseResultStatus.SUCCESS, body));
+        if (body instanceof Boolean && !(Boolean) body) {
+            responseResultStatus = ResponseResultStatus.FAILURE;
         }
-        return ApiResult.apiResult(ResponseResultStatus.SUCCESS, body);
+        String returnTypeName = returnType.getGenericParameterType().getTypeName();
+        if (returnTypeName.equals(String.class.getTypeName())) {
+            return objectMapper.writeValueAsString(ApiResult.apiResult(responseResultStatus, body));
+        }
+        return ApiResult.apiResult(responseResultStatus, body);
     }
 }

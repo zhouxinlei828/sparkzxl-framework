@@ -6,7 +6,7 @@
     <!--日志文件保存路径-->
     <springProperty name="springAppName" scope="context" source="spring.application.name"/>
 
-    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="/home/${springAppName}/logs"/>
+    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="../logs"/>
 
 
     <!-- 控制台 日志格式化 -->
