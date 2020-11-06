@@ -2,7 +2,6 @@ package com.github.sparkzxl.distributed.cloud.config;
 
 import com.github.sparkzxl.distributed.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.github.sparkzxl.distributed.cloud.interceptor.FeignAddHeaderRequestInterceptor;
-import com.github.sparkzxl.distributed.cloud.utils.DateFormatRegister;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -20,16 +19,6 @@ public class OpenFeignAutoConfiguration {
 
     public OpenFeignAutoConfiguration() {
 
-    }
-
-    /**
-     * 在feign调用方配置， 解决入参和出参是 date 类型
-     *
-     * @return DateFormatRegister
-     */
-    @Bean
-    public DateFormatRegister dateFormatRegister() {
-        return new DateFormatRegister();
     }
 
     /**
