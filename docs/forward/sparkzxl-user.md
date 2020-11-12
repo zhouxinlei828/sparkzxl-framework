@@ -47,7 +47,7 @@
     private void accessToken(String username, OAuth2AccessToken oAuth2AccessToken) {
         AuthUserInfo<Long> authUserInfo = authUserService.getAuthUserInfo(username);
         log.info("AuthUserInfo json is {}", JSONUtil.toJsonPrettyStr(authUserInfo));
-        String buildKey = KeyUtils.buildKey(BaseContextConstant.AUTH_USER, oAuth2AccessToken.getValue());
+        String buildKey = KeyUtils.generateKey(BaseContextConstant.AUTH_USER, oAuth2AccessToken.getValue());
         cacheTemplate.set(buildKey, authUserInfo, (long) oAuth2AccessToken.getExpiresIn());
     }
 ```

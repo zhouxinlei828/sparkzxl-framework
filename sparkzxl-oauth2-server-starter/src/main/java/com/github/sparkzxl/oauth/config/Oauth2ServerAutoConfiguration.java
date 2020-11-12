@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oauth.config;
 
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.core.utils.KeyPairUtils;
+import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
 import com.github.sparkzxl.oauth.enhancer.JwtTokenEnhancer;
 import com.github.sparkzxl.oauth.properties.Oauth2Properties;
@@ -106,7 +106,7 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         if (ObjectUtils.isNotEmpty(keyStoreProperties) && keyStoreProperties.isEnable()) {
-            KeyPair keyPair = KeyPairUtils.keyPair(keyStoreProperties.getPath(),
+            KeyPair keyPair = HuSecretUtils.keyPair(keyStoreProperties.getPath(),
                     keyStoreProperties.getAlias(), keyStoreProperties.getPassword());
             Optional.ofNullable(keyPair).ifPresent(jwtAccessTokenConverter::setKeyPair);
         }
