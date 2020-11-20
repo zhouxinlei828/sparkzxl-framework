@@ -11,7 +11,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date: 2020-07-10 17:47:04
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.swagger")
+@ConfigurationProperties(
+        prefix = "knife4j"
+)
 public class SwaggerProperties {
 
     private String groupName;

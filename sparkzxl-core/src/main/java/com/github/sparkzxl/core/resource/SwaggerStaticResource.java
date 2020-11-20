@@ -16,10 +16,12 @@ public class SwaggerStaticResource {
             "/swagger-resources/**",
             "/swagger/**",
             "/**/v2/api-docs",
+            "/v3/api-docs",
             "/**/*.js",
             "/**/*.css",
             "/**/*.png",
             "/**/*.ico",
+            "/favicon.ico",
             "/webjars/**",
             "/doc.html",
             "/actuator/**"

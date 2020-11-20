@@ -3,6 +3,7 @@ package com.github.sparkzxl.swagger.config;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerAutoConfiguration {
 
+    private final OpenApiExtensionResolver openApiExtensionResolver;
+
+    public SwaggerAutoConfiguration(OpenApiExtensionResolver openApiExtensionResolver) {
+        this.openApiExtensionResolver = openApiExtensionResolver;
+    }
+
     @Bean(value = "defaultApi2")
     public Docket defaultApi2(SwaggerProperties swaggerProperties) {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -38,7 +45,8 @@ public class SwaggerAutoConfiguration {
                 .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build()
-                .ignoredParameterTypes(AuthUserInfo.class);
+                .ignoredParameterTypes(AuthUserInfo.class)
+                .extensions(openApiExtensionResolver.buildExtensions(swaggerProperties.getGroupName()));
     }
 
 
