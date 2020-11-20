@@ -3,7 +3,7 @@ package com.github.sparkzxl.security.service;
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstant;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.utils.HuSecretKeyUtils;
+import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
@@ -106,7 +106,7 @@ public abstract class AbstractSecurityLoginService {
     }
 
     private void checkPasswordError(LoginDTO authRequest, AuthUserDetail authUserDetail) {
-        String encryptPassword = HuSecretKeyUtils.encryptMd5(authRequest.getPassword());
+        String encryptPassword = HuSecretUtils.encryptMd5(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserDetail.getPassword());
         //数据库密码比对
         boolean verifyResult = StringUtils.equals(encryptPassword, authUserDetail.getPassword());

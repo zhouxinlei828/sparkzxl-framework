@@ -2,7 +2,7 @@ package com.github.sparkzxl.user.service.impl;
 
 import com.github.sparkzxl.core.constant.BaseContextConstant;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
-import com.github.sparkzxl.core.utils.KeyUtils;
+import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.cache.template.CacheTemplate;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
@@ -26,7 +26,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
         log.info("accessToken is {}", accessToken);
-        AuthUserInfo authUser = getCache(KeyUtils.buildKey(BaseContextConstant.AUTH_USER, accessToken));
+        AuthUserInfo authUser = getCache(BuildKeyUtils.generateKey(BaseContextConstant.AUTH_USER, accessToken));
         ResponseResultStatus.UN_AUTHORIZED.assertNotNull(authUser);
         return authUser;
     }

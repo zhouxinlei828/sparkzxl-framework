@@ -1,7 +1,7 @@
 package com.github.sparkzxl.database.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.sparkzxl.core.utils.KeyUtils;
+import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.cache.template.CacheTemplate;
 import com.github.sparkzxl.database.base.mapper.SuperMapper;
 import com.github.sparkzxl.database.base.service.SuperCacheService;
@@ -40,7 +40,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     @Transactional(rollbackFor = {Exception.class})
     public boolean removeById(Serializable id) {
         boolean bool = super.removeById(id);
-        this.cacheTemplate.remove(KeyUtils.buildKey(this.getRegion(), id));
+        this.cacheTemplate.remove(BuildKeyUtils.generateKey(this.getRegion(), id));
         return bool;
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
             return true;
         } else {
             boolean flag = super.removeByIds(idList);
-            idList.forEach(id -> this.cacheTemplate.remove(KeyUtils.buildKey(this.getRegion(), id)));
+            idList.forEach(id -> this.cacheTemplate.remove(BuildKeyUtils.generateKey(this.getRegion(), id)));
             return flag;
         }
     }
@@ -61,7 +61,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     public boolean save(T model) {
         boolean result = super.save(model);
         if (model instanceof SuperEntity) {
-            this.cacheTemplate.set(KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId()), model);
+            this.cacheTemplate.set(BuildKeyUtils.generateKey(this.getRegion(), ((SuperEntity) model).getId()), model);
         }
         return result;
     }
@@ -71,7 +71,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
     public boolean updateById(T model) {
         boolean updateBool = super.updateById(model);
         if (model instanceof SuperEntity) {
-            this.cacheTemplate.remove(KeyUtils.buildKey(this.getRegion(), ((SuperEntity) model).getId()));
+            this.cacheTemplate.remove(BuildKeyUtils.generateKey(this.getRegion(), ((SuperEntity) model).getId()));
         }
         return updateBool;
     }

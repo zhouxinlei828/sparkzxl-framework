@@ -9,7 +9,7 @@ import cn.hutool.core.util.StrUtil;
  * @author: zhouxinlei
  * @date: 2020-07-13 14:07:32
  */
-public class KeyUtils {
+public class BuildKeyUtils {
 
     /**
      * 构建key
@@ -17,7 +17,7 @@ public class KeyUtils {
      * @param args 参数
      * @return String
      */
-    public static String buildKey(String template, Object... args) {
+    public static String generateKey(String template, Object... args) {
         StringBuilder key = new StringBuilder();
         if (args != null && args.length > 0) {
             for (int i = 0; i < args.length; i++) {
@@ -28,7 +28,7 @@ public class KeyUtils {
         return key.toString();
     }
 
-    public static String buildKey(Object... args) {
+    public static String generateKey(Object... args) {
         if (args.length == 1) {
             return String.valueOf(args[0]);
         } else {
@@ -37,6 +37,6 @@ public class KeyUtils {
     }
 
     public static String key(Object... args) {
-        return buildKey(args);
+        return generateKey(args);
     }
 }

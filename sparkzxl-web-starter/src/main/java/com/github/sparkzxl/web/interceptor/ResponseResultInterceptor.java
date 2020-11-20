@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.constant.BaseContextConstant;
 import com.github.sparkzxl.core.constant.CoreConstant;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.cache.template.CacheTemplate;
-import com.github.sparkzxl.core.utils.KeyUtils;
+import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.web.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -35,7 +35,7 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (ObjectUtils.isNotEmpty(cacheTemplate)) {
             String accessToken = ResponseResultUtils.getAuthHeader(request);
-            AuthUserInfo authUser = cacheTemplate.get(KeyUtils.buildKey(BaseContextConstant.AUTH_USER, accessToken));
+            AuthUserInfo authUser = cacheTemplate.get(BuildKeyUtils.generateKey(BaseContextConstant.AUTH_USER, accessToken));
             if (ObjectUtils.isNotEmpty(authUser)) {
                 request.setAttribute(BaseContextConstant.APPLICATION_AUTH_USER_ID, authUser.getId());
                 request.setAttribute(BaseContextConstant.APPLICATION_AUTH_ACCOUNT, authUser.getAccount());
