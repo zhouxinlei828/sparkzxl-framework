@@ -25,8 +25,8 @@
             <artifactId>sparkzxl-log-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-swagger-starter</artifactId>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
