@@ -30,7 +30,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${logHome}/${springAppName}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <maxHistory>7</maxHistory>
-            <maxFileSize>10MB</maxFileSize>
+            <maxFileSize>50MB</maxFileSize>
         </rollingPolicy>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers class="net.logstash.logback.composite.loggingevent.LoggingEventJsonProviders">

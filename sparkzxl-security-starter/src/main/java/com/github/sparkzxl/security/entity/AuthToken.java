@@ -19,7 +19,7 @@ public class AuthToken implements Serializable {
     /**
      * token
      */
-    private String token;
+    private String accessToken;
 
     /**
      * 有效期
@@ -34,7 +34,7 @@ public class AuthToken implements Serializable {
     /**
      * 访问令牌头前缀
      */
-    private String tokenHead;
+    private String tokenType;
 
 
 }

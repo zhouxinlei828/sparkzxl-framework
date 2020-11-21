@@ -4,13 +4,17 @@ import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.authorization.DynamicAccessDecisionManager;
+import com.github.sparkzxl.security.endpoint.AuthorizationEndPoint;
 import com.github.sparkzxl.security.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.security.intercept.DynamicSecurityMetadataSource;
 import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.github.sparkzxl.security.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.security.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.security.filter.DynamicSecurityFilter;
+import com.github.sparkzxl.security.service.AbstractSecurityLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,15 +54,16 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired(required = false)
     private UserDetailsService userDetailsService;
+    @Autowired(required = false)
+    private AbstractSecurityLoginService abstractSecurityLoginService;
 
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-        String[] excludeStaticPatterns = ListUtils.stringToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
+    public void configure(WebSecurity web) {
+        String[] excludeStaticPatterns = ListUtils.listToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
         web.ignoring().antMatchers(excludeStaticPatterns);
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
@@ -129,5 +134,12 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
         return new DynamicSecurityMetadataSource();
+    }
+
+    @Bean
+    @ConditionalOnWebApplication
+    @ConditionalOnProperty(name = "sparkzxl.security.enableLogin", havingValue = "true")
+    public AuthorizationEndPoint authorizationEndPoint() {
+        return new AuthorizationEndPoint(abstractSecurityLoginService);
     }
 }

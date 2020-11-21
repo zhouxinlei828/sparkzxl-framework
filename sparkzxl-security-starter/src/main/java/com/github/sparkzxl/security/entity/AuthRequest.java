@@ -1,17 +1,17 @@
-package com.github.sparkzxl.security.dto;
+package com.github.sparkzxl.security.entity;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 /**
- * description: 登录请求参数
+ * description: 登录请求
  *
- * @author zhouxinlei
- * @date 2020-05-24 13:38:55
+ * @author: zhouxinlei
+ * @date: 2020-11-21 17:15:25
  */
 @Data
-public class LoginDTO {
+public class AuthRequest {
 
     @NotEmpty(message = "账户不能为空")
     private String account;

@@ -84,7 +84,7 @@ public class LoginStatus<T> implements Serializable {
          */
         SUCCESS,
         PWD_ERROR,
-        FAIL;
+        FAIL
     }
 
 }

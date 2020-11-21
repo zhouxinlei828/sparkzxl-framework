@@ -62,9 +62,8 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-        String[] excludeStaticPatterns = ListUtils.stringToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
+    public void configure(WebSecurity web) {
+        String[] excludeStaticPatterns = ListUtils.listToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
         web.ignoring().antMatchers(excludeStaticPatterns);
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);

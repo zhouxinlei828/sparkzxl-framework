@@ -52,8 +52,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         ResponseResultStatus responseResultStatus = ResponseResultStatus.SUCCESS;
         if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(CoreConstant.FALLBACK))) {
             responseResultStatus = ResponseResultStatus.SERVICE_DEGRADATION;
-        }
-        if (body instanceof Boolean && !(Boolean) body) {
+        } else if (body instanceof Boolean && !(Boolean) body) {
             responseResultStatus = ResponseResultStatus.FAILURE;
         }
         String returnTypeName = returnType.getGenericParameterType().getTypeName();

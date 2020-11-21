@@ -1,8 +1,10 @@
 package com.github.sparkzxl.swagger.properties;
 
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
 
 /**
  * description: swagger属性配置
@@ -20,15 +22,50 @@ public class SwaggerProperties {
 
     private String basePackage;
 
-    private ApiInfo apiInfo;
+    private String title;
+
+    private String description;
+
+    private String version;
+
+    /**
+     * 许可证
+     **/
+    private String license = "";
+
+    /**
+     * 许可证URL
+     **/
+    private String licenseUrl = "";
+
+    private String termsOfServiceUrl;
+
+    private Contact contact = new Contact();
 
     @Data
-    public static class ApiInfo {
-        private String title;
-        private String description;
-        private String version;
-        private String termsOfServiceUrl;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AllowableValues {
+        private List<String> values;
+        private String valueType;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Contact {
+        /**
+         * 联系人
+         **/
+        private String name = "";
+        /**
+         * 联系人url
+         **/
+        private String url = "";
+        /**
+         * 联系人email
+         **/
+        private String email = "";
+    }
 
 }

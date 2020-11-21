@@ -7,7 +7,7 @@ import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
-import com.github.sparkzxl.security.dto.LoginDTO;
+import com.github.sparkzxl.security.entity.AuthRequest;
 import com.github.sparkzxl.security.entity.AuthToken;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
 import com.github.sparkzxl.security.entity.LoginStatus;
@@ -62,7 +62,7 @@ public abstract class AbstractSecurityLoginService {
      * @return java.lang.String
      * @throws Exception 异常
      */
-    public AuthToken login(LoginDTO authRequest) {
+    public AuthToken login(AuthRequest authRequest) {
         String account = authRequest.getAccount();
         AuthUserDetail authUserDetail = (AuthUserDetail) userDetailsService.loadUserByUsername(account);
         ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(authUserDetail);
@@ -84,10 +84,10 @@ public abstract class AbstractSecurityLoginService {
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthToken authToken = new AuthToken();
-        authToken.setToken(createJwtToken(authUserDetail));
+        authToken.setAccessToken(createJwtToken(authUserDetail));
         authToken.setExpiration(jwtProperties.getExpire());
         authToken.setAuthUserDetail(authUserDetail);
-        authToken.setTokenHead(BaseContextConstant.BEARER_TOKEN);
+        authToken.setTokenType(BaseContextConstant.BEARER_TOKEN);
         //设置accessToken缓存
         accessToken(authToken, authUserDetail);
         return authToken;
@@ -105,7 +105,7 @@ public abstract class AbstractSecurityLoginService {
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(LoginDTO authRequest, AuthUserDetail authUserDetail) {
+    private void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail) {
         String encryptPassword = HuSecretUtils.encryptMd5(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserDetail.getPassword());
         //数据库密码比对

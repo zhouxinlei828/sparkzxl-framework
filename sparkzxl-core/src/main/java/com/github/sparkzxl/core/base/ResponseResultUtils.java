@@ -35,7 +35,6 @@ public class ResponseResultUtils {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(code);
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
-            log.info("");
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());

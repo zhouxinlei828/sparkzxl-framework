@@ -14,6 +14,7 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -60,7 +61,9 @@ public class WebLogAspect {
         requestInfo.setHttpMethod(httpServletRequest.getMethod());
         requestInfo.setClassMethod(String.format("%s.%s", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
                 proceedingJoinPoint.getSignature().getName()));
-        requestInfo.setRequestParams(getRequestParameterJson(proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs()));
+        if (!httpServletRequest.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+            requestInfo.setRequestParams(getRequestParameterJson(proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs()));
+        }
         requestInfo.setResult(result);
         String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
         requestInfo.setTimeCost(timeCost);

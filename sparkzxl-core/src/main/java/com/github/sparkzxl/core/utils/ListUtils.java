@@ -148,7 +148,7 @@ public class ListUtils {
     }
 
 
-    public static String[] stringToArray(List<String> data) {
+    public static String[] listToArray(List<String> data) {
         if (isNotEmpty(data)) {
             return data.stream().map(String::valueOf).toArray(String[]::new);
         } else {

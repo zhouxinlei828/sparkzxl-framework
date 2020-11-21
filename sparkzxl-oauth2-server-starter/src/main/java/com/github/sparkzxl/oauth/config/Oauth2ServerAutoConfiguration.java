@@ -43,7 +43,6 @@ import java.util.Optional;
 @Slf4j
 public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
 
-
     @Autowired(required = false)
     private PasswordEncoder passwordEncoder;
     @Autowired(required = false)
