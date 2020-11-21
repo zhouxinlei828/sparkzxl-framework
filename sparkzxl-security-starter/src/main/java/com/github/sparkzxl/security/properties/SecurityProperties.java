@@ -17,6 +17,6 @@ public class SecurityProperties {
 
     private List<String> ignorePatterns;
 
-    private boolean enableLogin;
+    private boolean enableLogin = false;
 
 }
