@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -61,9 +62,7 @@ public class WebLogAspect {
         requestInfo.setHttpMethod(httpServletRequest.getMethod());
         requestInfo.setClassMethod(String.format("%s.%s", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
                 proceedingJoinPoint.getSignature().getName()));
-        if (!httpServletRequest.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
-            requestInfo.setRequestParams(getRequestParameterJson(proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs()));
-        }
+        requestInfo.setRequestParams(getRequestParameterJson(proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs()));
         requestInfo.setResult(result);
         String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
         requestInfo.setTimeCost(timeCost);

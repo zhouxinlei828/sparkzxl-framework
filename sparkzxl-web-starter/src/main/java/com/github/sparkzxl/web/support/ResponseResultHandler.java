@@ -50,12 +50,12 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ResponseResultStatus responseResultStatus = ResponseResultStatus.SUCCESS;
+        String returnTypeName = returnType.getGenericParameterType().getTypeName();
         if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(CoreConstant.FALLBACK))) {
             responseResultStatus = ResponseResultStatus.SERVICE_DEGRADATION;
         } else if (body instanceof Boolean && !(Boolean) body) {
             responseResultStatus = ResponseResultStatus.FAILURE;
         }
-        String returnTypeName = returnType.getGenericParameterType().getTypeName();
         if (returnTypeName.equals(String.class.getTypeName())) {
             return objectMapper.writeValueAsString(ApiResult.apiResult(responseResultStatus, body));
         }
