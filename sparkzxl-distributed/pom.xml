@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>sparkzxl-distributed-cloud-starter</module>
+        <module>sparkzxl-distributed-dubbo-starter</module>
     </modules>
 
 </project>
