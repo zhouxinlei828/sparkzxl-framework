@@ -4,8 +4,6 @@ package com.github.sparkzxl.swagger.properties;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.List;
-
 /**
  * description: swagger属性配置
  *
@@ -42,13 +40,6 @@ public class SwaggerProperties {
 
     private Contact contact = new Contact();
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class AllowableValues {
-        private List<String> values;
-        private String valueType;
-    }
 
     @Data
     @AllArgsConstructor
