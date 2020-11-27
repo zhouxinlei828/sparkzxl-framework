@@ -58,5 +58,10 @@
             <artifactId>sparkzxl-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-web-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
