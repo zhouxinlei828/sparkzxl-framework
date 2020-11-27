@@ -112,12 +112,17 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     /**
      * 黑名单
      */
-    REQ_BLACKLIST(1002, "IP已被禁止，请稍后再试"),
+    REQ_BLACKLIST(1002, "IP受限，请稍后再试"),
+
+    /**
+     * 请求次数过多
+     */
+    SYSTEM_BLOCK(1003, "系统负载过高，请稍后再试"),
 
     /**
      * 黑名单
      */
-    PARAM_FLOW(1003, "热点参数访问限制，请稍后再试"),
+    PARAM_FLOW(1004, "热点参数访问频繁，请稍后再试"),
 
     /**
      * token签名不合法
