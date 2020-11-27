@@ -1,5 +1,7 @@
 package com.github.sparkzxl.core.support;
 
+import com.github.sparkzxl.core.base.code.BaseEnumCode;
+
 /**
  * description：断言异常全局处理
  *
@@ -11,6 +13,10 @@ public class SparkZxlExceptionAssert {
 
     public static void businessFail(String message) {
         throw new BusinessException(ResponseResultStatus.FAILURE, null, message);
+    }
+
+    public static void businessFail(BaseEnumCode baseEnumCode) {
+        throw new BusinessException(baseEnumCode);
     }
 
     /**
