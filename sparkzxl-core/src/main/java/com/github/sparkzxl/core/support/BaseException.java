@@ -20,6 +20,10 @@ public class BaseException extends RuntimeException {
 
     private String message;
 
+    public BaseException(BaseEnumCode baseEnumCode) {
+        this.baseEnumCode = baseEnumCode;
+    }
+
     public BaseException(Throwable cause) {
         super(cause);
     }

@@ -13,4 +13,11 @@ public class SparkZxlExceptionAssert {
         throw new BusinessException(ResponseResultStatus.FAILURE, null, message);
     }
 
+    /**
+     * 服务降级异常处理
+     */
+    public static void serviceDegrade() {
+        throw new ServiceDegradeException(ResponseResultStatus.SERVICE_DEGRADATION);
+    }
+
 }

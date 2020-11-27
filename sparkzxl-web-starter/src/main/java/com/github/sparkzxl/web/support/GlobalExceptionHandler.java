@@ -4,6 +4,7 @@ import com.github.sparkzxl.core.constant.CoreConstant;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BusinessException;
+import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.web.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ApiResult businessException(BusinessException e) {
+        handleResponseResult();
+        log.error(e.getMessage());
+        int code = e.getBaseEnumCode().getCode();
+        String message = e.getMessage() == null ? e.getBaseEnumCode().getMessage() : e.getMessage();
+        return ApiResult.apiResult(code, message);
+    }
+
+    @ExceptionHandler(ServiceDegradeException.class)
+    public ApiResult serviceDegradeException(ServiceDegradeException e) {
         handleResponseResult();
         log.error(e.getMessage());
         int code = e.getBaseEnumCode().getCode();
