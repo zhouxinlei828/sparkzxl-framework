@@ -1,9 +1,11 @@
 package com.github.sparkzxl.cache.config;
 
 import com.github.sparkzxl.cache.serializer.FastJson2JsonRedisSerializer;
+import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
 import com.github.sparkzxl.cache.utils.TokenUtil;
 import com.github.sparkzxl.cache.template.RedisCacheTemplateImpl;
 import com.github.sparkzxl.cache.template.CacheTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -33,15 +35,15 @@ public class RedisConfiguration {
      */
     @Bean
     @ConditionalOnBean(RedisConnectionFactory.class)
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(@Autowired RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        RedisSerializer<Object> fastJson2JsonRedisSerializer = fastJson2JsonRedisSerializer();
+        RedisSerializer<Object> redisObjectSerializer = new RedisObjectSerializer();
         redisTemplate.setKeySerializer(stringSerializer);
         redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(fastJson2JsonRedisSerializer);
-        redisTemplate.setValueSerializer(fastJson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(redisObjectSerializer);
+        redisTemplate.setValueSerializer(redisObjectSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }

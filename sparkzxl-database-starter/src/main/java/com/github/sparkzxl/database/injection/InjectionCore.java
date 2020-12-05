@@ -30,14 +30,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
- * 字典数据注入工具类
- * 1. 通过反射将obj的字段上标记了@InjectionFiled注解的字段解析出来
- * 2. 依次查询待注入的数据
- * 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
+ * description:  字典数据注入工具类
+ *  * 1. 通过反射将obj的字段上标记了@InjectionFiled注解的字段解析出来
+ *  * 2. 依次查询待注入的数据
+ *  * 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
  *
- * @author zuihou
- * @date 2019/11/13
- */
+ * @author: zhouxinlei
+ * @date: 2020-12-05 10:04:34
+*/
 @Slf4j
 public class InjectionCore {
 
@@ -111,7 +111,6 @@ public class InjectionCore {
      *
      * @param obj        需要注入的对象、集合、IPage
      * @param isUseCache 是否使用guava缓存
-     * @throws Exception
      */
     public void injection(Object obj, boolean isUseCache) {
         try {

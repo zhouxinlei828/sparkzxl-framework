@@ -1,4 +1,4 @@
-package com.github.sparkzxl.web.serializer;
+package com.github.sparkzxl.core.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

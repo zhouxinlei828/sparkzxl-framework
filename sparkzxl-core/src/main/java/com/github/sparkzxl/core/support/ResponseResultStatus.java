@@ -24,6 +24,8 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
      */
     FAILURE(HttpStatus.HTTP_BAD_REQUEST, "哎呀，开了个小差，请稍后再试"),
 
+    JSON_PARSE_ERROR(-13, "JSON解析异常"),
+
     /**
      * 请求未授权
      */
