@@ -1,10 +1,12 @@
 package com.github.sparkzxl.distributed.cloud.interceptor;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstant;
 import com.github.sparkzxl.core.constant.CoreConstant;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,11 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
+        //传递事务id
+        String xid = RootContext.getXID();
+        if (StrUtil.isNotEmpty(xid)) {
+            template.header(RootContext.KEY_XID, xid);
+        }
         template.header(CoreConstant.REQUEST_TYPE, CoreConstant.REQUEST_TYPE);
         HttpServletRequest request = RequestContextHolderUtils.getRequest();
         if (request == null) {

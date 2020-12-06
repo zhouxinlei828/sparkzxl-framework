@@ -12,6 +12,7 @@ import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
 import com.github.sparkzxl.distributed.cloud.utils.ThreadLocalUtils;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -127,11 +128,13 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         private final Callable<T> target;
         private final RequestAttributes requestAttributes;
         private final Map<String, String> threadLocalMap; //研究并发是否会冲突
+        private final String xid;
 
         WrappedCallable(Callable<T> target) {
             this.target = target;
             this.requestAttributes = RequestContextHolder.getRequestAttributes();
             this.threadLocalMap = ThreadLocalUtils.getLocalMap();
+            this.xid = RootContext.getXID();
         }
 
         @Override
@@ -139,10 +142,12 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
                 ThreadLocalUtils.setLocalMap(this.threadLocalMap);
+                RootContext.bind(this.xid);
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
                 ThreadLocalUtils.remove();
+                RootContext.unbind();
             }
         }
     }
