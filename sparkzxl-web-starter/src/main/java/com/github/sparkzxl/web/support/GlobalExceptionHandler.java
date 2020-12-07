@@ -143,22 +143,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 500 默认异常
-     *
-     * @param
-     * @return ApiResult
-     * @author zhouxinlei
-     * @date 2019/5/25 0025
-     */
-    @ExceptionHandler(Exception.class)
-    public ApiResult defaultException(Exception e) {
-        handleResponseResult();
-        e.printStackTrace();
-        log.error(e.getMessage());
-        return ApiResult.apiResult(ResponseResultStatus.FAILURE);
-    }
-
-    /**
      * 数据库异常
      *
      * @param e
