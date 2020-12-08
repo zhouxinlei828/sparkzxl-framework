@@ -145,15 +145,15 @@ public class GlobalExceptionHandler {
     /**
      * 数据库异常
      *
-     * @param e
+     * @param e 数据库异常
      * @return ApiResult
-     * @author zhouxinlei
-     * @date 2019/5/25 0025
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
-    public ApiResult handleException(SQLException e) {
+    public ApiResult handleSQLException(SQLException e) {
         log.error("数据库异常{}", e.getMessage());
-        return ApiResult.apiResult(e.getErrorCode(), "数据库异常");
+        handleResponseResult();
+        return ApiResult.apiResult(ResponseResultStatus.SQL_EXCEPTION_ERROR);
     }
+
 }

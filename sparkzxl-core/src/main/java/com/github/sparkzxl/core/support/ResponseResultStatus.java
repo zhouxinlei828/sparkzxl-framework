@@ -102,6 +102,11 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     UPLOAD_FAILURE(HttpStatus.HTTP_INTERNAL_ERROR, "上传文件失败了哦"),
 
     /**
+     * 数据库异常
+     */
+    SQL_EXCEPTION_ERROR(-14, "数据库异常"),
+
+    /**
      * 请求被拒绝
      */
     REQ_REJECT(HttpStatus.HTTP_FORBIDDEN, "请求被拒绝"),

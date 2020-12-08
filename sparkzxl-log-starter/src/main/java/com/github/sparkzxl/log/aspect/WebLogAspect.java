@@ -1,6 +1,8 @@
 package com.github.sparkzxl.log.aspect;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.log.entity.RequestErrorInfo;
 import com.github.sparkzxl.log.entity.RequestInfo;
 import com.google.common.base.Stopwatch;
@@ -15,7 +17,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -66,7 +67,14 @@ public class WebLogAspect {
         requestInfo.setResult(result);
         String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
         requestInfo.setTimeCost(timeCost);
-        log.info("Request Info : {}", JSONUtil.toJsonPrettyStr(requestInfo));
+        int length = StringUtils.length(requestInfo.toString());
+        String jsonStr;
+        if (length >= 5000) {
+            jsonStr = JsonUtil.toJson(requestInfo);
+        }else {
+            jsonStr = JSONUtil.toJsonPrettyStr(requestInfo);
+        }
+        log.info("Request Info : {}", jsonStr);
         get().stop();
         return result;
     }
@@ -92,8 +100,19 @@ public class WebLogAspect {
         requestErrorInfo.setClassMethod(String.format("%s.%s", joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName()));
         requestErrorInfo.setRequestParams(getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs()));
-        requestErrorInfo.setException(e);
-        log.info("Error Request Info : {}", JSONUtil.toJsonPrettyStr(requestErrorInfo));
+        requestErrorInfo.setErrorMsg(e.getMessage());
+        String error = ExceptionUtil.getMessage(e);
+        requestErrorInfo.setError(error);
+        requestErrorInfo.setThrowExceptionClass(e.getClass().getTypeName());
+        int length = StringUtils.length(requestErrorInfo.toString());
+        String jsonStr;
+        if (length >= 5000) {
+            jsonStr = JsonUtil.toJson(requestErrorInfo);
+        }else {
+            jsonStr = JSONUtil.toJsonPrettyStr(requestErrorInfo);
+        }
+        log.info("Error Request Info : {}", jsonStr);
+        remove();
     }
 
     public Map<String, Object> getRequestParameterJson(Signature signature, Object[] args) {
@@ -119,6 +138,7 @@ public class WebLogAspect {
         }
         return parameterMap;
     }
+
 
     public Stopwatch get() {
         Stopwatch stopwatch = stopwatchThreadLocal.get();

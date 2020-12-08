@@ -2,7 +2,9 @@ package com.github.sparkzxl.core.utils;
 
 import org.springframework.util.AntPathMatcher;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -22,5 +24,20 @@ public class StringHandlerUtils {
         return list.stream().anyMatch((url) ->
                 currentUri.startsWith(url) || ANT_PATH_MATCHER.match(url, currentUri)
         );
+    }
+
+
+    public static <Input> boolean isBlank(Input verifiedData) {
+        if (verifiedData != null && verifiedData.getClass().isArray()) {
+            return ((Input[]) verifiedData).length == 0;
+        } else if (verifiedData instanceof Collection) {
+            return ((Collection) verifiedData).isEmpty();
+        } else if (verifiedData instanceof Map) {
+            return ((Map) verifiedData).isEmpty();
+        } else if (verifiedData instanceof CharSequence) {
+            return ((CharSequence) verifiedData).length() == 0;
+        } else {
+            return verifiedData == null;
+        }
     }
 }

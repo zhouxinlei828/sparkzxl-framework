@@ -33,8 +33,16 @@ public class RequestErrorInfo {
     private Object requestParams;
 
     /**
-     * 异常
+     * 错误原因
      */
-    private RuntimeException exception;
+    private String error;
+
+    /**
+     * exception中包含的信息
+     */
+    private String errorMsg;
+
+    private String throwExceptionClass;
+
 
 }

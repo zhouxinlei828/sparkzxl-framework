@@ -1,5 +1,6 @@
 package com.github.sparkzxl.distributed.cloud.hystrix;
 
+import com.github.sparkzxl.distributed.cloud.properties.CustomSeataProperties;
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
 import com.netflix.hystrix.strategy.HystrixPlugins;
@@ -34,7 +35,10 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
 
     private HystrixConcurrencyStrategy delegate;
 
-    public ThreadLocalHystrixConcurrencyStrategy() {
+    private final CustomSeataProperties customSeataProperties;
+
+    public ThreadLocalHystrixConcurrencyStrategy(CustomSeataProperties customSeataProperties) {
+        this.customSeataProperties = customSeataProperties;
         try {
             this.delegate = HystrixPlugins.getInstance().getConcurrencyStrategy();
             if (this.delegate instanceof ThreadLocalHystrixConcurrencyStrategy) {
@@ -93,7 +97,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             return wrappedCallable;
         }
 
-        return new WrappedCallable<>(callable);
+        return new WrappedCallable<>(callable, customSeataProperties);
     }
 
     @Override
@@ -129,12 +133,18 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         private final RequestAttributes requestAttributes;
         private final Map<String, String> threadLocalMap; //研究并发是否会冲突
         private final String xid;
+        private final CustomSeataProperties customSeataProperties;
 
-        WrappedCallable(Callable<T> target) {
+        WrappedCallable(Callable<T> target, CustomSeataProperties customSeataProperties) {
             this.target = target;
+            this.customSeataProperties = customSeataProperties;
             this.requestAttributes = RequestContextHolder.getRequestAttributes();
             this.threadLocalMap = ThreadLocalUtils.getLocalMap();
-            this.xid = RootContext.getXID();
+            if (this.customSeataProperties.isEnable()){
+                this.xid = RootContext.getXID();
+            }else {
+                this.xid = null;
+            }
         }
 
         @Override
@@ -142,12 +152,16 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
                 ThreadLocalUtils.setLocalMap(this.threadLocalMap);
-                RootContext.bind(this.xid);
+                if (this.customSeataProperties.isEnable()){
+                    RootContext.bind(this.xid);
+                }
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
                 ThreadLocalUtils.remove();
-                RootContext.unbind();
+                if (this.customSeataProperties.isEnable()){
+                    RootContext.unbind();
+                }
             }
         }
     }

@@ -24,5 +24,6 @@ public class CoreConstant {
     public static final String FALLBACK = "fallback";
 
     public static final String RESPONSE_RESULT_ANN = "response_result_ann";
+    public static final String EXCEPTION_ATTR_MSG = "exception_attr_msg";
 
 }

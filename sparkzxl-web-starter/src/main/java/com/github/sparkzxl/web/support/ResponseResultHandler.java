@@ -46,19 +46,28 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<?
             extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        Object returnBody = body;
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ResponseResultStatus responseResultStatus = ResponseResultStatus.SUCCESS;
+        int code = ResponseResultStatus.SUCCESS.getCode();
+        String message = ResponseResultStatus.SUCCESS.getMessage();
         String returnTypeName = returnType.getGenericParameterType().getTypeName();
+        String attribute = (String) RequestContextHolderUtils.getAttribute(CoreConstant.EXCEPTION_ATTR_MSG);
         if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(CoreConstant.FALLBACK))) {
-            responseResultStatus = ResponseResultStatus.SERVICE_DEGRADATION;
-        } else if (body instanceof Boolean && !(Boolean) body) {
-            responseResultStatus = ResponseResultStatus.FAILURE;
+            code = ResponseResultStatus.SERVICE_DEGRADATION.getCode();
+            message = ResponseResultStatus.SERVICE_DEGRADATION.getMessage();
+        } else if (ObjectUtils.isNotEmpty(attribute)) {
+            code = ResponseResultStatus.FAILURE.getCode();
+            message = attribute;
+            returnBody = null;
+        } else if (returnBody instanceof Boolean && !(Boolean) returnBody) {
+            code = ResponseResultStatus.FAILURE.getCode();
+            message = ResponseResultStatus.FAILURE.getMessage();
         }
         if (returnTypeName.equals(String.class.getTypeName())) {
-            return objectMapper.writeValueAsString(ApiResult.apiResult(responseResultStatus, body));
+            return objectMapper.writeValueAsString(ApiResult.apiResult(code,message,returnBody));
         }
-        return ApiResult.apiResult(responseResultStatus, body);
+        return ApiResult.apiResult(code,message,returnBody);
     }
 }

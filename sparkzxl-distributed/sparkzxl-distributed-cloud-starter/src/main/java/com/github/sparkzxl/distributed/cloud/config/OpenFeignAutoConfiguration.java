@@ -2,7 +2,9 @@ package com.github.sparkzxl.distributed.cloud.config;
 
 import com.github.sparkzxl.distributed.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.github.sparkzxl.distributed.cloud.interceptor.FeignAddHeaderRequestInterceptor;
+import com.github.sparkzxl.distributed.cloud.properties.CustomSeataProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * @date: 2020-07-12 16:32:22
  */
 @Configuration
+@EnableConfigurationProperties(value = CustomSeataProperties.class)
 @ConditionalOnClass(FeignAutoConfiguration.class)
 public class OpenFeignAutoConfiguration {
 
@@ -27,8 +30,8 @@ public class OpenFeignAutoConfiguration {
      * @return FeignAddHeaderRequestInterceptor
      */
     @Bean
-    public FeignAddHeaderRequestInterceptor getClientTokenInterceptor() {
-        return new FeignAddHeaderRequestInterceptor();
+    public FeignAddHeaderRequestInterceptor getClientTokenInterceptor(CustomSeataProperties customSeataProperties) {
+        return new FeignAddHeaderRequestInterceptor(customSeataProperties);
     }
 
     /**
@@ -37,7 +40,7 @@ public class OpenFeignAutoConfiguration {
      * @return ThreadLocalHystrixConcurrencyStrategy
      */
     @Bean
-    public ThreadLocalHystrixConcurrencyStrategy getThreadLocalHystrixConcurrencyStrategy() {
-        return new ThreadLocalHystrixConcurrencyStrategy();
+    public ThreadLocalHystrixConcurrencyStrategy getThreadLocalHystrixConcurrencyStrategy(CustomSeataProperties customSeataProperties) {
+        return new ThreadLocalHystrixConcurrencyStrategy(customSeataProperties);
     }
 }
