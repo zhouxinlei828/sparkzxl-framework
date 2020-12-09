@@ -64,7 +64,7 @@
         <itext.version>7.0.5</itext.version>
         <apache.xmlgraphics.version>1.7</apache.xmlgraphics.version>
 
-        <xstream.version>1.4.13-java7</xstream.version>
+        <xstream.version>1.4.14</xstream.version>
         <mapstruct.version>1.4.0.CR1</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
