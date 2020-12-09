@@ -79,6 +79,7 @@
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.0</seata.version>
+        <janino.version>3.1.2</janino.version>
     </properties>
 
     <modules>
@@ -490,6 +491,12 @@
                 <groupId>io.seata</groupId>
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
+            </dependency>
+            <!-- 开源Java 编译器 -->
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>${janino.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

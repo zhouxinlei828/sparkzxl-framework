@@ -4,10 +4,13 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!--日志文件保存路径-->
-    <springProperty name="springAppName" scope="context" source="spring.application.name"/>
+    <springProperty name="springAppName" scope="context" source="spring.application.name" defaultValue="application"/>
 
     <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="../logs"/>
 
+    <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
+    <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
+    <springProperty name="enableJson" scope="context" source="logging.file.enable-json" defaultValue="false"/>
 
     <!-- 控制台 日志格式化 -->
     <property name="CONSOLE_LOG_PATTERN"
@@ -32,40 +35,43 @@
             <maxHistory>7</maxHistory>
             <maxFileSize>50MB</maxFileSize>
         </rollingPolicy>
-        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-            <providers class="net.logstash.logback.composite.loggingevent.LoggingEventJsonProviders">
-                <pattern>
-                    <pattern>
-                        {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
-                        "level": "%level",
-                        "service": "${springAppName:-}",
-                        "traceId": "%tid",
-                        "pid": "${PID:-}",
-                        "thread": "%thread",
-                        "class": "%logger{40}",
-                        "message": "%message"}
-                    </pattern>
-                </pattern>
-            </providers>
-        </encoder>
+        <if condition='property("enableJson").contains("true")'>
+            <then>
+                <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                    <providers class="net.logstash.logback.composite.loggingevent.LoggingEventJsonProviders">
+                        <pattern>
+                            <pattern>
+                                {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
+                                "level": "%level",
+                                "service": "${springAppName:-}",
+                                "traceId": "%tid",
+                                "pid": "${PID:-}",
+                                "thread": "%thread",
+                                "class": "%logger{40}",
+                                "message": "%message"}
+                            </pattern>
+                        </pattern>
+                    </providers>
+                </encoder>
+            </then>
+            <else>
+                <!-- 日志的格式化 -->
+                <encoder>
+                    <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                </encoder>
+            </else>
+        </if>
     </appender>
-
-    <springProfile name="dev">
-        <root level="INFO">
-            <appender-ref ref="console"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="test">
-        <root level="INFO">
-            <appender-ref ref="console"/>
-            <appender-ref ref="FILE"/>
-        </root>
-    </springProfile>
-    <springProfile name="prod">
-        <root level="INFO">
-            <appender-ref ref="console"/>
-            <appender-ref ref="FILE"/>
-        </root>
-    </springProfile>
+    <root level="INFO">
+        <if condition='property("enableFile").contains("true")'>
+            <then>
+                <appender-ref ref="FILE"/>
+            </then>
+        </if>
+        <if condition='property("enableConsole").contains("true")'>
+            <then>
+                <appender-ref ref="console"/>
+            </then>
+        </if>
+    </root>
 </configuration>
