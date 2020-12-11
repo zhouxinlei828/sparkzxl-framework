@@ -15,6 +15,7 @@ import com.netflix.hystrix.strategy.properties.HystrixProperty;
 import com.github.sparkzxl.distributed.cloud.utils.ThreadLocalUtils;
 import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -140,9 +141,9 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             this.customSeataProperties = customSeataProperties;
             this.requestAttributes = RequestContextHolder.getRequestAttributes();
             this.threadLocalMap = ThreadLocalUtils.getLocalMap();
-            if (this.customSeataProperties.isEnable()){
+            if (this.customSeataProperties.isEnable()) {
                 this.xid = RootContext.getXID();
-            }else {
+            } else {
                 this.xid = null;
             }
         }
@@ -152,14 +153,14 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
                 ThreadLocalUtils.setLocalMap(this.threadLocalMap);
-                if (this.customSeataProperties.isEnable()){
+                if (this.customSeataProperties.isEnable() && StringUtils.isNotEmpty(this.xid)) {
                     RootContext.bind(this.xid);
                 }
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
                 ThreadLocalUtils.remove();
-                if (this.customSeataProperties.isEnable()){
+                if (this.customSeataProperties.isEnable() && StringUtils.isNotEmpty(this.xid)) {
                     RootContext.unbind();
                 }
             }
