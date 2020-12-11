@@ -1,13 +1,10 @@
 package com.github.sparkzxl.distributed.cloud.interceptor;
 
-import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstant;
 import com.github.sparkzxl.core.constant.CoreConstant;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.distributed.cloud.properties.CustomSeataProperties;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,27 +21,18 @@ import java.util.List;
 @Slf4j
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
-    private final CustomSeataProperties customSeataProperties;
 
     private static final List<String> HEADER_NAME_LIST = Arrays.asList(
             BaseContextConstant.APPLICATION_AUTH_USER_ID, BaseContextConstant.APPLICATION_AUTH_NAME,
             BaseContextConstant.APPLICATION_AUTH_ACCOUNT
     );
 
-    public FeignAddHeaderRequestInterceptor(CustomSeataProperties customSeataProperties) {
+    public FeignAddHeaderRequestInterceptor() {
         super();
-        this.customSeataProperties = customSeataProperties;
     }
 
     @Override
     public void apply(RequestTemplate template) {
-        if (customSeataProperties.isEnable()){
-            //传递事务id
-            String xid = RootContext.getXID();
-            if (StrUtil.isNotEmpty(xid)) {
-                template.header(RootContext.KEY_XID, xid);
-            }
-        }
         template.header(CoreConstant.REQUEST_TYPE, CoreConstant.REQUEST_TYPE);
         HttpServletRequest request = RequestContextHolderUtils.getRequest();
         if (request == null) {
