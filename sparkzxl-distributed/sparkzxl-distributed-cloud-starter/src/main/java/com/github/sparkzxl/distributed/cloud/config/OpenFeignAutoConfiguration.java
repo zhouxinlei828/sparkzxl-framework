@@ -47,7 +47,7 @@ public class OpenFeignAutoConfiguration {
     /**
      * 本地线程 Hystrix并发策略
      *
-     * @return
+     * @return ThreadLocalHystrixConcurrencyStrategy
      */
     @Bean
     public ThreadLocalHystrixConcurrencyStrategy threadLocalHystrixConcurrencyStrategy() {
