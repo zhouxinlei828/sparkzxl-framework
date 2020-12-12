@@ -1,5 +1,6 @@
 package com.github.sparkzxl.distributed.cloud.hystrix;
 
+import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
 import com.netflix.hystrix.strategy.HystrixPlugins;
@@ -11,7 +12,7 @@ import com.netflix.hystrix.strategy.executionhook.HystrixCommandExecutionHook;
 import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
-import com.github.sparkzxl.distributed.cloud.utils.ThreadLocalUtils;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -32,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
     private HystrixConcurrencyStrategy delegate;
-
 
     public ThreadLocalHystrixConcurrencyStrategy() {
         try {
@@ -67,11 +67,11 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
                                                  HystrixMetricsPublisher metricsPublisher,
                                                  HystrixPropertiesStrategy propertiesStrategy) {
         if (log.isDebugEnabled()) {
-            log.debug("Current Hystrix plugins configuration is [concurrencyStrategy [{}],eventNotifier [{}],metricPublisher [{}],propertiesStrategy [{}],]",
-                    this.delegate,
-                    eventNotifier,
-                    metricsPublisher,
-                    propertiesStrategy);
+            log.debug("Current Hystrix plugins configuration is ["
+                    + "concurrencyStrategy [" + this.delegate + "]," + "eventNotifier ["
+                    + eventNotifier + "]," + "metricPublisher [" + metricsPublisher + "],"
+                    + "propertiesStrategy [" + propertiesStrategy + "]," + "]");
+            log.debug("Registering Sleuth Hystrix Concurrency Strategy.");
         }
     }
 
@@ -129,21 +129,26 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         private final RequestAttributes requestAttributes;
         private final Map<String, String> threadLocalMap; //研究并发是否会冲突
 
+        private final String xid;
+
         WrappedCallable(Callable<T> target) {
             this.target = target;
             this.requestAttributes = RequestContextHolder.getRequestAttributes();
-            this.threadLocalMap = ThreadLocalUtils.getLocalMap();
+            this.threadLocalMap = BaseContextHandler.getLocalMap();
+            this.xid = RootContext.getXID();
         }
 
         @Override
         public T call() throws Exception {
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
-                ThreadLocalUtils.setLocalMap(this.threadLocalMap);
+                BaseContextHandler.setLocalMap(this.threadLocalMap);
+                RootContext.bind(this.xid);
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
-                ThreadLocalUtils.remove();
+                BaseContextHandler.remove();
+                RootContext.unbind();
             }
         }
     }

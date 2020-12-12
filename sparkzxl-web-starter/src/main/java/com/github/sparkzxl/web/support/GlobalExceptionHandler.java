@@ -1,6 +1,6 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.core.constant.CoreConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BusinessException;
@@ -39,10 +39,10 @@ public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(CoreConstant.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
-            servletRequest.removeAttribute(CoreConstant.RESPONSE_RESULT_ANN);
+            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
     }
 

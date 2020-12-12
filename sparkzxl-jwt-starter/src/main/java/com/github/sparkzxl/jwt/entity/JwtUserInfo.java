@@ -12,9 +12,23 @@ import java.util.List;
  * @date: 2020-07-14 07:51:20
  */
 @Data
-public class JwtUserInfo {
+public class JwtUserInfo<T> {
 
-    private Long id;
+    private T id;
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 用户姓名
+     */
+    private String name;
+
+    /**
+     * clientId
+     */
+    private String clientId;
     /**
      * 主题
      */
@@ -31,10 +45,6 @@ public class JwtUserInfo {
      * JWT的ID
      */
     private String jti;
-    /**
-     * 用户名
-     */
-    private String username;
     /**
      * 用户拥有的权限
      */

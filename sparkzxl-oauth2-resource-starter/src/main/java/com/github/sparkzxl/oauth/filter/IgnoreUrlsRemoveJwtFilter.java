@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.filter;
 
-import com.github.sparkzxl.core.constant.BaseContextConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
 import com.github.sparkzxl.oauth.utils.WebFluxUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -32,9 +32,9 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        String header = WebFluxUtils.getHeader(BaseContextConstant.JWT_TOKEN_HEADER, request);
+        String header = WebFluxUtils.getHeader(BaseContextConstants.JWT_TOKEN_HEADER, request);
         if (StringUtils.isNotEmpty(header)) {
-            if (header.startsWith(BaseContextConstant.BASIC_AUTH)) {
+            if (header.startsWith(BaseContextConstants.BASIC_AUTH)) {
                 return chain.filter(exchange);
             }
             URI uri = request.getURI();
@@ -44,7 +44,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
             if (ArrayUtils.isNotEmpty(ignoreUrls)) {
                 for (String ignoreUrl : ignoreUrls) {
                     if (pathMatcher.match(ignoreUrl, uri.getPath())) {
-                        request = exchange.getRequest().mutate().header(BaseContextConstant.JWT_TOKEN_HEADER, "").build();
+                        request = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
                         exchange = exchange.mutate().request(request).build();
                         return chain.filter(exchange);
                     }

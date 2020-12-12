@@ -3,9 +3,9 @@ package com.github.sparkzxl.database.mybatis.hander;
 import cn.hutool.core.lang.Snowflake;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.utils.ReflectObjectUtils;
 import com.github.sparkzxl.database.constant.EntityConstant;
-import com.github.sparkzxl.database.context.BaseContextHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
@@ -56,8 +56,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object createUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER);
         if (ObjectUtils.isNotEmpty(createUserClass)) {
             if (ObjectUtils.isEmpty(createUserVal) || createUserVal.equals(0)) {
-                createUserVal = String.class.getName().equals(createUserClass.getTypeName()) ?
-                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+                createUserVal = BaseContextHandler.getUserId(createUserClass.getClass());
                 this.setFieldValByName(EntityConstant.CREATE_USER, createUserVal, metaObject);
             }
         }
@@ -66,8 +65,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object createUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_ID);
         if (ObjectUtils.isNotEmpty(createUserIdClass)) {
             if (ObjectUtils.isEmpty(createUserIdVal) || createUserIdVal.equals(0)) {
-                createUserIdVal = String.class.getName().equals(createUserIdClass.getTypeName()) ?
-                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+                createUserIdVal = BaseContextHandler.getUserId(createUserIdClass.getClass());
                 this.setFieldValByName(EntityConstant.CREATE_USER_ID, createUserIdVal, metaObject);
             }
         }
@@ -76,7 +74,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object createUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_NAME);
         if (ObjectUtils.isNotEmpty(createUserNameClass)) {
             if (ObjectUtils.isEmpty(createUserNameVal)) {
-                createUserNameVal = BaseContextHandler.getUserName();
+                createUserNameVal = BaseContextHandler.getName();
                 this.setFieldValByName(EntityConstant.CREATE_USER_NAME, createUserNameVal, metaObject);
             }
         }
@@ -118,8 +116,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object updateUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER);
         if (ObjectUtils.isNotEmpty(updateUserClass)) {
             if (ObjectUtils.isEmpty(updateUserVal) || updateUserVal.equals(0)) {
-                updateUserVal = String.class.getName().equals(updateUserClass.getTypeName()) ?
-                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+                updateUserVal = BaseContextHandler.getUserId(updateUserClass.getClass());
                 this.setFieldValByName(EntityConstant.UPDATE_USER, updateUserVal, metaObject);
             }
         }
@@ -128,8 +125,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object updateUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_Id);
         if (ObjectUtils.isNotEmpty(updateUserIdClass)) {
             if (ObjectUtils.isEmpty(updateUserIdVal) || updateUserIdVal.equals(0)) {
-                updateUserIdVal = String.class.getName().equals(updateUserIdClass.getTypeName()) ?
-                        String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+                updateUserIdVal = BaseContextHandler.getUserId(updateUserIdClass.getClass());
                 this.setFieldValByName(EntityConstant.UPDATE_USER_Id, updateUserIdVal, metaObject);
             }
         }
@@ -138,7 +134,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object updateUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_NAME);
         if (ObjectUtils.isNotEmpty(updateUserNameClass)) {
             if (ObjectUtils.isEmpty(updateUserNameVal)) {
-                updateUserNameVal = BaseContextHandler.getUserName();
+                updateUserNameVal = BaseContextHandler.getName();
                 this.setFieldValByName(EntityConstant.UPDATE_USER_NAME, updateUserNameVal, metaObject);
             }
         }

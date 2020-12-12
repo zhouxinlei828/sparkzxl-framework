@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.github.sparkzxl.core.constant.BaseContextConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
@@ -14,15 +14,16 @@ import com.github.sparkzxl.security.entity.LoginStatus;
 import com.github.sparkzxl.security.event.LoginEvent;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.openssl.PasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 /**
  * description: 登录授权Service
@@ -34,38 +35,27 @@ import java.util.stream.Collectors;
 public abstract class AbstractSecurityLoginService {
 
 
+    @Autowired(required = false)
     public JwtProperties jwtProperties;
 
+    @Autowired(required = false)
     public JwtTokenService jwtTokenService;
 
+    @Autowired(required = false)
     public UserDetailsService userDetailsService;
-
-    @Autowired
-    public void setJwtProperties(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
-    }
-
-    @Autowired
-    public void setJwtTokenService(JwtTokenService jwtTokenService) {
-        this.jwtTokenService = jwtTokenService;
-    }
-
-    @Autowired
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     /**
      * 登录
      *
      * @param authRequest 登录认证
      * @return java.lang.String
-     * @throws Exception 异常
      */
-    public AuthToken login(AuthRequest authRequest) {
+    public AuthToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
         String account = authRequest.getAccount();
         AuthUserDetail authUserDetail = (AuthUserDetail) userDetailsService.loadUserByUsername(account);
-        ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(authUserDetail);
+        if (ObjectUtils.isEmpty(authUserDetail)){
+            throw new AccountNotFoundException("账户不存在");
+        }
         //校验密码输入是否正确
         checkPasswordError(authRequest, authUserDetail);
         AuthToken authToken = authorization(authUserDetail);
@@ -87,7 +77,7 @@ public abstract class AbstractSecurityLoginService {
         authToken.setAccessToken(createJwtToken(authUserDetail));
         authToken.setExpiration(jwtProperties.getExpire());
         authToken.setAuthUserDetail(authUserDetail);
-        authToken.setTokenType(BaseContextConstant.BEARER_TOKEN);
+        authToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
         accessToken(authToken, authUserDetail);
         return authToken;
@@ -97,15 +87,17 @@ public abstract class AbstractSecurityLoginService {
     private String createJwtToken(AuthUserDetail authUserDetail) {
         Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
         JwtUserInfo jwtUserInfo = new JwtUserInfo();
+        jwtUserInfo.setId(authUserDetail.getId());
+        jwtUserInfo.setName(authUserDetail.getName());
+        jwtUserInfo.setUsername(authUserDetail.getUsername());
         jwtUserInfo.setSub(authUserDetail.getUsername());
         jwtUserInfo.setIat(System.currentTimeMillis());
-        jwtUserInfo.setAuthorities(authUserDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-        jwtUserInfo.setUsername(authUserDetail.getUsername());
         jwtUserInfo.setExpire(expire);
+        jwtUserInfo.setAuthorities(authUserDetail.getAuthorityList());
         return jwtTokenService.createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail) {
+    private void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail) throws PasswordException {
         String encryptPassword = HuSecretUtils.encryptMd5(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserDetail.getPassword());
         //数据库密码比对
@@ -113,7 +105,7 @@ public abstract class AbstractSecurityLoginService {
         if (!verifyResult) {
             SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUserDetail.getId(),
                     ResponseResultStatus.PASSWORD_ERROR.getMessage())));
-            ResponseResultStatus.PASSWORD_ERROR.assertNotTrue(false);
+            throw new PasswordException("密码不正确");
         }
     }
 

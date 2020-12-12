@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.utils;
 
-import com.github.sparkzxl.core.constant.CoreConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
@@ -499,7 +499,7 @@ public class DocumentPdfTemplate extends PdfUtils {
         float length = getStrWidth(lContent, fontWidth, numWidth) * 2;
         float end = (580 - length) / 2;
         float top = (380 - getStrWidth(lContent, fontWidth, numWidth)) / 2;
-        if (!"".equals(lContent) && !CoreConstant.BLANK_SPACE.equals(lContent)) {
+        if (!"".equals(lContent) && !BaseContextConstants.BLANK_SPACE.equals(lContent)) {
             addVerticalLine(0.5f, 565, 680, 690 - end);
             addVerticalText(end + 120, 558, fontSize, lContent);
             addVerticalLine(0.5f, 565, 680 - end - length, 100);

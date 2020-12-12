@@ -3,6 +3,8 @@ package com.github.sparkzxl.jwt.service;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.nimbusds.jose.jwk.RSAKey;
 
+import java.text.ParseException;
+
 /**
  * description: jwtToken 服务类
  *
@@ -17,7 +19,7 @@ public interface JwtTokenService {
      * @param jwtUserInfo 负载信息
      * @return String
      */
-    String createTokenByRsa(JwtUserInfo jwtUserInfo);
+    <T> String createTokenByRsa(JwtUserInfo<T> jwtUserInfo);
 
     /**
      * 根据RSA校验token
@@ -25,7 +27,7 @@ public interface JwtTokenService {
      * @param token token
      * @return PayloadDto
      */
-    JwtUserInfo verifyTokenByRsa(String token);
+    <T> JwtUserInfo<T> verifyTokenByRsa(String token);
 
     /**
      * 根据token获取信息
@@ -33,7 +35,9 @@ public interface JwtTokenService {
      * @param token token
      * @return JwtUserInfo
      */
-    JwtUserInfo getJwtUserInfo(String token);
+    <T> JwtUserInfo<T> getJwtUserInfo(String token) throws ParseException;
+
+    <T> JwtUserInfo<T> getAuthJwtInfo(String token) throws ParseException;
 
     /**
      * 根据HMAC算法生成token
@@ -41,7 +45,7 @@ public interface JwtTokenService {
      * @param jwtUserInfo 负载信息
      * @return String
      */
-    String createTokenByHmac(JwtUserInfo jwtUserInfo);
+    <T> String createTokenByHmac(JwtUserInfo<T> jwtUserInfo);
 
     /**
      * 根据HMAC校验token
@@ -49,7 +53,7 @@ public interface JwtTokenService {
      * @param token token
      * @return PayloadDto
      */
-    JwtUserInfo verifyTokenByHmac(String token);
+    <T> JwtUserInfo<T> verifyTokenByHmac(String token);
 
     /**
      * 获取公钥

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.default_;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.constant.CoreConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.constant.ExceptionConstant;
@@ -66,10 +66,10 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
     }
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(CoreConstant.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
-            servletRequest.removeAttribute(CoreConstant.RESPONSE_RESULT_ANN);
+            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
     }
 

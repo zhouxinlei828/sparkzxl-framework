@@ -11,22 +11,26 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * description：授权登录用户
+ * description：security用户
  *
  * @author： zhouxinlei
  * @date： 2020-06-24 16:35:11
  */
 @Data
-public class AuthUserDetail implements UserDetails {
+public class AuthUserDetail<T> implements UserDetails {
 
     /**
      * ID
      */
-    private Long id;
+    private T id;
     /**
      * 用户名
      */
     private String username;
+    /**
+     * 用户名
+     */
+    private String name;
     /**
      * 用户密码
      */
@@ -42,10 +46,11 @@ public class AuthUserDetail implements UserDetails {
 
     private List<String> authorityList;
 
-    public AuthUserDetail(Long id, String username, String password, Boolean enabled, List<String> authorityList) {
+    public AuthUserDetail(T id, String username, String password, String name, Boolean enabled, List<String> authorityList) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.name = name;
         this.enabled = enabled;
         this.authorityList = authorityList;
         if (CollectionUtils.isNotEmpty(authorityList)) {
@@ -82,6 +87,10 @@ public class AuthUserDetail implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

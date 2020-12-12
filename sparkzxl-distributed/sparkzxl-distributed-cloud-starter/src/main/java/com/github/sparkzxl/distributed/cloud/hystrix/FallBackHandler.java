@@ -1,6 +1,6 @@
 package com.github.sparkzxl.distributed.cloud.hystrix;
 
-import com.github.sparkzxl.core.constant.CoreConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 
 /**
@@ -12,6 +12,6 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 public class FallBackHandler {
 
     public static void fallBack() {
-        RequestContextHolderUtils.setAttribute(CoreConstant.FALLBACK, true);
+        RequestContextHolderUtils.setAttribute(BaseContextConstants.FALLBACK, true);
     }
 }

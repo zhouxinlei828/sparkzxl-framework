@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.distributed.cloud.config.OpenFeignAutoConfiguration , \
-    com.github.sparkzxl.distributed.cloud.config.RibbonMetaFilterAutoConfiguration
+    com.github.sparkzxl.distributed.cloud.config.OpenFeignAutoConfiguration

@@ -1,7 +1,9 @@
 package com.github.sparkzxl.oauth.filter;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.ResponseResultUtils;
-import com.github.sparkzxl.core.constant.BaseContextConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.oauth.entity.AuthUserDetail;
@@ -18,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * description: jwt认证授权过滤器
@@ -42,9 +45,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String accessToken = ResponseResultUtils.getAuthHeader(request);
-        if (!StringUtils.startsWith(accessToken, BaseContextConstant.BASIC_AUTH)) {
+        if (!StringUtils.startsWith(accessToken, BaseContextConstants.BASIC_AUTH)) {
             if (StringUtils.isNotEmpty(accessToken)) {
-                JwtUserInfo jwtUserInfo = jwtTokenService.getJwtUserInfo(accessToken);
+                JwtUserInfo jwtUserInfo = null;
+                try {
+                    jwtUserInfo = jwtTokenService.getJwtUserInfo(accessToken);
+                } catch (ParseException e) {
+                    log.error("解析token用户信息出错 :{}", ExceptionUtil.getMessage(e));
+                    SparkZxlExceptionAssert.businessFail("解析token用户信息出错");
+                }
+                assert jwtUserInfo != null;
                 String username = jwtUserInfo.getUsername();
                 log.info("checking username:{}", username);
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

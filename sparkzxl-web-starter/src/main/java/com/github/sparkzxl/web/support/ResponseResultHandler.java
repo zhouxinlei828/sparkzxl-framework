@@ -1,7 +1,7 @@
 package com.github.sparkzxl.web.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.sparkzxl.core.constant.CoreConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -38,7 +38,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(CoreConstant.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
 
@@ -53,10 +53,11 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         int code = ResponseResultStatus.SUCCESS.getCode();
         String message = ResponseResultStatus.SUCCESS.getMessage();
         String returnTypeName = returnType.getGenericParameterType().getTypeName();
-        String attribute = (String) RequestContextHolderUtils.getAttribute(CoreConstant.EXCEPTION_ATTR_MSG);
-        if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(CoreConstant.FALLBACK))) {
+        String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
+        if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(BaseContextConstants.FALLBACK))) {
             code = ResponseResultStatus.SERVICE_DEGRADATION.getCode();
             message = ResponseResultStatus.SERVICE_DEGRADATION.getMessage();
+            returnBody = null;
         } else if (ObjectUtils.isNotEmpty(attribute)) {
             code = ResponseResultStatus.FAILURE.getCode();
             message = attribute;

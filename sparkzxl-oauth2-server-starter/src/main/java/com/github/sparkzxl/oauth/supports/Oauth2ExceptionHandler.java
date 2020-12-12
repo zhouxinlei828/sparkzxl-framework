@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oauth.supports;
 
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.constant.CoreConstant;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,7 +21,7 @@ public class Oauth2ExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        servletRequest.removeAttribute(CoreConstant.RESPONSE_RESULT_ANN);
+        servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
     }
 
     @ResponseBody
