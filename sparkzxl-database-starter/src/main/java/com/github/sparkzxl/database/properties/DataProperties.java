@@ -1,5 +1,6 @@
 package com.github.sparkzxl.database.properties;
 
+import com.github.sparkzxl.database.enums.IdTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -14,6 +15,8 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.data")
 public class DataProperties {
+
+    private IdTypeEnum idType = IdTypeEnum.SNOWFLAKE_ID;
 
     private long workerId = 0;
 

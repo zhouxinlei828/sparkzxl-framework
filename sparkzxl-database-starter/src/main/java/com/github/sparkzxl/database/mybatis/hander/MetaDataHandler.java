@@ -1,16 +1,18 @@
 package com.github.sparkzxl.database.mybatis.hander;
 
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.utils.ReflectObjectUtils;
 import com.github.sparkzxl.database.constant.EntityConstant;
-import lombok.AllArgsConstructor;
+import com.github.sparkzxl.database.enums.IdTypeEnum;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -21,10 +23,13 @@ import java.util.Date;
  * @date 2020-05-24 13:22:30
  */
 @Slf4j
-@AllArgsConstructor
+@Getter
+@Setter
 public class MetaDataHandler implements MetaObjectHandler {
 
-    private final Snowflake snowflake;
+    private IdTypeEnum idType;
+
+    private Snowflake snowflake;
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -45,9 +50,17 @@ public class MetaDataHandler implements MetaObjectHandler {
         if (idExistClass) {
             Object idVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.ID);
             if (ObjectUtils.isEmpty(idVal)) {
-                Long id = snowflake.nextId();
-                Class<?> idClass = metaObject.getGetterType(EntityConstant.ID);
-                idVal = String.class.getName().equals(idClass.getTypeName()) ? String.valueOf(id) : snowflake.nextId();
+                if (idType.equals(IdTypeEnum.RANDOM_UUID)) {
+                    idVal = IdUtil.randomUUID();
+                } else if (idType.equals(IdTypeEnum.SIMPLE_UUID)) {
+                    idVal = IdUtil.simpleUUID();
+                } else if (idType.equals(IdTypeEnum.OBJECT_Id)) {
+                    idVal = IdUtil.objectId();
+                } else if (idType.equals(IdTypeEnum.SNOWFLAKE_ID)) {
+                    Long id = snowflake.nextId();
+                    Class<?> idClass = metaObject.getGetterType(EntityConstant.ID);
+                    idVal = String.class.getName().equals(idClass.getTypeName()) ? String.valueOf(id) : snowflake.nextId();
+                }
                 this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
             }
         }
@@ -155,4 +168,5 @@ public class MetaDataHandler implements MetaObjectHandler {
             }
         }
     }
+
 }

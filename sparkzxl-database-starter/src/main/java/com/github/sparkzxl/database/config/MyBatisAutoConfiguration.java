@@ -3,6 +3,7 @@ package com.github.sparkzxl.database.config;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.database.enums.IdTypeEnum;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.properties.DataProperties;
@@ -34,14 +35,20 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     public Snowflake snowflake() {
-        return IdUtil.createSnowflake(dataProperties.getWorkerId(),
+        return IdUtil.getSnowflake(dataProperties.getWorkerId(),
                 dataProperties.getDataCenterId());
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public MetaDataHandler metaDataHandler(Snowflake snowflake) {
-        return new MetaDataHandler(snowflake);
+    public MetaDataHandler metaDataHandler() {
+        MetaDataHandler metaDataHandler = new MetaDataHandler();
+        metaDataHandler.setIdType(dataProperties.getIdType());
+        if (IdTypeEnum.SNOWFLAKE_ID.equals(dataProperties.getIdType())) {
+            Snowflake snowflake = snowflake();
+            metaDataHandler.setSnowflake(snowflake);
+        }
+        return metaDataHandler;
     }
 
     @Bean

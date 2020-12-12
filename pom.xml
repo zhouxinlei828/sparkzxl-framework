@@ -87,23 +87,23 @@
         <module>sparkzxl-cache-starter</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-database-starter</module>
+        <module>sparkzxl-distributed</module>
         <module>sparkzxl-elasticsearch-starter</module>
+        <module>sparkzxl-feign-starter</module>
+        <module>sparkzxl-job-executor-starter</module>
         <module>sparkzxl-jwt-starter</module>
         <module>sparkzxl-log-starter</module>
         <module>sparkzxl-mail-starter</module>
+        <module>sparkzxl-oauth2-resource-starter</module>
         <module>sparkzxl-oauth2-server-starter</module>
+        <module>sparkzxl-oss-starter</module>
+        <module>sparkzxl-patterns-starter</module>
+        <module>sparkzxl-redisson-starter</module>
         <module>sparkzxl-security-starter</module>
         <module>sparkzxl-swagger-starter</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-oauth2-resource-starter</module>
-        <module>sparkzxl-redisson-starter</module>
-        <module>sparkzxl-patterns-starter</module>
-        <module>sparkzxl-job-executor-starter</module>
-        <module>sparkzxl-distributed</module>
-        <module>sparkzxl-oss-starter</module>
-        <module>sparkzxl-feign-starter</module>
     </modules>
 
     <distributionManagement>
