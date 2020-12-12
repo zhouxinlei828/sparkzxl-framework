@@ -123,6 +123,21 @@ public class ReflectObjectUtils {
         return null;
     }
 
+    public static boolean existProperty(Object obj, String key) {
+        List<Field> fields = getAllField(obj);
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                if (field.getName().equalsIgnoreCase(key)) {
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     private static List<Field> getAllField(Object model) {
         Class clazz = model.getClass();
         List<Field> fields = Lists.newArrayList();

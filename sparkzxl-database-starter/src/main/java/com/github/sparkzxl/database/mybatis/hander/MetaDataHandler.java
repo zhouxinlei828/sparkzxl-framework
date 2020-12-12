@@ -41,38 +41,41 @@ public class MetaDataHandler implements MetaObjectHandler {
     public void insertCommonColumn(MetaObject metaObject) {
         Object targetObject = metaObject.getOriginalObject();
         // 主键
-        Type idClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.ID);
-        Object idVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.ID);
-        if (ObjectUtils.isNotEmpty(idClass)) {
+        boolean idExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.ID);
+        if (idExistClass) {
+            Object idVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.ID);
             if (ObjectUtils.isEmpty(idVal)) {
                 Long id = snowflake.nextId();
+                Class<?> idClass = metaObject.getGetterType(EntityConstant.ID);
                 idVal = String.class.getName().equals(idClass.getTypeName()) ? String.valueOf(id) : snowflake.nextId();
                 this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
             }
         }
 
         // 创建人
-        Type createUserClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER);
-        Object createUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER);
-        if (ObjectUtils.isNotEmpty(createUserClass)) {
+        boolean createUserExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.CREATE_USER);
+        if (createUserExistClass) {
+            Object createUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER);
             if (ObjectUtils.isEmpty(createUserVal) || createUserVal.equals(0)) {
-                createUserVal = BaseContextHandler.getUserId(createUserClass.getClass());
+                Class<?> createUserClass = metaObject.getGetterType(EntityConstant.CREATE_USER);
+                createUserVal = BaseContextHandler.getUserId(createUserClass);
                 this.setFieldValByName(EntityConstant.CREATE_USER, createUserVal, metaObject);
             }
         }
 
-        Type createUserIdClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER_ID);
-        Object createUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_ID);
-        if (ObjectUtils.isNotEmpty(createUserIdClass)) {
+        boolean createUserIdExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.CREATE_USER_ID);
+        if (createUserIdExistClass) {
+            Object createUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_ID);
             if (ObjectUtils.isEmpty(createUserIdVal) || createUserIdVal.equals(0)) {
-                createUserIdVal = BaseContextHandler.getUserId(createUserIdClass.getClass());
+                Class<?> createUserIdClass = metaObject.getGetterType(EntityConstant.CREATE_USER_ID);
+                createUserIdVal = BaseContextHandler.getUserId(createUserIdClass);
                 this.setFieldValByName(EntityConstant.CREATE_USER_ID, createUserIdVal, metaObject);
             }
         }
 
-        Type createUserNameClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_USER_NAME);
-        Object createUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_NAME);
-        if (ObjectUtils.isNotEmpty(createUserNameClass)) {
+        boolean createUserNameExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.CREATE_USER_NAME);
+        if (createUserNameExistClass) {
+            Object createUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_USER_NAME);
             if (ObjectUtils.isEmpty(createUserNameVal)) {
                 createUserNameVal = BaseContextHandler.getName();
                 this.setFieldValByName(EntityConstant.CREATE_USER_NAME, createUserNameVal, metaObject);
@@ -80,12 +83,12 @@ public class MetaDataHandler implements MetaObjectHandler {
         }
 
         // 创建时间
-        Type createTimeClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.CREATE_TIME);
-        Object createTimeVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_TIME);
-        if (ObjectUtils.isNotEmpty(createTimeClass)) {
+        boolean createTimeExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.CREATE_TIME);
+        if (createTimeExistClass) {
+            Object createTimeVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.CREATE_TIME);
             if (ObjectUtils.isEmpty(createTimeVal)) {
-                createTimeVal = Date.class.getName().equals(createTimeClass.getTypeName()) ?
-                        new Date() : LocalDateTime.now();
+                Class<?> createTimeClass = metaObject.getGetterType(EntityConstant.CREATE_TIME);
+                createTimeVal = Date.class.equals(createTimeClass) ? new Date() : LocalDateTime.now();
                 this.setFieldValByName(EntityConstant.CREATE_TIME, createTimeVal, metaObject);
             }
         }
@@ -112,27 +115,29 @@ public class MetaDataHandler implements MetaObjectHandler {
     public void updateCommonColumn(MetaObject metaObject) {
         Object targetObject = metaObject.getOriginalObject();
         //更新人
-        Type updateUserClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER);
-        Object updateUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER);
-        if (ObjectUtils.isNotEmpty(updateUserClass)) {
+        boolean updateUserExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_USER);
+        if (ObjectUtils.isNotEmpty(updateUserExistClass)) {
+            Object updateUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER);
             if (ObjectUtils.isEmpty(updateUserVal) || updateUserVal.equals(0)) {
-                updateUserVal = BaseContextHandler.getUserId(updateUserClass.getClass());
+                Class<?> updateUserClass = metaObject.getGetterType(EntityConstant.UPDATE_USER);
+                updateUserVal = BaseContextHandler.getUserId(updateUserClass);
                 this.setFieldValByName(EntityConstant.UPDATE_USER, updateUserVal, metaObject);
             }
         }
 
-        Type updateUserIdClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER_Id);
-        Object updateUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_Id);
-        if (ObjectUtils.isNotEmpty(updateUserIdClass)) {
+        boolean updateUserIdExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_USER_Id);
+        if (updateUserIdExistClass) {
+            Object updateUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_Id);
             if (ObjectUtils.isEmpty(updateUserIdVal) || updateUserIdVal.equals(0)) {
-                updateUserIdVal = BaseContextHandler.getUserId(updateUserIdClass.getClass());
+                Class<?> updateUserIdClass = metaObject.getGetterType(EntityConstant.UPDATE_USER_Id);
+                updateUserIdVal = BaseContextHandler.getUserId(updateUserIdClass);
                 this.setFieldValByName(EntityConstant.UPDATE_USER_Id, updateUserIdVal, metaObject);
             }
         }
 
-        Type updateUserNameClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_USER_NAME);
-        Object updateUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_NAME);
-        if (ObjectUtils.isNotEmpty(updateUserNameClass)) {
+        boolean updateUserNameExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_USER_NAME);
+        if (updateUserNameExistClass) {
+            Object updateUserNameVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_NAME);
             if (ObjectUtils.isEmpty(updateUserNameVal)) {
                 updateUserNameVal = BaseContextHandler.getName();
                 this.setFieldValByName(EntityConstant.UPDATE_USER_NAME, updateUserNameVal, metaObject);
@@ -140,12 +145,12 @@ public class MetaDataHandler implements MetaObjectHandler {
         }
 
         //更新时间
-        Type updateTimeClass = ReflectObjectUtils.getPropertyType(targetObject, EntityConstant.UPDATE_TIME);
+        boolean updateTimeExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_TIME);
         Object updateTimeVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_TIME);
-        if (ObjectUtils.isNotEmpty(updateTimeClass)) {
+        if (updateTimeExistClass) {
             if (ObjectUtils.isEmpty(updateTimeVal)) {
-                updateTimeVal = Date.class.getName().equals(updateTimeClass.getTypeName()) ?
-                        new Date() : LocalDateTime.now();
+                Class<?> updateTimeClass = metaObject.getGetterType(EntityConstant.UPDATE_TIME);
+                updateTimeVal = Date.class.equals(updateTimeClass) ? new Date() : LocalDateTime.now();
                 this.setFieldValByName(EntityConstant.UPDATE_TIME, updateTimeVal, metaObject);
             }
         }
