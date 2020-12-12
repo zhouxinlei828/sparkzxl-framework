@@ -1,5 +1,6 @@
 package com.github.sparkzxl.distributed.cloud.config;
 
+import com.github.sparkzxl.distributed.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.github.sparkzxl.distributed.cloud.interceptor.FeignAddHeaderRequestInterceptor;
 import com.netflix.hystrix.HystrixCommand;
 import feign.Feign;
@@ -41,6 +42,16 @@ public class OpenFeignAutoConfiguration {
         List<HttpMessageConverter<?>> converters = new RestTemplate().getMessageConverters();
         ObjectFactory<HttpMessageConverters> factory = () -> new HttpMessageConverters(converters);
         return new SpringFormEncoder(new SpringEncoder(factory));
+    }
+
+    /**
+     * 本地线程 Hystrix并发策略
+     *
+     * @return
+     */
+    @Bean
+    public ThreadLocalHystrixConcurrencyStrategy threadLocalHystrixConcurrencyStrategy() {
+        return new ThreadLocalHystrixConcurrencyStrategy();
     }
 
     @Configuration("hystrixFeignConfiguration")

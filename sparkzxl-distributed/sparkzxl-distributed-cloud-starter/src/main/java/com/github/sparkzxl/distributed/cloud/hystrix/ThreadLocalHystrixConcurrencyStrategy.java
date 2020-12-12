@@ -14,6 +14,7 @@ import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
 import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -143,12 +144,16 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
                 BaseContextHandler.setLocalMap(this.threadLocalMap);
-                RootContext.bind(this.xid);
+                if (StringUtils.isNotEmpty(this.xid)){
+                    RootContext.bind(this.xid);
+                }
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
                 BaseContextHandler.remove();
-                RootContext.unbind();
+                if (StringUtils.isNotEmpty(this.xid)){
+                    RootContext.unbind();
+                }
             }
         }
     }
