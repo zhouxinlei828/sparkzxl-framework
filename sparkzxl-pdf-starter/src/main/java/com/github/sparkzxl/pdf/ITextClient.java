@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.utils;
+package com.github.sparkzxl.pdf;
 
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -16,8 +16,6 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.layout.property.TextAlignment;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -33,15 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * description: Pdf操作工具类
+ * description: itext api client
  *
- * @author zhouxinlei
- * @date 2020-05-24 13:13:32
- */
-@Getter
-@NoArgsConstructor
+ * @author: zhouxinlei
+ * @date: 2020-12-14 17:20:32
+*/
 @Slf4j
-public class PdfUtils {
+public class ITextClient {
 
 
     private final String WINDOWS = "Window";
@@ -445,5 +441,4 @@ public class PdfUtils {
         File outFile = new File(outPath);
         ImageIO.write(imageResult, "png", outFile);
     }
-
 }

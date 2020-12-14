@@ -98,6 +98,7 @@
         <module>sparkzxl-oauth2-server-starter</module>
         <module>sparkzxl-oss-starter</module>
         <module>sparkzxl-patterns-starter</module>
+        <module>sparkzxl-pdf-starter</module>
         <module>sparkzxl-redisson-starter</module>
         <module>sparkzxl-security-starter</module>
         <module>sparkzxl-swagger-starter</module>

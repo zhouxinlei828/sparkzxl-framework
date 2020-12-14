@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.utils;
+package com.github.sparkzxl.pdf;
 
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.google.common.collect.Maps;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author zhouxinlei
  * @date 2020-05-24 13:12:10
  */
-public class DocumentPdfTemplate extends PdfUtils {
+public class DocumentPdfTemplate extends ITextClient {
 
     /**
      * 默认字体大小13
@@ -960,19 +960,5 @@ public class DocumentPdfTemplate extends PdfUtils {
             }
         }
         return new String(c);
-    }
-
-    public static void main(String[] args) {
-        DocumentPdfTemplate documentPdfTemplate = new DocumentPdfTemplate();
-        String fileName = "test.pdf";
-        documentPdfTemplate.fileName = fileName;
-        documentPdfTemplate.initPdfData();
-        documentPdfTemplate.currPage = 1;
-        documentPdfTemplate.top = 785;
-        documentPdfTemplate.currLeft = 55;
-        documentPdfTemplate.addMainTitle(0, "test");
-        documentPdfTemplate.wrap();
-        documentPdfTemplate.addText("testhhhhh");
-        documentPdfTemplate.getDocument().close();
     }
 }
