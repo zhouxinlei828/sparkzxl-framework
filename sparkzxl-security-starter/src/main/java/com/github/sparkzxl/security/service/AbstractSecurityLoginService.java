@@ -16,6 +16,7 @@ import com.github.sparkzxl.core.support.ResponseResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,17 +33,7 @@ import java.util.Date;
  * @date 2020-05-24 13:39:06
  */
 @Slf4j
-public abstract class AbstractSecurityLoginService {
-
-
-    @Autowired(required = false)
-    public JwtProperties jwtProperties;
-
-    @Autowired(required = false)
-    public JwtTokenService jwtTokenService;
-
-    @Autowired(required = false)
-    public UserDetailsService userDetailsService;
+public abstract class AbstractSecurityLoginService<ID> {
 
     /**
      * 登录
@@ -52,8 +43,8 @@ public abstract class AbstractSecurityLoginService {
      */
     public AuthToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
         String account = authRequest.getAccount();
-        AuthUserDetail authUserDetail = (AuthUserDetail) userDetailsService.loadUserByUsername(account);
-        if (ObjectUtils.isEmpty(authUserDetail)){
+        AuthUserDetail<ID> authUserDetail = (AuthUserDetail<ID>) getUserDetailsService().loadUserByUsername(account);
+        if (ObjectUtils.isEmpty(authUserDetail)) {
             throw new AccountNotFoundException("账户不存在");
         }
         //校验密码输入是否正确
@@ -69,13 +60,13 @@ public abstract class AbstractSecurityLoginService {
      * @param authUserDetail 授权用户
      * @return AuthToken
      */
-    public AuthToken authorization(AuthUserDetail authUserDetail) {
+    public AuthToken authorization(AuthUserDetail<ID> authUserDetail) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthToken authToken = new AuthToken();
         authToken.setAccessToken(createJwtToken(authUserDetail));
-        authToken.setExpiration(jwtProperties.getExpire());
+        authToken.setExpiration(getJwtProperties().getExpire());
         authToken.setAuthUserDetail(authUserDetail);
         authToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
@@ -84,9 +75,9 @@ public abstract class AbstractSecurityLoginService {
     }
 
 
-    private String createJwtToken(AuthUserDetail authUserDetail) {
-        Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
-        JwtUserInfo jwtUserInfo = new JwtUserInfo();
+    private String createJwtToken(AuthUserDetail<ID> authUserDetail) {
+        Date expire = DateUtil.offsetSecond(new Date(), getJwtProperties().getExpire().intValue());
+        JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
         jwtUserInfo.setId(authUserDetail.getId());
         jwtUserInfo.setName(authUserDetail.getName());
         jwtUserInfo.setUsername(authUserDetail.getUsername());
@@ -94,10 +85,10 @@ public abstract class AbstractSecurityLoginService {
         jwtUserInfo.setIat(System.currentTimeMillis());
         jwtUserInfo.setExpire(expire);
         jwtUserInfo.setAuthorities(authUserDetail.getAuthorityList());
-        return jwtTokenService.createTokenByHmac(jwtUserInfo);
+        return getJwtTokenService().createTokenByHmac(jwtUserInfo);
     }
 
-    private void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail) throws PasswordException {
+    private void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException {
         String encryptPassword = HuSecretUtils.encryptMd5(authRequest.getPassword());
         log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserDetail.getPassword());
         //数据库密码比对
@@ -115,6 +106,27 @@ public abstract class AbstractSecurityLoginService {
      * @param authToken      用户token
      * @param authUserDetail 认证用户
      */
-    public abstract void accessToken(AuthToken authToken, AuthUserDetail authUserDetail);
+    public abstract void accessToken(AuthToken authToken, AuthUserDetail<ID> authUserDetail);
+
+    /**
+     * 获取jwt配置属性
+     *
+     * @return JwtProperties
+     */
+    public abstract JwtProperties getJwtProperties();
+
+    /**
+     * 获取jwt service
+     *
+     * @return JwtTokenService
+     */
+    public abstract JwtTokenService getJwtTokenService();
+
+    /**
+     * 获取用户信息接口
+     *
+     * @return UserDetailsService
+     */
+    public abstract UserDetailsService getUserDetailsService();
 
 }

@@ -19,4 +19,6 @@ public class SecurityProperties {
 
     private boolean enableLogin = false;
 
+    private boolean builtInPermissions;
+
 }

@@ -26,9 +26,9 @@ import javax.security.auth.login.AccountNotFoundException;
 @RestController
 @RequestMapping("/authorization")
 @Slf4j
-public class AuthorizationEndPoint {
+public class AuthorizationEndPoint<ID> {
 
-    private final AbstractSecurityLoginService abstractSecurityLoginService;
+    private final AbstractSecurityLoginService<ID> abstractSecurityLoginService;
 
     @PostMapping("/accessToken")
     public ApiResult<AuthToken> getAccessToken(@RequestBody AuthRequest authRequest) {

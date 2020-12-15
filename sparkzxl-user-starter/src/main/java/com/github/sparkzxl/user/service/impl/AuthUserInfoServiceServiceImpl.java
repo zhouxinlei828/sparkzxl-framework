@@ -27,6 +27,9 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
     public AuthUserInfo getUserInfo(String accessToken) {
         log.info("accessToken is {}", accessToken);
         AuthUserInfo authUser = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));
+        if (ObjectUtils.isEmpty(authUser)){
+            SparkZxlExceptionAssert.businessFail("未获取登录用户信息");
+        }
         ResponseResultStatus.UN_AUTHORIZED.assertNotNull(authUser);
         return authUser;
     }
