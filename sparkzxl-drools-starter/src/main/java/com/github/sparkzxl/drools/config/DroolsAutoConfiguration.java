@@ -2,7 +2,7 @@ package com.github.sparkzxl.drools.config;
 
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.executor.DroolsRuleExecutor;
-import com.github.sparkzxl.drools.properties.DroolsProerties;
+import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
 import com.github.sparkzxl.drools.service.impl.DroolsRuleServiceImpl;
 import org.kie.api.KieBase;
@@ -31,18 +31,18 @@ import java.io.IOException;
  * @date: 2020-12-15 11:46:06
  */
 @Configuration
-@EnableConfigurationProperties({DroolsProerties.class})
+@EnableConfigurationProperties({DroolsProperties.class})
 public class DroolsAutoConfiguration {
 
     @Autowired
-    private DroolsProerties droolsProerties;
+    private DroolsProperties droolsProperties;
 
     @Bean
     @ConditionalOnMissingBean(KieFileSystem.class)
     public KieFileSystem kieFileSystem() throws IOException {
         KieFileSystem kieFileSystem = getKieServices().newKieFileSystem();
         for (Resource file : ruleFiles()) {
-            kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProerties.getRulesPath() + file.getFilename(), "UTF-8"));
+            kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties.getRulesPath() + file.getFilename(), "UTF-8"));
         }
         return kieFileSystem;
     }
@@ -50,7 +50,7 @@ public class DroolsAutoConfiguration {
     @Bean
     public Resource[] ruleFiles() throws IOException {
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        return resourcePatternResolver.getResources("classpath*:" + droolsProerties.getRulesPath() + "**/*.*");
+        return resourcePatternResolver.getResources("classpath*:" + droolsProperties.getRulesPath() + "**/*.*");
     }
 
     @Bean
@@ -78,7 +78,7 @@ public class DroolsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(KieContainerSessionsPool.class)
     public KieContainerSessionsPool kieContainerSessionsPool() throws IOException {
-        return kieContainer().newKieSessionsPool(droolsProerties.getPoolSize());
+        return kieContainer().newKieSessionsPool(droolsProperties.getPoolSize());
     }
 
     private KieServices getKieServices() {
@@ -106,7 +106,7 @@ public class DroolsAutoConfiguration {
 
     @Bean
     public DroolsRuleService droolsRuleService(){
-        return new DroolsRuleServiceImpl(droolsProerties);
+        return new DroolsRuleServiceImpl(droolsProperties);
     }
 
     @Bean

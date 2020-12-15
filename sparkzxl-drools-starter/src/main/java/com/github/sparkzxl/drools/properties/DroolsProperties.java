@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 */
 @Data
 @ConfigurationProperties(prefix = "drools")
-public class DroolsProerties {
+public class DroolsProperties {
 
     private String rulesPath;
 
