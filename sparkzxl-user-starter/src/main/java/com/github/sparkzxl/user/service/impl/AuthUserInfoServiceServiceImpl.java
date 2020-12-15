@@ -30,7 +30,6 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
         if (ObjectUtils.isEmpty(authUser)){
             SparkZxlExceptionAssert.businessFail("未获取登录用户信息");
         }
-        ResponseResultStatus.UN_AUTHORIZED.assertNotNull(authUser);
         return authUser;
     }
 
