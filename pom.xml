@@ -80,6 +80,7 @@
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.0</seata.version>
         <janino.version>3.1.2</janino.version>
+        <drools-version>7.47.0.Final</drools-version>
     </properties>
 
     <modules>
@@ -88,6 +89,7 @@
         <module>sparkzxl-core</module>
         <module>sparkzxl-database-starter</module>
         <module>sparkzxl-distributed</module>
+        <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
         <module>sparkzxl-feign-starter</module>
         <module>sparkzxl-job-executor-starter</module>
@@ -498,6 +500,34 @@
                 <groupId>org.codehaus.janino</groupId>
                 <artifactId>janino</artifactId>
                 <version>${janino.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kie-spring</artifactId>
+                <version>${drools-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-compiler</artifactId>
+                <version>${drools-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
