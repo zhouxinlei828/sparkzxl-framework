@@ -4,6 +4,7 @@ import com.github.sparkzxl.core.base.ResponseResultUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,10 +37,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain chain) throws ServletException, IOException {
+                                    FilterChain chain) {
         String accessToken = ResponseResultUtils.getAuthHeader(request);
         if (StringUtils.isNotEmpty(accessToken)) {
             JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);

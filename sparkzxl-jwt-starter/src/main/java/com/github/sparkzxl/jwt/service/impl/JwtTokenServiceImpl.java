@@ -1,7 +1,6 @@
 package com.github.sparkzxl.jwt.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -17,16 +16,14 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +35,27 @@ import java.util.Map;
  * @date: 2020-07-14 08:03:30
  */
 @Slf4j
-@AllArgsConstructor
-public class JwtTokenServiceImpl implements JwtTokenService {
+public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenService<ID> {
 
     private final JwtProperties jwtProperties;
     private final KeyStoreProperties KeyStoreProperties;
     private Map<String, KeyPair> keyPairMap;
 
+    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties) {
+        this.jwtProperties = jwtProperties;
+        this.KeyStoreProperties = keyStoreProperties;
+    }
+
+    public void setKeyPairMap(Map<String, KeyPair> keyPairMap) {
+        this.keyPairMap = keyPairMap;
+    }
+
+    public Map<String, KeyPair> getKeyPairMap() {
+        return keyPairMap;
+    }
+
     @Override
-    public <T> String createTokenByRsa(JwtUserInfo<T> jwtUserInfo) {
+    public String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo) throws JOSEException {
         //创建JWS头，设置签名算法和类型
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
@@ -60,27 +69,15 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         //创建JWS对象
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
         //创建RSA签名器
-        JWSSigner jwsSigner;
-        try {
-            jwsSigner = new RSASSASigner(getRsaKey(), true);
-            //签名
-            jwsObject.sign(jwsSigner);
-        } catch (JOSEException e) {
-            log.warn("根据RSA算法生成token失败：{}", e.getMessage());
-            SparkZxlExceptionAssert.businessFail(e.getMessage());
-        }
+        JWSSigner jwsSigner = new RSASSASigner(getRsaKey(), true);
+        //签名
+        jwsObject.sign(jwsSigner);
         return jwsObject.serialize();
     }
 
     @Override
-    public <T> JwtUserInfo<T> verifyTokenByRsa(String token) {
-        JwtUserInfo<T> jwtUserInfo = null;
-        try {
-            jwtUserInfo = getJwtUserInfo(token);
-        } catch (ParseException e) {
-            log.error("jwt转换异常：{}", ExceptionUtil.getMessage(e));
-            e.printStackTrace();
-        }
+    public JwtUserInfo<ID> verifyTokenByRsa(String token) throws Exception{
+        JwtUserInfo<ID> jwtUserInfo = getJwtUserInfo(token);
         assert jwtUserInfo != null;
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
             throw new JwtExpireException("token已过期");
@@ -89,19 +86,19 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public <T> JwtUserInfo<T> getJwtUserInfo(String token) throws ParseException {
+    public JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception {
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
         return JSONUtil.toBean(payload, JwtUserInfo.class);
     }
 
     @Override
-    public <T> JwtUserInfo<T> getAuthJwtInfo(String token) throws ParseException {
-        JwtUserInfo<T> jwtUserInfo = new JwtUserInfo<T>();
+    public JwtUserInfo<ID> getAuthJwtInfo(String token) throws Exception {
+        JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
         JSONObject jsonObject = JSONUtil.parseObj(payload);
-        T id = (T) jsonObject.get("id");
+        ID id = (ID) jsonObject.get("id");
         jwtUserInfo.setId(id);
         String username = jsonObject.getStr("user_name");
         jwtUserInfo.setUsername(username);
@@ -125,7 +122,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public <T> String createTokenByHmac(JwtUserInfo<T> jwtUserInfo) {
+    public String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo) throws Exception{
         //创建JWS头，设置签名算法和类型
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
                 type(JOSEObjectType.JWT)
@@ -135,41 +132,30 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         Payload payload = new Payload(payloadStr);
         //创建JWS对象
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
-        try {
-            //创建HMAC签名器
-            JWSSigner jwsSigner = new MACSigner(HuSecretUtils.encryptMd5(jwtProperties.getSecret()));
-            //签名
-            jwsObject.sign(jwsSigner);
-        } catch (Exception e) {
-            log.warn("根据HMAC算法生成token失败：{}", e.getMessage());
-            SparkZxlExceptionAssert.businessFail(e.getMessage());
-        }
+        //创建HMAC签名器
+        JWSSigner jwsSigner = new MACSigner(HuSecretUtils.encryptMd5(jwtProperties.getSecret()));
+        //签名
+        jwsObject.sign(jwsSigner);
         return jwsObject.serialize();
     }
 
     @Override
-    public <T> JwtUserInfo<T> verifyTokenByHmac(String token) {
-
-        try {
-            JwtUserInfo<T> jwtUserInfo;
-            //从token中解析JWS对象
-            JWSObject jwsObject = JWSObject.parse(token);
-            //创建HMAC验证器
-            JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtils.encryptMd5(jwtProperties.getSecret()));
-            if (!jwsObject.verify(jwsVerifier)) {
-                throw new JwtInvalidException("token签名不合法");
-            }
-            String payload = jwsObject.getPayload().toString();
-            jwtUserInfo = getJwtUserInfo(token);
-            assert jwtUserInfo != null;
-            if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-                throw new JwtExpireException("token已过期");
-            }
-            return jwtUserInfo;
-        } catch (JOSEException | ParseException e) {
-            log.warn("根据HMAC校验token失败：{}", e.getMessage());
-            return null;
+    public JwtUserInfo<ID> verifyTokenByHmac(String token) throws Exception{
+        JwtUserInfo<ID> jwtUserInfo;
+        //从token中解析JWS对象
+        JWSObject jwsObject = JWSObject.parse(token);
+        //创建HMAC验证器
+        JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtils.encryptMd5(jwtProperties.getSecret()));
+        if (!jwsObject.verify(jwsVerifier)) {
+            throw new JwtInvalidException("token签名不合法");
         }
+        String payload = jwsObject.getPayload().toString();
+        jwtUserInfo = getJwtUserInfo(token);
+        assert jwtUserInfo != null;
+        if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
+            throw new JwtExpireException("token已过期");
+        }
+        return jwtUserInfo;
     }
 
     private KeyPair getKeyPair() {

@@ -1,6 +1,7 @@
 package com.github.sparkzxl.oauth.enhancer;
 
 import com.github.sparkzxl.oauth.entity.AuthUserDetail;
+import com.google.common.collect.Maps;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -20,7 +21,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
         AuthUserDetail userDetails = (AuthUserDetail) oAuth2Authentication.getPrincipal();
-        Map<String, Object> info = new HashMap<>(1);
+        Map<String, Object> info = Maps.newLinkedHashMap();
         info.put("id", userDetails.getId());
         info.put("username", userDetails.getUsername());
         info.put("name", userDetails.getName());

@@ -10,17 +10,29 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * description: 动态权限控制数据管理
+ *
+ * @author: zhouxinlei
+ * @date: 2020-12-16 13:36:46
+*/
 public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     private static Map<String, ConfigAttribute> configAttributeMap = null;
 
-    @Resource
+
     private DynamicSecurityService dynamicSecurityService;
+
+    public void setDynamicSecurityService(DynamicSecurityService dynamicSecurityService) {
+        this.dynamicSecurityService = dynamicSecurityService;
+    }
+
+    public DynamicSecurityService getDynamicSecurityService() {
+        return dynamicSecurityService;
+    }
 
     @PostConstruct
     public void loadDataSource() {

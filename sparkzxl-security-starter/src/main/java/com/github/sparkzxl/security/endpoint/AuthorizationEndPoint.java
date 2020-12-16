@@ -2,8 +2,6 @@ package com.github.sparkzxl.security.endpoint;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
-import com.github.sparkzxl.security.entity.AuthToken;
 import com.github.sparkzxl.security.entity.AuthRequest;
 import com.github.sparkzxl.security.service.AbstractSecurityLoginService;
 import lombok.AllArgsConstructor;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.Serializable;
 
 /**
  * description: 授权登录管理
@@ -26,12 +25,12 @@ import javax.security.auth.login.AccountNotFoundException;
 @RestController
 @RequestMapping("/authorization")
 @Slf4j
-public class AuthorizationEndPoint<ID> {
+public class AuthorizationEndPoint<ID extends Serializable> {
 
     private final AbstractSecurityLoginService<ID> abstractSecurityLoginService;
 
     @PostMapping("/accessToken")
-    public ApiResult<AuthToken> getAccessToken(@RequestBody AuthRequest authRequest) {
+    public ApiResult getAccessToken(@RequestBody AuthRequest authRequest) {
         try {
             return ApiResult.apiResult(200, "登录成功", abstractSecurityLoginService.login(authRequest));
         } catch (AccountNotFoundException | PasswordException e) {

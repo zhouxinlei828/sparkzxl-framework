@@ -12,7 +12,11 @@ public class SparkZxlExceptionAssert {
 
 
     public static void businessFail(String message) {
-        throw new BusinessException(ResponseResultStatus.FAILURE, null, message);
+        throw new BusinessException(ResponseResultStatus.FAILURE.getCode(), message);
+    }
+
+    public static void businessFail(int code, String message) {
+        throw new BusinessException(code, message);
     }
 
     public static void businessFail(BaseEnumCode baseEnumCode) {

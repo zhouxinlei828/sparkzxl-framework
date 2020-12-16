@@ -22,6 +22,10 @@ public class BusinessException extends BaseException {
         super(baseEnumCode, args, message);
     }
 
+    public BusinessException(int code, String message) {
+        super(code, message);
+    }
+
     public BusinessException(BaseEnumCode baseEnumCode, Object[] args, String message, Throwable cause) {
         super(baseEnumCode, args, message, cause);
     }

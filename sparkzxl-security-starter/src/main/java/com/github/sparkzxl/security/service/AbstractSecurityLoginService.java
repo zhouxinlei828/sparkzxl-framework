@@ -1,8 +1,10 @@
 package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
@@ -16,14 +18,13 @@ import com.github.sparkzxl.core.support.ResponseResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.bouncycastle.openssl.PasswordException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -33,7 +34,7 @@ import java.util.Date;
  * @date 2020-05-24 13:39:06
  */
 @Slf4j
-public abstract class AbstractSecurityLoginService<ID> {
+public abstract class AbstractSecurityLoginService<ID extends Serializable> {
 
     /**
      * 登录
@@ -85,20 +86,24 @@ public abstract class AbstractSecurityLoginService<ID> {
         jwtUserInfo.setIat(System.currentTimeMillis());
         jwtUserInfo.setExpire(expire);
         jwtUserInfo.setAuthorities(authUserDetail.getAuthorityList());
-        return getJwtTokenService().createTokenByHmac(jwtUserInfo);
-    }
-
-    private void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException {
-        String encryptPassword = HuSecretUtils.encryptMd5(authRequest.getPassword());
-        log.info("密码加密 = {}，数据库密码={}", encryptPassword, authUserDetail.getPassword());
-        //数据库密码比对
-        boolean verifyResult = StringUtils.equals(encryptPassword, authUserDetail.getPassword());
-        if (!verifyResult) {
-            SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.pwdError(authUserDetail.getId(),
-                    ResponseResultStatus.PASSWORD_ERROR.getMessage())));
-            throw new PasswordException("密码不正确");
+        try {
+            return getJwtTokenService().createTokenByHmac(jwtUserInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("生成token发生异常：{}", ExceptionUtil.getMessage(e));
+            SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(e.getMessage()));
+            return null;
         }
     }
+
+    /**
+     * 校验密码正确性
+     *
+     * @param authRequest 登录请求
+     * @param authUserDetail 用户信息
+     */
+    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException;
+
 
     /**
      * 设置accessToken缓存
@@ -120,7 +125,7 @@ public abstract class AbstractSecurityLoginService<ID> {
      *
      * @return JwtTokenService
      */
-    public abstract JwtTokenService getJwtTokenService();
+    public abstract JwtTokenService<ID> getJwtTokenService();
 
     /**
      * 获取用户信息接口

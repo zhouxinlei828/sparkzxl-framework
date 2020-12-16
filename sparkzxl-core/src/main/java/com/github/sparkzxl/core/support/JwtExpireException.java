@@ -15,7 +15,7 @@ public class JwtExpireException extends BaseException {
     private static final long serialVersionUID = -2803534562798384761L;
 
     public JwtExpireException(String message) {
-        super(message);
+        super(ResponseResultStatus.FAILURE.code, message);
     }
 
     public JwtExpireException(BaseEnumCode baseEnumCode, Object[] args, String message) {

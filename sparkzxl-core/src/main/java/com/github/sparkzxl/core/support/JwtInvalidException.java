@@ -23,7 +23,7 @@ public class JwtInvalidException extends BaseException {
     }
 
     public JwtInvalidException(String message) {
-        super(message);
+        super(ResponseResultStatus.FAILURE.code,message);
     }
 
     @Override

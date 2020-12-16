@@ -12,6 +12,7 @@ import com.github.sparkzxl.security.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.security.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.security.filter.DynamicSecurityFilter;
 import com.github.sparkzxl.security.service.AbstractSecurityLoginService;
+import com.github.sparkzxl.security.service.DynamicSecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -58,6 +59,8 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired(required = false)
     private AbstractSecurityLoginService abstractSecurityLoginService;
+    @Autowired(required = false)
+    private DynamicSecurityService dynamicSecurityService;
 
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
@@ -100,7 +103,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        if (securityProperties.isBuiltInPermissions()){
+        if (securityProperties.isBuiltInPermissions()) {
             registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
         }
     }
@@ -127,22 +130,24 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         log.info("DynamicAccessDecisionManager registered success! ");
         return new DynamicAccessDecisionManager();
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
     public DynamicSecurityFilter dynamicSecurityFilter() {
         return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
-        return new DynamicSecurityMetadataSource();
+        DynamicSecurityMetadataSource dynamicSecurityMetadataSource = new DynamicSecurityMetadataSource();
+        dynamicSecurityMetadataSource.setDynamicSecurityService(dynamicSecurityService);
+        return dynamicSecurityMetadataSource;
     }
 
     @Bean

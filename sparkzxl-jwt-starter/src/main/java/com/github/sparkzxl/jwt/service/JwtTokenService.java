@@ -1,9 +1,10 @@
 package com.github.sparkzxl.jwt.service;
 
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
 
-import java.text.ParseException;
+import java.io.Serializable;
 
 /**
  * description: jwtToken 服务类
@@ -11,49 +12,61 @@ import java.text.ParseException;
  * @author: zhouxinlei
  * @date: 2020-07-14 08:02:04
  */
-public interface JwtTokenService {
+public interface JwtTokenService<ID extends Serializable> {
 
     /**
      * 根据RSA算法生成token
      *
      * @param jwtUserInfo 负载信息
      * @return String
+     * @throws JOSEException 抛出异常
      */
-    <T> String createTokenByRsa(JwtUserInfo<T> jwtUserInfo);
+    String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo) throws JOSEException;
 
     /**
      * 根据RSA校验token
      *
      * @param token token
-     * @return PayloadDto
+     * @return JwtUserInfo<ID>
+     * @throws Exception 抛出异常
      */
-    <T> JwtUserInfo<T> verifyTokenByRsa(String token);
+    JwtUserInfo<ID> verifyTokenByRsa(String token) throws Exception;
 
     /**
      * 根据token获取信息
      *
-     * @param token token
+     * @param token token信息
      * @return JwtUserInfo
+     * @throws Exception 抛出异常
      */
-    <T> JwtUserInfo<T> getJwtUserInfo(String token) throws ParseException;
+    JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception;
 
-    <T> JwtUserInfo<T> getAuthJwtInfo(String token) throws ParseException;
+    /**
+     * 获取jwt用户信息
+     *
+     * @param token token信息
+     * @return JwtUserInfo<ID>
+     * @throws Exception 抛出异常
+     */
+    JwtUserInfo<ID> getAuthJwtInfo(String token) throws Exception;
 
     /**
      * 根据HMAC算法生成token
      *
      * @param jwtUserInfo 负载信息
      * @return String
+     * @throws Exception 抛出异常
      */
-    <T> String createTokenByHmac(JwtUserInfo<T> jwtUserInfo);
+    String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo) throws Exception;
 
     /**
      * 根据HMAC校验token
      *
      * @param token token
      * @return PayloadDto
+     * @throws Exception 抛出异常
      */
-    <T> JwtUserInfo<T> verifyTokenByHmac(String token);
+    JwtUserInfo<ID> verifyTokenByHmac(String token) throws Exception;
 
     /**
      * 获取公钥

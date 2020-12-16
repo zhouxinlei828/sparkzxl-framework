@@ -50,8 +50,8 @@ public class GlobalExceptionHandler {
     public ApiResult businessException(BusinessException e) {
         handleResponseResult();
         log.error(e.getMessage());
-        int code = e.getBaseEnumCode().getCode();
-        String message = e.getMessage() == null ? e.getBaseEnumCode().getMessage() : e.getMessage();
+        int code = e.getCode();
+        String message = e.getMessage();
         return ApiResult.apiResult(code, message);
     }
 
@@ -59,8 +59,8 @@ public class GlobalExceptionHandler {
     public ApiResult serviceDegradeException(ServiceDegradeException e) {
         handleResponseResult();
         log.error(e.getMessage());
-        int code = e.getBaseEnumCode().getCode();
-        String message = e.getMessage() == null ? e.getBaseEnumCode().getMessage() : e.getMessage();
+        int code = e.getCode();
+        String message = e.getMessage();
         return ApiResult.apiResult(code, message);
     }
 
