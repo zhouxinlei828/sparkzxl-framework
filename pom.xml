@@ -38,7 +38,7 @@
         <logstash.version>5.3</logstash.version>
         <freemarker.version>2.3.28</freemarker.version>
         <!-- common组件-->
-        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-lang3.version>3.10</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.7</commons-io.version>
         <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
