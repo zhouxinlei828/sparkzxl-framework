@@ -129,7 +129,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object targetObject = metaObject.getOriginalObject();
         //更新人
         boolean updateUserExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_USER);
-        if (ObjectUtils.isNotEmpty(updateUserExistClass)) {
+        if (updateUserExistClass) {
             Object updateUserVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER);
             if (ObjectUtils.isEmpty(updateUserVal) || updateUserVal.equals(0)) {
                 Class<?> updateUserClass = metaObject.getGetterType(EntityConstant.UPDATE_USER);
