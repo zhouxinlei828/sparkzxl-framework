@@ -107,6 +107,7 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
+        <module>sparkzxl-word-starter</module>
     </modules>
 
     <distributionManagement>
