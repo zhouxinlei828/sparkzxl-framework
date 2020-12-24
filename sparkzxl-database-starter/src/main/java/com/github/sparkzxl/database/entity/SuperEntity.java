@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.github.sparkzxl.database.constant.EntityConstant;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -35,7 +34,6 @@ public class SuperEntity<T> implements Serializable {
     protected T createUser;
 
     @TableField(value = EntityConstant.COLUMN_CREATE_TIME, fill = FieldFill.INSERT)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     protected LocalDateTime createTime;
 
 }

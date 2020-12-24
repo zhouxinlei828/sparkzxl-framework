@@ -131,10 +131,20 @@ public class JsonUtil {
             Map<String, Map<String, Object>> map = getInstance().readValue(content, new TypeReference<Map<String, Map<String, Object>>>() {
             });
             Map<String, T> result = new HashMap<>(map.size());
-            map.forEach((key, value) -> {
-                result.put(key, toPojo(value, valueTypeRef));
-            });
+            map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
+            return result;
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
 
+    public static <T, E> Map<String, T> toMap(E data, Class<T> valueTypeRef) {
+        try {
+            Map<String, Map<String, Object>> map = getInstance().readValue(toJson(data), new TypeReference<Map<String, Map<String, Object>>>() {
+            });
+            Map<String, T> result = new HashMap<>(map.size());
+            map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
         } catch (IOException e) {
             log.error(e.getMessage(), e);

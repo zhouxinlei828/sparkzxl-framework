@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 登录认证用户实体类
@@ -47,8 +48,8 @@ public class AuthUserInfo<T> implements Serializable {
     private List<String> authorityList;
 
     /**
-     * 额外数据（可为json字符串）
+     * 扩展数据
      */
-    private String extraInfo;
+    private Map<String, Object> extraInfo;
 
 }

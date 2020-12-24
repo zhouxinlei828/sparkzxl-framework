@@ -2,7 +2,6 @@ package com.github.sparkzxl.database.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.github.sparkzxl.database.constant.EntityConstant;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,6 @@ public class Entity<T> extends SuperEntity<T> {
     protected T updateUser;
 
     @TableField(value = EntityConstant.COLUMN_UPDATE_TIME, fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     protected LocalDateTime updateTime;
 
 
