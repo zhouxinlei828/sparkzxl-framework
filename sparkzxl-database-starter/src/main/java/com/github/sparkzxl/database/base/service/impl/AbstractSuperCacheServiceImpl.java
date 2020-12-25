@@ -33,7 +33,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
 
     @Override
     public T getByIdCache(Serializable id) {
-        return this.cacheTemplate.get(this.getRegion(), (x) -> super.getById(id));
+        return this.cacheTemplate.get(BuildKeyUtils.generateKey(this.getRegion(), id), (x) -> super.getById(id));
     }
 
     @Override
