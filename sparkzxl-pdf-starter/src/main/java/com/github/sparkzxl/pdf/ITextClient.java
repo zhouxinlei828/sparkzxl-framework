@@ -40,7 +40,6 @@ import java.util.List;
 public class ITextClient {
 
 
-    private final String WINDOWS = "Window";
     public float top = 785;
     /**
      * 总宽度
@@ -86,7 +85,8 @@ public class ITextClient {
     public void initPdfData() {
         try {
             String osName = System.getProperty("os.name");
-            if (osName.contains(WINDOWS)) {
+            String window = "Window";
+            if (osName.contains(window)) {
                 fontPath = "C:/Windows/Fonts/simfang.ttf";
             } else {
                 fontPath = "/usr/share/fonts/chinese/simfang.ttf";
