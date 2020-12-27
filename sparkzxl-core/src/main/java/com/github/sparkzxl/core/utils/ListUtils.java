@@ -2,10 +2,12 @@ package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.convert.Convert;
 
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,4 +179,20 @@ public class ListUtils {
     public static <T> List<T> unionList(List<T> a, List<T> b) {
         return new ArrayList<>(CollectionUtils.union(a, b));
     }
+
+    public static <T> List<T> deepCopy(List<T> srcList) {
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(byteOut);
+            out.writeObject(srcList);
+
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            ObjectInputStream inStream = new ObjectInputStream(byteIn);
+            return (List<T>) inStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return Lists.newArrayList();
+    }
+
 }
