@@ -101,5 +101,9 @@
             <groupId>com.github.whvcse</groupId>
             <artifactId>easy-captcha</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+        </dependency>
     </dependencies>
 </project>

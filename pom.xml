@@ -82,6 +82,7 @@
         <janino.version>3.1.2</janino.version>
         <drools-version>7.47.0.Final</drools-version>
         <easy-captcha-version>1.6.2</easy-captcha-version>
+        <vavr-version>0.10.3</vavr-version>
     </properties>
 
     <modules>
@@ -536,6 +537,11 @@
                 <groupId>com.github.whvcse</groupId>
                 <artifactId>easy-captcha</artifactId>
                 <version>${easy-captcha-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>${vavr-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
