@@ -43,4 +43,7 @@ public class AuthorizationRequest {
     @ApiModelProperty(value = "授权范围", required = true, example = "all")
     private String scope;
 
+    @ApiModelProperty(value = "验证码")
+    private String captcha;
+
 }
