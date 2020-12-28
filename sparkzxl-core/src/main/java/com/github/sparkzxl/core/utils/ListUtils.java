@@ -3,6 +3,8 @@ package com.github.sparkzxl.core.utils;
 import cn.hutool.core.convert.Convert;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,9 +48,7 @@ public class ListUtils {
 
 
     public static <T> List<T> single(T value) {
-        List<T> list = new ArrayList<>(1);
-        list.add(value);
-        return list;
+        return Lists.newArrayList(value);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ListUtils {
      * @return List<T>
      */
     public static <T> List<T> setToList(Set<T> set) {
-        return new ArrayList<>(set);
+        return Lists.newArrayList(set);
     }
 
     /**
@@ -68,7 +68,7 @@ public class ListUtils {
      * @return Set<T>
      */
     public static <T> Set<T> listToSet(List<T> list) {
-        return new HashSet<>(list);
+        return Sets.newHashSet(list);
     }
 
     /**
@@ -101,7 +101,7 @@ public class ListUtils {
     public static String listToString(List<String> list) {
         String str = "";
         if (isNotEmpty(list)) {
-            str = String.join(",", list);
+            str = StringUtils.joinWith(",", list);
         }
         return str;
     }
@@ -181,18 +181,13 @@ public class ListUtils {
     }
 
     public static <T> List<T> deepCopy(List<T> srcList) {
-        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-        try {
+        return Try.of(() -> {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(byteOut);
             out.writeObject(srcList);
-
             ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
             ObjectInputStream inStream = new ObjectInputStream(byteIn);
             return (List<T>) inStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return Lists.newArrayList();
+        }).onFailure(Throwable::printStackTrace).getOrElse(Lists.newArrayList());
     }
-
 }
