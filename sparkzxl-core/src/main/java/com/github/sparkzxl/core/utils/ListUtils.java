@@ -13,6 +13,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.vavr.API.*;
+
 /**
  * description: 集合工具类
  *
