@@ -10,6 +10,7 @@ import com.github.sparkzxl.web.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -112,6 +113,13 @@ public class GlobalExceptionHandler {
         handleResponseResult();
         log.error(e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.METHOD_NOT_SUPPORTED);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ApiResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        handleResponseResult();
+        log.error(e.getMessage());
+        return ApiResult.apiResult(ResponseResultStatus.MSG_NOT_READABLE);
     }
 
     /**
