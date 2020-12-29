@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.github.sparkzxl.core.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Date;
@@ -21,12 +22,15 @@ public class CustomDateDeserializer extends JsonDeserializer<Date> {
 
 
     @Override
-    public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String date = jsonParser.getText();
-        if (NumberUtil.isNumber(date)) {
-            long timeStamp = Long.parseLong(date);
-            return DateUtils.date(timeStamp);
+        if (StringUtils.isNotEmpty(date)){
+            if (NumberUtil.isNumber(date)) {
+                long timeStamp = Long.parseLong(date);
+                return DateUtils.date(timeStamp);
+            }
+            return DateUtils.parse(date, DatePattern.NORM_DATETIME_FORMAT);
         }
-        return DateUtils.parse(date, DatePattern.NORM_DATETIME_FORMAT);
+        return null;
     }
 }
