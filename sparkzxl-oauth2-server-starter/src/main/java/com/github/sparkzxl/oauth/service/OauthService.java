@@ -1,8 +1,7 @@
 package com.github.sparkzxl.oauth.service;
 
-import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.oauth.entity.AuthorizationRequest;
-import com.github.sparkzxl.oauth.entity.CaptchaInfo;
+import com.github.sparkzxl.core.entity.CaptchaInfo;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 

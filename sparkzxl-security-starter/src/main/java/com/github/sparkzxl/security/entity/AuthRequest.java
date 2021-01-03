@@ -19,4 +19,14 @@ public class AuthRequest {
     @NotEmpty(message = "密码不能为空")
     private String password;
 
+    /**
+     * 验证码key
+     */
+    private String captchaKey;
+
+    /**
+     * 验证码
+     */
+    private String captchaCode;
+
 }

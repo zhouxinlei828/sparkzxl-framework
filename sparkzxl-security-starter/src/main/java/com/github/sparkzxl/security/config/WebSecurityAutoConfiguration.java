@@ -4,19 +4,16 @@ import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.authorization.DynamicAccessDecisionManager;
-import com.github.sparkzxl.security.endpoint.AuthorizationEndPoint;
 import com.github.sparkzxl.security.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.security.intercept.DynamicSecurityMetadataSource;
 import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.github.sparkzxl.security.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.security.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.security.filter.DynamicSecurityFilter;
-import com.github.sparkzxl.security.service.AbstractSecurityLoginService;
 import com.github.sparkzxl.security.service.DynamicSecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,11 +51,8 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired(required = false)
     private JwtTokenService jwtTokenService;
-
     @Autowired(required = false)
     private UserDetailsService userDetailsService;
-    @Autowired(required = false)
-    private AbstractSecurityLoginService abstractSecurityLoginService;
     @Autowired(required = false)
     private DynamicSecurityService dynamicSecurityService;
 
@@ -148,12 +142,5 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
         DynamicSecurityMetadataSource dynamicSecurityMetadataSource = new DynamicSecurityMetadataSource();
         dynamicSecurityMetadataSource.setDynamicSecurityService(dynamicSecurityService);
         return dynamicSecurityMetadataSource;
-    }
-
-    @Bean
-    @ConditionalOnWebApplication
-    @ConditionalOnProperty(name = "sparkzxl.security.enableLogin", havingValue = "true")
-    public AuthorizationEndPoint authorizationEndPoint() {
-        return new AuthorizationEndPoint(abstractSecurityLoginService);
     }
 }

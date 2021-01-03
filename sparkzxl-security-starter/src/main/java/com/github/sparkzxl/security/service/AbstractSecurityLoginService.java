@@ -3,6 +3,7 @@ package com.github.sparkzxl.security.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.core.entity.CaptchaInfo;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
@@ -96,11 +97,33 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
     /**
      * 校验密码正确性
      *
-     * @param authRequest 登录请求
+     * @param authRequest    登录请求
      * @param authUserDetail 用户信息
+     * @throws PasswordException 密码校验异常
      */
     public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException;
 
+
+    /**
+     * 生成验证码
+     *
+     * @param type 验证码类型
+     * @return CaptchaInfo
+     */
+    public CaptchaInfo createCaptcha(String type) {
+        return null;
+    }
+
+    /**
+     * 校验验证码
+     *
+     * @param key   前端上送 key
+     * @param value 前端上送待校验值
+     * @return 是否成功
+     */
+    public boolean checkCaptcha(String key, String value) {
+        return false;
+    }
 
     /**
      * 设置accessToken缓存
@@ -130,5 +153,6 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @return UserDetailsService
      */
     public abstract UserDetailsService getUserDetailsService();
+
 
 }
