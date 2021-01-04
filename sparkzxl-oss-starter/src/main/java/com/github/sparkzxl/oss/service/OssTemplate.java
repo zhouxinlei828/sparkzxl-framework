@@ -143,36 +143,30 @@ public class OssTemplate implements InitializingBean {
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, expires);
         URL url = amazonS3.generatePresignedUrl(bucketName, objectName, calendar.getTime());
-        String urlStr = url.toString();
-        if (StringUtils.isNotEmpty(ossProperties.getCustomDomain())) {
-            String domain = ossProperties.getBucketName().concat(".").concat(ossProperties.getEndpoint());
-            urlStr = urlStr.replace(domain, ossProperties.getCustomDomain());
+        return replaceHttpDomain(url);
+    }
+
+    private String replaceHttpDomain(URL url) {
+        String objectUrl = url.toString();
+        String customDomain = ossProperties.getCustomDomain();
+        if (StringUtils.isNotEmpty(customDomain)) {
+            String host = URLUtil.getHost(url).toString();
+            if (!StringUtils.startsWithAny(customDomain, "http", "https")) {
+                customDomain = "https://".concat(customDomain);
+            }
+            objectUrl = objectUrl.replace(host, customDomain);
         }
-        return urlStr;
+        return URLUtil.decode(objectUrl);
     }
 
     @SneakyThrows
     public String getObjectURL(String bucketName, String objectName) {
-        String buildUrl;
-        String path = bucketName.concat("/").concat(objectName);
-        if (StringUtils.isNotEmpty(ossProperties.getCustomDomain())) {
-            buildUrl = UrlBuilder.create()
-                    .setScheme("https")
-                    .setHost(ossProperties.getCustomDomain())
-                    .addPath(path)
-                    .build();
-            return URLUtil.decode(buildUrl);
-        }
-        String endpoint = ossProperties.getEndpoint();
-        if (StringUtils.startsWith(endpoint, "http")) {
-            buildUrl = endpoint.concat("/").concat(path);
-        } else {
-            buildUrl = UrlBuilder.create()
-                    .setHost(endpoint)
-                    .addPath(path)
-                    .build();
-        }
-        return URLUtil.decode(buildUrl);
+        return getObjectUrl(bucketName,objectName);
+    }
+
+    public String getObjectUrl(String bucketName, String objectName) {
+        URL url = amazonS3.getUrl(bucketName, objectName);
+        return replaceHttpDomain(url);
     }
 
     /**
