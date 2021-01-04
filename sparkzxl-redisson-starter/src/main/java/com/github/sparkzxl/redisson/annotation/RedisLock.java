@@ -16,6 +16,11 @@ import java.lang.annotation.Target;
 public @interface RedisLock {
 
     /**
+     * 特定参数识别，默认取第 0 个下标
+     */
+    int lockFiled() default 0;
+
+    /**
      * key的前缀
      *
      * @return String

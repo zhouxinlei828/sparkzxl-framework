@@ -1,5 +1,6 @@
 package com.github.sparkzxl.redisson.config;
 
+import com.github.sparkzxl.redisson.aspect.RedisLockAspect;
 import com.github.sparkzxl.redisson.lock.RedisDistributedLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.starter.RedissonAutoConfiguration;
@@ -24,5 +25,10 @@ public class RedissonConfiguration {
         RedisDistributedLock redisDistributedLock = new RedisDistributedLock();
         redisDistributedLock.setRedissonClient(redissonClient);
         return redisDistributedLock;
+    }
+
+    @Bean
+    public RedisLockAspect redisLockAspect() {
+        return new RedisLockAspect();
     }
 }

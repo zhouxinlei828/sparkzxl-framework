@@ -7,9 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -19,7 +17,6 @@ import java.lang.reflect.Method;
  * @author: zhouxinlei
  * @date: 2021-01-04 09:58:41
  */
-@Component
 @Aspect
 public class RedisLockAspect {
 
@@ -33,15 +30,15 @@ public class RedisLockAspect {
 
     @Around(value = "redisLockAspect(redisLock)", argNames = "proceedingJoinPoint,redisLock")
     public Object around(ProceedingJoinPoint proceedingJoinPoint, RedisLock redisLock) {
-        MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
-        Method method = signature.getMethod();
-        Object[] args = proceedingJoinPoint.getArgs();
-        Object arg = args[0];
+
         String keyPrefix = redisLock.keyPrefix();
+        int lockFiled = redisLock.lockFiled();
         long waitTime = redisLock.waitTime();
         long leaseTime = redisLock.leaseTime();
         int tryCount = redisLock.tryCount();
         long sleepTime = redisLock.sleepTime();
+        Object[] args = proceedingJoinPoint.getArgs();
+        Object arg = args[lockFiled];
         String lockKey = keyPrefix.concat("_").concat(String.valueOf(arg));
         boolean lock = false;
         Object result = null;
