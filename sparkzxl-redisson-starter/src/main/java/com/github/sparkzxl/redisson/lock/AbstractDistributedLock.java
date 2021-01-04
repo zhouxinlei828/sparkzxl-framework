@@ -4,22 +4,13 @@ package com.github.sparkzxl.redisson.lock;
  * description：
  *
  * @author zhouxinlei
- * @date  2020/6/17 0017
+ * @date 2020/6/17 0017
  */
 public abstract class AbstractDistributedLock implements DistributedLock {
 
     @Override
     public boolean lock(String key) {
-        return this.lock(key, WAIT_TIME, SLEEP_MILLIS);
+        return this.lock(key, WAIT_TIME, LEASE_TIME);
     }
 
-    @Override
-    public boolean lock(String key, long leaseTime) {
-        return this.lock(key, WAIT_TIME, leaseTime);
-    }
-
-    @Override
-    public boolean lock(String key, int waitTime) {
-        return this.lock(key, waitTime, SLEEP_MILLIS);
-    }
 }

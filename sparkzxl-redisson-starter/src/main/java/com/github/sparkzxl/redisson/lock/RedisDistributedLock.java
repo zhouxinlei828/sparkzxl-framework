@@ -16,28 +16,52 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisDistributedLock extends AbstractDistributedLock {
 
-    private static RedissonClient redissonClient;
+    public RedissonClient redissonClient;
 
-    public void setRedissonClient(RedissonClient locker) {
-        redissonClient = locker;
+    public void setRedissonClient(RedissonClient redissonClient) {
+        this.redissonClient = redissonClient;
     }
 
     @Override
-    public boolean lock(String key, int waitTime, long leaseTime) {
+    public boolean lock(String key, long waitTime, long leaseTime) {
         RLock lock = redissonClient.getLock(key);
         try {
-            return lock.tryLock(waitTime, leaseTime, TimeUnit.SECONDS);
+            return lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             return false;
         }
     }
 
+    @Override
+    public boolean lock(String key, long waitTime, long leaseTime, int tryCount, long sleepTime) {
+        boolean result = false;
+        try {
+            boolean unlock = lock(key, waitTime, leaseTime);
+            log.info("======> " + Thread.currentThread() + "尝试{}获取锁{} -> {}", tryCount, key, unlock);
+            if (unlock) {
+                result = true;
+            } else {
+                while (tryCount > 0) {
+                    Thread.sleep(sleepTime);
+                    --tryCount;
+                    boolean res = lock(key, waitTime, leaseTime, tryCount, sleepTime);
+                    if (res) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        } catch (InterruptedException e) {
+            log.error("RedisLock 获取分布式锁异常 -> {}", e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+        return result;
+    }
 
     @Override
-    public boolean releaseLock(String key) {
+    public void releaseLock(String key) {
         RLock lock = redissonClient.getLock(key);
         lock.unlock();
-        return true;
     }
 
 
