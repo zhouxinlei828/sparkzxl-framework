@@ -17,25 +17,19 @@ public class SuperServiceImpl<R extends IBaseRepository<T>, T extends Entity> im
     @Autowired
     protected R baseRepository;
 
-    @Transactional(
-            rollbackFor = {Exception.class}
-    )
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public boolean save(T entity) {
         return getBaseRepository().insert(entity) != 0;
     }
 
-    @Transactional(
-            rollbackFor = {Exception.class}
-    )
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public boolean saveBatch(List<T> entityList) {
         return getBaseRepository().insertMulti(entityList) != 0;
     }
 
-    @Transactional(
-            rollbackFor = {Exception.class}
-    )
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public boolean saveOrUpdate(T entity) {
         return getBaseRepository().insertOrUpdate(entity) != 0;
