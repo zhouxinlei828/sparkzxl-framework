@@ -1,7 +1,10 @@
 package com.github.sparkzxl.mongodb.repository;
 
+import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.utils.MapHelper;
+import com.github.sparkzxl.mongodb.constant.EntityConstant;
 import com.github.sparkzxl.mongodb.entity.Entity;
+import com.github.sparkzxl.mongodb.entity.SuperEntity;
 import com.github.sparkzxl.mongodb.page.MongoPageUtils;
 import com.github.sparkzxl.mongodb.page.PageInfo;
 import com.github.sparkzxl.mongodb.utils.MongoDbHandleUtil;
@@ -18,12 +21,13 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
+public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T> {
 
     protected Class<T> entityClass;
 
@@ -32,6 +36,10 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
 
     @Override
     public int insert(T entity) {
+        entity.setCreateUser(BaseContextHandler.getUserId(entity.getCreateUser().getClass()));
+        entity.setCreateTime(LocalDateTime.now());
+        entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+        entity.setUpdateTime(LocalDateTime.now());
         T insert = mongoTemplate.insert(entity);
         return ObjectUtils.isNotEmpty(insert.getId()) ? 1 : 0;
     }
@@ -39,6 +47,12 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
 
     @Override
     public int insertMulti(Collection<T> entityList) {
+        for (T entity : entityList) {
+            entity.setCreateUser(BaseContextHandler.getUserId(entity.getCreateUser().getClass()));
+            entity.setCreateTime(LocalDateTime.now());
+            entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+            entity.setUpdateTime(LocalDateTime.now());
+        }
         Collection<T> collection = mongoTemplate.insert(entityList, getEntityClass());
         return collection.size();
     }
@@ -72,6 +86,8 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
 
     @Override
     public long updateById(T entity) {
+        entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+        entity.setUpdateTime(LocalDateTime.now());
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
         Update update = new Update();
         MapHelper.removeNullValue(annotationValueMap);
@@ -85,7 +101,11 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
 
     @Override
     public long update(T entity) {
+        entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+        entity.setUpdateTime(LocalDateTime.now());
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
+        annotationValueMap.remove(EntityConstant.COLUMN_CREATE_USER);
+        annotationValueMap.remove(EntityConstant.COLUMN_CREATE_TIME);
         Update update = new Update();
         for (String key : annotationValueMap.keySet()) {
             update.set(key, annotationValueMap.get(key));
