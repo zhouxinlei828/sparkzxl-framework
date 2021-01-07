@@ -110,6 +110,7 @@
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-word-starter</module>
+        <module>sparkzxl-mongodb-starter</module>
     </modules>
 
     <distributionManagement>
