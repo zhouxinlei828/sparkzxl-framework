@@ -3,7 +3,6 @@ package com.github.sparkzxl.mongodb.repository;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.utils.MapHelper;
 import com.github.sparkzxl.mongodb.constant.EntityConstant;
-import com.github.sparkzxl.mongodb.entity.Entity;
 import com.github.sparkzxl.mongodb.entity.SuperEntity;
 import com.github.sparkzxl.mongodb.page.MongoPageUtils;
 import com.github.sparkzxl.mongodb.page.PageInfo;
@@ -36,9 +35,10 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public int insert(T entity) {
-        entity.setCreateUser(BaseContextHandler.getUserId(entity.getCreateUser().getClass()));
+        Long userId = BaseContextHandler.getUserId(Long.TYPE);
+        entity.setCreateUser(userId);
         entity.setCreateTime(LocalDateTime.now());
-        entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+        entity.setUpdateUser(userId);
         entity.setUpdateTime(LocalDateTime.now());
         T insert = mongoTemplate.insert(entity);
         return ObjectUtils.isNotEmpty(insert.getId()) ? 1 : 0;
@@ -47,10 +47,11 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public int insertMulti(Collection<T> entityList) {
+        Long userId = BaseContextHandler.getUserId(Long.TYPE);
         for (T entity : entityList) {
-            entity.setCreateUser(BaseContextHandler.getUserId(entity.getCreateUser().getClass()));
+            entity.setCreateUser(userId);
             entity.setCreateTime(LocalDateTime.now());
-            entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+            entity.setUpdateUser(userId);
             entity.setUpdateTime(LocalDateTime.now());
         }
         Collection<T> collection = mongoTemplate.insert(entityList, getEntityClass());
@@ -86,7 +87,8 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public long updateById(T entity) {
-        entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
+        Long userId = BaseContextHandler.getUserId(Long.TYPE);
+        entity.setUpdateUser(userId);
         entity.setUpdateTime(LocalDateTime.now());
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
         Update update = new Update();
