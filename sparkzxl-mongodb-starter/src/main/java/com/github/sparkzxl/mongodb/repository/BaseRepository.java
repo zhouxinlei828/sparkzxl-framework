@@ -35,10 +35,7 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public int insert(T entity) {
-        Long userId = BaseContextHandler.getUserId(Long.TYPE);
-        entity.setCreateUser(userId);
         entity.setCreateTime(LocalDateTime.now());
-        entity.setUpdateUser(userId);
         entity.setUpdateTime(LocalDateTime.now());
         T insert = mongoTemplate.insert(entity);
         return ObjectUtils.isNotEmpty(insert.getId()) ? 1 : 0;
@@ -47,11 +44,8 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public int insertMulti(Collection<T> entityList) {
-        Long userId = BaseContextHandler.getUserId(Long.TYPE);
         for (T entity : entityList) {
-            entity.setCreateUser(userId);
             entity.setCreateTime(LocalDateTime.now());
-            entity.setUpdateUser(userId);
             entity.setUpdateTime(LocalDateTime.now());
         }
         Collection<T> collection = mongoTemplate.insert(entityList, getEntityClass());
