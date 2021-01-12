@@ -177,7 +177,7 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
     @Override
     public Class<T> getEntityClass() {
         if (entityClass == null) {
-            this.entityClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[2];
+            this.entityClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return this.entityClass;
     }
