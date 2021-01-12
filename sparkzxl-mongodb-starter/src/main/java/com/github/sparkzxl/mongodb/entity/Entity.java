@@ -4,10 +4,13 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class Entity<E> {
+public class Entity<E> implements Serializable {
+
+    private static final long serialVersionUID = -7738124684295897274L;
 
     @Id
     private E id;
