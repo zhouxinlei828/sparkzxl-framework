@@ -1,6 +1,5 @@
 package com.github.sparkzxl.mongodb.repository;
 
-import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.utils.MapHelper;
 import com.github.sparkzxl.mongodb.constant.EntityConstant;
 import com.github.sparkzxl.mongodb.entity.SuperEntity;
@@ -81,8 +80,6 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public long updateById(T entity) {
-        Long userId = BaseContextHandler.getUserId(Long.TYPE);
-        entity.setUpdateUser(userId);
         entity.setUpdateTime(LocalDateTime.now());
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
         Update update = new Update();
@@ -97,7 +94,6 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public long update(T entity) {
-        entity.setUpdateUser(BaseContextHandler.getUserId(entity.getUpdateUser().getClass()));
         entity.setUpdateTime(LocalDateTime.now());
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
         annotationValueMap.remove(EntityConstant.COLUMN_CREATE_USER);
