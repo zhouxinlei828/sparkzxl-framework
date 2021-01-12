@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class SuperEntity<E> extends Entity<E>{
 
     @Field(value = "update_user")
-    public Long updateUser;
+    public String updateUser;
 
     @Field(value = "update_user_name")
     public String updateUserName;

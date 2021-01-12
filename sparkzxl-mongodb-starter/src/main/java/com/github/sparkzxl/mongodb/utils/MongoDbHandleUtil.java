@@ -1,11 +1,10 @@
 package com.github.sparkzxl.mongodb.utils;
 
-import com.google.common.collect.Lists;
+import com.github.sparkzxl.core.utils.ReflectObjectUtils;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +18,7 @@ public class MongoDbHandleUtil {
 
     public static Map<String, Object> getAndAnnotationValue(Object model) {
         Map<String, Object> annotationMap = Maps.newHashMap();
-        Class clazz = model.getClass();
-        List<Field> fields = Lists.newArrayList(Arrays.asList(clazz.getDeclaredFields()));
+        List<Field> fields = ReflectObjectUtils.getAllField(model);
         for (Field field : fields) {
             field.setAccessible(true);
             try {

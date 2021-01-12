@@ -74,7 +74,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
     }
 
 
-    private String createJwtToken(AuthUserDetail<ID> authUserDetail) {
+    public String createJwtToken(AuthUserDetail<ID> authUserDetail) {
         Date expire = DateUtil.offsetSecond(new Date(), getJwtProperties().getExpire().intValue());
         JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
         jwtUserInfo.setId(authUserDetail.getId());

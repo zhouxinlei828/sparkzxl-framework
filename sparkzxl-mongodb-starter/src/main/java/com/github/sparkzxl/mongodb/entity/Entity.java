@@ -16,7 +16,7 @@ public class Entity<E> implements Serializable {
     private E id;
 
     @Field(value = "create_user")
-    public Long createUser;
+    public String createUser;
 
     @Field(value = "create_user_name")
     public String createUserName;

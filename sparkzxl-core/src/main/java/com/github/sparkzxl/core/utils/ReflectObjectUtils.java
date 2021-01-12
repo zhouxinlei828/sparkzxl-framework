@@ -138,7 +138,7 @@ public class ReflectObjectUtils {
         return false;
     }
 
-    private static List<Field> getAllField(Object model) {
+    public static List<Field> getAllField(Object model) {
         Class clazz = model.getClass();
         List<Field> fields = Lists.newArrayList();
         while (clazz != null) {
