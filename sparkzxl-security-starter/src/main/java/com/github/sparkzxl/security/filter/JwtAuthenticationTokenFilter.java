@@ -4,6 +4,7 @@ import com.github.sparkzxl.core.base.ResponseResultUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
+import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +49,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = jwtUserInfo.getUsername();
             log.info("checking username:{}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                AuthUserDetail adminUserDetails = (AuthUserDetail) this.userDetailsService.loadUserByUsername(username);
+                AuthUserDetail adminUserDetails = new AuthUserDetail(
+                        jwtUserInfo.getId(),
+                        jwtUserInfo.getUsername(),
+                        null,
+                        jwtUserInfo.getName(),
+                        true,
+                        jwtUserInfo.getAuthorities()
+                );
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                         null, adminUserDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
