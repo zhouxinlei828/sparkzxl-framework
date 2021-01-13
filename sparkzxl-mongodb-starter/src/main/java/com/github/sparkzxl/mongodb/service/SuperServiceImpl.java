@@ -1,9 +1,9 @@
 package com.github.sparkzxl.mongodb.service;
 
 import com.github.sparkzxl.mongodb.entity.Entity;
-import com.github.sparkzxl.mongodb.page.PageInfo;
 import com.github.sparkzxl.mongodb.repository.IBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -101,12 +101,12 @@ public class SuperServiceImpl<R extends IBaseRepository<T>, T extends Entity> im
     }
 
     @Override
-    public PageInfo<T> page(Query query, int pageNum, int pageSize) {
+    public Page<T> page(Query query, int pageNum, int pageSize) {
         return this.getBaseRepository().findPage(query, pageNum, pageSize);
     }
 
     @Override
-    public PageInfo<T> page(int pageNum, int pageSize) {
+    public Page<T> page(int pageNum, int pageSize) {
         return this.getBaseRepository().findPage(pageNum, pageSize);
     }
 

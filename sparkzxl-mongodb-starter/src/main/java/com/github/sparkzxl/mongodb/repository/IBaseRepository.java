@@ -1,7 +1,7 @@
 package com.github.sparkzxl.mongodb.repository;
 
 import com.github.sparkzxl.mongodb.entity.Entity;
-import com.github.sparkzxl.mongodb.page.PageInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.Serializable;
@@ -48,9 +48,9 @@ public interface IBaseRepository<T extends Entity> {
 
     List<T> findBatchIds(Collection<? extends Serializable> idList);
 
-    PageInfo<T> findPage(Query query, int pageNum, int pageSize);
+    Page<T> findPage(Query query, int pageNum, int pageSize);
 
-    PageInfo<T> findPage(int pageNum, int pageSize);
+    Page<T> findPage(int pageNum, int pageSize);
 
     Class<T> getEntityClass();
 }

@@ -1,8 +1,8 @@
 package com.github.sparkzxl.mongodb.service;
 
 import com.github.sparkzxl.mongodb.entity.Entity;
-import com.github.sparkzxl.mongodb.page.PageInfo;
 import com.github.sparkzxl.mongodb.repository.IBaseRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.Serializable;
@@ -43,9 +43,9 @@ public interface ISuperService<T extends Entity> {
 
     long count(Query query);
 
-    PageInfo<T> page(Query query, int pageNum, int pageSize);
+    Page<T> page(Query query, int pageNum, int pageSize);
 
-    PageInfo<T> page(int pageNum, int pageSize);
+    Page<T> page(int pageNum, int pageSize);
 
     IBaseRepository<T> getBaseRepository();
 

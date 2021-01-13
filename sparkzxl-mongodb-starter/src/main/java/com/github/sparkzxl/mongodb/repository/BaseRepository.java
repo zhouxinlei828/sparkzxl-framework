@@ -3,19 +3,19 @@ package com.github.sparkzxl.mongodb.repository;
 import com.github.sparkzxl.core.utils.MapHelper;
 import com.github.sparkzxl.mongodb.constant.EntityConstant;
 import com.github.sparkzxl.mongodb.entity.SuperEntity;
-import com.github.sparkzxl.mongodb.page.MongoPageUtils;
-import com.github.sparkzxl.mongodb.page.PageInfo;
 import com.github.sparkzxl.mongodb.utils.MongoDbHandleUtil;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -152,22 +152,20 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
     }
 
     @Override
-    public PageInfo<T> findPage(Query query, int pageNum, int pageSize) {
+    public Page<T> findPage(Query query, int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        query.with(pageable);
         long count = mongoTemplate.count(query, getEntityClass());
-        List<T> list = mongoTemplate.find(query, getEntityClass());
-        return MongoPageUtils.pageInfo(list, count, pageable);
+        List<T> list = mongoTemplate.find(query.with(pageable), getEntityClass());
+        return PageableExecutionUtils.getPage(list, pageable, () -> count);
     }
 
     @Override
-    public PageInfo<T> findPage(int pageNum, int pageSize) {
+    public Page<T> findPage(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         Query query = new Query().with(pageable);
-        query.with(pageable);
         long count = mongoTemplate.count(query, getEntityClass());
-        List<T> list = mongoTemplate.find(query, getEntityClass());
-        return MongoPageUtils.pageInfo(list, count, pageable);
+        List<T> list = mongoTemplate.find(query.with(pageable), getEntityClass());
+        return PageableExecutionUtils.getPage(list, pageable, () -> count);
     }
 
     @Override
