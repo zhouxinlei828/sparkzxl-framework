@@ -36,7 +36,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
             cache = Caffeine.newBuilder().maximumSize(this.maxSize).build();
         } else {
             cache =
-                    Caffeine.newBuilder().expireAfterWrite(Duration.ofSeconds(expireTime)).maximumSize(this.maxSize).build();
+                    Caffeine.newBuilder().expireAfterWrite(Duration.ofMillis(expireTime)).maximumSize(this.maxSize).build();
         }
         cache.put(key, value);
         this.cacheMap.put(key, cache);
@@ -145,15 +145,6 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
             cache.cleanUp();
             return cache.estimatedSize() > 0L;
         }
-    }
-
-    public static void main(String[] args) {
-        CacheCaffeineTemplateImpl caffeineRepository = new CacheCaffeineTemplateImpl();
-        Long data = caffeineRepository.increment("hahha", 10);
-        System.out.println(data);
-        Long datav = caffeineRepository.get("hahha");
-        System.out.println(datav);
-
     }
 
 }
