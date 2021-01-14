@@ -1,5 +1,6 @@
 package com.github.sparkzxl.mongodb.repository;
 
+import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.core.utils.MapHelper;
 import com.github.sparkzxl.mongodb.constant.EntityConstant;
 import com.github.sparkzxl.mongodb.entity.SuperEntity;
@@ -34,6 +35,7 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public int insert(T entity) {
+        entity.setBusinessId(IdUtil.objectId());
         entity.setCreateTime(LocalDateTime.now());
         entity.setUpdateTime(LocalDateTime.now());
         T insert = mongoTemplate.insert(entity);
@@ -44,6 +46,7 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
     @Override
     public int insertMulti(Collection<T> entityList) {
         for (T entity : entityList) {
+            entity.setBusinessId(IdUtil.objectId());
             entity.setCreateTime(LocalDateTime.now());
             entity.setUpdateTime(LocalDateTime.now());
         }

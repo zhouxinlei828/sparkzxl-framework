@@ -15,6 +15,9 @@ public class Entity<E> implements Serializable {
     @Id
     private E id;
 
+    @Field(value = "business_id")
+    private String businessId;
+
     @Field(value = "create_user")
     public String createUser;
 
