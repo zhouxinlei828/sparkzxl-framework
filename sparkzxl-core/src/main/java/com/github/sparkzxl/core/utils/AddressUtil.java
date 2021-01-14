@@ -2,12 +2,10 @@ package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.lionsoul.ip2region.DataBlock;
-import org.lionsoul.ip2region.DbConfig;
-import org.lionsoul.ip2region.DbSearcher;
-import org.lionsoul.ip2region.Util;
+import org.lionsoul.ip2region.*;
 
 import java.io.File;
 import java.io.InputStream;
@@ -57,7 +55,7 @@ public class AddressUtil {
                 String result = dataBlock.getRegion();
                 long endTime = System.currentTimeMillis();
                 log.debug("region use time[{}] result[{}]", endTime - startTime, result);
-                return result;
+                return JsonUtil.toJson(dataBlock);
             } else {
                 log.error("DbSearcher is null");
             }
@@ -73,7 +71,7 @@ public class AddressUtil {
             File file = new File(dbPath);
             if (!file.exists()) {
                 String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
-                dbPath = tmpDir + "ip2region.db";
+                dbPath = tmpDir + "ip2region/ip2region.db";
                 file = new File(dbPath);
                 String classPath = "classpath:ip2region/ip2region.db";
                 InputStream resourceAsStream = ResourceUtil.getStreamSafe(classPath);
@@ -90,7 +88,7 @@ public class AddressUtil {
     }
 
     public static void main(String[] args) {
-        String location = AddressUtil.getRegion("183.159.126.42");
+        String location = AddressUtil.getRegion("47.116.52.58");
         System.out.println(location);
     }
 }
