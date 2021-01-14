@@ -35,8 +35,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
         if (expireTime == null) {
             cache = Caffeine.newBuilder().maximumSize(this.maxSize).build();
         } else {
-            cache =
-                    Caffeine.newBuilder().expireAfterWrite(Duration.ofMillis(expireTime)).maximumSize(this.maxSize).build();
+            cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMillis(expireTime)).maximumSize(this.maxSize).build();
         }
         cache.put(key, value);
         this.cacheMap.put(key, cache);
@@ -121,7 +120,6 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
         if (ifPresent == null && function != null) {
             obj = function.apply(funcParam);
             if (obj != null) {
-                //设置缓存信息
                 set(key, obj, expireTime);
             }
         } else if (ifPresent != null) {
