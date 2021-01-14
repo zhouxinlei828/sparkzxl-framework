@@ -67,13 +67,7 @@ public class WebLogAspect {
         requestInfo.setResult(result);
         String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
         requestInfo.setTimeCost(timeCost);
-        int length = StringUtils.length(requestInfo.toString());
-        String jsonStr;
-        if (length >= 5000) {
-            jsonStr = JsonUtil.toJson(requestInfo);
-        }else {
-            jsonStr = JSONUtil.toJsonPrettyStr(requestInfo);
-        }
+        String jsonStr = JsonUtil.toJson(requestInfo);
         log.info("Request Info : {}", jsonStr);
         get().stop();
         return result;
@@ -104,13 +98,7 @@ public class WebLogAspect {
         String error = ExceptionUtil.getMessage(e);
         requestErrorInfo.setError(error);
         requestErrorInfo.setThrowExceptionClass(e.getClass().getTypeName());
-        int length = StringUtils.length(requestErrorInfo.toString());
-        String jsonStr;
-        if (length >= 5000) {
-            jsonStr = JsonUtil.toJson(requestErrorInfo);
-        }else {
-            jsonStr = JSONUtil.toJsonPrettyStr(requestErrorInfo);
-        }
+        String jsonStr = JsonUtil.toJson(requestErrorInfo);
         log.info("Error Request Info : {}", jsonStr);
         remove();
     }
