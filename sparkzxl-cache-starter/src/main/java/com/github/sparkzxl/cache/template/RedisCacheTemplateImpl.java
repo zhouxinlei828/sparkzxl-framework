@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -25,14 +24,9 @@ import java.util.function.Function;
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class RedisCacheTemplateImpl implements CacheTemplate {
 
-    private static final Charset DEFAULT_CHARSET;
     private final RedisTemplate<String, Object> redisTemplate;
+
     private ValueOperations<String, Object> valueOperations;
-
-
-    static {
-        DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    }
 
     @PostConstruct
     public void initRedisOperation() {
@@ -89,7 +83,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
     @Override
     public void set(String key, Object value, Long expireTime) {
         if (ObjectUtils.isNotEmpty(expireTime)) {
-            valueOperations.set(key, value, expireTime, TimeUnit.SECONDS);
+            valueOperations.set(key, value, expireTime, TimeUnit.MILLISECONDS);
         } else {
             valueOperations.set(key, value);
         }
@@ -122,7 +116,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
 
     @Override
     public boolean exists(String key) {
-        return redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.exists(key.getBytes(DEFAULT_CHARSET)));
+        return redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.exists(key.getBytes(StandardCharsets.UTF_8)));
     }
 
     @Override
