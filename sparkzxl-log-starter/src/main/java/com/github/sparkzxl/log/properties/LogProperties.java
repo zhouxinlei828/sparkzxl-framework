@@ -22,5 +22,8 @@ public class LogProperties {
     @NestedConfigurationProperty
     private FileProperties file;
 
+    @NestedConfigurationProperty
+    private KafkaProperties kafka;
+
 
 }

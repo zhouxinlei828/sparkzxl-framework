@@ -81,8 +81,10 @@
         <seata.version>1.4.0</seata.version>
         <janino.version>3.1.2</janino.version>
         <drools-version>7.47.0.Final</drools-version>
-        <easy-captcha-version>1.6.2</easy-captcha-version>
-        <vavr-version>0.10.3</vavr-version>
+        <easy-captcha.version>1.6.2</easy-captcha.version>
+        <vavr.version>0.10.3</vavr.version>
+        <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
     </properties>
 
     <modules>
@@ -537,12 +539,24 @@
             <dependency>
                 <groupId>com.github.whvcse</groupId>
                 <artifactId>easy-captcha</artifactId>
-                <version>${easy-captcha-version}</version>
+                <version>${easy-captcha.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.vavr</groupId>
                 <artifactId>vavr</artifactId>
-                <version>${vavr-version}</version>
+                <version>${vavr.version}</version>
+            </dependency>
+            <!-- logback-kafka-appender -->
+            <dependency>
+                <groupId>com.github.danielwegener</groupId>
+                <artifactId>logback-kafka-appender</artifactId>
+                <version>${logback-kafka-appender.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

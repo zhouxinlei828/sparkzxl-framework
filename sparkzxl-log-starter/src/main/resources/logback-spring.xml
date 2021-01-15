@@ -11,6 +11,10 @@
     <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
     <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
     <springProperty name="enableJson" scope="context" source="logging.file.enable-json" defaultValue="false"/>
+    <!-- kafka 配置 -->
+    <springProperty name="enableKafka" scope="context" source="logging.kafka.enable" defaultValue="false"/>
+    <springProperty name="kafka.servers" scope="context" source="logging.kafka.servers"/>
+    <springProperty name="kafka.topic" scope="context" source="logging.kafka.topic"/>
 
     <!-- 控制台 日志格式化 -->
     <property name="CONSOLE_LOG_PATTERN"
@@ -62,6 +66,34 @@
             </else>
         </if>
     </appender>
+    <!-- 日志信息发送kafka -->
+    <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <encoder>
+            <pattern>
+                {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
+                "level": "%level",
+                "service": "${springAppName:-}",
+                "traceId": "%tid",
+                "pid": "${PID:-}",
+                "thread": "%thread",
+                "class": "%logger{40}",
+                "message": "%message"}
+            </pattern>
+        </encoder>
+        <!-- kafka topic -->
+        <topic>${kafka.topic}</topic>
+        <!--<topic>test</topic>-->
+        <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
+        <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
+        <!-- kafka 地址 -->
+        <producerConfig>bootstrap.servers=${kafka.servers}</producerConfig>
+    </appender>
+
+    <!-- 异步传递策略，建议选择异步，不然连接kafka失败，会阻挡服务启动 -->
+    <appender name="Async" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="kafkaAppender"/>
+    </appender>
+
     <root level="INFO">
         <if condition='property("enableFile").contains("true")'>
             <then>
@@ -71,6 +103,11 @@
         <if condition='property("enableConsole").contains("true")'>
             <then>
                 <appender-ref ref="console"/>
+            </then>
+        </if>
+        <if condition='property("enableKafka").contains("true")'>
+            <then>
+                <appender-ref ref="Async"/>
             </then>
         </if>
     </root>
