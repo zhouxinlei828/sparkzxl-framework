@@ -20,11 +20,10 @@ public class TimeTransferUtils {
         return (60 * 60 * 1000) * time;
     }
 
+    public static long hoursToSeconds(long time) {
+        return 3600 * time;
+    }
     public static long daysToMilliseconds(long time) {
         return (24 * 60 * 60 * 1000) * time;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(secondsToMilliseconds(15));
     }
 }
