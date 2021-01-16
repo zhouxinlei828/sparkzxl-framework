@@ -1,6 +1,6 @@
 package com.github.sparkzxl.cache.template;
 
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
@@ -26,16 +26,16 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
 
     @Override
     public void set(String key, Object value) {
-        set(key, value, null);
+        set(key, value, null, null);
     }
 
     @Override
-    public void set(String key, Object value, Long expireTime) {
+    public void set(String key, Object value, Long expireTime, TimeUnit timeUnit) {
         Cache<String, Object> cache;
         if (expireTime == null) {
             cache = Caffeine.newBuilder().maximumSize(this.maxSize).build();
         } else {
-            cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMillis(expireTime)).maximumSize(this.maxSize).build();
+            cache = Caffeine.newBuilder().expireAfterWrite(expireTime, timeUnit).maximumSize(this.maxSize).build();
         }
         cache.put(key, value);
         this.cacheMap.put(key, cache);
@@ -48,7 +48,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
             longAdder.increment();
             return longAdder.longValue();
         };
-        return get(key, function, 0L, null);
+        return get(key, function, 0L, null, null);
     }
 
 
@@ -59,7 +59,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
             longAdder.add(delta);
             return longAdder.longValue();
         };
-        return get(key, function, delta, null);
+        return get(key, function, delta, null, null);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
             longAdder.decrement();
             return longAdder.longValue();
         };
-        return get(key, function, 0L, null);
+        return get(key, function, 0L, null, null);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
             longAdder.add(-delta);
             return longAdder.longValue();
         };
-        return get(key, function, delta, null);
+        return get(key, function, delta, null, null);
     }
 
     @Override
@@ -92,26 +92,26 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
 
     @Override
     public <T> T get(String key) {
-        return get(key, null, null, null);
+        return get(key, null, null, null, null);
     }
 
     @Override
     public <T> T get(String key, Function<String, T> function) {
-        return get(key, function, key, null);
+        return get(key, function, key, null, null);
     }
 
     @Override
     public <T, M> T get(String key, Function<M, T> function, M funcParam) {
-        return get(key, function, funcParam, null);
+        return get(key, function, funcParam, null, null);
     }
 
     @Override
-    public <T> T get(String key, Function<String, T> function, Long expireTime) {
-        return get(key, function, key, expireTime);
+    public <T> T get(String key, Function<String, T> function, Long expireTime, TimeUnit timeUnit) {
+        return get(key, function, key, expireTime, timeUnit);
     }
 
     @Override
-    public <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime) {
+    public <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime, TimeUnit timeUnit) {
         T obj = null;
         if (StringUtils.isEmpty(key)) {
             return null;
@@ -120,7 +120,7 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
         if (ifPresent == null && function != null) {
             obj = function.apply(funcParam);
             if (obj != null) {
-                set(key, obj, expireTime);
+                set(key, obj, expireTime, timeUnit);
             }
         } else if (ifPresent != null) {
             obj = (T) ifPresent.getIfPresent(key);

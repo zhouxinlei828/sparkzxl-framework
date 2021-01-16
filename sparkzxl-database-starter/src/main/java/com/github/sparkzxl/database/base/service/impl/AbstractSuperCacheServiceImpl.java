@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * description: 缓存接口父类实现类
@@ -20,6 +21,8 @@ import java.util.Collection;
  * @date: 2020-07-07 19:38:37
  */
 public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
+
+    private final long expireTime = 1;
 
     @Autowired(required = false)
     protected CacheTemplate cacheTemplate;
@@ -33,7 +36,7 @@ public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T>
 
     @Override
     public T getByIdCache(Serializable id) {
-        return this.cacheTemplate.get(BuildKeyUtils.generateKey(this.getRegion(), id), (x) -> super.getById(id));
+        return this.cacheTemplate.get(BuildKeyUtils.generateKey(this.getRegion(), id), (x) -> super.getById(id), expireTime, TimeUnit.DAYS);
     }
 
     @Override

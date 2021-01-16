@@ -1,5 +1,6 @@
 package com.github.sparkzxl.cache.template;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
@@ -45,9 +46,11 @@ public interface CacheTemplate {
      * @param key        缓存键 不可为空
      * @param function   如没有缓存，调用该callable函数返回对象 可为空
      * @param expireTime 过期时间（单位：毫秒） 可为空
+     * @param timeUnit   java.util.concurrent.TimeUnit
      * @return T
+     * @see TimeUnit
      **/
-    <T> T get(String key, Function<String, T> function, Long expireTime);
+    <T> T get(String key, Function<String, T> function, Long expireTime, TimeUnit timeUnit);
 
     /**
      * 查询缓存
@@ -56,16 +59,17 @@ public interface CacheTemplate {
      * @param function   如没有缓存，调用该callable函数返回对象 可为空
      * @param funcParam  function函数的调用参数
      * @param expireTime 过期时间（单位：毫秒） 可为空
+     * @param timeUnit   java.util.concurrent.TimeUnit
      * @return T
+     * @see TimeUnit
      **/
-    <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime);
+    <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime, TimeUnit timeUnit);
 
     /**
      * 设置缓存键值
      *
      * @param key 缓存键 不可为空
      * @param obj 缓存值 不可为空
-     * @return void
      **/
     void set(String key, Object obj);
 
@@ -75,9 +79,10 @@ public interface CacheTemplate {
      * @param key        缓存键 不可为空
      * @param value      缓存值 不可为空
      * @param expireTime 过期时间（单位：毫秒） 可为空
-     * @return void
+     * @param timeUnit   java.util.concurrent.TimeUnit
+     * @see TimeUnit
      **/
-    void set(String key, Object value, Long expireTime);
+    void set(String key, Object value, Long expireTime, TimeUnit timeUnit);
 
     /**
      * 自增长

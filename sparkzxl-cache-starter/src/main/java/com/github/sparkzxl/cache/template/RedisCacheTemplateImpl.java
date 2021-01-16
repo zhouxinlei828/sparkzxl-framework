@@ -39,26 +39,26 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
 
     @Override
     public <T> T get(String key) {
-        return get(key, null, null, null);
+        return get(key, null, null, null, null);
     }
 
     @Override
     public <T> T get(String key, Function<String, T> function) {
-        return get(key, function, key, null);
+        return get(key, function, key, null, null);
     }
 
     @Override
     public <T, M> T get(String key, Function<M, T> function, M funcParam) {
-        return get(key, function, funcParam, null);
+        return get(key, function, funcParam, null, null);
     }
 
     @Override
-    public <T> T get(String key, Function<String, T> function, Long expireTime) {
-        return get(key, function, key, expireTime);
+    public <T> T get(String key, Function<String, T> function, Long expireTime, TimeUnit timeUnit) {
+        return get(key, function, key, expireTime, timeUnit);
     }
 
     @Override
-    public <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime) {
+    public <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime, TimeUnit timeUnit) {
         T obj = null;
         if (StringUtils.isEmpty(key)) {
             return null;
@@ -67,7 +67,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
             obj = (T) valueOperations.get(key);
             if (obj == null && function != null) {
                 obj = function.apply(funcParam);
-                Optional.ofNullable(obj).ifPresent(value->set(key, value, expireTime));
+                Optional.ofNullable(obj).ifPresent(value -> set(key, value, expireTime, timeUnit));
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -77,13 +77,13 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
 
     @Override
     public void set(String key, Object value) {
-        set(key, value, null);
+        set(key, value, null, null);
     }
 
     @Override
-    public void set(String key, Object value, Long expireTime) {
-        if (ObjectUtils.isNotEmpty(expireTime)) {
-            valueOperations.set(key, value, expireTime, TimeUnit.MILLISECONDS);
+    public void set(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        if (ObjectUtils.isNotEmpty(expireTime) && ObjectUtils.isNotEmpty(timeUnit)) {
+            valueOperations.set(key, value, expireTime, timeUnit);
         } else {
             valueOperations.set(key, value);
         }

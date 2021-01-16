@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2020-05-24 13:18:31
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.elasticsearch")
+@ConfigurationProperties(prefix = "elasticsearch")
 public class ElasticsearchProperties {
 
     /**
