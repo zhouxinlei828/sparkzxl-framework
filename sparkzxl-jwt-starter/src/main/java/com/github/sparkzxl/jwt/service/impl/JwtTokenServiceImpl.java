@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
+import com.github.sparkzxl.core.utils.TimeUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
@@ -60,7 +61,8 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
                 .build();
-        Date expire = DateUtil.offsetSecond(new Date(), jwtProperties.getExpire().intValue());
+        long seconds = TimeUtils.toSeconds(jwtProperties.getExpire(), jwtProperties.getUnit());
+        Date expire = DateUtil.offsetSecond(new Date(), (int) seconds);
         jwtUserInfo.setExpire(expire);
         jwtUserInfo.setJti(UUID.randomUUID().toString());
         //将负载信息封装到Payload中
@@ -76,7 +78,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     @Override
-    public JwtUserInfo<ID> verifyTokenByRsa(String token) throws Exception{
+    public JwtUserInfo<ID> verifyTokenByRsa(String token) throws Exception {
         JwtUserInfo<ID> jwtUserInfo = getJwtUserInfo(token);
         assert jwtUserInfo != null;
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
@@ -122,7 +124,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     @Override
-    public String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo) throws Exception{
+    public String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo) throws Exception {
         //创建JWS头，设置签名算法和类型
         JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
                 type(JOSEObjectType.JWT)
@@ -140,7 +142,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     @Override
-    public JwtUserInfo<ID> verifyTokenByHmac(String token) throws Exception{
+    public JwtUserInfo<ID> verifyTokenByHmac(String token) throws Exception {
         JwtUserInfo<ID> jwtUserInfo;
         //从token中解析JWS对象
         JWSObject jwsObject = JWSObject.parse(token);
@@ -159,7 +161,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     private KeyPair getKeyPair() {
-        KeyPair keyPair = keyPairMap.get("keyPair");
+        KeyPair keyPair = getKeyPairMap().get("keyPair");
         if (ObjectUtils.isNotEmpty(keyPair)) {
             return keyPair;
         }

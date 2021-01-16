@@ -120,7 +120,10 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-        return new JwtAuthenticationTokenFilter(jwtTokenService, userDetailsService);
+        JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter = new JwtAuthenticationTokenFilter();
+        jwtAuthenticationTokenFilter.setJwtTokenService(jwtTokenService);
+        jwtAuthenticationTokenFilter.setSecurityProperties(securityProperties);
+        return jwtAuthenticationTokenFilter;
     }
 
     @Bean

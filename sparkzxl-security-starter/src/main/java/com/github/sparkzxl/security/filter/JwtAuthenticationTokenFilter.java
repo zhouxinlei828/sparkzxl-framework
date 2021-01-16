@@ -1,9 +1,13 @@
 package com.github.sparkzxl.security.filter;
 
 import com.github.sparkzxl.core.base.ResponseResultUtils;
+import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.core.resource.SwaggerStaticResource;
+import com.github.sparkzxl.core.utils.StringHandlerUtils;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
+import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * description: jwt认证授权过滤器
@@ -29,13 +34,16 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private final JwtTokenService jwtTokenService;
+    private JwtTokenService jwtTokenService;
 
-    private final UserDetailsService userDetailsService;
+    private SecurityProperties securityProperties;
 
-    public JwtAuthenticationTokenFilter(JwtTokenService jwtTokenService, UserDetailsService userDetailsService) {
+    public void setJwtTokenService(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
-        this.userDetailsService = userDetailsService;
+    }
+
+    public void setSecurityProperties(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
     }
 
     @SneakyThrows
@@ -43,6 +51,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) {
+        String requestURI = request.getRequestURI();
+        log.info("请求路径：{}", requestURI);
+        if (StringHandlerUtils.isIgnore(securityProperties.getIgnorePatterns(), requestURI)) {
+            chain.doFilter(request, response);
+        }
         String accessToken = ResponseResultUtils.getAuthHeader(request);
         if (StringUtils.isNotEmpty(accessToken)) {
             JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
