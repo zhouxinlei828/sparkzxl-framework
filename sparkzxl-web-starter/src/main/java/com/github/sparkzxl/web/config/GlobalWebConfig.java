@@ -21,7 +21,7 @@ public class GlobalWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(responseResultInterceptor());
+        registry.addInterceptor(new ResponseResultInterceptor()).addPathPatterns("/**").order(-99);
     }
 
     @Bean

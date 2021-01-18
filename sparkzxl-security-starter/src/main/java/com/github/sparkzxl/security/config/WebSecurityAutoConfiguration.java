@@ -122,7 +122,6 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter = new JwtAuthenticationTokenFilter();
         jwtAuthenticationTokenFilter.setJwtTokenService(jwtTokenService);
-        jwtAuthenticationTokenFilter.setSecurityProperties(securityProperties);
         return jwtAuthenticationTokenFilter;
     }
 

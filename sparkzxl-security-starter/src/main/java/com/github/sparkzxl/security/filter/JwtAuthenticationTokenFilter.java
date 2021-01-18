@@ -36,14 +36,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private JwtTokenService jwtTokenService;
 
-    private SecurityProperties securityProperties;
 
     public void setJwtTokenService(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
-    }
-
-    public void setSecurityProperties(SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
     }
 
     @SneakyThrows
@@ -51,11 +46,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) {
-        String requestURI = request.getRequestURI();
-        log.info("请求路径：{}", requestURI);
-        if (StringHandlerUtils.isIgnore(securityProperties.getIgnorePatterns(), requestURI)) {
-            chain.doFilter(request, response);
-        }
         String accessToken = ResponseResultUtils.getAuthHeader(request);
         if (StringUtils.isNotEmpty(accessToken)) {
             JwtUserInfo jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);

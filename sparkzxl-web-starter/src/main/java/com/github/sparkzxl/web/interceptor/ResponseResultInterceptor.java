@@ -24,9 +24,9 @@ import java.lang.reflect.Method;
 @Slf4j
 public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
-    @SuppressWarnings("NullableProblems")
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //设置当前请求线程全局信息
         if (!BaseContextHandler.getBoot()) {
@@ -57,7 +57,6 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    @SuppressWarnings("NullableProblems")
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         BaseContextHandler.remove();
