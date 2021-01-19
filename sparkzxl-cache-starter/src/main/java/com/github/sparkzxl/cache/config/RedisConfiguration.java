@@ -5,6 +5,7 @@ import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
 import com.github.sparkzxl.cache.utils.TokenUtil;
 import com.github.sparkzxl.cache.template.RedisCacheTemplateImpl;
 import com.github.sparkzxl.cache.template.CacheTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -24,6 +25,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @date: 2020-07-31 14:51:06
  */
 @Configuration
+@Slf4j
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 public class RedisConfiguration {
 
@@ -53,10 +55,11 @@ public class RedisConfiguration {
         return new FastJson2JsonRedisSerializer<>(Object.class);
     }
 
-    @Bean
+    @Bean("redisCacheTemplate")
     @ConditionalOnBean(RedisTemplate.class)
     @Primary
     public CacheTemplate redisCacheTemplate(RedisTemplate<String, Object> redisTemplate) {
+        log.info("Autowired redisCacheTemplate success!");
         return new RedisCacheTemplateImpl(redisTemplate);
     }
 
