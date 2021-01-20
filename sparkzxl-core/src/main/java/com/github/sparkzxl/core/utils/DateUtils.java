@@ -200,4 +200,5 @@ public class DateUtils extends DateUtil {
         calendar.setTime(date);
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
+
 }
