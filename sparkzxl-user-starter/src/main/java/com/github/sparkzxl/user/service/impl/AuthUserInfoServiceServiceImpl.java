@@ -1,15 +1,17 @@
 package com.github.sparkzxl.user.service.impl;
 
 import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
-import com.github.sparkzxl.cache.template.CacheTemplate;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 
 /**
  * description: 全局用户获取 服务类
@@ -21,22 +23,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
     @Autowired(required = false)
-    public CacheTemplate cacheTemplate;
+    public RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
         log.info("accessToken is {}", accessToken);
-        AuthUserInfo authUser = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));
-        if (ObjectUtils.isEmpty(authUser)) {
+        String userId = BaseContextHandler.getUserId(String.class);
+        AuthUserInfo authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userId), accessToken);
+        if (ObjectUtils.isEmpty(authUserInfo)) {
             SparkZxlExceptionAssert.businessFail(ResponseResultStatus.JWT_EXPIRED_ERROR);
         }
-        return authUser;
+        return authUserInfo;
     }
 
     @Override
-    public AuthUserInfo getCache(String key) {
-        if (ObjectUtils.isNotEmpty(cacheTemplate)) {
-            return cacheTemplate.get(key);
+    public AuthUserInfo getCache(String key, String accessToken) {
+        if (ObjectUtils.isNotEmpty(redisTemplate)) {
+            return (AuthUserInfo) redisTemplate.opsForHash().get(key, accessToken);
         }
         SparkZxlExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存");
         return null;

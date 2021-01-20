@@ -21,8 +21,9 @@ public interface IAuthUserInfoService {
     /**
      * 缓存中获取用户信息
      *
-     * @param key      缓存key
+     * @param key         缓存key
+     * @param accessToken token∂
      * @return GlobalAuthUser
      */
-    AuthUserInfo getCache(String key);
+    AuthUserInfo getCache(String key, String accessToken);
 }

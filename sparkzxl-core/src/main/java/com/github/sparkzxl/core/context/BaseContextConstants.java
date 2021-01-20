@@ -40,6 +40,11 @@ public class BaseContextConstants {
     public static String AUTH_USER = "login_user";
 
     /**
+     * 登录账户token 前缀
+     */
+    public static String AUTH_USER_TOKEN = "login_user_token";
+
+    /**
      * resource 资源
      */
     public static final String AUTHORITY_PREFIX = "ROLE_";
