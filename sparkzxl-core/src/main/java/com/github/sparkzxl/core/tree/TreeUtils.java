@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.tree;
 
-import com.github.sparkzxl.core.utils.ListUtils;
+import com.github.sparkzxl.core.utils.CopyUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
@@ -28,7 +28,7 @@ public class TreeUtils {
         }
         //记录自己是自己的父节点的id集合
         List<Serializable> selfIdEqSelfParent = new ArrayList<>();
-        List<E> nodeList = ListUtils.deepCopy(treeList);
+        List<E> nodeList = CopyUtils.deepCopy(treeList);
         // 为每一个节点找到子节点集合
         for (E parent : nodeList) {
             Serializable id = parent.getId();

@@ -21,6 +21,7 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,8 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
     @Override
     public int insert(T entity) {
         entity.setBusinessId(IdUtil.objectId());
-        entity.setCreateTime(LocalDateTime.now());
-        entity.setUpdateTime(LocalDateTime.now());
+        entity.setCreateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        entity.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
         T insert = mongoTemplate.insert(entity);
         return ObjectUtils.isNotEmpty(insert.getId()) ? 1 : 0;
     }

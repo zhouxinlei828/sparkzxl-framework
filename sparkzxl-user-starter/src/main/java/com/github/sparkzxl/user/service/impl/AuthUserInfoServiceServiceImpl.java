@@ -1,5 +1,6 @@
 package com.github.sparkzxl.user.service.impl;
 
+import com.github.sparkzxl.cache.template.CacheTemplate;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
@@ -24,14 +25,22 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
     @Autowired(required = false)
     public RedisTemplate<String, Object> redisTemplate;
+    @Autowired(required = false)
+    private CacheTemplate cacheTemplate;
 
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
         log.info("accessToken is {}", accessToken);
-        String userId = BaseContextHandler.getUserId(String.class);
-        AuthUserInfo authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userId), accessToken);
+        AuthUserInfo authUserInfo = null;
+        if (ObjectUtils.isNotEmpty(cacheTemplate)) {
+            authUserInfo = cacheTemplate.get(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));
+        }
         if (ObjectUtils.isEmpty(authUserInfo)) {
-            SparkZxlExceptionAssert.businessFail(ResponseResultStatus.JWT_EXPIRED_ERROR);
+            String userId = BaseContextHandler.getUserId(String.class);
+            authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userId), accessToken);
+            if (ObjectUtils.isEmpty(authUserInfo)) {
+                SparkZxlExceptionAssert.businessFail(ResponseResultStatus.JWT_EXPIRED_ERROR);
+            }
         }
         return authUserInfo;
     }

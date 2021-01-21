@@ -4,16 +4,12 @@ import cn.hutool.core.convert.Convert;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static io.vavr.API.*;
 
 /**
  * description: 集合工具类
@@ -182,14 +178,4 @@ public class ListUtils {
         return new ArrayList<>(CollectionUtils.union(a, b));
     }
 
-    public static <T> List<T> deepCopy(List<T> srcList) {
-        return Try.of(() -> {
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(byteOut);
-            out.writeObject(srcList);
-            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
-            ObjectInputStream inStream = new ObjectInputStream(byteIn);
-            return (List<T>) inStream.readObject();
-        }).onFailure(Throwable::printStackTrace).getOrElse(Lists.newArrayList());
-    }
 }

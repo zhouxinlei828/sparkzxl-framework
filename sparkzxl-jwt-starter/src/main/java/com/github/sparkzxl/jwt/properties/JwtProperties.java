@@ -3,6 +3,7 @@ package com.github.sparkzxl.jwt.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,8 +14,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.jwt")
-public class JwtProperties {
+public class JwtProperties implements Serializable {
 
+    private static final long serialVersionUID = 6685832204171292577L;
     /**
      * 过期时间 2h
      */
