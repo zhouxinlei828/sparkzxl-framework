@@ -2,7 +2,6 @@ package com.github.sparkzxl.core.utils;
 
 import com.google.common.collect.Lists;
 import io.vavr.control.Try;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,5 +38,4 @@ public class CopyUtils {
             return (T) inStream.readObject();
         }).onFailure(Throwable::printStackTrace).getOrElse((T) new Object());
     }
-
 }
