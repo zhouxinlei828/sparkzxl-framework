@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.util.NestedServletException;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,13 @@ public class GlobalExceptionHandler {
         int code = e.getCode();
         String message = e.getMessage();
         return ApiResult.apiResult(code, message);
+    }
+
+    @ExceptionHandler(NestedServletException.class)
+    public ApiResult businessException(NestedServletException e) {
+        handleResponseResult();
+        log.error(e.getMessage());
+        return ApiResult.apiResult(ResponseResultStatus.FAILURE);
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
