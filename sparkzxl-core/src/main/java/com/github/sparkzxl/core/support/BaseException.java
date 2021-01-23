@@ -10,7 +10,7 @@ import lombok.Getter;
  * @date 2020-06-04 12:40:33
  */
 @Getter
-public class BaseException extends RuntimeException {
+public class BaseException extends Exception {
 
     private static final long serialVersionUID = 5092096093495323869L;
 
