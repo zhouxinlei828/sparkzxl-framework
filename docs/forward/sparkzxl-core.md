@@ -138,7 +138,7 @@ public class PdfTest {
 
 ## 更多
 > 更多详细内容请下载查看代码文档
->[sparkzxl-core-1.2.0.RELEASE-javadoc.jar](http://47.116.52.58:8085/repository/maven-releases/com/sparkzxl/sparkzxl-core/1.2.0.RELEASE/sparkzxl-core-1.2.0.RELEASE-javadoc.jar)
+>[sparkzxl-core-1.3.0.RELEASE-javadoc.jar](http://47.116.52.58:8085/repository/maven-releases/com/sparkzxl/sparkzxl-core/1.3.0.RELEASE/sparkzxl-core-1.3.0.RELEASE-javadoc.jar)
 
 ## 使用方法
 1. 引入依赖

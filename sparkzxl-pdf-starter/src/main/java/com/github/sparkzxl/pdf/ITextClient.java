@@ -4,7 +4,7 @@ import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
-import com.itextpdf.kernel.color.DeviceRgb;
+import com.itextpdf.kernel.colors.DeviceCmyk;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -167,7 +167,7 @@ public class ITextClient {
         paragraph.setMarginTop(50);
         paragraph.setTextAlignment(TextAlignment.CENTER);
         canvas.add(paragraph);
-        pdfCanvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(0.7f).moveTo(left, top - 40).lineTo(totalWidth, top - 40)
+        pdfCanvas.setStrokeColor(DeviceCmyk.BLACK).setLineWidth(0.7f).moveTo(left, top - 40).lineTo(totalWidth, top - 40)
                 .stroke();
         pdfCanvas.moveTo(left, top - 43).lineTo(totalWidth, top - 43).stroke();
     }
@@ -179,7 +179,7 @@ public class ITextClient {
      * @param top 上边距
      */
     public void addFooter(String data, float top) {
-        pdfCanvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(1.5f).moveTo(left, top).lineTo(totalWidth, top).stroke();
+        pdfCanvas.setStrokeColor(DeviceCmyk.BLACK).setLineWidth(1.5f).moveTo(left, top).lineTo(totalWidth, top).stroke();
     }
 
     /**
@@ -191,7 +191,7 @@ public class ITextClient {
      */
     public void addFullLine(float lineWidth, float left, float top) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(lineWidth).moveTo(left, top).lineTo(totalWidth, top).stroke();
+        canvas.setStrokeColor(DeviceCmyk.BLACK).setLineWidth(lineWidth).moveTo(left, top).lineTo(totalWidth, top).stroke();
     }
 
     /**
@@ -199,7 +199,7 @@ public class ITextClient {
      */
     public void addBindingLine() {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
+        canvas.setStrokeColor(DeviceCmyk.BLACK);
         canvas.setLineDash(3, 3, 10);
         canvas.setLineWidth(0.5f).moveTo(bindLeft, 680).lineTo(bindLeft, 552).stroke();
         addPrintText(537, bindLeft - 6, 13, "装");
@@ -220,7 +220,7 @@ public class ITextClient {
      */
     public void addVerticalLine(float lineWidth, float left, float topStart, float topEnd) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
+        canvas.setStrokeColor(DeviceCmyk.BLACK);
         canvas.setLineWidth(lineWidth).moveTo(left, topStart).lineTo(left, topEnd).stroke();
     }
 
@@ -234,7 +234,7 @@ public class ITextClient {
      */
     public void addLine(float lineWidth, float left, float right, float top) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(new DeviceRgb(0, 0, 0)).setLineWidth(lineWidth).moveTo(left, top).lineTo(right, top).stroke();
+        canvas.setStrokeColor(DeviceCmyk.BLACK).setLineWidth(lineWidth).moveTo(left, top).lineTo(right, top).stroke();
     }
 
     /**
@@ -249,7 +249,7 @@ public class ITextClient {
     public void addRectLine(float lineWidth, float left, float right, float top, float height) {
         float topEnd = top - height;
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
-        canvas.setStrokeColor(new DeviceRgb(0, 0, 0));
+        canvas.setStrokeColor(DeviceCmyk.BLACK);
         canvas.setLineWidth(lineWidth);
 
         canvas.moveTo(left, top).lineTo(right, top).stroke();
