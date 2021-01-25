@@ -1,9 +1,8 @@
 package com.github.sparkzxl.core.entity;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,9 +12,23 @@ import java.util.List;
  * @date: 2020-07-14 07:51:20
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Builder
-public class JwtUserInfo {
+public class JwtUserInfo<T> {
+
+    private T id;
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 用户姓名
+     */
+    private String name;
+
+    /**
+     * clientId
+     */
+    private String clientId;
     /**
      * 主题
      */
@@ -27,15 +40,11 @@ public class JwtUserInfo {
     /**
      * 过期时间
      */
-    private Long expire;
+    private Date expire;
     /**
      * JWT的ID
      */
     private String jti;
-    /**
-     * 用户名
-     */
-    private String username;
     /**
      * 用户拥有的权限
      */
