@@ -1,6 +1,7 @@
 package com.github.sparkzxl.jwt.service;
 
-import com.github.sparkzxl.jwt.entity.JwtUserInfo;
+import com.fasterxml.jackson.core.io.JsonEOFException;
+import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
 
@@ -21,7 +22,7 @@ public interface JwtTokenService<ID extends Serializable> {
      * @return String
      * @throws JOSEException 抛出异常
      */
-    String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo) throws JOSEException;
+    String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo) throws JsonEOFException;
 
     /**
      * 根据RSA校验token
