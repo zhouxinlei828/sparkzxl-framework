@@ -9,6 +9,7 @@ import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.utils.StringHandlerUtils;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
@@ -33,7 +34,7 @@ import java.util.List;
  * @date: 2021-01-25 18:15:40
  */
 @Slf4j
-public abstract class AbstractJwtAuthorizationManagerFilter implements GlobalFilter, Ordered {
+public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -50,15 +51,16 @@ public abstract class AbstractJwtAuthorizationManagerFilter implements GlobalFil
             exchange = exchange.mutate().request(request).build();
             return chain.filter(exchange);
         }
+
         if (StringUtils.isEmpty(token)) {
-            return errorResponse(response, ResponseResultStatus.UN_AUTHORIZED);
+            return handleTokenEmpty(exchange, chain, token);
         } else {
             if (token.startsWith(BaseContextConstants.BASIC_AUTH)) {
                 return chain.filter(exchange);
             }
             token = StringUtils.removeStartIgnoreCase(token, BaseContextConstants.BEARER_TOKEN);
             try {
-                boolean result = verifyToken();
+                boolean result = verifyToken(token);
                 if (result) {
                     JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
                     if (jwtUserInfo != null) {
@@ -89,20 +91,30 @@ public abstract class AbstractJwtAuthorizationManagerFilter implements GlobalFil
      *
      * @return 返回值
      */
-    abstract String getHeaderKey();
+    public abstract String getHeaderKey();
 
     /**
      * 放行地址集合
      *
      * @return List<String>
      */
-    abstract List<String> ignorePatterns();
+    protected List<String> ignorePatterns() {
+        return Lists.newArrayList();
+    }
 
-    protected boolean verifyToken() throws Exception {
+    protected Mono<Void> handleTokenEmpty(ServerWebExchange exchange, GatewayFilterChain chain, String token) {
+        ServerHttpResponse response = exchange.getResponse();
+        if (StringUtils.isEmpty(token)) {
+            return errorResponse(response, ResponseResultStatus.UN_AUTHORIZED);
+        }
+        return null;
+    }
+
+    protected boolean verifyToken(String token) throws Exception {
         return true;
     }
 
-    abstract JwtUserInfo getJwtUserInfo(String token);
+    public abstract JwtUserInfo getJwtUserInfo(String token) throws Exception;
 
 
     protected Mono<Void> errorResponse(ServerHttpResponse response, ResponseResultStatus responseResultStatus) {

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.core.utils;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ public class StringHandlerUtils {
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 
     public static boolean isIgnore(List<String> list, String currentUri) {
-        if (list.isEmpty()) {
+        if (CollectionUtils.isEmpty(list)) {
             return false;
         }
         return list.stream().anyMatch((url) ->

@@ -1,13 +1,11 @@
 package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.entity.CaptchaInfo;
+import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.TimeUtils;
-import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthRequest;
@@ -25,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: 登录授权Service
@@ -88,14 +85,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         jwtUserInfo.setIat(System.currentTimeMillis());
         jwtUserInfo.setExpire(expire);
         jwtUserInfo.setAuthorities(authUserDetail.getAuthorityList());
-        try {
-            return getJwtTokenService().createTokenByHmac(jwtUserInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("生成token发生异常：{}", ExceptionUtil.getMessage(e));
-            SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(e.getMessage()));
-            return null;
-        }
+        return getJwtTokenService().createTokenByHmac(jwtUserInfo);
     }
 
     /**

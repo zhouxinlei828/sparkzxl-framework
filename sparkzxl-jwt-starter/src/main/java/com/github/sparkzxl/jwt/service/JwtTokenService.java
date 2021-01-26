@@ -22,7 +22,7 @@ public interface JwtTokenService<ID extends Serializable> {
      * @return String
      * @throws JOSEException 抛出异常
      */
-    String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo) throws JsonEOFException;
+    String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo);
 
     /**
      * 根据RSA校验token
@@ -56,9 +56,8 @@ public interface JwtTokenService<ID extends Serializable> {
      *
      * @param jwtUserInfo 负载信息
      * @return String
-     * @throws Exception 抛出异常
      */
-    String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo) throws Exception;
+    String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo);
 
     /**
      * 根据HMAC校验token

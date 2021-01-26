@@ -2,9 +2,9 @@ package com.github.sparkzxl.security.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.ResponseResultUtils;
+import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
-import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
 import lombok.extern.slf4j.Slf4j;
