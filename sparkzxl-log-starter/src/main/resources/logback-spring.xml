@@ -48,11 +48,11 @@
                             <pattern>
                                 {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
                                 "level": "%level",
-                                "service": "${springAppName:-}",
+                                "service": "${springAppName}",
                                 "traceId": "%tid",
                                 "pid": "${PID:-}",
                                 "thread": "%thread",
-                                "class": "%logger{40}",
+                                "class": "%logger{15}",
                                 "message": "%message"}
                             </pattern>
                         </pattern>
