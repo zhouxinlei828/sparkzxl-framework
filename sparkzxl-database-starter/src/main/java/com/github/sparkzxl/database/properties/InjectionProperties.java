@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * @author: zhouxinlei
  * @date: 2020-07-19 08:50:32
-*/
+ */
 @Data
 @ConfigurationProperties("sparkzxl.injection")
 public class InjectionProperties {

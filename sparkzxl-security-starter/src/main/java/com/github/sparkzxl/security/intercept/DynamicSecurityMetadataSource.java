@@ -13,12 +13,13 @@ import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 /**
  * description: 动态权限控制数据管理
  *
  * @author: zhouxinlei
  * @date: 2020-12-16 13:36:46
-*/
+ */
 public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     private static Map<String, ConfigAttribute> configAttributeMap = null;
@@ -55,7 +56,7 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
         String path = URLUtil.getPath(url);
         PathMatcher pathMatcher = new AntPathMatcher();
         //获取访问该路径所需资源
-        configAttributeMap.keySet().forEach(pattern->{
+        configAttributeMap.keySet().forEach(pattern -> {
             if (pathMatcher.match(pattern, path)) {
                 configAttributes.add(configAttributeMap.get(pattern));
             }

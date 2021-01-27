@@ -144,14 +144,14 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
                 BaseContextHandler.setLocalMap(this.threadLocalMap);
-                if (StringUtils.isNotEmpty(this.xid)){
+                if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.bind(this.xid);
                 }
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
                 BaseContextHandler.remove();
-                if (StringUtils.isNotEmpty(this.xid)){
+                if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.unbind();
                 }
             }

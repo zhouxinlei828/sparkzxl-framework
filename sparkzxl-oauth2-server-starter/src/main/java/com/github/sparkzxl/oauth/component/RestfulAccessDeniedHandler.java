@@ -21,7 +21,7 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException e) {
-        log.error("AuthenticationException：{}",e.getMessage());
+        log.error("AuthenticationException：{}", e.getMessage());
         ResponseResultUtils.forbidden(response, e.getMessage());
     }
 }

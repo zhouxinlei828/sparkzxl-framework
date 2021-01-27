@@ -27,7 +27,7 @@ import static org.springframework.beans.factory.config.AutowireCapableBeanFactor
  *
  * @author: fin-9062
  * @date: 2020-12-08 11:14:43
-*/
+ */
 @Slf4j
 public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegistrar, EnvironmentAware, Ordered {
 
@@ -47,7 +47,7 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
         Class<? extends ErrorAttributes> handlerClass = annotationAttributes.getClass("handlerClass");
 
-        if (ObjectUtils.isNotEmpty(handlerClass)){
+        if (ObjectUtils.isNotEmpty(handlerClass)) {
             ErrorAttributes errorAttributes = BeanUtils.instantiateClass(handlerClass);
             AbstractBeanDefinition handler = BeanDefinitionBuilder
                     .genericBeanDefinition(ErrorAttributes.class, () -> errorAttributes)

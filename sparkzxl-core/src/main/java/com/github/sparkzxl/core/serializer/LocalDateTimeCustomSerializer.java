@@ -13,7 +13,7 @@ import java.time.ZoneOffset;
  *
  * @author: zhouxinlei
  * @date: 2020-11-06 15:54:01
-*/
+ */
 public class LocalDateTimeCustomSerializer extends JsonSerializer<LocalDateTime> {
     @Override
     public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {

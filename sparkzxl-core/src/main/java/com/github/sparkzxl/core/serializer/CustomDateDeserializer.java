@@ -17,14 +17,14 @@ import java.util.Date;
  *
  * @author: zhouxinlei
  * @date: 2020-12-05 11:14:34
-*/
+ */
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
 
 
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String date = jsonParser.getText();
-        if (StringUtils.isNotEmpty(date)){
+        if (StringUtils.isNotEmpty(date)) {
             if (NumberUtil.isNumber(date)) {
                 long timeStamp = Long.parseLong(date);
                 return DateUtils.date(timeStamp);

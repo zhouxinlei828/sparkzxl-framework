@@ -1,4 +1,5 @@
 # sparkzxl-cache-starter
+
 > 职能：
 > 对缓存通用的接口实现，包含本地缓存caffeine，redis，GuavaCache的实现，对原本赤裸裸的API做了通用性适配
 
@@ -40,7 +41,9 @@
 ```
 
 ## 实现
+
 - 新建CacheTemplate模板类
+
 ```java
 import java.util.function.Function;
 /**
@@ -182,12 +185,15 @@ public interface CacheTemplate {
     void flushDb();
 }
 ```
+
 - 实现CacheTemplate
+
 1. GuavaTemplateImpl
 2. RedisCacheTemplateImpl
 3. CacheCaffeineTemplateImpl
 
 - redis序列化，使用fastJson
+
 ```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -235,11 +241,15 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
     }
 }
 ```
+
 ## 拓展
+
 > 实际业务场景比较复杂，如果多种缓存并用，必然会出现不同步问题，如何才能设计出通用的缓存接口，具体可以参考[设计模式设计模式之抽象工厂模式：「替换多种缓存，代理抽象场景」](https://www.sparkzxl.top/archives/42)
 
 ## 使用方法
+
 1. 引入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.sparkzxl</groupId>

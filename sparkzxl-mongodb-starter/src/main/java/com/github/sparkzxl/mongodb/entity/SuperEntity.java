@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SuperEntity<E> extends Entity<E>{
+public class SuperEntity<E> extends Entity<E> {
 
     @Field(value = "update_user")
     public String updateUser;

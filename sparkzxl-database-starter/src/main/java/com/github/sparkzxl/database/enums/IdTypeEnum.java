@@ -12,6 +12,7 @@ public enum IdTypeEnum {
     private IdTypeEnum(int key) {
         this.key = key;
     }
+
     public int getKey() {
         return this.key;
     }

@@ -65,17 +65,17 @@ public class Java2Word {
         String city = data.substring(index2, index2 + 6);
         System.out.println(city);
         int index3 = data.indexOf("手机:") + 3;
-        String mobile= data.substring(index3, index3 + 11);
+        String mobile = data.substring(index3, index3 + 11);
         System.out.println(mobile);
         int index4 = data.indexOf("邮箱:") + 3;
-        int endIndex = data.indexOf(".com")+4;
-        String email= data.substring(index4, endIndex);
+        int endIndex = data.indexOf(".com") + 4;
+        String email = data.substring(index4, endIndex);
         System.out.println(email);
         int index5 = data.indexOf("住址:") + 3;
-        String address= data.substring(index5, index5+6);
+        String address = data.substring(index5, index5 + 6);
         System.out.println(address);
         int index6 = data.indexOf("年限:") + 3;
-        String time = data.substring(index6, index6+3);
+        String time = data.substring(index6, index6 + 3);
         System.out.println(time);
     }
 }

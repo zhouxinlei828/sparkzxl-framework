@@ -1,4 +1,5 @@
 # sparkzxl-user-starter
+
 > 职能：
 > 全局获取当前登录用户信息，与业务代码彻底解耦
 
@@ -22,19 +23,27 @@
     </dependency>
 </dependencies>
 ```
+
 ## 场景
+
 - 在现有的业务场景，获取当前登录用户信息，在业务代码中到处可见，污染了业务代码，没有较高的代码可读性，作为有原则的业务程序员，我忍不了，所以本项目横空出世
 
 ## 功能
+
 - 在微服务中，全局获取用户信息，在各个微服务当中行走自如
 
 ## 优点
+
 > 减少用户信息获取的频率，提高开发效率
 
 ## 原理
+
 在登录过后，将当前登录信息存入缓存（redis，内存）中，通过token获取用户缓存数据，注入业务代码当中
+
 ## 使用方法
+
 1. 引入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
@@ -42,7 +51,9 @@
     <version>${sparkzxl.version}</version>
 </dependency>
 ```
+
 2. 登录用户存入缓存
+
 ```java
     private void accessToken(String username, OAuth2AccessToken oAuth2AccessToken) {
         AuthUserInfo<Long> authUserInfo = authUserService.getAuthUserInfo(username);
@@ -51,14 +62,18 @@
         cacheTemplate.set(buildKey, authUserInfo, (long) oAuth2AccessToken.getExpiresIn());
     }
 ```
+
 2. 在controller请求入参中加入AuthUserInfo<Long> authUserInfo：示例如下
+
 ```java
     @PatchMapping("/role/{id}")
     public void updateAuthRoleStatus(@ApiIgnore AuthUserInfo<Long> authUserInfo) {
         log.info("当前登录信息为：{}",JSONUtil.toJsonPrettyStr(authUserInfo))
     }
 ```
+
 AuthUserInfo<Long>  泛型Long代表主键类型
 
 ## 总结
+
 使用起来非常方便

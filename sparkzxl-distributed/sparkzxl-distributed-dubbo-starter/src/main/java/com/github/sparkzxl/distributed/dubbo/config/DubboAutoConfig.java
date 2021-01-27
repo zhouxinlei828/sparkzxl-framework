@@ -16,17 +16,17 @@ import org.springframework.context.annotation.Configuration;
 public class DubboAutoConfig {
 
     @Bean
-    public DubboExceptionFilter dubboExceptionFilter(){
+    public DubboExceptionFilter dubboExceptionFilter() {
         return new DubboExceptionFilter();
     }
 
     @Bean
-    public CustomBlockExceptionHandler customBlockExceptionHandler(){
+    public CustomBlockExceptionHandler customBlockExceptionHandler() {
         return new CustomBlockExceptionHandler();
     }
 
     @Bean
-    public SentinelExceptionHandler sentinelExceptionHandler(){
+    public SentinelExceptionHandler sentinelExceptionHandler() {
         return new SentinelExceptionHandler();
     }
 }

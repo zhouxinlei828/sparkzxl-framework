@@ -105,12 +105,12 @@ public class DroolsAutoConfiguration {
     }
 
     @Bean
-    public DroolsRuleService droolsRuleService(){
+    public DroolsRuleService droolsRuleService() {
         return new DroolsRuleServiceImpl(droolsProperties);
     }
 
     @Bean
-    public DroolsRuleExecutor droolsRuleExecutor(){
+    public DroolsRuleExecutor droolsRuleExecutor() {
         return new DroolsRuleExecutor();
     }
 

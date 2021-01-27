@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author: zhouxinlei
  * @date: 2020-12-15 10:55:29
-*/
+ */
 public interface DroolsRuleService {
     /**
      * 重新加载规则

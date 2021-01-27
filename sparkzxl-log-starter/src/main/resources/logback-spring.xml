@@ -18,10 +18,11 @@
 
     <!-- 控制台 日志格式化 -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(application): %green(${springAppName:-}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %tid %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(application): %yellow(${springAppName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %tid %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <!-- 控制台 Appender -->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="ConsoleOutput" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
         <!-- 日志的格式化 -->
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
@@ -31,7 +32,7 @@
     </appender>
 
     <!--每天记录日志到文件appender-->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FileOutput" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logHome}/${springAppName}.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -89,25 +90,44 @@
         <producerConfig>bootstrap.servers=${kafka.servers}</producerConfig>
     </appender>
 
+    <!-- 异步控制台打印 -->
+    <appender name="AsyncConsole" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>100</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="ConsoleOutput"/>
+    </appender>
+
+    <!-- 异步输出文件 -->
+    <appender name="AsyncFile" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>100</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="FileOutput"/>
+    </appender>
+
     <!-- 异步传递策略，建议选择异步，不然连接kafka失败，会阻挡服务启动 -->
-    <appender name="Async" class="ch.qos.logback.classic.AsyncAppender">
+    <appender name="AsyncKafka" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>100</queueSize>
+        <neverBlock>true</neverBlock>
         <appender-ref ref="kafkaAppender"/>
     </appender>
 
     <root level="INFO">
         <if condition='property("enableFile").contains("true")'>
             <then>
-                <appender-ref ref="FILE"/>
+                <appender-ref ref="AsyncFile"/>
             </then>
         </if>
         <if condition='property("enableConsole").contains("true")'>
             <then>
-                <appender-ref ref="console"/>
+                <appender-ref ref="AsyncConsole"/>
             </then>
         </if>
         <if condition='property("enableKafka").contains("true")'>
             <then>
-                <appender-ref ref="Async"/>
+                <appender-ref ref="AsyncKafka"/>
             </then>
         </if>
     </root>

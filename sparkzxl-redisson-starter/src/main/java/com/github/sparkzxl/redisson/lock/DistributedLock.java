@@ -28,6 +28,7 @@ public interface DistributedLock {
      * @return boolean
      */
     boolean lock(String key, long waitTime, long leaseTime);
+
     /**
      * 加锁
      *

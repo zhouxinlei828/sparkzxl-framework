@@ -31,13 +31,13 @@ import java.util.function.Consumer;
 
 /**
  * description:  字典数据注入工具类
- *  * 1. 通过反射将obj的字段上标记了@InjectionFiled注解的字段解析出来
- *  * 2. 依次查询待注入的数据
- *  * 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
+ * * 1. 通过反射将obj的字段上标记了@InjectionFiled注解的字段解析出来
+ * * 2. 依次查询待注入的数据
+ * * 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
  *
  * @author: zhouxinlei
  * @date: 2020-12-05 10:04:34
-*/
+ */
 @Slf4j
 public class InjectionCore {
 
