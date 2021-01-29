@@ -69,9 +69,12 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
         // 任何请求需要身份认证
-        interceptUrlRegistry.antMatchers("/books").hasAnyRole("Member", "Librarian")
+        interceptUrlRegistry.antMatchers("/books").hasAnyRole("user-role", "Librarian")
                 .antMatchers("/manager").hasRole("Librarian")
-                .anyRequest().permitAll();
+                .anyRequest().permitAll().and()
+                .exceptionHandling()
+                .accessDeniedHandler(restfulAccessDeniedHandler)
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
 }
