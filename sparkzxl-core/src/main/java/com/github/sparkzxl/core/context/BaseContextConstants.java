@@ -34,6 +34,11 @@ public class BaseContextConstants {
     public static final String BASIC_AUTH = "Basic";
 
     /**
+     * JWT存储的请求头
+     */
+    public static final String KEYCLOAK_KEY = "keycloak";
+
+    /**
      * 登录账户 前缀
      * 完整key: authUser:{key} -> str
      */
@@ -88,22 +93,10 @@ public class BaseContextConstants {
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
 
     /**
-     * User信息 认证请求头
-     */
-    public static final String BEARER_HEADER_KEY = "token";
-    /**
-     * User信息 认证请求头前缀
-     */
-    public static final String BEARER_HEADER_PREFIX = "Bearer ";
-    /**
      * User信息 认证请求头前缀
      */
     public static final String BEARER_HEADER_PREFIX_EXT = "Bearer%20";
 
-    /**
-     * Client信息认证请求头
-     */
-    public static final String BASIC_HEADER_KEY = "Authorization";
 
     /**
      * Client信息认证请求头前缀

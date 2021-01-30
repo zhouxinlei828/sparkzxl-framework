@@ -102,11 +102,11 @@ public class BaseContextHandler {
      * @return
      */
     public static String getToken() {
-        return get(BaseContextConstants.BEARER_HEADER_KEY, String.class);
+        return get(BaseContextConstants.JWT_TOKEN_HEADER, String.class);
     }
 
     public static void setToken(String token) {
-        set(BaseContextConstants.BEARER_HEADER_KEY, token);
+        set(BaseContextConstants.JWT_TOKEN_HEADER, token);
     }
 
     public static String getTenant() {
