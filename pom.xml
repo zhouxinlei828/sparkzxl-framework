@@ -116,7 +116,6 @@
         <module>sparkzxl-word-starter</module>
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-security-keycloak-starter</module>
-        <module>sparkzxl-keycloak-filter-starter</module>
     </modules>
 
     <distributionManagement>
