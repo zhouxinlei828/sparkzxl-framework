@@ -1,9 +1,9 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.support.BusinessException;
+import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.web.annotation.ResponseResult;
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ApiResult businessException(BusinessException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("BusinessException：{}", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
         return ApiResult.apiResult(code, message);
@@ -60,14 +60,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NestedServletException.class)
     public ApiResult businessException(NestedServletException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("NestedServletException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.FAILURE);
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
     public ApiResult serviceDegradeException(ServiceDegradeException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("ServiceDegradeException：{}", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
         return ApiResult.apiResult(code, message);
@@ -77,14 +77,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("MethodArgumentNotValidException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResult illegalArgumentException(IllegalArgumentException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("IllegalArgumentException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.PARAM_TYPE_ERROR);
     }
 
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AccountNotFoundException.class, PasswordException.class})
     public ApiResult passwordException(Exception e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("AccountNotFoundException|PasswordException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED.getCode(), e.getMessage());
     }
 
@@ -119,14 +119,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ApiResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("HttpRequestMethodNotSupportedException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
         handleResponseResult();
-        log.error(e.getMessage());
+        log.error("HttpMessageNotReadableException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.MSG_NOT_READABLE);
     }
 
@@ -140,7 +140,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult notFoundPage404(NoHandlerFoundException e) {
-        log.error(e.getMessage());
+        handleResponseResult();
+        log.error("NoHandlerFoundException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.NOT_FOUND);
     }
 
@@ -154,7 +155,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ApiResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        log.error(e.getMessage());
+        handleResponseResult();
+        log.error("HttpMediaTypeNotSupportedException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
@@ -167,8 +169,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
     public ApiResult handleSQLException(SQLException e) {
-        log.error("数据库异常{}", e.getMessage());
         handleResponseResult();
+        log.error("SQLException：{}", e.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.SQL_EXCEPTION_ERROR);
     }
 

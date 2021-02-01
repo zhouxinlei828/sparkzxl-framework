@@ -1,6 +1,7 @@
 package com.github.sparkzxl.oauth.component;
 
 import com.github.sparkzxl.core.base.ResponseResultUtils;
+import com.github.sparkzxl.core.support.ResponseResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -21,7 +22,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException e) {
         log.error("AuthenticationException：{}", e.getMessage());
-        ResponseResultUtils.unauthorized(response, e.getMessage());
+        ResponseResultUtils.unauthorized(response, ResponseResultStatus.UN_AUTHORIZED.getMessage());
     }
 
 }

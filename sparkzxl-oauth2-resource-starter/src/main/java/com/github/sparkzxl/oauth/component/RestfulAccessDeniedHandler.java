@@ -27,11 +27,11 @@ public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
-        log.error("AuthenticationException：{}", e.getMessage());
+        log.error("AccessDeniedException：{}", e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.OK);
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body = JSONUtil.toJsonStr(ApiResult.apiResult(ResponseResultStatus.REQ_REJECT.getCode(), e.getMessage()));
+        String body = JSONUtil.toJsonStr(ApiResult.apiResult(ResponseResultStatus.AUTHORIZED_DENIED));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

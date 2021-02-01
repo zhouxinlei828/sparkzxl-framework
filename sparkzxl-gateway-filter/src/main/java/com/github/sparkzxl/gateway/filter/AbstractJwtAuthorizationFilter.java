@@ -71,11 +71,12 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                     }
                     ServerHttpRequest serverHttpRequest = mutate.build();
                     exchange = exchange.mutate().request(serverHttpRequest).build();
+                } else {
+                    return errorResponse(response, ResponseResultStatus.JWT_EXPIRED_ERROR);
                 }
-
             } catch (Exception e) {
                 log.error("jwt 获取用户发生异常：{}", ExceptionUtil.getMessage(e));
-                return errorResponse(response, ResponseResultStatus.JWT_EXPIRED_ERROR);
+                return errorResponse(response, ResponseResultStatus.JWT_VALID_ERROR);
             }
         }
         return chain.filter(exchange.mutate().request(request.mutate().build()).build());
@@ -110,7 +111,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         return null;
     }
 
-    protected boolean verifyToken(String token) throws Exception {
+    protected boolean verifyToken(String token) {
         return true;
     }
 

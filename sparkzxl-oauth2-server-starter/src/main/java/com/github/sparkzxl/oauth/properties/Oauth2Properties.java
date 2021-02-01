@@ -1,5 +1,6 @@
 package com.github.sparkzxl.oauth.properties;
 
+import com.github.sparkzxl.oauth.enums.StoreTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -13,6 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sparkzxl.oauth2.server")
 public class Oauth2Properties {
 
+    private StoreTypeEnum store = StoreTypeEnum.MEMORY;
     /**
      * client_id
      */

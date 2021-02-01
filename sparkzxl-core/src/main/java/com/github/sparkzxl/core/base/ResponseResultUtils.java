@@ -46,7 +46,7 @@ public class ResponseResultUtils {
             int code = ResponseResultStatus.REQ_REJECT.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(ResponseResultStatus.REQ_REJECT.getCode());
+            response.setStatus(ResponseResultStatus.AUTHORIZED_DENIED.getCode());
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {
