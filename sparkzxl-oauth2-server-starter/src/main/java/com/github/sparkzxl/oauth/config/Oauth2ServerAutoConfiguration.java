@@ -2,11 +2,14 @@ package com.github.sparkzxl.oauth.config;
 
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
+import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
 import com.github.sparkzxl.oauth.enhancer.JwtTokenEnhancer;
 import com.github.sparkzxl.oauth.enums.StoreTypeEnum;
 import com.github.sparkzxl.oauth.properties.Oauth2Properties;
 import com.github.sparkzxl.oauth.supports.Oauth2ExceptionHandler;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.BaseClientDetails;
+import org.springframework.security.oauth2.provider.client.InMemoryClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -34,6 +42,7 @@ import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -93,21 +102,32 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
         }
     }
 
+    @Bean
+    public ClientDetailsService clientDetailsService() {
+        if (oAuth2Properties.getStore().equals(StoreTypeEnum.DATABASE)) {
+            return new JdbcClientDetailsService(dataSource);
+
+        } else {
+            InMemoryClientDetailsService memoryClientDetailsService = new InMemoryClientDetailsService();
+            Map<String, ClientDetails> clientDetailsStore = Maps.newHashMap();
+            BaseClientDetails clientDetails = new BaseClientDetails();
+            clientDetails.setClientId(oAuth2Properties.getClientId());
+            clientDetails.setClientSecret(passwordEncoder.encode(oAuth2Properties.getClientSecret()));
+            clientDetails.setAccessTokenValiditySeconds(oAuth2Properties.getAccessTokenValiditySeconds());
+            clientDetails.setRefreshTokenValiditySeconds(oAuth2Properties.getRefreshTokenValiditySeconds());
+            clientDetails.setRegisteredRedirectUri(Sets.newHashSet(oAuth2Properties.getRegisteredRedirectUris()));
+            clientDetails.setScope(ListUtils.arrayToList(oAuth2Properties.getScopes()));
+            clientDetails.setAuthorizedGrantTypes(ListUtils.arrayToList(oAuth2Properties.getAuthorizedGrantTypes()));
+            clientDetailsStore.put(oAuth2Properties.getClientId(), clientDetails);
+            memoryClientDetailsService.setClientDetailsStore(clientDetailsStore);
+            return memoryClientDetailsService;
+        }
+    }
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         log.info("OAuth2Properties：{}", JSONUtil.toJsonPrettyStr(oAuth2Properties));
-        if (oAuth2Properties.getStore().equals(StoreTypeEnum.MEMORY)) {
-            clients.inMemory()
-                    .withClient(oAuth2Properties.getClientId())
-                    .secret(passwordEncoder.encode(oAuth2Properties.getClientSecret()))
-                    .accessTokenValiditySeconds(oAuth2Properties.getAccessTokenValiditySeconds())
-                    .refreshTokenValiditySeconds(oAuth2Properties.getRefreshTokenValiditySeconds())
-                    .redirectUris(oAuth2Properties.getRegisteredRedirectUris())
-                    .scopes(oAuth2Properties.getScopes())
-                    .authorizedGrantTypes(oAuth2Properties.getAuthorizedGrantTypes());
-        } else {
-            clients.jdbc(dataSource);
-        }
+        clients.withClientDetails(clientDetailsService());
     }
 
     @Override
@@ -118,6 +138,7 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
         //配置JWT的内容增强器
         delegates.add(accessTokenConverter());
         enhancerChain.setTokenEnhancers(delegates);
+        endpoints.setClientDetailsService(clientDetailsService());
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
                 //配置令牌存储策略

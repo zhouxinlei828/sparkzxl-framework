@@ -2,7 +2,6 @@ package com.github.sparkzxl.oauth.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
-import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
@@ -25,6 +24,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
+
+import java.util.List;
 
 /**
  * description: SpringSecurity配置
@@ -73,10 +74,9 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
+        httpSecurity.csrf().ignoringRequestMatchers(EndpointRequest.toAnyEndpoint());
         httpSecurity
-                .authorizeRequests().requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers(ArrayUtil.toArray(securityProperties.getIgnorePatterns(), String.class)).permitAll()
-                .anyRequest().authenticated()
+                .authorizeRequests().anyRequest().authenticated()
                 // 关闭跨站请求防护及不使用session
                 .and()
                 .csrf()
@@ -93,8 +93,9 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        String[] excludeStaticPatterns = ListUtils.listToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
-        web.ignoring().antMatchers(excludeStaticPatterns);
+        List<String> ignorePatternList = securityProperties.getIgnorePatterns();
+        ignorePatternList.addAll(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
+        web.ignoring().antMatchers(ArrayUtil.toArray(ignorePatternList, String.class));
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
         web.httpFirewall(firewall);
