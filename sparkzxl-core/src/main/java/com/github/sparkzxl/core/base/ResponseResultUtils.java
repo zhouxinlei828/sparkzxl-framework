@@ -28,6 +28,17 @@ public class ResponseResultUtils {
         return StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
     }
 
+    public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg) {
+        try {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.getWriter().flush();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public static void unauthorized(HttpServletResponse response, String msg) {
         try {
             int code = ResponseResultStatus.UN_AUTHORIZED.getCode();
@@ -52,9 +63,5 @@ public class ResponseResultUtils {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(StandardCharsets.UTF_8.name());
     }
 }
