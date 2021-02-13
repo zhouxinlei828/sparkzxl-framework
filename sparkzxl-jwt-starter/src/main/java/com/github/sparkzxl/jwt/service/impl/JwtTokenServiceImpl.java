@@ -122,10 +122,12 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         jwtUserInfo.setIat(iat);
         Long exp = jsonObject.getLong("exp");
         if (ObjectUtils.isNotEmpty(exp)) {
-            jwtUserInfo.setExpire(DateUtils.date(exp));
+            jwtUserInfo.setExpire(DateUtils.date(exp * 1000));
         }
         String jti = jsonObject.getStr("jti");
         jwtUserInfo.setJti(jti);
+        String tenant = jsonObject.getStr("tenant");
+        jwtUserInfo.setTenant(tenant);
         List authorities = jsonObject.get("authorities", List.class);
         jwtUserInfo.setAuthorities(authorities);
         return jwtUserInfo;

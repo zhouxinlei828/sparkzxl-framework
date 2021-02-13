@@ -22,4 +22,10 @@ public class DataProperties {
 
     private long dataCenterId = 10;
 
+    private boolean enableTenant;
+
+    private String tenantIdColumn = "tenant_code";
+
+    private String[] ignoreTable;
+
 }

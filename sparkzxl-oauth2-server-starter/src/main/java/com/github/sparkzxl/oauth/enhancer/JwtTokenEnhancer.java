@@ -2,6 +2,7 @@ package com.github.sparkzxl.oauth.enhancer;
 
 import com.github.sparkzxl.oauth.entity.AuthUserDetail;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -25,7 +26,10 @@ public class JwtTokenEnhancer implements TokenEnhancer {
         info.put("id", userDetails.getId());
         info.put("username", userDetails.getUsername());
         info.put("name", userDetails.getName());
-        info.put("enabled", userDetails.isEnabled());
+        String tenant = userDetails.getTenant();
+        if (StringUtils.isNotEmpty(tenant)) {
+            info.put("tenant", tenant);
+        }
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(info);
         return oAuth2AccessToken;
     }

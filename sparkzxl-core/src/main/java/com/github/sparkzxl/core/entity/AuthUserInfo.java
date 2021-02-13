@@ -52,4 +52,9 @@ public class AuthUserInfo<T> implements Serializable {
      */
     private Map<String, Object> extraInfo;
 
+    /**
+     * 租户标识
+     */
+    private String tenant;
+
 }

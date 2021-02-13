@@ -29,7 +29,7 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     /**
      * 请求未授权
      */
-    UN_AUTHORIZED(HttpStatus.HTTP_UNAUTHORIZED, "访问此资源需要授权登录"),
+    UN_AUTHORIZED(HttpStatus.HTTP_UNAUTHORIZED, "访问此资源需要授权"),
 
     AUTHORIZED_FAIL(HttpStatus.HTTP_UNAUTHORIZED, "授权失败，请重新尝试"),
 
@@ -141,7 +141,12 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     /**
      * token签名不合法
      */
-    JWT_VALID_ERROR(10011, "token校验失败");
+    JWT_VALID_ERROR(10011, "token校验失败"),
+
+    /**
+     * token为空
+     */
+    JWT_EMPTY_ERROR(10012, "token为空");
 
     final int code;
 
