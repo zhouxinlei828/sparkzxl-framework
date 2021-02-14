@@ -86,6 +86,7 @@
         <vavr.version>1.0.0-alpha-3</vavr.version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <logback-classic.version>1.2.3</logback-classic.version>
+        <jsqlparser.version>3.2</jsqlparser.version>
     </properties>
 
     <modules>
@@ -567,6 +568,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback-classic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
