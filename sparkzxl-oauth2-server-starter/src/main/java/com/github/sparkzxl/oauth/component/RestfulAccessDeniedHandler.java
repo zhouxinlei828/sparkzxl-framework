@@ -1,6 +1,7 @@
 package com.github.sparkzxl.oauth.component;
 
 import com.github.sparkzxl.core.base.ResponseResultUtils;
+import com.github.sparkzxl.core.support.ResponseResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -21,7 +22,7 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException e) {
-        log.error("AuthenticationException：{}",e.getMessage());
-        ResponseResultUtils.forbidden(response, e.getMessage());
+        log.error("AccessDeniedException：{}", e.getMessage());
+        ResponseResultUtils.forbidden(response, ResponseResultStatus.AUTHORIZED_DENIED.getMessage());
     }
 }

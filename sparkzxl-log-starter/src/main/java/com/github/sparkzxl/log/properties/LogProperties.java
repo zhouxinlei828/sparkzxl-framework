@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  *
  * @author: zhouxinlei
  * @date: 2020-12-09 11:40:24
-*/
+ */
 @Data
 @ConfigurationProperties(prefix = "logging")
 public class LogProperties {

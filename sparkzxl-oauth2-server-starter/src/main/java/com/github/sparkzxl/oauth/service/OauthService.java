@@ -38,7 +38,7 @@ public interface OauthService {
     /**
      * 生成验证码
      *
-     * @param type      验证码类型
+     * @param type 验证码类型
      * @return CaptchaInfo
      */
     CaptchaInfo createCaptcha(String type);

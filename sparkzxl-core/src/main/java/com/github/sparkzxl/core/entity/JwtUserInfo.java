@@ -1,7 +1,9 @@
 package com.github.sparkzxl.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -49,4 +51,9 @@ public class JwtUserInfo<T> {
      * 用户拥有的权限
      */
     private List<String> authorities;
+
+    /**
+     * 租户标识
+     */
+    private String tenant;
 }

@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author: zhouxinlei
  * @date: 2020-12-14 17:20:32
-*/
+ */
 @Slf4j
 public class ITextClient {
 
@@ -176,7 +176,7 @@ public class ITextClient {
      * 页尾
      *
      * @param data 字符串
-     * @param top 上边距
+     * @param top  上边距
      */
     public void addFooter(String data, float top) {
         pdfCanvas.setStrokeColor(DeviceCmyk.BLACK).setLineWidth(1.5f).moveTo(left, top).lineTo(totalWidth, top).stroke();

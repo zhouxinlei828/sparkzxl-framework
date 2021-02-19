@@ -2,18 +2,19 @@ package com.github.sparkzxl.oauth.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
-import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.oauth.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.oauth.properties.SecurityProperties;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +25,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
+
+import java.util.List;
 
 /**
  * description: SpringSecurity配置
@@ -46,6 +49,11 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter(jwtTokenService, userDetailsService);
     }
@@ -56,27 +64,21 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
-    public void configure(WebSecurity web) {
-        String[] excludeStaticPatterns = ListUtils.listToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
-        web.ignoring().antMatchers(excludeStaticPatterns);
-        StrictHttpFirewall firewall = new StrictHttpFirewall();
-        firewall.setAllowUrlEncodedSlash(true);
-        web.httpFirewall(firewall);
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
+        httpSecurity.csrf().ignoringRequestMatchers(EndpointRequest.toAnyEndpoint());
+        List<String> ignorePatternList = securityProperties.getIgnorePatterns();
         httpSecurity
-                .authorizeRequests().requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers(ArrayUtil.toArray(securityProperties.getIgnorePatterns(), String.class)).permitAll()
+        .authorizeRequests().antMatchers(ArrayUtil.toArray(ignorePatternList, String.class)).permitAll()
                 .anyRequest().authenticated()
                 // 关闭跨站请求防护及不使用session
                 .and()
@@ -90,6 +92,16 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and().addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        List<String> ignorePatternList = Lists.newArrayList();
+        ignorePatternList.addAll(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
+        web.ignoring().antMatchers(ArrayUtil.toArray(ignorePatternList, String.class));
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);
+        web.httpFirewall(firewall);
     }
 
 }

@@ -32,6 +32,6 @@ public class MainAutoConfiguration {
     @ConditionalOnBean({MailProperties.class, JavaMailSender.class})
     public MailService mailService() {
 
-        return new MailServiceImpl(mailSender,mailProperties);
+        return new MailServiceImpl(mailSender, mailProperties);
     }
 }

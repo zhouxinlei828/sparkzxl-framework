@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  *
  * @author: zhouxinlei
  * @date: 2020-12-08 11:10:17
-*/
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
@@ -23,12 +23,14 @@ public @interface EnableFeignExceptionHandler {
 
     /**
      * 异常抛出处理类, 必须要有无参构造方法
+     *
      * @return Class<? extends ErrorAttributes>
      */
     Class<? extends ErrorAttributes> handlerClass() default FeignExceptionHandler.class;
 
     /**
      * 异常解析处理类, 必须要有无参构造方法
+     *
      * @return Class<? extends ErrorDecoder>
      */
     Class<? extends ErrorDecoder> decoderClass() default FeignExceptionDecoder.class;

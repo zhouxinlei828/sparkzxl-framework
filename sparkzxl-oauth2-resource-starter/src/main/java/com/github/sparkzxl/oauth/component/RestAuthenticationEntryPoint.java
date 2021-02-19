@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -27,11 +28,17 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
 
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
-        log.error("AuthenticationException：{}",e.getMessage());
+        log.error("AuthenticationException：{}", e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body = JSONUtil.toJsonStr(ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED.getCode(), e.getMessage()));
+        int code = ResponseResultStatus.UN_AUTHORIZED.getCode();
+        String message = ResponseResultStatus.UN_AUTHORIZED.getMessage();
+        if (e instanceof InvalidBearerTokenException) {
+            code = ResponseResultStatus.JWT_EXPIRED_ERROR.getCode();
+            message = ResponseResultStatus.JWT_EXPIRED_ERROR.getMessage();
+        }
+        String body = JSONUtil.toJsonStr(ApiResult.apiResult(code,message));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

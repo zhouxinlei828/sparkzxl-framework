@@ -46,6 +46,8 @@ public class AuthUserDetail<T> implements UserDetails {
 
     private List<String> authorityList;
 
+    private String tenant;
+
     public AuthUserDetail(T id, String username, String password, String name, Boolean enabled, List<String> authorityList) {
         this.id = id;
         this.username = username;
@@ -96,5 +98,13 @@ public class AuthUserDetail<T> implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public String getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
     }
 }

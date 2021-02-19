@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * @author: zhouxinlei
  * @date: 2020-12-15 10:49:35
-*/
+ */
 @Data
 @ConfigurationProperties(prefix = "drools")
 public class DroolsProperties {

@@ -1,9 +1,11 @@
 # sparkzxl-data-starter
+
 > 职能：
 > 使用mybatis-plus作为curd增强框架，同时对跨库、库表、库服务 关联数据自动注入的支持，解决解决分页数据的属性或单个对象的属性 回显关联数据之痛, 支持对静态数据属性(数据字典)、动态主键数据进行自动注入，对db之上一层做了缓存，减轻对db
->的频繁访问，对curd的接口自动生成
+> 的频繁访问，对curd的接口自动生成
 
 ## POM
+
 ```xml
 <dependencies>
     <dependency>
@@ -59,33 +61,42 @@
     </dependency>
 </dependencies>
 ```
+
 ## 功能
+
 - sql日志自动填充功能-执行 SQL 分析打印
+
 > 可在控制台打印出完整的sql日志，自动填充参数
 
 - 自动增删改查接口
+
 1. mapper接口继承SuperMapper类
 2. service接口类继承SuperService或者SuperCacheService类，区别在于一个实现了缓存，一个没有
 3. serviceImpl实现类继承SuperServiceImpl或者AbstractSuperCacheServiceImpl
 4. CurdController 实现了curd的接口自动生成，使用方式可继承SuperSimpleController类来实现自动生成curd接口
 
 - 关联数据自动注入器
+
 > 用于 自动解决分页数据的属性或单个对象的属性 回显关联数据之痛, 支持对静态数据属性(数据字典)、动态主键数据进行自动注入
 **解决问题：** 跨库、库表、库服务 关联数据自动注入。
 
 **使用步骤：**
+
 1. 需要注入数据的字段上面添加注解： @InjectionField(api = DICTIONARY_ITEM_CLASS, method = DICTIONARY_ITEM_METHOD, type="EDUCATION")
 2. 需要注入数据的字段类型改成：RemoteData<Long, String> 或 RemoteData<String, String> 或 RemoteData<Long, User>
 3. 需要注入数据的方法标记注解：@InjectionResult 或者手动调用方法：InjectionCore.injection(Object obj)。
 4. 实现具体的查询方法。
 
 工具类中的RemoteData类的设计，灵感源于Hibernate,比如用户实体的字段改成:
+
 ```java
     @TableField("org_id")
     @InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
     private RemoteData<Long, CoreOrg> org;
 ```
+
 RemoteData 对象主要有2个字段：key、data
+
 ```java
 package com.github.sparkzxl.database.entity;
 
@@ -168,18 +179,22 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 }
 
 ```
-其中， key 用于存储 org_id的具体值， data用于注入需要回显的数据。
-比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将@InjectionField 注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， name> 即可。
-若想要回显org的多个字段， org类型可以设置成RemoteData<Long, Org>，, 并将@InjectionField 注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
+
+其中， key 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将@InjectionField
+注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， name> 即可。 若想要回显org的多个字段， org类型可以设置成RemoteData<Long, Org>，, 并将@InjectionField
+注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
 
 1. 引入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-database-starter</artifactId>
 </dependency>
 ```
+
 2. 使用方式
+
 ```yaml
 sparkzxl:
   injection:
@@ -188,15 +203,18 @@ sparkzxl:
     # 是否启用 远程数据 注解注入 
     aop-enabled: true
 ```
+
 3.在需要注入的对象上添加注解：@InjectionField
+
 ```java
     @TableField("org_id")
     @InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
     private RemoteData<Long, CoreOrg> org;
 ```
-4.实现具体的查询方法
- // 标记了该注解的字段 @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = DictionaryType.AREA_LEVEL) 需要实现的
- 示例
+
+4.实现具体的查询方法 // 标记了该注解的字段 @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType =
+DictionaryType.AREA_LEVEL) 需要实现的 示例
+
  ```java
 @Repository
 public class CoreOrgRepository implements ICoreOrgRepository {
@@ -229,28 +247,37 @@ public class CoreOrgRepository implements ICoreOrgRepository {
     }
 }
 ```
+
 使用demo可参考sparkzxl-cloud中sparkzxl-authority-server 用户的查询
 
 - 分页查询：
->使用pagehelper组件具体可参考[pagehelper官网](https://pagehelper.github.io/)
+
+> 使用pagehelper组件具体可参考[pagehelper官网](https://pagehelper.github.io/)
 
 本starter封装了分页查询的入参DTO，实际业务当中可继承PageDTO，同时分页结果的组装使用静态工厂方法隐藏对象的创建，可使用PageInfoUtils.pageInfo(data)
 
 - 自动填充功能
+
 > 使用mybatis-plus的增强功能，继承MetaObjectHandler，实现元对象处理器接口
 
-目的主要对自动填充的字段，创建时间，更新时间，创建人，更新人字段的自动填充功能，创建人和更新人的这都能过填充是通过request请求域内的用户进行传递，自动填充，可通过BaseContextHandler.getUserId()获取，具体可参考BaseContextHandler类当中的方法进行选择
+目的主要对自动填充的字段，创建时间，更新时间，创建人，更新人字段的自动填充功能，创建人和更新人的这都能过填充是通过request请求域内的用户进行传递，自动填充，可通过BaseContextHandler.getUserId()
+获取，具体可参考BaseContextHandler类当中的方法进行选择
+
 - 自动配置属性
+
 ```yaml
 sparkzxl:
   data:
     worker-id: 0
     data-center-id: 10
 ```
+
 雪花算法的数据id生成号段，不填默认
 
 ## 使用方法
+
 1. 引入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.sparkzxl</groupId>

@@ -22,7 +22,7 @@ import java.util.*;
  *
  * @author: zhouxinlei
  * @date: 2020-12-08 11:39:12
-*/
+ */
 @Slf4j
 public class FeignExceptionHandler extends DefaultErrorAttributes {
 
@@ -64,6 +64,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
         handleResponseResult();
         return errorAttributes;
     }
+
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
         ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);

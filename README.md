@@ -1,17 +1,21 @@
 # sparkzxl-component
+
 ## 简介
+
 > sparkzxl-component包含springboot项目的封装，主要功能是统一了对外接口的api访问格式，web模块进行了封装，基于DDD领域驱动模型设计代码，具体落地实施，对常用的工具类包进行封装，简单易用，elasticsearch，mybatis组件。集成了oauth2，redis缓存，本地缓存的构建，分布式锁的封装等等，是快速开发的脚手架，简易适用于企业级框架搭建
 
 ## 项目地址
+
 [sparkzxl-component](https://github.com/sparkzxl/sparkzxl-component.git)
 
 **落地最佳实践**：[sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
 
 ## 推荐阅读文档
+
 [sparkzxl-component使用文档](https://sparkzxl.github.io/sparkzxl-component)
 
-
 ## 开源博客
+
 [凛冬王昭君的笔记](https://www.sparksys.top)
 
 ## 文档更新记录
@@ -24,6 +28,7 @@
 - [sparkzxl-web-starter组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-web)
 
 ## 组件简介
+
 ```Text
 sparkzxl-component                               -- 核心组件模块
 ├── sparkzxl-boot-starter                         -- sparkzxl boot引导
@@ -48,7 +53,9 @@ sparkzxl-component                               -- 核心组件模块
 ├── sparkzxl-web-starter                          -- web视图层组件
 ├── sparkzxl-zookeeper-starter                    -- zookeeper组件
 ```
+
 ## 组件功能
+
 - [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
 - [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
 - [sparkzxl-core组件](forward/sparkzxl-core.md)

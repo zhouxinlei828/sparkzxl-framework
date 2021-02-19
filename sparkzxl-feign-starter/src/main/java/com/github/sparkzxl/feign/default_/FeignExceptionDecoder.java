@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author: zhouxinlei
  * @date: 2020-12-08 11:15:32
-*/
+ */
 @Slf4j
 public class FeignExceptionDecoder implements ErrorDecoder {
 

@@ -1,4 +1,5 @@
 # sparkzxl-web-starter
+
 > 职能：
 > 统一API请求封装，在业务系统中只需要一个注解ResponseResult，便可以对返回结果进行包装返回
 
@@ -33,6 +34,7 @@
 ```
 
 ## 功能
+
 - 替换tomcat服务，使用undertow替代，使用更快，更高效
 - 统一API请求封装，在业务系统中只需要一个注解ResponseResult，便可以对返回结果进行包装返回
 - 统一异常处理，使用全局api返回格式输出异常结果
@@ -40,7 +42,9 @@
 - jackson 处理时间，枚举，Long类型的精度丢失问题
 
 ## 使用方法
+
 1. 引入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
@@ -48,15 +52,19 @@
     <version>${sparkzxl.version}</version>
 </dependency>
 ```
+
 2. 在controller层加入@ResponseResult注解，可加在方法上，也可加在类上
 
 ![20200918100241.png](https://oss.sparksys.top/images/20200918100241.png)
 
 3. 异常的处理
+
 ```java
 ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(authUserDetail);
 ```
+
 默认有常见的异常枚举类
+
 ```java
 @Getter
 @AllArgsConstructor
@@ -182,7 +190,9 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     final String message;
 }
 ```
+
 断言可使用的场景(判断是否为空，判断是否为真，判断比较大小三种情况)
+
 ```java
 public interface SparkZxlAssert {
     /**
@@ -260,12 +270,17 @@ public interface SparkZxlAssert {
 ```
 
 那么其他情况如何处理呢,别担心，我通过用静态工厂的方法可自由灵活去处理异常，使用方法
+
 ```java
 SparkZxlExceptionAssert.businessFail("发生异常")
 ```
+
 这样，我们再业务代码中就再也看不到异常的存在，对整体的代码可阅读性大大增强
+
 ## 思考
+
 > 这样的异常抛出是否合理？对业务不可见，是否会产生不可控的异常
 
 ## 总结
+
 使用起来非常方便，对整体的架构，设计出可复用的代码，对架构师显得尤为重要

@@ -10,6 +10,7 @@ public interface DistributedLock {
 
     /**
      * 加锁
+     *
      * @param key key值
      * @return boolean
      */

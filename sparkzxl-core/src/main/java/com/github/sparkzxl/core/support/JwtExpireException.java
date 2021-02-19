@@ -18,6 +18,10 @@ public class JwtExpireException extends BaseException {
         super(ResponseResultStatus.FAILURE.code, message);
     }
 
+    public JwtExpireException(BaseEnumCode baseEnumCode) {
+        super(baseEnumCode);
+    }
+
     public JwtExpireException(BaseEnumCode baseEnumCode, Object[] args, String message) {
         super(baseEnumCode, args, message);
     }

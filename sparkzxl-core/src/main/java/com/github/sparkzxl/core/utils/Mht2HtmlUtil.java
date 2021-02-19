@@ -187,7 +187,7 @@ public class Mht2HtmlUtil {
     /**
      * 获取mht文件里资源文件的URL路径
      *
-     * @param bp  MimeBodyPart
+     * @param bp MimeBodyPart
      * @return String
      * @author zhouxinlei
      * @date 2020-05-15 15:19:21
@@ -214,7 +214,7 @@ public class Mht2HtmlUtil {
     /**
      * 获取mht文件中的内容代码
      *
-     * @param bp MimeBodyPart
+     * @param bp          MimeBodyPart
      * @param strEncoding mht文件编码
      * @return String
      * @author zhouxinlei

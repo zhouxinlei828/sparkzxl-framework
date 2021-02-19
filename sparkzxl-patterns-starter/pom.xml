@@ -15,6 +15,7 @@
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-core</artifactId>
+
         </dependency>
     </dependencies>
 

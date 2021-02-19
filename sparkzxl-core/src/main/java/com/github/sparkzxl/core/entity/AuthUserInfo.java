@@ -15,7 +15,7 @@ import java.util.Map;
 @Data
 public class AuthUserInfo<T> implements Serializable {
 
-    private static final long serialVersionUID = 5082256738321189608L;
+    private static final long serialVersionUID = 7289539823055340191L;
 
     /**
      * 用户id
@@ -51,5 +51,10 @@ public class AuthUserInfo<T> implements Serializable {
      * 扩展数据
      */
     private Map<String, Object> extraInfo;
+
+    /**
+     * 租户标识
+     */
+    private String tenant;
 
 }

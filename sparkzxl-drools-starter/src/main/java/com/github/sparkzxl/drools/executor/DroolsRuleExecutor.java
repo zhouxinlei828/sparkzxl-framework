@@ -19,11 +19,11 @@ import java.util.List;
  *
  * @author: zhouxinlei
  * @date: 2020-12-15 11:18:33
-*/
+ */
 @Slf4j
 public class DroolsRuleExecutor {
 
-    public <T> Object executeRule(String agendaGroup, String resultQuery, String resultVariable, String className, List<T> tList){
+    public <T> Object executeRule(String agendaGroup, String resultQuery, String resultVariable, String className, List<T> tList) {
         KieSession kieSession = KieClient.getKieContainer().newKieSession();
         kieSession.getAgenda().getAgendaGroup(agendaGroup).setFocus();
         kieSession.addEventListener(new RuleRuntimeEventListener() {
@@ -43,7 +43,7 @@ public class DroolsRuleExecutor {
                 log.info("Object--objectDeleted {}", event.getOldObject().toString());
             }
         });
-        if (CollectionUtils.isNotEmpty(tList)){
+        if (CollectionUtils.isNotEmpty(tList)) {
             tList.forEach(kieSession::insert);
         }
         int ruleFiredCount = kieSession.fireAllRules();
@@ -57,7 +57,7 @@ public class DroolsRuleExecutor {
             kieSession.dispose();
             log.info("命中了 {} 条drools规则", ruleFiredCount);
             return newInstance;
-        }catch (Exception exception){
+        } catch (Exception exception) {
             log.error("drools查询结果发生异常 massage：{}", ExceptionUtil.getMessage(exception));
             return null;
         }

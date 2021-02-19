@@ -7,7 +7,7 @@ import lombok.Data;
  *
  * @author: zhouxinlei
  * @date: 2020-12-09 11:39:50
-*/
+ */
 @Data
 public class FileProperties {
 

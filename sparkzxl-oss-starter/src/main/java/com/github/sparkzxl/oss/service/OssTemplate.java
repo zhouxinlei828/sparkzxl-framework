@@ -161,7 +161,7 @@ public class OssTemplate implements InitializingBean {
 
     @SneakyThrows
     public String getObjectURL(String bucketName, String objectName) {
-        return getObjectUrl(bucketName,objectName);
+        return getObjectUrl(bucketName, objectName);
     }
 
     public String getObjectUrl(String bucketName, String objectName) {

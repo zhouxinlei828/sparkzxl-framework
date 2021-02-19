@@ -62,8 +62,8 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
             message = ResponseResultStatus.FAILURE.getMessage();
         }
         if (returnTypeName.equals(String.class.getTypeName())) {
-            return objectMapper.writeValueAsString(ApiResult.apiResult(code,message,returnBody));
+            return objectMapper.writeValueAsString(ApiResult.apiResult(code, message, returnBody));
         }
-        return ApiResult.apiResult(code,message,returnBody);
+        return ApiResult.apiResult(code, message, returnBody);
     }
 }

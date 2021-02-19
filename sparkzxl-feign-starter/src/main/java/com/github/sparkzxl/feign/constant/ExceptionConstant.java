@@ -5,7 +5,7 @@ package com.github.sparkzxl.feign.constant;
  *
  * @author: zhouxinlei
  * @date: 2020-12-08 11:15:00
-*/
+ */
 public interface ExceptionConstant {
 
     /**
