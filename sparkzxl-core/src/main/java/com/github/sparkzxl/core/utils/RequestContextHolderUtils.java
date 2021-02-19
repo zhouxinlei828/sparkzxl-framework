@@ -99,4 +99,12 @@ public class RequestContextHolderUtils {
         return URLUtil.decode(value);
     }
 
+    public static String getHeader(String name) {
+        String value = getRequest().getHeader(name);
+        if (StrUtil.isEmpty(value)) {
+            return StrPool.EMPTY;
+        }
+        return URLUtil.decode(value);
+    }
+
 }
