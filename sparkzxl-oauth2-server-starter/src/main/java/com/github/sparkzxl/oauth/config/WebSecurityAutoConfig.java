@@ -7,6 +7,7 @@ import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.oauth.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.oauth.properties.SecurityProperties;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -75,8 +76,10 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
         httpSecurity.csrf().ignoringRequestMatchers(EndpointRequest.toAnyEndpoint());
+        List<String> ignorePatternList = securityProperties.getIgnorePatterns();
         httpSecurity
-                .authorizeRequests().anyRequest().authenticated()
+        .authorizeRequests().antMatchers(ArrayUtil.toArray(ignorePatternList, String.class)).permitAll()
+                .anyRequest().authenticated()
                 // 关闭跨站请求防护及不使用session
                 .and()
                 .csrf()
@@ -93,7 +96,7 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        List<String> ignorePatternList = securityProperties.getIgnorePatterns();
+        List<String> ignorePatternList = Lists.newArrayList();
         ignorePatternList.addAll(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
         web.ignoring().antMatchers(ArrayUtil.toArray(ignorePatternList, String.class));
         StrictHttpFirewall firewall = new StrictHttpFirewall();

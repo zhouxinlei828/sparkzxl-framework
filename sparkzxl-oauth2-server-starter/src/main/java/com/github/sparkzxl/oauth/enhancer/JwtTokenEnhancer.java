@@ -22,15 +22,15 @@ public class JwtTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
         AuthUserDetail userDetails = (AuthUserDetail) oAuth2Authentication.getPrincipal();
-        Map<String, Object> info = Maps.newLinkedHashMap();
-        info.put("id", userDetails.getId());
-        info.put("username", userDetails.getUsername());
-        info.put("name", userDetails.getName());
+        Map<String, Object> additionalInfo = Maps.newLinkedHashMap();
+        additionalInfo.put("id", userDetails.getId());
+        additionalInfo.put("username", userDetails.getUsername());
+        additionalInfo.put("name", userDetails.getName());
         String tenant = userDetails.getTenant();
         if (StringUtils.isNotEmpty(tenant)) {
-            info.put("tenant", tenant);
+            additionalInfo.put("tenant", tenant);
         }
-        ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(info);
+        ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(additionalInfo);
         return oAuth2AccessToken;
     }
 }

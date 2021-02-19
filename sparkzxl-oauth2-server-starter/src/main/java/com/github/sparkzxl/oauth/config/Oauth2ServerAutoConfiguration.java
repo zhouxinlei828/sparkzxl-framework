@@ -1,6 +1,7 @@
 package com.github.sparkzxl.oauth.config;
 
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
@@ -99,7 +100,9 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
         if (oAuth2Properties.getStore().equals(StoreTypeEnum.DATABASE)) {
             return new JdbcTokenStore(dataSource);
         } else {
-            return new RedisTokenStore(redisConnectionFactory);
+            RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
+            redisTokenStore.setPrefix(BaseContextConstants.CACHE_TOKEN_PREFIX);
+            return redisTokenStore;
         }
     }
 
@@ -107,7 +110,6 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     public ClientDetailsService clientDetailsService() {
         if (oAuth2Properties.getStore().equals(StoreTypeEnum.DATABASE)) {
             return new JdbcClientDetailsService(dataSource);
-
         } else {
             InMemoryClientDetailsService memoryClientDetailsService = new InMemoryClientDetailsService();
             Map<String, ClientDetails> clientDetailsStore = Maps.newHashMap();
@@ -140,7 +142,7 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
         delegates.add(accessTokenConverter());
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.setClientDetailsService(clientDetailsService());
-        endpoints.authenticationManager(authenticationManager)
+        endpoints.authenticationManager(authenticationManager).reuseRefreshTokens(false)
                 .userDetailsService(userDetailsService)
                 //配置令牌存储策略
                 .tokenStore(tokenStore())
@@ -153,6 +155,6 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.allowFormAuthenticationForClients() //如果使用表单认证则需要加上
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+                .checkTokenAccess("permitAll()");
     }
 }

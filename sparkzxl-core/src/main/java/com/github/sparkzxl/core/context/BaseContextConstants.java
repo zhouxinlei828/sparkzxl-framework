@@ -55,6 +55,11 @@ public class BaseContextConstants {
     public static final String AUTHORITY_PREFIX = "ROLE_";
 
     /**
+     * token缓存前缀
+     */
+    public static final String CACHE_TOKEN_PREFIX = "TOKEN_";
+
+    /**
      * 权限
      */
     public static final String AUTHORITY_CLAIM_NAME = "authorities";
