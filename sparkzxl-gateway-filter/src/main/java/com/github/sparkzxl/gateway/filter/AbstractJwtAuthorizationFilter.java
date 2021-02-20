@@ -67,15 +67,18 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
-                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_TENANT, jwtUserInfo.getTenant());
+
+                    String tenant = WebFluxUtils.getHeader(BaseContextConstants.JWT_KEY_TENANT, request);
+                    final String tenantCode = StringUtils.isEmpty(tenant) ? jwtUserInfo.getTenant() : tenant;
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_TENANT, tenantCode);
                     MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
-                    MDC.put(BaseContextConstants.JWT_KEY_TENANT, String.valueOf(jwtUserInfo.getTenant()));
+                    MDC.put(BaseContextConstants.JWT_KEY_TENANT, String.valueOf(tenantCode));
                 }
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
             } catch (BaseException e) {
                 log.error("jwt 获取用户发生异常：{}", ExceptionUtil.getMessage(e));
-                return errorResponse(response, e.getCode(),e.getMessage());
+                return errorResponse(response, e.getCode(), e.getMessage());
             }
         }
         return chain.filter(exchange.mutate().request(request.mutate().build()).build());
@@ -105,7 +108,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
     protected Mono<Void> handleTokenEmpty(ServerWebExchange exchange, GatewayFilterChain chain, String token) {
         ServerHttpResponse response = exchange.getResponse();
         if (StringUtils.isEmpty(token)) {
-            return errorResponse(response, ResponseResultStatus.JWT_EMPTY_ERROR.getCode(),ResponseResultStatus.JWT_EMPTY_ERROR.getMessage());
+            return errorResponse(response, ResponseResultStatus.JWT_EMPTY_ERROR.getCode(), ResponseResultStatus.JWT_EMPTY_ERROR.getMessage());
         }
         return null;
     }
@@ -120,10 +123,10 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
 
     public abstract JwtUserInfo getJwtUserInfo(String token) throws BaseException;
 
-    protected Mono<Void> errorResponse(ServerHttpResponse response, int code,String message) {
+    protected Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
-        byte[] bytes = JSON.toJSONString(ApiResult.apiResult(code,message)).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(ApiResult.apiResult(code, message)).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }
