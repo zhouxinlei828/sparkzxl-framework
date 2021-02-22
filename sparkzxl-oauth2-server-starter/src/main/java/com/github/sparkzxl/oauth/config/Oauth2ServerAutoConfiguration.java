@@ -155,6 +155,6 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.allowFormAuthenticationForClients() //如果使用表单认证则需要加上
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("permitAll()");
+                .checkTokenAccess("isAuthenticated()");
     }
 }
