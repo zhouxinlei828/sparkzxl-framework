@@ -81,7 +81,6 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         if (ObjectUtils.isNotEmpty(keyStoreProperties) && keyStoreProperties.isEnable()) {
             KeyPair keyPair = HuSecretUtils.keyPair(keyStoreProperties.getPath(),

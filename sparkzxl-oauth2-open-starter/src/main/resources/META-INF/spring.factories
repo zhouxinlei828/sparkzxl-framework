@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.github.sparkzxl.open.config.WebSecurityAutoConfig, \
+    com.github.sparkzxl.open.config.OAuth2AuthorizationServerConfig

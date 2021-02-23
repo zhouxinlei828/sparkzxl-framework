@@ -117,6 +117,7 @@
         <module>sparkzxl-word-starter</module>
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-security-keycloak-starter</module>
+        <module>sparkzxl-oauth2-open-starter</module>
     </modules>
 
     <distributionManagement>
