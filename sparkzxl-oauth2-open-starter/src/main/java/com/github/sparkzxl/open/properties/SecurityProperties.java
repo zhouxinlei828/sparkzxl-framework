@@ -19,4 +19,6 @@ public class SecurityProperties {
 
     private boolean restAuthentication;
 
+    private boolean csrf = true;
+
 }

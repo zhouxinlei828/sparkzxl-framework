@@ -66,20 +66,16 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .antMatchers(ArrayUtil.toArray(ignorePatternList, String.class)).permitAll();
         }
-        http.csrf().ignoringRequestMatchers(EndpointRequest.toAnyEndpoint());
         http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().and()
-                .httpBasic()
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(restfulAccessDeniedHandler);
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll();
+        if (!securityProperties.isCsrf()) {
+            http.csrf().disable();
+        }
         if (securityProperties.isRestAuthentication()) {
             http.authorizeRequests()
                     .anyRequest().authenticated()
                     .and()
-                    .formLogin().and()
+                    .formLogin().permitAll().and()
                     .httpBasic()
                     .and()
                     .exceptionHandling()
@@ -89,7 +85,7 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .anyRequest().authenticated()
                     .and()
-                    .formLogin().and()
+                    .formLogin().permitAll().and()
                     .httpBasic()
                     .and()
                     .exceptionHandling()

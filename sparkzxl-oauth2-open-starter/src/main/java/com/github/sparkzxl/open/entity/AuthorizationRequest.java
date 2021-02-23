@@ -16,22 +16,21 @@ import lombok.Data;
 public class AuthorizationRequest {
 
     @ApiModelProperty(value = "授权类型：password，authorization_code，refresh_token", required = true, example = "password")
-    @JsonProperty(value = "grant_type")
     private String grantType;
 
     @ApiModelProperty(value = "授权类型为authorization_code,参数必传", allowEmptyValue = true)
     private String code;
 
     @ApiModelProperty(value = "授权类型为authorization_code,参数必传", allowEmptyValue = true)
-    @JsonProperty("client_id")
     private String clientId;
 
+    @ApiModelProperty(value = "授权类型为authorization_code,参数必传", allowEmptyValue = true)
+    private String clientSecret;
+
     @ApiModelProperty(value = "授权成功跳转地址,授权类型为authorization_code,参数必传", allowEmptyValue = true)
-    @JsonProperty("redirect_uri")
     private String redirectUri;
 
     @ApiModelProperty(value = "刷新token，授权类型为refresh_token,参数必传", allowEmptyValue = true)
-    @JsonProperty("refresh_token")
     private String refreshToken;
 
     @ApiModelProperty(value = "用户名，授权类型为password,参数必传", allowEmptyValue = true)
