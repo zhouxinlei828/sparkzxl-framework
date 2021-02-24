@@ -58,7 +58,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     private UserDetailsService userDetailsService;
 
     @Bean
-    public TokenStore jdbcTokenStore() {
+    public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }
 
@@ -89,7 +89,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
-                .tokenStore(jdbcTokenStore())
+                .tokenStore(tokenStore())
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(enhancerChain);
     }
