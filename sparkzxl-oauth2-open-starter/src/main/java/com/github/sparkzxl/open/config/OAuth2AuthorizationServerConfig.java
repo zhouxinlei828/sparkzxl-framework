@@ -1,13 +1,14 @@
 package com.github.sparkzxl.open.config;
 
-import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
 import com.github.sparkzxl.open.enhancer.JwtTokenEnhancer;
+import com.github.sparkzxl.open.properties.OpenProperties;
 import com.github.sparkzxl.open.supports.Oauth2ExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -25,7 +26,6 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
 import java.security.KeyPair;
@@ -41,6 +41,7 @@ import java.util.Optional;
  */
 @Configuration
 @EnableAuthorizationServer
+@EnableConfigurationProperties(OpenProperties.class)
 @Slf4j
 @Import({Oauth2ExceptionHandler.class})
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -81,16 +82,16 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        endpoints.authenticationManager(authenticationManager)
+                .userDetailsService(userDetailsService)
+                .tokenStore(tokenStore());
         JwtAccessTokenConverter jwtAccessTokenConverter = accessTokenConverter();
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
         delegates.add(jwtTokenEnhancer());
         delegates.add(jwtAccessTokenConverter);
         enhancerChain.setTokenEnhancers(delegates);
-        endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                .tokenStore(tokenStore())
-                .accessTokenConverter(jwtAccessTokenConverter)
+        endpoints.accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(enhancerChain);
     }
 

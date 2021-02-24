@@ -4,6 +4,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
+import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
 import com.github.sparkzxl.open.properties.SecurityProperties;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,19 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public PermitAuthenticationFilter permitAuthenticationFilter() {
+        return new PermitAuthenticationFilter();
+    }
+
+    @Bean
+    public PermitAllSecurityConfig permitAllSecurityConfig() {
+        PermitAllSecurityConfig permitAllSecurityConfig = new PermitAllSecurityConfig();
+        permitAllSecurityConfig.setPermitAuthenticationFilter(permitAuthenticationFilter());
+        return permitAllSecurityConfig;
+
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.security.Principal;
  */
 public interface OauthService {
 
+    String OAUTH_AUTHORIZE_URL= "oauth/authorize?client_id={}&redirect_uri={}&response_type=code&state={}";
     /**
      * get请求授权登录
      *
@@ -51,5 +52,12 @@ public interface OauthService {
      * @return 是否成功
      */
     boolean checkCaptcha(String key, String value);
+
+    /**
+     * 获取授权认证连接
+     *
+     * @return String
+     */
+    String getAuthorizeUrl();
 
 }
