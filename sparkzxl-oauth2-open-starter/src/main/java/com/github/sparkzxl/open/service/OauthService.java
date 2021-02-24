@@ -15,7 +15,8 @@ import java.security.Principal;
  */
 public interface OauthService {
 
-    String OAUTH_AUTHORIZE_URL= "oauth/authorize?client_id={}&redirect_uri={}&response_type=code&state={}";
+    String OAUTH_AUTHORIZE_URL = "oauth/authorize?client_id={}&redirect_uri={}&response_type=code&state={}";
+
     /**
      * get请求授权登录
      *
@@ -59,5 +60,14 @@ public interface OauthService {
      * @return String
      */
     String getAuthorizeUrl();
+
+
+    /**
+     * 授权回调
+     *
+     * @param authorizationCode 授权码
+     * @return OAuth2AccessToken
+     */
+    OAuth2AccessToken callBack(String authorizationCode);
 
 }
