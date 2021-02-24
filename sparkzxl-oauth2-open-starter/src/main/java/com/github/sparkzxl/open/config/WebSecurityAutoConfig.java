@@ -6,6 +6,7 @@ import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
 import com.github.sparkzxl.open.properties.SecurityProperties;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -86,31 +87,66 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
             http.csrf().disable();
         }
         if (securityProperties.isRestAuthentication()) {
-            http.authorizeRequests()
-                    .anyRequest().authenticated()
-                    .and()
-                    .formLogin().permitAll().and()
-                    .httpBasic()
-                    .and()
-                    .exceptionHandling()
-                    .accessDeniedHandler(restfulAccessDeniedHandler)
-                    .authenticationEntryPoint(restAuthenticationEntryPoint);
+            if (securityProperties.isCustomLogin()) {
+                http.authorizeRequests()
+                        .anyRequest().authenticated()
+                        .and()
+                        .formLogin()
+                        .loginPage("/authentication/require")
+                        .loginProcessingUrl("/authentication/form")
+                        .permitAll().and()
+                        .httpBasic()
+                        .and()
+                        .exceptionHandling()
+                        .accessDeniedHandler(restfulAccessDeniedHandler)
+                        .authenticationEntryPoint(restAuthenticationEntryPoint);
+            } else {
+                http.authorizeRequests()
+                        .anyRequest().authenticated()
+                        .and()
+                        .formLogin()
+                        .permitAll().and()
+                        .httpBasic()
+                        .and()
+                        .exceptionHandling()
+                        .accessDeniedHandler(restfulAccessDeniedHandler)
+                        .authenticationEntryPoint(restAuthenticationEntryPoint);
+            }
         } else {
-            http.authorizeRequests()
-                    .anyRequest().authenticated()
-                    .and()
-                    .formLogin().permitAll().and()
-                    .httpBasic()
-                    .and()
-                    .exceptionHandling()
-                    .accessDeniedHandler(restfulAccessDeniedHandler);
+            if (securityProperties.isCustomLogin()) {
+                http.authorizeRequests()
+                        .anyRequest().authenticated()
+                        .and()
+                        .formLogin()
+                        .loginPage("/authentication/require")
+                        .loginProcessingUrl("/authentication/form")
+                        .permitAll().and()
+                        .httpBasic()
+                        .and()
+                        .exceptionHandling()
+                        .accessDeniedHandler(restfulAccessDeniedHandler);
+            } else {
+                http.authorizeRequests()
+                        .anyRequest().authenticated()
+                        .and()
+                        .formLogin()
+                        .permitAll().and()
+                        .httpBasic()
+                        .and()
+                        .exceptionHandling()
+                        .accessDeniedHandler(restfulAccessDeniedHandler);
+            }
         }
     }
 
     @Override
     public void configure(WebSecurity web) {
-        List<String> ignorePatternList = SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS;
-        web.ignoring().antMatchers(ArrayUtil.toArray(ignorePatternList, String.class));
+        List<String> ignoreStaticPatterns = Lists.newArrayList();
+        ignoreStaticPatterns.addAll(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
+        if (CollectionUtils.isNotEmpty(securityProperties.getIgnoreStaticPatterns())){
+            ignoreStaticPatterns.addAll(securityProperties.getIgnoreStaticPatterns());
+        }
+        web.ignoring().antMatchers(ArrayUtil.toArray(ignoreStaticPatterns, String.class));
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
         web.httpFirewall(firewall);

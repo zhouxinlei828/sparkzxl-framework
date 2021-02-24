@@ -17,7 +17,11 @@ public class SecurityProperties {
 
     private List<String> ignorePatterns;
 
+    private List<String> ignoreStaticPatterns;
+
     private boolean restAuthentication;
+
+    private boolean customLogin;
 
     private boolean csrf = true;
 
