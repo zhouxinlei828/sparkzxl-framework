@@ -27,23 +27,15 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     JSON_PARSE_ERROR(-13, "JSON解析异常"),
 
     /**
-     * 请求未授权
+     * 未登录
      */
-    UN_AUTHORIZED(HttpStatus.HTTP_UNAUTHORIZED, "访问此资源需要授权"),
+    UN_AUTHORIZED(HttpStatus.HTTP_UNAUTHORIZED, "暂未登录或者token失效"),
 
     AUTHORIZED_FAIL(HttpStatus.HTTP_UNAUTHORIZED, "授权失败，请重新尝试"),
 
     AUTHORIZED_DENIED(HttpStatus.HTTP_FORBIDDEN, "该资源无权限访问"),
 
-    USERNAME_EMPTY(HttpStatus.HTTP_UNAUTHORIZED, "用户名不能为空"),
-
-    PASSWORD_EMPTY(HttpStatus.HTTP_UNAUTHORIZED, "密码不能为空"),
-
-    PASSWORD_ERROR(HttpStatus.HTTP_UNAUTHORIZED, "密码不正确"),
-
-    ACCOUNT_EMPTY(HttpStatus.HTTP_UNAUTHORIZED, "账户不存在"),
-
-    UN_PERMISSION(HttpStatus.HTTP_UNAUTHORIZED, "抱歉，您没有访问权限"),
+    UN_PERMISSION(HttpStatus.HTTP_FORBIDDEN, "抱歉，您没有访问权限"),
     /**
      * 404 没找到请求
      */
@@ -101,8 +93,6 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
 
     SERVICE_DEGRADATION(HttpStatus.HTTP_UNAVAILABLE, "服务降级，请稍候再试"),
 
-    UPLOAD_FAILURE(HttpStatus.HTTP_INTERNAL_ERROR, "上传文件失败了哦"),
-
     /**
      * 数据库异常
      */
@@ -133,20 +123,30 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
      */
     PARAM_FLOW(1004, "热点参数访问频繁，请稍后再试"),
 
+    USERNAME_EMPTY(1005, "用户名不能为空"),
+
+    PASSWORD_EMPTY(1006, "密码不能为空"),
+
+    PASSWORD_ERROR(1007, "密码不正确"),
+
+    ACCOUNT_EMPTY(1008, "账户不存在"),
+
+    UPLOAD_FAILURE(1009, "上传文件失败了哦"),
+
     /**
      * token已过期
      */
-    JWT_EXPIRED_ERROR(10010, "token已过期"),
+    JWT_EXPIRED_ERROR(2001, "token已过期"),
 
     /**
      * token签名不合法
      */
-    JWT_VALID_ERROR(10011, "token校验失败"),
+    JWT_VALID_ERROR(2002, "token校验失败"),
 
     /**
      * token为空
      */
-    JWT_EMPTY_ERROR(10012, "token为空");
+    JWT_EMPTY_ERROR(2003, "token为空");
 
     final int code;
 
