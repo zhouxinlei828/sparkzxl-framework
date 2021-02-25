@@ -25,4 +25,6 @@ public class SecurityProperties {
 
     private boolean csrf = true;
 
+    private String preHandleFilter;
+
 }

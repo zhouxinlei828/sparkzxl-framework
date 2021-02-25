@@ -2,12 +2,14 @@ package com.github.sparkzxl.open.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
+import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
 import com.github.sparkzxl.open.properties.SecurityProperties;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,8 +25,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
+import javax.servlet.Filter;
 import java.util.List;
 
 /**
@@ -136,6 +140,10 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                         .exceptionHandling()
                         .accessDeniedHandler(restfulAccessDeniedHandler);
             }
+            if (StringUtils.isNotEmpty(securityProperties.getPreHandleFilter())) {
+                Filter bean = SpringContextUtils.getBean(securityProperties.getPreHandleFilter());
+                http.addFilterBefore(bean, UsernamePasswordAuthenticationFilter.class);
+            }
         }
     }
 
@@ -143,7 +151,7 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         List<String> ignoreStaticPatterns = Lists.newArrayList();
         ignoreStaticPatterns.addAll(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
-        if (CollectionUtils.isNotEmpty(securityProperties.getIgnoreStaticPatterns())){
+        if (CollectionUtils.isNotEmpty(securityProperties.getIgnoreStaticPatterns())) {
             ignoreStaticPatterns.addAll(securityProperties.getIgnoreStaticPatterns());
         }
         web.ignoring().antMatchers(ArrayUtil.toArray(ignoreStaticPatterns, String.class));

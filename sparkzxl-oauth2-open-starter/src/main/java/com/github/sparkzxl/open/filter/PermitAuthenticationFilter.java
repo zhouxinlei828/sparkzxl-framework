@@ -27,7 +27,6 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("当前访问的地址:{}", request.getRequestURI());
         if ("/permitAll".equals(request.getRequestURI())) {
 
             request = new HttpServletRequestWrapper(request) {
