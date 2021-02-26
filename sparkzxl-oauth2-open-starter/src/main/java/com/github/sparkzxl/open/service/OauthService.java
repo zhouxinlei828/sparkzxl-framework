@@ -5,6 +5,7 @@ import com.github.sparkzxl.open.entity.AuthorizationRequest;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 /**
@@ -14,8 +15,6 @@ import java.security.Principal;
  * @date: 2020-06-25 09:49:22
  */
 public interface OauthService {
-
-    String OAUTH_AUTHORIZE_URL = "oauth/authorize?client_id={}&redirect_uri={}&response_type=code&state={}";
 
     /**
      * get请求授权登录
@@ -71,5 +70,12 @@ public interface OauthService {
      * @return OAuth2AccessToken
      */
     OAuth2AccessToken callBack(String authorizationCode, String loginState);
+
+    /**
+     * 自定义退出登录
+     * @param request HttpServletRequest
+     * @return boolean
+     */
+    boolean logout(HttpServletRequest request);
 
 }
