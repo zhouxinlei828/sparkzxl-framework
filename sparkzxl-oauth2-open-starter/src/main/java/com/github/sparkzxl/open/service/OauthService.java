@@ -57,17 +57,19 @@ public interface OauthService {
     /**
      * 获取授权认证连接
      *
+     * @param frontUrl 前端地址
      * @return String
      */
-    String getAuthorizeUrl();
+    String getAuthorizeUrl(String frontUrl);
 
 
     /**
      * 授权回调
      *
      * @param authorizationCode 授权码
+     * @param loginState        登录态
      * @return OAuth2AccessToken
      */
-    OAuth2AccessToken callBack(String authorizationCode);
+    OAuth2AccessToken callBack(String authorizationCode, String loginState);
 
 }
