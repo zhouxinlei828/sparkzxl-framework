@@ -56,10 +56,11 @@ public interface OauthService {
     /**
      * 获取授权认证连接
      *
+     * @param clientId 客户端id
      * @param frontUrl 前端地址
      * @return String
      */
-    String getAuthorizeUrl(String frontUrl);
+    String getAuthorizeUrl(String clientId, String frontUrl);
 
 
     /**
@@ -73,6 +74,7 @@ public interface OauthService {
 
     /**
      * 自定义退出登录
+     *
      * @param request HttpServletRequest
      * @return boolean
      */
