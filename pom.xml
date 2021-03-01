@@ -123,11 +123,11 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>http://47.116.52.58:8085/repository/maven-releases/</url>
+            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>maven-snapshots</id>
-            <url>http://47.116.52.58:8085/repository/maven-snapshots/</url>
+            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <dependencies>
@@ -740,11 +740,11 @@
             <distributionManagement>
                 <repository>
                     <id>maven-releases</id>
-                    <url>http://47.116.52.58:8085/repository/maven-releases/</url>
+                    <url>http://47.114.40.129:8764/repository/maven-releases/</url>
                 </repository>
                 <snapshotRepository>
                     <id>maven-snapshots</id>
-                    <url>http://47.116.52.58:8085/repository/maven-snapshots/</url>
+                    <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
             <activation>
