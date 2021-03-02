@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.database.annonation.InjectionField;
 import com.github.sparkzxl.database.entity.RemoteData;
+import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.InjectionProperties;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

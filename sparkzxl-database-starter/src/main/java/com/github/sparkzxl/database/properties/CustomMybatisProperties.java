@@ -3,18 +3,13 @@ package com.github.sparkzxl.database.properties;
 import com.github.sparkzxl.database.enums.IdTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import java.util.List;
-
-/**
- * description：数据源配置类
- *
- * @author zhouxinlei
- * @date： 2020-06-18 16:12:30
- */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.data")
-public class DataProperties {
+@ConfigurationProperties(
+        prefix = "mybatis-plus.custom"
+)
+public class CustomMybatisProperties {
 
     private IdTypeEnum idType = IdTypeEnum.SNOWFLAKE_ID;
 
@@ -28,4 +23,8 @@ public class DataProperties {
 
     private String[] ignoreTable;
 
+    private String[] mapperScan;
+
+    @NestedConfigurationProperty
+    private InjectionProperties injection = new InjectionProperties();
 }

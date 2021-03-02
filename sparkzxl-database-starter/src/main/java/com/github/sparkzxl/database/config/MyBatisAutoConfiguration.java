@@ -6,16 +6,20 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.github.sparkzxl.database.aspect.InjectionResultAspect;
 import com.github.sparkzxl.database.enums.IdTypeEnum;
+import com.github.sparkzxl.database.injection.InjectionCore;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
+import com.github.sparkzxl.database.mybatis.hander.RemoteDataTypeHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;
-import com.github.sparkzxl.database.properties.DataProperties;
+import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,16 +34,16 @@ import java.util.List;
  * @date 2020-05-24 13:20:57
  */
 @Configuration
-@EnableConfigurationProperties({DataProperties.class})
-@MapperScan(basePackages = "${mybatis-plus.mapper-scan}")
+@EnableConfigurationProperties({CustomMybatisProperties.class})
+@MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
 public class MyBatisAutoConfiguration {
 
-    private final DataProperties dataProperties;
+    private final CustomMybatisProperties customMybatisProperties;
 
-    public MyBatisAutoConfiguration(DataProperties dataProperties) {
-        this.dataProperties = dataProperties;
-        log.info("dataProperties：{}", JSONUtil.toJsonPrettyStr(dataProperties));
+    public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties) {
+        this.customMybatisProperties = customMybatisProperties;
+        log.info("dataProperties：{}", JSONUtil.toJsonPrettyStr(customMybatisProperties));
     }
 
     /**
@@ -48,10 +52,10 @@ public class MyBatisAutoConfiguration {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        if (dataProperties.isEnableTenant()) {
-            List<String> ignoreTableList = ArrayUtils.isEmpty(dataProperties.getIgnoreTable()) ? Lists.newArrayList() :
-                    Arrays.asList(dataProperties.getIgnoreTable());
-            interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(dataProperties.getTenantIdColumn(),
+        if (customMybatisProperties.isEnableTenant()) {
+            List<String> ignoreTableList = ArrayUtils.isEmpty(customMybatisProperties.getIgnoreTable()) ? Lists.newArrayList() :
+                    Arrays.asList(customMybatisProperties.getIgnoreTable());
+            interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(customMybatisProperties.getTenantIdColumn(),
                     ignoreTableList)));
         }
         return interceptor;
@@ -64,16 +68,16 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     public Snowflake snowflake() {
-        return IdUtil.getSnowflake(dataProperties.getWorkerId(),
-                dataProperties.getDataCenterId());
+        return IdUtil.getSnowflake(customMybatisProperties.getWorkerId(),
+                customMybatisProperties.getDataCenterId());
     }
 
     @Bean
     @ConditionalOnMissingBean
     public MetaDataHandler metaDataHandler() {
         MetaDataHandler metaDataHandler = new MetaDataHandler();
-        metaDataHandler.setIdType(dataProperties.getIdType());
-        if (IdTypeEnum.SNOWFLAKE_ID.equals(dataProperties.getIdType())) {
+        metaDataHandler.setIdType(customMybatisProperties.getIdType());
+        if (IdTypeEnum.SNOWFLAKE_ID.equals(customMybatisProperties.getIdType())) {
             Snowflake snowflake = snowflake();
             metaDataHandler.setSnowflake(snowflake);
         }
@@ -84,4 +88,31 @@ public class MyBatisAutoConfiguration {
     public BaseSqlInjector sqlInjector() {
         return new BaseSqlInjector();
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
+    public InjectionCore injectionCore(CustomMybatisProperties customMybatisProperties) {
+        return new InjectionCore(customMybatisProperties.getInjection());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
+    public InjectionResultAspect getRemoteAspect(InjectionCore injectionCore) {
+        return new InjectionResultAspect(injectionCore);
+    }
+
+    /**
+     * Mybatis 类型处理器： 处理 RemoteData 类型的字段
+     *
+     * @return RemoteDataTypeHandler
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
+    public RemoteDataTypeHandler remoteDataTypeHandler() {
+        return new RemoteDataTypeHandler();
+    }
+
 }

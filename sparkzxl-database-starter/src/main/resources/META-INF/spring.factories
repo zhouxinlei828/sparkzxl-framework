@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.database.config.MyBatisAutoConfiguration,\
-    com.github.sparkzxl.database.config.InjectionDataAutoConfiguration
+    com.github.sparkzxl.database.config.MyBatisAutoConfiguration

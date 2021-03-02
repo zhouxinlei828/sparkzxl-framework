@@ -1,7 +1,6 @@
 package com.github.sparkzxl.database.properties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: Injection配置类
@@ -10,7 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date: 2020-07-19 08:50:32
  */
 @Data
-@ConfigurationProperties("sparkzxl.injection")
 public class InjectionProperties {
 
     /**
