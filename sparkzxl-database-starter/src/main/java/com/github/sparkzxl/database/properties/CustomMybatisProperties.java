@@ -5,6 +5,12 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+/**
+ * description: CustomMybatisProperties配置属性类
+ *
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:41:11
+ */
 @Data
 @ConfigurationProperties(
         prefix = "mybatis-plus.custom"
