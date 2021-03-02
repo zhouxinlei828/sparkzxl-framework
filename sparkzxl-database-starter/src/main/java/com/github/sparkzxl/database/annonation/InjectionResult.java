@@ -7,12 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 将该注解标记在service方法上， 调用该方法后，返回值中标记了@InjectionField 注解的字段将会自动注入属性
- * <p>
+ * description: 将该注解标记在service方法上， 调用该方法后，返回值中标记了@InjectionField 注解的字段将会自动注入属性
  * 注意，该方法不能写在 Mapper 的方法上。
  *
- * @author zuihou
- * @create 2020年01月19日09:08:40
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:37:30
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.METHOD})

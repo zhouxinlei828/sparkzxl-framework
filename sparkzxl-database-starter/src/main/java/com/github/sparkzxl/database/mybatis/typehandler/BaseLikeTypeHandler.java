@@ -11,10 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * 仅仅用于like查询
+ * description: 仅仅用于like查询
  *
- * @author zuihou
- */
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:38:12
+*/
 public class BaseLikeTypeHandler extends BaseTypeHandler<CharSequence> {
 
     private static final String LIKE = "%";

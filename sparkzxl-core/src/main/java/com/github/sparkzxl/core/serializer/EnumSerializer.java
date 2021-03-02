@@ -10,15 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 继承了BaseEnum接口的枚举值，将会统一按照以下格式序列化
- * {
- * "code": "XX",
- * "desc": "xxxx"
- * }
+ * description: 继承了BaseEnum接口的枚举值，将会统一按照以下格式序列化
+ * {"code": "XX","desc": "xxxx"}
  *
- * @author zuihou
- * @date 2020/5/4 下午6:45
- */
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:35:26
+*/
 public class EnumSerializer extends StdSerializer<Enumerator> {
 
     public final static EnumSerializer INSTANCE = new EnumSerializer();

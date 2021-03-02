@@ -6,22 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 在某个对象的字段上标记该注解，该字段的值将被主动注入
- * <p>
- * 如：
+ * description: 在某个对象的字段上标记该注解，该字段的值将被主动注入
  *
- * @author zuihou
- * @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem")
- * private String nation;
- * @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem")
- * private RemoteData<String,String>  nation;
- *
- * <p>
- * 强烈建议：不要对象之间互相依赖
- * 如： User 想要注入 File， File也想注入User
- * @create 2020年01月18日17:59:25
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:36:05
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 public @interface InjectionField {

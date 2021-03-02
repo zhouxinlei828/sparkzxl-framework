@@ -8,10 +8,10 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 登录态
+ * description: 登录态
  *
- * @author zuihou
- * @date 2020年03月18日17:25:44
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:39:24
  */
 @Data
 @NoArgsConstructor

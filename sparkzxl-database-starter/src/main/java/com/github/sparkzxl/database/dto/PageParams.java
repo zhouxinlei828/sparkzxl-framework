@@ -13,11 +13,11 @@ import lombok.EqualsAndHashCode;
 import java.util.Map;
 
 /**
- * 分页参数
+ * description: 分页参数
  *
- * @author zuihou
- * @date 2020年02月14日16:19:36
- */
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:37:55
+*/
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PageParams", description = "分页参数")

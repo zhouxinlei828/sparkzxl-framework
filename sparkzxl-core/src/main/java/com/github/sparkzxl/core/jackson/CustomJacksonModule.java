@@ -22,10 +22,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * jackson 自定义序列化 & 反序列化 规则
+ * description: 自定义序列化 & 反序列化 规则
  *
- * @author zuihou
- */
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:35:08
+*/
 public class CustomJacksonModule extends SimpleModule {
 
     public CustomJacksonModule() {

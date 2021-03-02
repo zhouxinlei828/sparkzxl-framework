@@ -10,11 +10,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * InjectionResult 注解的 AOP 工具
+ * description: InjectionResult 注解的 AOP 工具
  *
- * @author zuihou
- * @create 2020年01月19日09:27:41
- */
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:34:58
+*/
 @Aspect
 @AllArgsConstructor
 @Slf4j

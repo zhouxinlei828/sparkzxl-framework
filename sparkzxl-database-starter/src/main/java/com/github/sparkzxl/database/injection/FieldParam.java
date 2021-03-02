@@ -7,9 +7,11 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @author zuihou
- * @date 2020/5/8 下午9:19
- */
+ * description:
+ *
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:38:04
+*/
 @Data
 @AllArgsConstructor
 public class FieldParam {

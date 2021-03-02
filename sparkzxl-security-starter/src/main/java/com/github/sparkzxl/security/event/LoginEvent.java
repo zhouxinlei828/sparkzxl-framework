@@ -4,11 +4,11 @@ import com.github.sparkzxl.security.entity.LoginStatus;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 登录事件
+ * description: 登录事件
  *
- * @author zuihou
- * @date 2020年03月18日17:22:55
- */
+ * @author: zhouxinlei
+ * @date: 2021-03-02 13:38:57
+*/
 public class LoginEvent extends ApplicationEvent {
 
     public LoginEvent(LoginStatus source) {
