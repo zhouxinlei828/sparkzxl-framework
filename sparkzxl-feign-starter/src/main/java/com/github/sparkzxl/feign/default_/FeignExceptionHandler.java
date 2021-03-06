@@ -7,7 +7,7 @@ import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.constant.ExceptionConstant;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.feign.model.ExceptionChain;
-import com.github.sparkzxl.web.annotation.ResponseResult;
+import com.github.sparkzxl.core.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -73,6 +73,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
     }
+
 
 }
 

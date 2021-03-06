@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.keycloak.config.KeycloakConfig, \
-    com.github.sparkzxl.keycloak.config.KeycloakSecurityConfig

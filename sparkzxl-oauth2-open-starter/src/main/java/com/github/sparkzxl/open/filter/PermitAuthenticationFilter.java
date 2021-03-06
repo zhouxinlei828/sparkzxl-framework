@@ -27,7 +27,8 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if ("/permitAll".equals(request.getRequestURI())) {
+        String filterUrl = "/permitAll";
+        if (filterUrl.equals(request.getRequestURI())) {
 
             request = new HttpServletRequestWrapper(request) {
                 private Set<String> headerNameSet;
