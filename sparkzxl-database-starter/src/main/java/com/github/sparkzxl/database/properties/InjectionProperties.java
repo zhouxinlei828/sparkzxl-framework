@@ -40,7 +40,7 @@ public class InjectionProperties {
          * <p>
          * 注意：本地缓存开启后，会存在短暂的数据不一致情况(由guavaCacheRefreshWriteTime决定)， 所以对数据正确性有要求的项目建议禁用，然后在@RemoteField.method 方法上执行添加redis等缓存！
          */
-        private Boolean enabled = true;
+        private Boolean enabled = false;
         /**
          * guava缓存的 最大数
          */
