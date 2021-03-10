@@ -3,7 +3,6 @@ package com.github.sparkzxl.open.config;
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.open.component.LogoutSuccessHandlerImpl;
 import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
@@ -27,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import javax.servlet.Filter;
@@ -47,6 +47,8 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired
     private SecurityProperties securityProperties;
+    @Autowired(required = false)
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Override
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -72,11 +74,6 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    public LogoutSuccessHandlerImpl logoutSuccessHandler() {
-        return new LogoutSuccessHandlerImpl();
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -98,7 +95,9 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
         }
         if (securityProperties.isCustomLogout()) {
             http.logout().logoutUrl("/customLogout")
-                    .logoutSuccessHandler(logoutSuccessHandler());
+                    .logoutSuccessHandler(logoutSuccessHandler)
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true);
         }
         if (securityProperties.isRestAuthentication()) {
             if (securityProperties.isCustomLogin()) {

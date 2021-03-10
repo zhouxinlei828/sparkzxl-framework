@@ -64,31 +64,13 @@ public interface OauthService {
      */
     String getAuthorizeUrl(String clientId, String frontUrl);
 
-
     /**
      * 授权回调处理
      *
      * @param authorizationCode 授权码
      * @param loginState        登录态
-     * @return AuthorizationCallBackResponse
-     */
-    AuthorizationCallBackResponse callBack(String authorizationCode, String loginState);
-
-
-    /**
-     * 根据token态交换token
-     *
-     * @param tokenState token态
      * @return AccessTokenInfo
      */
-    AccessTokenInfo exchangeToken(String tokenState);
-
-    /**
-     * 自定义退出登录
-     *
-     * @param request HttpServletRequest
-     * @return boolean
-     */
-    boolean logout(HttpServletRequest request);
+    AccessTokenInfo authorizationCodeCallBack(String authorizationCode, String loginState);
 
 }
