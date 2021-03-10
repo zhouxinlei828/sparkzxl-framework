@@ -35,6 +35,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
             if (accessToken != null) {
                 tokenStore.removeAccessToken(accessToken);
+                tokenStore.removeRefreshToken(accessToken.getRefreshToken());
             }
         }
         if (securityProperties.isLogoutRest()) {
