@@ -26,5 +26,16 @@ public class SecurityProperties {
     private boolean csrf = true;
 
     private String preHandleFilter;
-
+    /**
+     * 自定义退出登录
+     */
+    private boolean customLogout = true;
+    /**
+     * 退出登录响应rest
+     */
+    private boolean logoutRest = true;
+    /**
+     * 退出登录后跳转地址
+     */
+    private String logoutSuccessUrl;
 }

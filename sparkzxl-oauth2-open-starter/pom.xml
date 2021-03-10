@@ -31,6 +31,10 @@
         </dependency>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-cache-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-swagger-starter</artifactId>
             <scope>provided</scope>
         </dependency>

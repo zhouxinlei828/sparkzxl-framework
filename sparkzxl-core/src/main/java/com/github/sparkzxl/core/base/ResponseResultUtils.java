@@ -39,6 +39,17 @@ public class ResponseResultUtils {
         }
     }
 
+    public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg, Object data) {
+        try {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg, data)).toStringPretty());
+            response.getWriter().flush();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public static void unauthorized(HttpServletResponse response, String msg) {
         try {
             int code = ResponseResultStatus.UN_AUTHORIZED.getCode();

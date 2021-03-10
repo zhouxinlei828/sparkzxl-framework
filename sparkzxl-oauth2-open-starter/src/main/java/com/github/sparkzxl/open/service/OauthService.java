@@ -64,13 +64,13 @@ public interface OauthService {
 
 
     /**
-     * 授权回调
+     * 授权回调处理返回前端地址
      *
      * @param authorizationCode 授权码
      * @param loginState        登录态
-     * @return OAuth2AccessToken
+     * @return String
      */
-    OAuth2AccessToken callBack(String authorizationCode, String loginState);
+    String callBack(String authorizationCode, String loginState);
 
     /**
      * 自定义退出登录

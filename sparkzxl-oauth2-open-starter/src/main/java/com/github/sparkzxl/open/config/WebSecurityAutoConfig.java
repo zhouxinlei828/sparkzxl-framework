@@ -3,6 +3,7 @@ package com.github.sparkzxl.open.config;
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.open.component.LogoutSuccessHandlerImpl;
 import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
@@ -71,6 +72,11 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Bean
+    public LogoutSuccessHandlerImpl logoutSuccessHandler() {
+        return new LogoutSuccessHandlerImpl();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -89,6 +95,10 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll();
         if (!securityProperties.isCsrf()) {
             http.csrf().disable();
+        }
+        if (securityProperties.isCustomLogout()) {
+            http.logout().logoutUrl("/customLogout")
+                    .logoutSuccessHandler(logoutSuccessHandler());
         }
         if (securityProperties.isRestAuthentication()) {
             if (securityProperties.isCustomLogin()) {
