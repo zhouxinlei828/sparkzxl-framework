@@ -1,6 +1,8 @@
 package com.github.sparkzxl.open.service;
 
 import com.github.sparkzxl.core.entity.CaptchaInfo;
+import com.github.sparkzxl.open.entity.AccessTokenInfo;
+import com.github.sparkzxl.open.entity.AuthorizationCallBackResponse;
 import com.github.sparkzxl.open.entity.AuthorizationRequest;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -64,13 +66,22 @@ public interface OauthService {
 
 
     /**
-     * 授权回调处理返回前端地址
+     * 授权回调处理
      *
      * @param authorizationCode 授权码
      * @param loginState        登录态
-     * @return String
+     * @return AuthorizationCallBackResponse
      */
-    String callBack(String authorizationCode, String loginState);
+    AuthorizationCallBackResponse callBack(String authorizationCode, String loginState);
+
+
+    /**
+     * 根据token态交换token
+     *
+     * @param tokenState token态
+     * @return AccessTokenInfo
+     */
+    AccessTokenInfo exchangeToken(String tokenState);
 
     /**
      * 自定义退出登录
