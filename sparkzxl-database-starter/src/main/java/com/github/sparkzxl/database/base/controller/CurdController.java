@@ -97,9 +97,9 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      */
     @ApiOperation(value = "删除数据")
     @DeleteMapping("/delete")
-    @ApiImplicitParams({@ApiImplicitParam(name = "ids[]", value = "主键id", dataType = "array", paramType = "query"),
+    @ApiImplicitParams({@ApiImplicitParam(name = "ids", value = "主键id", dataType = "array", paramType = "query"),
     })
-    default boolean delete(@RequestParam("ids[]") List<Id> ids) {
+    default boolean delete(@RequestParam("ids") List<Id> ids) {
         boolean result = handlerDelete(ids);
         if (result) {
             return getBaseService().removeByIds(ids);
