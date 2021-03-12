@@ -6,10 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
-import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.database.annonation.InjectionField;
 import com.github.sparkzxl.database.entity.RemoteData;
-import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.InjectionProperties;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -21,6 +19,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -46,6 +45,8 @@ public class InjectionCore {
      * 动态配置参数
      */
     private final InjectionProperties injectionProperties;
+
+    private final ApplicationContext applicationContext;
     /**
      * 侦听执行器服务
      */
@@ -55,8 +56,9 @@ public class InjectionCore {
      */
     private LoadingCache<InjectionFieldExtPo, Map<Serializable, Object>> caches;
 
-    public InjectionCore(InjectionProperties injectionProperties) {
+    public InjectionCore(InjectionProperties injectionProperties, ApplicationContext applicationContext) {
         this.injectionProperties = injectionProperties;
+        this.applicationContext = applicationContext;
         InjectionProperties.GuavaCache guavaCache = injectionProperties.getGuavaCache();
         if (guavaCache.getEnabled()) {
             this.backgroundRefreshPools = MoreExecutors.listeningDecorator(
@@ -92,10 +94,10 @@ public class InjectionCore {
     private Map<Serializable, Object> loadMap(InjectionFieldExtPo type) {
         Object bean;
         if (StrUtil.isNotEmpty(type.getApi())) {
-            bean = SpringContextUtils.getBean(type.getApi());
+            bean = applicationContext.getBean(type.getApi());
             log.info("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getApi(), type.getMethod());
         } else {
-            bean = SpringContextUtils.getBean(type.getApiClass());
+            bean = applicationContext.getBean(type.getApiClass());
             log.info("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getApiClass().toString(), type.getMethod());
         }
         return ReflectUtil.invoke(bean, type.getMethod(), type.getKeys());

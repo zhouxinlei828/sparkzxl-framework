@@ -2,12 +2,10 @@ package com.github.sparkzxl.open.service;
 
 import com.github.sparkzxl.core.entity.CaptchaInfo;
 import com.github.sparkzxl.open.entity.AccessTokenInfo;
-import com.github.sparkzxl.open.entity.AuthorizationCallBackResponse;
 import com.github.sparkzxl.open.entity.AuthorizationRequest;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 /**

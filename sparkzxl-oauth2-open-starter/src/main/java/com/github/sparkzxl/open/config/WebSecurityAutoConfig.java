@@ -2,7 +2,6 @@ package com.github.sparkzxl.open.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
-import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
@@ -13,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,6 +49,8 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     private SecurityProperties securityProperties;
     @Autowired(required = false)
     private LogoutSuccessHandler logoutSuccessHandler;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -150,7 +152,7 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
                         .accessDeniedHandler(restfulAccessDeniedHandler);
             }
             if (StringUtils.isNotEmpty(securityProperties.getPreHandleFilter())) {
-                Filter bean = SpringContextUtils.getBean(securityProperties.getPreHandleFilter());
+                Filter bean = (Filter) applicationContext.getBean(securityProperties.getPreHandleFilter());
                 http.addFilterBefore(bean, UsernamePasswordAuthenticationFilter.class);
             }
         }

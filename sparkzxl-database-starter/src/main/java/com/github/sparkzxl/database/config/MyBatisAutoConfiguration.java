@@ -21,6 +21,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -92,8 +93,8 @@ public class MyBatisAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
-    public InjectionCore injectionCore(CustomMybatisProperties customMybatisProperties) {
-        return new InjectionCore(customMybatisProperties.getInjection());
+    public InjectionCore injectionCore(ApplicationContext applicationContext) {
+        return new InjectionCore(customMybatisProperties.getInjection(), applicationContext);
     }
 
     @Bean
