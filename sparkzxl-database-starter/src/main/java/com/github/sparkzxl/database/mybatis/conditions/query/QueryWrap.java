@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 import static com.github.sparkzxl.database.mybatis.conditions.Wraps.replace;
 
 /**
- * Entity 对象封装操作类
+ * description: Entity 对象封装操作类
  * <p>
  * 相比 QueryWrapper 的增强如下：
  * 1，new QueryWrapper(T entity)时， 对entity 中的string字段 %和_ 符号进行转义，便于模糊查询
@@ -37,10 +37,9 @@ import static com.github.sparkzxl.database.mybatis.conditions.Wraps.replace;
  * 5，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
  * 6，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
- * @author hubin miemie HCL
- * @since 2018-05-25
+ * @author: zhouxinlei
+ * @date: 2021-03-13 23:15:30
  */
-@SuppressWarnings("serial")
 public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         implements Query<QueryWrap<T>, T, String> {
     private boolean skipEmpty = true;
