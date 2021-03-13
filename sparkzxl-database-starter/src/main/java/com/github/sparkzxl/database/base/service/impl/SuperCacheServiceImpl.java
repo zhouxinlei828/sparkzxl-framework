@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @author: zhouxinlei
  * @date: 2020-07-07 19:38:37
  */
-public abstract class AbstractSuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
+public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
     private final long expireTime = 1;
 

@@ -34,8 +34,8 @@ import java.lang.reflect.ParameterizedType;
  * @author: zhouxinlei
  * @date: 2020-07-29 10:49:32
  */
-public abstract class SuperController<S extends SuperService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO> extends SuperSimpleController<S, Entity>
-        implements CurdController<Entity, Id, SaveDTO, UpdateDTO, PageDTO> {
+public abstract class SuperController<S extends SuperService<Entity>, Id extends Serializable, Entity, SaveDTO, UpdateDTO, QueryDTO> extends SuperSimpleController<S, Entity>
+        implements CurdController<Entity, Id, SaveDTO, UpdateDTO, QueryDTO> {
 
 
     @Override

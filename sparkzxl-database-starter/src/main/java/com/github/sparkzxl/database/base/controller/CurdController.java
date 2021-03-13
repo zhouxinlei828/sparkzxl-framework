@@ -32,7 +32,7 @@ import java.util.Map;
  * @author: zhouxinlei
  * @date: 2020-07-29 09:48:00
  */
-public interface CurdController<Entity, Id extends Serializable, SaveDTO, UpdateDTO, PageDTO> extends BaseController<Entity> {
+public interface CurdController<Entity, Id extends Serializable, SaveDTO, UpdateDTO, QueryDTO> extends BaseController<Entity> {
 
     /**
      * 新增
@@ -117,70 +117,6 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     }
 
     /**
-     * 处理参数
-     *
-     * @param params 分页参数
-     */
-    default void handlerQueryParams(PageParams<PageDTO> params) {
-
-    }
-
-    /**
-     * 执行查询
-     * 可以覆盖后重写查询逻辑
-     *
-     * @param params 分页参数
-     * @return 分页结果
-     */
-    default PageInfo<?> query(PageParams<PageDTO> params) {
-        handlerQueryParams(params);
-        Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
-        QueryWrap<Entity> wrapper = handlerWrapper(model, params);
-        params.buildPage();
-        List<Entity> entityList = getBaseService().list(wrapper);
-        PageInfo<Entity> pageInfo = PageInfoUtils.pageInfo(entityList);
-        // 处理结果
-        PageInfo<?> pageInfoDto = handlerResult(pageInfo);
-        if (ObjectUtils.isNotEmpty(pageInfoDto)) {
-            return pageInfoDto;
-        } else {
-            return pageInfo;
-        }
-    }
-
-    /**
-     * 条件构造
-     *
-     * @param model  对象
-     * @param params 分页参数
-     * @return QueryWrap<Entity>
-     */
-    default QueryWrap<Entity> handlerWrapper(Entity model, PageParams<PageDTO> params) {
-        QueryWrap<Entity> wrapper = model == null ? Wraps.q() : Wraps.q(model);
-        if (CollUtil.isNotEmpty(params.getMap())) {
-            Map<String, String> map = params.getMap();
-            //拼装区间
-            for (Map.Entry<String, String> field : map.entrySet()) {
-                String key = field.getKey();
-                String value = field.getValue();
-                if (StrUtil.isEmpty(value)) {
-                    continue;
-                }
-                Date date = DateUtils.parse(value);
-                if (key.endsWith("_st")) {
-                    String beanField = StrUtil.subBefore(key, "_st", true);
-                    wrapper.ge(getDbField(beanField, getEntityClass()), DateUtils.beginOfDay(date));
-                }
-                if (key.endsWith("_ed")) {
-                    String beanField = StrUtil.subBefore(key, "_ed", true);
-                    wrapper.le(getDbField(beanField, getEntityClass()), DateUtils.endOfDay(date));
-                }
-            }
-        }
-        return wrapper;
-    }
-
-    /**
      * 自定义处理返回结果
      *
      * @param pageInfo 数据返回list
@@ -231,8 +167,71 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      */
     @ApiOperation(value = "分页列表查询")
     @PostMapping(value = "/page")
-    default PageInfo<?> page(@RequestBody @Validated PageParams<PageDTO> params) {
+    default PageInfo<?> page(@RequestBody @Validated PageParams<QueryDTO> params) {
         return query(params);
+    }
+
+    /**
+     * 执行查询
+     * 可以覆盖后重写查询逻辑
+     *
+     * @param params 分页参数
+     * @return 分页结果
+     */
+    default PageInfo<?> query(PageParams<QueryDTO> params) {
+        handlerQueryParams(params);
+        Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
+        QueryWrap<Entity> wrapper = handlerWrapper(model, params);
+        params.buildPage();
+        List<Entity> entityList = getBaseService().list(wrapper);
+        PageInfo<Entity> pageInfo = PageInfoUtils.pageInfo(entityList);
+        // 处理结果
+        PageInfo<?> pageInfoDto = handlerResult(pageInfo);
+        if (ObjectUtils.isNotEmpty(pageInfoDto)) {
+            return pageInfoDto;
+        } else {
+            return pageInfo;
+        }
+    }
+
+    /**
+     * 处理参数
+     *
+     * @param params 分页参数
+     */
+    default void handlerQueryParams(PageParams<QueryDTO> params) {
+    }
+
+    /**
+     * 条件构造
+     *
+     * @param model  对象
+     * @param params 分页参数
+     * @return QueryWrap<Entity>
+     */
+    default QueryWrap<Entity> handlerWrapper(Entity model, PageParams<QueryDTO> params) {
+        QueryWrap<Entity> wrapper = model == null ? Wraps.q() : Wraps.q(model);
+        if (CollUtil.isNotEmpty(params.getMap())) {
+            Map<String, String> map = params.getMap();
+            //拼装区间
+            for (Map.Entry<String, String> field : map.entrySet()) {
+                String key = field.getKey();
+                String value = field.getValue();
+                if (StrUtil.isEmpty(value)) {
+                    continue;
+                }
+                Date date = DateUtils.parse(value);
+                if (key.endsWith("_st")) {
+                    String beanField = StrUtil.subBefore(key, "_st", true);
+                    wrapper.ge(getDbField(beanField, getEntityClass()), DateUtils.beginOfDay(date));
+                }
+                if (key.endsWith("_ed")) {
+                    String beanField = StrUtil.subBefore(key, "_ed", true);
+                    wrapper.le(getDbField(beanField, getEntityClass()), DateUtils.endOfDay(date));
+                }
+            }
+        }
+        return wrapper;
     }
 
     /**
@@ -241,10 +240,11 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @param data list查询
      * @return 查询结果
      */
-    @ApiOperation(value = "批量查询", notes = "批量查询")
+    @ApiOperation(value = "list查询", notes = "list查询")
     @PostMapping("/list")
-    default List<Entity> query(@RequestBody Entity data) {
-        QueryWrap<Entity> wrapper = Wraps.q(data);
+    default List<Entity> query(@RequestBody QueryDTO data) {
+        Entity model = BeanUtil.toBean(data, getEntityClass());
+        QueryWrap<Entity> wrapper = Wraps.q(model);
         return getBaseService().list(wrapper);
     }
 

@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @author: zhouxinlei
  * @date: 2020-07-29 10:56:21
  */
-public abstract class SuperCacheController<S extends SuperCacheService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO>
-        extends SuperController<S, Id, Entity, PageDTO, SaveDTO, UpdateDTO> {
+public abstract class SuperCacheController<S extends SuperCacheService<Entity>, Id extends Serializable, Entity, SaveDTO, UpdateDTO, QueryDTO>
+        extends SuperController<S, Id, Entity, SaveDTO, UpdateDTO, QueryDTO> {
 
     /**
      * 查询
