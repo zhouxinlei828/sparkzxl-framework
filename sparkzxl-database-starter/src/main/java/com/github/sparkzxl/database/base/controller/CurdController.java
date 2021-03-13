@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.pagehelper.PageInfo;
 import com.github.sparkzxl.core.utils.DateUtils;
+import com.github.sparkzxl.database.dto.DeleteDTO;
 import com.github.sparkzxl.database.dto.PageParams;
 import com.github.sparkzxl.database.mybatis.conditions.Wraps;
 import com.github.sparkzxl.database.mybatis.conditions.query.QueryWrap;
@@ -92,17 +93,15 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     /**
      * 删除方法
      *
-     * @param ids ids
+     * @param deleteDTO ids
      * @return boolean
      */
     @ApiOperation(value = "删除数据")
     @DeleteMapping("/delete")
-    @ApiImplicitParams({@ApiImplicitParam(name = "ids", value = "主键id", dataType = "array", paramType = "query"),
-    })
-    default boolean delete(@RequestParam("ids") List<Id> ids) {
-        boolean result = handlerDelete(ids);
+    default boolean delete(@RequestBody DeleteDTO<Id> deleteDTO) {
+        boolean result = handlerDelete(deleteDTO.getIds());
         if (result) {
-            return getBaseService().removeByIds(ids);
+            return getBaseService().removeByIds(deleteDTO.getIds());
         }
         return false;
     }

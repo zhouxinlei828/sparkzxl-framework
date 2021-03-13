@@ -11,8 +11,8 @@ import java.util.List;
  * @date 2020-05-24 13:21:12
  */
 @Data
-public class DeleteDTO {
+public class DeleteDTO<ID> {
 
-    private List<Long> ids;
+    private List<ID> ids;
 
 }
