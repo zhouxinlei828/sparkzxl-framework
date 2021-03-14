@@ -2,26 +2,38 @@ package com.github.sparkzxl.database.base.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.pagehelper.PageInfo;
 import com.github.sparkzxl.core.utils.DateUtils;
+import com.github.sparkzxl.database.base.listener.ImportDataListener;
 import com.github.sparkzxl.database.dto.DeleteDTO;
 import com.github.sparkzxl.database.dto.PageParams;
 import com.github.sparkzxl.database.mybatis.conditions.Wraps;
 import com.github.sparkzxl.database.mybatis.conditions.query.QueryWrap;
 import com.github.sparkzxl.database.utils.PageInfoUtils;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +44,9 @@ import java.util.Map;
  * @author: zhouxinlei
  * @date: 2020-07-29 09:48:00
  */
-public interface CurdController<Entity, Id extends Serializable, SaveDTO, UpdateDTO, QueryDTO> extends BaseController<Entity> {
+public interface CurdController<Entity, Id extends Serializable, SaveDTO, UpdateDTO, QueryDTO, ExcelEntity> extends BaseController<Entity> {
+
+    Logger logger = LoggerFactory.getLogger(CurdController.class);
 
     /**
      * 新增
@@ -246,6 +260,106 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         Entity model = BeanUtil.toBean(data, getEntityClass());
         QueryWrap<Entity> wrapper = Wraps.q(model);
         return getBaseService().list(wrapper);
+    }
+
+    /**
+     * Excel导入数据
+     *
+     * @param multipartFile 文件
+     * @return 导入记录数
+     */
+    @ApiOperation("导入数据")
+    @PostMapping("/import")
+    default Integer importData(@RequestParam("file") MultipartFile multipartFile) {
+        ImportDataListener<?> importDataListener = getImportDataListener();
+        try {
+            Class<?> importExcelClass = importExcelClass();
+            if (ObjectUtils.isEmpty(importExcelClass)) {
+                logger.error("请先实例化导入Excel处理类：{}", importExcelClass);
+            }
+            EasyExcel.read(multipartFile.getInputStream(), importExcelClass, importDataListener)
+                    .sheet(0).doRead();
+            return importDataListener.getCount();
+        } catch (IOException e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            logger.error("读取Excel发生异常：{}", e.getMessage());
+        }
+        return 0;
+    }
+
+    /**
+     * Excel处理类
+     *
+     * @return ImportDataListener<?>
+     */
+    default ImportDataListener<?> getImportDataListener() {
+        return new ImportDataListener<>();
+    }
+
+    /**
+     * 导入Excel处理类
+     *
+     * @return Class<?>
+     */
+    default Class<?> importExcelClass() {
+        return null;
+    }
+
+    /**
+     * Excel导出数据
+     *
+     * @param queryDTO 查询参数
+     * @param response 响应
+     * @throws IOException IO异常
+     */
+    @ApiOperation("导出数据")
+    @GetMapping("/export")
+    @RequestMapping(value = "/export", method = RequestMethod.POST, produces = "application/octet-stream")
+    default void exportData(@RequestBody QueryDTO queryDTO, HttpServletResponse response) throws IOException {
+        List<Entity> entityList = Lists.newArrayList();
+        boolean result = handlerExcelQueryList(queryDTO, entityList);
+        if (!result) {
+            entityList = query(queryDTO);
+        }
+        List<ExcelEntity> excelEntities = convertExcels(entityList);
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        String fileName = getFileName();
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        Class excelClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[6];
+        EasyExcel.write(response.getOutputStream(), excelClass).sheet("模板").doWrite(excelEntities);
+    }
+
+    /**
+     * 自定义查询Excel数据
+     *
+     * @param queryDTO   查询参数
+     * @param entityList 数据列表
+     * @return boolean
+     */
+    default boolean handlerExcelQueryList(QueryDTO queryDTO, List<Entity> entityList) {
+        return false;
+    }
+
+    /**
+     * 转换Excel表格
+     *
+     * @param entityList list数据
+     * @return List<ExcelEntity>
+     */
+    default List<ExcelEntity> convertExcels(List<Entity> entityList) {
+        return Lists.newArrayList();
+    }
+
+    /**
+     * 获取文件名
+     *
+     * @return String
+     */
+    default String getFileName() {
+        return URLEncoder.ALL.encode("data_export_".concat(String.valueOf(System.currentTimeMillis())),
+                StandardCharsets.UTF_8);
     }
 
 }

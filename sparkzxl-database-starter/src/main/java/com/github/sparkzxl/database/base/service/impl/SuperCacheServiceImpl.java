@@ -24,8 +24,12 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
 
     private final long expireTime = 1;
 
-    @Autowired(required = false)
     protected CacheTemplate cacheTemplate;
+
+    @Autowired(required = false)
+    public void setCacheTemplate(CacheTemplate cacheTemplate) {
+        this.cacheTemplate = cacheTemplate;
+    }
 
     /**
      * 缓存key模板
