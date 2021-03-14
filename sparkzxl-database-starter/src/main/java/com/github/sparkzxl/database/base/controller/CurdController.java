@@ -254,7 +254,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @param data list查询
      * @return 查询结果
      */
-    @ApiOperation(value = "list查询", notes = "list查询")
+    @ApiOperation(value = "列表查询", notes = "列表查询")
     @PostMapping("/list")
     default List<Entity> query(@RequestBody QueryDTO data) {
         Entity model = BeanUtil.toBean(data, getEntityClass());
