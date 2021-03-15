@@ -29,11 +29,12 @@ public class ApplicationInitRunner implements ApplicationRunner, Ordered {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Environment env = applicationContext.getEnvironment();
+        String contextPath = env.getProperty("server.servlet.context-path") == null ? "" : env.getProperty("server.servlet.context-path");
         log.info("\n______________________________________________________________\n\t" +
                         "Java Version: {} \n\t" +
                         "运行系统: {} \n\t" +
-                        "application: {} \n\t" +
-                        "访问连接: http://{}:{}\n\t" +
+                        "Application: {} is running! \n\t" +
+                        "访问连接: http://{}:{}/{}\n\t" +
                         "API接口文档：http://{}:{}/doc.html\n" +
                         "______________________________________________________________",
                 SystemUtil.getJavaInfo().getVersion(),
@@ -41,6 +42,7 @@ public class ApplicationInitRunner implements ApplicationRunner, Ordered {
                 env.getProperty("spring.application.name"),
                 InetAddress.getLocalHost().getHostAddress(),
                 env.getProperty("server.port"),
+                contextPath,
                 InetAddress.getLocalHost().getHostAddress(),
                 env.getProperty("server.port"));
     }

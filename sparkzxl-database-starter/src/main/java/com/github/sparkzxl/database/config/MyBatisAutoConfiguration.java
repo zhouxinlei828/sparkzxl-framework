@@ -2,7 +2,6 @@ package com.github.sparkzxl.database.config;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
@@ -44,11 +43,10 @@ public class MyBatisAutoConfiguration {
 
     public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties) {
         this.customMybatisProperties = customMybatisProperties;
-        log.info("dataProperties：{}", JSONUtil.toJsonPrettyStr(customMybatisProperties));
     }
 
     /**
-     * 新多租户插件配置,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存万一出现问题
+     * 多租户插件配置,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存万一出现问题
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
