@@ -27,7 +27,6 @@
         <spring-boot-dependencies.version>2.3.9.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
         <keycloak-dependencies.version>12.0.2</keycloak-dependencies.version>
-        <spring-webmvc.version>5.2.13.RELEASE</spring-webmvc.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.4</knife4j.version>
 
@@ -166,11 +165,6 @@
                 <version>${keycloak-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring-webmvc.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
