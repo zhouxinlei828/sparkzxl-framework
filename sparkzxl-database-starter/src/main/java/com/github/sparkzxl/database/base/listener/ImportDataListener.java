@@ -10,8 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * description: excel监听处理类
  *
- * @author: zhouxinlei
- * @date: 2021-03-14 12:37:28
+ * @author zhouxinlei
  */
 public class ImportDataListener<ExcelEntity> extends AnalysisEventListener<ExcelEntity> {
 

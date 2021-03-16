@@ -31,8 +31,7 @@ import java.lang.reflect.ParameterizedType;
  * <SaveDTO>   保存参数
  * <UpdateDTO> 修改参数
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 10:49:32
+ * @author zhouxinlei
  */
 public abstract class SuperController<S extends SuperService<Entity>, Id extends Serializable, Entity, SaveDTO, UpdateDTO, QueryDTO, ExcelEntity> extends SuperSimpleController<S, Entity>
         implements CurdController<Entity, Id, SaveDTO, UpdateDTO, QueryDTO, ExcelEntity> {

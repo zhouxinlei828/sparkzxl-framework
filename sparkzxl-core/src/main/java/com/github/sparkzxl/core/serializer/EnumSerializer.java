@@ -13,8 +13,7 @@ import java.util.Map;
  * description: 继承了BaseEnum接口的枚举值，将会统一按照以下格式序列化
  * {"code": "XX","desc": "xxxx"}
  *
- * @author: zhouxinlei
- * @date: 2021-03-02 13:35:26
+ * @author zhouxinlei
 */
 public class EnumSerializer extends StdSerializer<Enumerator> {
 

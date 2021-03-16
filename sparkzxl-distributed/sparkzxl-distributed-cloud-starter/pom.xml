@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sparkzxl-distributed-cloud-starter</artifactId>
-    <version>${sparkzxl.version}</version>
     <dependencies>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
 /**
  * description: base 属性
  *
- * @author: zhouxinlei
- * @date: 2021-01-06 17:46:55
+ * @author zhouxinlei
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

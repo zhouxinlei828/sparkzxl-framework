@@ -7,8 +7,7 @@ import java.lang.annotation.*;
 /**
  * description: 策略模式业务类型注解
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 14:29:07
+ * @author zhouxinlei
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

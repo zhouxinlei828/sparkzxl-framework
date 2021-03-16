@@ -19,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * description: WebConfig全局配置
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:43:12
  */
 @Configuration
 @Import({ResponseResultHandler.class, GlobalExceptionHandler.class})

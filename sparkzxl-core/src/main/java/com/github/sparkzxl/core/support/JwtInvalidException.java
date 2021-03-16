@@ -7,7 +7,6 @@ import lombok.Getter;
  * description: 业务异常类
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:49:04
  */
 @Getter
 public class JwtInvalidException extends BaseException {

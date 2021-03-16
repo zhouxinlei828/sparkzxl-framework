@@ -35,8 +35,7 @@ import java.util.function.Predicate;
  * 5，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
  * 6，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 10:20:22
+ * @author zhouxinlei
  */
 public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
         implements Query<LbqWrapper<T>, T, SFunction<T, ?>> {

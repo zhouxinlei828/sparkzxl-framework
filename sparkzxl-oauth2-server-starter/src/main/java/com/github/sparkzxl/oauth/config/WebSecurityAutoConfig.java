@@ -24,13 +24,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
+
 import java.util.List;
 
 /**
  * description: SpringSecurity配置
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 12:29:21
+ * @author zhouxinlei
  */
 @Configuration
 @EnableConfigurationProperties({SecurityProperties.class})

@@ -8,8 +8,7 @@ import java.io.Serializable;
 /**
  * description: super 缓存controller
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 10:56:21
+ * @author zhouxinlei
  */
 public abstract class SuperCacheController<S extends SuperCacheService<Entity>, Id extends Serializable, Entity, SaveDTO, UpdateDTO, QueryDTO, ExcelEntity>
         extends SuperController<S, Id, Entity, SaveDTO, UpdateDTO, QueryDTO, ExcelEntity> {

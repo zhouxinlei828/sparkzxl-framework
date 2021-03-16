@@ -2,19 +2,6 @@ package com.github.sparkzxl.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.net.URL;
-import java.util.Enumeration;
 import javax.activation.DataHandler;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -23,12 +10,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimePartDataSource;
+import java.io.*;
+import java.net.URL;
+import java.util.Enumeration;
 
 /**
  * description: Mht2Html转换工具类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:13:53
  */
 @Slf4j
 public class Mht2HtmlUtil {
@@ -38,7 +27,6 @@ public class Mht2HtmlUtil {
      *
      * @param srcMht   源mht文件
      * @param descHtml 目标html
-     * @return void
      */
     public static void mht2html(String srcMht, String descHtml) {
         try {
@@ -122,8 +110,6 @@ public class Mht2HtmlUtil {
      * @param htmlText html文本
      * @param htmlPath html路径
      * @param encode   编码类型
-     * @author zhouxinlei
-     * @date 2020-05-15 15:21:02
      */
     public static void saveHtml(String htmlText, String htmlPath, String encode) {
         try {
@@ -189,8 +175,6 @@ public class Mht2HtmlUtil {
      *
      * @param bp MimeBodyPart
      * @return String
-     * @author zhouxinlei
-     * @date 2020-05-15 15:19:21
      */
     private static String getResourcesUrl(MimeBodyPart bp) {
         if (bp == null) {
@@ -217,8 +201,6 @@ public class Mht2HtmlUtil {
      * @param bp          MimeBodyPart
      * @param strEncoding mht文件编码
      * @return String
-     * @author zhouxinlei
-     * @date 2020-05-15 15:19:38
      */
     private static String getHtmlText(MimeBodyPart bp, String strEncoding) {
         InputStream textStream = null;

@@ -15,8 +15,7 @@ import java.util.Date;
 /**
  * description: 在feign调用方配置， 解决入参和出参是 date 类型.
  *
- * @author: zhouxinlei
- * @date: 2020-08-21 17:45:19
+ * @author zhouxinlei
  */
 public class DateFormatRegister implements FeignFormatterRegistrar {
 

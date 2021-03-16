@@ -10,8 +10,7 @@ import java.io.Serializable;
 /**
  * description: 登录态
  *
- * @author: zhouxinlei
- * @date: 2021-03-02 13:39:24
+ * @author zhouxinlei
  */
 @Data
 @NoArgsConstructor

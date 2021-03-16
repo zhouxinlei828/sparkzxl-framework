@@ -9,8 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * description: dubbo定制化自动装配类
  *
- * @author: zhouxinlei
- * @date: 2020-11-27 10:30:15
+ * @author zhouxinlei
  */
 @Configuration
 public class DubboAutoConfig {

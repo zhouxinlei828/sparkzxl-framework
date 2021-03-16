@@ -1,10 +1,10 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.collection.CollUtil;
+import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -13,8 +13,7 @@ import java.util.function.Function;
 /**
  * description: Map 工具类
  *
- * @author: zhouxinlei
- * @date: 2020-07-19 09:40:56
+ * @author zhouxinlei
  */
 public class MapHelper {
 
@@ -32,7 +31,6 @@ public class MapHelper {
      * 移除map的空key
      *
      * @param map
-     * @return
      */
     public static void removeNullKey(Map map) {
         Set set = map.keySet();
@@ -46,7 +44,6 @@ public class MapHelper {
      * 移除map中的value空值
      *
      * @param map
-     * @return
      */
     public static void removeNullValue(Map map) {
         Set set = map.keySet();

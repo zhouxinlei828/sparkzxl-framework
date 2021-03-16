@@ -20,8 +20,7 @@ import java.util.List;
  * description: feign client 拦截器，
  * 实现将 feign 调用方的 请求头封装到 被调用方的请求头
  *
- * @author: zhouxinlei
- * @date: 2020-07-12 16:31:14
+ * @author zhouxinlei
  */
 @Slf4j
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {

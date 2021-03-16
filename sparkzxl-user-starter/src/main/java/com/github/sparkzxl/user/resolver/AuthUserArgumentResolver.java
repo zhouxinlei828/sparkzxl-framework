@@ -1,9 +1,8 @@
 package com.github.sparkzxl.user.resolver;
 
-import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.core.base.ResponseResultUtils;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
-
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
  * description: 全局获取用户信息
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:41:46
  */
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 

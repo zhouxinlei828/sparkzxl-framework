@@ -10,7 +10,6 @@ import java.util.List;
  * description: Elasticsearch 配置类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:18:31
  */
 @Data
 @ConfigurationProperties(prefix = "elasticsearch")

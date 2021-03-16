@@ -11,8 +11,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * description: xxl-job Executor 自动配置
  *
- * @author: zhouxinlei
- * @date: 2020-08-21 14:13:13
+ * @author zhouxinlei
  */
 @Configuration
 @EnableConfigurationProperties(XxlJobProperties.class)

@@ -16,7 +16,6 @@ import java.io.File;
  * description: 邮件 服务实现类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:20:12
  */
 public class MailServiceImpl implements MailService {
 

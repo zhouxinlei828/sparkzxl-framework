@@ -7,8 +7,7 @@ import com.github.sparkzxl.database.base.service.SuperService;
 /**
  * description:
  *
- * @author: zhouxinlei
- * @date: 2020-07-07 20:14:55
+ * @author zhouxinlei
  */
 public class SuperServiceImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M, T> implements SuperService<T> {
     public SuperServiceImpl() {

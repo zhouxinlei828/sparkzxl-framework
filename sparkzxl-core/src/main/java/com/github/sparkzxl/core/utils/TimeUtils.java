@@ -6,8 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * description: 时间转换
  *
- * @author: zhouxinlei
- * @date: 2021-01-04 10:54:49
+ * @author zhouxinlei
  */
 public class TimeUtils {
 

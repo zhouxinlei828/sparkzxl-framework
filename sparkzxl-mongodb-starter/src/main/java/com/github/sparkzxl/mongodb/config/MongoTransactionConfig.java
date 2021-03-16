@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * description: MongoDB事务自动管理
  *
- * @author: zhouxinlei
- * @date: 2021-01-07 20:29:43
+ * @author zhouxinlei
  */
 @Configuration
 @EnableTransactionManagement

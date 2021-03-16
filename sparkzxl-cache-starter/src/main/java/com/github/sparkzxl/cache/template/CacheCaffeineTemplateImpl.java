@@ -1,18 +1,17 @@
 package com.github.sparkzxl.cache.template;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Function;
-
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.util.StringUtils;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Function;
+
 /**
  * description: Caffeine本地缓存实现
  *
- * @author: zhouxinlei
- * @date: 2020-07-28 17:46:50
+ * @author zhouxinlei
  */
 @SuppressWarnings("unchecked")
 public class CacheCaffeineTemplateImpl implements CacheTemplate {
@@ -83,11 +82,10 @@ public class CacheCaffeineTemplateImpl implements CacheTemplate {
     }
 
     @Override
-    public Long remove(String... keys) {
+    public void remove(String... keys) {
         for (String key : keys) {
             this.cacheMap.invalidate(key);
         }
-        return (long) keys.length;
     }
 
     @Override

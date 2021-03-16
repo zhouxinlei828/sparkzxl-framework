@@ -8,14 +8,12 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * description: Jwt内容增强器
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:24:10
  */
 public class JwtTokenEnhancer implements TokenEnhancer {
 

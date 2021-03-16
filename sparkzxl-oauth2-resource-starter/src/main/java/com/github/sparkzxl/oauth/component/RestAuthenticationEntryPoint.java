@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
  * description: 当未登录或者token失效访问接口时，自定义的返回结果
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:35:00
  */
 @Slf4j
 public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {

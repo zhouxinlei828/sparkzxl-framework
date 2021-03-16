@@ -3,8 +3,7 @@ package com.github.sparkzxl.patterns.strategy;
 /***
  * description: 业务处理策略类
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 14:36:15
+ * @author zhouxinlei
  */
 public interface BusinessHandler<R, T> {
 

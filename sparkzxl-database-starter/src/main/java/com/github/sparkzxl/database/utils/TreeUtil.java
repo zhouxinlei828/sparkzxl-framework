@@ -12,17 +12,14 @@ import java.util.stream.Collectors;
  * description：list列表 转换成tree列表
  *
  * @author zhouxinlei
- * @date 2020-06-17 10:36:52
  */
 public class TreeUtil {
 
     /**
      * 构建Tree结构
      *
-     * @param treeList
-     * @param <E>      实体
-     * @param <?>      主键
-     * @return
+     * @param treeList list数据
+     * @return List<E>
      */
     public static <E extends TreeEntity<E, ? extends Serializable>> List<E> buildTree(List<E> treeList) {
         if (CollectionUtils.isEmpty(treeList)) {

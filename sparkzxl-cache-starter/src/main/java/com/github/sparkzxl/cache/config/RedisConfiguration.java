@@ -2,9 +2,9 @@ package com.github.sparkzxl.cache.config;
 
 import com.github.sparkzxl.cache.serializer.FastJson2JsonRedisSerializer;
 import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
-import com.github.sparkzxl.cache.utils.TokenUtil;
-import com.github.sparkzxl.cache.template.RedisCacheTemplateImpl;
 import com.github.sparkzxl.cache.template.CacheTemplate;
+import com.github.sparkzxl.cache.template.RedisCacheTemplateImpl;
+import com.github.sparkzxl.cache.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -21,8 +21,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 /**
  * description: redis缓存配置
  *
- * @author: zhouxinlei
- * @date: 2020-07-31 14:51:06
+ * @author zhouxinlei
  */
 @Configuration
 @Slf4j

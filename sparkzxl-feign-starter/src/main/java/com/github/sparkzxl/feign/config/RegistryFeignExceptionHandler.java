@@ -17,7 +17,6 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 
-
 import java.util.Objects;
 
 import static org.springframework.beans.factory.config.AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
@@ -25,8 +24,7 @@ import static org.springframework.beans.factory.config.AutowireCapableBeanFactor
 /**
  * description:
  *
- * @author: fin-9062
- * @date: 2020-12-08 11:14:43
+ * @author zhouxinlei
  */
 @Slf4j
 public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegistrar, EnvironmentAware, Ordered {

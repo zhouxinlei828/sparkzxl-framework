@@ -50,7 +50,6 @@ import java.util.Optional;
  * description: 认证服务器配置
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:23:36
  */
 @Configuration
 @EnableConfigurationProperties(Oauth2Properties.class)

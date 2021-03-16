@@ -9,8 +9,7 @@ import java.util.List;
 /**
  * description: 异常实体类封装
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 14:19:15
+ * @author zhouxinlei
  */
 @Getter
 @Setter

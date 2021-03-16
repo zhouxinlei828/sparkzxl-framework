@@ -6,8 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * description: xxl job属性配置类
  *
- * @author: zhouxinlei
- * @date: 2020-08-21 14:08:24
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.xxl-job")

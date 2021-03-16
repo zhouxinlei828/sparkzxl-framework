@@ -1,13 +1,13 @@
 package com.github.sparkzxl.feign.default_;
 
 import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.constant.ExceptionConstant;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.feign.model.ExceptionChain;
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -15,13 +15,15 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * description: 当服务内报错 返回给Feign的处理器
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:39:12
+ * @author zhouxinlei
  */
 @Slf4j
 public class FeignExceptionHandler extends DefaultErrorAttributes {

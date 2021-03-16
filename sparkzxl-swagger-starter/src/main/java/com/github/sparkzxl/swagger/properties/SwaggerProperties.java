@@ -1,8 +1,6 @@
 package com.github.sparkzxl.swagger.properties;
 
 
-import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import springfox.documentation.service.AllowableValues;
@@ -12,8 +10,7 @@ import java.util.List;
 /**
  * description: swagger属性配置
  *
- * @author: zhouxinlei
- * @date: 2020-07-10 17:47:04
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(

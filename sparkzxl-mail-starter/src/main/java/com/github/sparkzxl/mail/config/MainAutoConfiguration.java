@@ -16,7 +16,6 @@ import javax.annotation.Resource;
  * description: mail邮件配置
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:31:56
  */
 @Configuration
 @AutoConfigureAfter(MailSenderAutoConfiguration.class)

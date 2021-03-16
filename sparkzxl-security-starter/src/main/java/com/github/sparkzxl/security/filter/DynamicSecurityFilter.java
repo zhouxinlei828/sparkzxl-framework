@@ -19,8 +19,7 @@ import java.io.IOException;
 /**
  * description: 接口权限认证过滤器
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 19:25:16
+ * @author zhouxinlei
  */
 public class DynamicSecurityFilter extends AbstractSecurityInterceptor implements Filter {
 

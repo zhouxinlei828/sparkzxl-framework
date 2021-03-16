@@ -5,7 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.lionsoul.ip2region.*;
+import org.lionsoul.ip2region.DataBlock;
+import org.lionsoul.ip2region.DbConfig;
+import org.lionsoul.ip2region.DbSearcher;
+import org.lionsoul.ip2region.Util;
 
 import java.io.File;
 import java.io.InputStream;
@@ -15,7 +18,6 @@ import java.lang.reflect.Method;
  * description：获取ip地址
  *
  * @author zhouxinlei
- * @date 2020/6/17 0017
  */
 @Slf4j
 public class AddressUtil {

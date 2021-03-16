@@ -3,8 +3,8 @@ package com.github.sparkzxl.database.dto;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pagehelper.PageHelper;
-import com.google.common.collect.Maps;
 import com.github.sparkzxl.database.constant.EntityConstant;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,8 +15,7 @@ import java.util.Map;
 /**
  * description: 分页参数
  *
- * @author: zhouxinlei
- * @date: 2021-03-02 13:37:55
+ * @author zhouxinlei
 */
 @Data
 @EqualsAndHashCode(callSuper = true)

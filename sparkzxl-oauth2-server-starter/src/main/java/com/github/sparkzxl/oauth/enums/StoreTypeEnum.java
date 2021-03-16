@@ -6,8 +6,7 @@ import lombok.ToString;
 /**
  * description： 授权类型枚举类
  *
- * @author： zhouxinlei
- * @date： 2020-06-24 15:27:05
+ * @author zhouxinlei
  */
 @Getter
 @ToString

@@ -9,8 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * description: JWT属性类
  *
- * @author: zhouxinlei
- * @date: 2020-07-14 07:56:59
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.jwt")

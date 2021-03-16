@@ -12,7 +12,6 @@ import java.util.function.Supplier;
  * description: 异常处理工具类
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:53:29
  */
 public class ExceptionUtils extends ExceptionUtil {
 

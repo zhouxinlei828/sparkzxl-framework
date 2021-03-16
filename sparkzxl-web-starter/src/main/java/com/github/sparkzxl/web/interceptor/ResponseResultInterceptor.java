@@ -1,10 +1,10 @@
 package com.github.sparkzxl.web.interceptor;
 
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
  * description: 全局请求拦截处理
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:42:17
  */
 @Slf4j
 public class ResponseResultInterceptor extends HandlerInterceptorAdapter {

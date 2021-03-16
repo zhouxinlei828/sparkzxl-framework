@@ -5,8 +5,7 @@ import org.springframework.core.env.Environment;
 /**
  * description:
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:12:00
+ * @author zhouxinlei
  */
 public final class FeignExceptionHandlerContext {
 

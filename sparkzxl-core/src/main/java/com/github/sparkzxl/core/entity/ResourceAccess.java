@@ -8,8 +8,7 @@ import java.util.List;
 /**
  * description: 资源权限
  *
- * @author: zhouxinlei
- * @date: 2021-01-30 11:28:51
+ * @author zhouxinlei
  */
 @NoArgsConstructor
 @Data

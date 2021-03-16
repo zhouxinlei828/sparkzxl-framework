@@ -15,7 +15,6 @@ import java.net.InetAddress;
  * 日志打印微服务关键配置信息(服务名、接口文档、访问地址)
  *
  * @author zhouxinlei
- * @date 2020-06-05 20:31:48
  */
 @Slf4j
 public class ApplicationInitRunner implements ApplicationRunner, Ordered {

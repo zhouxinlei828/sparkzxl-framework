@@ -1,18 +1,17 @@
 package com.github.sparkzxl.core.enums;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * description: 枚举序列化类
  *
- * @author: zhouxinlei
- * @date: 2020-10-05 20:52:53
+ * @author zhouxinlei
  */
 public class EnumeratorSerializer extends JsonSerializer<Enumerator> {
 

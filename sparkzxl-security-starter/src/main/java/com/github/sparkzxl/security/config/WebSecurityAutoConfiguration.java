@@ -4,12 +4,12 @@ import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.authorization.DynamicAccessDecisionManager;
-import com.github.sparkzxl.security.filter.JwtAuthenticationTokenFilter;
-import com.github.sparkzxl.security.intercept.DynamicSecurityMetadataSource;
-import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.github.sparkzxl.security.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.security.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.security.filter.DynamicSecurityFilter;
+import com.github.sparkzxl.security.filter.JwtAuthenticationTokenFilter;
+import com.github.sparkzxl.security.intercept.DynamicSecurityMetadataSource;
+import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.github.sparkzxl.security.service.DynamicSecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,6 @@ import java.util.List;
  * description: Spring Security 配置
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:35:26
  */
 
 @Configuration

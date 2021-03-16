@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * description: 自定义Sql注入
  *
- * @author: zhouxinlei
- * @date: 2020-07-11 16:54:45
+ * @author zhouxinlei
  */
 public class BaseSqlInjector extends DefaultSqlInjector {
 

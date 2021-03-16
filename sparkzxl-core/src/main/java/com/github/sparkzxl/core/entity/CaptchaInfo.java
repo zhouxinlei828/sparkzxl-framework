@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: 验证码信息
  *
- * @author: zhouxinlei
- * @date: 2020-12-26 22:41:02
+ * @author zhouxinlei
  */
 @Data
 public class CaptchaInfo {

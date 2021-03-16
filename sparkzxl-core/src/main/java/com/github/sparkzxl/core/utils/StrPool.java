@@ -3,8 +3,7 @@ package com.github.sparkzxl.core.utils;
 /**
  * description: 常用字符串
  *
- * @author: zhouxinlei
- * @date: 2020-12-05 10:14:54
+ * @author zhouxinlei
  */
 public interface StrPool {
     String AMPERSAND = "&";

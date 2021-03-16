@@ -3,8 +3,7 @@ package com.github.sparkzxl.database.constant;
 /**
  * description: 实体属性常量
  *
- * @author: zhouxinlei
- * @date: 2020-08-13 12:51:57
+ * @author zhouxinlei
  */
 public class EntityConstant {
 
@@ -23,7 +22,7 @@ public class EntityConstant {
     public static final String COLUMN_CREATE_TIME = "create_time";
 
     public static final String UPDATE_USER = "updateUser";
-    public static final String UPDATE_USER_Id = "updateUserId";
+    public static final String UPDATE_USER_ID = "updateUserId";
     public static final String UPDATE_USER_NAME = "updateUserName";
 
     public static final String COLUMN_UPDATE_USER = "update_user";

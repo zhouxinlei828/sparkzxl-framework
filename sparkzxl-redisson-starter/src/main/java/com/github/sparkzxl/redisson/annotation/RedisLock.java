@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 /**
  * description: redis lock注解
  *
- * @author: zhouxinlei
- * @date: 2021-01-04 09:57:20
+ * @author zhouxinlei
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * description: redis缓存配置
  *
- * @author: zhouxinlei
- * @date: 2020-07-31 14:51:06
+ * @author zhouxinlei
  */
 @Configuration
 @AutoConfigureAfter(RedissonAutoConfiguration.class)

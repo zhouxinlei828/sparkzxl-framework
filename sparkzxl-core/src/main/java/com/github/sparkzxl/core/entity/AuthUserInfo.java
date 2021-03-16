@@ -10,7 +10,6 @@ import java.util.Map;
  * description: 登录认证用户实体类
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:47:33
  */
 @Data
 public class AuthUserInfo<T> implements Serializable {

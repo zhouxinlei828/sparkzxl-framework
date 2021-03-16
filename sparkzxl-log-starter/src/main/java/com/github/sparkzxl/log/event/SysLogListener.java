@@ -12,8 +12,7 @@ import java.util.function.Consumer;
 /**
  * description: 异步监听日志事件
  *
- * @author: zhouxinlei
- * @date: 2020-07-12 00:02:08
+ * @author zhouxinlei
  */
 @Slf4j
 @AllArgsConstructor

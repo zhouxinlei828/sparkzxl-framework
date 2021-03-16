@@ -11,8 +11,7 @@ import java.util.List;
 /**
  * description: 公共仓储层
  *
- * @author: zhouxinlei
- * @date: 2021-01-06 17:59:49
+ * @author zhouxinlei
  */
 public interface IBaseRepository<T extends Entity> {
 

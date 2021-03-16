@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * description: pdf base方法封装
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:12:10
  */
 public class DocumentPdfTemplate extends ITextClient {
 
@@ -64,9 +63,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param str      文本(如果宽度不足缩小字体)
      * @param width    指定文本宽度
      * @param isCenter 文本是否居中
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:26:50
      */
     public void addAppointWidthText(String str, float width, boolean isCenter) {
         if (str == null) {
@@ -81,9 +77,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param str      字符串
      * @param width    指定文本宽度
      * @param isCenter 是否居中
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:27:10
      */
     public void addAppointWidthLineText(String str, float width, boolean isCenter) {
         if (str == null) {
@@ -100,9 +93,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param isLine   是否有横线
      * @param isCenter 是否居中
      * @param autoSize 自动大小
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:27:22
      */
     public void printLineOne(String str, float width, boolean isLine, boolean isCenter, boolean autoSize) {
         if (str == null) {
@@ -171,9 +161,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * 添加没有下划线的文本
      *
      * @param str 字符串
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:29:04
      */
     public void addText(String str) {
         if (str == null) {
@@ -209,9 +196,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param minTextCount 最小字数为0时自动
      * @param isFullLine   是否为整行
      * @param isCenter     是否居中
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:29:27
      */
     public void addLineText(String str, float minTextCount, boolean isFullLine, boolean isCenter) {
         if (str == null) {
@@ -261,8 +245,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param str   字符串
      * @param width 剩余宽度
      * @return String
-     * @author zhouxinlei
-     * @date 2020-05-08 15:25:55
      */
     public String fullText(String str, float width) {
         float cWidth = totalWidth - currLeft;
@@ -314,8 +296,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param width 剩余宽度
      * @param str   字符串
      * @return List<String>
-     * @author zhouxinlei
-     * @date 2020-05-08 15:30:59
      */
     public List<String> subText(float width, String str) {
         // 定义分行的文本数组
@@ -366,9 +346,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param year  年
      * @param month 月
      * @param day   日
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:31:28
      */
     public void printTime(String year, String month, String day) {
         printLineOne(year, 40, false, true, false);
@@ -384,9 +361,6 @@ public class DocumentPdfTemplate extends ITextClient {
      *
      * @param text 内容
      * @param top  高度
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:31:54
      */
     public void addSeal(String text, float top) {
         if (StringUtils.isNotEmpty(text)) {
@@ -397,10 +371,6 @@ public class DocumentPdfTemplate extends ITextClient {
 
     /**
      * 换行
-     *
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:33:12
      */
     public void wrap() {
         if (currLeft != left) {
@@ -411,10 +381,6 @@ public class DocumentPdfTemplate extends ITextClient {
 
     /**
      * 空行
-     *
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:33:21
      */
     public void newLine() {
         top -= rowSpacing;
@@ -424,9 +390,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * 添加头部内容
      *
      * @param data 内容
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:34:15
      */
     public void addHeadContent(String data) {
         addHead(data);
@@ -438,9 +401,6 @@ public class DocumentPdfTemplate extends ITextClient {
      *
      * @param topSpacing 向上高度
      * @param title      标题
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:34:43
      */
     public void addMainTitle(float topSpacing, String title) {
         documentInfo.setTitle(title);
@@ -457,9 +417,6 @@ public class DocumentPdfTemplate extends ITextClient {
      *
      * @param topSpacing 向上高度
      * @param title      标题
-     * @return void
-     * @author zhouxinlei
-     * @date 2020-05-08 15:35:18
      */
     public void addSubTitle(float topSpacing, String title) {
         addParagraphText(title, 13, 0, 0, false, true, false);
@@ -471,10 +428,6 @@ public class DocumentPdfTemplate extends ITextClient {
      *
      * @param topSpacing 向上高度
      * @param title      标题
-     * @return void
-     * @throws
-     * @author zhouxinlei
-     * @date 2020-05-08 15:35:49
      */
     public void addFooter(float topSpacing, String title) {
         addFooter(title, topSpacing);
@@ -792,7 +745,6 @@ public class DocumentPdfTemplate extends ITextClient {
      * @param str
      * @param fontWidth
      * @param numWidth
-     * @return
      */
     public Float getStrWidth(String str, float fontWidth, float numWidth) {
         Float strWidth = 0f;
@@ -817,11 +769,10 @@ public class DocumentPdfTemplate extends ITextClient {
     /**
      * 计算文本居中应该移动的宽度
      *
-     * @param str
-     * @param width
-     * @param fontWidth
-     * @param numWidth
-     * @return
+     * @param str 字符串
+     * @param width 宽度
+     * @param fontWidth 字体宽度
+     * @param numWidth 数字宽度
      */
     public Float textCenter(String str, float width, float fontWidth, float numWidth) {
         String reg = "/^[ ]*|[ ]*$/g";

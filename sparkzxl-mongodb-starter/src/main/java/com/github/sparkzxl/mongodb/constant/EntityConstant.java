@@ -3,8 +3,7 @@ package com.github.sparkzxl.mongodb.constant;
 /**
  * description: 实体属性常量
  *
- * @author: zhouxinlei
- * @date: 2020-08-13 12:51:57
+ * @author zhouxinlei
  */
 public class EntityConstant {
 

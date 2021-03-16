@@ -6,11 +6,11 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
+import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
  * description: 全局异常处理
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:44:48
  */
 @ControllerAdvice
 @RestController

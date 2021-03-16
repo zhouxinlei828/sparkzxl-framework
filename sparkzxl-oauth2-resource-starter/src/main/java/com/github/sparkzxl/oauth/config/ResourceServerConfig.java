@@ -1,11 +1,11 @@
 package com.github.sparkzxl.oauth.config;
 
 import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.oauth.filter.IgnoreUrlsRemoveJwtFilter;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
-import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,8 +28,7 @@ import reactor.core.publisher.Mono;
 /**
  * description: 资源保护配置类
  *
- * @author: zhouxinlei
- * @date: 2020-08-01 13:49:22
+ * @author zhouxinlei
  */
 @Configuration
 @AllArgsConstructor

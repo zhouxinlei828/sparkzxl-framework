@@ -18,7 +18,6 @@ import java.nio.charset.StandardCharsets;
  * description: ResponseResult工具类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:40:03
  */
 @Slf4j
 public class ResponseResultUtils {

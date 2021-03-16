@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 /**
  * description: 系统日志实体类
  *
- * @author: zhouxinlei
- * @date: 2020-07-11 23:52:46
+ * @author zhouxinlei
  */
 @Data
 @NoArgsConstructor

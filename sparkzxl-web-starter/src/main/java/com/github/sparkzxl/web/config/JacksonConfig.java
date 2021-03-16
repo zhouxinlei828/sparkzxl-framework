@@ -10,13 +10,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.github.sparkzxl.core.enums.Enumerator;
 import com.github.sparkzxl.core.enums.EnumeratorSerializer;
 import com.github.sparkzxl.core.jackson.CustomJacksonModule;
 import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
-import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomDeSerializer;
+import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
 import com.google.common.collect.ImmutableMap;
-import com.github.sparkzxl.core.enums.Enumerator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -42,7 +42,6 @@ import java.util.TimeZone;
  * description: Jackson全局配置
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:43:33
  */
 @Configuration
 public class JacksonConfig {
@@ -90,8 +89,8 @@ public class JacksonConfig {
      * 3. "yyyy-MM-dd" -> LocalDate
      * 4. "HH:mm:ss" -> LocalTime
      *
-     * @param builder
-     * @return
+     * @param builder 构建
+     * @return ObjectMapper
      */
     @Bean
     @Primary

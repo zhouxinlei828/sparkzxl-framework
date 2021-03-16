@@ -5,8 +5,7 @@ import com.github.sparkzxl.core.entity.AuthUserInfo;
 /**
  * description: 全局用户获取 服务类
  *
- * @author: zhouxinlei
- * @date: 2020-07-13 14:25:46
+ * @author zhouxinlei
  */
 public interface IAuthUserInfoService {
 

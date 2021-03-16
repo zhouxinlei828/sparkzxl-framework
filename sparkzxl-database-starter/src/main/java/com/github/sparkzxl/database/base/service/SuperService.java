@@ -10,8 +10,7 @@ import java.util.List;
 /**
  * description:
  *
- * @author: zhouxinlei
- * @date: 2020-07-07 20:26:15
+ * @author zhouxinlei
  */
 public interface SuperService<T> extends IService<T> {
 

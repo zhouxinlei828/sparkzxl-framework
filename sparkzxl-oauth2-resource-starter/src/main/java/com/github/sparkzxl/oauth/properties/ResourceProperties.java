@@ -6,8 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * description:  oauth resource属性
  *
- * @author: zhouxinlei
- * @date: 2020-08-01 13:24:15
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.oauth2.resource")

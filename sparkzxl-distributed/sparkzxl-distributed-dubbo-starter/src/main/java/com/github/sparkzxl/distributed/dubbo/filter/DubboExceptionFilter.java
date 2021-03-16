@@ -17,8 +17,7 @@ import java.lang.reflect.Method;
 /**
  * description: 实现对 ExceptionFilter 增强的过滤器
  *
- * @author: zhouxinlei
- * @date: 2020-11-27 09:37:09
+ * @author zhouxinlei9
  */
 @Activate(group = CommonConstants.PROVIDER)
 public class DubboExceptionFilter extends ListenableFilter {

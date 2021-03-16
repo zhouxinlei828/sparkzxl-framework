@@ -8,7 +8,6 @@ import java.io.Serializable;
  * description: token实体类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:38:01
  */
 @Data
 public class AuthToken implements Serializable {

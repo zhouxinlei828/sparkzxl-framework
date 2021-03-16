@@ -6,7 +6,6 @@ import javax.mail.MessagingException;
  * description: 邮件 服务类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:20:00
  */
 public interface MailService {
 

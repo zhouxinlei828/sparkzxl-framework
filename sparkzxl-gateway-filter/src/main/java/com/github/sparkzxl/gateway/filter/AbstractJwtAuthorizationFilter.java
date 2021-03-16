@@ -32,8 +32,7 @@ import java.util.List;
 /**
  * description: JWT授权校验管理过滤器
  *
- * @author: zhouxinlei
- * @date: 2021-01-25 18:15:40
+ * @author zhouxinlei
  */
 @Slf4j
 public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Ordered {

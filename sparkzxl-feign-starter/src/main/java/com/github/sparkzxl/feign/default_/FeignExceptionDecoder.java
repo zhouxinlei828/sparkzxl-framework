@@ -14,8 +14,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * description: 当调用远程服务 其抛出异常捕获
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:15:32
+ * @author zhouxinlei
  */
 @Slf4j
 public class FeignExceptionDecoder implements ErrorDecoder {

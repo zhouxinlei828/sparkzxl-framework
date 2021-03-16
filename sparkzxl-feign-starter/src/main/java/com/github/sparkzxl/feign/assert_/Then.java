@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  *     如果有特殊要求 可使用{@linkplain Then#with(Consumer)}进行手动处理
  * </pre>
  *
- * @author: minton.zhang
+ * @author minton.zhang
  * @since: 2020/5/26 17:22
  */
 
@@ -27,8 +27,7 @@ import java.util.function.Consumer;
  *      如果有特殊要求 可使用{@linkplain Then#with(Consumer)}进行手动处理
  *  </pre>
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:10:54
+ * @author zhouxinlei
  */
 @Slf4j
 @RequiredArgsConstructor

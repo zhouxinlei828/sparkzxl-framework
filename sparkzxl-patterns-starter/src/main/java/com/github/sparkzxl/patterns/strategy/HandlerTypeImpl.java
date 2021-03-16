@@ -7,8 +7,7 @@ import java.lang.annotation.Annotation;
 /**
  * description: 策略模式业务类型注解实现类
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 15:07:01
+ * @author zhouxinlei
  */
 public class HandlerTypeImpl implements HandlerType {
 

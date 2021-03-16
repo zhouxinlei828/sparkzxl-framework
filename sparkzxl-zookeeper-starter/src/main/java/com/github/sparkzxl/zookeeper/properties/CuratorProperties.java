@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * description: zookeeper属性配置
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:45:52
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.zookeeper.curator")

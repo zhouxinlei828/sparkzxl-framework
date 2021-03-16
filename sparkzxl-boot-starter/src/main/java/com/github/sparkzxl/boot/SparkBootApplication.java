@@ -9,8 +9,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 /**
  * description: sparkzxl 启动类
  *
- * @author: zhouxinlei
- * @date: 2020-07-15 21:49:59
+ * @author zhouxinlei
  */
 @EnableSpringUtil
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)

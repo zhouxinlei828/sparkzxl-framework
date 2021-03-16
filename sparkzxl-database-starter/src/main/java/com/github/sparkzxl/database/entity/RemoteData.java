@@ -13,8 +13,7 @@ import java.io.Serializable;
  * <K> ID或者code 等唯一键
  * <D> 根据key 远程查询出的数据
  *
- * @author: zhouxinlei
- * @date: 2020-07-19 08:44:11
+ * @author zhouxinlei
  */
 @Data
 @NoArgsConstructor
@@ -32,10 +31,8 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
     /**
      * 获取对象的 主键key
      *
-     * @param remoteData
-     * @param <K>
-     * @param <D>
-     * @return
+     * @param remoteData data
+     * @return K
      */
     public static <K, D> K getKey(RemoteData<K, D> remoteData) {
         return remoteData != null ? remoteData.getKey() : null;
@@ -48,10 +45,8 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
     /**
      * 获取对象的 data
      *
-     * @param remoteData
-     * @param <K>
-     * @param <D>
-     * @return
+     * @param remoteData data
+     * @return D
      */
     public static <K, D> D getData(RemoteData<K, D> remoteData) {
         return remoteData != null ? remoteData.getData() : null;
@@ -70,7 +65,7 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
     /**
      * 用于Hibernate-Validator 自定义校验规则
      *
-     * @return
+     * @return Object
      */
     @Override
     public Object value() {

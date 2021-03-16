@@ -11,8 +11,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 /**
  * description: jackson序列化
  *
- * @author: zhouxinlei
- * @date: 2020-12-05 17:44:44
+ * @author zhouxinlei
  */
 
 public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {

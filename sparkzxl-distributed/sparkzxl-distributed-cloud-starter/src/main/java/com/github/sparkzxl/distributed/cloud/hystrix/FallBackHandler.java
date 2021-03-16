@@ -6,8 +6,7 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 /**
  * description: 降级处理类
  *
- * @author: zhouxinlei
- * @date: 2020-08-13 21:00:52
+ * @author zhouxinlei
  */
 public class FallBackHandler {
 

@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
  * description：
  *
  * @author zhouxinlei
- * @date 2020/6/17 0017
  */
 public class Entity<T> extends SuperEntity<T> {
 

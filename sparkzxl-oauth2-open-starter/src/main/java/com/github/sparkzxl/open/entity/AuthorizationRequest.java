@@ -1,6 +1,5 @@
 package com.github.sparkzxl.open.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,8 +7,7 @@ import lombok.Data;
 /**
  * description:
  *
- * @author: zhouxinlei
- * @date: 2020-08-04 15:26:10
+ * @author zhouxinlei
  */
 @Data
 @ApiModel(value = "授权请求参数")

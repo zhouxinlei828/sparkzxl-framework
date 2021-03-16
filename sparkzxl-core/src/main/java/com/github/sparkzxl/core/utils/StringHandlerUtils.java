@@ -6,13 +6,11 @@ import org.springframework.util.AntPathMatcher;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * description: 校验url是否一致
  *
- * @author: zhouxinlei
- * @date: 2020-07-27 21:14:20
+ * @author zhouxinlei
  */
 public class StringHandlerUtils {
 

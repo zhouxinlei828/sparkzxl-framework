@@ -8,7 +8,6 @@ import lombok.Getter;
  * description: 枚举一些常用API操作码
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:45:57
  */
 @Getter
 @AllArgsConstructor

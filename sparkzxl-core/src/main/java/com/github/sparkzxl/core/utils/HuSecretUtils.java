@@ -20,8 +20,7 @@ import java.security.PublicKey;
 /**
  * description: hutool 密钥工具类
  *
- * @author: zhouxinlei
- * @date: 2020-10-25 20:26:17
+ * @author zhouxinlei
  */
 public class HuSecretUtils {
 

@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
  * description: 当访问接口没有权限时，自定义的返回结果
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:35:14
  */
 @Slf4j
 public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {

@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
  * description: redis token生成组件
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:29:13
  */
 public class TokenUtil {
 
@@ -23,7 +22,7 @@ public class TokenUtil {
     public String getToken() {
         String token = "token".concat(IdUtil.simpleUUID());
         long expire = 60 * 60;
-        cacheTemplate.set(token, token, 15l, TimeUnit.MINUTES);
+        cacheTemplate.set(token, token, 15L, TimeUnit.MINUTES);
         return token;
     }
 

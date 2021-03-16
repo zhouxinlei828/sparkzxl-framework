@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
 import com.github.sparkzxl.database.annonation.InjectionField;
 import com.github.sparkzxl.database.entity.RemoteData;
+import com.github.sparkzxl.database.factory.CustomThreadFactory;
 import com.github.sparkzxl.database.properties.InjectionProperties;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -35,8 +36,7 @@ import java.util.function.Consumer;
  * * 2. 依次查询待注入的数据
  * * 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
  *
- * @author: zhouxinlei
- * @date: 2020-12-05 10:04:34
+ * @author zhouxinlei
  */
 @Slf4j
 public class InjectionCore {
@@ -64,7 +64,7 @@ public class InjectionCore {
             this.backgroundRefreshPools = MoreExecutors.listeningDecorator(
                     new ThreadPoolExecutor(guavaCache.getRefreshThreadPoolSize(), guavaCache.getRefreshThreadPoolSize(),
                             0L, TimeUnit.MILLISECONDS,
-                            new LinkedBlockingQueue<>())
+                            new LinkedBlockingQueue<>(),new CustomThreadFactory())
             );
             this.caches = CacheBuilder.newBuilder()
                     .maximumSize(guavaCache.getMaximumSize())

@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: 请求日志实体类
  *
- * @author: zhouxinlei
- * @date: 2020-10-25 23:13:10
+ * @author zhouxinlei
  */
 @Data
 public class RequestInfo {

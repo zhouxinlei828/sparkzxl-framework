@@ -1,17 +1,14 @@
 package com.github.sparkzxl.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * description:JWT中存储的信息
  *
- * @author: zhouxinlei
- * @date: 2020-07-14 07:51:20
+ * @author zhouxinlei
  */
 @Data
 public class JwtUserInfo<T> {

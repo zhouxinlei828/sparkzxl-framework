@@ -5,8 +5,7 @@ import com.github.sparkzxl.core.base.code.BaseEnumCode;
 /**
  * description: 服务降级异常
  *
- * @author: zhouxinlei
- * @date: 2020-11-27 16:18:20
+ * @author zhouxinlei
  */
 
 public class ServiceDegradeException extends BaseException {

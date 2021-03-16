@@ -12,8 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 /**
  * description: InjectionResult 注解的 AOP 工具
  *
- * @author: zhouxinlei
- * @date: 2021-03-02 13:34:58
+ * @author zhouxinlei
 */
 @Aspect
 @AllArgsConstructor

@@ -26,8 +26,7 @@ import java.util.List;
 /**
  * description: OpenFeign 配置
  *
- * @author: zhouxinlei
- * @date: 2020-07-12 16:32:22
+ * @author zhouxinlei
  */
 @Configuration
 public class OpenFeignAutoConfiguration {

@@ -7,8 +7,7 @@ import java.util.Random;
 /**
  * description: 随机工具类
  *
- * @author: zhouxinlei
- * @date: 2020-09-08 17:48:17
+ * @author zhouxinlei
  */
 public class RandomTool {
 

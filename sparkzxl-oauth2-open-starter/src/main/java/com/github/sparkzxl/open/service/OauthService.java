@@ -11,8 +11,7 @@ import java.security.Principal;
 /**
  * description: Oauth认证 服务类
  *
- * @author: zhouxinlei
- * @date: 2020-06-25 09:49:22
+ * @author zhouxinlei
  */
 public interface OauthService {
 

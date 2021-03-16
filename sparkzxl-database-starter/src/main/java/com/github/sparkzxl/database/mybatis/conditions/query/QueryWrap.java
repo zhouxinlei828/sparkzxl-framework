@@ -37,8 +37,7 @@ import static com.github.sparkzxl.database.mybatis.conditions.Wraps.replace;
  * 5，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
  * 6，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
- * @author: zhouxinlei
- * @date: 2021-03-13 23:15:30
+ * @author zhouxinlei
  */
 public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         implements Query<QueryWrap<T>, T, String> {
@@ -252,7 +251,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
     /**
      * 取消跳过空的字符串  不允许跳过空的字符串
      *
-     * @return
+     * @return QueryWrap<T>
      */
     public QueryWrap<T> cancelSkipEmpty() {
         this.skipEmpty = false;
@@ -288,8 +287,8 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
      * 再次可以进行忽略
      *
      * @param <A>       这个是传入的待忽略字段的set方法
-     * @param setColumn
-     * @return
+     * @param setColumn 设置字段
+     * @return QueryWrap<T>
      */
     public <A extends Object> QueryWrap<T> ignore(BiFunction<T, A, ?> setColumn) {
         setColumn.apply(this.getEntity(), null);

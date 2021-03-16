@@ -1,12 +1,12 @@
 package com.github.sparkzxl.web.support;
 
+import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.support.BusinessException;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,6 @@ import java.sql.SQLException;
  * description: 全局异常处理
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:44:48
  */
 @ControllerAdvice
 @RestController
@@ -107,14 +106,6 @@ public class GlobalExceptionHandler {
         return ApiResult.apiResult(ResponseResultStatus.UN_AUTHORIZED.getCode(), e.getMessage());
     }
 
-    /**
-     * 405
-     *
-     * @param
-     * @return ApiResult
-     * @author zhouxinlei
-     * @date 2019/5/25 0025
-     */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ApiResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
@@ -130,14 +121,6 @@ public class GlobalExceptionHandler {
         return ApiResult.apiResult(ResponseResultStatus.MSG_NOT_READABLE);
     }
 
-    /**
-     * 404 没有找到访问资源
-     *
-     * @param
-     * @return ApiResult
-     * @author zhouxinlei
-     * @date 2019/5/25 0025
-     */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult notFoundPage404(NoHandlerFoundException e) {
         handleResponseResult();
@@ -145,14 +128,7 @@ public class GlobalExceptionHandler {
         return ApiResult.apiResult(ResponseResultStatus.NOT_FOUND);
     }
 
-    /**
-     * 415 不支持媒体类型
-     *
-     * @param e 异常
-     * @return ApiResult
-     * @author zhouxinlei
-     * @date 2019/5/25 0025
-     */
+
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ApiResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         handleResponseResult();
@@ -160,12 +136,7 @@ public class GlobalExceptionHandler {
         return ApiResult.apiResult(ResponseResultStatus.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
-    /**
-     * 数据库异常
-     *
-     * @param e 数据库异常
-     * @return ApiResult
-     */
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
     public ApiResult handleSQLException(SQLException e) {

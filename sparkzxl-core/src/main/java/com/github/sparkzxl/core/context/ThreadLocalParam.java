@@ -7,8 +7,7 @@ import java.io.Serializable;
 /**
  * description: 线程变量封装的参数
  *
- * @author: zhouxinlei
- * @date: 2020-12-12 10:21:40
+ * @author zhouxinlei
  */
 @Data
 public class ThreadLocalParam implements Serializable {

@@ -19,7 +19,7 @@ public interface SparkZxlAssert {
      *
      * @param t    t
      * @param args 入参
-     * @return
+     * @return BaseException
      */
     BaseException newException(Throwable t, Object... args);
 

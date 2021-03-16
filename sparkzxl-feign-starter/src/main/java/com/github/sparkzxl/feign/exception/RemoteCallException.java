@@ -19,8 +19,7 @@ import java.util.List;
 /**
  * description: feign远程调用异常
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:16:03
+ * @author zhouxinlei
  */
 @Slf4j
 public class RemoteCallException extends RuntimeException {
@@ -76,7 +75,8 @@ public class RemoteCallException extends RuntimeException {
     /**
      * 判断异常是否为原始异常的子类
      *
-     * @return
+     * @param exception 异常
+     * @return boolean
      */
     public boolean isAssignableFrom(Class<? extends Throwable> exception) {
         ExceptionChain rawExceptionInfo = this.getRawExceptionInfo();

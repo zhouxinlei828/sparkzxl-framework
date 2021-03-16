@@ -17,8 +17,7 @@ import java.util.List;
 /**
  * description: drools 规则执行器
  *
- * @author: zhouxinlei
- * @date: 2020-12-15 11:18:33
+ * @author zhouxinlei
  */
 @Slf4j
 public class DroolsRuleExecutor {

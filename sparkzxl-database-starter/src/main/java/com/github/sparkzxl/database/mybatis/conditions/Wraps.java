@@ -4,8 +4,8 @@ package com.github.sparkzxl.database.mybatis.conditions;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.github.sparkzxl.database.entity.RemoteData;
-import com.github.sparkzxl.database.mybatis.conditions.query.QueryWrap;
 import com.github.sparkzxl.database.mybatis.conditions.query.LbqWrapper;
+import com.github.sparkzxl.database.mybatis.conditions.query.QueryWrap;
 import com.github.sparkzxl.database.mybatis.conditions.update.LbuWrapper;
 import lombok.Data;
 
@@ -15,8 +15,7 @@ import java.lang.reflect.Modifier;
 /**
  * description: Wrappers 工具类， 该方法的主要目的是为了 缩短代码长度
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 10:24:57
+ * @author zhouxinlei
  */
 public class Wraps {
 
@@ -92,14 +91,11 @@ public class Wraps {
      *
      * @param source 源对象
      * @return 最新源对象
-     * @see
      */
     public static <T> T replace(Object source) {
         if (source == null) {
             return null;
         }
-        Object target = source;
-
         Class<?> srcClass = source.getClass();
         Field[] fields = ReflectUtil.getFields(srcClass);
         for (Field field : fields) {
@@ -116,7 +112,7 @@ public class Wraps {
                 RemoteData rd = (RemoteData) classValue;
                 Object key = rd.getKey();
                 if (ObjectUtil.isEmpty(key)) {
-                    ReflectUtil.setFieldValue(target, field, null);
+                    ReflectUtil.setFieldValue(source, field, null);
                     continue;
                 }
                 if (!(key instanceof String)) {
@@ -128,7 +124,7 @@ public class Wraps {
                     tarValue = tarValue.replaceAll("\\_", "\\\\_");
 
                     rd.setKey(tarValue);
-                    ReflectUtil.setFieldValue(target, field, rd);
+                    ReflectUtil.setFieldValue(source, field, rd);
                 }
                 continue;
             }
@@ -141,10 +137,10 @@ public class Wraps {
                 String tarValue = srcValue.replaceAll("\\%", "\\\\%");
                 tarValue = tarValue.replaceAll("\\_", "\\\\_");
 
-                ReflectUtil.setFieldValue(target, field, tarValue);
+                ReflectUtil.setFieldValue(source, field, tarValue);
             }
         }
-        return (T) target;
+        return (T) source;
     }
 
     @Data

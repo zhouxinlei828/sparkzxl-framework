@@ -8,8 +8,7 @@ import java.util.Map;
 /**
  * description：动态权限 服务类
  *
- * @author： zhouxinlei
- * @date： 2020-06-24 11:32:55
+ * @author zhouxinlei
  */
 public interface DynamicSecurityService {
 

@@ -18,7 +18,6 @@ import java.util.function.Function;
  * description: redis缓存提供接口实现类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:25:06
  */
 @Slf4j
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -110,8 +109,8 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
     }
 
     @Override
-    public Long remove(String... keys) {
-        return redisTemplate.delete(Lists.newArrayList(keys));
+    public void remove(String... keys) {
+        redisTemplate.delete(Lists.newArrayList(keys));
     }
 
     @Override

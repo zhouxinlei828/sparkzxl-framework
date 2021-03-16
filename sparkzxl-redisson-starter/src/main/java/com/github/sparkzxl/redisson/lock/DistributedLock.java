@@ -4,7 +4,6 @@ package com.github.sparkzxl.redisson.lock;
  * description：分布式锁接口
  *
  * @author zhouxinlei
- * @date 2020/6/17 0017
  */
 public interface DistributedLock {
 

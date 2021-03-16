@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: UserAgent信息
  *
- * @author: zhouxinlei
- * @date: 2020-07-28 17:47:18
+ * @author zhouxinlei
  */
 @Data
 public class UserAgentEntity {

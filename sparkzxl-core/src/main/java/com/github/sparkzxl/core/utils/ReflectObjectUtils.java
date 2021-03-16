@@ -12,8 +12,7 @@ import java.util.Map;
 /**
  * description: 反射对象工具类
  *
- * @author: zhouxinlei
- * @date: 2020-08-13 11:42:30
+ * @author zhouxinlei
  */
 public class ReflectObjectUtils {
 

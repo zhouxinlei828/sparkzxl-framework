@@ -21,8 +21,7 @@ import java.util.function.Consumer;
 /**
  * description: 修改构造器
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 10:23:44
+ * @author zhouxinlei
  */
 public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
         implements Update<LbuWrapper<T>, SFunction<T, ?>> {

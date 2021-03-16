@@ -24,8 +24,7 @@ import java.time.format.DateTimeFormatter;
  * 5. yyyy年MM月dd日HH时mm分ss秒
  * 6. yyyy/MM/dd HH:mm:ss
  *
- * @author: zhouxinlei
- * @date: 2020-12-05 19:36:57
+ * @author zhouxinlei
  */
 public class LocalDateTimeCustomDeSerializer extends JSR310DateTimeDeserializerBase<LocalDateTime> {
 

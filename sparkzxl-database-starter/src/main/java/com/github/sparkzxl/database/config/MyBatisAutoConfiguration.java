@@ -30,8 +30,7 @@ import java.util.List;
 /**
  * description: mybatis全局配置
  *
- * @author zhouxinlei
- * @date 2020-05-24 13:20:57
+ * @author zhouxinlei7
  */
 @Configuration
 @EnableConfigurationProperties({CustomMybatisProperties.class})

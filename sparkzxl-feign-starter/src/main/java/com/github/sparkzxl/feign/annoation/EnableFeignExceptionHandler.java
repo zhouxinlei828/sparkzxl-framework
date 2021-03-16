@@ -12,8 +12,7 @@ import java.lang.annotation.*;
 /**
  * description:
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:10:17
+ * @author zhouxinlei
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

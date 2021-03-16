@@ -9,8 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * description: log 自动配置
  *
- * @author: zhouxinlei
- * @date: 2020-07-18 08:19:06
+ * @author zhouxinlei
  */
 @Configuration
 @EnableConfigurationProperties(value = LogProperties.class)

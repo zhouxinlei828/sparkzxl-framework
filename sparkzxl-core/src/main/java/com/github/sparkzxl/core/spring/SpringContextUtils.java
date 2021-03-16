@@ -10,7 +10,6 @@ import java.util.Map;
  * description: 获取bean公用方法
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:42:56
  */
 public class SpringContextUtils implements ApplicationContextAware {
 

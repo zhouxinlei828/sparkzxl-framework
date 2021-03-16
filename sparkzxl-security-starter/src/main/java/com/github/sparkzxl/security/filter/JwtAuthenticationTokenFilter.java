@@ -23,8 +23,7 @@ import java.io.IOException;
 /**
  * description: jwt认证授权过滤器
  *
- * @author: zhouxinlei
- * @date: 2020-08-07 14:41:50
+ * @author zhouxinlei
  */
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {

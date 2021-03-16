@@ -8,8 +8,7 @@ import java.lang.annotation.*;
 /**
  * description: 自动注入SpringUtil
  *
- * @author: zhouxinlei
- * @date: 2020-08-02 14:26:02
+ * @author zhouxinlei
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

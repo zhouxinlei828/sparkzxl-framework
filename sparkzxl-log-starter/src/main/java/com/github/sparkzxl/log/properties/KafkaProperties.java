@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: kafka配置
  *
- * @author: zhouxinlei
- * @date: 2021-01-15 23:11:41
+ * @author zhouxinlei
  */
 @Data
 public class KafkaProperties {

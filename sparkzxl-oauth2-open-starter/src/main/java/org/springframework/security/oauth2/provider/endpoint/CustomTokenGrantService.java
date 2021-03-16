@@ -19,8 +19,7 @@ import java.util.Map;
 /**
  * description: 不走端点token获取
  *
- * @author: zhouxinlei
- * @date: 2021-02-24 12:17:37
+ * @author zhouxinlei
  */
 @Slf4j
 public class CustomTokenGrantService {

@@ -3,8 +3,7 @@ package com.github.sparkzxl.core.enums;
 /**
  * description: 枚举通用接口
  *
- * @author: zhouxinlei
- * @date: 2020-07-30 09:31:41
+ * @author zhouxinlei
  */
 public interface Enumerator {
 

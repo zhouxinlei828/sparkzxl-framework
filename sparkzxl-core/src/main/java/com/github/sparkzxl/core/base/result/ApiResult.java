@@ -12,7 +12,6 @@ import java.io.Serializable;
  * description: API接口响应结果
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:46:27
  */
 @NoArgsConstructor
 @Setter
@@ -40,28 +39,52 @@ public class ApiResult<T> implements Serializable {
     /**
      * 返回结果
      *
-     * @param code
-     * @param msg
-     * @return ApiResult<T>
-     * @author zhouxinlei
-     * @date 2019/5/26 0026
+     * @param code 状态码
+     * @param msg  信息
+     * @return ApiResult
      */
     public static ApiResult apiResult(int code, String msg) {
         return ApiResult.builder().code(code).msg(msg).build();
     }
 
+    /**
+     * 返回结果
+     *
+     * @param code 状态码
+     * @param msg  信息
+     * @param data 数据
+     * @return ApiResult
+     */
     public static <T> ApiResult apiResult(int code, String msg, T data) {
         return ApiResult.builder().code(code).msg(msg).data(data).build();
     }
 
+    /**
+     * 返回结果
+     *
+     * @param resultStatus API操作码
+     * @return ApiResult
+     */
     public static <T> ApiResult apiResult(ResponseResultStatus resultStatus) {
         return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).build();
     }
 
+    /**
+     * 返回结果
+     *
+     * @param resultStatus API操作码
+     * @param data         数据
+     * @return ApiResult
+     */
     public static <T> ApiResult apiResult(ResponseResultStatus resultStatus, T data) {
         return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).data(data).build();
     }
 
+    /**
+     * 超时返回结果
+     *
+     * @return ApiResult
+     */
     public static <T> ApiResult timeOut() {
         return ApiResult.apiResult(ResponseResultStatus.SERVICE_DEGRADATION);
     }

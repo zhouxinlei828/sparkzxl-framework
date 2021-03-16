@@ -1,16 +1,14 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.log.entity.RequestErrorInfo;
 import com.github.sparkzxl.log.entity.RequestInfo;
 import com.google.common.base.Stopwatch;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -30,7 +28,6 @@ import java.util.concurrent.TimeUnit;
  * description: web请求日志切面
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:41:01
  */
 @Aspect
 @Slf4j

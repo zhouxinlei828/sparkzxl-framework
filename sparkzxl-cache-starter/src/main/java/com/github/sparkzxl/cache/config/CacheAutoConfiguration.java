@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * description: 缓存自动配置类
  *
- * @author: zhouxinlei
- * @date: 2020-07-09 12:05:47
+ * @author zhouxinlei
  */
 @Configuration
 public class CacheAutoConfiguration {

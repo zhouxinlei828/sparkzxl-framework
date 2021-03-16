@@ -1,6 +1,5 @@
 package com.github.sparkzxl.oss.service;
 
-import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.SdkClientException;
@@ -28,10 +27,7 @@ import java.util.*;
 /**
  * aws-s3 通用存储操作 支持所有兼容s3协议的云存储: {阿里云OSS，腾讯云COS，七牛云，京东云，minio 等}
  *
- * @author lengleng
- * @author 858695266
- * @date 2020/5/23 6:36 上午
- * @since 1.0
+ * @author zhouxinlei
  */
 @RequiredArgsConstructor
 public class OssTemplate implements InitializingBean {

@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * description：security用户
  *
- * @author： zhouxinlei
- * @date： 2020-06-24 16:35:11
+ * @author zhouxinlei
  */
 @Data
 public class AuthUserDetail<T> implements UserDetails {

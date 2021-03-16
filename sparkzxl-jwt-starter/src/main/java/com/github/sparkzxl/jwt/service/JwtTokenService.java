@@ -1,6 +1,5 @@
 package com.github.sparkzxl.jwt.service;
 
-import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -10,8 +9,7 @@ import java.io.Serializable;
 /**
  * description: jwtToken 服务类
  *
- * @author: zhouxinlei
- * @date: 2020-07-14 08:02:04
+ * @author zhouxinlei
  */
 public interface JwtTokenService<ID extends Serializable> {
 

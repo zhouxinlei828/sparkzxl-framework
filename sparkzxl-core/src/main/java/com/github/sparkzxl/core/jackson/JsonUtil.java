@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
 /**
  * description:  Jackson封装工具类
  *
- * @author: zhouxinlei
- * @date: 2020-12-05 19:38:21
+ * @author zhouxinlei
  */
 @Slf4j
 public class JsonUtil {

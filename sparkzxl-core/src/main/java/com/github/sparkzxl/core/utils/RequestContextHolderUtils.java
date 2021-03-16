@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
@@ -16,7 +15,6 @@ import java.net.UnknownHostException;
  * description: HttpServlet工具类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:45:00
  */
 @Slf4j
 public class RequestContextHolderUtils {

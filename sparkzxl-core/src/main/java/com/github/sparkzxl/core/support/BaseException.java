@@ -7,7 +7,6 @@ import lombok.Getter;
  * description：BaseException
  *
  * @author zhouxinlei
- * @date 2020-06-04 12:40:33
  */
 @Getter
 public class BaseException extends RuntimeException {

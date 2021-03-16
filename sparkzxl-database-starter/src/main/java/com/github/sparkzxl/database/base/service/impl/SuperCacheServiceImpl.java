@@ -1,13 +1,12 @@
 package com.github.sparkzxl.database.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.cache.template.CacheTemplate;
+import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.database.base.mapper.SuperMapper;
 import com.github.sparkzxl.database.base.service.SuperCacheService;
 import com.github.sparkzxl.database.entity.SuperEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -17,8 +16,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * description: 缓存接口父类实现类
  *
- * @author: zhouxinlei
- * @date: 2020-07-07 19:38:37
+ * @author zhouxinlei
  */
 public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 

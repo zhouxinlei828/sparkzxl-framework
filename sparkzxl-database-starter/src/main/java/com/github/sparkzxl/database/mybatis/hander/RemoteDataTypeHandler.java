@@ -9,8 +9,7 @@ import java.sql.*;
 /**
  * description: 远程数据 类型转换器
  *
- * @author: zhouxinlei
- * @date: 2020-07-19 09:10:53
+ * @author zhouxinlei
  */
 public class RemoteDataTypeHandler extends BaseTypeHandler<RemoteData> {
     /**

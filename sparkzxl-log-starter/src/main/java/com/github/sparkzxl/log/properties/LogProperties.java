@@ -7,8 +7,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * description: 日志配置类
  *
- * @author: zhouxinlei
- * @date: 2020-12-09 11:40:24
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "logging")

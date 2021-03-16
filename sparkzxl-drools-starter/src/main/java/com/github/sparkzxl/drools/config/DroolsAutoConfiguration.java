@@ -27,8 +27,7 @@ import java.io.IOException;
 /**
  * description:
  *
- * @author: zhouxinlei
- * @date: 2020-12-15 11:46:06
+ * @author zhouxinlei
  */
 @Configuration
 @EnableConfigurationProperties({DroolsProperties.class})

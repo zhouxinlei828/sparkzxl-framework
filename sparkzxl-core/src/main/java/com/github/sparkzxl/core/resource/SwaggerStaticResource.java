@@ -7,7 +7,6 @@ import java.util.List;
  * description: 静态资源过滤
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:38:27
  */
 public class SwaggerStaticResource {
 

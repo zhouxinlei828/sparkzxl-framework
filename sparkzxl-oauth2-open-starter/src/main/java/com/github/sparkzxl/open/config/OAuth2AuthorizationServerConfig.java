@@ -39,8 +39,7 @@ import java.util.Optional;
 /**
  * description: 授权服务器配置
  *
- * @author: zhouxinlei
- * @date: 2021-02-23 14:13:03
+ * @author zhouxinlei
  */
 @Configuration
 @EnableAuthorizationServer

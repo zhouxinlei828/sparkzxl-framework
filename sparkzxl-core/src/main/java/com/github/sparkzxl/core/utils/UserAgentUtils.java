@@ -15,8 +15,7 @@ import java.util.List;
 /**
  * description: 用户代理工具类
  *
- * @author: zhouxinlei
- * @date: 2020-07-12 17:16:41
+ * @author zhouxinlei
  */
 public class UserAgentUtils extends UserAgentUtil {
 

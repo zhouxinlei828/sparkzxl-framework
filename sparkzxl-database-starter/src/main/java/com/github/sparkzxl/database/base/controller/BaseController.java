@@ -5,8 +5,7 @@ import com.github.sparkzxl.database.base.service.SuperService;
 /**
  * description: 基础controller
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 09:38:01
+ * @author zhouxinlei
  */
 public interface BaseController<Entity> {
 

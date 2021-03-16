@@ -1,7 +1,6 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.convert.Convert;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
  * description: 集合工具类
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:49:53
  */
 @Slf4j
 public class ListUtils {

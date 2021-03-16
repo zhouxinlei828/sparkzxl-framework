@@ -113,8 +113,7 @@ import java.io.Serializable;
  * <K> ID或者code 等唯一键
  * <D> 根据key 远程查询出的数据
  *
- * @author: zhouxinlei
- * @date: 2020-07-19 08:44:11
+ * @author zhouxinlei
  */
 @Data
 @NoArgsConstructor

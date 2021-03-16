@@ -41,8 +41,7 @@ import java.util.Map;
 /**
  * description: curd 接口自动生成类
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 09:48:00
+ * @author zhouxinlei
  */
 public interface CurdController<Entity, Id extends Serializable, SaveDTO, UpdateDTO, QueryDTO, ExcelEntity> extends BaseController<Entity> {
 

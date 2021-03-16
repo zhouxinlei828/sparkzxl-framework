@@ -14,12 +14,12 @@ import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.core.utils.TimeUtils;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
+import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.github.sparkzxl.jwt.service.JwtTokenService;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -35,8 +35,7 @@ import java.util.Map;
 /**
  * description: jwtToken 服务实现类
  *
- * @author: zhouxinlei
- * @date: 2020-07-14 08:03:30
+ * @author zhouxinlei
  */
 @Slf4j
 public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenService<ID> {

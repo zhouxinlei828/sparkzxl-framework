@@ -6,6 +6,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -14,8 +15,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * description: redis fastJson 序列化
  *
- * @author: zhouxinlei
- * @date: 2020-08-05 16:17:14
+ * @author zhouxinlei
  */
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 

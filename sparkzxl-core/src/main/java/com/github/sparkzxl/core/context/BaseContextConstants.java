@@ -3,8 +3,7 @@ package com.github.sparkzxl.core.context;
 /**
  * description: 常量工具类
  *
- * @author: zhouxinlei
- * @date: 2020-12-12 10:20:30
+ * @author zhouxinlei
  */
 public class BaseContextConstants {
 

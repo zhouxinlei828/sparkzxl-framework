@@ -10,8 +10,7 @@ import java.util.List;
 /**
  * description: 设计模式自动注入配置
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 15:13:16
+ * @author zhouxinlei
  */
 @Configuration
 public class PatternsAutoConfiguration {

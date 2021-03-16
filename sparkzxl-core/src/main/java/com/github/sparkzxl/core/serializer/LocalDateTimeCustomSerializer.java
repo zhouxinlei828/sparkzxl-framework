@@ -11,8 +11,7 @@ import java.time.ZoneOffset;
 /**
  * description: LocalDateTime自定义序列化
  *
- * @author: zhouxinlei
- * @date: 2020-11-06 15:54:01
+ * @author zhouxinlei
  */
 public class LocalDateTimeCustomSerializer extends JsonSerializer<LocalDateTime> {
     @Override

@@ -1,6 +1,8 @@
 package com.github.sparkzxl.core.utils;
 
-import cn.hutool.core.date.*;
+import cn.hutool.core.date.BetweenFormater;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +19,6 @@ import java.util.Optional;
  * description: DateUtils工具类
  *
  * @author zhouxinlei
- * @date 2020-05-24 12:52:19
  */
 @Slf4j
 public class DateUtils extends DateUtil {

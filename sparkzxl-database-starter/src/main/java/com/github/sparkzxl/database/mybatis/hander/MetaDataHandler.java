@@ -20,7 +20,6 @@ import java.util.Date;
  * description: mybatis-plus自动注入处理器
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:22:30
  */
 @Slf4j
 @Getter
@@ -138,13 +137,13 @@ public class MetaDataHandler implements MetaObjectHandler {
             }
         }
 
-        boolean updateUserIdExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_USER_Id);
+        boolean updateUserIdExistClass = ReflectObjectUtils.existProperty(targetObject, EntityConstant.UPDATE_USER_ID);
         if (updateUserIdExistClass) {
-            Object updateUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_Id);
+            Object updateUserIdVal = ReflectObjectUtils.getValueByKey(targetObject, EntityConstant.UPDATE_USER_ID);
             if (ObjectUtils.isEmpty(updateUserIdVal) || updateUserIdVal.equals(0)) {
-                Class<?> updateUserIdClass = metaObject.getGetterType(EntityConstant.UPDATE_USER_Id);
+                Class<?> updateUserIdClass = metaObject.getGetterType(EntityConstant.UPDATE_USER_ID);
                 updateUserIdVal = BaseContextHandler.getUserId(updateUserIdClass);
-                this.setFieldValByName(EntityConstant.UPDATE_USER_Id, updateUserIdVal, metaObject);
+                this.setFieldValByName(EntityConstant.UPDATE_USER_ID, updateUserIdVal, metaObject);
             }
         }
 

@@ -23,8 +23,7 @@ import java.util.concurrent.*;
 /**
  * description: 本地线程 Hystrix并发策略
  *
- * @author: zhouxinlei
- * @date: 2020-07-12 16:29:54
+ * @author zhouxinlei
  */
 @Slf4j
 public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
@@ -75,9 +74,8 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
     /**
      * 复制当前线程中的 requestAttributes 和 localMap， 注入到装饰器： WrappedCallable
      *
-     * @param callable
-     * @param <T>
-     * @return
+     * @param callable callable
+     * @return Callable<T>
      */
     @Override
     public <T> Callable<T> wrapCallable(Callable<T> callable) {

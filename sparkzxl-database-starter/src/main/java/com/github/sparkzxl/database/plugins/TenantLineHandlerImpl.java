@@ -10,8 +10,7 @@ import java.util.List;
 /**
  * description: 多租户处理器
  *
- * @author: zhouxinlei
- * @date: 2021-02-13 11:50:06
+ * @author zhouxinlei
  */
 public class TenantLineHandlerImpl implements TenantLineHandler {
 

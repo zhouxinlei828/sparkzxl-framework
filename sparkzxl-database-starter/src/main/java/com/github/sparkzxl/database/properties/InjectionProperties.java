@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: Injection配置类
  *
- * @author: zhouxinlei
- * @date: 2020-07-19 08:50:32
+ * @author zhouxinlei
  */
 @Data
 public class InjectionProperties {

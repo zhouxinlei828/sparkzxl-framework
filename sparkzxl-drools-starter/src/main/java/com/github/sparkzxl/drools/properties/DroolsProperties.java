@@ -6,8 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * description: drools 配置属性
  *
- * @author: zhouxinlei
- * @date: 2020-12-15 10:49:35
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "drools")

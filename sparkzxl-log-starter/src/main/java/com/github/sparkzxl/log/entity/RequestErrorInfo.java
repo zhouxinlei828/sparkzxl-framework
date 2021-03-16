@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: 异常请求信息
  *
- * @author: zhouxinlei
- * @date: 2020-10-25 23:31:27
+ * @author zhouxinlei
  */
 @Data
 public class RequestErrorInfo {

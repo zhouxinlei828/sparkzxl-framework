@@ -7,8 +7,7 @@ import javax.validation.constraints.NotEmpty;
 /**
  * description: 登录请求
  *
- * @author: zhouxinlei
- * @date: 2020-11-21 17:15:25
+ * @author zhouxinlei
  */
 @Data
 public class AuthRequest {

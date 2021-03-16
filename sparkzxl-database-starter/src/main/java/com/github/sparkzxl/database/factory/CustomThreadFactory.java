@@ -6,8 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * description: 自定义ThreadFactory
  *
- * @author: zhouxinlei
- * @date: 2020-07-28 16:24:56
+ * @author zhouxinlei
  */
 public class CustomThreadFactory implements ThreadFactory {
 

@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * description: itext api client
  *
- * @author: zhouxinlei
- * @date: 2020-12-14 17:20:32
+ * @author zhouxinlei
  */
 @Slf4j
 public class ITextClient {
@@ -186,8 +185,8 @@ public class ITextClient {
      * 整横线
      *
      * @param lineWidth 线条粗细
-     * @param left      （x坐标）
-     * @param top（y坐标）
+     * @param left      x坐标
+     * @param top       y坐标
      */
     public void addFullLine(float lineWidth, float left, float top) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
@@ -213,10 +212,10 @@ public class ITextClient {
     /**
      * 指定竖线长度
      *
-     * @param lineWidth     线条粗细
-     * @param left（x坐标）
-     * @param topStart（y坐标）
-     * @param topEnd        @
+     * @param lineWidth 线条粗细
+     * @param left      x坐标
+     * @param topStart  y坐标
+     * @param topEnd    结束坐标
      */
     public void addVerticalLine(float lineWidth, float left, float topStart, float topEnd) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
@@ -227,10 +226,10 @@ public class ITextClient {
     /**
      * 指定横线长度
      *
-     * @param lineWidth  线条粗细
-     * @param left（x坐标）
-     * @param right（y坐标）
-     * @param top        @
+     * @param lineWidth 线条粗细
+     * @param left      x坐标
+     * @param right     y坐标
+     * @param top       结束坐标
      */
     public void addLine(float lineWidth, float left, float right, float top) {
         PdfCanvas canvas = new PdfCanvas(pdfDocument.getPage(pageNum));
@@ -240,11 +239,11 @@ public class ITextClient {
     /**
      * 增加矩形线
      *
-     * @param lineWidth  线条粗细
-     * @param left（左边距）
-     * @param right（右边距）
-     * @param top（上边距）
-     * @param height（高度）
+     * @param lineWidth 线条粗细
+     * @param left      左边距
+     * @param right     右边距
+     * @param top       上边距
+     * @param height    高度
      */
     public void addRectLine(float lineWidth, float left, float right, float top, float height) {
         float topEnd = top - height;
@@ -325,8 +324,8 @@ public class ITextClient {
     /**
      * 可控文本位置填充（适合短文本）
      *
-     * @param top      上边距（y坐标）
-     * @param left     左边距（x坐标）
+     * @param top      上边距
+     * @param left     左边距
      * @param fontSize 字体大小
      * @param str      文本
      */
@@ -338,8 +337,8 @@ public class ITextClient {
     /**
      * 垂直文本添加
      *
-     * @param top      上边距（y坐标）
-     * @param left     左边距（x坐标）
+     * @param top      上边距
+     * @param left     左边距
      * @param fontSize 字体大小
      * @param str      文本
      */
@@ -356,8 +355,8 @@ public class ITextClient {
     /**
      * 添加图片
      *
-     * @param left      左边距（x坐标）
-     * @param top       上边距（y坐标）
+     * @param left      左边距
+     * @param top       上边距
      * @param width     宽度
      * @param imagePath 图片路径
      * @throws MalformedURLException 异常

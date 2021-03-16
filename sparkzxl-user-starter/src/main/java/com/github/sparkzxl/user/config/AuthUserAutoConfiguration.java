@@ -14,8 +14,7 @@ import java.util.List;
 /**
  * description: 全局用户配置类
  *
- * @author: zhouxinlei
- * @date: 2020-07-13 14:42:17
+ * @author zhouxinlei
  */
 @Configuration
 @Slf4j

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  * description：list列表转换成tree列表
  *
  * @author zhouxinlei
- * @date 2020-06-17 10:36:52
  */
 public class TreeUtils {
 

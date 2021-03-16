@@ -6,8 +6,7 @@ import org.apache.ibatis.type.Alias;
 /**
  * description: 仅仅用于like查询
  *
- * @author: zhouxinlei
- * @date: 2021-03-02 13:38:44
+ * @author zhouxinlei
  */
 @Alias("rightLike")
 public class RightLikeTypeHandler extends BaseLikeTypeHandler {

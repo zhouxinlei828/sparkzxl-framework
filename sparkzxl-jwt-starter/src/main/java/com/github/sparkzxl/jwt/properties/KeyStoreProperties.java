@@ -6,8 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * description: JWT属性类
  *
- * @author: zhouxinlei
- * @date: 2020-07-14 07:56:59
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.key-store")

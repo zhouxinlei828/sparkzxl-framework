@@ -10,7 +10,10 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.core.enums.Enumerator;
-import com.github.sparkzxl.core.serializer.*;
+import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
+import com.github.sparkzxl.core.serializer.EnumSerializer;
+import com.github.sparkzxl.core.serializer.LocalDateTimeCustomDeSerializer;
+import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -24,8 +27,7 @@ import java.util.Date;
 /**
  * description: 自定义序列化 & 反序列化 规则
  *
- * @author: zhouxinlei
- * @date: 2021-03-02 13:35:08
+ * @author zhouxinlei
 */
 public class CustomJacksonModule extends SimpleModule {
 

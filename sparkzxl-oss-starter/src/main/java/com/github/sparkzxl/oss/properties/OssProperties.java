@@ -6,8 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * description: oss属性注入
  *
- * @author: zhouxinlei
- * @date: 2020-09-12 22:25:55
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.oss")

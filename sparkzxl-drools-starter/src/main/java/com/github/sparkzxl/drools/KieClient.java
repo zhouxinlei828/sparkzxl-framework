@@ -9,8 +9,7 @@ import org.kie.api.runtime.KieSession;
 /**
  * description: kie工具类
  *
- * @author: fin-9062
- * @date: 2020-12-15 10:53:04
+ * @author fin-9062
  */
 public class KieClient {
     private static KieServices kieServices;

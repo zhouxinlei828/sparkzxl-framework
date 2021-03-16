@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * description: PageInfo静态工具类
  *
- * @author: zhouxinlei
- * @date: 2020-07-11 22:56:51
+ * @author zhouxinlei
  */
 public class PageInfoUtils {
 

@@ -8,8 +8,7 @@ import java.util.Date;
 /**
  * description: 开始结束时间通用实体类
  *
- * @author: zhouxinlei
- * @date: 2020-08-14 09:19:59
+ * @author zhouxinlei
  */
 @Data
 public class DateInfo {

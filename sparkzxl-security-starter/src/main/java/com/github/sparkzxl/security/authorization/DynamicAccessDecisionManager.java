@@ -14,8 +14,7 @@ import java.util.Collection;
 /**
  * description: 决策认证管理器
  *
- * @author: zhouxinlei
- * @date: 2020-08-03 19:27:43
+ * @author zhouxinlei
  */
 public class DynamicAccessDecisionManager implements AccessDecisionManager {
 

@@ -3,10 +3,10 @@ package com.github.sparkzxl.user.service.impl;
 import com.github.sparkzxl.cache.template.CacheTemplate;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.core.support.ResponseResultStatus;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -17,8 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 /**
  * description: 全局用户获取 服务类
  *
- * @author: zhouxinlei
- * @date: 2020-07-13 14:27:12
+ * @author zhouxinlei
  */
 @Slf4j
 public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {

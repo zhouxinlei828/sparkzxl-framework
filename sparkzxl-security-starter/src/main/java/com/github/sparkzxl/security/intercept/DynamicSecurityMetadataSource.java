@@ -1,8 +1,8 @@
 package com.github.sparkzxl.security.intercept;
 
 import cn.hutool.core.util.URLUtil;
-import com.google.common.collect.Lists;
 import com.github.sparkzxl.security.service.DynamicSecurityService;
+import com.google.common.collect.Lists;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
@@ -17,8 +17,7 @@ import java.util.Map;
 /**
  * description: 动态权限控制数据管理
  *
- * @author: zhouxinlei
- * @date: 2020-12-16 13:36:46
+ * @author zhouxinlei
  */
 public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 

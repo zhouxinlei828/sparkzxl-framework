@@ -7,8 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * description: oauth2 自动装配属性配置
  *
- * @author: zhouxinlei
- * @date: 2020-07-14 16:24:55
+ * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.oauth2.server")
@@ -55,8 +54,7 @@ public class Oauth2Properties {
     /**
      * description: 公钥和私钥来进行签名和验证
      *
-     * @author: zhouxinlei
-     * @date: 2020-07-15 19:35:38
+     * @author zhouxinlei
      */
     @Data
     public static class KeyStore {

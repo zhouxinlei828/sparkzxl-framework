@@ -8,8 +8,7 @@ import java.util.Objects;
 /**
  * description:  Conditional assertion
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 11:09:35
+ * @author zhouxinlei
  */
 public interface CA {
 

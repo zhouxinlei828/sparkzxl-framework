@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oauth.service;
 
-import com.github.sparkzxl.oauth.entity.AuthorizationRequest;
 import com.github.sparkzxl.core.entity.CaptchaInfo;
+import com.github.sparkzxl.oauth.entity.AuthorizationRequest;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
@@ -10,8 +10,7 @@ import java.security.Principal;
 /**
  * description: Oauth认证 服务类
  *
- * @author: zhouxinlei
- * @date: 2020-06-25 09:49:22
+ * @author zhouxinlei
  */
 public interface OauthService {
 

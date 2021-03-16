@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * description: 日志文件配置类
  *
- * @author: zhouxinlei
- * @date: 2020-12-09 11:39:50
+ * @author zhouxinlei
  */
 @Data
 public class FileProperties {

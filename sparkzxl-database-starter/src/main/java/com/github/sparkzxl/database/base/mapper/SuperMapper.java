@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * description: 公共mapper
  *
- * @author: zhouxinlei
- * @date: 2020-07-07 19:25:43
+ * @author zhouxinlei
  */
 public interface SuperMapper<T> extends BaseMapper<T> {
 

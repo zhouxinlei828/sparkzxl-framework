@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * description: 定制化阻塞异常
  *
- * @author: zhouxinlei
- * @date: 2020-11-27 10:11:24
+ * @author zhouxinlei
  */
 @Slf4j
 public class CustomBlockExceptionHandler implements BlockExceptionHandler {

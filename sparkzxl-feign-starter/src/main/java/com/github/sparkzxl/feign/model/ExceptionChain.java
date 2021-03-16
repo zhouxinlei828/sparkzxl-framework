@@ -8,8 +8,7 @@ import java.util.Date;
 /**
  * description: 异常链实体
  *
- * @author: zhouxinlei
- * @date: 2020-12-08 14:19:42
+ * @author zhouxinlei
  */
 @Getter
 @Setter

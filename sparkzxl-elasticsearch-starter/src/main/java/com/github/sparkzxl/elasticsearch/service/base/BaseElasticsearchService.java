@@ -27,7 +27,6 @@ import java.io.IOException;
  * description: BaseElasticsearchService
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:19:23
  */
 @Slf4j
 public abstract class BaseElasticsearchService {
@@ -51,7 +50,6 @@ public abstract class BaseElasticsearchService {
      * create elasticsearch index (asyc)
      *
      * @param index elasticsearch index
-     * @author fxbin
      */
     protected void createIndexRequest(String index) {
         try {
@@ -70,7 +68,6 @@ public abstract class BaseElasticsearchService {
      * delete elasticsearch index
      *
      * @param index elasticsearch index name
-     * @author fxbin
      */
     protected void deleteIndexRequest(String index) {
         DeleteIndexRequest deleteIndexRequest = buildDeleteIndexRequest(index);
@@ -85,7 +82,6 @@ public abstract class BaseElasticsearchService {
      * build DeleteIndexRequest
      *
      * @param index elasticsearch index name
-     * @author fxbin
      */
     private static DeleteIndexRequest buildDeleteIndexRequest(String index) {
         return new DeleteIndexRequest(index);
@@ -98,7 +94,6 @@ public abstract class BaseElasticsearchService {
      * @param id     request object id
      * @param object request object
      * @return {@link IndexRequest}
-     * @author fxbin
      */
     protected static IndexRequest buildIndexRequest(String index, String id, Object object) {
         return new IndexRequest(index).id(id).source(BeanUtil.beanToMap(object), XContentType.JSON);
@@ -110,7 +105,6 @@ public abstract class BaseElasticsearchService {
      * @param index  elasticsearch index name
      * @param id     Document id
      * @param object request object
-     * @author fxbin
      */
     protected void updateRequest(String index, String id, Object object) {
         try {
@@ -126,7 +120,6 @@ public abstract class BaseElasticsearchService {
      *
      * @param index elasticsearch index name
      * @param id    Document id
-     * @author fxbin
      */
     protected void deleteRequest(String index, String id) {
         try {
@@ -142,7 +135,6 @@ public abstract class BaseElasticsearchService {
      *
      * @param index elasticsearch index name
      * @return {@link SearchResponse}
-     * @author fxbin
      */
     protected SearchResponse search(String index) {
         SearchRequest searchRequest = new SearchRequest(index);

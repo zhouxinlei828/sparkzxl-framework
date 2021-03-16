@@ -25,7 +25,6 @@ import java.util.List;
  * description: Elasticsearch自动装载配置类
  *
  * @author zhouxinlei
- * @date 2020-05-24 13:17:10
  */
 @Configuration
 @EnableConfigurationProperties(ElasticsearchProperties.class)

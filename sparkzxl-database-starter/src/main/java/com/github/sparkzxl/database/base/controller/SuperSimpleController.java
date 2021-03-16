@@ -12,8 +12,7 @@ import java.lang.reflect.ParameterizedType;
  * 可以让业务Controller继承 SuperSimpleController 后，按需实现 *Controller 接口
  * </p>
  *
- * @author: zhouxinlei
- * @date: 2020-07-29 10:52:29
+ * @author zhouxinlei
  */
 public abstract class SuperSimpleController<S extends SuperService<Entity>, Entity> implements BaseController<Entity> {
 
