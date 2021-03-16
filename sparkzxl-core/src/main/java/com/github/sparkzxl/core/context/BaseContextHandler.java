@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BaseContextHandler {
 
-    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<ConcurrentHashMap<String, String>> THREAD_LOCAL = new ThreadLocal<>();
 
     public static void set(String key, Object value) {
         Map<String, String> map = getLocalMap();
@@ -37,8 +37,8 @@ public class BaseContextHandler {
         return map.getOrDefault(key, StrPool.EMPTY);
     }
 
-    public static Map<String, String> getLocalMap() {
-        Map<String, String> map = THREAD_LOCAL.get();
+    public static ConcurrentHashMap<String, String> getLocalMap() {
+        ConcurrentHashMap<String, String> map = THREAD_LOCAL.get();
         if (map == null) {
             map = new ConcurrentHashMap<>(10);
             THREAD_LOCAL.set(map);
@@ -46,7 +46,7 @@ public class BaseContextHandler {
         return map;
     }
 
-    public static void setLocalMap(Map<String, String> threadLocalMap) {
+    public static void setLocalMap(ConcurrentHashMap<String, String> threadLocalMap) {
         THREAD_LOCAL.set(threadLocalMap);
     }
 

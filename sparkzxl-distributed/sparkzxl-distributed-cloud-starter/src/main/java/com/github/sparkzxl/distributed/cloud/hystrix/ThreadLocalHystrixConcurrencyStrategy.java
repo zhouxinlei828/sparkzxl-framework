@@ -18,11 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * description: 本地线程 Hystrix并发策略
@@ -128,7 +124,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
 
         private final Callable<T> target;
         private final RequestAttributes requestAttributes;
-        private final Map<String, String> threadLocalMap; //研究并发是否会冲突
+        private final ConcurrentHashMap<String, String> threadLocalMap; //研究并发是否会冲突
 
         private final String xid;
 
