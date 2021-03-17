@@ -27,7 +27,7 @@ public class CustomTokenGrantService {
 
     private final TokenEndpoint tokenEndpoint;
 
-    private OAuth2RequestValidator oAuth2RequestValidator = new DefaultOAuth2RequestValidator();
+    private final OAuth2RequestValidator oAuth2RequestValidator = new DefaultOAuth2RequestValidator();
 
     public CustomTokenGrantService(TokenEndpoint tokenEndpoint) {
         this.tokenEndpoint = tokenEndpoint;
