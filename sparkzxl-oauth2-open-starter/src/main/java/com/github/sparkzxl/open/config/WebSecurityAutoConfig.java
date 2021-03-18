@@ -2,7 +2,6 @@ package com.github.sparkzxl.open.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
-import com.github.sparkzxl.open.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.open.component.RestfulAccessDeniedHandler;
 import com.github.sparkzxl.open.filter.PermitAuthenticationFilter;
 import com.github.sparkzxl.open.properties.SecurityProperties;
@@ -83,7 +82,6 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
-        RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
         List<String> ignorePatternList = securityProperties.getIgnorePatterns();
         if (CollectionUtils.isNotEmpty(ignorePatternList)) {
             http.authorizeRequests()
@@ -94,66 +92,26 @@ public class WebSecurityAutoConfig extends WebSecurityConfigurerAdapter {
         if (!securityProperties.isCsrf()) {
             http.csrf().disable();
         }
-        if (securityProperties.isCustomLogout()) {
-            http.logout().logoutUrl("/customLogout")
-                    .logoutSuccessHandler(logoutSuccessHandler)
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true);
-        }
-        if (securityProperties.isRestAuthentication()) {
-            if (securityProperties.isCustomLogin()) {
-                http.authorizeRequests()
-                        .anyRequest().authenticated()
-                        .and()
-                        .formLogin()
-                        .loginPage("/authentication/require")
-                        .loginProcessingUrl("/authentication/form")
-                        .permitAll().and()
-                        .httpBasic()
-                        .and()
-                        .exceptionHandling()
-                        .accessDeniedHandler(restfulAccessDeniedHandler)
-                        .authenticationEntryPoint(restAuthenticationEntryPoint);
-            } else {
-                http.authorizeRequests()
-                        .anyRequest().authenticated()
-                        .and()
-                        .formLogin()
-                        .permitAll().and()
-                        .httpBasic()
-                        .and()
-                        .exceptionHandling()
-                        .accessDeniedHandler(restfulAccessDeniedHandler)
-                        .authenticationEntryPoint(restAuthenticationEntryPoint);
-            }
-        } else {
-            if (securityProperties.isCustomLogin()) {
-                http.authorizeRequests()
-                        .anyRequest().authenticated()
-                        .and()
-                        .formLogin()
-                        .loginPage("/authentication/require")
-                        .loginProcessingUrl("/authentication/form")
-                        .permitAll().and()
-                        .httpBasic()
-                        .and()
-                        .exceptionHandling()
-                        .accessDeniedHandler(restfulAccessDeniedHandler);
-            } else {
-                http.authorizeRequests()
-                        .anyRequest().authenticated()
-                        .and()
-                        .formLogin()
-                        .permitAll().and()
-                        .httpBasic()
-                        .and()
-                        .exceptionHandling()
-                        .accessDeniedHandler(restfulAccessDeniedHandler);
-            }
-            if (StringUtils.isNotEmpty(securityProperties.getPreHandleFilter())) {
-                Filter bean = (Filter) applicationContext.getBean(securityProperties.getPreHandleFilter());
-                http.addFilterBefore(bean, UsernamePasswordAuthenticationFilter.class);
-            }
+        http.logout().logoutUrl("/customLogout")
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+                .and().authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/authentication/require")
+                .loginProcessingUrl("/authentication/form")
+                .permitAll().and()
+                .httpBasic()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(restfulAccessDeniedHandler);
+        if (StringUtils.isNotEmpty(securityProperties.getPreHandleFilter())) {
+            Filter bean = (Filter) applicationContext.getBean(securityProperties.getPreHandleFilter());
+            http.addFilterBefore(bean, UsernamePasswordAuthenticationFilter.class);
         }
     }
 
