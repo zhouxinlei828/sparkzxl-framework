@@ -31,7 +31,7 @@ public class AccessTokenInfo implements Serializable {
     private Date expiration;
 
     @ApiModelProperty("租户")
-    private String tenant;
+    private String realm;
 
 
 }

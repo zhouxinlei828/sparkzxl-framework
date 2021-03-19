@@ -52,5 +52,5 @@ public class JwtUserInfo<T> {
     /**
      * 租户标识
      */
-    private String tenant;
+    private String realm;
 }

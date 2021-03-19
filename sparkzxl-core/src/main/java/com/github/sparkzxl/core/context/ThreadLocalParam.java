@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public class ThreadLocalParam implements Serializable {
 
-    private String tenant;
+    private String realm;
 
     private Long userId;
 

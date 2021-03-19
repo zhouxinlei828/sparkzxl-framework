@@ -24,7 +24,7 @@ public class CustomMybatisProperties {
 
     private boolean enableTenant;
 
-    private String tenantIdColumn = "tenant_code";
+    private String tenantIdColumn = "realm_code";
 
     private String[] ignoreTable;
 

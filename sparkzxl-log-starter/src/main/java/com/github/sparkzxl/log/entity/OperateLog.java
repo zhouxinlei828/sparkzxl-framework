@@ -25,7 +25,7 @@ public class OperateLog {
      */
     private String requestIp;
 
-    private String tenantCode;
+    private String realmCode;
 
     /**
      * 日志链路追踪id日志标志

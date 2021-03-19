@@ -90,7 +90,7 @@ public class BaseContextConstants {
     /**
      * JWT中封装的 租户编码
      */
-    public static final String JWT_KEY_TENANT = "tenant";
+    public static final String JWT_KEY_REALM = "realm";
     /**
      * 刷新 Token
      */

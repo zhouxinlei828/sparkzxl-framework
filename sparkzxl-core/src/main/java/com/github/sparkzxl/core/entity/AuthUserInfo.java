@@ -54,6 +54,6 @@ public class AuthUserInfo<T> implements Serializable {
     /**
      * 租户标识
      */
-    private String tenant;
+    private String realm;
 
 }

@@ -32,10 +32,10 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
             BaseContextHandler.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
             BaseContextHandler.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
             BaseContextHandler.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
-            BaseContextHandler.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_TENANT));
+            BaseContextHandler.setRealm(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
             String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
             MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
-            MDC.put(BaseContextConstants.JWT_KEY_TENANT, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_TENANT));
+            MDC.put(BaseContextConstants.JWT_KEY_REALM, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
             MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
             String feign = request.getHeader(BaseContextConstants.REQUEST_TYPE);
             if (StringUtils.isNotEmpty(feign)) {
