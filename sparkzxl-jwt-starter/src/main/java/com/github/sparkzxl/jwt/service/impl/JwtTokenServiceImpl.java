@@ -129,6 +129,8 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         jwtUserInfo.setRealm(realm);
         List authorities = jsonObject.get("authorities", List.class);
         jwtUserInfo.setAuthorities(authorities);
+        String realmStatus = jsonObject.getStr("realmStatus", "false");
+        jwtUserInfo.setRealmStatus(Boolean.parseBoolean(realmStatus));
         return jwtUserInfo;
     }
 

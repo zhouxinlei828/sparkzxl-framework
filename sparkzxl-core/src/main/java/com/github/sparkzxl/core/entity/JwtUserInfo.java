@@ -53,4 +53,9 @@ public class JwtUserInfo<T> {
      * 租户标识
      */
     private String realm;
+
+    /**
+     * 是否领域用户
+     */
+    private boolean realmStatus;
 }
