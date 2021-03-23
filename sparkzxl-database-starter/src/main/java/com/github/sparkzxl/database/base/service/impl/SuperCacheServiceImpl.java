@@ -20,8 +20,6 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
-    private final long expireTime = 1;
-
     protected CacheTemplate cacheTemplate;
 
     @Autowired(required = false)
@@ -38,6 +36,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
 
     @Override
     public T getByIdCache(Serializable id) {
+        long expireTime = 1;
         return this.cacheTemplate.get(BuildKeyUtils.generateKey(this.getRegion(), id), (x) -> super.getById(id), expireTime, TimeUnit.DAYS);
     }
 
