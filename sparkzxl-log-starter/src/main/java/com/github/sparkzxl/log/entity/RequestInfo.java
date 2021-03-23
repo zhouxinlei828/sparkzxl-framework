@@ -30,13 +30,56 @@ public class RequestInfo {
      * 请求参数
      */
     private Object requestParams;
+
+    /**
+     * 请求来源
+     */
+    private String requestSource;
+
     /**
      * 请求结果
      */
     private Object result;
 
     /**
+     * 日志类型 1: 操作日志, 2: 请求日志, 3：异常日志
+     */
+    private Integer logType;
+    /**
+     * 错误原因
+     */
+    private String error;
+
+    /**
+     * exception中包含的信息
+     */
+    private String errorMsg;
+
+    private String throwExceptionClass;
+
+    /**
      * 请求耗时
      */
     private String timeCost;
+
+    /**
+     * 请求地点
+     */
+    private String location;
+
+    /**
+     * 浏览器名称
+     */
+    private String browser;
+
+    /**
+     * 浏览器版本
+     */
+    private String browserVersion;
+
+    /**
+     * 操作系统
+     */
+    private String operatingSystem;
+
 }

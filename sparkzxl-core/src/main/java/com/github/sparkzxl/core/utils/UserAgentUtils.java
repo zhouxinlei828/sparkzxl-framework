@@ -42,6 +42,7 @@ public class UserAgentUtils extends UserAgentUtil {
         userAgentEntity.setOperatingSystem(userAgent.getPlatform().toString()
                 .concat(" ").concat(userAgent.getOs().toString()));
         userAgentEntity.setUa(ua);
+        userAgentEntity.setMobile(userAgent.isMobile());
         return userAgentEntity;
     }
 }

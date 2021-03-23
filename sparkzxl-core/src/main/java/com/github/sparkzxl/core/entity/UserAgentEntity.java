@@ -18,7 +18,7 @@ public class UserAgentEntity {
     private String requestIp;
 
     /**
-     * 登录地点
+     * 请求地点
      */
     private String location;
 
@@ -36,5 +36,10 @@ public class UserAgentEntity {
      * 操作系统
      */
     private String operatingSystem;
+
+    /**
+     * 是否是手机
+     */
+    private boolean mobile;
 
 }

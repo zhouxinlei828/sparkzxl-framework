@@ -1,9 +1,10 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import com.github.sparkzxl.core.entity.UserAgentEntity;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.log.entity.RequestErrorInfo;
+import com.github.sparkzxl.core.utils.UserAgentUtils;
 import com.github.sparkzxl.log.entity.RequestInfo;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
@@ -54,20 +55,41 @@ public class WebLogAspect {
         stopwatch.start();
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         Object result = proceedingJoinPoint.proceed();
-        RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setIp(RequestContextHolderUtils.getIpAddress());
-        requestInfo.setUrl(httpServletRequest.getRequestURL().toString());
-        requestInfo.setHttpMethod(httpServletRequest.getMethod());
-        requestInfo.setClassMethod(String.format("%s.%s", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
-                proceedingJoinPoint.getSignature().getName()));
-        requestInfo.setRequestParams(getRequestParameterJson(proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs()));
+        RequestInfo requestInfo = buildRequestInfo(httpServletRequest, proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs());
         requestInfo.setResult(result);
+        requestInfo.setLogType(2);
         String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
         requestInfo.setTimeCost(timeCost);
         String jsonStr = JsonUtil.toJson(requestInfo);
         log.info("Request Info : {}", jsonStr);
         get().stop();
         return result;
+    }
+
+    /**
+     * 构建请求日志
+     *
+     * @param httpServletRequest httpServletRequest
+     * @param signature          signature
+     * @param args               参数
+     * @return RequestInfo
+     */
+    private RequestInfo buildRequestInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
+        RequestInfo requestInfo = new RequestInfo();
+        UserAgentEntity userAgentEntity = UserAgentUtils.getUserAgentEntity();
+        String operatingSystem = userAgentEntity.getOperatingSystem();
+        requestInfo.setIp(userAgentEntity.getRequestIp());
+        requestInfo.setLocation(userAgentEntity.getLocation());
+        requestInfo.setBrowser(userAgentEntity.getBrowser());
+        requestInfo.setBrowserVersion(userAgentEntity.getBrowserVersion());
+        requestInfo.setRequestSource(userAgentEntity.isMobile() ? "Mobile" : "PC");
+        requestInfo.setOperatingSystem(operatingSystem);
+        requestInfo.setUrl(httpServletRequest.getRequestURL().toString());
+        requestInfo.setHttpMethod(httpServletRequest.getMethod());
+        requestInfo.setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
+                signature.getName()));
+        requestInfo.setRequestParams(getRequestParameterJson(signature, args));
+        return requestInfo;
     }
 
     /**
@@ -84,18 +106,13 @@ public class WebLogAspect {
     @AfterThrowing(pointcut = "pointCut()", throwing = "e")
     public void doAfterThrow(JoinPoint joinPoint, RuntimeException e) {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        RequestErrorInfo requestErrorInfo = new RequestErrorInfo();
-        requestErrorInfo.setIp(RequestContextHolderUtils.getIpAddress());
-        requestErrorInfo.setUrl(httpServletRequest.getRequestURL().toString());
-        requestErrorInfo.setHttpMethod(httpServletRequest.getMethod());
-        requestErrorInfo.setClassMethod(String.format("%s.%s", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName()));
-        requestErrorInfo.setRequestParams(getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs()));
-        requestErrorInfo.setErrorMsg(e.getMessage());
+        RequestInfo requestInfo = buildRequestInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
+        requestInfo.setLogType(3);
+        requestInfo.setErrorMsg(e.getMessage());
         String error = ExceptionUtil.getMessage(e);
-        requestErrorInfo.setError(error);
-        requestErrorInfo.setThrowExceptionClass(e.getClass().getTypeName());
-        String jsonStr = JsonUtil.toJson(requestErrorInfo);
+        requestInfo.setError(error);
+        requestInfo.setThrowExceptionClass(e.getClass().getTypeName());
+        String jsonStr = JsonUtil.toJson(requestInfo);
         log.info("Error Request Info : {}", jsonStr);
         remove();
     }
