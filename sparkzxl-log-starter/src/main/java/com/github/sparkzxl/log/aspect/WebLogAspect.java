@@ -61,7 +61,7 @@ public class WebLogAspect {
         String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
         requestInfo.setTimeCost(timeCost);
         String jsonStr = JsonUtil.toJson(requestInfo);
-        log.info("Request Info : {}", jsonStr);
+        log.info("Request Info : [{}]", jsonStr);
         get().stop();
         return result;
     }
@@ -113,7 +113,7 @@ public class WebLogAspect {
         requestInfo.setError(error);
         requestInfo.setThrowExceptionClass(e.getClass().getTypeName());
         String jsonStr = JsonUtil.toJson(requestInfo);
-        log.info("Error Request Info : {}", jsonStr);
+        log.info("Error Request Info : [{}]", jsonStr);
         remove();
     }
 

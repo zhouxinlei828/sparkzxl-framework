@@ -62,7 +62,7 @@ public class AddressUtil {
                 log.error("DbSearcher is null");
             }
         } catch (Exception e) {
-            log.error("error:{}", e.getMessage());
+            log.error("error:[{}]", e.getMessage());
         }
         return "";
     }
@@ -83,14 +83,8 @@ public class AddressUtil {
             }
             config = new DbConfig();
             searcher = new DbSearcher(config, dbPath);
-        } catch (Exception var5) {
-            log.warn("init ip region error:{}", var5.getMessage());
+        } catch (Exception ignored) {
         }
 
-    }
-
-    public static void main(String[] args) {
-        String location = AddressUtil.getRegion("47.116.52.58");
-        System.out.println(location);
     }
 }

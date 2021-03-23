@@ -54,7 +54,7 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
             registry.registerBeanDefinition(Objects.requireNonNull(handler.getBeanClassName()), handler);
             boolean infoEnabled = log.isInfoEnabled();
             if (infoEnabled) {
-                log.info("'{}' and '{}' has been successfully registered", handler.getBeanClassName(), decoder.getBeanClassName());
+                log.info("[{}] and [{}] has been successfully registered", handler.getBeanClassName(), decoder.getBeanClassName());
             }
         }
     }

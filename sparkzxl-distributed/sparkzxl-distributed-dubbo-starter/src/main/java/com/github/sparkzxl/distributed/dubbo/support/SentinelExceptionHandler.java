@@ -40,34 +40,34 @@ public class SentinelExceptionHandler {
     @ExceptionHandler(value = FlowException.class)
     public ApiResult blockExceptionHandler(FlowException flowException) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：{}, message：{}", flowException.getClass().getSimpleName(), flowException.getMessage());
+        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", flowException.getClass().getSimpleName(), flowException.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.REQ_LIMIT, flowException.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
     public ApiResult blockExceptionHandler(AuthorityException authorityException) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：{}, message：{}", authorityException.getClass().getSimpleName(), authorityException.getMessage());
+        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", authorityException.getClass().getSimpleName(), authorityException.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.REQ_BLACKLIST, authorityException.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
     public ApiResult blockExceptionHandler(SystemBlockException systemBlockException) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：{}, message：{}", systemBlockException.getClass().getSimpleName(), systemBlockException.getMessage());
+        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", systemBlockException.getClass().getSimpleName(), systemBlockException.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.SYSTEM_BLOCK, systemBlockException.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
     public ApiResult blockExceptionHandler(ParamFlowException paramFlowException) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：{}, message：{}", paramFlowException.getClass().getSimpleName(), paramFlowException.getMessage());
+        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", paramFlowException.getClass().getSimpleName(), paramFlowException.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.PARAM_FLOW, paramFlowException.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
     public ApiResult blockExceptionHandler(DegradeException degradeException) {
-        log.error("请求被拦截，拦截类型为：{}, message：{}", degradeException.getClass().getSimpleName(), degradeException.getMessage());
+        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", degradeException.getClass().getSimpleName(), degradeException.getMessage());
         return ApiResult.apiResult(ResponseResultStatus.SERVICE_DEGRADATION);
     }
 }

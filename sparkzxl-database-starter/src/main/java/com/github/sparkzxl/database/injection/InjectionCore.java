@@ -126,7 +126,7 @@ public class InjectionCore {
             parse(obj, typeMap, 1);
             long parseEnd = System.currentTimeMillis();
 
-            log.info("解析耗时={} ms", (parseEnd - parseStart));
+            log.info("解析耗时: [{}] ms", (parseEnd - parseStart));
             if (typeMap.isEmpty()) {
                 return;
             }
@@ -147,15 +147,15 @@ public class InjectionCore {
             }
 
             long injectionStart = System.currentTimeMillis();
-            log.info("批量查询耗时={} ms", (injectionStart - parseEnd));
+            log.info("批量查询耗时: [{}] ms", (injectionStart - parseEnd));
 
             // 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
             injection(obj, typeMap, 1);
             long injectionEnd = System.currentTimeMillis();
 
-            log.info("注入耗时={} ms", (injectionEnd - injectionStart));
+            log.info("注入耗时: [{}] ms", (injectionEnd - injectionStart));
         } catch (Exception e) {
-            log.warn("注入失败", e);
+            log.error("注入失败: Exception [{}]", e.getMessage());
         }
     }
 
@@ -198,7 +198,7 @@ public class InjectionCore {
             return;
         }
         if (depth > injectionProperties.getMaxDepth()) {
-            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", injectionProperties.getMaxDepth(), depth);
+            log.info("出现循环依赖，最多执行 [{}] 次， 已执行 [{}] 次，已为您跳出循环", injectionProperties.getMaxDepth(), depth);
             return;
         }
         if (typeMap == null) {
@@ -260,7 +260,7 @@ public class InjectionCore {
             return;
         }
         if (depth > injectionProperties.getMaxDepth()) {
-            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", injectionProperties.getMaxDepth(), depth);
+            log.info("出现循环依赖，最多执行 [{}] 次， 已执行 [{}] 次，已为您跳出循环", injectionProperties.getMaxDepth(), depth);
             return;
         }
         if (typeMap == null || typeMap.isEmpty()) {
@@ -357,7 +357,7 @@ public class InjectionCore {
         Class<?> feign = anno.apiClass();
 
         if (StrUtil.isEmpty(api) && Object.class.equals(feign)) {
-            log.warn("忽略注入字段: {}.{}", field.getType(), field.getName());
+            log.warn("忽略注入字段: [{}.{}]", field.getType(), field.getName());
             return null;
         }
 

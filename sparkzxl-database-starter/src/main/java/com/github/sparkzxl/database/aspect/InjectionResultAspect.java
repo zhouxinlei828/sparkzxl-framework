@@ -33,7 +33,7 @@ public class InjectionResultAspect {
         try {
             injectionCore.injection(proceed, injectionResult.isUseCache());
         } catch (Exception e) {
-            log.error("AOP拦截@RemoteResult出错", e);
+            log.error("AOP拦截@InjectionResult出错：[{}]", e.getMessage());
         }
         return proceed;
     }

@@ -39,12 +39,11 @@ public class DroolsRuleServiceImpl implements DroolsRuleService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            log.info("reload新规则重载失败：message：{}", ExceptionUtil.getMessage(e));
+            log.info("reload新规则重载失败：message：[{}]", ExceptionUtil.getMessage(e));
             return false;
         }
         reloadRules(kieServices, kfs);
         log.info("reload新规则重载成功");
-        System.out.println("reload新规则重载成功");
         return true;
     }
 

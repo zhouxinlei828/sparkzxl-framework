@@ -46,11 +46,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
             } catch (Exception e) {
                 e.printStackTrace();
-                log.error("校验token发生异常：{}", ExceptionUtil.getMessage(e));
+                log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
                 SparkZxlExceptionAssert.businessFail(ResponseResultStatus.JWT_EXPIRED_ERROR);
             }
             String username = jwtUserInfo.getUsername();
-            log.info("checking username:{}", username);
+            log.info("checking username:[{}]", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 AuthUserDetail adminUserDetails = new AuthUserDetail(
                         jwtUserInfo.getId(),
@@ -63,7 +63,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
                         null, adminUserDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                log.info("authenticated user:{}", username);
+                log.info("authenticated user:[{}]", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

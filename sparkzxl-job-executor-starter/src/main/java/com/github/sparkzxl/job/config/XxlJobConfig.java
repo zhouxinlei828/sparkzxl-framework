@@ -20,7 +20,7 @@ public class XxlJobConfig {
 
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor(XxlJobProperties xxlJobProperties) {
-        log.info(">>>>>>>>>>> xxl-job config init XxlJobProperties：{}", JSONUtil.toJsonPrettyStr(xxlJobProperties));
+        log.info("xxl-job config init XxlJobProperties：[{}]", JSONUtil.toJsonPrettyStr(xxlJobProperties));
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(xxlJobProperties.getAdminAddresses());
         xxlJobSpringExecutor.setAppname(xxlJobProperties.getAppName());

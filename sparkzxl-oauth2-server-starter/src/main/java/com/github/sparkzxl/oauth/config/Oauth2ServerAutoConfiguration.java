@@ -127,7 +127,7 @@ public class Oauth2ServerAutoConfiguration extends AuthorizationServerConfigurer
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        log.info("OAuth2Properties：{}", JSONUtil.toJsonPrettyStr(oAuth2Properties));
+        log.info("OAuth2Properties：[{}]", JSONUtil.toJsonPrettyStr(oAuth2Properties));
         clients.withClientDetails(clientDetailsService());
     }
 

@@ -29,17 +29,17 @@ public class DroolsRuleExecutor {
 
             @Override
             public void objectUpdated(ObjectUpdatedEvent event) {
-                log.info("Object--objectUpdated {}", event.getObject().toString());
+                log.info("Object--objectUpdated：[{}]", event.getObject().toString());
             }
 
             @Override
             public void objectInserted(ObjectInsertedEvent event) {
-                log.info("Object--objectInserted {}", event.getObject().toString());
+                log.info("Object--objectInserted：[{}]", event.getObject().toString());
             }
 
             @Override
             public void objectDeleted(ObjectDeletedEvent event) {
-                log.info("Object--objectDeleted {}", event.getOldObject().toString());
+                log.info("Object--objectDeleted：[{}]", event.getOldObject().toString());
             }
         });
         if (CollectionUtils.isNotEmpty(tList)) {
@@ -54,10 +54,10 @@ public class DroolsRuleExecutor {
                 newInstance = row.get("$".concat(resultVariable));
             }
             kieSession.dispose();
-            log.info("命中了 {} 条drools规则", ruleFiredCount);
+            log.info("命中了 [{}] 条drools规则", ruleFiredCount);
             return newInstance;
         } catch (Exception exception) {
-            log.error("drools查询结果发生异常 massage：{}", ExceptionUtil.getMessage(exception));
+            log.error("drools查询结果发生异常 massage：[{}]", ExceptionUtil.getMessage(exception));
             return null;
         }
 

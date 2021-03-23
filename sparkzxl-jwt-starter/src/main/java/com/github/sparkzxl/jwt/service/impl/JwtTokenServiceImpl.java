@@ -79,7 +79,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         }).onFailure(throwable -> {
-            log.error("根据RSA算法生成token发生异常：{}", ExceptionUtil.getSimpleMessage(throwable));
+            log.error("根据RSA算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
             SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
         }).getOrElse("");
     }
@@ -150,7 +150,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         }).onFailure(throwable -> {
-            log.error("根据HMAC算法生成token发生异常：{}", ExceptionUtil.getSimpleMessage(throwable));
+            log.error("根据HMAC算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
             SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
 
         }).getOrElse("");

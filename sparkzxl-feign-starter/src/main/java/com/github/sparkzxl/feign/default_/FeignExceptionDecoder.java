@@ -27,7 +27,7 @@ public class FeignExceptionDecoder implements ErrorDecoder {
             ExceptionInfo exceptionInfo = JsonUtil.parse(body, ExceptionInfo.class);
             return new RemoteCallException(exceptionInfo.getMessage(), exceptionInfo.getExceptionChain());
         } catch (Exception e) {
-            log.error("{} has an unknown exception.", methodKey, e);
+            log.error("[{}] has an unknown exception.", methodKey, e);
             return new RemoteCallException("unKnowException", e);
         }
 

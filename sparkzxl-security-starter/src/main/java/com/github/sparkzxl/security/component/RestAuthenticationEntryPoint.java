@@ -21,7 +21,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException e) {
-        log.error("AuthenticationException：{}", e.getMessage());
+        log.error("AuthenticationException：[{}]", e.getMessage());
         int code = ResponseResultStatus.UN_AUTHORIZED.getCode();
         String message = ResponseResultStatus.UN_AUTHORIZED.getMessage();
         if (e instanceof AccountExpiredException) {

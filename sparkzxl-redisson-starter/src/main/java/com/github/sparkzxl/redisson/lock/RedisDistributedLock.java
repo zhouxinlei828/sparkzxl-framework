@@ -36,7 +36,7 @@ public class RedisDistributedLock extends AbstractDistributedLock {
         boolean result = false;
         try {
             boolean unlock = lock(key, waitTime, leaseTime);
-            log.info("======> " + Thread.currentThread() + "尝试{}获取锁{} -> {}", tryCount, key, unlock);
+            log.info("线程" + Thread.currentThread().getId() + "尝试[{}]获取锁[{}] -> [{}]", tryCount, key, unlock);
             if (unlock) {
                 result = true;
             } else {
@@ -51,7 +51,7 @@ public class RedisDistributedLock extends AbstractDistributedLock {
                 }
             }
         } catch (InterruptedException e) {
-            log.error("RedisLock 获取分布式锁异常 -> {}", e.getMessage());
+            log.error("RedisLock 获取分布式锁异常 -> [{}]", e.getMessage());
             Thread.currentThread().interrupt();
         }
         return result;

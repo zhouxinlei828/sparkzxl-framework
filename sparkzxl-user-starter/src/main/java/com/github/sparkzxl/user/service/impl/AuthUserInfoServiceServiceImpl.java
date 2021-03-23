@@ -29,7 +29,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
-        log.info("accessToken is {}", accessToken);
+        log.info("accessToken : [{}]", accessToken);
         AuthUserInfo authUserInfo = null;
         if (ObjectUtils.isNotEmpty(cacheTemplate)) {
             authUserInfo = cacheTemplate.get(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));

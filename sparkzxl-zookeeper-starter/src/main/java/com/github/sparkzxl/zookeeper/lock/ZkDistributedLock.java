@@ -38,10 +38,10 @@ public class ZkDistributedLock implements InitializingBean, DistributedLock {
                         .withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
                         .withACL(ZooDefs.Ids.OPEN_ACL_UNSAFE)
                         .forPath(keyPath);
-                log.info("success to acquire lock for path:{}", keyPath);
+                log.info("success to acquire lock for path:[{}]", keyPath);
                 return true;
             } catch (Exception e) {
-                log.info("failed to acquire lock for path:{}", keyPath);
+                log.info("failed to acquire lock for path:[{}]", keyPath);
                 log.info("while try again .......");
                 try {
                     if (countDownLatch.getCount() <= 0) {
@@ -64,7 +64,7 @@ public class ZkDistributedLock implements InitializingBean, DistributedLock {
                 curatorFramework.delete().forPath(keyPath);
             }
         } catch (Exception e) {
-            log.error("failed to release lock");
+            log.error("failed to release lock: [{}]",e.getMessage());
             return false;
         }
         return true;
@@ -85,7 +85,7 @@ public class ZkDistributedLock implements InitializingBean, DistributedLock {
         cache.getListenable().addListener((client, event) -> {
             if (event.getType().equals(PathChildrenCacheEvent.Type.CHILD_REMOVED)) {
                 String oldPath = event.getData().getPath();
-                log.info("success to release lock for path:{}", oldPath);
+                log.info("success to release lock for path:[{}]", oldPath);
                 if (oldPath.contains(path)) {
                     //释放计数器，让当前的请求获取锁
                     countDownLatch.countDown();
@@ -112,7 +112,7 @@ public class ZkDistributedLock implements InitializingBean, DistributedLock {
             addWatcher(ROOT_PATH_LOCK);
             log.info("root path 的 watcher 事件创建成功");
         } catch (Exception e) {
-            log.error("connect zookeeper fail，please check the log >> {}", e.getMessage(), e);
+            log.error("connect zookeeper fail，please check the log >> [{}]", e.getMessage(), e);
         }
     }
 }

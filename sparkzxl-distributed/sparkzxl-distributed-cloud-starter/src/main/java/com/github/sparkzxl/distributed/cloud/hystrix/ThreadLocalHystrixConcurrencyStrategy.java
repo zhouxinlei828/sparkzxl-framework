@@ -55,7 +55,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
             HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
         } catch (Exception e) {
-            log.error("Failed to register Sleuth Hystrix Concurrency Strategy", e);
+            log.error("Failed to register Sleuth Hystrix Concurrency Strategy：[{}]", e.getMessage());
         }
     }
 

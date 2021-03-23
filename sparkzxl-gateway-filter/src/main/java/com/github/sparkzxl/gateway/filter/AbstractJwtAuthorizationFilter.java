@@ -43,7 +43,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         ServerHttpResponse response = exchange.getResponse();
         ServerHttpRequest.Builder mutate = request.mutate();
         String requestUrl = request.getPath().toString();
-        log.info("请求路径：{}", requestUrl);
+        log.info("请求路径：[{}]", requestUrl);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
         if (StringHandlerUtils.isIgnore(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
@@ -76,7 +76,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
             } catch (BaseException e) {
-                log.error("jwt 获取用户发生异常：{}", ExceptionUtil.getMessage(e));
+                log.error("jwt 获取用户发生异常：[{}]", ExceptionUtil.getMessage(e));
                 return errorResponse(response, e.getCode(), e.getMessage());
             }
         }
