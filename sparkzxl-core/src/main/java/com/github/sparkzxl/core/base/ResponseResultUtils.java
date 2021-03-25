@@ -64,7 +64,7 @@ public class ResponseResultUtils {
 
     public static void forbidden(HttpServletResponse response, String msg) {
         try {
-            int code = ResponseResultStatus.REQ_REJECT.getCode();
+            int code = ResponseResultStatus.AUTHORIZED_DENIED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(ResponseResultStatus.AUTHORIZED_DENIED.getCode());
