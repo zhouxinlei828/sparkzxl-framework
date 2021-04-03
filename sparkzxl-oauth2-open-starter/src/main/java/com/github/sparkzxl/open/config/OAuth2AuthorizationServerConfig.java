@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +30,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
 import java.security.KeyPair;
@@ -85,8 +87,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         jwtAccessTokenConverter.setSigningKey("sparkzxl");
         if (ObjectUtils.isNotEmpty(keyStoreProperties) && keyStoreProperties.isEnable()) {
-            KeyPair keyPair = HuSecretUtils.keyPair(keyStoreProperties.getPath(),
-                    keyStoreProperties.getAlias(), keyStoreProperties.getPassword());
+            KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(keyStoreProperties.getPath()),
+                    keyStoreProperties.getPassword().toCharArray());
+            KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", keyStoreProperties.getPassword().toCharArray());
             Optional.ofNullable(keyPair).ifPresent(jwtAccessTokenConverter::setKeyPair);
         }
         return jwtAccessTokenConverter;

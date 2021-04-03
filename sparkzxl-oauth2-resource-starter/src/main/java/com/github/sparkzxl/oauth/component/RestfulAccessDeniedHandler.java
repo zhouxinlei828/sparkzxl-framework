@@ -2,7 +2,7 @@ package com.github.sparkzxl.oauth.component;
 
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +30,7 @@ public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.FORBIDDEN);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body = JSONUtil.toJsonStr(ApiResult.apiResult(ResponseResultStatus.AUTHORIZED_DENIED));
+        String body = JSONUtil.toJsonStr(ApiResult.apiResult(ApiResponseStatus.AUTHORIZED_DENIED));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

@@ -30,7 +30,7 @@ public class CuratorConfig {
     }
 
     @Bean
-    public ZkDistributedLock distributedZkLock(CuratorFramework curatorFramework) {
+    public ZkDistributedLock zkDistributedLock(CuratorFramework curatorFramework) {
         return new ZkDistributedLock(curatorFramework);
     }
 }

@@ -7,11 +7,6 @@ package com.github.sparkzxl.core.context;
  */
 public class BaseContextConstants {
 
-    /**
-     * 空格
-     */
-    public static final String BLANK_SPACE = "　";
-
     public static final String REQUEST_TYPE = "feign_request";
 
     public static final String FALLBACK = "fallback";
@@ -31,11 +26,6 @@ public class BaseContextConstants {
     public static final String BEARER_TOKEN = "Bearer ";
 
     public static final String BASIC_AUTH = "Basic";
-
-    /**
-     * JWT存储的请求头
-     */
-    public static final String KEYCLOAK_KEY = "keycloak";
 
     /**
      * 登录账户 前缀
@@ -73,10 +63,6 @@ public class BaseContextConstants {
      * JWT中封装的 用户名称
      */
     public static final String JWT_KEY_NAME = "name";
-    /**
-     * JWT中封装的 token 类型
-     */
-    public static final String JWT_KEY_TOKEN_TYPE = "token_type";
     /**
      * JWT中封装的 用户账号
      */

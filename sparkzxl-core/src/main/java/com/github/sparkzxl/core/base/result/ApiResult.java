@@ -1,6 +1,5 @@
 package com.github.sparkzxl.core.base.result;
 
-import com.github.sparkzxl.core.support.ResponseResultStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -65,7 +64,7 @@ public class ApiResult<T> implements Serializable {
      * @param resultStatus API操作码
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(ResponseResultStatus resultStatus) {
+    public static <T> ApiResult apiResult(ApiResponseStatus resultStatus) {
         return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).build();
     }
 
@@ -76,7 +75,7 @@ public class ApiResult<T> implements Serializable {
      * @param data         数据
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(ResponseResultStatus resultStatus, T data) {
+    public static <T> ApiResult apiResult(ApiResponseStatus resultStatus, T data) {
         return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).data(data).build();
     }
 
@@ -86,7 +85,7 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult
      */
     public static <T> ApiResult timeOut() {
-        return ApiResult.apiResult(ResponseResultStatus.SERVICE_DEGRADATION);
+        return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
 
     public static class ApiResultBuilder<T> {
@@ -115,7 +114,7 @@ public class ApiResult<T> implements Serializable {
         }
 
         public ApiResult<T> build() {
-            return new ApiResult<>(this.code, this.code == ResponseResultStatus.SUCCESS.getCode(), this.msg, this.data);
+            return new ApiResult<>(this.code, this.code == ApiResponseStatus.SUCCESS.getCode(), this.msg, this.data);
         }
     }
 }

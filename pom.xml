@@ -112,7 +112,6 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-word-starter</module>
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-oauth2-open-starter</module>
     </modules>

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.distributed.dubbo.filter;
 
 import com.github.sparkzxl.core.support.BusinessException;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.extension.Activate;
@@ -65,7 +65,7 @@ public class DubboExceptionFilter extends ListenableFilter {
                 detailMessage.append(constraintViolation.getMessage());
             }
             // 返回异常
-            return new BusinessException(ResponseResultStatus.PARAM_VALID_ERROR, null, detailMessage.toString());
+            return new BusinessException(ApiResponseStatus.PARAM_VALID_ERROR, null, detailMessage.toString());
         }
 
     }

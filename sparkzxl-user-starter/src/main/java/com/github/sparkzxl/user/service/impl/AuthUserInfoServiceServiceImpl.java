@@ -4,7 +4,7 @@ import com.github.sparkzxl.cache.template.CacheTemplate;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
@@ -38,7 +38,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             String userId = BaseContextHandler.getUserId(String.class);
             authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
-                SparkZxlExceptionAssert.businessFail(ResponseResultStatus.JWT_EXPIRED_ERROR);
+                SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
             }
         }
         return authUserInfo;

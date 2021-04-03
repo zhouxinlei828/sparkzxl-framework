@@ -2,7 +2,7 @@ package com.github.sparkzxl.oauth.component;
 
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -31,11 +31,11 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        int code = ResponseResultStatus.UN_AUTHORIZED.getCode();
-        String message = ResponseResultStatus.UN_AUTHORIZED.getMessage();
+        int code = ApiResponseStatus.UN_AUTHORIZED.getCode();
+        String message = ApiResponseStatus.UN_AUTHORIZED.getMessage();
         if (e instanceof InvalidBearerTokenException) {
-            code = ResponseResultStatus.JWT_EXPIRED_ERROR.getCode();
-            message = ResponseResultStatus.JWT_EXPIRED_ERROR.getMessage();
+            code = ApiResponseStatus.JWT_EXPIRED_ERROR.getCode();
+            message = ApiResponseStatus.JWT_EXPIRED_ERROR.getMessage();
         }
         String body = JSONUtil.toJsonStr(ApiResult.apiResult(code,message));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));

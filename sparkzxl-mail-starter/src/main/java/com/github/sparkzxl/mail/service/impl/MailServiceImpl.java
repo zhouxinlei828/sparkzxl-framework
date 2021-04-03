@@ -1,6 +1,5 @@
 package com.github.sparkzxl.mail.service.impl;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.mail.service.MailService;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.core.io.FileSystemResource;
@@ -11,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.lang.reflect.Array;
 
 /**
  * description: 邮件 服务实现类
@@ -35,7 +35,7 @@ public class MailServiceImpl implements MailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(content);
-        if (ArrayUtil.isNotEmpty(cc)) {
+        if (Array.getLength(cc) != 0) {
             message.setCc(cc);
         }
         mailSender.send(message);
@@ -49,7 +49,7 @@ public class MailServiceImpl implements MailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(content, true);
-        if (ArrayUtil.isNotEmpty(cc)) {
+        if (Array.getLength(cc) != 0) {
             helper.setCc(cc);
         }
         mailSender.send(message);
@@ -63,7 +63,7 @@ public class MailServiceImpl implements MailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(content, true);
-        if (ArrayUtil.isNotEmpty(cc)) {
+        if (Array.getLength(cc) != 0) {
             helper.setCc(cc);
         }
         FileSystemResource file = new FileSystemResource(new File(filePath));
@@ -80,7 +80,7 @@ public class MailServiceImpl implements MailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(content, true);
-        if (ArrayUtil.isNotEmpty(cc)) {
+        if (Array.getLength(cc) != 0) {
             helper.setCc(cc);
         }
         FileSystemResource res = new FileSystemResource(new File(rscPath));

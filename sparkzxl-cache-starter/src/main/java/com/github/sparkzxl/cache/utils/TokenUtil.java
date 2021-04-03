@@ -21,7 +21,6 @@ public class TokenUtil {
 
     public String getToken() {
         String token = "token".concat(IdUtil.simpleUUID());
-        long expire = 60 * 60;
         cacheTemplate.set(token, token, 15L, TimeUnit.MINUTES);
         return token;
     }

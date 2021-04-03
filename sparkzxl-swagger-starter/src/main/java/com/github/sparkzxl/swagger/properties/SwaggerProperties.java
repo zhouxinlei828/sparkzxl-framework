@@ -18,6 +18,8 @@ import java.util.List;
 )
 public class SwaggerProperties {
 
+    private Boolean enable = true;
+
     private String groupName;
 
     private String basePackage;

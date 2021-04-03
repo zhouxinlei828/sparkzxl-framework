@@ -1,10 +1,10 @@
-package com.github.sparkzxl.core.base;
+package com.github.sparkzxl.core.utils;
 
 
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
@@ -51,7 +51,7 @@ public class ResponseResultUtils {
 
     public static void unauthorized(HttpServletResponse response, String msg) {
         try {
-            int code = ResponseResultStatus.UN_AUTHORIZED.getCode();
+            int code = ApiResponseStatus.UN_AUTHORIZED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(code);
@@ -64,10 +64,10 @@ public class ResponseResultUtils {
 
     public static void forbidden(HttpServletResponse response, String msg) {
         try {
-            int code = ResponseResultStatus.AUTHORIZED_DENIED.getCode();
+            int code = ApiResponseStatus.AUTHORIZED_DENIED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(ResponseResultStatus.AUTHORIZED_DENIED.getCode());
+            response.setStatus(ApiResponseStatus.AUTHORIZED_DENIED.getCode());
             response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {

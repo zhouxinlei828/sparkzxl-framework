@@ -23,6 +23,8 @@ import com.nimbusds.jose.jwk.RSAKey;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.io.Serializable;
 import java.security.KeyPair;
@@ -179,7 +181,9 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         if (ObjectUtils.isNotEmpty(keyPair)) {
             return keyPair;
         }
-        keyPair = HuSecretUtils.keyPair(KeyStoreProperties.getPath(), "jwt", KeyStoreProperties.getPassword());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(KeyStoreProperties.getPath()),
+                KeyStoreProperties.getPassword().toCharArray());
+        keyPair = keyStoreKeyFactory.getKeyPair("jwt", KeyStoreProperties.getPassword().toCharArray());
         keyPairMap.put("keyPair", keyPair);
         return keyPair;
     }

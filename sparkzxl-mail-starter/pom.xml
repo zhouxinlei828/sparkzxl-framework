@@ -12,17 +12,11 @@
     <artifactId>sparkzxl-mail-starter</artifactId>
 
     <dependencies>
-
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-core</artifactId>
-        </dependency>
         <!-- Spring Boot 邮件依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-
         <!--jasypt配置文件加解密-->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>

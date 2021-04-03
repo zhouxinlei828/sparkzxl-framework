@@ -95,5 +95,5 @@ public interface StrPool {
      */
     Long DEF_PARENT_ID = 0L;
 
-    String UNKNOW = "unknown";
+    String UNKNOWN = "unknown";
 }

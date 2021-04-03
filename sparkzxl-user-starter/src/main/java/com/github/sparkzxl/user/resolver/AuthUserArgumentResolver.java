@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.resolver;
 
-import com.github.sparkzxl.core.base.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
 import org.springframework.core.MethodParameter;

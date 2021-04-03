@@ -1,4 +1,6 @@
-package com.github.sparkzxl.core.support;
+package com.github.sparkzxl.core.assert_;
+
+import com.github.sparkzxl.core.support.BaseException;
 
 /**
  * 断言异常处理接口

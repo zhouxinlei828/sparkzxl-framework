@@ -4,6 +4,7 @@ import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.google.common.collect.Lists;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ import java.util.Objects;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerAutoConfiguration {
 
+    @ConditionalOnProperty(name = {"knife4j.enable"}, havingValue = "true")
     @Bean(value = "defaultApi2")
     public Docket defaultApi2(SwaggerProperties swaggerProperties) {
         return new Docket(DocumentationType.SWAGGER_2)

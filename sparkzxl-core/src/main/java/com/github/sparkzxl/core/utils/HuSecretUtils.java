@@ -9,11 +9,8 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.crypto.symmetric.DES;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.nio.charset.Charset;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -86,12 +83,6 @@ public class HuSecretUtils {
 
     public static PublicKey getPublicKey() {
         return rsa.getPublicKey();
-    }
-
-    public static KeyPair keyPair(String path, String alias, String password) {
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(path),
-                password.toCharArray());
-        return keyStoreKeyFactory.getKeyPair(alias, password.toCharArray());
     }
 
 }

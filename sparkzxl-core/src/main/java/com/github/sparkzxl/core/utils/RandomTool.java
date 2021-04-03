@@ -1,7 +1,5 @@
 package com.github.sparkzxl.core.utils;
 
-import cn.hutool.core.util.URLUtil;
-
 import java.util.Random;
 
 /**
@@ -24,7 +22,7 @@ public class RandomTool {
     public static String randomStr(int length) {
         String sources = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random rand = new Random();
-        StringBuffer flag = new StringBuffer();
+        StringBuilder flag = new StringBuilder();
         for (int j = 0; j < length; j++) {
             int number = rand.nextInt(sources.length());
             //根据索引值获取对应的字符
@@ -32,11 +30,5 @@ public class RandomTool {
             flag.append(charAt);
         }
         return flag.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(RandomTool.randomNumber(10));
-        System.out.println(RandomTool.randomStr(10));
-        System.out.println(URLUtil.normalize("www.baidu.com"));
     }
 }

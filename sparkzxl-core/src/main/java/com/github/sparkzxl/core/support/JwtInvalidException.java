@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.support;
 
 import com.github.sparkzxl.core.base.code.BaseEnumCode;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import lombok.Getter;
 
 /**
@@ -22,7 +23,7 @@ public class JwtInvalidException extends BaseException {
     }
 
     public JwtInvalidException(String message) {
-        super(ResponseResultStatus.FAILURE.code, message);
+        super(ApiResponseStatus.FAILURE.getCode(), message);
     }
 
     @Override

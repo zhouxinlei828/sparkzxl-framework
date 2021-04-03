@@ -1,6 +1,7 @@
-package com.github.sparkzxl.core.support;
+package com.github.sparkzxl.core.base.result;
 
 import cn.hutool.http.HttpStatus;
+import com.github.sparkzxl.core.assert_.BusinessEnumSysAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ResponseResultStatus implements BusinessEnumSysAssert {
+public enum ApiResponseStatus implements BusinessEnumSysAssert {
 
     /**
      * 操作成功

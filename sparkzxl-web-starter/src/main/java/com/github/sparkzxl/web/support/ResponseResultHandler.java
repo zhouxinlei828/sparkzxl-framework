@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -49,21 +49,21 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        int code = ResponseResultStatus.SUCCESS.getCode();
-        String message = ResponseResultStatus.SUCCESS.getMessage();
+        int code = ApiResponseStatus.SUCCESS.getCode();
+        String message = ApiResponseStatus.SUCCESS.getMessage();
         String returnTypeName = returnType.getGenericParameterType().getTypeName();
         String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
         if (ObjectUtils.isNotEmpty(RequestContextHolderUtils.getAttribute(BaseContextConstants.FALLBACK))) {
-            code = ResponseResultStatus.SERVICE_DEGRADATION.getCode();
-            message = ResponseResultStatus.SERVICE_DEGRADATION.getMessage();
+            code = ApiResponseStatus.SERVICE_DEGRADATION.getCode();
+            message = ApiResponseStatus.SERVICE_DEGRADATION.getMessage();
             returnBody = null;
         } else if (ObjectUtils.isNotEmpty(attribute)) {
-            code = ResponseResultStatus.FAILURE.getCode();
+            code = ApiResponseStatus.FAILURE.getCode();
             message = attribute;
             returnBody = null;
         } else if (returnBody instanceof Boolean && !(Boolean) returnBody) {
-            code = ResponseResultStatus.FAILURE.getCode();
-            message = ResponseResultStatus.FAILURE.getMessage();
+            code = ApiResponseStatus.FAILURE.getCode();
+            message = ApiResponseStatus.FAILURE.getMessage();
         }
         if (returnTypeName.equals(String.class.getTypeName())) {
             return objectMapper.writeValueAsString(ApiResult.apiResult(code, message, returnBody));

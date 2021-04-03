@@ -74,11 +74,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--Spring Security RSA工具类-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-rsa</artifactId>
-        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

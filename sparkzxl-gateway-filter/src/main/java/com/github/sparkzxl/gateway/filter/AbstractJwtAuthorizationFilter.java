@@ -8,7 +8,7 @@ import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.JwtExpireException;
-import com.github.sparkzxl.core.support.ResponseResultStatus;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.utils.StringHandlerUtils;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
 import com.google.common.collect.Lists;
@@ -107,7 +107,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
     protected Mono<Void> handleTokenEmpty(ServerWebExchange exchange, GatewayFilterChain chain, String token) {
         ServerHttpResponse response = exchange.getResponse();
         if (StringUtils.isEmpty(token)) {
-            return errorResponse(response, ResponseResultStatus.JWT_EMPTY_ERROR.getCode(), ResponseResultStatus.JWT_EMPTY_ERROR.getMessage());
+            return errorResponse(response, ApiResponseStatus.JWT_EMPTY_ERROR.getCode(), ApiResponseStatus.JWT_EMPTY_ERROR.getMessage());
         }
         return null;
     }
@@ -115,7 +115,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
     protected JwtUserInfo verifyToken(String token) throws BaseException {
         JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new JwtExpireException(ResponseResultStatus.JWT_EXPIRED_ERROR);
+            throw new JwtExpireException(ApiResponseStatus.JWT_EXPIRED_ERROR);
         }
         return jwtUserInfo;
     }
