@@ -28,7 +28,7 @@
         <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
         <keycloak-dependencies.version>12.0.2</keycloak-dependencies.version>
         <servlet-api.version>4.0.1</servlet-api.version>
-        <knife4j.version>2.0.4</knife4j.version>
+        <knife4j.version>2.0.8</knife4j.version>
 
         <!-- datasource-->
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
@@ -114,6 +114,7 @@
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-oauth2-open-starter</module>
+        <module>sparkzxl-dependencies</module>
     </modules>
 
     <distributionManagement>
