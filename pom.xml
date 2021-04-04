@@ -42,7 +42,7 @@
         <spring-security-rsa.version>1.0.9.RELEASE</spring-security-rsa.version>
         <spring-data-commos.version>2.2.6.RELEASE</spring-data-commos.version>
         <!-- jwt组件-->
-        <jwt.version>9.4.1</jwt.version>
+        <jwt.version>9.7</jwt.version>
 
         <aws.version>1.11.941</aws.version>
         <!-- google-->
