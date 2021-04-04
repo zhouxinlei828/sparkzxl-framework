@@ -97,6 +97,8 @@
         <module>sparkzxl-jwt-starter</module>
         <module>sparkzxl-log-starter</module>
         <module>sparkzxl-mail-starter</module>
+        <module>sparkzxl-mongodb-starter</module>
+        <module>sparkzxl-oauth2-open-starter</module>
         <module>sparkzxl-oauth2-resource-starter</module>
         <module>sparkzxl-oauth2-server-starter</module>
         <module>sparkzxl-oss-starter</module>
@@ -108,8 +110,6 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-mongodb-starter</module>
-        <module>sparkzxl-oauth2-open-starter</module>
     </modules>
 
     <distributionManagement>
