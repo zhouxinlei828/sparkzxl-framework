@@ -23,8 +23,8 @@ public class CloudApplicationInitRunner implements ApplicationRunner, Ordered {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        log.info("spring cloud is running");
+    public void run(ApplicationArguments args) {
+        log.info("\nspring cloud is running!");
     }
 
     @Override
