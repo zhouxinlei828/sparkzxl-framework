@@ -26,7 +26,6 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         //设置当前请求线程全局信息
         if (!BaseContextHandler.getBoot()) {
             BaseContextHandler.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
@@ -37,7 +36,7 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
             MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
             MDC.put(BaseContextConstants.JWT_KEY_REALM, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
             MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-            String feign = request.getHeader(BaseContextConstants.REQUEST_TYPE);
+            String feign = request.getHeader(BaseContextConstants.REMOTE_CALL);
             if (StringUtils.isNotEmpty(feign)) {
                 return true;
             }

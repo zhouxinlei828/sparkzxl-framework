@@ -38,7 +38,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header(BaseContextConstants.REQUEST_TYPE, BaseContextConstants.REQUEST_TYPE);
+        template.header(BaseContextConstants.REMOTE_CALL, BaseContextConstants.REMOTE_CALL);
         if (seataEnable) {
             String xid = RootContext.getXID();
             if (StrUtil.isNotEmpty(xid)) {

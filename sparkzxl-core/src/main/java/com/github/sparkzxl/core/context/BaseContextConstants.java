@@ -7,6 +7,8 @@ package com.github.sparkzxl.core.context;
  */
 public class BaseContextConstants {
 
+    public static final String REMOTE_CALL = "remote_call";
+
     public static final String REQUEST_TYPE = "feign_request";
 
     public static final String FALLBACK = "fallback";
