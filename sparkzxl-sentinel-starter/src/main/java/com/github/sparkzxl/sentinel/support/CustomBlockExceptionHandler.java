@@ -1,4 +1,4 @@
-package com.github.sparkzxl.distributed.dubbo.support;
+package com.github.sparkzxl.sentinel.support;
 
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.BlockException;

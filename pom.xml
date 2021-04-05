@@ -106,6 +106,7 @@
         <module>sparkzxl-pdf-starter</module>
         <module>sparkzxl-redisson-starter</module>
         <module>sparkzxl-security-starter</module>
+        <module>sparkzxl-sentinel-starter</module>
         <module>sparkzxl-swagger-starter</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
