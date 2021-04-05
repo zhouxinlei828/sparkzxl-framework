@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.distributed.cloud.config.CloudAutoConfig
+    com.github.sparkzxl.hystrix.config.HystrixAutoConfig

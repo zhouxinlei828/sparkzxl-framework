@@ -1,4 +1,4 @@
-package com.github.sparkzxl.distributed.cloud.hystrix;
+package com.github.sparkzxl.hystrix.utils;
 
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;

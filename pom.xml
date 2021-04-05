@@ -111,6 +111,7 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
+        <module>sparkzxl-hystrix-starter</module>
     </modules>
 
     <distributionManagement>
@@ -188,6 +189,11 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-feign-starter</artifactId>
+                <version>${sparkzxl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-hystrix-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>

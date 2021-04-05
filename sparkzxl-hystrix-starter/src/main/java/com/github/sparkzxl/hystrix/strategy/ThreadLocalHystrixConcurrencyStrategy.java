@@ -1,4 +1,4 @@
-package com.github.sparkzxl.distributed.cloud.hystrix;
+package com.github.sparkzxl.hystrix.strategy;
 
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.netflix.hystrix.HystrixThreadPoolKey;
@@ -122,14 +122,11 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
 
         private final Callable<T> target;
         private final RequestAttributes requestAttributes;
-        private final ConcurrentHashMap<String, String> threadLocalMap; //研究并发是否会冲突
-
         private final String xid;
 
         WrappedCallable(Callable<T> target) {
             this.target = target;
             this.requestAttributes = RequestContextHolder.getRequestAttributes();
-            this.threadLocalMap = BaseContextHandler.getLocalMap();
             this.xid = RootContext.getXID();
         }
 
@@ -137,14 +134,12 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         public T call() throws Exception {
             try {
                 RequestContextHolder.setRequestAttributes(this.requestAttributes);
-                BaseContextHandler.setLocalMap(this.threadLocalMap);
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.bind(this.xid);
                 }
                 return this.target.call();
             } finally {
                 RequestContextHolder.resetRequestAttributes();
-                BaseContextHandler.remove();
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.unbind();
                 }

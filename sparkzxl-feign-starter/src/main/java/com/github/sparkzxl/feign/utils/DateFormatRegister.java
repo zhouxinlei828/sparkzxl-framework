@@ -1,4 +1,4 @@
-package com.github.sparkzxl.distributed.cloud.utils;
+package com.github.sparkzxl.feign.utils;
 
 import cn.hutool.core.date.DatePattern;
 import com.github.sparkzxl.core.utils.DateUtils;

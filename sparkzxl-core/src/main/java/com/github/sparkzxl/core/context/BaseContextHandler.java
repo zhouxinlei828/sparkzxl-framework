@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.context;
 
 import cn.hutool.core.convert.Convert;
+import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.core.utils.StrPool;
 
 import java.util.Map;
@@ -14,39 +15,23 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BaseContextHandler {
 
-    private static final ThreadLocal<ConcurrentHashMap<String, String>> THREAD_LOCAL = new ThreadLocal<>();
-
     public static void set(String key, Object value) {
-        Map<String, String> map = getLocalMap();
-        map.put(key, value == null ? StrPool.EMPTY : value.toString());
+        RequestContextHolderUtils.setAttribute(key,value == null ? StrPool.EMPTY : value.toString());
     }
 
     public static <T> T get(String key, Class<T> type) {
-        Map<String, String> map = getLocalMap();
-        return Convert.convert(type, map.get(key));
+        Object attribute = RequestContextHolderUtils.getAttribute(key);
+        return Convert.convert(type, attribute);
     }
 
     public static <T> T get(String key, Class<T> type, Object def) {
-        Map<String, String> map = getLocalMap();
-        return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? StrPool.EMPTY : def)));
+        Object attribute = RequestContextHolderUtils.getAttribute(key);
+        return Convert.convert(type, attribute == null ? def : attribute);
     }
 
     public static String get(String key) {
-        Map<String, String> map = getLocalMap();
-        return map.getOrDefault(key, StrPool.EMPTY);
-    }
-
-    public static ConcurrentHashMap<String, String> getLocalMap() {
-        ConcurrentHashMap<String, String> map = THREAD_LOCAL.get();
-        if (map == null) {
-            map = new ConcurrentHashMap<>(10);
-            THREAD_LOCAL.set(map);
-        }
-        return map;
-    }
-
-    public static void setLocalMap(ConcurrentHashMap<String, String> threadLocalMap) {
-        THREAD_LOCAL.set(threadLocalMap);
+        Object attribute = RequestContextHolderUtils.getAttribute(key);
+        return attribute == null ? "" : (String) attribute;
     }
 
 
@@ -124,22 +109,11 @@ public class BaseContextHandler {
         set(BaseContextConstants.JWT_KEY_CLIENT_ID, val);
     }
 
-
     public static Boolean getBoot() {
         return get(BaseContextConstants.IS_BOOT, Boolean.class, false);
     }
 
-    /**
-     * 账号id
-     *
-     * @param val 是否boot
-     */
     public static void setBoot(Boolean val) {
         set(BaseContextConstants.IS_BOOT, val);
     }
-
-    public static void remove() {
-        THREAD_LOCAL.remove();
-    }
-
 }
