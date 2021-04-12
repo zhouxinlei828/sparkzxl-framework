@@ -186,7 +186,7 @@ public class OssTemplate implements InitializingBean {
      * @param objectName 文件名称
      * @param stream     文件流
      * @return PutObjectResult
-     * @throws Exception
+     * @throws Exception 异常
      */
     public PutObjectResult putObject(String bucketName, String objectName, InputStream stream) throws Exception {
         return putObject(bucketName, objectName, stream, stream.available(), "application/octet-stream");
@@ -200,7 +200,7 @@ public class OssTemplate implements InitializingBean {
      * @param stream      文件流
      * @param size        大小
      * @param contentType 类型
-     * @throws Exception
+     * @throws Exception 异常
      * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/PutObject">AWS
      * API Documentation</a>
      */
@@ -233,7 +233,7 @@ public class OssTemplate implements InitializingBean {
         List<PartETag> partETags = new ArrayList<PartETag>();
         // 计算文件有多少个分片。
         // 1MB
-        final long partSize = 1 * 1024 * 1024L;
+        final long partSize = 1024 * 1024L;
         final File sampleFile = new File(path);
         long fileLength = sampleFile.length();
         int partCount = (int) (fileLength / partSize);
