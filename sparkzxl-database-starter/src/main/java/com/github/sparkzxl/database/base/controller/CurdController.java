@@ -276,6 +276,8 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
             if (ObjectUtils.isEmpty(importExcelClass)) {
                 logger.error("请先实例化导入Excel处理类：{}", importExcelClass);
             }
+            importDataListener.setList(Lists.newArrayList());
+            importDataListener.setCount(0);
             EasyExcel.read(multipartFile.getInputStream(), importExcelClass, importDataListener)
                     .sheet(0).doRead();
             return importDataListener.getCount();

@@ -2,13 +2,13 @@ package com.github.sparkzxl.gateway.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.JwtExpireException;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.utils.StringHandlerUtils;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
 import com.google.common.collect.Lists;
@@ -48,8 +48,8 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         // 校验是否需要拦截地址
         if (StringHandlerUtils.isIgnore(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
                 || StringHandlerUtils.isIgnore(ignorePatterns(), request.getPath().toString())) {
-            request = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
-            exchange = exchange.mutate().request(request).build();
+            // 放行请求清除token
+            clearTokenRequest(exchange);
             return chain.filter(exchange);
         }
 
@@ -110,6 +110,11 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
             return errorResponse(response, ApiResponseStatus.JWT_EMPTY_ERROR.getCode(), ApiResponseStatus.JWT_EMPTY_ERROR.getMessage());
         }
         return null;
+    }
+
+    protected void clearTokenRequest(ServerWebExchange exchange) {
+        ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
+        exchange.mutate().request(serverHttpRequest).build();
     }
 
     protected JwtUserInfo verifyToken(String token) throws BaseException {

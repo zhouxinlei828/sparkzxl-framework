@@ -2,7 +2,6 @@ package com.github.sparkzxl.database.base.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,11 +13,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ImportDataListener<ExcelEntity> extends AnalysisEventListener<ExcelEntity> {
 
-    protected final List<ExcelEntity> list = Lists.newArrayList();
-    protected final AtomicInteger count = new AtomicInteger(0);
+    public List<ExcelEntity> list;
+    protected AtomicInteger count;
 
     public Integer getCount() {
         return count.get();
+    }
+
+    public void setCount(int value) {
+        this.count = new AtomicInteger(value);
     }
 
     @Override
@@ -29,5 +32,13 @@ public class ImportDataListener<ExcelEntity> extends AnalysisEventListener<Excel
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
 
+    }
+
+    public List<ExcelEntity> getList() {
+        return list;
+    }
+
+    public void setList(List<ExcelEntity> list) {
+        this.list = list;
     }
 }
