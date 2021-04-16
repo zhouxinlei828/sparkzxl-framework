@@ -19,6 +19,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -31,11 +32,21 @@ import java.io.IOException;
 @Slf4j
 public abstract class BaseElasticsearchService {
 
-    @Resource
-    protected RestHighLevelClient client;
+    @Autowired
+    protected RestHighLevelClient restHighLevelClient;
 
-    @Resource
+    @Autowired
     private ElasticsearchProperties elasticsearchProperties;
+
+    @Autowired
+    public void setRestHighLevelClient(RestHighLevelClient restHighLevelClient) {
+        this.restHighLevelClient = restHighLevelClient;
+    }
+
+    @Autowired
+    public void setElasticsearchProperties(ElasticsearchProperties elasticsearchProperties) {
+        this.elasticsearchProperties = elasticsearchProperties;
+    }
 
     protected static final RequestOptions COMMON_OPTIONS;
 
@@ -56,7 +67,7 @@ public abstract class BaseElasticsearchService {
             CreateIndexRequest request = new CreateIndexRequest(index);
             // Settings for this index
             request.settings(Settings.builder().put("index.number_of_shards", elasticsearchProperties.getIndex().getNumberOfShards()).put("index.number_of_replicas", elasticsearchProperties.getIndex().getNumberOfReplicas()));
-            CreateIndexResponse createIndexResponse = client.indices().create(request, COMMON_OPTIONS);
+            CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request, COMMON_OPTIONS);
             log.info(" whether all of the nodes have acknowledged the request : [{}]", createIndexResponse.isAcknowledged());
             log.info(" Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
                     ":[{}]", createIndexResponse.isShardsAcknowledged());
@@ -73,7 +84,7 @@ public abstract class BaseElasticsearchService {
     protected void deleteIndexRequest(String index) {
         DeleteIndexRequest deleteIndexRequest = buildDeleteIndexRequest(index);
         try {
-            client.indices().delete(deleteIndexRequest, COMMON_OPTIONS);
+            restHighLevelClient.indices().delete(deleteIndexRequest, COMMON_OPTIONS);
         } catch (IOException e) {
             throw new ElasticsearchException("删除索引 {" + index + "} 失败");
         }
@@ -110,7 +121,7 @@ public abstract class BaseElasticsearchService {
     protected void updateRequest(String index, String id, Object object) {
         try {
             UpdateRequest updateRequest = new UpdateRequest(index, id).doc(BeanUtil.beanToMap(object), XContentType.JSON);
-            client.update(updateRequest, COMMON_OPTIONS);
+            restHighLevelClient.update(updateRequest, COMMON_OPTIONS);
         } catch (IOException e) {
             throw new ElasticsearchException("更新索引 {" + index + "} 数据 {" + object + "} 失败");
         }
@@ -125,7 +136,7 @@ public abstract class BaseElasticsearchService {
     protected void deleteRequest(String index, String id) {
         try {
             DeleteRequest deleteRequest = new DeleteRequest(index, id);
-            client.delete(deleteRequest, COMMON_OPTIONS);
+            restHighLevelClient.delete(deleteRequest, COMMON_OPTIONS);
         } catch (IOException e) {
             throw new ElasticsearchException("删除索引 {" + index + "} 数据id {" + id + "} 失败");
         }
@@ -144,7 +155,7 @@ public abstract class BaseElasticsearchService {
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = null;
         try {
-            searchResponse = client.search(searchRequest, COMMON_OPTIONS);
+            searchResponse = restHighLevelClient.search(searchRequest, COMMON_OPTIONS);
         } catch (IOException e) {
             log.error(e.getMessage());
             log.error(e.getMessage());

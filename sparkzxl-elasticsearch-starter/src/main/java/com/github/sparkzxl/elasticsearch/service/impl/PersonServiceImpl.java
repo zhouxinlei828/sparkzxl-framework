@@ -43,14 +43,14 @@ public class PersonServiceImpl extends BaseElasticsearchService implements Perso
             list.forEach(person -> {
                 IndexRequest request = buildIndexRequest(index, String.valueOf(person.getId()), person);
                 try {
-                    client.index(request, COMMON_OPTIONS);
+                    restHighLevelClient.index(request, COMMON_OPTIONS);
                 } catch (IOException e) {
                     log.error(e.getMessage());
                 }
             });
         } finally {
             try {
-                client.close();
+                restHighLevelClient.close();
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
