@@ -29,13 +29,15 @@ public class UserAgentUtils extends UserAgentUtil {
         String browserVersion = userAgent.getVersion();
         String clientIp = ServletUtil.getClientIP(request);
         String region = AddressUtil.getRegion(clientIp);
-        JSONObject locationJsonObj = JSONObject.parseObject(region);
-        String address = locationJsonObj.getString("region");
-        String[] split = StringUtils.split(address, "|");
-        split = ArrayUtils.removeAllOccurrences(split, "0");
-        List<String> areaList = Arrays.stream(split).distinct().collect(Collectors.toList());
-        String clientAddress = StringUtils.join(areaList, " ");
-        userAgentEntity.setLocation(clientAddress);
+        if (StringUtils.isNotEmpty(region)){
+            JSONObject locationJsonObj = JSONObject.parseObject(region);
+            String address = locationJsonObj.getString("region");
+            String[] split = StringUtils.split(address, "|");
+            split = ArrayUtils.removeAllOccurrences(split, "0");
+            List<String> areaList = Arrays.stream(split).distinct().collect(Collectors.toList());
+            String clientAddress = StringUtils.join(areaList, " ");
+            userAgentEntity.setLocation(clientAddress);
+        }
         userAgentEntity.setRequestIp(clientIp);
         userAgentEntity.setBrowser(userAgent.getBrowser().toString());
         userAgentEntity.setBrowserVersion(browserVersion);
