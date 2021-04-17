@@ -1,13 +1,13 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
-import org.elasticsearch.action.search.SearchRequest;
+import com.github.sparkzxl.elasticsearch.page.PageResponse;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
- * description:
+ * description: 通用es操作 服务类
  *
  * @author zhouxinlei
  * @date 2021-04-17 08:37:05
@@ -33,40 +33,40 @@ public interface IBaseElasticsearchService {
     /**
      * 保存
      *
-     * @param index     索引
-     * @param id        主键
-     * @param objectMap map对象
+     * @param index  索引
+     * @param id     主键
+     * @param object 对象
      * @return boolean
      */
-    boolean saveDoc(String index, Serializable id, Map<String, Object> objectMap);
+    <T> boolean saveDoc(String index, Serializable id, T object);
 
     /**
      * 更新
      *
-     * @param index     索引
-     * @param id        主键
-     * @param objectMap map对象
+     * @param index  索引
+     * @param id     主键
+     * @param object 对象
      * @return boolean
      */
-    boolean updateDoc(String index, Serializable id, Map<String, Object> objectMap);
+    <T> boolean updateDoc(String index, Serializable id, T object);
 
     /**
      * 批量保存
      *
-     * @param index         索引
-     * @param objectMapList 对象list
+     * @param index      索引
+     * @param objectList 对象list
      * @return boolean
      */
-    boolean saveDocBatch(String index, List<Map<String, Object>> objectMapList);
+    <T> boolean saveDocBatch(String index, List<T> objectList);
 
     /**
      * 批量更新
      *
-     * @param index         索引
-     * @param objectMapList 对象list
+     * @param index      索引
+     * @param objectList 对象list
      * @return boolean
      */
-    boolean updateDocBatch(String index, List<Map<String, Object>> objectMapList);
+    <T> boolean updateDocBatch(String index, List<T> objectList);
 
     /**
      * 根据id删除文档
@@ -80,45 +80,21 @@ public interface IBaseElasticsearchService {
     /**
      * 根据条件查询单个文档
      *
-     * @param searchRequest 搜索请求
-     * @return Map<String, Object>
+     * @param index               索引
+     * @param searchSourceBuilder 搜索请求
+     * @param tClass              class
+     * @return T
      */
-    Map<String, Object> searchOneDoc(SearchRequest searchRequest);
-
-    /**
-     * 根据条件查询单个文档
-     *
-     * @param searchRequest 搜索请求
-     * @param tClass        class
-     * @return Map<String, Object>
-     */
-    <T> T searchObjectOneDoc(SearchRequest searchRequest, Class<T> tClass);
-
-    /**
-     * search all doc records
-     *
-     * @param index 索引
-     * @return List<Map < String, Object>>
-     */
-    List<Map<String, Object>> searchAllDoc(String index);
+    <T> T searchOneDoc(String index, SearchSourceBuilder searchSourceBuilder, Class<T> tClass);
 
     /**
      * search all doc records
      *
      * @param index  索引
      * @param tClass class
-     * @return List<Map < String, Object>>
+     * @return List<T>
      */
-    <T> List<T> searchObjectAllDoc(String index, Class<T> tClass);
-
-    /**
-     * search all doc records
-     *
-     * @param index 索引
-     * @param id    主键
-     * @return Map<String, Object>
-     */
-    Map<String, Object> searchDocById(String index, String id);
+    <T> List<T> searchAllDoc(String index, Class<T> tClass);
 
     /**
      * search all doc records
@@ -126,18 +102,9 @@ public interface IBaseElasticsearchService {
      * @param index  索引
      * @param id     主键
      * @param tClass class
-     * @return Map<String, Object>
+     * @return T
      */
-    <T> T searchObjectDocById(String index, String id, Class<T> tClass);
-
-    /**
-     * search all doc records
-     *
-     * @param index  索引
-     * @param idList 主键列表
-     * @return Map<String, Object>
-     */
-    List<Map<String, Object>> searchDocsByIdList(String index, List<String> idList);
+    <T> T searchDocById(String index, String id, Class<T> tClass);
 
     /**
      * search all doc records
@@ -145,8 +112,20 @@ public interface IBaseElasticsearchService {
      * @param index  索引
      * @param idList 主键列表
      * @param tClass class
-     * @return Map<String, Object>
+     * @return List<T>
      */
     <T> List<T> searchObjectDocsByIdList(String index, List<String> idList, Class<T> tClass);
 
+    /**
+     * 分页搜索
+     *
+     * @param index               索引
+     * @param searchSourceBuilder 查询构造器
+     * @param clazz               试题类型
+     * @param pageNum             当前页
+     * @param pageSize            分页大小
+     * @return PageResponse<T>
+     */
+    <T> PageResponse<T> search(String index, SearchSourceBuilder searchSourceBuilder, Class<T> clazz,
+                               Integer pageNum, Integer pageSize);
 }
