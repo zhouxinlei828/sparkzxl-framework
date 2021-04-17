@@ -255,6 +255,26 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     }
 
     @Override
+    public boolean deleteDocByIds(String index, List<String> ids) {
+        boolean result = true;
+        try {
+            if (CollectionUtils.isNotEmpty(ids)) {
+                BulkRequest request = new BulkRequest();
+                for (String deleteId : ids) {
+                    DeleteRequest deleteRequest = new DeleteRequest(index, deleteId);
+                    request.add(deleteRequest);
+                }
+                BulkResponse bulk = restHighLevelClient.bulk(request, COMMON_OPTIONS);
+                result = bulk.status().equals(RestStatus.OK);
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
     public <T> T searchOneDoc(String index, SearchSourceBuilder searchSourceBuilder, Class<T> tClass) {
         try {
             SearchRequest searchRequest = new SearchRequest(index);
@@ -339,7 +359,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     }
 
     @Override
-    public <T> Map<String, List<T>> searchDocsMapByIdList(String index, List<String> idList, Class<T> tClass) {
+    public <T> Map<String, T> searchDocsMapByIdList(String index, List<String> idList, Class<T> tClass) {
         SearchRequest searchRequest = buildSearchRequest(index);
         log.debug("DSL语句为：{}", searchRequest.source().toString());
         try {
@@ -348,16 +368,11 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
-            Map<String, List<T>> results = Maps.newHashMap();
+            Map<String, T> results = Maps.newHashMap();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
                 String id = sourceAsMap.get("id").toString();
                 T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
-                List<T> tList = results.get(id);
-                if (CollectionUtils.isEmpty(tList)) {
-                    tList = Lists.newArrayList();
-                }
-                tList.add(resultObject);
-                results.put(id, tList);
+                results.put(id, resultObject);
             });
             return results;
         } catch (Exception e) {

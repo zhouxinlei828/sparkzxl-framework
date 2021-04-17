@@ -1,7 +1,6 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
-import org.apache.poi.ss.formula.functions.T;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.Serializable;
@@ -80,6 +79,15 @@ public interface IBaseElasticsearchService {
     boolean deleteDocById(String index, String id);
 
     /**
+     * 根据id删除文档
+     *
+     * @param index 索引
+     * @param ids   主键列表
+     * @return boolean
+     */
+    boolean deleteDocByIds(String index, List<String> ids);
+
+    /**
      * 根据条件查询单个文档
      *
      * @param index               索引
@@ -126,7 +134,7 @@ public interface IBaseElasticsearchService {
      * @param tClass class
      * @return Map<String, List < T>>
      */
-    <T> Map<String, List<T>> searchDocsMapByIdList(String index, List<String> idList, Class<T> tClass);
+    <T> Map<String, T> searchDocsMapByIdList(String index, List<String> idList, Class<T> tClass);
 
     /**
      * search all doc records
