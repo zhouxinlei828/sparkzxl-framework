@@ -5,11 +5,8 @@ package com.github.sparkzxl.elasticsearch.contants;
  *
  * @author zhouxinlei
  */
-public interface ElasticsearchConstant {
+public interface BaseElasticsearchConstant {
 
-    /**
-     * 索引名称
-     */
-    String INDEX_NAME = "person";
+    public static final String ES_ID = "_id";
 
 }
