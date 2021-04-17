@@ -1,10 +1,12 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
+import org.apache.poi.ss.formula.functions.T;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 通用es操作 服务类
@@ -115,6 +117,47 @@ public interface IBaseElasticsearchService {
      * @return List<T>
      */
     <T> List<T> searchDocsByIdList(String index, List<String> idList, Class<T> tClass);
+
+    /**
+     * search all doc records
+     *
+     * @param index  索引
+     * @param idList 主键列表
+     * @param tClass class
+     * @return Map<String, List < T>>
+     */
+    <T> Map<String, List<T>> searchDocsMapByIdList(String index, List<String> idList, Class<T> tClass);
+
+    /**
+     * search all doc records
+     *
+     * @param index               索引
+     * @param searchSourceBuilder 资源搜索
+     * @param tClass              class
+     * @return List<T>
+     */
+    <T> List<T> searchDocList(String index, SearchSourceBuilder searchSourceBuilder, Class<T> tClass);
+
+    /**
+     * search all doc records
+     *
+     * @param index               索引
+     * @param searchSourceBuilder 资源搜索
+     * @param aggName             分组字段
+     * @param tClass              class
+     * @return Map<String, List < T>>
+     */
+    <T> Map<String, List<T>> searchDocsGroupMap(String index, SearchSourceBuilder searchSourceBuilder, String aggName, Class<T> tClass);
+
+    /**
+     * 聚合查询
+     *
+     * @param index               索引
+     * @param aggName             分组字段
+     * @param searchSourceBuilder 资源搜索
+     * @return Map<String, Long>
+     */
+    Map<String, Long> aggregationSearchDoc(String index, SearchSourceBuilder searchSourceBuilder, String aggName);
 
     /**
      * 分页搜索

@@ -6,7 +6,9 @@ import com.github.sparkzxl.elasticsearch.contants.BaseElasticsearchConstant;
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -29,16 +31,15 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * description: 通用es操作 服务实现类
@@ -82,8 +83,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             // Settings for this index
             request.settings(Settings.builder().put("index.number_of_shards", elasticsearchProperties.getIndex().getNumberOfShards()).put("index.number_of_replicas", elasticsearchProperties.getIndex().getNumberOfReplicas()));
             CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request, COMMON_OPTIONS);
-            log.info(" whether all of the nodes have acknowledged the request : [{}]", createIndexResponse.isAcknowledged());
-            log.info(" Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
+            log.debug(" whether all of the nodes have acknowledged the request : [{}]", createIndexResponse.isAcknowledged());
+            log.debug(" Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
                     ":[{}]", createIndexResponse.isShardsAcknowledged());
         } catch (IOException e) {
             throw new ElasticsearchException("创建索引 {" + index + "} 失败");
@@ -168,7 +169,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         searchRequest.source(searchSourceBuilder);
-        log.info("DSL语句为：{}", searchRequest.source().toString());
+        log.debug("DSL语句为：{}", searchRequest.source().toString());
         SearchResponse searchResponse = null;
         try {
             searchResponse = restHighLevelClient.search(searchRequest, COMMON_OPTIONS);
@@ -258,12 +259,12 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         try {
             SearchRequest searchRequest = new SearchRequest(index);
             searchRequest.source(searchSourceBuilder);
-            log.info("DSL语句为：{}", searchRequest.source().toString());
+            log.debug("DSL语句为：{}", searchRequest.source().toString());
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = Lists.newArrayList();
-            Arrays.stream(hits).forEach(hit -> {
-                T resultObject = JsonUtil.toPojo(hit.getSourceAsMap(), tClass);
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList.size() == 0 ? null : resultList.get(0);
@@ -280,8 +281,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchResponse searchResponse = search(index);
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = Lists.newArrayList();
-            Arrays.stream(hits).forEach(hit -> {
-                T resultObject = JsonUtil.toPojo(hit.getSourceAsMap(), tClass);
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList;
@@ -291,19 +292,20 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         return null;
     }
 
+
     @Override
     public <T> T searchDocById(String index, String id, Class<T> tClass) {
         try {
             SearchRequest searchRequest = buildSearchRequest(index);
-            log.info("DSL语句为：{}", searchRequest.source().toString());
+            log.debug("DSL语句为：{}", searchRequest.source().toString());
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
             searchSourceBuilder.query(QueryBuilders.termQuery(BaseElasticsearchConstant.ES_ID, id));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
-            List<T> resultList = new ArrayList<>();
-            Arrays.stream(hits).forEach(hit -> {
-                T resultObject = JsonUtil.toPojo(hit.getSourceAsMap(), tClass);
+            List<T> resultList = Lists.newArrayList();
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList.size() == 0 ? null : resultList.get(0);
@@ -317,16 +319,16 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     @Override
     public <T> List<T> searchDocsByIdList(String index, List<String> idList, Class<T> tClass) {
         SearchRequest searchRequest = buildSearchRequest(index);
-        log.info("DSL语句为：{}", searchRequest.source().toString());
+        log.debug("DSL语句为：{}", searchRequest.source().toString());
         try {
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
             searchSourceBuilder.query(QueryBuilders.termsQuery(BaseElasticsearchConstant.ES_ID, idList));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
-            List<T> resultList = new ArrayList<>();
-            Arrays.stream(hits).forEach(hit -> {
-                T resultObject = JsonUtil.toPojo(hit.getSourceAsMap(), tClass);
+            List<T> resultList = Lists.newArrayList();
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList;
@@ -334,6 +336,97 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             log.error(e.getMessage());
         }
         return Lists.newArrayList();
+    }
+
+    @Override
+    public <T> Map<String, List<T>> searchDocsMapByIdList(String index, List<String> idList, Class<T> tClass) {
+        SearchRequest searchRequest = buildSearchRequest(index);
+        log.debug("DSL语句为：{}", searchRequest.source().toString());
+        try {
+            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+            searchSourceBuilder.query(QueryBuilders.termsQuery(BaseElasticsearchConstant.ES_ID, idList));
+            searchRequest.source(searchSourceBuilder);
+            SearchResponse searchResponse = search(searchRequest);
+            SearchHit[] hits = searchResponse.getHits().getHits();
+            Map<String, List<T>> results = Maps.newHashMap();
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                String id = sourceAsMap.get("id").toString();
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
+                List<T> tList = results.get(id);
+                if (CollectionUtils.isEmpty(tList)) {
+                    tList = Lists.newArrayList();
+                }
+                tList.add(resultObject);
+                results.put(id, tList);
+            });
+            return results;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return Maps.newHashMap();
+    }
+
+    @Override
+    public <T> List<T> searchDocList(String index, SearchSourceBuilder searchSourceBuilder, Class<T> tClass) {
+        try {
+            SearchRequest searchRequest = buildSearchRequest(index);
+            searchRequest.source(searchSourceBuilder);
+            SearchResponse searchResponse = search(searchRequest);
+            SearchHit[] hits = searchResponse.getHits().getHits();
+            List<T> resultList = new ArrayList<>();
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
+                resultList.add(resultObject);
+            });
+            return resultList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public <T> Map<String, List<T>> searchDocsGroupMap(String index, SearchSourceBuilder searchSourceBuilder, String aggName, Class<T> tClass) {
+        SearchRequest searchRequest = buildSearchRequest(index);
+        log.debug("DSL语句为：{}", searchRequest.source().toString());
+        try {
+            searchRequest.source(searchSourceBuilder);
+            SearchResponse searchResponse = search(searchRequest);
+            SearchHit[] hits = searchResponse.getHits().getHits();
+            Map<String, List<T>> results = Maps.newHashMap();
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                String aggValue = sourceAsMap.get(aggName).toString();
+                T resultObject = JsonUtil.toPojo(sourceAsMap, tClass);
+                List<T> tList = results.get(aggValue);
+                if (CollectionUtils.isEmpty(tList)) {
+                    tList = Lists.newArrayList();
+                }
+                tList.add(resultObject);
+                results.put(aggValue, tList);
+            });
+            return results;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return Maps.newHashMap();
+    }
+
+    @Override
+    public Map<String, Long> aggregationSearchDoc(String index, SearchSourceBuilder searchSourceBuilder, String aggName) {
+        try {
+            SearchRequest searchRequest = buildSearchRequest(index);
+            searchRequest.source(searchSourceBuilder);
+            SearchResponse searchResponse = search(searchRequest);
+            Aggregations aggregations = searchResponse.getAggregations();
+            Terms terms = aggregations.get(aggName);
+            List<? extends Terms.Bucket> buckets = terms.getBuckets();
+            Map<String, Long> responseMap = new HashMap<>(buckets.size());
+            buckets.forEach(bucket -> responseMap.put(bucket.getKeyAsString(), bucket.getDocCount()));
+            return responseMap;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return Maps.newHashMap();
     }
 
     @Override
@@ -348,11 +441,11 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             pageResponse.setPageSize(pageSize);
             pageResponse.setTotal(response.getHits().getTotalHits().value);
             List<T> dataList = new ArrayList<>();
-            SearchHits hits = response.getHits();
-            for (SearchHit hit : hits) {
-                T resultObject = JsonUtil.toPojo(hit.getSourceAsMap(), clazz);
+            SearchHit[] hits = response.getHits().getHits();
+            Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
+                T resultObject = JsonUtil.toPojo(sourceAsMap, clazz);
                 dataList.add(resultObject);
-            }
+            });
             pageResponse.setList(dataList);
             return pageResponse;
         } catch (Exception e) {
