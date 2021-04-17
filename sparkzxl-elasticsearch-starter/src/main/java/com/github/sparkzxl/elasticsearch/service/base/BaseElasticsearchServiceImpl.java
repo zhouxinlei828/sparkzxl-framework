@@ -341,7 +341,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
 
 
     @Override
-    public <T> List<T> searchObjectDocsByIdList(String index, List<String> idList, Class<T> tClass) {
+    public <T> List<T> searchDocsByIdList(String index, List<String> idList, Class<T> tClass) {
         SearchRequest searchRequest = buildSearchRequest(index);
         try {
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

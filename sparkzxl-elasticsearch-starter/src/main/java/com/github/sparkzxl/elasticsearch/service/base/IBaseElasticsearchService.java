@@ -114,7 +114,7 @@ public interface IBaseElasticsearchService {
      * @param tClass class
      * @return List<T>
      */
-    <T> List<T> searchObjectDocsByIdList(String index, List<String> idList, Class<T> tClass);
+    <T> List<T> searchDocsByIdList(String index, List<String> idList, Class<T> tClass);
 
     /**
      * 分页搜索
