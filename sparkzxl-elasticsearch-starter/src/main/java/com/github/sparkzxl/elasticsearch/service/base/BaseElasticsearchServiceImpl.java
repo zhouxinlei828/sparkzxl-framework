@@ -473,6 +473,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     private String getESId(Object obj) {
         JsonNode jsonNode = JsonUtil.readTree(JsonUtil.toJson(obj));
         assert jsonNode != null;
-        return jsonNode.get("id").textValue();
+        JsonNode idNode = jsonNode.get("id");
+        return idNode.asText();
     }
 }
