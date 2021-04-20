@@ -69,4 +69,5 @@ public class AuthorityApplication extends SparkBootApplication {
 ```
 
 截图示例：
+
 ![sparkzxl-boot-screenshots](../images/sparkzxl-boot-screenshots.png)
