@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -77,11 +78,15 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
      *
      * @param index elasticsearch index
      */
-    protected void createIndexRequest(String index) {
+    protected void createIndexRequest(String index, String mapping) {
         try {
             CreateIndexRequest request = new CreateIndexRequest(index);
             // Settings for this index
-            request.settings(Settings.builder().put("index.number_of_shards", elasticsearchProperties.getIndex().getNumberOfShards()).put("index.number_of_replicas", elasticsearchProperties.getIndex().getNumberOfReplicas()));
+            request.settings(Settings.builder().put("index.number_of_shards", elasticsearchProperties.getIndex().getNumberOfShards())
+                    .put("index.number_of_replicas", elasticsearchProperties.getIndex().getNumberOfReplicas()));
+            if (StringUtils.isNotEmpty(mapping)) {
+                request.mapping(mapping, XContentType.JSON);
+            }
             CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request, COMMON_OPTIONS);
             log.debug(" whether all of the nodes have acknowledged the request : [{}]", createIndexResponse.isAcknowledged());
             log.debug(" Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
@@ -180,8 +185,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     }
 
     @Override
-    public boolean createIndex(String index) {
-        createIndexRequest(index);
+    public boolean createIndex(String index, String mapping) {
+        createIndexRequest(index, mapping);
         return true;
     }
 
@@ -403,7 +408,9 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     @Override
     public <T> Map<String, List<T>> searchDocsGroupMap(String index, SearchSourceBuilder searchSourceBuilder, String aggName, Class<T> tClass) {
         SearchRequest searchRequest = buildSearchRequest(index);
-        log.debug("DSL语句为：{}", searchRequest.source().toString());
+        if (log.isDebugEnabled()) {
+            log.debug("DSL语句为：{}", searchRequest.source().toString());
+        }
         try {
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);

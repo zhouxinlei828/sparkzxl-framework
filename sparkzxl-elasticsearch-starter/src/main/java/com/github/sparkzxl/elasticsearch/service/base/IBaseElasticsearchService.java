@@ -19,9 +19,10 @@ public interface IBaseElasticsearchService {
      * 创建索引
      *
      * @param index 索引
+     * @param mapping 索引映射
      * @return boolean
      */
-    boolean createIndex(String index);
+    boolean createIndex(String index, String mapping);
 
     /**
      * delete Index
