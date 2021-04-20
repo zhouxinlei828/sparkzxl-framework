@@ -8,7 +8,7 @@ import java.util.function.Function;
  *
  * @author zhouxinlei
  */
-public interface CacheTemplate {
+public interface GeneralCacheService {
 
     /**
      * 查询缓存

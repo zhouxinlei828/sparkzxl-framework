@@ -1,10 +1,9 @@
 package com.github.sparkzxl.cache.config;
 
-import com.github.sparkzxl.cache.serializer.FastJson2JsonRedisSerializer;
 import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
-import com.github.sparkzxl.cache.template.CacheTemplate;
-import com.github.sparkzxl.cache.template.RedisCacheTemplateImpl;
-import com.github.sparkzxl.cache.utils.TokenUtil;
+import com.github.sparkzxl.cache.template.GeneralCacheService;
+import com.github.sparkzxl.cache.template.RedisCacheImpl;
+import com.github.sparkzxl.cache.utils.CacheTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -49,22 +48,17 @@ public class RedisConfiguration {
         return redisTemplate;
     }
 
-    @Bean
-    public FastJson2JsonRedisSerializer<Object> fastJson2JsonRedisSerializer() {
-        return new FastJson2JsonRedisSerializer<>(Object.class);
-    }
-
     @Bean("redisCacheTemplate")
     @ConditionalOnBean(RedisTemplate.class)
     @Primary
-    public CacheTemplate redisCacheTemplate(RedisTemplate<String, Object> redisTemplate) {
+    public GeneralCacheService redisCacheTemplate(RedisTemplate<String, Object> redisTemplate) {
         log.info("Autowired redisCacheTemplate success!");
-        return new RedisCacheTemplateImpl(redisTemplate);
+        return new RedisCacheImpl(redisTemplate);
     }
 
     @Bean
-    public TokenUtil tokenUtil(CacheTemplate cacheTemplate) {
-        return new TokenUtil(cacheTemplate);
+    public CacheTokenUtils tokenUtil(GeneralCacheService generalCacheService) {
+        return new CacheTokenUtils(generalCacheService);
     }
 
 

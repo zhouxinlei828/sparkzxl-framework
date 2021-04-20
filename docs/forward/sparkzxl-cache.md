@@ -42,7 +42,7 @@
 
 ## 实现
 
-- 新建CacheTemplate模板类
+- 新建GeneralCacheService类
 
 ```java
 import java.util.function.Function;
@@ -51,7 +51,7 @@ import java.util.function.Function;
  *
  * @author zhouxinlei
  */
-public interface CacheTemplate {
+public interface GeneralCacheService {
 
     /**
      * 查询缓存
@@ -176,59 +176,43 @@ public interface CacheTemplate {
 }
 ```
 
-- 实现CacheTemplate
+- 实现GeneralCacheService类
 
-1. GuavaTemplateImpl
-2. RedisCacheTemplateImpl
-3. CacheCaffeineTemplateImpl
+1. RedisCacheImpl
+2. CaffeineCacheImpl
 
-- redis序列化，使用fastJson
+- redis序列化，使用jackson序列化
 
 ```java
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.SerializationException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+package com.github.sparkzxl.cache.serializer;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.github.sparkzxl.core.jackson.JsonUtil;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+
 /**
- * description: redis fastJson 序列化
+ * description: jackson序列化
  *
  * @author zhouxinlei
  */
-public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
-    public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
 
-    private final Class<T> clazz;
-
-    static {
-        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
-    }
-
-    public FastJson2JsonRedisSerializer(Class<T> clazz) {
-        super();
-        this.clazz = clazz;
-    }
-
-    @Override
-    public byte[] serialize(T t) throws SerializationException {
-        if (t == null) {
-            return new byte[0];
-        }
-        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
-    }
-
-    @Override
-    public T deserialize(byte[] bytes) throws SerializationException {
-        if (bytes == null || bytes.length <= 0) {
-            return null;
-        }
-        String str = new String(bytes, DEFAULT_CHARSET);
-        return JSON.parseObject(str, clazz);
+    public RedisObjectSerializer() {
+        super(Object.class);
+        ObjectMapper objectMapper = JsonUtil.newInstance();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.WRAPPER_ARRAY);
+        this.setObjectMapper(objectMapper);
     }
 }
+
 ```
 
 ## 拓展

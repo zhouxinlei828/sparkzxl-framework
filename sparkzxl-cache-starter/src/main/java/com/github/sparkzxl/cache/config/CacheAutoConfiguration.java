@@ -1,7 +1,7 @@
 package com.github.sparkzxl.cache.config;
 
-import com.github.sparkzxl.cache.template.CacheCaffeineTemplateImpl;
-import com.github.sparkzxl.cache.template.CacheTemplate;
+import com.github.sparkzxl.cache.template.CaffeineCacheImpl;
+import com.github.sparkzxl.cache.template.GeneralCacheService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class CacheAutoConfiguration {
 
     @Bean
-    public CacheTemplate cacheCaffeineTemplate() {
-        return new CacheCaffeineTemplateImpl();
+    public GeneralCacheService cacheCaffeineTemplate() {
+        return new CaffeineCacheImpl();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.cache.utils;
 
 import cn.hutool.core.util.IdUtil;
-import com.github.sparkzxl.cache.template.CacheTemplate;
+import com.github.sparkzxl.cache.template.GeneralCacheService;
 import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -11,25 +11,25 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhouxinlei
  */
-public class TokenUtil {
+public class CacheTokenUtils {
 
-    private final CacheTemplate cacheTemplate;
+    private final GeneralCacheService generalCacheService;
 
-    public TokenUtil(CacheTemplate cacheTemplate) {
-        this.cacheTemplate = cacheTemplate;
+    public CacheTokenUtils(GeneralCacheService generalCacheService) {
+        this.generalCacheService = generalCacheService;
     }
 
     public String getToken() {
         String token = "token".concat(IdUtil.simpleUUID());
-        cacheTemplate.set(token, token, 15L, TimeUnit.MINUTES);
+        generalCacheService.set(token, token, 15L, TimeUnit.MINUTES);
         return token;
     }
 
 
     public boolean findToken(String token) {
-        String value = cacheTemplate.get(token);
+        String value = generalCacheService.get(token);
         if (!StringUtils.isEmpty(value)) {
-            cacheTemplate.remove(token);
+            generalCacheService.remove(token);
             return true;
         }
         return false;

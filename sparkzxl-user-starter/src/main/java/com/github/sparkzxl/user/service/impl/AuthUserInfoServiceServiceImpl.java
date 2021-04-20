@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.service.impl;
 
-import com.github.sparkzxl.cache.template.CacheTemplate;
+import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
@@ -22,17 +22,25 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Slf4j
 public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
 
-    @Autowired(required = false)
     public RedisTemplate<String, Object> redisTemplate;
-    @Autowired(required = false)
-    private CacheTemplate cacheTemplate;
+    private GeneralCacheService generalCacheService;
+
+    @Autowired
+    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    @Autowired
+    public void setGeneralCacheService(GeneralCacheService generalCacheService) {
+        this.generalCacheService = generalCacheService;
+    }
 
     @Override
     public AuthUserInfo getUserInfo(String accessToken) {
         log.info("accessToken : [{}]", accessToken);
         AuthUserInfo authUserInfo = null;
-        if (ObjectUtils.isNotEmpty(cacheTemplate)) {
-            authUserInfo = cacheTemplate.get(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));
+        if (ObjectUtils.isNotEmpty(generalCacheService)) {
+            authUserInfo = generalCacheService.get(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
             String userId = BaseContextHandler.getUserId(String.class);

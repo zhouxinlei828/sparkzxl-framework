@@ -14,12 +14,12 @@ import java.util.function.Function;
  * @author zhouxinlei
  */
 @SuppressWarnings("unchecked")
-public class CacheCaffeineTemplateImpl implements CacheTemplate {
+public class CaffeineCacheImpl implements GeneralCacheService {
 
     long maxSize = 1000L;
     private final Cache<String, Cache<String, Object>> cacheMap;
 
-    public CacheCaffeineTemplateImpl() {
+    public CaffeineCacheImpl() {
         this.cacheMap = Caffeine.newBuilder().maximumSize(this.maxSize).build();
     }
 

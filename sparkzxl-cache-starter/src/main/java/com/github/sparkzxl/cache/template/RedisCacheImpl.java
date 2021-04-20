@@ -21,7 +21,7 @@ import java.util.function.Function;
  */
 @Slf4j
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class RedisCacheTemplateImpl implements CacheTemplate {
+public class RedisCacheImpl implements GeneralCacheService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -32,7 +32,7 @@ public class RedisCacheTemplateImpl implements CacheTemplate {
         valueOperations = redisTemplate.opsForValue();
     }
 
-    public RedisCacheTemplateImpl(RedisTemplate<String, Object> redisTemplate) {
+    public RedisCacheImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
