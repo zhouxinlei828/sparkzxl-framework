@@ -28,6 +28,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
@@ -92,7 +93,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             log.debug(" Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
                     ":[{}]", createIndexResponse.isShardsAcknowledged());
         } catch (IOException e) {
-            throw new ElasticsearchException("创建索引 {" + index + "} 失败");
+            throw new ElasticsearchException("创建索引 {" + index + "} 失败：{}", e.getMessage());
         }
     }
 
@@ -106,7 +107,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         try {
             restHighLevelClient.indices().delete(deleteIndexRequest, COMMON_OPTIONS);
         } catch (IOException e) {
-            throw new ElasticsearchException("删除索引 {" + index + "} 失败");
+            throw new ElasticsearchException("删除索引 {" + index + "} 失败：{}", e.getMessage());
         }
     }
 
@@ -204,7 +205,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             IndexResponse indexResponse = restHighLevelClient.index(request, COMMON_OPTIONS);
             result = indexResponse.status().equals(RestStatus.OK);
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("error to execute save doc ,because of [{}]", e.getMessage());
             result = false;
         }
         return result;
@@ -215,7 +216,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         try {
             return updateRequest(index, id == null ? getESId(object) : String.valueOf(id), object);
         } catch (Exception e) {
-            log.error("更新索引 [{}] 数据 [{}] 失败", index, object);
+            log.error("更新索引 [{}] 数据 [{}] 失败：[{}]", index, object, e.getMessage());
             return false;
         }
     }
@@ -238,7 +239,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             BulkResponse bulk = restHighLevelClient.bulk(request, COMMON_OPTIONS);
             result = bulk.status().equals(RestStatus.OK);
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("error to execute save or update doc ,because of [{}]", e.getMessage());
             result = false;
         }
         return result;
@@ -254,7 +255,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         try {
             return deleteRequest(index, id);
         } catch (Exception e) {
-            log.error("删除索引 [{}] 数据id [{}] 失败", index, id);
+            log.error("删除索引 [{}] 数据id [{}] 失败：{}", index, id, e.getMessage());
             return false;
         }
     }
@@ -273,7 +274,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
                 result = bulk.status().equals(RestStatus.OK);
             }
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("error to execute delete doc ,because of [{}]", e.getMessage());
             result = false;
         }
         return result;
@@ -294,8 +295,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             });
             return resultList.size() == 0 ? null : resultList.get(0);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("搜索文档发生异常： [{}]", e.getMessage());
+            log.error("error to execute searching,because of [{}]", e.getMessage());
         }
         return null;
     }
@@ -312,7 +312,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             });
             return resultList;
         } catch (Exception e) {
-            log.error("搜索文档发生异常： [{}]", e.getMessage());
+            log.error("error to execute searching,because of [{}]", e.getMessage());
         }
         return null;
     }
@@ -400,7 +400,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             });
             return resultList;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("error to execute searching,because of [{}]", e.getMessage());
         }
         return Lists.newArrayList();
     }
@@ -428,7 +428,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             });
             return results;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("error to execute searching,because of [{}]", e.getMessage());
         }
         return Maps.newHashMap();
     }
@@ -446,7 +446,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             buckets.forEach(bucket -> responseMap.put(bucket.getKeyAsString(), bucket.getDocCount()));
             return responseMap;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("error to execute aggregation searching,because of [{}]", e.getMessage());
         }
         return Maps.newHashMap();
     }
@@ -471,7 +471,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             pageResponse.setList(dataList);
             return pageResponse;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("error to execute searching,because of [{}]", e.getMessage());
             throw new ElasticsearchException(String.valueOf(HttpStatus.BAD_REQUEST),
                     "error to execute searching,because of " + e.getMessage());
         }
