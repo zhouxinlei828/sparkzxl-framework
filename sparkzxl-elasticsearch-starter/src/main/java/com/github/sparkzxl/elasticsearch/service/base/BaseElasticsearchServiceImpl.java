@@ -50,7 +50,7 @@ import java.util.*;
 @Slf4j
 public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
 
-    protected RestHighLevelClient restHighLevelClient;
+    public RestHighLevelClient restHighLevelClient;
 
     private ElasticsearchProperties elasticsearchProperties;
 
