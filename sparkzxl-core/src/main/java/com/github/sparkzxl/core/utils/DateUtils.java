@@ -2,6 +2,7 @@ package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -168,13 +169,15 @@ public class DateUtils extends DateUtil {
     public static DateInfo getDateInfo(Date startDate, Date endDate) {
         DateInfo dateInfo = new DateInfo();
         Optional.ofNullable(startDate).ifPresent(value -> {
-            dateInfo.setStartTime(beginOfDay(startDate).toString(DatePattern.NORM_DATETIME_PATTERN));
-            dateInfo.setStartDate(startDate);
+            DateTime beginOfDay = beginOfDay(startDate);
+            dateInfo.setStartTime(DatePattern.NORM_DATETIME_FORMAT.format(beginOfDay));
+            dateInfo.setStartDate(beginOfDay);
         });
-        String endTime = Optional.ofNullable(endDate).map(value -> endOfDay(value).toString(DatePattern.NORM_DATETIME_PATTERN))
-                .orElseGet(DateUtil::now);
-        dateInfo.setEndTime(endTime);
-        dateInfo.setEndDate(parse(endTime));
+        Optional.ofNullable(endDate).ifPresent(value -> {
+            DateTime endOfDay = endOfDay(startDate);
+            dateInfo.setEndTime(DatePattern.NORM_DATETIME_FORMAT.format(endOfDay));
+            dateInfo.setEndDate(endOfDay);
+        });
         return dateInfo;
     }
 
