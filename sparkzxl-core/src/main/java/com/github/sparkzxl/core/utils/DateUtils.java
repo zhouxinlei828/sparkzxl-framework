@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -203,6 +204,14 @@ public class DateUtils extends DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Date localDate2Date(LocalDate localDate) {
+        if (null == localDate) {
+            return null;
+        }
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+        return Date.from(zonedDateTime.toInstant());
     }
 
 }
