@@ -4,9 +4,6 @@ import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.core.utils.StrPool;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * description: 获取当前域中的 用户id appid 用户昵称
  * 注意： appid 通过token解析，  用户id 和 用户昵称必须在前端 通过请求头的方法传入。 否则这里无法获取
@@ -16,7 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BaseContextHandler {
 
     public static void set(String key, Object value) {
-        RequestContextHolderUtils.setAttribute(key,value == null ? StrPool.EMPTY : value.toString());
+        RequestContextHolderUtils.setAttribute(key, value == null ? StrPool.EMPTY : value.toString());
+    }
+
+    public static void remove(String key) {
+        RequestContextHolderUtils.removeAttribute(key);
     }
 
     public static <T> T get(String key, Class<T> type) {

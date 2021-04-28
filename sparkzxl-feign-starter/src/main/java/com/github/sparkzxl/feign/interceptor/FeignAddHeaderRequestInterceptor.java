@@ -1,6 +1,5 @@
 package com.github.sparkzxl.feign.interceptor;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
@@ -9,9 +8,9 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,10 +49,11 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
             HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, BaseContextHandler.get(headerName)));
             return;
         }
-        HttpServletRequest request = requestAttributes.getRequest();
         HEADER_NAME_LIST.forEach((headerName) -> {
-            String header = request.getHeader(headerName);
-            template.header(headerName, ObjectUtil.isEmpty(header) ? BaseContextHandler.get(headerName) : header);
+            String header = BaseContextHandler.get(headerName);
+            if (StringUtils.isNotEmpty(header)) {
+                template.header(headerName, BaseContextHandler.get(headerName));
+            }
         });
     }
 }

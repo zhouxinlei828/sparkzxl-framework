@@ -37,6 +37,10 @@ public class RequestContextHolderUtils {
         getRequestAttributes().getRequest().setAttribute(name, o);
     }
 
+    public static void removeAttribute(String name) {
+        getRequestAttributes().getRequest().removeAttribute(name);
+    }
+
     public static String getAttributeStr(String name) {
         return String.valueOf(getRequestAttributes().getRequest().getAttribute(name));
     }

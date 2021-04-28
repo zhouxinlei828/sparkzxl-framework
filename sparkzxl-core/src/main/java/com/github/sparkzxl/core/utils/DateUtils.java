@@ -7,6 +7,8 @@ import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,6 +57,17 @@ public class DateUtils extends DateUtil {
      */
     public static String formatDate(LocalDateTime localDateTime, DateTimeFormatter dateTimeFormatter) {
         return localDateTime.format(dateTimeFormatter);
+    }
+
+    public static Date formatDate(String dateStr, String datePattern) {
+        DateFormat fmt = new SimpleDateFormat(datePattern);
+        try {
+            return fmt.parse(dateStr);
+        } catch (ParseException e) {
+            log.error("格式化日期发生异常：[{}]", e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -214,4 +227,10 @@ public class DateUtils extends DateUtil {
         return Date.from(zonedDateTime.toInstant());
     }
 
+    public static void main(String[] args) {
+        String dateStr = "2021-04-28 09:15";
+        Date date = formatDate(dateStr, DatePattern.NORM_DATETIME_MINUTE_PATTERN);
+        System.out.println(formatDateTime(date));
+        System.out.println(date);
+    }
 }
