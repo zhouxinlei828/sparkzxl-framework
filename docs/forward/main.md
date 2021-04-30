@@ -11,7 +11,7 @@
 **落地最佳实践**：[sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
 
 ## 文档更新记录
-
+- [框架使用手册](forward/框架使用手册.md)
 - [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
 - [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
 - [sparkzxl-core组件](forward/sparkzxl-core.md)
