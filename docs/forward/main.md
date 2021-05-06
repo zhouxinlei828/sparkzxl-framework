@@ -12,6 +12,7 @@
 
 ## 文档更新记录
 - [框架使用手册](forward/框架使用手册.md)
+- [Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
 - [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
 - [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
 - [sparkzxl-core组件](forward/sparkzxl-core.md)
