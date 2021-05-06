@@ -1,7 +1,8 @@
 * 首页
     * [sparkzxl-component功能概览](forward/main.md)
 * 组件框架搭建
-    * [1.sparkzxl-component框架搭建手册](forward/框架搭建手册.md)
+    * [1.框架搭建手册之maven私库nexus实战](forward/框架搭建手册之maven私库nexus实战.md)
+    * [2.框架搭建手册之idea搭建代码环境](forward/框架搭建手册之idea搭建代码环境.md)
 * 应用部署实践
     * [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
     * [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
