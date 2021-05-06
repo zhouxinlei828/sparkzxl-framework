@@ -1,7 +1,7 @@
 * 首页
     * [sparkzxl-component功能概览](forward/main.md)
 * 组件应用篇
-    * [框架使用手册](forward/框架使用手册.md)
+    * [框架搭建手册](forward/框架搭建手册.md)
     * [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
     * [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
     * [3.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)

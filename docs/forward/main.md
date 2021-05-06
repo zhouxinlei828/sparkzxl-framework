@@ -11,7 +11,7 @@
 **落地最佳实践**：[sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
 
 ## 文档更新记录
-- [框架使用手册](forward/框架使用手册.md)
+- [框架搭建手册](forward/框架搭建手册.md)
 - [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
 - [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
 - [3.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)
