@@ -31,8 +31,19 @@
         alias: {
             '/.*/_sidebar.md': '/_sidebar.md',//防止意外回退
         },
-        themeColor: '#2980b9',
+        themeColor: '#1890ff',
         ga: 'UA-144208445-1',
+        count: {
+            countable: true,
+            fontsize: '0.9em',
+            color: 'rgb(90,90,90)',
+            language: 'chinese'
+        },
+        copyCode: {
+            buttonText: '复制到剪切板',
+            errorText: '错误',
+            successText: '复制成功'
+        },
         plugins: [
             function (hook) {
                 var header = [
@@ -61,10 +72,12 @@
         ]
     }
 </script>
-<script src="//unpkg.com/docsify@4.10.0/lib/docsify.min.js"></script>
-<script src="//unpkg.com/docsify@4.10.0/lib/plugins/ga.js"></script>
-<script src="//unpkg.com/docsify@4.10.0/lib/plugins/search.js"></script>
-<script src="//unpkg.com/docsify-copy-code@2.1.0/dist/docsify-copy-code.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/ga.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+<script src="//unpkg.com/docsify-count/dist/countable.js"></script>
 <script src="//unpkg.com/prismjs@1.19.0/components/prism-bash.js"></script>
 <script src="//unpkg.com/prismjs@1.19.0/components/prism-java.js"></script>
 <script src="//unpkg.com/prismjs@1.19.0/components/prism-sql.js"></script>
