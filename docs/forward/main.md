@@ -8,7 +8,10 @@
 
 [sparkzxl-component](https://github.com/sparkzxl/sparkzxl-component.git)
 
-**落地最佳实践**：[sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
+**落地最佳实践**：
+
+- [sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
+- [sparkzxl-auth](https://github.com/sparkzxl/sparkzxl-auth.git)
 
 ## 文档更新记录
 
