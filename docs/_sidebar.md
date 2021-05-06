@@ -2,7 +2,8 @@
     * [sparkzxl-component功能概览](forward/main.md)
 * 组件功能篇
     * [框架使用手册](forward/框架使用手册.md)
-    * [Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
+    * [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
+    * [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
     * [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
     * [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
     * [sparkzxl-core组件](forward/sparkzxl-core.md)
