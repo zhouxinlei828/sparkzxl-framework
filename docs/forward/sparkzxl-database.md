@@ -7,6 +7,7 @@
 ## POM
 
 ```xml
+
 <dependencies>
     <dependency>
         <groupId>com.github.sparkzxl</groupId>
@@ -91,8 +92,8 @@
 
 ```java
     @TableField("org_id")
-    @InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
-    private RemoteData<Long, CoreOrg> org;
+@InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
+private RemoteData<Long, CoreOrg> org;
 ```
 
 RemoteData 对象主要有2个字段：key、data
@@ -186,6 +187,7 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 1. 引入依赖
 
 ```xml
+
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-database-starter</artifactId>
@@ -207,14 +209,15 @@ sparkzxl:
 
 ```java
     @TableField("org_id")
-    @InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
-    private RemoteData<Long, CoreOrg> org;
+@InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
+private RemoteData<Long, CoreOrg> org;
 ```
 
 4.实现具体的查询方法 // 标记了该注解的字段 @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType =
 DictionaryType.AREA_LEVEL) 需要实现的 示例
 
  ```java
+
 @Repository
 public class CoreOrgRepository implements ICoreOrgRepository {
 
@@ -278,6 +281,7 @@ sparkzxl:
 1. 引入依赖
 
 ```xml
+
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-database-starter</artifactId>

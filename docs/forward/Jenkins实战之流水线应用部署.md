@@ -1,4 +1,5 @@
 # Jenkins实战之流水线语法详解
+
 > 在前两章节，我们了解了Jenkins流水线的搭建部署以及Jenkins流水线语法的介绍，本章节开始进行实战
 
 - [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
@@ -6,6 +7,7 @@
 - [框架使用手册](forward/框架使用手册.md)
 
 ## 一. 准备环境
+
 |软件环境|简介|版本|RAM
 |-------|-------|-------|-------|
 |centos|Linux操作系统|7.8|8G|
@@ -15,9 +17,11 @@
 |spring boot应用|业务应用代码|2.3.9||
 
 ## 二. spring boot应用环境搭建
+
 > 基于谷歌maven jib插件进行镜像打包，详情指令文档可查看[谷歌maven jib插件](https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin)
 
 ### 新建config.json文件
+
 ```json
 {
   "version": "1.0-SNAPSHOT",
@@ -48,6 +52,7 @@
   }
 }
 ```
+
 **注释**
 
 |变量|注释|
@@ -62,7 +67,9 @@
 |appName|应用名称|
 
 ### 新建Jenkinsfile文件
+
 > 读取config.json文件字段获取配置项
+
 ```text
 import groovy.json.JsonSlurper
 node {
@@ -150,6 +157,7 @@ node {
 }
 
 ```
+
 **注释**
 
 |变量|注释|
@@ -185,6 +193,7 @@ node {
 点击保存即可建完Jenkins流水线任务
 
 ## 运行流水线
+
 - 打开流水线面板
 
 ![run-pipeline.png](../images/run-pipeline.png)

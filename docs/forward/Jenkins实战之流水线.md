@@ -124,7 +124,7 @@ cat /usr/local/docker/jenkins/data/secrets/initialAdminPassword
 ![jenkins-maven-setting1.png](../images/jenkins-maven-setting1.png)
 
 - 新增配置
-  
+
 ![maven-configfiles.png](../images/maven-configfiles.png)
 
 ```xml

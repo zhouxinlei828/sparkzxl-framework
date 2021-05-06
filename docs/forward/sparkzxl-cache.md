@@ -6,6 +6,7 @@
 ## POM
 
 ```xml
+
 <dependencies>
     <dependency>
         <groupId>com.github.sparkzxl</groupId>
@@ -46,6 +47,7 @@
 
 ```java
 import java.util.function.Function;
+
 /**
  * description: 缓存提供接口
  *
@@ -224,6 +226,7 @@ public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
 1. 引入依赖
 
 ```xml
+
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-cache-starter</artifactId>

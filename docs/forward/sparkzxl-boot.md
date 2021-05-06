@@ -6,6 +6,7 @@
 ## POM
 
 ```xml
+
 <dependencies>
     <dependency>
         <groupId>com.github.sparkzxl</groupId>
@@ -50,6 +51,7 @@
 1. 引入依赖
 
 ```xml
+
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-boot-starter</artifactId>
@@ -60,6 +62,7 @@
 2. 继承SparkBootApplication
 
 ```java
+
 @SpringBootApplication(scanBasePackages = {"com.github.sparkzxl.authority"})
 public class AuthorityApplication extends SparkBootApplication {
     public static void main(String[] args) {

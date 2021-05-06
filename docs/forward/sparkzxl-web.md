@@ -6,6 +6,7 @@
 ## POM
 
 ```xml
+
 <dependencies>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -46,6 +47,7 @@
 1. 引入依赖
 
 ```xml
+
 <dependency>
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-web-starter</artifactId>
@@ -66,6 +68,7 @@ ResponseResultStatus.ACCOUNT_EMPTY.assertNotNull(authUserDetail);
 默认有常见的异常枚举类
 
 ```java
+
 @Getter
 @AllArgsConstructor
 public enum ResponseResultStatus implements BusinessEnumSysAssert {

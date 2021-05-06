@@ -1,15 +1,16 @@
 * 首页
-  * [sparkzxl-component功能概览](forward/main.md)
+    * [sparkzxl-component功能概览](forward/main.md)
 * 组件框架搭建
-  * [1.sparkzxl-component框架搭建手册](forward/框架搭建手册.md)
+    * [1.sparkzxl-component框架搭建手册](forward/框架搭建手册.md)
 * 应用部署实践
-  * [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
-  * [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
-  * [3.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)
+    * [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
+    * [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
+    * [3.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)
+    * [4.链路追踪实战之skywalking应用搭建](forward/链路追踪实战之skywalking应用搭建.md)
 * 组件功能介绍
-  * [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
-  * [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
-  * [sparkzxl-core组件](forward/sparkzxl-core.md)
-  * [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
-  * [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
-  * [sparkzxl-web-starter组件](forward/sparkzxl-web.md)
+    * [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
+    * [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
+    * [sparkzxl-core组件](forward/sparkzxl-core.md)
+    * [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
+    * [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
+    * [sparkzxl-web-starter组件](forward/sparkzxl-web.md)

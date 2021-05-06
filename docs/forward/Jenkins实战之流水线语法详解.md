@@ -5,6 +5,7 @@
 > Pipeline支持两种语法： Declarative Pipeline（声明式pipeline，在pipeline2.5中引入，结构化方式）和Scripted Pipeline（脚本式pipeline），两者都支持建立连续输送的Pipeline。
 
 相关资料：
+
 - [jenkins-scripted-pipeline-or-declarative-pipeline](https://stackoverflow.com/questions/43484979/jenkins-scripted-pipeline-or-declarative-pipeline)
 - [Declarative-pipelines-vs-scripted](http://jenkins-ci.361315.n4.nabble.com/Declarative-pipelines-vs-scripted-td4891792.html)
 
