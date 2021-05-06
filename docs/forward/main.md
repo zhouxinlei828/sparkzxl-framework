@@ -15,6 +15,7 @@
 
 ## 文档更新记录
 
+- [手册/文档更新手册](forward/文档更新手册.md)
 - [组件框架搭建/框架搭建手册](forward/框架搭建手册.md)
 - [应用部署实践/1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
 - [应用部署实践/2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)

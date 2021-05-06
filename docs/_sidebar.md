@@ -14,3 +14,4 @@
     * [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
     * [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
     * [sparkzxl-web-starter组件](forward/sparkzxl-web.md)
+* [文档更新手册](forward/文档更新手册.md)
