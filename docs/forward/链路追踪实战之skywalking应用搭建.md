@@ -73,5 +73,5 @@ docker-compose up -d
 
 ### 1.2 spring-boot接入skywalking
 
-[spring-boot接入skywalking](forward/spring-boot接入skywalking.md)
+[链路追踪实战之spring-boot接入skywalking](forward/链路追踪实战之spring-boot接入skywalking.md)
 
