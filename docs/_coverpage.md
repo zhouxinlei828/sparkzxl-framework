@@ -6,3 +6,6 @@
 
 [GitHub](https://github.com/sparkzxl/sparkzxl-component)
 [开始](README.md)
+
+![](images/1142.jpg)
+![color](#f0f0f0)
