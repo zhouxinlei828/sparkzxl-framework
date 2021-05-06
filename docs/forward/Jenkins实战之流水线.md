@@ -1,11 +1,13 @@
 # Jenkins部署之流水线实战
 ## 1. Jenkins搭建流程
 ### 1.1 安装环境
+
 |软件环境|简介|版本|RAM
 |-------|-------|-------|-------|
 |centos|Linux操作系统|7.8|8G|
 |docker|docker虚拟化环境|20.10.6||
 |docker-compose|docker容器编排|1.29.1||
+
 ### 1.2 安装Jenkins
 1. 新建Jenkins持久化volume目录
 ```shell
