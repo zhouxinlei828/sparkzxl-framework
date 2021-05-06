@@ -1,4 +1,4 @@
-# SkyWalking实战之应用搭建
+# 链路追踪实战之skywalking应用搭建
 
 ## 1. SkyWalking搭建流程
 
