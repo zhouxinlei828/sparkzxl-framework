@@ -461,8 +461,12 @@ public class DemoApplication extends SparkBootApplication {
 
 **注意事项：** sparkzxl-distributed-cloud-starter里面依赖了nacos配置中心和nacos注册中心的maven依赖，还有openfeign服务之间的调用，熔断器使用hystrix
 
-### 3.2 yaml配置
+### 3.2 bootstrap.yaml配置
+> - bootstrap-dev.yaml
+> - bootstrap-test.yaml
+> - bootstrap-prod.yaml
 
+以上各自加上以下spring cloud配置
 ```yaml
 spring:
   cloud:
