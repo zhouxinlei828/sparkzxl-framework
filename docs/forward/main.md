@@ -22,6 +22,7 @@
 - [应用部署实践/2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
 - [应用部署实践/3.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)
 - [应用部署实践/4.链路追踪实战之skywalking应用搭建](forward/链路追踪实战之skywalking应用搭建.md)
+- [应用部署实践/5.链路追踪实战之spring-boot接入skywalking](forward/链路追踪实战之spring-boot接入skywalking.md)
 - [组件功能介绍/sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
 - [组件功能介绍/sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
 - [组件功能介绍/sparkzxl-core组件](forward/sparkzxl-core.md)
