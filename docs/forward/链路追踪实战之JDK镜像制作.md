@@ -35,15 +35,11 @@
   
 ```dockerfile
 FROM centos:7
-
 MAINTAINER zhouxinlei <zhouxinlei298@163.com>
-
 RUN  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
-
 ENV LANG="zh_CN.UTF-8"
 RUN echo "export LC_ALL=zh_CN.UTF-8"  >>  /etc/profile &&  echo "export LC_ALL=zh_CN.UTF-8" >>/root/.bashrc \
         && localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
-
 RUN cd /usr/share/fonts/ \
         && chmod -R 755 /usr/share/fonts \
         && yum install mkfontscale -y \
@@ -54,18 +50,14 @@ RUN cd /usr/share/fonts/ \
         && mkdir /usr/local/java/ \
         #清理缓存,减少镜像大小
         && yum clean all
-
 ADD jdk-8u281-linux-x64.tar.gz /usr/local/java/
 ADD skywalking/ skywalking/
-
 ENV JAVA_HOME /usr/local/java/jdk1.8.0_281
 ENV JRE_HOME ${JAVA_HOME}/jre
 ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
 ENV PATH ${JAVA_HOME}/bin:$PATH
-
 HEALTHCHECK --interval=5s --timeout=2s --retries=10 \
   CMD curl --silent --fail ${HEALTHCHECK_URL} || exit 1
-
 CMD ["/bin/bash"]
 ```
 > - 这边使用的是jdk-8u281版本的jdk
