@@ -172,7 +172,6 @@ docker-compose up -d
 2. 添加上传nexus配置
 
 ```xml
-
 <build>
     <resources>
         <resource>
@@ -199,113 +198,112 @@ docker-compose up -d
                 <version>3.8.0</version>
                 <configuration>
                     <source>1.8</source>
-                    <target1.8
-                </target>
-                <encoding>UTF-8</encoding>
-            </configuration>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- resources资源插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <delimiters>
+                        <delimiter>@</delimiter>
+                    </delimiters>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                    <encoding>UTF-8</encoding>
+                    <!-- 后缀为pem、pfx的证书文件 -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>key</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>db</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>txt</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <!--配置生成源码包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+    <plugins>
+        <!-- 编译插件 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
         </plugin>
-        <!-- resources资源插件 -->
+        <!-- 资源插件 -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
-            <version>3.1.0</version>
-            <configuration>
-                <delimiters>
-                    <delimiter>@</delimiter>
-                </delimiters>
-                <useDefaultDelimiters>false</useDefaultDelimiters>
-                <encoding>UTF-8</encoding>
-                <!-- 后缀为pem、pfx的证书文件 -->
-                <nonFilteredFileExtensions>
-                    <nonFilteredFileExtension>pem</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>p12</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>key</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>jks</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>db</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>txt</nonFilteredFileExtension>
-                </nonFilteredFileExtensions>
-            </configuration>
         </plugin>
         <!--配置生成源码包 -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-                <execution>
-                    <id>attach-sources</id>
-                    <goals>
-                        <goal>jar</goal>
-                    </goals>
-                </execution>
-            </executions>
         </plugin>
     </plugins>
-</pluginManagement>
-<plugins>
-<!-- 编译插件 -->
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-</plugin>
-<!-- 资源插件 -->
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-resources-plugin</artifactId>
-</plugin>
-<!--配置生成源码包 -->
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-source-plugin</artifactId>
-</plugin>
-</plugins>
-        </build>
-
+</build>
 <profiles>
-<profile>
-    <!-- 打包的 -P参数 -->
-    <id>release</id>
-    <build>
-        <plugins>
-            <!-- Source -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://127.0.0.1:8764/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://127.0.0.1:8764/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    <activation>
-        <activeByDefault>true</activeByDefault>
-    </activation>
-</profile>
+    <profile>
+        <!-- 打包的 -P参数 -->
+        <id>release</id>
+        <build>
+            <plugins>
+                <!-- Source -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Javadoc -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </build>
+        <distributionManagement>
+            <repository>
+                <id>maven-releases</id>
+                <url>http://127.0.0.1:8764/repository/maven-releases/</url>
+            </repository>
+            <snapshotRepository>
+                <id>maven-snapshots</id>
+                <url>http://127.0.0.1:8764/repository/maven-snapshots/</url>
+            </snapshotRepository>
+        </distributionManagement>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+    </profile>
 </profiles>
 ```
 
-snapshotRepository和repository设置你需要上传的仓库地址：
+> snapshotRepository和repository设置你需要上传的仓库地址：
+
 ![image.png](https://oss.sparksys.top/halo/image_1620095852552.png)
 
 3. 到此，上传jar包到maven私库nexus的配置完成，点击deploy试试吧
@@ -317,7 +315,6 @@ snapshotRepository和repository设置你需要上传的仓库地址：
 新增repositories节点，连接nexus特定的仓库
 
 ```xml
-
 <repositories>
     <repository>
         <id>maven-releases</id>
