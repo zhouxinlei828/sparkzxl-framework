@@ -32,7 +32,69 @@
 ### 1.4 制作JDK镜像
 
 - 新建Dockerfile
+  
+```text
+FROM centos:7
+
+MAINTAINER zhouxinlei <zhouxinlei298@163.com>
+
+#修改时区
+RUN  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
+# 解决中文环境问题
+ENV LANG="zh_CN.UTF-8"
+RUN echo "export LC_ALL=zh_CN.UTF-8"  >>  /etc/profile &&  echo "export LC_ALL=zh_CN.UTF-8" >>/root/.bashrc \
+        && localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
+
+#执行安装
+RUN cd /usr/share/fonts/ \
+        && chmod -R 755 /usr/share/fonts \
+        && yum install mkfontscale -y \
+        && mkfontscale \
+        && yum install fontconfig -y \
+        && mkfontdir \
+        && fc-cache -fv \
+        && mkdir /usr/local/java/ \
+        #清理缓存,减少镜像大小
+        && yum clean all
+
+ADD jdk-8u281-linux-x64.tar.gz /usr/local/java/
+ADD skywalking/ skywalking/
+
+#配置环境变量
+ENV JAVA_HOME /usr/local/java/jdk1.8.0_281
+ENV JRE_HOME ${JAVA_HOME}/jre
+ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
+ENV PATH ${JAVA_HOME}/bin:$PATH
+
+HEALTHCHECK --interval=5s --timeout=2s --retries=10 \
+  CMD curl --silent --fail ${HEALTHCHECK_URL} || exit 1
+
+CMD ["/bin/bash"]
+```
+> - 这边使用的是jdk-8u281版本的jdk
+> - HEALTHCHECK_URL：是配置健康检查地址
+
+
 - JDK镜像构建
+
+文件结构如下
+  
+![jdk-build.png](jdk-build.png)
+
+```shell
+docker build -t java:8 .
+```
 - 推送镜像
+
+> 打标签，登录阿里云Docker Registry，推送镜像
+```shell
+docker tag 2467d72208b3 registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
+docker login --username=admin registry.cn-hangzhou.aliyuncs.com
+docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
+```
+> - 2467d72208b3: 镜像id
+> - sparkzxl/java:8: 打包镜像名称
+  
 - 使用镜像
 - 运行容器
