@@ -44,7 +44,7 @@
     <repositories>
         <repository>
             <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+            <url>http://58.33.180.123:23582/repository/maven-releases/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -54,7 +54,7 @@
         </repository>
         <repository>
             <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+            <url>http://58.33.180.123:23582/repository/maven-snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -284,11 +284,11 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+            <url>http://58.33.180.123:23582/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+            <url>http://58.33.180.123:23582/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

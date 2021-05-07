@@ -150,7 +150,7 @@ public class PdfTest {
 ## 更多
 
 > 更多详细内容请下载查看代码文档
-> [sparkzxl-core-1.0.1.RELEASE-javadoc.jar](http://47.114.40.129:8764/repository/maven-releases/com/sparkzxl/sparkzxl-core/1.0.1.RELEASE/sparkzxl-core-1.0.1.RELEASE-javadoc.jar)
+> [sparkzxl-core-1.0.1.RELEASE-javadoc.jar](http://58.33.180.123:23582/repository/maven-releases/com/sparkzxl/sparkzxl-core/1.0.1.RELEASE/sparkzxl-core-1.0.1.RELEASE-javadoc.jar)
 
 ## 使用方法
 

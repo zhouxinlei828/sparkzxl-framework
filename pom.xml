@@ -116,12 +116,12 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+            <id>nexus-maven-releases</id>
+            <url>http://58.33.180.123:23582/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+            <id>nexus-maven-snapshots</id>
+            <url>http://58.33.180.123:23582/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <dependencies>
@@ -732,12 +732,12 @@
             </build>
             <distributionManagement>
                 <repository>
-                    <id>maven-releases</id>
-                    <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+                    <id>nexus-maven-releases</id>
+                    <url>http://58.33.180.123:23582/repository/maven-releases/</url>
                 </repository>
                 <snapshotRepository>
-                    <id>maven-snapshots</id>
-                    <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+                    <id>nexus-maven-snapshots</id>
+                    <url>http://58.33.180.123:23582/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
             <activation>
