@@ -221,10 +221,6 @@
                             <tags>
                                 <tag>${project.version}</tag>
                             </tags>
-                            <auth>
-                                <username>仲秋廿八298</username>
-                                <password>Zxl298828</password>
-                            </auth>
                         </to>
                         <container>
                             <jvmFlags>
