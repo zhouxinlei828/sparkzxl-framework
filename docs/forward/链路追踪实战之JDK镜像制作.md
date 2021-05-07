@@ -33,7 +33,7 @@
 
 - 新建Dockerfile
   
-```text
+```dockerfile
 FROM centos:7
 
 MAINTAINER zhouxinlei <zhouxinlei298@163.com>
