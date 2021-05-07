@@ -82,7 +82,7 @@ docker login --username=admin registry.cn-hangzhou.aliyuncs.com
 docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 ```
 > - 2467d72208b3: 镜像id
-> - sparkzxl/java:8: 打包镜像名称
+> - registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8: 打包镜像地址
   
 - 使用镜像
 - 运行容器
