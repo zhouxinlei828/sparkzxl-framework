@@ -349,4 +349,4 @@ maven私库在日常开发中占据着很大的作用，希望我的这边文章
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](../images/wechat-sparkzxl.jpg)
