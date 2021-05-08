@@ -66,6 +66,9 @@ CMD ["/bin/bash"]
 
 - JDK镜像构建
 
+> 将下载JDK包和skywalking包 agent 下的放到Dockerfile同级目录
+
+![img.png](img.png)
 文件结构如下
   
 ![jdk-build.png](jdk-build.png)
