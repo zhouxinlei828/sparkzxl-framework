@@ -249,3 +249,8 @@ under the License.
 具体语法可参考：
 [Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
 
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

@@ -6,7 +6,6 @@
 ## POM
 
 ```xml
-
 <dependencies>
     <dependency>
         <groupId>com.github.sparkzxl</groupId>
@@ -68,14 +67,16 @@
 2. 在controller请求入参中加入AuthUserInfo<Long> authUserInfo：示例如下
 
 ```java
-    @PatchMapping("/role/{id}")
+@PatchMapping("/role/{id}")
 public void updateAuthRoleStatus(@ApiIgnore AuthUserInfo<Long> authUserInfo){
-        log.info("当前登录信息为：{}",JSONUtil.toJsonPrettyStr(authUserInfo))
-        }
+    log.info("当前登录信息为：{}",JSONUtil.toJsonPrettyStr(authUserInfo))
+}
 ```
 
 AuthUserInfo<Long>  泛型Long代表主键类型
 
-## 总结
+# 公众号
 
-使用起来非常方便
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

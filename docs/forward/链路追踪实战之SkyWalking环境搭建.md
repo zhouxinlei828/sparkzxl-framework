@@ -76,3 +76,9 @@ docker-compose up -d
 - [1.Spring Boot 链路追踪 SkyWalking 入门](http://www.iocoder.cn/Spring-Boot/SkyWalking)
 - [2.Spring Cloud 链路追踪 SkyWalking 入门](http://www.iocoder.cn/Spring-Cloud/SkyWalking)
 - [3.如何使用 SkyWalking 给 Dubbo 服务做链路追踪？](https://www.iocoder.cn/SkyWalking/How-do-I-use-Skywalking-to-do-tracking-for-the-Dubbo-service/)
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

@@ -154,3 +154,9 @@ docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 ```shell
 docker run -d --name spring-boot-demo --restart=always -v /logs/spring-boot-demo:/home/spring-boot-demo/logs -e --spring.profiles.active='dev' 8080:8080 spring-boot-demo:1.0
 ```
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

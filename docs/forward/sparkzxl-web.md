@@ -287,3 +287,9 @@ SparkZxlExceptionAssert.businessFail("发生异常")
 ## 总结
 
 使用起来非常方便，对整体的架构，设计出可复用的代码，对架构师显得尤为重要
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

@@ -207,3 +207,9 @@ node {
 ![run-pipeline-result.png](../images/run-pipeline-result.png)
 
 绿色代表流水线执行成功
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

@@ -233,3 +233,8 @@ public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
     <version>${sparkzxl.version}</version>
 </dependency>
 ```
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

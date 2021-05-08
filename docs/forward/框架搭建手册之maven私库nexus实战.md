@@ -344,3 +344,9 @@ docker-compose up -d
 ## 4 总结
 
 maven私库在日常开发中占据着很大的作用，希望我的这边文章能给小白们少一点踩坑，更好地提高工作效率，愉快的摸鱼~
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)

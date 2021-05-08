@@ -532,3 +532,9 @@ hystrix:
 
 - [sparkzxl-demo示例项目](https://gitee.com/AbsolutelyNT/sparkzxl-demo.git)
 - [sparkzxl-auth单点登陆](https://gitee.com/AbsolutelyNT/sparkzxl-auth.git)
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)
