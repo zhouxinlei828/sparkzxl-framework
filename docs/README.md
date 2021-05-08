@@ -1,4 +1,4 @@
-# sparkzxl-component
+# sparkzxl-component学习教程
 
 ## 简介
 
@@ -38,3 +38,7 @@
 ## 文档更新手册
 
 - [文档更新手册](forward/文档更新手册.md)
+
+#公众号
+
+![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)
