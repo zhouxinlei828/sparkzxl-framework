@@ -14,16 +14,20 @@
 - [sparkzxl-auth](https://github.com/sparkzxl/sparkzxl-auth.git)
 
 ## 开源博客
-[凛冬王昭君的笔记](https://www.sparksys.top)
+
+- [凛冬王昭君的笔记](https://www.sparksys.top)
 
 ## 核心架构
+
 ![分布式系统架构](https://oss.sparksys.top/images/system.png)
+
 ## 未来展望
 
 ## 组件框架搭建
 
 - [1.框架搭建手册之maven私库nexus实战](forward/框架搭建手册之maven私库nexus实战.md)
 - [2.框架搭建手册之idea搭建代码环境](forward/框架搭建手册之idea搭建代码环境.md)
+
 ## 分布式架构篇
 
 ## 应用部署实践
@@ -47,6 +51,8 @@
 
 - [文档更新手册](forward/文档更新手册.md)
 
-#公众号
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
 
 ![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)
