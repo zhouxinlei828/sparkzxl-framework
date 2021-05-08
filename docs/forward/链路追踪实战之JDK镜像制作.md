@@ -3,6 +3,7 @@
 ## 1. SkyWalking搭建流程
 
 在阅读本文章时，确保已经了解了sky walking基本搭建流程
+
 - [链路追踪实战之SkyWalking极简入门](https://www.iocoder.cn/SkyWalking/install)
 - [链路追踪实战之SkyWalking应用搭建](forward/链路追踪实战之SkyWalking环境搭建.md)
 
@@ -23,6 +24,7 @@
 下载对应的系统的jdk版本，本文使用的是Linux操作系统
 
 ### 1.3 下载SkyWalking
+
 官网下载路径:[skywalking 8.5.0](https://archive.apache.org/dist/skywalking/8.5.0/)
 
 ![skywalking-download.png](../images/skywalking-download.png)
@@ -32,7 +34,7 @@
 ### 1.4 制作JDK镜像
 
 - 新建Dockerfile
-  
+
 ```dockerfile
 FROM centos:7
 MAINTAINER zhouxinlei <zhouxinlei298@163.com>
@@ -60,9 +62,9 @@ HEALTHCHECK --interval=5s --timeout=2s --retries=10 \
   CMD curl --silent --fail ${HEALTHCHECK_URL} || exit 1
 CMD ["/bin/bash"]
 ```
+
 > - 这边使用的是jdk-8u281版本的jdk
 > - HEALTHCHECK_URL：是配置健康检查地址
-
 
 - JDK镜像构建
 
@@ -70,25 +72,28 @@ CMD ["/bin/bash"]
 
 ![skywalking-agent.png](../images/skywalking-agent.png)
 文件结构如下
-  
+
 ![jdk-build.png](../images/jdk-build.png)
 
 ```shell
 docker build -t java:8 .
 ```
+
 - 推送镜像
 
 > 打标签，登录阿里云Docker Registry，推送镜像
+
 ```shell
 docker tag 2467d72208b3 registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 docker login --username=admin registry.cn-hangzhou.aliyuncs.com
 docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 ```
+
 > - 2467d72208b3: 镜像id
 > - registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8: 打包镜像地址
-  
+
 - 使用镜像
-  
+
 ```xml
 <plugin>
     <groupId>com.google.cloud.tools</groupId>
@@ -134,11 +139,17 @@ docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
             </goals>
         </execution>
     </executions>
-    </plugin>
+</plugin>
 ```
 
-```text
-- jvmFlag:设置skywalking启动参数-> -javaagent:/skywalking/agent/skywalking-agent.jar
-- SW_AGENT_NAME: 注册到skywalking应用名称
-```
+> - **jvmFlag**:设置skywalking启动参数-> -javaagent:/skywalking/agent/skywalking-agent.jar
+> - **SW_AGENT_NAME**: 配置 Agent 名字。一般来说，我们直接使用 Spring Boot 项目的 `spring.application.name`
+> - **SW_AGENT_COLLECTOR_BACKEND_SERVICES**: skywalking 服务地址
+> - **SW_AGENT_SPAN_LIMIT**：配置链路的最大 Span 数量。一般情况下，不需要配置，默认为 300 。主要考虑，有些新上 SkyWalking Agent 的项目，代码可能比较糟糕
+
 - 运行容器
+> 示例
+
+```shell
+docker run -d --name spring-boot-demo --restart=always -v /logs/spring-boot-demo:/home/spring-boot-demo/logs -e --spring.profiles.active='dev' 8080:8080 spring-boot-demo:1.0
+```
