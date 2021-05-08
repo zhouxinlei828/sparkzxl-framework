@@ -68,10 +68,10 @@ CMD ["/bin/bash"]
 
 > 将下载JDK包和skywalking包 agent 下的放到Dockerfile同级目录
 
-![img.png](img.png)
+![skywalking-agent.png](../images/skywalking-agent.png)
 文件结构如下
   
-![jdk-build.png](jdk-build.png)
+![jdk-build.png](../images/jdk-build.png)
 
 ```shell
 docker build -t java:8 .
