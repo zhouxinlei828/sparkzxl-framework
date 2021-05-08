@@ -1,5 +1,3 @@
-* 首页
-    * [sparkzxl-component功能概览](forward/main.md)
 * 组件框架搭建
     * [1.框架搭建手册之maven私库nexus实战](forward/框架搭建手册之maven私库nexus实战.md)
     * [2.框架搭建手册之idea搭建代码环境](forward/框架搭建手册之idea搭建代码环境.md)
