@@ -19,7 +19,7 @@
 
 ## 核心架构
 
-![分布式系统架构](https://oss.sparksys.top/images/system.png)
+![分布式系统架构](https://oss.sparksys.top/sparkzxl-component/distributed-architecture.jpg)
 
 ## 未来展望
 
