@@ -88,4 +88,57 @@ docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 > - registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8: 打包镜像地址
   
 - 使用镜像
+  
+```xml
+<plugin>
+    <groupId>com.google.cloud.tools</groupId>
+    <artifactId>jib-maven-plugin</artifactId>
+    <version>2.5.0</version>
+    <configuration>
+        <from>
+            <image>registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8</image>
+        </from>
+        <to>
+            <image>127.0.0.1:8603/ltc/${project.artifactId}</image>
+            <tags>
+                <tag>prod-1.0</tag>
+            </tags>
+        </to>
+        <container>
+            <jvmFlags>
+                <jvmFlag>-javaagent:/skywalking/agent/skywalking-agent.jar</jvmFlag>
+                <jvmFlag>-Xms512m</jvmFlag>
+                <jvmFlag>-Xmx512m</jvmFlag>
+            </jvmFlags>
+            <appRoot>/home/${project.artifactId}</appRoot>
+            <workingDirectory>/home/${project.artifactId}</workingDirectory>
+            <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+            <environment>
+                <SW_AGENT_NAME>${project.artifactId}</SW_AGENT_NAME>
+                <SW_AGENT_COLLECTOR_BACKEND_SERVICES>172.34.200.5:11800
+                </SW_AGENT_COLLECTOR_BACKEND_SERVICES>
+                <SW_AGENT_SPAN_LIMIT>2000</SW_AGENT_SPAN_LIMIT>
+                <TZ>Asia/Shanghai</TZ>
+            </environment>
+            <labels>
+                <name>${project.artifactId}</name>
+            </labels>
+        </container>
+        <allowInsecureRegistries>true</allowInsecureRegistries>
+    </configuration>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>build</goal>
+            </goals>
+        </execution>
+    </executions>
+    </plugin>
+```
+
+```text
+- jvmFlag:设置skywalking启动参数-> -javaagent:/skywalking/agent/skywalking-agent.jar
+- SW_AGENT_NAME: 注册到skywalking应用名称
+```
 - 运行容器
