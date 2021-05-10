@@ -58,10 +58,6 @@
 - [sparkzxl-user-starter组件](docs/forward/sparkzxl-user.md)
 - [sparkzxl-web-starter组件](docs/forward/sparkzxl-web.md)
 
-## 文档更新手册
-
-- [文档更新手册](docs/forward/文档更新手册.md)
-
 # 公众号
 
 学习不走弯路，关注公众号「凛冬王昭君」
