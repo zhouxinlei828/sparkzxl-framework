@@ -47,26 +47,26 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /var/logs/springboot/sparksys-authorization.log # 配置我们要读取的 Spring Boot 应用的日志
+      - /var/logs/springboot/sparkzxl-authorization.log # 配置我们要读取的 Spring Boot 应用的日志
     fields:
       #定义日志来源，添加了自定义字段
       log_source: authorization
   - type: log
     enabled: true
     paths:
-      - /var/logs/springboot/sparksys-gateway.log
+      - /var/logs/springboot/sparkzxl-gateway.log
     fields:
       log_source: gateway
   - type: log
     enabled: true
     paths:
-      - /var/logs/springboot/sparksys-file.log
+      - /var/logs/springboot/sparkzxl-file.log
     fields:
       log_source: file
   - type: log
     enabled: true
     paths:
-      - /var/logs/springboot/sparksys-oauth.log
+      - /var/logs/springboot/sparkzxl-auth-server.log
     fields:
       log_source: oauth
     #================================ Outputs =====================================
@@ -85,7 +85,7 @@ filebeat.inputs:
 output.kafka:
   enabled: true
   hosts: [ "192.168.3.3:9092" ]
-  topic: sparksys-log
+  topic: sparkzxl-log
 ```
 
 > 添加kafka输出的配置，将logstash输出配置注释掉。hosts表示kafka的ip和端口号，topic表示filebeat将数据输出到topic为sparksys-log的主题下，此处也根据自己情况修改
@@ -98,7 +98,7 @@ logstash.conf配置input由原来的输入源beat改为kafka
 input {
   kafka {
   codec => "json"
-  topics => ["sparksys-log"]
+  topics => ["sparkzxl-log"]
   bootstrap_servers => "192.168.3.3:9092"
   auto_offset_reset => "latest"
   group_id => "logstash-g1"
@@ -115,7 +115,7 @@ input {
 
 上述配置说明如下:
 
-- topics后面的sparksys-log表示从kafka中topic为sparksys-log的主题中获取数据，此处的配置根据自己的具体情况去配置。
+- topics后面的sparkzxl-log表示从kafka中topic为sparkzxl-log的主题中获取数据，此处的配置根据自己的具体情况去配置。
 - bootstrap_servers表示配置kafka的ip与端口。
 
 到此，ELFK的变动部分结束，接下来就是kafka的搭建
@@ -125,27 +125,28 @@ input {
 #### 2.2.1 新建docker-compose.yaml
 
 ```Yaml
-version: '3'
+version: '3.2'
 services:
   zookeeper:
-    image: zookeeper:latest
+    image: wurstmeister/zookeeper
     container_name: zookeeper
     volumes:
-      - /Users/zhouxinlei/docker/kafka/zookeeper/data:/data
-      - /Users/zhouxinlei/docker/kafka/zookeeper/datalog:/datalog
+      - ./zookeeper/data:/data
+      - ./zookeeper/datalog:/datalog
     ports:
       - 2181:2181
     restart: always
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
-    volumes:
-      - /Users/zhouxinlei/docker/kafka/data:/kafka
-    ports:
-      - 9092:9092
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 192.168.3.3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.3.14:9092
+      KAFKA_LISTENERS: PLAINTEXT://:9092
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_LOG_RETENTION_HOURS: 120
       KAFKA_MESSAGE_MAX_BYTES: 10000000
@@ -153,6 +154,11 @@ services:
       KAFKA_GROUP_MAX_SESSION_TIMEOUT_MS: 60000
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_DELETE_RETENTION_MS: 1000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./kafka/data:/kafka
+    ports:
+      - 9092:9092
     restart: always
   kafka-manager:
     image: kafkamanager/kafka-manager
@@ -215,7 +221,7 @@ http://192.168.3.3:9001
 2. 如果完成后如果数据显示不了，可以先到根据工作流程到各个节点查询数据是否存储和传输成功。如查询filebeat是否成功把数据传输到了kafka，可以进入kafka容器当中使用kafka中如下命令查询：
 
 ```Shell
-bin/kafka-console-consumer.sh –zookeeper localhost:2181 –topic sparksys-log –from-beginning
+bin/kafka-console-consumer.sh –zookeeper localhost:2181 –topic sparkzxl-log –from-beginning
 ```
 
 查看日志filebeat中的数据是否正常在kafka中存储。
@@ -227,3 +233,9 @@ docker logs -f --tail=200 filebeat
 3. 该平台的搭建是比较简便的方式，大家可以更加灵活以及动态的配置该平台。
 
 4. 源码下载[elfk部署源码](https://github.com/zhouxinlei298/sparksys-docker/tree/master/elfk) 相对应kafka的部署源码在上层目录中
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](../images/wechat-sparkzxl.jpg)
