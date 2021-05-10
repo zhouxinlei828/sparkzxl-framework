@@ -40,29 +40,7 @@
         <lombok.version>1.18.8</lombok.version>
         <mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -277,16 +255,6 @@
             </plugin>
         </plugins>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
 ```
 
