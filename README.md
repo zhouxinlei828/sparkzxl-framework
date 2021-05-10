@@ -1,4 +1,4 @@
-# sparkzxl-component
+# sparkzxl-component学习教程
 
 ## 简介
 
@@ -8,73 +8,62 @@
 
 [sparkzxl-component](https://github.com/sparkzxl/sparkzxl-component.git)
 
-**落地最佳实践**：[sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
+**落地最佳实践**：
 
-## 推荐阅读文档
+- [sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
+- [sparkzxl-auth](https://github.com/sparkzxl/sparkzxl-auth.git)
 
-[sparkzxl-component使用文档](https://sparkzxl.github.io/sparkzxl-component)
+## 在线体验
+
+- [spark auth](http://119.45.182.28:3000/login)
+
+!> 账户：admin 密码：123456
 
 ## 开源博客
 
-[凛冬王昭君的笔记](https://www.sparksys.top)
+- [凛冬王昭君的笔记](https://www.sparksys.top)
 
-## 文档更新记录
+## 核心架构
 
-- [sparkzxl-boot-starter组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-boot)
-- [sparkzxl-cache-starter组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-cache)
-- [sparkzxl-core组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-core)
-- [sparkzxl-database-starter组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-database)
-- [sparkzxl-user-starter组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-user)
-- [sparkzxl-web-starter组件](https://sparkzxl.github.io/sparkzxl-component/#/forward/sparkzxl-web)
+![分布式系统架构](https://oss.sparksys.top/sparkzxl-component/distributed-architecture.jpg)
 
-## 组件简介
+## 未来展望
 
-```Text
-sparkzxl-component                               -- 核心组件模块
-├── sparkzxl-boot-starter                         -- sparkzxl boot引导
-├── sparkzxl-cache-starter                        -- cache组件封装
-├── sparkzxl-core                                 -- 工具类组件
-├── sparkzxl-database-starter                     -- 持久层组件
-├── sparkzxl-distributed		          -- spring cloud组件
-├──── sparkzxl-distributed-cloud-starter            -- spring cloud starter
-├── sparkzxl-elasticsearch-starter                -- 搜索引擎组件
-├── sparkzxl-job-executor-starter                 -- 分布式job组件
-├── sparkzxl-jwt-starter                          -- JWT组件
-├── sparkzxl-log-starter                          -- 日志log组件
-├── sparkzxl-mail-starter                         -- 邮件组件
-├── sparkzxl-oauth2-resource-starter	          -- oauth2资源保护组件
-├── sparkzxl-oauth2-server-starter                -- oauth2授权组件
-├── sparkzxl-oss-starter                          -- 对象存储（兼容阿里云oss，minio等）组件
-├── sparkzxl-patterns-starter                     -- 设计模式组件
-├── sparkzxl-redisson-starter                     -- redisson分布式锁组件
-├── sparkzxl-security-starter                     -- 权限控制组件
-├── sparkzxl-swagger-starter                      -- API文档组件
-├── sparkzxl-user-starter                         -- 全局用户绑定组件
-├── sparkzxl-web-starter                          -- web视图层组件
-├── sparkzxl-zookeeper-starter                    -- zookeeper组件
-```
 ## 组件包依赖下载指引
+> 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
 
-![img.png](docs/images/nexus-compoment.png)
-## 组件功能
+![nexus-compoment.png](docs/images/nexus-compoment.png)
 
-- [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)
-- [sparkzxl-cache-starter组件](forward/sparkzxl-cache.md)
-- [sparkzxl-core组件](forward/sparkzxl-core.md)
-- [sparkzxl-database-starter组件](forward/sparkzxl-database.md)
-- [sparkzxl-distributed-cloud-starter组件](222)
-- [sparkzxl-elasticsearch-starter组件](222)
-- [sparkzxl-job-executor-starter组件](222)
-- [sparkzxl-jwt-starter组件](222)
-- [sparkzxl-log-starter组件](222)
-- [sparkzxl-mail-starter组件](222)
-- [sparkzxl-oauth2-resource-starter组件](222)
-- [sparkzxl-oss-starter组件](222)
-- [sparkzxl-oauth2-server-starter组件](222)
-- [sparkzxl-patterns-starter组件](222)
-- [sparkzxl-redisson-starter组件](222)
-- [sparkzxl-security-starter组件](222)
-- [sparkzxl-swagger-starter组件](222)
-- [sparkzxl-user-starter组件](forward/sparkzxl-user.md)
-- [sparkzxl-web-starter组件](222)
-- [sparkzxl-zookeeper-starter组件](222)
+## 组件框架搭建
+
+- [1.框架搭建手册之maven私库nexus实战](docs/forward/框架搭建手册之maven私库nexus实战.md)
+- [2.框架搭建手册之idea搭建代码环境](docs/forward/框架搭建手册之idea搭建代码环境.md)
+
+## 分布式架构篇
+
+## 应用部署实践
+
+- [1.Jenkins实战之流水线](docs/forward/Jenkins实战之流水线.md)
+- [2.Jenkins实战之流水线语法详解](docs/forward/Jenkins实战之流水线语法详解.md)
+- [3.Jenkins实战之流水线应用部署](docs/forward/Jenkins实战之流水线应用部署.md)
+- [4.链路追踪实战之SkyWalking环境搭建](docs/forward/链路追踪实战之SkyWalking环境搭建.md)
+- [5.链路追踪实战之JDK镜像制作](docs/forward/链路追踪实战之JDK镜像制作.md)
+
+## 组件功能介绍
+
+- [sparkzxl-boot-starter组件](docs/forward/sparkzxl-boot.md)
+- [sparkzxl-cache-starter组件](docs/forward/sparkzxl-cache.md)
+- [sparkzxl-core组件](docs/forward/sparkzxl-core.md)
+- [sparkzxl-database-starter组件](docs/forward/sparkzxl-database.md)
+- [sparkzxl-user-starter组件](docs/forward/sparkzxl-user.md)
+- [sparkzxl-web-starter组件](docs/forward/sparkzxl-web.md)
+
+## 文档更新手册
+
+- [文档更新手册](docs/forward/文档更新手册.md)
+
+# 公众号
+
+学习不走弯路，关注公众号「凛冬王昭君」
+
+![wechat-sparkzxl.jpg](docs/images/wechat-sparkzxl.jpg)
