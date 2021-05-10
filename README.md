@@ -30,6 +30,7 @@
 ## 未来展望
 
 ## 组件包依赖下载指引
+
 > 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
 
 ![nexus-compoment.png](docs/images/nexus-compoment.png)
@@ -40,6 +41,10 @@
 - [2.框架搭建手册之idea搭建代码环境](docs/forward/框架搭建手册之idea搭建代码环境.md)
 
 ## 分布式架构篇
+
+- [1.分布式架构之Nacos注册&配置中心搭建](forward/分布式架构之Nacos注册&配置中心搭建.md)
+- [2.分布式架构之Spring Cloud Alibaba 配置中心 Nacos 入门](forward/分布式架构之SpringCloudAlibaba配置中心Nacos入门.md)
+- [3.分布式架构之Spring Cloud Alibaba 注册中心 Nacos 入门](forward/分布式架构之SpringCloudAlibaba注册中心Nacos入门.md)
 
 ## 应用部署实践
 
