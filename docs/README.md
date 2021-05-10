@@ -62,11 +62,15 @@
 
 ## 应用部署实践
 
-- [1.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
-- [2.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
-- [3.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)
-- [4.链路追踪实战之SkyWalking环境搭建](forward/链路追踪实战之SkyWalking环境搭建.md)
-- [5.链路追踪实战之JDK镜像制作](forward/链路追踪实战之JDK镜像制作.md)
+- [1.Docker环境部署安装](forward/Docker环境部署安装.md)
+- [2.Jenkins+Docker+Gitlab+Harbor服务器部署](forward/Jenkins+Docker+Gitlab+Harbor服务器部署.md)
+- [3.Jenkins全自动化部署SpringBoot项目](forward/Jenkins全自动化部署SpringBoot项目.md)
+- [4.Jenkins打包并远程部署NodeJS应用](forward/Jenkins打包并远程部署NodeJS应用.md)
+- [5.Jenkins实战之流水线](forward/Jenkins实战之流水线.md)
+- [6.Jenkins实战之流水线语法详解](forward/Jenkins实战之流水线语法详解.md)
+- [7.Jenkins实战之流水线应用部署](forward/Jenkins实战之流水线应用部署.md)
+- [8.链路追踪实战之SkyWalking环境搭建](forward/链路追踪实战之SkyWalking环境搭建.md)
+- [9.链路追踪实战之JDK镜像制作](forward/链路追踪实战之JDK镜像制作.md)
 
 ## 组件功能介绍
 
