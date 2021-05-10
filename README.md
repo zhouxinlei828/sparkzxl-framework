@@ -55,8 +55,10 @@
 - [11.分布式架构之Spring Cloud Alibaba Sentinel实现熔断与限流](docs/forward/222)
 - [12.分布式架构之Spring Cloud Alibaba Seata 分布式事务问题](docs/forward/222)
 - [13.分布式架构之Spring-cloud-gateway-oauth2-实现统一认证和鉴权](docs/forward/222)
-- [14.分布式架构之Spring Cloud 微服务聚合swagger文档](docs/forward/222)
-- [15.分布式架构之「一站式」兼容所有云厂商文件存储Spring Boot实现](docs/forward/222)
+- [14.分布式架构之skywalking链路追踪](docs/forward/222)
+- [15.分布式架构之Spring Cloud 微服务聚合swagger文档](docs/forward/222)
+- [16.分布式架构之「一站式」兼容所有云厂商文件存储Spring Boot实现](docs/forward/222)
+- [17.分布式架构之ELK+Filebeat+Kafka分布式日志管理平台搭建](docs/forward/222)
 
 ## 应用部署实践
 
