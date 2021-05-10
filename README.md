@@ -53,7 +53,9 @@ sparkzxl-component                               -- 核心组件模块
 ├── sparkzxl-web-starter                          -- web视图层组件
 ├── sparkzxl-zookeeper-starter                    -- zookeeper组件
 ```
+## 组件包依赖下载指引
 
+![img.png](docs/images/nexus-compoment.png)
 ## 组件功能
 
 - [sparkzxl-boot-starter组件](forward/sparkzxl-boot.md)

@@ -29,6 +29,11 @@
 
 ## 未来展望
 
+## 组件包依赖下载指引
+> 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
+
+![nexus-compoment.png](images/nexus-compoment.png)
+
 ## 组件框架搭建
 
 - [1.框架搭建手册之maven私库nexus实战](forward/框架搭建手册之maven私库nexus实战.md)
