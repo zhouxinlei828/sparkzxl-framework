@@ -8,6 +8,9 @@
     <artifactId>sparkzxl-component</artifactId>
     <version>1.0.1.RELEASE</version>
     <packaging>pom</packaging>
+    <name>sparkzxl-component</name>
+    <description>sparkzxl component framework</description>
+    <url>https://github.com/sparkzxl/sparkzxl-component</url>
 
     <properties>
         <sparkzxl.version>1.0.1.RELEASE</sparkzxl.version>
@@ -114,16 +117,41 @@
         <module>sparkzxl-hystrix-starter</module>
     </modules>
 
+    <licenses>
+        <license>
+            <name>Apache 2.0 License</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>zhouxinlei</name>
+            <email>zhouxinlei298@163.com</email>
+            <roles>
+                <role>Java Development Engineer</role>
+            </roles>
+            <url>https://sparkzxl.github.io/sparkzxl-component</url>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/sparkzxl/sparkzxl-component</url>
+        <connection>https://github.com/sparkzxl/sparkzxl-component.git</connection>
+    </scm>
+
     <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -670,6 +698,21 @@
                         <generateBackupPoms>false</generateBackupPoms>
                     </configuration>
                 </plugin>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-gpg-plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -701,13 +744,17 @@
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
             <!-- 打包的 -P参数 -->
-            <id>release</id>
+            <id>ossrh</id>
             <build>
                 <plugins>
                     <!-- Source -->
@@ -728,21 +775,19 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
                 </plugins>
             </build>
-            <distributionManagement>
-                <repository>
-                    <id>maven-releases</id>
-                    <url>http://47.114.40.129:8764/repository/maven-releases/</url>
-                </repository>
-                <snapshotRepository>
-                    <id>maven-snapshots</id>
-                    <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
-                </snapshotRepository>
-            </distributionManagement>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.passphrase>Zxl298828</gpg.passphrase>
+            </properties>
         </profile>
     </profiles>
 </project>
