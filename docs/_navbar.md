@@ -5,4 +5,4 @@
     * [sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
     * [sparkzxl-auth](https://github.com/sparkzxl/sparkzxl-auth.git)
 
-* [开源博客](https://www.sparksys.top)
+* [博客](https://www.sparksys.top)
