@@ -15,34 +15,34 @@
 
 1. 先安装lrzsz，用于文件上传与下载
 
-```Shell
+```bash
 yum install lrzsz -y
 rz node-v12.16.2-linux-x64.tar.xz
 ```
 
 2. 进行安装nodejs
 
-```Shell
+```bash
 tar -xvf node-v12.16.2-linux-x64.tar.xz
 ```
 
 3. 移动并改名文件夹（不改名也行）
 
-```Shell
+```bash
 mv node-v12.16.2-linux nodejs
 cp -r nodejs /usr/local
 ```
 
 4. 软链接方式让npm和node命令全局生效
 
-```Shell
+```bash
 ln -s /usr/local/nodejs/bin/npm /usr/local/bin/
 ln -s /usr/local/nodejs/bin/node /usr/local/bin/
 ```
 
 5. 查看nodejs是否安装成功
 
-```Shell
+```bash
 node -v
 npm -v
 ```

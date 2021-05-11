@@ -72,7 +72,7 @@ docker-compose up -d
 
 - 方式1：使用管理员密码进行登录，可以使用以下命令从容器启动日志中获取管理密码
 
-```Shell
+```bash
 docker logs jenkins
 ```
 
@@ -80,7 +80,7 @@ docker logs jenkins
 
 - 方式2：从挂载目录/usr/local/docker/jenkins/data中获取
 
-```Shell
+```bash
 cat /usr/local/docker/jenkins/data/secrets/initialAdminPassword
 ```
 

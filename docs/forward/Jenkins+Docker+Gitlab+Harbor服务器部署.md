@@ -5,14 +5,14 @@
 
 ## 2. jenkins安装
 ### 2.1 新建jenkins安装目录
-```Shell
+```bash
 mkdir -p /usr/local/docker/jenkins
 cd /usr/local/docker/jenkins
 touch install.sh
 chmod 777 install.sh
 ```
 ### 2.2 新建install.sh脚本文件
-```Shell
+```bash
 #!/bin/bash
 echo "step 1 -> 创建jenkins挂载目录------"
 mkdir -p /usr/local/docker/jenkins/jenkins_home
@@ -42,7 +42,7 @@ sleep 1
 docker ps -a
 ```
 ### 2.3 运行install.sh脚本文件
-```Shell
+```bash
 bash install.sh
 ```
 
@@ -54,12 +54,12 @@ bash install.sh
 
 ![image.png](https://oss.sparksys.top/halo/image_1585184355186.png)
 - 方式1：使用管理员密码进行登录，可以使用以下命令从容器启动日志中获取管理密码
-```Shell
+```bash
 docker logs jenkins
 ```
 ![image.png](https://oss.sparksys.top/halo/image_1585186880497.png)
 - 方式2：从挂载目录/usr/local/docker/jenkins/jenkins_home中获取
-```Shell
+```bash
 cat /usr/local/docker/jenkins/jenkins_home/secrets/initialAdminPassword
 ```
 ![image.png](https://oss.sparksys.top/halo/image_1585184618794.png)
@@ -100,12 +100,12 @@ cat /usr/local/docker/jenkins/jenkins_home/secrets/initialAdminPassword
 ## 3. gitlab安装
 
 ### 3.1 下载Gitlab的Docker镜像
-```Shell
+```bash
 docker pull gitlab/gitlab-ce
 ```
 
 ### 3.2 新建gitlab安装目录
-```Shell
+```bash
 mkdir -p /usr/local/docker/gitlab
 cd /usr/local/docker/gitlab
 touch install.sh
@@ -115,7 +115,7 @@ mkdir data
 mkdir logs
 ```
 ### 3.3 新建install.sh脚本文件
-```Shell
+```bash
 #!/bin/bash
 docker run --detach \
   --publish 10443:443 --publish 8082:80 --publish 1022:22 \
@@ -128,18 +128,18 @@ docker run --detach \
 > 需要注意的是我们的Gitlab的http服务运行在宿主机的8082端口上，这里我们将Gitlab的配置，日志以及数据目录映射到了宿主机的指定文件夹下，防止我们在重新创建容器后丢失数据。
 
 ### 3.4 运行install.sh脚本文件
-```Shell
+```bash
 bash install.sh
 ```
 ### 3.5 查看gitlab安装是否成功
-```Shell
+```bash
 docker ps -a
 ```
 
 如下图所示则表示成功，gitlab安装有点大，需要耐心等待一段时间
 ![image.png](https://oss.sparksys.top/halo/image_1585187082936.png)
 ### 3.6 开启防火墙的指定端口
-```Shell
+```bash
 # 开启1080端口
 firewall-cmd --zone=public --add-port=1080/tcp --permanent 
 # 重启防火墙才能生效
@@ -157,7 +157,7 @@ firewall-cmd --list-ports
 - 可以通过docker命令动态查看容器启动日志来知道gitlab是否已经启动完成
 
 ![image.png](https://oss.sparksys.top/halo/image_1585187913079.png)
-```Shell
+```bash
 docker logs gitlab -f
 ```
 
@@ -228,7 +228,7 @@ docker logs gitlab -f
 修改如图标注地方
 ![image.png](https://oss.sparksys.top/halo/image_1585189483297.png)
 ### 4.3 运行install.sh
-```Shell
+```bash
 ./install.sh
 ```
 如图所示，即代表安装成功

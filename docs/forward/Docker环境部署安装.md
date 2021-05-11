@@ -15,19 +15,19 @@ Docker从1.13版本之后采用时间线的方式作为版本号，分为社区�
 
 - 通过 uname -r 命令查看你当前的内核版本
 
-```Shell
+```bash
 uname -r
 ```
 
 - 使用 root 权限登录 Centos。确保 yum 包更新到最新。
 
-```Shell
+```bash
 sudo yum update
 ```
 
 ### 2.2 卸载旧版本
 
-```Shell
+```bash
 sudo yum remove docker  docker-common docker-selinux docker-engine
 ```
 
@@ -35,13 +35,13 @@ sudo yum remove docker  docker-common docker-selinux docker-engine
 
 > yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖
 
-```Shell
+```bash
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 ```
 
 ### 2.4 设置yum源
 
-```Shell
+```bash
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
 
@@ -51,7 +51,7 @@ yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/d
 
 >
 
-```Shell
+```bash
 yum list docker-ce --showduplicates | sort -r
 ```
 
@@ -59,7 +59,7 @@ yum list docker-ce --showduplicates | sort -r
 
 ### 2.6 安装docker
 
-```Shell
+```bash
 sudo yum install docker-ce -y
 ```
 
@@ -67,7 +67,7 @@ sudo yum install docker-ce -y
 
 ### 2.7 启动并加入开机启动
 
-```Shell
+```bash
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
@@ -76,7 +76,7 @@ sudo systemctl enable docker
 
 > 有client和service两部分表示docker安装启动都成功了
 
-```Shell
+```bash
 docker version
 ```
 
@@ -86,7 +86,7 @@ docker version
 
 您可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器
 
-```Shell
+```bash
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
@@ -107,19 +107,19 @@ sudo systemctl restart docker
 
 - 下载docker compose
 
-```Shell
+```bash
 curl -L https://get.daocloud.io/docker/compose/releases/download/1.29.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 ```
 
 - 修改该文件的权限为可执行
 
-```Shell
+```bash
 chmod +x /usr/local/bin/docker-compose
 ```
 
 - 查看是否已经安装成功
 
-```Shell
+```bash
 docker-compose --version
 ```
 
@@ -176,7 +176,7 @@ environment:
 
 连接其他容器的服务（SERVICE:ALIAS） 可以以database为域名访问服务名称为db的容器
 
-```Shell
+```bash
 links:
   - db:database
 ```
@@ -187,19 +187,19 @@ links:
 
 -d 表示在后台运行
 
-```Shell
+```bash
 docker-compose up -d
 ```
 
 ### 5.2 停止所有相关容器：
 
-```Shell
+```bash
 docker-compose stop
 ```
 
 ### 5.3 列出所有容器信息：
 
-```Shell
+```bash
 docker-compose ps
 ```
 
@@ -229,7 +229,7 @@ services:
 
 > 先将docker-compose.yml上传至Linux服务器，再在当前目录下运行如下命令
 
-```Shell
+```bash
 docker-compose up docker-compose.yml -d
 ```
 

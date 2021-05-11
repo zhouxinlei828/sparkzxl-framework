@@ -172,7 +172,7 @@ services:
 
 #### 2.2.2 创建并启动kafka容器
 
-```Shell
+```bash
 docker-compose up -d
 ```
 
@@ -220,13 +220,13 @@ http://192.168.3.3:9001
 
 2. 如果完成后如果数据显示不了，可以先到根据工作流程到各个节点查询数据是否存储和传输成功。如查询filebeat是否成功把数据传输到了kafka，可以进入kafka容器当中使用kafka中如下命令查询：
 
-```Shell
+```bash
 bin/kafka-console-consumer.sh –zookeeper localhost:2181 –topic sparkzxl-log –from-beginning
 ```
 
 查看日志filebeat中的数据是否正常在kafka中存储。
 
-```Shell
+```bash
 docker logs -f --tail=200 filebeat
 ```
 

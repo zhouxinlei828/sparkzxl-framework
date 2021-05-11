@@ -62,7 +62,7 @@ Spring Cloud 的编程模型，接入 Nacos 作为注册中心，实现服务的
 
 创建 sparkzxl-nacos-discovery-provider 项目，作为服务提供者 nacos-provider。最终项目代码如下图所示：
 
-![sparkzxl-nacos-discovery-provider](sparkzxl-nacos-discovery-provider.png)
+![sparkzxl-nacos-discovery-provider](../images/sparkzxl-nacos-discovery-provider.png)
 
 #### 3.1.1 引入依赖
 
@@ -445,6 +445,340 @@ public class TestController {
 ![nacos-provider-img.png](../images/nacos-provider-img.png)
 
 ### 3.2 搭建服务消费者
+
+创建 sparkzxl-nacos-discovery-consumer 项目，作为服务提供者 nacos-consumer。最终项目代码如下图所示：
+
+![sparkzxl-nacos-discovery-consumer.png](../images/sparkzxl-nacos-discovery-consumer.png)
+
+整个项目的代码，和服务提供者是基本一致的，毕竟是示例代码 😜
+
+#### 3.2.1 引入依赖
+
+和「3.1.1 引入依赖」一样，只是修改 Maven <artifactId/> 为 sparkzxl-nacos-discovery-consumer，见 pom.xml 文件。
+
+#### 3.2.2 配置文件
+
+创建 application.yaml 配置文件，添加相应配置项。配置如下：
+
+```yaml
+server:
+  port: 8081
+spring:
+  application:
+    name: nacos-consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848 # Nacos 服务器地址
+        service: ${spring.application.name} # 注册到 Nacos 的服务名。默认值为 ${spring.application.name}。
+knife4j:
+  enable: true
+  description: sparkzxl nacos consumer在线文档
+  base-package: com.github.sparkzxl.nacos.controller
+  group: nacos consumer应用
+  title: sparkzxl nacos consumer在线文档
+  terms-of-service-url: https://www.sparksys.top
+  version: 1.0
+  license: Powered By sparkzxl
+  license-url: https://github.com/sparkzxl
+  contact:
+    name: zhouxinlei
+    email: zhouxinlei298@163.com
+    url: https://github.com/sparkzxl
+
+```
+
+和「3.1.2 配置文件」基本一致，主要是将配置项目 spring.application.name 修改为 nacos-consumer。
+
+#### 3.2.3 NacosConsumerApplication
+
+创建 **NacosConsumerApplication** 类，创建应用启动类，并提供一个调用服务提供者的 HTTP 接口。代码如下：
+
+```java
+package com.github.sparkzxl.nacos;
+
+import com.github.sparkzxl.boot.SparkBootApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+
+/**
+ * description: nacos consumer
+ *
+ * @author charles.zhou
+ * @date 2021-05-11 10:41:35
+ */
+@SpringBootApplication(scanBasePackages = {"com.github.sparkzxl.nacos"})
+public class NacosConsumerApplication extends SparkBootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(NacosConsumerApplication.class, args);
+    }
+
+
+    @Configuration
+    public class RestTemplateConfiguration {
+        @Bean
+        public RestTemplate restTemplate() {
+            return new RestTemplate();
+        }
+
+    }
+
+}
+```
+
+```java
+package com.github.sparkzxl.nacos.controller;
+
+import com.github.sparkzxl.core.annotation.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+
+/**
+ * description: test
+ *
+ * @author charles.zhou
+ * @date 2021-05-11 10:47:54
+ */
+@RestController
+@ResponseResult
+@Api(tags = "测试")
+public class TestController {
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
+
+    @ApiOperation("echo")
+    @GetMapping("/hello")
+    public String hello(String name) {
+        // <1> 获得服务 `nacos-provider` 的一个实例
+        ServiceInstance instance;
+        if (true) {
+            // 获取服务 `nacos-provider` 对应的实例列表
+            List<ServiceInstance> instances = discoveryClient.getInstances("nacos-provider");
+            // 选择第一个
+            instance = instances.size() > 0 ? instances.get(0) : null;
+        } else {
+            instance = loadBalancerClient.choose("nacos-provider");
+        }
+        // <2> 发起调用
+        if (instance == null) {
+            throw new IllegalStateException("获取不到实例");
+        }
+        String targetUrl = instance.getUri() + "/echo?name=" + name;
+        String response = restTemplate.getForObject(targetUrl, String.class);
+        // 返回结果
+        return "consumer:" + response;
+    }
+}
+```
+
+① @EnableDiscoveryClient 注解，因为已经无需添加，所以我们进行了注释，原因在上面已经解释过。
+
+② RestTemplateConfiguration 配置类，创建 **RestTemplate** Bean。RestTemplate 是 Spring 提供的 HTTP 调用模板工具类，可以方便我们稍后调用服务提供者的 HTTP
+API。
+
+③ TestController 提供了 /hello 接口，用于调用服务提供者的 /demo 接口。代码略微有几行，我们来稍微解释下哈。
+
+discoveryClient 属性，DiscoveryClient 对象，服务发现客户端，上文我们已经介绍过。这里我们注入的不是 Nacos Discovery 提供的
+NacosDiscoveryClient，保证通用性。未来如果我们不使用 Nacos 作为注册中心，而是使用 Eureka 或则 Zookeeper 时，则无需改动这里的代码。
+
+loadBalancerClient 属性，**LoadBalancerClient** 对象，负载均衡客户端。稍后我们会使用它，从 Nacos 获取的服务 demo-provider 的实例列表中，选择一个进行 HTTP 调用。
+
+> - 拓展小知识：在 Spring Cloud Common 项目中，定义了LoadBalancerClient 接口，作为通用的负载均衡客户端，提供从指定服务中选择一个实例、对指定服务发起请求等 API 方法。而想要集成到 Spring Cloud 体系的负载均衡的组件，需要提供对应的 LoadBalancerClient 实现类。
+> - 例如说，Spring Cloud Netflix Ribbon 提供了 RibbonLoadBalancerClient 实现。
+> - 如此，所有需要使用到的地方，只需要获取到 DiscoveryClient 客户端，而无需关注具体实现，保证其通用性。😈 不过貌似 Spring Cloud 体系中，暂时只有 Ribbon 一个负载均衡组件。
+> - 当然，LoadBalancerClient 的服务的实例列表，是来自 DiscoveryClient 提供的。
+
+/hello 接口，示例接口，对服务提供者发起一次 HTTP 调用。
+
+- <1> 处，获得服务 nacos-provider 的一个实例。这里我们提供了两种方式的代码，分别基于 DiscoveryClient 和 LoadBalancerClient。
+- <2> 处，通过获取到的服务实例 ServiceInstance 对象，拼接请求的目标 URL，之后使用 RestTemplate 发起 HTTP 调用。
+
+#### 3.2.4 简单测试
+
+① 通过 NacosConsumerApplication 启动服务消费者，IDEA 控制台输出日志如：
+
+```text
+
+2021-05-11 14:23:26.590 application: nacos-consumer  INFO 5629 TID: N/A --- [           main] c.a.c.n.r.NacosServiceRegistry           : nacos registry, DEFAULT_GROUP nacos-consumer 172.34.67.31:8081 register finished
+```
+
+- 服务 nacos-consumer 注册到 Nacos 上的日志。
+
+> 注意，服务消费者和服务提供是一种角色的概念，本质都是一种服务，都是可以注册自己到注册中心的。
+
+② 打开 Nacos 控制台，可以在服务列表看到服务 nacos-consumer。如下图：
+
+![nacos-consumer-console.png](../images/nacos-consumer-console.png)
+
+③ 访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口。
+
+![nacos-consumer-httpRequest.png](../images/nacos-consumer-httpRequest.png)
+
+④ 打开 Nacos 控制台，可以在订阅者列表看到订阅关系。如下图：
+
+![nacos-consumer-sub.png](../images/nacos-consumer-sub.png)
+
+⑤ 关闭服务提供者后，再次访问 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为报错提示 "获取不到实例"，说明我们本地缓存的服务 demo-provider
+的实例列表已刷新，没有任何实例。
+
+![nacos-consumer-error.png](../images/nacos-consumer-error.png)
+
+😈 这里我们并没有演示启动多个服务提供者的测试，胖友可以自己尝试下哟。
+
+## 4. Nacos 概念详解
+
+> 友情提示：本小节的内容，基于如下两篇文档梳理，推荐胖友后续也看看：
+> - [《Nacos 官方文档 —— 概念》](https://nacos.io/zh-cn/docs/what-is-nacos.html)
+> - [《Nacos 官方文档 —— 架构》](https://nacos.io/zh-cn/docs/architecture.html)
+
+### 4.1 数据模型
+
+Nacos 数据模型 Key 由三元组唯一确认。如下图所示：
+
+![nacos-data-model.png](../images/nacos-data-model.png)
+
+- 作为注册中心时，Namespace + Group + Service
+- 作为配置中心时，Namespace + Group + DataId
+
+我们来看看 Namespace、Group、Service 的概念。
+
+### 4.1.1 Namespace 命名空间
+
+用于进行租户粒度的配置隔离。默认为 public（公共命名空间）。
+
+不同的命名空间下，可以存在相同的 Group 或 Data ID 的配置。Namespace 的常用场景之一是不同环境的配置的区分隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等。
+
+稍后在**6. 多环境配置**小节中，我们会通过 Namespace 隔离不同环境的服务。
+
+#### 4.1.2 Group 服务分组
+
+不同的服务可以归类到同一分组。默认为 DEFAULT_GROUP（默认分组）。
+
+#### 4.1.3 Service 服务
+
+例如说，用户服务、订单服务、商品服务等等。
+
+### 4.2 服务领域模型
+
+Service 可以进一步细拆服务领域模型，如下图：
+
+![nacos-service-level.png](../images/nacos-service-level.png)
+
+我们来看看图中的每个**节点**的概念。
+
+#### 4.2.1 Instance 实例
+
+提供一个或多个服务的具有可访问网络地址（IP:Port）的进程。
+
+我们以**3.1 搭建服务提供者**小节来举例子：
+
+- 如果我们启动一个 JVM 进程，就是服务 demo-provider 下的一个实例。
+- 如果我们启动多个 JVM 进程，就是服务 demo-provider 下的多个实例。
+
+#### 4.2.2 Cluster 集群
+
+同一个服务下的所有服务实例组成一个默认集群（Default）。集群可以被进一步按需求划分，划分的单位可以是虚拟集群。
+
+例如说，我们将服务部署在多个机房之中，每个机房可以创建为一个虚拟集群。每个服务在注册到 Nacos 时，设置所在机房的虚拟集群。这样，服务在调用其它服务时，可以通过虚拟集群，优先调用本机房的服务。如此，在提升服务的可用性的同时，保证了性能。
+
+#### 4.2.3 Metadata 元数据
+
+Nacos 元数据（如配置和服务）描述信息，如服务版本、权重、容灾策略、负载均衡策略、鉴权配置、各种自定义标签 (label)。
+
+从作用范围来看，分为服务级别的元信息、集群的元信息及实例的元信息。如下图：
+
+![nacos-instance-example.png](../images/nacos-instance-example.png)
+
+![nacos-instance-example1.png](../images/nacos-instance-example1.png)
+
+以 Nacos 元数据的服务版本举例子。当一个接口实现，出现不兼容升级时，可以用版本号过渡，版本号不同的服务相互间不引用。
+
+可以按照以下的步骤进行版本迁移：
+
+- 在低压力时间段，先升级一半提供者为新版本
+- 再将所有消费者升级为新版本
+- 然后将剩下的一半提供者升级为新版本
+
+再次 Nacos 元数据的鉴权配置举例子。通过令牌验证在注册中心控制权限，以决定要不要下发令牌给消费者，可以防止消费者绕过注册中心访问提供者。另外，通过注册中心可灵活改变授权方式，而不需修改或升级提供者。
+
+![nacos-security-1.png](../images/nacos-security-1.png)
+
+#### 4.2.4 Health Check 健康检查
+
+以指定方式检查服务下挂载的实例的健康度，从而确认该实例是否能提供服务。根据检查结果，实例会被判断为健康或不健康。
+
+对服务发起解析请求时，不健康的实例不会返回给客户端。
+
+健康保护阈值
+
+为了防止因过多实例不健康导致流量全部流向健康实例，继而造成流量压力把健康实例实例压垮并形成雪崩效应，应将健康保护阈值定义为一个 0 到 1 之间的浮点数。
+
+当域名健康实例占总服务实例的比例小于该值时，无论实例是否健康，都会将这个实例返回给客户端。这样做虽然损失了一部分流量，但是保证了集群的剩余健康实例能正常工作。
+
+### 4.3 小结
+
+为了让胖友更好理解，我们把数据模型和服务领域模型整理如下图所示：
+
+![img.png](../images/nacos-example-1.png)
+
+## 5. 更多的配置项信息
+
+在**3. 快速入门**小节中，我们为了快速入门，只使用了 Nacos Discovery Starter 两个配置项。实际上，Nacos Discovery Starter 提供的配置项挺多的，我们参考文档将配置项一起梳理下。
+
+**Nacos 服务器相关**
+
+|配置项|Key|说明
+|-------|-------|-------|
+|服务端地址|spring.cloud.nacos.discovery.server-addr|    Nacos Server 启动监听的ip地址和端口|
+|AccessKey|spring.cloud.nacos.discovery.access-key|    当要上阿里云时，阿里云上面的一个云账号名|
+|SecretKey|spring.cloud.nacos.discovery.secret-key|    当要上阿里云时，阿里云上面的一个云账号密码|
+
+**服务相关**
+
+|配置项|Key|说明
+|-------|-------|-------|
+|命名空间|spring.cloud.nacos.discovery.namespace|常用场景之一是不同环境的注册的区分隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等|
+|服务分组    |spring.cloud.nacos.discovery.group    |不同的服务可以归类到同一分组。默认为 DEFAULT_GROUP|
+服务名    |spring.cloud.nacos.discovery.service    |注册的服务名。默认为 ${spring.application.name}|
+集群    |spring.cloud.nacos.discovery.cluster-name    |Nacos 集群名称。默认为 DEFAULT|
+权重    |spring.cloud.nacos.discovery.weight    |取值范围 1 到 100，数值越大，权重越大。默认为 1|
+Metadata|    spring.cloud.nacos.discovery.metadata    |使用Map格式配置，用户可以根据自己的需要自定义一些和服务相关的元数据信息|
+是否开启Nacos Watch    |spring.cloud.nacos.discovery.watch.enabled    |可以设置成 false 来关闭 watch。默认为 true|
+
+**网络相关**
+
+|配置项|Key|说明
+|-------|-------|-------|
+|网卡名    |spring.cloud.nacos.discovery.network-interface    |当IP未配置时，注册的 IP 为此网卡所对应的 IP 地址，如果此项也未配置，则默认取第一块网卡的地址|
+|注册的IP地址    |spring.cloud.nacos.discovery.ip    |优先级最高|
+|注册的端口    |spring.cloud.nacos.discovery.port    |默认情况下不用配置，会自动探测。默认为 -1|
+
+**其它相关**
+
+|配置项|Key|说明
+|-------|-------|-------|
+|是否集成 Ribbon    |ribbon.nacos.enabled    |一般都设置成true 即可。默认为 true|
+|日志文件名    |spring.cloud.nacos.discovery.log-name||
+|接入点    |spring.cloud.nacos.discovery.endpoint    |地域的某个服务的入口域名，通过此域名可以动态地拿到服务端地址|
+
 # 公众号
 
 学习不走弯路，关注公众号「凛冬王昭君」

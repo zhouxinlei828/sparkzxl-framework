@@ -55,7 +55,7 @@
 
 ![image.png](https://oss.sparksys.top/halo/image_1585365858423.png)
 
-```Shell
+```bash
 # 只package admin,core,web三个模块
 mvn clean package -pl  core,web,admin -am
 ```
@@ -66,7 +66,7 @@ mvn clean package -pl  core,web,admin -am
 
 ![image](https://oss.sparksys.top/halo/image_1585373622100.png)
 
-```Shell
+```bash
 #!/usr/bin/env bash
 # 初始化核心参数
 # jenkins任务名
@@ -123,7 +123,7 @@ echo 'run container '${app_name}' success!'
 ![image.png](https://oss.sparksys.top/halo/image_1585367064270.png)
 ![image.png](https://oss.sparksys.top/halo/image_1585367113790.png)
 
-```Shell
+```bash
 # 该镜像需要依赖的基础镜像
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
