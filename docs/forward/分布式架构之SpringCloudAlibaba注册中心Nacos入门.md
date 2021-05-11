@@ -796,10 +796,10 @@ Nacos，我们怎么实现不同环境的隔离呢？
 下面，我们来搭建一个多环境配置的示例。步骤如下：
 
 - 首先，我们会在 Nacos 中创建开发环境使用的 Namespace 为 dev，测试环境使用的 Namespace 为 uat。
-- 然后，搭建一个服务提供者 demo-provider，使用开发环境配置，注册服务到 Nacos 的 dev Namespace 下。
-- 之后，搭建一个服务消费者 demo-consumer，调用服务提供者 demo-provider 提供的 HTTP 接口。
-    - 先使用开发环境配置，因为服务 demo-provider 是在 Nacos dev Namespace 下注册，所以调用它成功。
-    - 后使用测试环境配置，因为服务 demo-provider 不在 Nacos uat Namespace 下注册，所以调用它失败，
+- 然后，搭建一个服务提供者 nacos-provider，使用开发环境配置，注册服务到 Nacos 的 dev Namespace 下。
+- 之后，搭建一个服务消费者 nacos-consumer，调用服务提供者 demo-provider 提供的 HTTP 接口。
+    - 先使用开发环境配置，因为服务 nacos-provider 是在 Nacos dev Namespace 下注册，所以调用它成功。
+    - 后使用测试环境配置，因为服务 nacos-provider 不在 Nacos uat Namespace 下注册，所以调用它失败，
 
 > 友情提示：在 Spring Boot（Spring Cloud）项目中，可以使用 Profiles 机制，基于 spring.profiles.active 配置项，实现不同环境读取不同的配置文件。
 
@@ -1000,6 +1000,94 @@ nacos-consumer 无法调用到该服务。
 
 即，我们可以通过 Nacos 的 Namespace 实现不同环境下的服务隔离。未来，在开源版本 Nacos 权限完善之后，每个 Namespace 提供不同的
 AccessKey、SecretKey，保证只有知道账号密码的服务，才能连到对应的 Namespace，进一步提升安全性。
+
+## 7. 监控端点
+
+> 示例代码对应仓库：
+> - 服务提供者：[sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
+> - 服务消费者：[sparkzxl-nacos-discovery-consumer](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer)
+
+Nacos Discovery 基于 Spring Boot Actuator，提供了自定义监控端点 nacos-discovery，获取 Nacos Discovery 配置项，和订阅的服务信息。
+
+同时，Nacos Discovery 拓展了 Spring Boot Actuator 内置的 health 端点，通过自定义的 **NacosDiscoveryHealthIndicator**，获取和 Nacos 服务器的连接状态。
+
+> 友情提示：对 Spring Boot Actuator 不了解的胖友，可以后续阅读[《芋道 Spring Boot 监控端点 Actuator 入门》](https://www.iocoder.cn/Spring-Boot/Actuator/?self)文章。
+
+下面，我们来搭建一个 Nacos Discovery 监控端点的示例。步骤如下：
+
+- 首先，搭建一个服务提供者 nacos-provider ，注册服务到 Nacos 中。
+- 然后，搭建一个服务消费者 nacos-consumer，调用服务提供者 demo-provider 提供的 HTTP 接口。同时，配置开启服务消费者的 Nacos Discovery 监控端点。
+- 最后，访问服务消费者的 Nacos Discovery 监控端点，查看下返回的监控数据。 7.1 搭建服务提供者 直接复用**3.1 搭建服务提供者**
+  小节的 [sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
+  项目即可。
+
+因为 **sparkzxl-nacos-discovery-provider** 项目没有从 Nacos 订阅任何服务，无法完整看到 nacos-discovery 端点的完整效果，所以我们暂时不配置该项目的 Nacos Discovery
+监控端点。
+
+不过实际项目中，配置下开启 Nacos Discovery 监控端点 还是可以的，至少可以看到 Nacos Discovery 配置项。
+
+### 7.2 搭建服务消费者
+
+从**3.2 搭建服务消费者**小节的 sparkzxl-nacos-discovery-consumer 项目，复用 sparkzxl-nacos-discovery-consumer 项目。然后在其上进行修改，方便搭建~
+
+#### 7.2.1 引入依赖
+
+在 pom.xml 文件中，额外引入 Spring Boot Actuator 相关依赖。代码如下：
+
+```xml
+<!-- 实现对 Actuator 的自动化配置 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+#### 7.2.2 配置文件
+
+修改 **application.yaml** 配置文件，增加 Spring Boot Actuator 配置项。配置如下：
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*' # 需要开放的端点。默认值只打开 health 和 info 两个端点。通过设置 * ，可以开放所有端点。
+  endpoint:
+    # Health 端点配置项，对应 HealthProperties 配置类
+    health:
+      enabled: true # 是否开启。默认为 true 开启。
+      show-details: ALWAYS # 何时显示完整的健康信息。默认为 NEVER 都不展示。可选 WHEN_AUTHORIZED 当经过授权的用户；可选 ALWAYS 总是展示。
+```
+
+每个配置项的作用，胖友看下艿艿添加的注释。如果还不理解的话，后续看下[《芋道 Spring Boot 监控端点 Actuator 入门》](https://www.iocoder.cn/Spring-Boot/Actuator/?self)文章。
+
+### 7.3 简单测试
+
+① 通过 NacosProviderApplication 启动服务提供者，通过 NacosConsumerApplication 启动服务消费者。
+
+之后，访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 "consumer:provider:helloWorld"。a说明，调用远程的服务提供者成功。
+
+② 访问服务消费者的 nacos-discovery 监控端点 http://127.0.0.1:8081/actuator/nacos-discovery，返回结果如下图：
+
+![nacos-actuator.png](nacos-actuator.png)
+
+理论来说，"subscribe" 字段应该返回订阅的服务 demo-provider 的信息，结果这里返回的是空。后来翻看了下源码，是需要主动向 Nacos EventDispatcher 注册 EventListener
+才可以。咳咳咳，感觉这个设定有点神奇~
+
+③ 访问服务消费者的 health 监控端点 http://127.0.0.1:8081/actuator/health，返回结果如下图：
+
+![nacos-actuator-1.png](nacos-actuator-1.png)
+
+#### 666. 彩蛋
+
+至此，我们已经完成 Spring Cloud Alibaba Nacos Discovery 的学习。如下是 Nacos 相关的官方文档：
+
+- [《Nacos 官方文档》](https://nacos.io/zh-cn/docs/what-is-nacos.html)
+- [《Spring Cloud Alibaba 官方文档 —— Nacos Discovery》](https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-discovery)
+- [《Spring Cloud Alibaba 官方示例 —— Nacos Discovery》](https://github.com/alibaba/spring-cloud-alibaba/blob/master/spring-cloud-alibaba-examples/nacos-example/nacos-discovery-example/readme-zh.md)
+
+另外，想要在 Spring Boot 项目中使用 Nacos
+作为注册中心的胖友，可以阅读[《芋道 Spring Boot 注册中心 Nacos 入门》](https://www.iocoder.cn/Spring-Boot/registry-nacos/?self)文章。
 
 # 公众号
 
