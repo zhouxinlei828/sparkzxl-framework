@@ -981,22 +981,22 @@ knife4j:
 
 ![nacos-console-swtich-env1.png](../images/nacos-console-swtich-env1.png)
 
-之后通过 DemoConsumerApplication 启动服务消费者。
+之后通过 NacosConsumerEnvApplication 启动服务消费者。
 
 访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 "consumer:provider:helloWorld"。说明，调用远程的服务提供者【成功】。
 
 ![nacos-consumer-httpRequest.png](../images/nacos-consumer-httpRequest.png)
 
-② 再配置 --spring.profiles.active 为 uat，设置 DemoConsumerApplication 读取 application-uat.yaml 配置文件。如下图所示：
+② 再配置 --spring.profiles.active 为 uat，设置 NacosConsumerEnvApplication 读取 application-uat.yaml 配置文件。如下图所示：
 
 ![nacos-console-swtich-env2.png](../images/nacos-console-swtich-env2.png)
 
-之后通过 DemoConsumerApplication 启动服务消费者。
+之后通过 NacosConsumerEnvApplication 启动服务消费者。
 
 访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 报错提示 "获取不到实例"。说明，调用远程的服务提供者【失败】。
 
 原因是，虽然说服务 demo-provider 已经启动，因为其注册在 Nacos 的 Namespace 为 dev，这就导致第 ① 步启动的服务 demo-consumer 可以调用到该服务，而第② 步启动的服务
-demo-consumer 无法调用到该服务。
+nacos-consumer 无法调用到该服务。
 
 即，我们可以通过 Nacos 的 Namespace 实现不同环境下的服务隔离。未来，在开源版本 Nacos 权限完善之后，每个 Namespace 提供不同的
 AccessKey、SecretKey，保证只有知道账号密码的服务，才能连到对应的 Namespace，进一步提升安全性。
