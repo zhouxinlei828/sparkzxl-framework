@@ -70,6 +70,9 @@ docker-compose -f example/cluster-hostname.yaml up
 
 ## 2. 集成到 Spring Cloud
 
+- [Spring Cloud Alibaba 注册中心 Nacos 入门](分布式架构之SpringCloudAlibaba注册中心Nacos入门.md)
+- [Spring Cloud Alibaba 配置中心 Nacos 入门](分布式架构之SpringCloudAlibaba配置中心Nacos入门.md)
+
 # 公众号
 
 学习不走弯路，关注公众号「凛冬王昭君」
