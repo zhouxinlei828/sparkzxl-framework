@@ -26,14 +26,14 @@ Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台。 N
 
 - Clone 项目
 
-```shell
+```bash
 git clone https://github.com/nacos-group/nacos-docker.git
 cd nacos-docker
 ```
 
 - 单机模式 Derby
 
-```shell
+```bash
 docker-compose -f example/standalone-derby.yaml up
 ```
 
@@ -41,19 +41,19 @@ docker-compose -f example/standalone-derby.yaml up
 
 如果希望使用MySQL5.7
 
-```shell
+```bash
 docker-compose -f example/standalone-mysql-5.7.yaml up
 ```
 
 如果希望使用MySQL8
 
-```shell
+```bash
 docker-compose -f example/standalone-mysql-8.yaml up
 ```
 
 - 集群模式
 
-```shell
+```bash
 docker-compose -f example/cluster-hostname.yaml up
 ```
 

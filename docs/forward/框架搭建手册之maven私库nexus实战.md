@@ -18,7 +18,7 @@
 
 1. 新建nexus目录
 
-```shell
+```bash
 mkdir nexus
 cd nexus
 touch docker-compose.yaml
@@ -48,7 +48,7 @@ services:
 
 3. 运行docker-compose文件
 
-```shell
+```bash
 docker-compose up -d
 ```
 

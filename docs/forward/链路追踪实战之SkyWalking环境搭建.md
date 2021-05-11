@@ -14,7 +14,7 @@
 
 1. 新建SkyWalking持久化volume目录
 
-```shell
+```bash
 mkdir skywalking
 cd skywalking
 touch docker-compose.yaml
@@ -60,7 +60,7 @@ services:
 
 3. 运行docker-compose文件
 
-```shell
+```bash
 docker-compose up -d
 ```
 

@@ -14,7 +14,7 @@
 
 1. 新建Jenkins持久化volume目录
 
-```shell
+```bash
 mkdir jenkins
 cd jenkins
 mkdir data repository
@@ -53,7 +53,7 @@ services:
 
 3. 运行docker-compose文件
 
-```shell
+```bash
 docker-compose up -d
 ```
 

@@ -76,7 +76,7 @@ CMD ["/bin/bash"]
 
 ![jdk-build.png](../images/jdk-build.png)
 
-```shell
+```bash
 docker build -t java:8 .
 ```
 
@@ -84,7 +84,7 @@ docker build -t java:8 .
 
 > 打标签，登录阿里云Docker Registry，推送镜像
 
-```shell
+```bash
 docker tag 2467d72208b3 registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 docker login --username=admin registry.cn-hangzhou.aliyuncs.com
 docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
@@ -151,7 +151,7 @@ docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 - 运行容器
 > 示例
 
-```shell
+```bash
 docker run -d --name spring-boot-demo --restart=always -v /logs/spring-boot-demo:/home/spring-boot-demo/logs -e --spring.profiles.active='dev' 8080:8080 spring-boot-demo:1.0
 ```
 
