@@ -4,8 +4,8 @@
   
 * 分布式架构篇
     * [1.Nacos注册&配置中心搭建](forward/分布式架构之Nacos注册&配置中心搭建.md)
-    * [2.Spring Cloud Alibaba 配置中心 Nacos 入门](forward/分布式架构之SpringCloudAlibaba配置中心Nacos入门.md)
-    * [3.Spring Cloud Alibaba 注册中心 Nacos 入门](forward/分布式架构之SpringCloudAlibaba注册中心Nacos入门.md)
+    * [2.Spring Cloud Alibaba 注册中心 Nacos 入门](forward/分布式架构之SpringCloudAlibaba注册中心Nacos入门.md)
+    * [3.Spring Cloud Alibaba 配置中心 Nacos 入门](forward/分布式架构之SpringCloudAlibaba配置中心Nacos入门.md)
     * [4.Spring Cloud openfeign 服务调用](forward/222)
     * [5.Spring Cloud Ribbon 服务负载均衡](forward/222)
     * [6.Spring Cloud hystrix 服务容错保护](forward/222)
