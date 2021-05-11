@@ -49,8 +49,8 @@ Spring Cloud 的编程模型，接入 Nacos 作为注册中心，实现服务的
 ## 3. 快速入门
 
 > 示例代码对应仓库：
-> - 服务提供者：sparkzxl-nacos-discovery-provider
-> - 服务消费者：sparkzxl-nacos-discovery-consumer
+> - 服务提供者：[sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
+> - 服务消费者：[sparkzxl-nacos-discovery-consumer](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer)
 
 本小节，我们来搭建一个 Nacos Discovery 组件的快速入门示例。步骤如下：
 
@@ -778,6 +778,228 @@ Metadata|    spring.cloud.nacos.discovery.metadata    |使用Map格式配置，�
 |是否集成 Ribbon    |ribbon.nacos.enabled    |一般都设置成true 即可。默认为 true|
 |日志文件名    |spring.cloud.nacos.discovery.log-name||
 |接入点    |spring.cloud.nacos.discovery.endpoint    |地域的某个服务的入口域名，通过此域名可以动态地拿到服务端地址|
+
+## 6. 多环境配置
+
+> 示例代码对应仓库：
+> - 服务提供者：[sparkzxl-nacos-discovery-provider-env](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider-env)
+> - 服务消费者：[sparkzxl-nacos-discovery-consumer-env](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer-env)
+
+同一个服务，我们会部署到开发、测试、预发布、生产等环境中，那么我们需要在项目中，添加不同环境的 Nacos 配置。一般情况下，开发和测试使用同一个 Nacos，预发布和生产使用另一个 Nacos。那么针对相同的
+Nacos，我们怎么实现不同环境的隔离呢？
+
+实际上，Nacos 开发者已经告诉我们如何实现了，通过 Nacos Namespace 命名空间。文档说明如下：
+
+> [FROM 《Nacos 文档 —— Nacos 概念》](https://nacos.io/zh-cn/docs/concepts.html)
+> 命名空间，用于进行租户粒度的配置隔离。不同的命名空间下，可以存在相同的 Group 或 Data ID 的配置。Namespace 的常用场景之一是不同环境的配置的区分隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等。
+
+下面，我们来搭建一个多环境配置的示例。步骤如下：
+
+- 首先，我们会在 Nacos 中创建开发环境使用的 Namespace 为 dev，测试环境使用的 Namespace 为 uat。
+- 然后，搭建一个服务提供者 demo-provider，使用开发环境配置，注册服务到 Nacos 的 dev Namespace 下。
+- 之后，搭建一个服务消费者 demo-consumer，调用服务提供者 demo-provider 提供的 HTTP 接口。
+    - 先使用开发环境配置，因为服务 demo-provider 是在 Nacos dev Namespace 下注册，所以调用它成功。
+    - 后使用测试环境配置，因为服务 demo-provider 不在 Nacos uat Namespace 下注册，所以调用它失败，
+
+> 友情提示：在 Spring Boot（Spring Cloud）项目中，可以使用 Profiles 机制，基于 spring.profiles.active 配置项，实现不同环境读取不同的配置文件。
+
+## 6.1 创建 Nacos 命名空间
+
+① 打开 Nacos UI 界面的「命名空间」菜单，进入「命名空间」功能。如下图所示：
+
+![nacos-namespace-1.png](../images/nacos-namespace-1.png)
+
+② 点击列表右上角的「新建命名空间」按钮，弹出「新建命名空间」窗口，创建一个 **dev** 命名空间。输入如下内容，并点击「确定」按钮，完成创建。如下图所示：
+
+![nacos-namespace-2.png](../images/nacos-namespace-2.png)
+
+③ 重复该操作，继续创建一个 uat 命名空间。最终 **dev** 和 **uat** 信息如下图：
+
+![nacos-namespace-3.png](../images/nacos-namespace-3.png)
+
+### 6.2 搭建服务提供者
+
+从**3.1 搭建服务提供者**小节的 sparkzxl-nacos-discovery-provider 项目，复制出 sparkzxl-nacos-discovery-provider-env 项目。然后在其上进行修改，方便搭建~
+
+#### 6.2.1 配置文件
+
+修改 application.yaml 配置文件，将 Nacos Discovery 配置项删除，稍后添加在不同环境的配置文件中。配置如下：
+
+```yaml
+spring:
+  application:
+    name: nacos-provider
+server:
+  port: 8080
+```
+
+创建开发环境使用的 application-dev.yaml 配置文件，增加 Namespace 为 dev 的 Nacos Discovery 配置项。配置如下：
+
+```yaml
+spring:
+  cloud:
+    nacos:
+      # Nacos 作为注册中心的配置项，对应 NacosDiscoveryProperties 配置类
+      discovery:
+        server-addr: 47.114.40.129:8848 # Nacos 服务器地址
+        service: ${spring.application.name} # 注册到 Nacos 的服务名。默认值为 ${spring.application.name}。
+        namespace: 5acd2f93-cd2d-420a-afe4-15d7cf5b3b0b # Nacos 命名空间 uat 的编号
+knife4j:
+  enable: true
+  description: sparkzxl nacos provider在线文档
+  base-package: com.github.sparkzxl.nacos.controller
+  group: nacos provider应用
+  title: sparkzxl nacos provider在线文档
+  terms-of-service-url: https://www.sparksys.top
+  version: 1.0
+  license: Powered By sparkzxl
+  license-url: https://github.com/sparkzxl
+  contact:
+    name: zhouxinlei
+    email: zhouxinlei298@163.com
+    url: https://github.com/sparkzxl
+```
+
+创建测试环境使用的 application-uat.yaml 配置文件，增加 Namespace 为 uat 的 Nacos Discovery 配置项。配置如下：
+
+```yaml
+spring:
+  cloud:
+    nacos:
+      # Nacos 作为注册中心的配置项，对应 NacosDiscoveryProperties 配置类
+      discovery:
+        server-addr: 47.114.40.129:8848 # Nacos 服务器地址
+        service: ${spring.application.name} # 注册到 Nacos 的服务名。默认值为 ${spring.application.name}。
+        namespace: 6657f6f1-6c27-48c0-8187-9f675237144a # Nacos 命名空间 uat 的编号
+knife4j:
+  enable: true
+  description: sparkzxl nacos provider在线文档
+  base-package: com.github.sparkzxl.nacos.controller
+  group: nacos provider应用
+  title: sparkzxl nacos provider在线文档
+  terms-of-service-url: https://www.sparksys.top
+  version: 1.0
+  license: Powered By sparkzxl
+  license-url: https://github.com/sparkzxl
+  contact:
+    name: zhouxinlei
+    email: zhouxinlei298@163.com
+    url: https://github.com/sparkzxl
+```
+
+6.2.2 简单测试 下面，我们使用命令行参数进行 --spring.profiles.active 配置项，实现不同环境，读取不同配置文件。
+
+① 先配置 --spring.profiles.active 为 dev，设置 NacosProviderEnvApplication 读取 application-dev.yaml 配置文件。如下图所示：
+
+![nacos-namespace-swtich-env.png](../images/nacos-namespace-swtich-env.png)
+
+之后通过 NacosProviderEnvApplication 启动服务提供者。
+
+② 打开 Nacos 控制台，可以在服务列表看到服务 nacos-provider 注册在命名空间 dev 下。如下图：
+
+![nacos-console-swtich-env.png](../images/nacos-console-swtich-env.png)
+
+### 6.3 搭建服务消费者
+
+从**3.2 搭建服务消费者**小节的 labx-01-sca-nacos-discovery-demo01-consumer 项目，复制出 labx-01-sca-nacos-discovery-demo02-consumer
+项目。然后在其上进行修改，方便搭建~
+
+#### 6.3.1 配置文件
+
+> 友情提示：和**6.2.1 配置文件**小节的内容是基本一致的，重复唠叨一遍。
+
+修改 application.yaml 配置文件，将 Nacos Discovery 配置项删除，稍后添加在不同环境的配置文件中。配置如下：
+
+```yaml
+spring:
+  application:
+    name: nacos-consumer # Spring 应用名
+
+server:
+  port: 8081 # 服务器端口。默认为 8080
+```
+
+创建开发环境使用的 application-dev.yaml 配置文件，增加 Namespace 为 **dev** 的 Nacos Discovery 配置项。配置如下：
+
+```yaml
+spring:
+  cloud:
+    nacos:
+      # Nacos 作为注册中心的配置项，对应 NacosDiscoveryProperties 配置类
+      discovery:
+        server-addr: 47.114.40.129:8848 # Nacos 服务器地址
+        service: ${spring.application.name} # 注册到 Nacos 的服务名。默认值为 ${spring.application.name}。
+        namespace: 5acd2f93-cd2d-420a-afe4-15d7cf5b3b0b # Nacos 命名空间 uat 的编号
+knife4j:
+  enable: true
+  description: sparkzxl nacos consumer在线文档
+  base-package: com.github.sparkzxl.nacos.controller
+  group: nacos consumer应用
+  title: sparkzxl nacos consumer在线文档
+  terms-of-service-url: https://www.sparksys.top
+  version: 1.0
+  license: Powered By sparkzxl
+  license-url: https://github.com/sparkzxl
+  contact:
+    name: zhouxinlei
+    email: zhouxinlei298@163.com
+    url: https://github.com/sparkzxl
+```
+
+创建测试环境使用的 application-uat.yaml 配置文件，增加 Namespace 为 uat 的 Nacos Discovery 配置项。配置如下：
+
+```yaml
+spring:
+  cloud:
+    nacos:
+      # Nacos 作为注册中心的配置项，对应 NacosDiscoveryProperties 配置类
+      discovery:
+        server-addr: 47.114.40.129:8848 # Nacos 服务器地址
+        service: ${spring.application.name} # 注册到 Nacos 的服务名。默认值为 ${spring.application.name}。
+        namespace: 6657f6f1-6c27-48c0-8187-9f675237144a # Nacos 命名空间 uat 的编号
+knife4j:
+  enable: true
+  description: sparkzxl nacos consumer在线文档
+  base-package: com.github.sparkzxl.nacos.controller
+  group: nacos consumer应用
+  title: sparkzxl nacos consumer在线文档
+  terms-of-service-url: https://www.sparksys.top
+  version: 1.0
+  license: Powered By sparkzxl
+  license-url: https://github.com/sparkzxl
+  contact:
+    name: zhouxinlei
+    email: zhouxinlei298@163.com
+    url: https://github.com/sparkzxl
+```
+
+#### 6.2.3 简单测试
+
+下面，我们使用命令行参数进行 --spring.profiles.active 配置项，实现不同环境，读取不同配置文件。
+
+① 先配置 --spring.profiles.active 为 dev，设置 NacosConsumerEnvApplication 读取 application-dev.yaml 配置文件。如下图所示：
+
+![nacos-console-swtich-env1.png](../images/nacos-console-swtich-env1.png)
+
+之后通过 DemoConsumerApplication 启动服务消费者。
+
+访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 "consumer:provider:helloWorld"。说明，调用远程的服务提供者【成功】。
+
+![nacos-consumer-httpRequest.png](../images/nacos-consumer-httpRequest.png)
+
+② 再配置 --spring.profiles.active 为 uat，设置 DemoConsumerApplication 读取 application-uat.yaml 配置文件。如下图所示：
+
+![nacos-console-swtich-env2.png](../images/nacos-console-swtich-env2.png)
+
+之后通过 DemoConsumerApplication 启动服务消费者。
+
+访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 报错提示 "获取不到实例"。说明，调用远程的服务提供者【失败】。
+
+原因是，虽然说服务 demo-provider 已经启动，因为其注册在 Nacos 的 Namespace 为 dev，这就导致第 ① 步启动的服务 demo-consumer 可以调用到该服务，而第② 步启动的服务
+demo-consumer 无法调用到该服务。
+
+即，我们可以通过 Nacos 的 Namespace 实现不同环境下的服务隔离。未来，在开源版本 Nacos 权限完善之后，每个 Namespace 提供不同的
+AccessKey、SecretKey，保证只有知道账号密码的服务，才能连到对应的 Namespace，进一步提升安全性。
 
 # 公众号
 
