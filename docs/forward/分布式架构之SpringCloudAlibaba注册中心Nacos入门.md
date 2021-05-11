@@ -1069,14 +1069,14 @@ management:
 
 ② 访问服务消费者的 nacos-discovery 监控端点 http://127.0.0.1:8081/actuator/nacos-discovery，返回结果如下图：
 
-![nacos-actuator.png](nacos-actuator.png)
+![nacos-actuator.png](../images/nacos-actuator.png)
 
 理论来说，"subscribe" 字段应该返回订阅的服务 demo-provider 的信息，结果这里返回的是空。后来翻看了下源码，是需要主动向 Nacos EventDispatcher 注册 EventListener
 才可以。咳咳咳，感觉这个设定有点神奇~
 
 ③ 访问服务消费者的 health 监控端点 http://127.0.0.1:8081/actuator/health，返回结果如下图：
 
-![nacos-actuator-1.png](nacos-actuator-1.png)
+![nacos-actuator-1.png](../images/nacos-actuator-1.png)
 
 #### 666. 彩蛋
 
