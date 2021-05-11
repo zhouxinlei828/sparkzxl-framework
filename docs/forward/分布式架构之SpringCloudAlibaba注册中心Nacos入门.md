@@ -362,7 +362,7 @@ knife4j:
 
 重点看 spring.cloud.nacos.discovery 配置项，它是 Nacos Discovery 配置项的前缀，对应 NacosDiscoveryProperties 配置项。
 
-![NacosDiscoveryProperties.png](NacosDiscoveryProperties.png)
+![NacosDiscoveryProperties.png](../images/NacosDiscoveryProperties.png)
 
 #### 3.1.3 NacosProviderApplication
 
@@ -442,7 +442,7 @@ public class TestController {
 
 ② 打开 Nacos 控制台，可以在服务列表看到服务 nacos-provider。如下图：
 
-![nacos-provider-img.png](nacos-provider-img.png)
+![nacos-provider-img.png](../images/nacos-provider-img.png)
 
 ### 3.2 搭建服务消费者
 # 公众号
