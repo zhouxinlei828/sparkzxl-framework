@@ -14,7 +14,7 @@
 
 1. 新建SkyWalking持久化volume目录
 
-```bash
+```bash'
 mkdir skywalking
 cd skywalking
 touch docker-compose.yaml
