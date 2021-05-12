@@ -176,7 +176,7 @@ node {
 
 如图所示：
 
-![spring-boot-jenkins.png](../images/spring-boot-jenkins.png)
+![spring-boot-jenkins.png](../../images/spring-boot-jenkins.png)
 
 ## Jenkins 流水线任务
 
@@ -184,11 +184,11 @@ node {
 
 **新建Jenkins流水线任务**
 
-![jenkins-Pipeline-Pipeline.png](../images/jenkins-Pipeline.png)
+![jenkins-Pipeline-Pipeline.png](../../images/jenkins-Pipeline.png)
 
 ### 配置流水线任务
 
-![Pipeline-config.png](../images/Pipeline-config.png)
+![Pipeline-config.png](../../images/Pipeline-config.png)
 
 点击保存即可建完Jenkins流水线任务
 
@@ -196,15 +196,15 @@ node {
 
 - 打开流水线面板
 
-![run-pipeline.png](../images/run-pipeline.png)
+![run-pipeline.png](../../images/run-pipeline.png)
 
 - 运行流水线任务
 
-![run-pipeline-1.png](../images/run-pipeline-1.png)
+![run-pipeline-1.png](../../images/run-pipeline-1.png)
 
 - 查看运行结果
 
-![run-pipeline-result.png](../images/run-pipeline-result.png)
+![run-pipeline-result.png](../../images/run-pipeline-result.png)
 
 绿色代表流水线执行成功
 
@@ -212,4 +212,4 @@ node {
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)

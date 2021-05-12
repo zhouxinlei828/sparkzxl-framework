@@ -121,11 +121,11 @@ cat /usr/local/docker/jenkins/data/secrets/initialAdminPassword
 
 - 进入系统管理
 
-![jenkins-maven-setting1.png](../images/jenkins-maven-setting1.png)
+![jenkins-maven-setting1.png](../../images/jenkins-maven-setting1.png)
 
 - 新增配置
 
-![maven-configfiles.png](../images/maven-configfiles.png)
+![maven-configfiles.png](../../images/maven-configfiles.png)
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -220,11 +220,11 @@ under the License.
 
 - 配置maven插件
 
-![maven-plugin.png](../images/maven-plugin.png)
+![maven-plugin.png](../../images/maven-plugin.png)
 
-![maven-settings.png](../images/maven-settings.png)
+![maven-settings.png](../../images/maven-settings.png)
 
-![maven-install.png](../images/maven-install.png)
+![maven-install.png](../../images/maven-install.png)
 
 ### 1.6 配置密码凭证
 
@@ -232,13 +232,13 @@ under the License.
 
 - 进入系统管理
 
-![credentials-1.png](../images/credentials-1.png)
+![credentials-1.png](../../images/credentials-1.png)
 
 - 添加凭证
 
-![credentials-2.png](../images/credentials-2.png)
+![credentials-2.png](../../images/credentials-2.png)
 
-![credentials-3.png](../images/credentials-3.png)
+![credentials-3.png](../../images/credentials-3.png)
 
 添加完成后，在Jenkins任务中即可使用
 
@@ -253,4 +253,4 @@ under the License.
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)

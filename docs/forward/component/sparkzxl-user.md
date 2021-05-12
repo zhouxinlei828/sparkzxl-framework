@@ -79,4 +79,4 @@ AuthUserInfo<Long>  泛型Long代表主键类型
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)

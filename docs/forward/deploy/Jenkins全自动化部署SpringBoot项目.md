@@ -171,4 +171,4 @@ MAINTAINER zhouxinlei
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
