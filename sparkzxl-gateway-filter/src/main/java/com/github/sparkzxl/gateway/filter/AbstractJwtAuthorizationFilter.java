@@ -125,6 +125,13 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         return jwtUserInfo;
     }
 
+    /**
+     * 获取token用户信息
+     *
+     * @param token token值
+     * @return JwtUserInfo
+     * @throws BaseException 异常
+     */
     public abstract JwtUserInfo getJwtUserInfo(String token) throws BaseException;
 
     protected Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {

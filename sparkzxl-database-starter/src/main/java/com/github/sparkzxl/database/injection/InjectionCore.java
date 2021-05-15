@@ -24,7 +24,10 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -64,7 +67,7 @@ public class InjectionCore {
             this.backgroundRefreshPools = MoreExecutors.listeningDecorator(
                     new ThreadPoolExecutor(guavaCache.getRefreshThreadPoolSize(), guavaCache.getRefreshThreadPoolSize(),
                             0L, TimeUnit.MILLISECONDS,
-                            new LinkedBlockingQueue<>(),new CustomThreadFactory())
+                            new LinkedBlockingQueue<>(), new CustomThreadFactory())
             );
             this.caches = CacheBuilder.newBuilder()
                     .maximumSize(guavaCache.getMaximumSize())
@@ -227,7 +230,7 @@ public class InjectionCore {
             }
 
             InjectionFieldPo type = new InjectionFieldPo(fieldParam.getInjectionField());
-            Map<Serializable, Object> valueMap = typeMap.getOrDefault(type, new HashMap());
+            Map<Serializable, Object> valueMap = typeMap.getOrDefault(type, Maps.newHashMap());
             valueMap.put(fieldParam.getQueryKey(), null);
             typeMap.put(type, valueMap);
         }

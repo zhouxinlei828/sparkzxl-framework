@@ -107,7 +107,9 @@ public class DubboExceptionFilter extends ListenableFilter {
                     }
                     // directly throw if it's JDK exception
                     String className = exception.getClass().getName();
-                    if (className.startsWith("java.") || className.startsWith("javax.")) {
+                    String java = "java.";
+                    String javax = "javax.";
+                    if (className.startsWith(java) || className.startsWith(javax)) {
                         return;
                     }
                     // directly throw if it's dubbo exception

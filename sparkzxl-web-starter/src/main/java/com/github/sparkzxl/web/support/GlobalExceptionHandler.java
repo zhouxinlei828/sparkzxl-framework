@@ -139,7 +139,7 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
-    public ApiResult handleSQLException(SQLException e) {
+    public ApiResult handleSqlException(SQLException e) {
         handleResponseResult();
         log.error("SQLException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);

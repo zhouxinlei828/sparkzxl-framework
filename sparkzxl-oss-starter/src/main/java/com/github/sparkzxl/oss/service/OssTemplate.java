@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -147,7 +148,7 @@ public class OssTemplate implements InitializingBean {
         String customDomain = ossProperties.getCustomDomain();
         if (StringUtils.isNotEmpty(customDomain)) {
             String host = URLUtil.getHost(url).toString();
-            if (!StringUtils.startsWithAny(customDomain, "http", "https")) {
+            if (!StringUtils.startsWithAny(customDomain, StrPool.HTTP, StrPool.HTTPS)) {
                 customDomain = "https://".concat(customDomain);
             }
             objectUrl = objectUrl.replace(host, customDomain);
@@ -268,7 +269,6 @@ public class OssTemplate implements InitializingBean {
                 new CompleteMultipartUploadRequest(bucketName, objectName, uploadId, partETags);
 
         // 如果需要在完成文件上传的同时设置文件访问权限，请参考以下示例代码。
-        // completeMultipartUploadRequest.setObjectACL(CannedAccessControlList.PublicRead);
         return amazonS3.completeMultipartUpload(completeMultipartUploadRequest);
     }
 

@@ -44,9 +44,10 @@ public class CustomTokenGrantService {
                 this.oAuth2RequestValidator.validateScope(tokenRequest, authenticatedClient);
             }
 
+            String implicit = "implicit";
             if (!StringUtils.hasText(tokenRequest.getGrantType())) {
                 throw new InvalidRequestException("Missing grant type");
-            } else if ("implicit".equals(tokenRequest.getGrantType())) {
+            } else if (implicit.equals(tokenRequest.getGrantType())) {
                 throw new InvalidGrantException("Implicit grant type not supported from token endpoint");
             } else {
                 if (this.isAuthCodeRequest(parameters) && !tokenRequest.getScope().isEmpty()) {

@@ -12,9 +12,9 @@ import lombok.Data;
 public class PageDTO {
 
     @ApiModelProperty(value = "当前页", example = "1")
-    private int pageNum = 1;
+    private Integer pageNum = 1;
 
     @ApiModelProperty(value = "页面大小", example = "10")
-    private int pageSize = 10;
+    private Integer pageSize = 10;
 
 }
