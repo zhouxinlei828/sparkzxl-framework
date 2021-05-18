@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.MethodBasedEvaluationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
@@ -28,10 +27,9 @@ import java.lang.reflect.Method;
 @Slf4j
 public class RedisLockAspect {
 
-    private RedisDistributedLock redisDistributedLock;
+    private final RedisDistributedLock redisDistributedLock;
 
-    @Autowired
-    public void setRedisDistributedLock(RedisDistributedLock redisDistributedLock) {
+    public RedisLockAspect(RedisDistributedLock redisDistributedLock) {
         this.redisDistributedLock = redisDistributedLock;
     }
 
