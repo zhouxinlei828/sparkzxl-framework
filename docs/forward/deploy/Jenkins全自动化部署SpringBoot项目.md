@@ -6,7 +6,7 @@
 
 ### 1.1 环境准备
 
-参考我上一篇：[Jenkins+Docker+Gitlab+Harbor部署环境搭建](Jenkins+Docker+Gitlab+Harbor服务器部署.md)
+参考我上一篇：[Jenkins+Docker+Gitlab+Harbor部署环境搭建](forward/deploy/Jenkins+Docker+Gitlab+Harbor服务器部署.md)
 本次使用到环境有：
 
 |软件 |版本|描述|
