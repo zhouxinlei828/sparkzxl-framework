@@ -59,6 +59,7 @@
 - [15.Spring Cloud 微服务聚合swagger文档](forward/222)
 - [16.一站式兼容所有云厂商文件存储实现](forward/distributed/一站式兼容所有云厂商文件存储实现.md)
 - [17.ELK+Filebeat+Kafka分布式日志管理平台搭建](forward/distributed/分布式架构之ELK+Filebeat+Kafka分布式日志管理平台搭建.md)
+- [17.高吞吐量的分布式消息中间件kafka初体验](forward/222.md)
 
 ## 应用部署实践
 

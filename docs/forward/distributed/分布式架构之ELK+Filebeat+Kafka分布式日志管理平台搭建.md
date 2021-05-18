@@ -42,7 +42,7 @@
 
 由于我们架构演变，在filebeat中原来由传输到logstash改变为发送到kafka，我们这边filebeat.yml改动的部分为：
 
-```Yaml
+```yaml
 filebeat.inputs:
   - type: log
     enabled: true
@@ -124,7 +124,7 @@ input {
 
 #### 2.2.1 新建docker-compose.yaml
 
-```Yaml
+```yaml
 version: '3.2'
 services:
   zookeeper:

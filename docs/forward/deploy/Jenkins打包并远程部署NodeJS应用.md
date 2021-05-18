@@ -2,7 +2,7 @@
 
 ## 1.环境准备
 
-- [Jenkins+Docker+Gitlab+Harbor服务器部署](Jenkins+Docker+Gitlab+Harbor服务器部署.md)
+- [Jenkins+Docker+Gitlab+Harbor服务器部署](forward/deploy/Jenkins+Docker+Gitlab+Harbor服务器部署.md)
 - nodeJs安装
 
 ## 2. NodeJs安装
