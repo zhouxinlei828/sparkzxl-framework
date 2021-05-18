@@ -1,10 +1,31 @@
-# sparkzxl-data-starter
+# sparkzxl-database-starter
 
-> 职能：
-> 使用mybatis-plus作为curd增强框架，同时对跨库、库表、库服务 关联数据自动注入的支持，解决解决分页数据的属性或单个对象的属性 回显关联数据之痛, 支持对静态数据属性(数据字典)、动态主键数据进行自动注入，对db之上一层做了缓存，减轻对db
-> 的频繁访问，对curd的接口自动生成
+> 简介：
+> 使用mybatis-plus作为curd增强框架，MyBatis-Plus (opens new window)（简称 MP）是一个 MyBatis (opens new window)的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
 
-## POM
+- **跨库、库表、库服务 关联数据自动注入的支持**：解决分页数据的属性或单个对象的属性 回显关联数据之痛, 支持对静态数据属性(数据字典)、动态主键数据进行自动注入
+- **缓存支撑**：db之上一层做了缓存，减轻对db的频繁冲击
+- **CRUD通用操作**：对单表数据逻辑的curd极简封装，同时对excel的导入导出适配
+
+> **愿景**<br/>
+> 我们的愿景是成为 MyBatis 最好的搭档，就像 魂斗罗 中的 1P、2P，基友搭配，效率翻倍。
+
+## mybatis-plus 特性
+
+- **无侵入**：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑
+- **损耗小**：启动即会自动注入基本 CURD，性能基本无损耗，直接面向对象操作
+- **强大的 CRUD 操作**：内置通用 Mapper、通用 Service，仅仅通过少量配置即可实现单表大部分 CRUD 操作，更有强大的条件构造器，满足各类使用需求
+- **支持 Lambda 形式调用**：通过 Lambda 表达式，方便的编写各类查询条件，无需再担心字段写错
+- **支持主键自动生成**：支持多达 4 种主键策略（内含分布式唯一 ID 生成器 - Sequence），可自由配置，完美解决主键问题
+- **支持 ActiveRecord 模式**：支持 ActiveRecord 形式调用，实体类只需继承 Model 类即可进行强大的 CRUD 操作
+- **支持自定义全局通用操作**：支持全局通用方法注入（ Write once, use anywhere ）
+- **内置代码生成器**：采用代码或者 Maven 插件可快速生成 Mapper 、 Model 、 Service 、 Controller 层代码，支持模板引擎，更有超多自定义配置等您来使用
+- **内置分页插件**：基于 MyBatis 物理分页，开发者无需关心具体操作，配置好插件之后，写分页等同于普通 List 查询
+- **分页插件支持多种数据库**：支持 MySQL、MariaDB、Oracle、DB2、H2、HSQL、SQLite、Postgre、SQLServer 等多种数据库
+- **内置性能分析插件**：可输出 Sql 语句以及其执行时间，建议开发测试时启用该功能，能快速揪出慢查询
+- **内置全局拦截插件**：提供全表 delete 、 update 操作智能分析阻断，也可自定义拦截规则，预防误操作
+
+## POM依赖
 
 ```xml
 
@@ -12,26 +33,19 @@
     <dependency>
         <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-core</artifactId>
-        <scope>provided</scope>
     </dependency>
     <!-- mybatis-plus -->
     <dependency>
         <groupId>com.baomidou</groupId>
         <artifactId>mybatis-plus-boot-starter</artifactId>
-        <exclusions>
-            <exclusion>
-                <artifactId>mybatis</artifactId>
-                <groupId>org.mybatis</groupId>
-            </exclusion>
-        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>com.github.jsqlparser</groupId>
+        <artifactId>jsqlparser</artifactId>
     </dependency>
     <dependency>
         <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-cache-starter</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
     </dependency>
     <dependency>
         <groupId>mysql</groupId>
@@ -45,6 +59,16 @@
     <dependency>
         <groupId>com.github.pagehelper</groupId>
         <artifactId>pagehelper-spring-boot-starter</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -73,7 +97,7 @@
 
 1. mapper接口继承SuperMapper类
 2. service接口类继承SuperService或者SuperCacheService类，区别在于一个实现了缓存，一个没有
-3. serviceImpl实现类继承SuperServiceImpl或者AbstractSuperCacheServiceImpl
+3. serviceImpl实现类继承SuperServiceImpl或者SuperCacheServiceImpl
 4. CurdController 实现了curd的接口自动生成，使用方式可继承SuperSimpleController类来实现自动生成curd接口
 
 - 关联数据自动注入器
@@ -91,7 +115,7 @@
 工具类中的RemoteData类的设计，灵感源于Hibernate,比如用户实体的字段改成:
 
 ```java
-    @TableField("org_id")
+@TableField("org_id")
 @InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = CoreOrg.class)
 private RemoteData<Long, CoreOrg> org;
 ```
@@ -180,9 +204,9 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 
 ```
 
-其中， key 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将@InjectionField
-注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， name> 即可。 若想要回显org的多个字段， org类型可以设置成RemoteData<Long, Org>，, 并将@InjectionField
-注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
+其中， key 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将@InjectionField 注解上标注的
+orgApi.findOrgByIds 方法返回 Map<id， name> 即可。 若想要回显org的多个字段， org类型可以设置成RemoteData<Long, Org>，, 并将@InjectionField 注解上标注的 orgApi.findOrgByIds
+方法返回 Map<id， Org> 即可。
 
 1. 引入依赖
 
@@ -268,13 +292,23 @@ public class CoreOrgRepository implements ICoreOrgRepository {
 - 自动配置属性
 
 ```yaml
-sparkzxl:
-  data:
-    worker-id: 0
-    data-center-id: 10
+mybatis-plus:
+  custom:
+    id-type: snowflake_id
+    ignore-table:
+    data-center-id:
+    enable-tenant: false
+    injection:
+      aop-enabled: true
+    mapper-scan: 
 ```
 
-雪花算法的数据id生成号段，不填默认
+- 多租户实现
+
+TenantLineHandlerImpl
+原理参考mybatis-plus实现 [tenantlineinnerinterceptor](https://mp.baomidou.com/guide/interceptor-tenant-line.html#tenantlineinnerinterceptor)
+
+更多装配属性参考**CustomMybatisProperties**类 雪花算法的数据id生成号段，不填默认
 
 ## 使用方法
 
@@ -288,6 +322,9 @@ sparkzxl:
     <version>${sparkzxl.version}</version>
 </dependency>
 ```
+
+## 示例项目
+
 # 公众号
 
 学习不走弯路，关注公众号「凛冬王昭君」
