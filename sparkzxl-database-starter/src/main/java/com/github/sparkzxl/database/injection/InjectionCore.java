@@ -172,7 +172,7 @@ public class InjectionCore {
      * @param field 字段
      * @return
      */
-    private boolean isNotBaseType(Object obj, Field field) {
+    private boolean isNotBaseType(Field field) {
         String typeName = field.getType().getName();
         return !StringUtils.equals(Integer.class.getName(), typeName) &&
                 !StringUtils.equals(Byte.class.getName(), typeName) &&
@@ -351,7 +351,7 @@ public class InjectionCore {
         }
         field.setAccessible(true);
         //类型
-        if (isNotBaseType(obj, field)) {
+        if (isNotBaseType(field)) {
             consumer.accept(typeMap);
             return null;
         }

@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Service
-public @interface HandlerType {
+public @interface BusinessStrategy {
 
     String type();
 

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.patterns.strategy;
 
-import com.github.sparkzxl.patterns.annonation.HandlerType;
+import com.github.sparkzxl.patterns.annonation.BusinessStrategy;
 
 import java.lang.annotation.Annotation;
 
@@ -9,12 +9,12 @@ import java.lang.annotation.Annotation;
  *
  * @author zhouxinlei
  */
-public class HandlerTypeImpl implements HandlerType {
+public class BusinessStrategyImpl implements BusinessStrategy {
 
     private final String type;
     private final String source;
 
-    HandlerTypeImpl(String type, String source) {
+    BusinessStrategyImpl(String type, String source) {
         this.source = source;
         this.type = type;
     }
@@ -31,7 +31,7 @@ public class HandlerTypeImpl implements HandlerType {
 
     @Override
     public Class<? extends Annotation> annotationType() {
-        return HandlerType.class;
+        return BusinessStrategy.class;
     }
 
     @Override
@@ -44,10 +44,10 @@ public class HandlerTypeImpl implements HandlerType {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof HandlerType)) {
+        if (!(obj instanceof BusinessStrategy)) {
             return false;
         }
-        HandlerType other = (HandlerType) obj;
+        BusinessStrategy other = (BusinessStrategy) obj;
         return type.equals(other.type()) && source.equals(other.source());
     }
 }
