@@ -2,7 +2,7 @@
 
 > 在前两章节，我们了解了Jenkins流水线的搭建部署以及Jenkins流水线语法的介绍，本章节开始进行实战
 
-- [1.框架使用手册](forward/框架使用手册.md)
+- [1.框架使用手册](forward/framework/框架搭建手册之idea搭建代码环境.md)
 - [2.Jenkins实战之流水线](forward/deploy/Jenkins实战之流水线.md)
 - [3.Jenkins实战之流水线语法详解](forward/deploy/Jenkins实战之流水线语法详解.md)
 
