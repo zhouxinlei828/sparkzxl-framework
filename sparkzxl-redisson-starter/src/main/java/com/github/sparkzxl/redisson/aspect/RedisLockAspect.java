@@ -2,7 +2,6 @@ package com.github.sparkzxl.redisson.aspect;
 
 import com.github.sparkzxl.redisson.annotation.RedisLock;
 import com.github.sparkzxl.redisson.lock.RedisDistributedLock;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -10,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.redisson.RedissonLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.MethodBasedEvaluationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -19,11 +17,10 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * description:
+ * description: Redis分布式AOP实现
  *
  * @author zhouxinlei
  */
