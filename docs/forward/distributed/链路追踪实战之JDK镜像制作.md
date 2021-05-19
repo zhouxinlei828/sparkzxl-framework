@@ -19,7 +19,7 @@
 
 官网下载路径:[javase-jdk8-downloads](https://www.oracle.com/cn/java/technologies/javase/javase-jdk8-downloads.html)
 
-![jdk-download.png](../../images/jdk-download.png)
+![jdk-download.png](https://oss.sparksys.top/sparkzxl-component/jdk-download.png)
 
 下载对应的系统的jdk版本，本文使用的是Linux操作系统
 
@@ -27,7 +27,7 @@
 
 官网下载路径:[skywalking 8.5.0](https://archive.apache.org/dist/skywalking/8.5.0/)
 
-![skywalking-download.png](../../images/skywalking-download.png)
+![skywalking-download.png](https://oss.sparksys.top/sparkzxl-component/skywalking-download.png)
 
 下载对应的版本包，如果使用的是es7作为skywalking 存储db，则需要es7对应的包文件
 
@@ -70,11 +70,11 @@ CMD ["/bin/bash"]
 
 > 将下载JDK包和skywalking包 agent 下的放到Dockerfile同级目录
 
-![skywalking-agent.png](../../images/skywalking-agent.png)
+![skywalking-agent.png](https://oss.sparksys.top/sparkzxl-component/skywalking-agent.png)
 
 文件结构如下
 
-![jdk-build.png](../../images/jdk-build.png)
+![jdk-build.png](https://oss.sparksys.top/sparkzxl-component/jdk-build.png)
 
 ```bash
 docker build -t java:8 .
@@ -159,4 +159,4 @@ docker run -d --name spring-boot-demo --restart=always -v /logs/spring-boot-demo
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

@@ -6,7 +6,7 @@
 
 ### 1.1 在idea新建maven项目
 
-![idea-new-project](../../images/idea-new-project.png)
+![idea-new-project](https://oss.sparksys.top/sparkzxl-component/idea-new-project.png)
 
 ### 1.2 pom定义
 
@@ -281,7 +281,7 @@ jib-maven-plugin:maven 打包应用代码为docker images 插件，
 
 截图示例：
 
-![import-maven](../../images/import-maven.png)
+![import-maven](https://oss.sparksys.top/sparkzxl-component/import-maven.png)
 
 ### 1.4 组件自动装配
 
@@ -505,4 +505,4 @@ hystrix:
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
