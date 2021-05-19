@@ -178,7 +178,7 @@ node {
 
 ![spring-boot-jenkins.png](../../images/spring-boot-jenkins.png)
 
-## Jenkins 流水线任务
+## 三. Jenkins 流水线任务
 
 ### 创建流水线任务
 
