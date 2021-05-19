@@ -221,12 +221,13 @@ orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
 2. 使用方式
 
 ```yaml
-sparkzxl:
-  injection:
-    # 是否启用 远程数据 手动注入
-    enabled: true
-    # 是否启用 远程数据 注解注入 
-    aop-enabled: true
+mybatis-plus:
+  custom:
+    injection:
+      # 是否启用 远程数据 手动注入
+      enabled: true
+      # 是否启用 远程数据 注解注入
+      aop-enabled: true
 ```
 
 3.在需要注入的对象上添加注解：`@InjectionField`
@@ -245,7 +246,6 @@ private RemoteData<Long, CoreOrg> org;
 示例
 
  ```java
-
 @Repository
 public class CoreOrgRepository implements ICoreOrgRepository {
 
