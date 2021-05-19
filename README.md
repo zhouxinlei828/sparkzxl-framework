@@ -2,9 +2,9 @@
 
 <p>
 <a href="https://search.maven.org/"><img src="https://img.shields.io/badge/maven-1.0.1.RELEASE-blue" alt="maven"></a>
+<a href="https://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2.0"></a>
 <a href="https://github.com/sparkzxl/sparkzxl-component"><img src="https://img.shields.io/badge/组件-sparkzxl--component-orange" alt="sparkzxl-component"></a>
 <a href="https://github.com/sparkzxl/sparkzxl-auth"><img src="https://img.shields.io/badge/分布式认证-sparkzxl--auth-success" alt="分布式认证"></a>
-<a href="https://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2.0"></a>
 </p>
 
 ## 简介
