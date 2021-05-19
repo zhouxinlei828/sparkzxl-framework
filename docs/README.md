@@ -40,7 +40,7 @@
 
 > 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
 
-![nexus-compoment.png](images/nexus-compoment.png)
+![nexus-compoment.png](https://oss.sparksys.top/sparkzxl-component/nexus-compoment.png)
 
 ## 组件框架搭建
 
@@ -97,4 +97,4 @@
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
