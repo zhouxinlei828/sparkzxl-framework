@@ -107,9 +107,9 @@
 
 **使用步骤：**
 
-1. 需要注入数据的字段上面添加注解：**`@InjectionField(api = DICTIONARY_ITEM_CLASS, method = DICTIONARY_ITEM_METHOD, type="EDUCATION")`**
-2. 需要注入数据的字段类型改成：**`RemoteData<Long, String>`** 或 **`RemoteData<String, String>`** 或 **`RemoteData<Long, User>`**
-3. 需要注入数据的方法标记注解：**`@InjectionResult`** 或者手动调用方法：**`InjectionCore.injection(Object obj)`**
+1. 需要注入数据的字段上面添加注解：`@InjectionField(api = DICTIONARY_ITEM_CLASS, method = DICTIONARY_ITEM_METHOD, type="EDUCATION")`
+2. 需要注入数据的字段类型改成：`RemoteData<Long, String>` 或 `RemoteData<String, String>` 或 `RemoteData<Long, User>`
+3. 需要注入数据的方法标记注解：`@InjectionResult` 或者手动调用方法：`InjectionCore.injection(Object obj)`
 4. 实现具体的查询方法。
 
 工具类中的RemoteData类的设计，灵感源于Hibernate,比如用户实体的字段改成:
@@ -204,8 +204,8 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 
 ```
 
-其中， **key** 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将**`@InjectionField`**  注解上标注的
-orgApi.findOrgByIds 方法返回 Map<id， name> 即可。 若想要回显org的多个字段， org类型可以设置成**`RemoteData<Long, Org>`**，, 并将**`@InjectionField`** 注解上标注的
+其中， **key** 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将`@InjectionField`  注解上标注的
+orgApi.findOrgByIds 方法返回 Map<id， name> 即可。 若想要回显org的多个字段， org类型可以设置成`RemoteData<Long, Org>`，, 并将`@InjectionField` 注解上标注的
 orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
 
 1. 引入依赖
@@ -229,7 +229,7 @@ sparkzxl:
     aop-enabled: true
 ```
 
-3.在需要注入的对象上添加注解：**`@InjectionField`**
+3.在需要注入的对象上添加注解：`@InjectionField`
 
 ```java
 @TableField("org_id")
@@ -278,7 +278,7 @@ public class CoreOrgRepository implements ICoreOrgRepository {
 }
 ```
 
-使用demo可参考**`sparkzxl-cloud`**中**`sparkzxl-auth-server`** 用户的查询
+使用demo可参考`sparkzxl-cloud`中`sparkzxl-auth-server` 用户的查询
 
 - 分页查询：
 
@@ -291,7 +291,7 @@ public class CoreOrgRepository implements ICoreOrgRepository {
 > 使用mybatis-plus的增强功能，继承MetaObjectHandler，实现元对象处理器接口
 
 目的主要对自动填充的字段，创建时间，更新时间，创建人，更新人字段的自动填充功能，创建人和更新人的这都能过填充是通过request请求域内的用户进行传递，自动填充，可通过BaseContextHandler.getUserId()
-获取，具体可参考**`BaseContextHandler`**类当中的方法进行选择
+获取，具体可参考`BaseContextHandler`类当中的方法进行选择
 
 - 自动配置属性
 
@@ -312,7 +312,7 @@ mybatis-plus:
 TenantLineHandlerImpl
 原理参考mybatis-plus实现 [tenantlineinnerinterceptor](https://mp.baomidou.com/guide/interceptor-tenant-line.html#tenantlineinnerinterceptor)
 
-更多装配属性参考**`CustomMybatisProperties`**类 雪花算法的数据id生成号段，不填默认
+更多装配属性参考`CustomMybatisProperties`类 雪花算法的数据id生成号段，不填默认
 
 ## 使用方法
 
