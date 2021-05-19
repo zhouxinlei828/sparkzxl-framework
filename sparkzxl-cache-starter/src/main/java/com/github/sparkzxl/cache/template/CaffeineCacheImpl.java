@@ -2,6 +2,7 @@ package com.github.sparkzxl.cache.template;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,26 @@ public class CaffeineCacheImpl implements GeneralCacheService {
         }
         cache.put(key, value);
         this.cacheMap.put(key, cache);
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        Cache<String, Object> ifPresent = this.cacheMap.getIfPresent(key);
+        if (ObjectUtils.isEmpty(ifPresent)) {
+            set(key, value, expireTime, timeUnit);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value) {
+        Cache<String, Object> ifPresent = this.cacheMap.getIfPresent(key);
+        if (ObjectUtils.isEmpty(ifPresent)) {
+            set(key, value);
+            return true;
+        }
+        return false;
     }
 
     @Override

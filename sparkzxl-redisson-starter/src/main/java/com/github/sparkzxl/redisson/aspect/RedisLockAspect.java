@@ -82,7 +82,7 @@ public class RedisLockAspect {
     }
 
     private String parseExpression(ProceedingJoinPoint joinPoint, RedisLock redisLock) throws NoSuchMethodException {
-        String lockParam = redisLock.lockExpression();
+        String lockParam = redisLock.expression();
         Method targetMethod = getTargetMethod(joinPoint);
         ExpressionParser parser = new SpelExpressionParser();
         EvaluationContext context = new MethodBasedEvaluationContext(new Object(), targetMethod, joinPoint.getArgs(),

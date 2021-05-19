@@ -223,7 +223,7 @@ public class JsonUtil {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
                     .getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            super.registerModule(new CustomJacksonModule());
+            super.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
             super.findAndRegisterModules();
         }
 
@@ -231,9 +231,5 @@ public class JsonUtil {
         public ObjectMapper copy() {
             return super.copy();
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
     }
 }

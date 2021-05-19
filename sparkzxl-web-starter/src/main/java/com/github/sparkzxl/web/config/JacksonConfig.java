@@ -13,6 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.core.enums.Enumerator;
 import com.github.sparkzxl.core.enums.EnumeratorSerializer;
 import com.github.sparkzxl.core.jackson.CustomJacksonModule;
+import com.github.sparkzxl.core.jackson.CustomJavaTimeModule;
 import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomDeSerializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
@@ -125,7 +126,7 @@ public class JacksonConfig {
                 .getDeserializationConfig()
                 .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        objectMapper.registerModule(new CustomJacksonModule());
+        objectMapper.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
         objectMapper.findAndRegisterModules();
         return objectMapper;
     }

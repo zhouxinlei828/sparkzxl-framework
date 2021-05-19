@@ -82,6 +82,26 @@ public interface GeneralCacheService {
     void set(String key, Object value, Long expireTime, TimeUnit timeUnit);
 
     /**
+     * 不存在时设置缓存键值对
+     *
+     * @param key        键值
+     * @param value      value值
+     * @param expireTime 过期时间（单位：毫秒）
+     * @param timeUnit   java.util.concurrent.TimeUnit
+     * @return boolean
+     */
+    boolean setIfAbsent(String key, Object value, Long expireTime, TimeUnit timeUnit);
+
+    /**
+     * 不存在时设置缓存键值对
+     *
+     * @param key   键值
+     * @param value value值
+     * @return boolean
+     */
+    boolean setIfAbsent(String key, Object value);
+
+    /**
      * 自增长
      *
      * @param key key值

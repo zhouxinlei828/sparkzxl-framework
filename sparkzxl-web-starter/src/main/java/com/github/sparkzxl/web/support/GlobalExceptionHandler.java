@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -27,6 +28,7 @@ import org.springframework.web.util.NestedServletException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * description: 全局异常处理
@@ -89,14 +91,13 @@ public class GlobalExceptionHandler {
 
     private String bindingResult(BindingResult bindingResult) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (ObjectError objectError : bindingResult.getAllErrors()) {
-            stringBuilder.append(", ");
-            if (objectError instanceof FieldError) {
-                stringBuilder.append(((FieldError) objectError).getField()).append(": ");
-            }
-            stringBuilder.append(objectError.getDefaultMessage() == null ? "" : objectError.getDefaultMessage());
+        List<ObjectError> allErrors = bindingResult.getAllErrors();
+        if (CollectionUtils.isNotEmpty(allErrors)) {
+            stringBuilder.append(allErrors.get(0).getDefaultMessage() == null ? "" : allErrors.get(0).getDefaultMessage());
+        } else {
+            stringBuilder.append(ApiResponseStatus.PARAM_BIND_ERROR.getMessage());
         }
-        return stringBuilder.substring(2);
+        return stringBuilder.toString();
     }
 
     @ExceptionHandler({AccountNotFoundException.class, PasswordException.class})

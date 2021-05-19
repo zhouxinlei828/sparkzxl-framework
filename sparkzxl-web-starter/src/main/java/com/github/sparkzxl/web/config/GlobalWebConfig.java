@@ -31,10 +31,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 @EnableConfigurationProperties(WebProperties.class)
 public class GlobalWebConfig implements WebMvcConfigurer {
 
-    @Autowired
     private WebProperties webProperties;
+
+    private ApplicationContext applicationContext;
+
     @Autowired
-    protected ApplicationContext applicationContext;
+    public void setWebProperties(WebProperties webProperties) {
+        this.webProperties = webProperties;
+    }
+
+    @Autowired
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Bean
     public ResponseResultInterceptor responseResultInterceptor() {

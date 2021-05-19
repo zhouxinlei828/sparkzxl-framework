@@ -7,7 +7,7 @@ import com.github.sparkzxl.core.support.BaseException;
  *
  * @author zhouxinlei
  */
-public interface SparkZxlAssert {
+public interface BusinessAssert {
     /**
      * 创建异常
      *

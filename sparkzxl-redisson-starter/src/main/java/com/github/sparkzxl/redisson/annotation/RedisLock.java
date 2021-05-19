@@ -17,7 +17,7 @@ public @interface RedisLock {
     /**
      * spel表达式
      */
-    String lockExpression() default "";
+    String expression() default "#p0";
 
     /**
      * key的前缀
