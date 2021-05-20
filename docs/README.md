@@ -64,7 +64,7 @@
 - [13.Spring-cloud-gateway-oauth2 实现统一认证和鉴权](forward/222)
 - [14.Spring Cloud Skywalking链路追踪](forward/222)
 - [15.Spring Cloud 微服务聚合swagger文档](forward/222)
-- [16.一站式兼容所有云厂商文件存储实现](forward/distributed/一站式兼容所有云厂商文件存储实现.md)
+- [16.我用AmazonS3解决了众多云厂商oss的痛点](forward/distributed/我用AmazonS3解决了众多云厂商oss的痛点.md)
 - [17.ELK+Filebeat+Kafka分布式日志管理平台搭建](forward/distributed/分布式架构之ELK+Filebeat+Kafka分布式日志管理平台搭建.md)
 - [17.高吞吐量的分布式消息中间件kafka初体验](forward/222.md)
 

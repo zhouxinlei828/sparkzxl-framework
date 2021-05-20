@@ -40,7 +40,7 @@
 
 > 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
 
-![nexus-compoment.png](docs/https://oss.sparksys.top/sparkzxl-component/nexus-compoment.png)
+![nexus-compoment.png](https://oss.sparksys.top/sparkzxl-component/nexus-compoment.png)
 
 ## 组件框架搭建
 
@@ -64,7 +64,7 @@
 - [13.Spring-cloud-gateway-oauth2 实现统一认证和鉴权](docs/forward/222)
 - [14.Spring Cloud Skywalking链路追踪](docs/forward/222)
 - [15.Spring Cloud 微服务聚合swagger文档](docs/forward/222)
-- [16.一站式兼容所有云厂商文件存储实现](docs/forward/distributed/一站式兼容所有云厂商文件存储实现.md)
+- [16.我用AmazonS3解决了众多云厂商oss的痛点](docs/forward/distributed/我用AmazonS3解决了众多云厂商oss的痛点.md)
 - [17.ELK+Filebeat+Kafka分布式日志管理平台搭建](docs/forward/distributed/分布式架构之ELK+Filebeat+Kafka分布式日志管理平台搭建.md)
 
 ## 应用部署实践
