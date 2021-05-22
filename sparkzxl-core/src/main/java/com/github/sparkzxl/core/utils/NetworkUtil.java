@@ -1,170 +1,69 @@
 package com.github.sparkzxl.core.utils;
 
-import cn.hutool.core.net.NetUtil;
+import lombok.extern.slf4j.Slf4j;
 
-import java.net.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * description：Network工具类
  *
  * @author zhouxinlei
  */
-public class NetworkUtil extends NetUtil {
+@Slf4j
+public class NetworkUtil {
 
-    private static InetAddress localINetAddress;
-
-    public static InetAddress getLocalInetAddress() {
-        if (localINetAddress == null) {
-            load();
+    /**
+     * 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址;
+     *
+     * @param request
+     * @return
+     */
+    public static String getIpAddress(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (log.isInfoEnabled()) {
+            log.info("getIpAddress(HttpServletRequest) - X-Forwarded-For - String ip=" + ip);
         }
-        return localINetAddress;
-    }
 
-    public static String getLocalHostAddress() {
-        if (localINetAddress == null) {
-            load();
-        }
-        return localINetAddress.getHostAddress();
-    }
-
-    public static String getLocalHostName() {
-        if (localINetAddress == null) {
-            load();
-        }
-        try {
-            return InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            return localINetAddress.getHostName();
-        }
-    }
-
-    private static InetAddress findValidateIp(List<Address> addresses) {
-        InetAddress local = null;
-        int maxWeight = -1;
-        for (Address address : addresses) {
-            if (address.isInet4Address()) {
-                int weight = 0;
-
-                if (address.isSiteLocalAddress()) {
-                    weight += 8;
+        if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+                if (log.isInfoEnabled()) {
+                    log.info("getIpAddress(HttpServletRequest) - Proxy-Client-IP - String ip=" + ip);
                 }
-
-                if (address.isLinkLocalAddress()) {
-                    weight += 4;
+            }
+            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+                if (log.isInfoEnabled()) {
+                    log.info("getIpAddress(HttpServletRequest) - WL-Proxy-Client-IP - String ip=" + ip);
                 }
-
-                if (address.isLoopbackAddress()) {
-                    weight += 2;
+            }
+            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_CLIENT_IP");
+                if (log.isInfoEnabled()) {
+                    log.info("getIpAddress(HttpServletRequest) - HTTP_CLIENT_IP - String ip=" + ip);
                 }
-
-                if (address.hasHostName()) {
-                    weight += 1;
+            }
+            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+                if (log.isInfoEnabled()) {
+                    log.info("getIpAddress(HttpServletRequest) - HTTP_X_FORWARDED_FOR - String ip=" + ip);
                 }
-
-                if (weight > maxWeight) {
-                    maxWeight = weight;
-                    local = address.getAddress();
+            }
+            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+                if (log.isInfoEnabled()) {
+                    log.info("getIpAddress(HttpServletRequest) - getRemoteAddr - String ip=" + ip);
+                }
+            }
+        } else if (ip.length() > 15) {
+            String[] ips = ip.split(",");
+            for (String s : ips) {
+                if (!(StrPool.UNKNOWN.equalsIgnoreCase(s))) {
+                    ip = s;
+                    break;
                 }
             }
         }
-
-        return local;
-    }
-
-    private static String getProperty() {
-        String value;
-        value = System.getProperty("host.ip");
-        if (value == null) {
-            value = System.getenv("host.ip");
-        }
-        return value;
-    }
-
-    private static void load() {
-        String ip = getProperty();
-
-        if (ip != null) {
-            try {
-                localINetAddress = InetAddress.getByName(ip);
-                return;
-            } catch (Exception e) {
-                System.err.println(e);
-                // ignore
-            }
-        }
-
-        try {
-            List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
-            List<Address> addresses = new ArrayList<>();
-            InetAddress local = null;
-
-            try {
-                for (NetworkInterface ni : nis) {
-                    if (ni.isUp() && !ni.isLoopback()) {
-                        List<InetAddress> list = Collections.list(ni.getInetAddresses());
-
-                        for (InetAddress address : list) {
-                            addresses.add(new Address(address, ni));
-                        }
-                    }
-                }
-                local = findValidateIp(addresses);
-            } catch (Exception e) {
-                // ignore
-            }
-            localINetAddress = local;
-        } catch (SocketException e) {
-            // ignore it
-        }
-    }
-
-    static class Address {
-        private final InetAddress address;
-
-        private boolean loopback;
-
-        public Address(InetAddress address, NetworkInterface ni) {
-            this.address = address;
-            try {
-                if (ni != null && ni.isLoopback()) {
-                    loopback = true;
-                }
-            } catch (SocketException e) {
-                // ignore it
-            }
-        }
-
-        public InetAddress getAddress() {
-            return address;
-        }
-
-        public boolean hasHostName() {
-            return !address.getHostName().equals(address.getHostAddress());
-        }
-
-        public boolean isLinkLocalAddress() {
-            return !loopback && address.isLinkLocalAddress();
-        }
-
-        public boolean isLoopbackAddress() {
-            return loopback || address.isLoopbackAddress();
-        }
-
-        public boolean isSiteLocalAddress() {
-            return !loopback && address.isSiteLocalAddress();
-        }
-
-        public boolean isInet4Address() {
-            return address instanceof Inet4Address;
-        }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(NetworkUtil.getLocalHostAddress());
-        System.out.println(NetworkUtil.getLocalHostName());
-        System.out.println(NetworkUtil.getLocalInetAddress());
+        return ip;
     }
 }

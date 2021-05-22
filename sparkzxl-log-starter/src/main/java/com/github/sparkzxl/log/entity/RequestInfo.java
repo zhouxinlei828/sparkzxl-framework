@@ -32,11 +32,6 @@ public class RequestInfo {
     private Object requestParams;
 
     /**
-     * 请求来源
-     */
-    private String requestSource;
-
-    /**
      * 请求结果
      */
     private Object result;
@@ -61,25 +56,5 @@ public class RequestInfo {
      * 请求耗时
      */
     private String timeCost;
-
-    /**
-     * 请求地点
-     */
-    private String location;
-
-    /**
-     * 浏览器名称
-     */
-    private String browser;
-
-    /**
-     * 浏览器版本
-     */
-    private String browserVersion;
-
-    /**
-     * 操作系统
-     */
-    private String operatingSystem;
 
 }

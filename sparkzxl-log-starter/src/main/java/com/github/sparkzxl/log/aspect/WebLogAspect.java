@@ -1,10 +1,9 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.entity.UserAgentEntity;
 import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.core.utils.UserAgentUtils;
 import com.github.sparkzxl.log.entity.RequestInfo;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
@@ -76,14 +75,8 @@ public class WebLogAspect {
      */
     private RequestInfo buildRequestInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
         RequestInfo requestInfo = new RequestInfo();
-        UserAgentEntity userAgentEntity = UserAgentUtils.getUserAgentEntity();
-        String operatingSystem = userAgentEntity.getOperatingSystem();
-        requestInfo.setIp(userAgentEntity.getRequestIp());
-        requestInfo.setLocation(userAgentEntity.getLocation());
-        requestInfo.setBrowser(userAgentEntity.getBrowser());
-        requestInfo.setBrowserVersion(userAgentEntity.getBrowserVersion());
-        requestInfo.setRequestSource(userAgentEntity.isMobile() ? "Mobile" : "PC");
-        requestInfo.setOperatingSystem(operatingSystem);
+        String ipAddress = NetworkUtil.getIpAddress(httpServletRequest);
+        requestInfo.setIp(ipAddress);
         requestInfo.setUrl(httpServletRequest.getRequestURL().toString());
         requestInfo.setHttpMethod(httpServletRequest.getMethod());
         requestInfo.setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
