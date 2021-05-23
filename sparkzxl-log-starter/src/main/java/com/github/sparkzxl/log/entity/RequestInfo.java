@@ -1,5 +1,8 @@
 package com.github.sparkzxl.log.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.sparkzxl.core.jackson.JsonUtil;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +11,8 @@ import lombok.Data;
  * @author zhouxinlei
  */
 @Data
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestInfo {
 
     /**
@@ -26,20 +31,27 @@ public class RequestInfo {
      * 请求类方法
      */
     private String classMethod;
+
+    /**
+     * 用户id
+     */
+    private String userId;
+
+    /**
+     * 用户姓名
+     */
+    private String userName;
+
     /**
      * 请求参数
      */
-    private Object requestParams;
+    private Object params;
 
     /**
      * 请求结果
      */
     private Object result;
 
-    /**
-     * 日志类型 1: 操作日志, 2: 请求日志, 3：异常日志
-     */
-    private Integer logType;
     /**
      * 错误原因
      */
@@ -56,5 +68,15 @@ public class RequestInfo {
      * 请求耗时
      */
     private String timeCost;
+
+    public static void main(String[] args) {
+        RequestInfo requestInfo = RequestInfo.builder()
+                .url("11111")
+                .build();
+        String jsonStr = JsonUtil.toJson(requestInfo);
+        System.out.println(jsonStr);
+
+    }
+
 
 }

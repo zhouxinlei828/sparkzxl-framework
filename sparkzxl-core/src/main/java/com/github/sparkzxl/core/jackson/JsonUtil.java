@@ -37,6 +37,15 @@ public class JsonUtil {
         return null;
     }
 
+    public static <T> String toJsonPretty(T value) {
+        try {
+            return getInstance().writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
     public static byte[] toJsonAsBytes(Object object) {
         try {
             return getInstance().writeValueAsBytes(object);

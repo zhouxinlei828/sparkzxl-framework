@@ -7,12 +7,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * description: log 自动配置
+ * description: 日志增强自动装配
  *
  * @author zhouxinlei
+ * @date 2021-05-23 13:07:55
  */
 @Configuration
-@EnableConfigurationProperties(value = LogProperties.class)
+@EnableConfigurationProperties(value = {LogProperties.class})
 public class LogAutoConfiguration {
 
     @Bean

@@ -40,6 +40,10 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
+        <dependency>
+            <groupId>wiki.xsx</groupId>
+            <artifactId>slf4j-spring-boot-starter</artifactId>
+        </dependency>
         <!-- 自定义的元数据依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
