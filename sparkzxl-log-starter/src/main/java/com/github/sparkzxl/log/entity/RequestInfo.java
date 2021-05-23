@@ -1,7 +1,6 @@
 package com.github.sparkzxl.log.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.Builder;
 import lombok.Data;
 
@@ -68,15 +67,5 @@ public class RequestInfo {
      * 请求耗时
      */
     private String timeCost;
-
-    public static void main(String[] args) {
-        RequestInfo requestInfo = RequestInfo.builder()
-                .url("11111")
-                .build();
-        String jsonStr = JsonUtil.toJson(requestInfo);
-        System.out.println(jsonStr);
-
-    }
-
 
 }

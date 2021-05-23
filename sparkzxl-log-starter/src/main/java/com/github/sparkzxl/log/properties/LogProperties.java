@@ -18,6 +18,11 @@ public class LogProperties {
      */
     private boolean enableConsole = true;
 
+    /**
+     * 是否开启日志存储
+     */
+    private boolean storage = false;
+
     @NestedConfigurationProperty
     private FileProperties file;
 

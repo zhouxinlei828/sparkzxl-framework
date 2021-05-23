@@ -6,6 +6,7 @@ import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
+import com.github.sparkzxl.log.LogStoreService;
 import com.github.sparkzxl.log.entity.RequestInfo;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
@@ -16,6 +17,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +26,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,6 +39,15 @@ import java.util.concurrent.TimeUnit;
 public class WebLogAspect {
 
     private final ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
+
+    private boolean storage = false;
+
+    @Autowired(required = false)
+    private LogStoreService logStoreService;
+
+    public void setStorage(boolean storage) {
+        this.storage = storage;
+    }
 
     @Pointcut("@within(com.github.sparkzxl.log.annotation.WebLog)")
     public void pointCut() {
@@ -59,6 +71,9 @@ public class WebLogAspect {
         RequestInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
         String jsonStr = JsonUtil.toJson(requestParamInfo);
         log.info("请求参数信息: [{}]", jsonStr);
+        if (storage) {
+            CompletableFuture.runAsync(() -> logStoreService.saveLog(requestParamInfo));
+        }
     }
 
     /**
@@ -98,6 +113,9 @@ public class WebLogAspect {
         RequestInfo requestInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
         String jsonStr = JsonUtil.toJson(requestInfo);
         log.info("请求接口发生异常 : [{}]", jsonStr);
+        if (storage) {
+            CompletableFuture.runAsync(() -> logStoreService.saveLog(requestInfo));
+        }
         remove();
     }
 

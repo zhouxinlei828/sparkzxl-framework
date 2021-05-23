@@ -17,8 +17,9 @@ import org.springframework.context.annotation.Configuration;
 public class LogAutoConfiguration {
 
     @Bean
-    public WebLogAspect webLogAspect() {
-        return new WebLogAspect();
+    public WebLogAspect webLogAspect(LogProperties logProperties) {
+        WebLogAspect webLogAspect = new WebLogAspect();
+        webLogAspect.setStorage(logProperties.isStorage());
+        return webLogAspect;
     }
-
 }
