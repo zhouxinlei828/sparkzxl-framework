@@ -58,7 +58,7 @@ public class WebLogAspect {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         RequestInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
         String jsonStr = JsonUtil.toJson(requestParamInfo);
-        log.info("Request Param Info : [{}]", jsonStr);
+        log.info("请求参数信息: [{}]", jsonStr);
     }
 
     /**
@@ -74,7 +74,7 @@ public class WebLogAspect {
         Object result = proceedingJoinPoint.proceed();
         RequestInfo requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint.getSignature(), result);
         String jsonStr = JsonUtil.toJson(requestResultInfo);
-        log.info("Request Result Info : [{}]", jsonStr);
+        log.info("响应结果信息: [{}]", jsonStr);
         return result;
     }
 
@@ -84,9 +84,8 @@ public class WebLogAspect {
     @AfterReturning("pointCut()")
     public void afterReturning(JoinPoint joinPoint) {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        RequestInfo requestTimeCostInfo = buildRequestTimeCostInfo(httpServletRequest, joinPoint.getSignature());
-        String jsonStr = JsonUtil.toJson(requestTimeCostInfo);
-        log.info("Request cost Info : [{}]", jsonStr);
+        String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
+        log.info("请求接口：[{}],总计耗时: [{}]", httpServletRequest.getRequestURL().toString(), timeCost);
         remove();
     }
 
@@ -98,7 +97,7 @@ public class WebLogAspect {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         RequestInfo requestInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
         String jsonStr = JsonUtil.toJson(requestInfo);
-        log.info(" Request Error Info : [{}]", jsonStr);
+        log.info("请求接口发生异常 : [{}]", jsonStr);
         remove();
     }
 
@@ -148,29 +147,6 @@ public class WebLogAspect {
     }
 
     /**
-     * 构建请求耗时日志
-     *
-     * @param httpServletRequest httpServletRequest
-     * @param signature          signature
-     * @return RequestInfo
-     */
-    private RequestInfo buildRequestTimeCostInfo(HttpServletRequest httpServletRequest, Signature signature) {
-        String userId = BaseContextHandler.getUserId(String.class);
-        String name = BaseContextHandler.getName();
-        String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
-        return RequestInfo.builder()
-                .ip(NetworkUtil.getIpAddress(httpServletRequest))
-                .url(httpServletRequest.getRequestURL().toString())
-                .httpMethod(httpServletRequest.getMethod())
-                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
-                        signature.getName()))
-                .userId(userId)
-                .userName(name)
-                .timeCost(timeCost)
-                .build();
-    }
-
-    /**
      * 构建请求异常日志
      *
      * @param httpServletRequest httpServletRequest
@@ -182,9 +158,7 @@ public class WebLogAspect {
         String userId = BaseContextHandler.getUserId(String.class);
         String name = BaseContextHandler.getName();
         return RequestInfo.builder()
-                .ip(NetworkUtil.getIpAddress(httpServletRequest))
                 .url(httpServletRequest.getRequestURL().toString())
-                .httpMethod(httpServletRequest.getMethod())
                 .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
                         signature.getName()))
                 .userId(userId)
