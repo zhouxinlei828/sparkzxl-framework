@@ -3,14 +3,20 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <!--日志文件保存路径-->
+    <!-- 应用名称 -->
     <springProperty name="springAppName" scope="context" source="spring.application.name" defaultValue="application"/>
 
-    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="../logs"/>
+    <!-- 日志文件保存路径 -->
+    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="logs"/>
 
-    <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
+    <!-- 日志显隐控制方式 -->
     <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
     <springProperty name="enableJson" scope="context" source="logging.file.enable-json" defaultValue="false"/>
+
+    <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
+    <springProperty name="maxHistory" scope="context" source="logging.file.maxHistory" defaultValue="7"/>
+    <springProperty name="maxFileSize" scope="context" source="logging.file.maxFileSize" defaultValue="10MB"/>
+
     <!-- kafka 配置 -->
     <springProperty name="enableKafka" scope="context" source="logging.kafka.enable" defaultValue="false"/>
     <springProperty name="kafka.servers" scope="context" source="logging.kafka.servers"/>
@@ -37,8 +43,9 @@
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${logHome}/${springAppName}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-            <maxHistory>7</maxHistory>
-            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <if condition='property("enableJson").contains("true")'>
             <then>
@@ -83,7 +90,6 @@
         </encoder>
         <!-- kafka topic -->
         <topic>${kafka.topic}</topic>
-        <!--<topic>test</topic>-->
         <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
         <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
         <!-- kafka 地址 -->

@@ -7,13 +7,12 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.database.base.listener.ImportDataListener;
 import com.github.sparkzxl.database.dto.DeleteDTO;
 import com.github.sparkzxl.database.dto.PageParams;
-import com.github.sparkzxl.database.mybatis.conditions.Wraps;
-import com.github.sparkzxl.database.mybatis.conditions.query.QueryWrap;
 import com.github.sparkzxl.database.utils.PageInfoUtils;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
@@ -194,7 +193,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     default PageInfo<?> query(PageParams<QueryDTO> params) {
         handlerQueryParams(params);
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
-        QueryWrap<Entity> wrapper = handlerWrapper(model, params);
+        QueryWrapper<Entity> wrapper = handlerWrapper(model, params);
         params.buildPage();
         List<Entity> entityList = getBaseService().list(wrapper);
         PageInfo<Entity> pageInfo = PageInfoUtils.pageInfo(entityList);
@@ -222,8 +221,8 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @param params 分页参数
      * @return QueryWrap<Entity>
      */
-    default QueryWrap<Entity> handlerWrapper(Entity model, PageParams<QueryDTO> params) {
-        QueryWrap<Entity> wrapper = model == null ? Wraps.q() : Wraps.q(model);
+    default QueryWrapper<Entity> handlerWrapper(Entity model, PageParams<QueryDTO> params) {
+        QueryWrapper<Entity> wrapper = model == null ? new QueryWrapper<>() : new QueryWrapper<>(model);
         if (CollUtil.isNotEmpty(params.getMap())) {
             Map<String, String> map = params.getMap();
             //拼装区间
@@ -257,7 +256,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     @PostMapping("/list")
     default List<Entity> query(@RequestBody QueryDTO data) {
         Entity model = BeanUtil.toBean(data, getEntityClass());
-        QueryWrap<Entity> wrapper = Wraps.q(model);
+        QueryWrapper<Entity> wrapper = new QueryWrapper<>(model);
         return getBaseService().list(wrapper);
     }
 

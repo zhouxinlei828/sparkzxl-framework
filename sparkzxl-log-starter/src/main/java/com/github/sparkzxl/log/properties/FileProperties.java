@@ -26,10 +26,10 @@ public class FileProperties {
 
     private String totalSizeCap = "0B";
 
-    private String path = "../logs";
+    private String path = "logs";
 
     private int maxHistory = 7;
 
-    private String maxSize = "10MB";
+    private String maxFileSize = "10MB";
 
 }
