@@ -5,97 +5,97 @@ package com.github.sparkzxl.core.utils;
  *
  * @author zhouxinlei
  */
-public class StrPool {
-    public static final String AMPERSAND = "&";
-    public static final String AND = "and";
-    public static final String AT = "@";
-    public static final String ASTERISK = "*";
-    public static final String STAR = "*";
-    public static final String BACK_SLASH = "\\";
-    public static final String COLON = ":";
-    public static final String COMMA = ",";
-    public static final String DASH = "-";
-    public static final String DOLLAR = "$";
-    public static final String DOT = ".";
-    public static final String DOTDOT = "..";
-    public static final String DOT_CLASS = ".class";
-    public static final String DOT_JAVA = ".java";
-    public static final String DOT_XML = ".xml";
-    public static final String EMPTY = "";
-    public static final String EQUALS = "=";
-    public static final String FALSE = "false";
-    public static final String SLASH = "/";
-    public static final String HASH = "#";
-    public static final String HAT = "^";
-    public static final String LEFT_BRACE = "{";
-    public static final String LEFT_BRACKET = "(";
-    public static final String LEFT_CHEV = "<";
-    public static final String NEWLINE = "\n";
-    public static final String N = "n";
-    public static final String NO = "no";
-    public static final String NULL = "null";
-    public static final String OFF = "off";
-    public static final String ON = "on";
-    public static final String PERCENT = "%";
-    public static final String PIPE = "|";
-    public static final String PLUS = "+";
-    public static final String QUESTION_MARK = "?";
-    public static final String EXCLAMATION_MARK = "!";
-    public static final String QUOTE = "\"";
-    public static final String RETURN = "\r";
-    public static final String TAB = "\t";
-    public static final String RIGHT_BRACE = "}";
-    public static final String RIGHT_BRACKET = ")";
-    public static final String RIGHT_CHEV = ">";
-    public static final String SEMICOLON = ";";
-    public static final String SINGLE_QUOTE = "'";
-    public static final String BACKTICK = "`";
-    public static final String SPACE = " ";
-    public static final String TILDA = "~";
-    public static final String LEFT_SQ_BRACKET = "[";
-    public static final String RIGHT_SQ_BRACKET = "]";
-    public static final String TRUE = "true";
-    public static final String UNDERSCORE = "_";
-    public static final String UTF_8 = "UTF-8";
-    public static final String GBK = "GBK";
-    public static final String US_ASCII = "US-ASCII";
-    public static final String ISO_8859_1 = "ISO-8859-1";
-    public static final String Y = "y";
-    public static final String YES = "yes";
-    public static final String ONE = "1";
-    public static final String ZERO = "0";
-    public static final String DOLLAR_LEFT_BRACE = "${";
-    public static final String HASH_LEFT_BRACE = "#{";
-    public static final String CRLF = "\r\n";
-    public static final String HTML_NBSP = "&nbsp;";
-    public static final String HTML_AMP = "&amp";
-    public static final String HTML_QUOTE = "&quot;";
-    public static final String HTML_LT = "&lt;";
-    public static final String HTML_GT = "&gt;";
+public interface StrPool {
+    String AMPERSAND = "&";
+    String AND = "and";
+    String AT = "@";
+    String ASTERISK = "*";
+    String STAR = "*";
+    String BACK_SLASH = "\\";
+    String COLON = ":";
+    String COMMA = ",";
+    String DASH = "-";
+    String DOLLAR = "$";
+    String DOT = ".";
+    String DOTDOT = "..";
+    String DOT_CLASS = ".class";
+    String DOT_JAVA = ".java";
+    String DOT_XML = ".xml";
+    String EMPTY = "";
+    String EQUALS = "=";
+    String FALSE = "false";
+    String SLASH = "/";
+    String HASH = "#";
+    String HAT = "^";
+    String LEFT_BRACE = "{";
+    String LEFT_BRACKET = "(";
+    String LEFT_CHEV = "<";
+    String NEWLINE = "\n";
+    String N = "n";
+    String NO = "no";
+    String NULL = "null";
+    String OFF = "off";
+    String ON = "on";
+    String PERCENT = "%";
+    String PIPE = "|";
+    String PLUS = "+";
+    String QUESTION_MARK = "?";
+    String EXCLAMATION_MARK = "!";
+    String QUOTE = "\"";
+    String RETURN = "\r";
+    String TAB = "\t";
+    String RIGHT_BRACE = "}";
+    String RIGHT_BRACKET = ")";
+    String RIGHT_CHEV = ">";
+    String SEMICOLON = ";";
+    String SINGLE_QUOTE = "'";
+    String BACKTICK = "`";
+    String SPACE = " ";
+    String TILDA = "~";
+    String LEFT_SQ_BRACKET = "[";
+    String RIGHT_SQ_BRACKET = "]";
+    String TRUE = "true";
+    String UNDERSCORE = "_";
+    String UTF_8 = "UTF-8";
+    String GBK = "GBK";
+    String US_ASCII = "US-ASCII";
+    String ISO_8859_1 = "ISO-8859-1";
+    String Y = "y";
+    String YES = "yes";
+    String ONE = "1";
+    String ZERO = "0";
+    String DOLLAR_LEFT_BRACE = "${";
+    String HASH_LEFT_BRACE = "#{";
+    String CRLF = "\r\n";
+    String HTML_NBSP = "&nbsp;";
+    String HTML_AMP = "&amp";
+    String HTML_QUOTE = "&quot;";
+    String HTML_LT = "&lt;";
+    String HTML_GT = "&gt;";
     /**
      * 编码
      */
-    public static final String UTF8 = "UTF-8";
+     String UTF8 = "UTF-8";
     /**
      * JSON 资源
      */
-    public static final String CONTENT_TYPE = "application/json; charset=utf-8";
+    String CONTENT_TYPE = "application/json;charset=utf-8";
 
-    public static final String TEST = "test";
-    public static final String PROD = "prod";
+    String TEST = "test";
+    String PROD = "prod";
 
     /**
      * 默认的根节点path
      */
-    public static final String DEF_ROOT_PATH = ",";
+    String DEF_ROOT_PATH = ",";
     /**
      * 默认的父id
      */
-    public static final Long DEF_PARENT_ID = 0L;
+    Long DEF_PARENT_ID = 0L;
 
-    public static final String UNKNOWN = "unknown";
+    String UNKNOWN = "unknown";
 
-    public static final String HTTP = "http";
+    String HTTP = "http";
 
-    public static final String HTTPS = "https";
+    String HTTPS = "https";
 }
