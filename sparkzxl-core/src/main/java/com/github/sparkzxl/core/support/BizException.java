@@ -9,23 +9,23 @@ import lombok.Getter;
  * @author zhouxinlei
  */
 @Getter
-public class BusinessException extends BaseException {
+public class BizException extends BaseException {
 
     private static final long serialVersionUID = -2803534562798384761L;
 
-    public BusinessException(BaseEnumCode baseEnumCode) {
+    public BizException(BaseEnumCode baseEnumCode) {
         super(baseEnumCode);
     }
 
-    public BusinessException(BaseEnumCode baseEnumCode, Object[] args, String message) {
+    public BizException(BaseEnumCode baseEnumCode, Object[] args, String message) {
         super(baseEnumCode, args, message);
     }
 
-    public BusinessException(int code, String message) {
+    public BizException(int code, String message) {
         super(code, message);
     }
 
-    public BusinessException(BaseEnumCode baseEnumCode, Object[] args, String message, Throwable cause) {
+    public BizException(BaseEnumCode baseEnumCode, Object[] args, String message, Throwable cause) {
         super(baseEnumCode, args, message, cause);
     }
 

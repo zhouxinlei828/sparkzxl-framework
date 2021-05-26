@@ -8,7 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.core.utils.TimeUtils;
@@ -80,7 +80,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             return jwsObject.serialize();
         }).onFailure(throwable -> {
             log.error("根据RSA算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
+            BizExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
         }).getOrElse("");
     }
 
@@ -151,7 +151,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             return jwsObject.serialize();
         }).onFailure(throwable -> {
             log.error("根据HMAC算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
+            BizExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
 
         }).getOrElse("");
     }

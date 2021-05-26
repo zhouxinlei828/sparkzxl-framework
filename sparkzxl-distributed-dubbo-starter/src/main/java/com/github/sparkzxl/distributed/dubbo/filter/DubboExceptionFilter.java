@@ -1,6 +1,6 @@
 package com.github.sparkzxl.distributed.dubbo.filter;
 
-import com.github.sparkzxl.core.support.BusinessException;
+import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.common.constants.CommonConstants;
@@ -39,7 +39,7 @@ public class DubboExceptionFilter extends ListenableFilter {
             if (appResponse.hasException() && GenericService.class != invoker.getInterface()) {
                 Throwable exception = appResponse.getException();
                 // <1> 如果是 ServiceException 异常，直接返回
-                if (exception instanceof BusinessException) {
+                if (exception instanceof BizException) {
                     return;
                 }
                 // <2> 如果是参数校验的 ConstraintViolationException 异常，则封装返回
@@ -53,7 +53,7 @@ public class DubboExceptionFilter extends ListenableFilter {
         }
 
         // 将 ConstraintViolationException 转换成 ServiceException
-        private BusinessException handleConstraintViolationException(ConstraintViolationException ex) {
+        private BizException handleConstraintViolationException(ConstraintViolationException ex) {
             // 拼接错误
             StringBuilder detailMessage = new StringBuilder();
             for (ConstraintViolation<?> constraintViolation : ex.getConstraintViolations()) {
@@ -65,7 +65,7 @@ public class DubboExceptionFilter extends ListenableFilter {
                 detailMessage.append(constraintViolation.getMessage());
             }
             // 返回异常
-            return new BusinessException(ApiResponseStatus.PARAM_VALID_ERROR, null, detailMessage.toString());
+            return new BizException(ApiResponseStatus.PARAM_VALID_ERROR, null, detailMessage.toString());
         }
 
     }

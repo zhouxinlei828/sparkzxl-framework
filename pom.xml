@@ -41,8 +41,7 @@
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
-        <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
-        <spring-security-rsa.version>1.0.9.RELEASE</spring-security-rsa.version>
+        <spring-security-rsa.version>1.0.10.RELEASE</spring-security-rsa.version>
         <spring-data-commos.version>2.2.6.RELEASE</spring-data-commos.version>
         <!-- jwt组件-->
         <jwt.version>9.7</jwt.version>
@@ -62,7 +61,7 @@
         <html2pdf.version>3.0.3</html2pdf.version>
         <pdfbox.version>2.0.22</pdfbox.version>
         <itext.version>7.1.14</itext.version>
-        <xstream.version>1.4.16</xstream.version>
+        <xstream.version>1.4.17</xstream.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
@@ -70,7 +69,7 @@
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.8.8</caffeine.version>
         <fastjson.version>1.2.75</fastjson.version>
-        <easy-excel.version>2.2.7</easy-excel.version>
+        <easy-excel.version>2.2.10</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.1.3</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.2.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
@@ -290,11 +289,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk16</artifactId>
-                <version>${bcprov-jdk16.version}</version>
             </dependency>
             <!--Spring Security RSA工具类-->
             <dependency>

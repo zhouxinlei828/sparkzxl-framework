@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +50,7 @@ public class JsonUtil {
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -68,7 +68,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, typeReference);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -77,7 +77,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, valueType);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -86,7 +86,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, typeReference);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -95,7 +95,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, valueType);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -104,7 +104,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, typeReference);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -172,7 +172,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonString);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -181,7 +181,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(in);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -190,7 +190,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(content);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -199,7 +199,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }

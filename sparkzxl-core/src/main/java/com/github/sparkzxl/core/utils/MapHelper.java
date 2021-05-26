@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
@@ -110,7 +110,7 @@ public class MapHelper {
         try {
             return builder.build();
         } catch (IllegalArgumentException var6) {
-            SparkZxlExceptionAssert.businessFail(var6.getMessage() + ".若要在键下索引多个值，请使用: Multimaps.index.");
+            BizExceptionAssert.businessFail(var6.getMessage() + ".若要在键下索引多个值，请使用: Multimaps.index.");
         }
         return null;
     }

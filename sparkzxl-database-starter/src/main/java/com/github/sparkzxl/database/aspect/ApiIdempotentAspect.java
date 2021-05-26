@@ -3,7 +3,7 @@ package com.github.sparkzxl.database.aspect;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.core.annotation.ApiIdempotent;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.AspectUtils;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import lombok.AllArgsConstructor;
@@ -66,7 +66,7 @@ public class ApiIdempotentAspect {
             result = joinPoint.proceed();
         } else {
             log.debug("Idempotent hits, key=" + key);
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.FAILURE.getCode(), message);
+            BizExceptionAssert.businessFail(ApiResponseStatus.FAILURE.getCode(), message);
         }
         return result;
     }

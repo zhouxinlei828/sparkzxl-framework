@@ -3,7 +3,7 @@ package com.github.sparkzxl.web.support;
 import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.support.BusinessException;
+import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -13,7 +13,6 @@ import org.bouncycastle.openssl.PasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -49,8 +48,8 @@ public class GlobalExceptionHandler {
         }
     }
 
-    @ExceptionHandler(BusinessException.class)
-    public ApiResult businessException(BusinessException e) {
+    @ExceptionHandler(BizException.class)
+    public ApiResult businessException(BizException e) {
         handleResponseResult();
         log.error("BusinessException：[{}]", e.getMessage());
         int code = e.getCode();

@@ -8,19 +8,19 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
  *
  * @author zhouxinlei
  */
-public class SparkZxlExceptionAssert {
+public class BizExceptionAssert {
 
 
     public static void businessFail(String message) {
-        throw new BusinessException(ApiResponseStatus.FAILURE.getCode(), message);
+        throw new BizException(ApiResponseStatus.FAILURE.getCode(), message);
     }
 
     public static void businessFail(int code, String message) {
-        throw new BusinessException(code, message);
+        throw new BizException(code, message);
     }
 
     public static void businessFail(BaseEnumCode baseEnumCode) {
-        throw new BusinessException(baseEnumCode);
+        throw new BizException(baseEnumCode);
     }
 
     /**

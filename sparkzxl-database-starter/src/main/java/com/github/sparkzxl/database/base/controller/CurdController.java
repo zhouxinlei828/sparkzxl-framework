@@ -166,8 +166,8 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      */
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "主键", dataType = "long", paramType = "query")})
     @ApiOperation(value = "查询数据", notes = "查询")
-    @GetMapping("/get/{id}")
-    default Entity get(@PathVariable Id id) {
+    @GetMapping("/get")
+    default Entity get(@RequestParam(value = "id") Id id) {
         return getBaseService().getById(id);
     }
 
