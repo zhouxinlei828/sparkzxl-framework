@@ -24,7 +24,7 @@ public class FileProperties {
 
     private boolean cleanHistoryOnStart;
 
-    private String totalSizeCap = "0B";
+    private String totalSizeCap = "10GB";
 
     private String path = "logs";
 

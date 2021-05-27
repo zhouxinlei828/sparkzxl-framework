@@ -4,10 +4,9 @@ import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.core.annotation.ApiIdempotent;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
-import com.github.sparkzxl.core.utils.AspectUtils;
-import com.github.sparkzxl.core.utils.BuildKeyUtils;
-import lombok.AllArgsConstructor;
+import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -15,6 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 /**
@@ -24,48 +24,45 @@ import java.lang.reflect.Method;
  * @date 2021-05-19 13:52:36
  */
 @Aspect
-@AllArgsConstructor
 @Slf4j
 public class ApiIdempotentAspect {
 
     private final GeneralCacheService generalCacheService;
+    private LockKeyGenerator lockKeyGenerator;
+
+    public ApiIdempotentAspect(GeneralCacheService generalCacheService) {
+        this.generalCacheService = generalCacheService;
+    }
 
     @Pointcut("@annotation(com.github.sparkzxl.core.annotation.ApiIdempotent)")
     public void executeApiIdempotent() {
 
     }
 
+    public void setLockKeyGenerator(LockKeyGenerator lockKeyGenerator) {
+        this.lockKeyGenerator = lockKeyGenerator;
+    }
+
     @Around("executeApiIdempotent()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         //获取方法
         Signature signature = joinPoint.getSignature();
         Method method = ((MethodSignature) signature).getMethod();
         //获取幂等注解
         ApiIdempotent apiIdempotent = method.getAnnotation(ApiIdempotent.class);
-        String keyExpression = apiIdempotent.keyExpression();
-        String keyPrefix = apiIdempotent.keyPrefix();
-        String message = apiIdempotent.message();
-
-        String uniqueValue = null;
-        try {
-            uniqueValue = AspectUtils.parseExpression(joinPoint, keyExpression);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+        if (StringUtils.isEmpty(apiIdempotent.prefix())) {
+            BizExceptionAssert.businessFail(ApiResponseStatus.PARAM_VALID_ERROR.getCode(), "lock key don't null...");
         }
-
-        String classMethod = String.format("%s.%s", signature.getDeclaringTypeName(),
-                signature.getName());
-
-        // 根据 key前缀 + 方法签名 + keyExpression参数唯一值 构建缓存键值
-        String key = BuildKeyUtils.generateKey(keyPrefix, classMethod, uniqueValue);
-
-        boolean success = generalCacheService.setIfAbsent(key, key, apiIdempotent.expireMillis(), apiIdempotent.timeUnit());
-
+        String message = apiIdempotent.message();
+        final String lockKey = lockKeyGenerator.getLockKey(joinPoint);
+        log.info("接口[{}]幂等性校验，key:[{}]", httpServletRequest.getRequestURL().toString(), lockKey);
+        boolean success = generalCacheService.setIfAbsent(lockKey, lockKey, apiIdempotent.expireMillis(), apiIdempotent.timeUnit());
         Object result = null;
         if (success) {
             result = joinPoint.proceed();
         } else {
-            log.debug("Idempotent hits, key=" + key);
+            log.error("Idempotent hits, key：[{}], error msg：[{}]" + lockKey, message);
             BizExceptionAssert.businessFail(ApiResponseStatus.FAILURE.getCode(), message);
         }
         return result;

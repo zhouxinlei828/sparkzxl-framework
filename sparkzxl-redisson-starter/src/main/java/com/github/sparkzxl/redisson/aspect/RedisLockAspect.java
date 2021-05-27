@@ -4,19 +4,10 @@ import com.github.sparkzxl.redisson.annotation.RedisLock;
 import com.github.sparkzxl.redisson.lock.RedisDistributedLock;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.expression.MethodBasedEvaluationContext;
-import org.springframework.core.DefaultParameterNameDiscoverer;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-
-import java.lang.reflect.Method;
+import org.springframework.util.StringUtils;
 
 /**
  * description: Redis分布式AOP实现
@@ -40,55 +31,30 @@ public class RedisLockAspect {
 
     @Around(value = "redisLockAspect(redisLock)", argNames = "proceedingJoinPoint,redisLock")
     public Object around(ProceedingJoinPoint proceedingJoinPoint, RedisLock redisLock) throws Throwable {
-        String threadName = Thread.currentThread().getName();
-        String keyPrefix = redisLock.keyPrefix();
+        long threadId = Thread.currentThread().getId();
+        String keyPrefix = redisLock.prefix();
+        if (StringUtils.isEmpty(keyPrefix)) {
+            throw new RuntimeException("lock key don't null...");
+        }
         long waitTime = redisLock.waitTime();
         long leaseTime = redisLock.leaseTime();
         int tryCount = redisLock.tryCount();
         long sleepTime = redisLock.sleepTime();
-        StringBuilder keyBuffer = new StringBuilder();
-        String lockKey = null;
-        try {
-            lockKey = parseExpression(proceedingJoinPoint, redisLock);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        keyBuffer.append(keyPrefix);
-        keyBuffer.append("_");
-        keyBuffer.append(lockKey);
-        String key = keyBuffer.toString();
-        log.info("线程[{}] -> 要加锁的key：[{}]，value：[{}]", threadName, key, lockKey);
+        String lockKey = LockKeyGenerator.getLockKey(proceedingJoinPoint);
+        log.info("线程[{}] -> 要加锁的key：[{}]，value：[{}]", threadId, lockKey, lockKey);
         Object result;
-        if (redisDistributedLock.lock(key, waitTime, leaseTime, tryCount, sleepTime)) {
-            log.info("线程[{}] -> 获取锁key[{}] 成功", threadName, key);
+        if (redisDistributedLock.lock(lockKey, waitTime, leaseTime, tryCount, sleepTime)) {
+            log.info("线程[{}] -> 获取锁key[{}] 成功", threadId, lockKey);
             try {
                 result = proceedingJoinPoint.proceed();
             } finally {
-                redisDistributedLock.releaseLock(key);
-                log.info("线程[{}] -> 释放锁 key [{}]", threadName, key);
+                log.info("线程[{}] -> 释放锁 key [{}]", threadId, lockKey);
+                redisDistributedLock.releaseLock(lockKey);
             }
         } else {
-            log.info("线程[{}] -> 获取锁key[{}] 失败", threadName, key);
+            log.error("线程[{}] -> 获取锁key[{}] 失败", threadId, lockKey);
             throw new RuntimeException("哎呀，开了个小差，请稍后再试");
         }
         return result;
     }
-
-    private Method getTargetMethod(ProceedingJoinPoint pjp) throws NoSuchMethodException {
-        Signature signature = pjp.getSignature();
-        MethodSignature methodSignature = (MethodSignature) signature;
-        Method agentMethod = methodSignature.getMethod();
-        return pjp.getTarget().getClass().getMethod(agentMethod.getName(), agentMethod.getParameterTypes());
-    }
-
-    private String parseExpression(ProceedingJoinPoint joinPoint, RedisLock redisLock) throws NoSuchMethodException {
-        String lockParam = redisLock.expression();
-        Method targetMethod = getTargetMethod(joinPoint);
-        ExpressionParser parser = new SpelExpressionParser();
-        EvaluationContext context = new MethodBasedEvaluationContext(new Object(), targetMethod, joinPoint.getArgs(),
-                new DefaultParameterNameDiscoverer());
-        Expression expression = parser.parseExpression(lockParam);
-        return expression.getValue(context, String.class);
-    }
-
 }

@@ -1,9 +1,6 @@
 package com.github.sparkzxl.core.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,19 +10,16 @@ import java.util.concurrent.TimeUnit;
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
 public @interface ApiIdempotent {
-
-    /**
-     * key唯一性值 spel表达式
-     */
-    String keyExpression() default "#p0";
 
     /**
      * key的前缀
      *
      * @return String
      */
-    String keyPrefix() default "";
+    String prefix() default "";
 
     // 过期时间（毫秒）
     long expireMillis() default 60;
@@ -33,5 +27,13 @@ public @interface ApiIdempotent {
     TimeUnit timeUnit() default TimeUnit.SECONDS;
 
     String message() default "请勿重复提交!";
+
+    /**
+     * 分隔符（默认 :）
+     * 生成的Key：N:SO1008:500
+     *
+     * @return String
+     */
+    String delimiter() default ":";
 
 }
