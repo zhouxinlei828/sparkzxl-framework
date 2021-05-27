@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
- * description: sparkzxl 启动类
+ * description: sparkzxl boot 启动类
  *
  * @author zhouxinlei
  */

@@ -54,7 +54,7 @@ public class JacksonConfig {
                 .put(Long.TYPE, ToStringSerializer.instance)
                 .put(BigInteger.class, ToStringSerializer.instance)
                 .put(BigDecimal.class, ToStringSerializer.instance)
-                .put(Date.class, new DateSerializer(true, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")))
+                .put(Date.class, new DateSerializer(true, new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN)))
                 .put(LocalDateTime.class, new LocalDateTimeCustomSerializer())
                 .put(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)))
                 .put(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)))

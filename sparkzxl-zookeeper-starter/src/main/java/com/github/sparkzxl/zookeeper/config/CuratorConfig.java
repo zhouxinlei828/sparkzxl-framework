@@ -1,5 +1,6 @@
 package com.github.sparkzxl.zookeeper.config;
 
+import com.github.sparkzxl.zookeeper.aspect.ZkLockAspect;
 import com.github.sparkzxl.zookeeper.lock.ZkDistributedLock;
 import com.github.sparkzxl.zookeeper.properties.CuratorProperties;
 import org.apache.curator.RetryPolicy;
@@ -32,5 +33,12 @@ public class CuratorConfig {
     @Bean
     public ZkDistributedLock zkDistributedLock(CuratorFramework curatorFramework) {
         return new ZkDistributedLock(curatorFramework);
+    }
+
+    @Bean
+    public ZkLockAspect zkLockAspect(ZkDistributedLock zkDistributedLock) {
+        ZkLockAspect zkLockAspect = new ZkLockAspect();
+        zkLockAspect.setZkDistributedLock(zkDistributedLock);
+        return zkLockAspect;
     }
 }

@@ -46,8 +46,8 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         log.info("请求路径：[{}]", requestUrl);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
-        if (StringHandlerUtils.isIgnore(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
-                || StringHandlerUtils.isIgnore(ignorePatterns(), request.getPath().toString())) {
+        if (StringHandlerUtils.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
+                || StringHandlerUtils.matchUrl(ignorePatterns(), request.getPath().toString())) {
             // 放行请求清除token
             clearTokenRequest(exchange);
             return chain.filter(exchange);

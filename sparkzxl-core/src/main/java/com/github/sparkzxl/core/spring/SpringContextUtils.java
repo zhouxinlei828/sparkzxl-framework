@@ -110,6 +110,10 @@ public class SpringContextUtils implements ApplicationContextAware {
         return applicationContext.getEnvironment().getActiveProfiles();
     }
 
+    public static <T> T getProperty(String name, Class<T> tClass) {
+        return applicationContext.getEnvironment().getRequiredProperty(name, tClass);
+    }
+
     /**
      * 获取当前的环境配置，当有多个环境配置时，只获取第一个
      *
