@@ -5,8 +5,8 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.core.utils.StrPool;
 
 /**
- * description: 获取当前域中的 用户id appid 用户昵称
- * 注意： appid 通过token解析，  用户id 和 用户昵称必须在前端 通过请求头的方法传入。 否则这里无法获取
+ * description: 获取当前域中的 用户id, 用户昵称
+ * 注意： 用户id 和 用户昵称必须在前端 通过请求头的方法传入。 否则这里无法获取
  *
  * @author zhouxinlei
  */

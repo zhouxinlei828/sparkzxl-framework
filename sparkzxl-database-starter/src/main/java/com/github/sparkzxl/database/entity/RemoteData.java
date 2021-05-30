@@ -1,7 +1,6 @@
 package com.github.sparkzxl.database.entity;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.github.sparkzxl.database.validation.IValidatable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemoteData<K, D> implements Serializable, IValidatable {
+public class RemoteData<K, D> implements Serializable {
 
     private K key;
     private D data;
@@ -59,16 +58,5 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
             toString = String.valueOf(data);
         }
         return toString;
-    }
-
-
-    /**
-     * 用于Hibernate-Validator 自定义校验规则
-     *
-     * @return Object
-     */
-    @Override
-    public Object value() {
-        return this.key;
     }
 }

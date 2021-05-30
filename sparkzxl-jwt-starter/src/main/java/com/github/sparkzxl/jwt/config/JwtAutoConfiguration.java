@@ -20,8 +20,7 @@ public class JwtAutoConfiguration {
 
     @Bean
     public JwtTokenService jwtTokenService(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties) {
-        JwtTokenServiceImpl jwtTokenService = new JwtTokenServiceImpl(jwtProperties, keyStoreProperties);
-        jwtTokenService.setKeyPairMap(Maps.newHashMap());
+        JwtTokenServiceImpl jwtTokenService = new JwtTokenServiceImpl(jwtProperties, keyStoreProperties,Maps.newHashMap());
         return jwtTokenService;
     }
 }

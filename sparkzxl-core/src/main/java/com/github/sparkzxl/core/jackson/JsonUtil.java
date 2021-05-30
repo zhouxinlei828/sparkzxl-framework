@@ -164,6 +164,10 @@ public class JsonUtil {
         return getInstance().convertValue(fromValue, toValueType);
     }
 
+    public static <T> T toPojo(String data, Class<T> toValueType) {
+        return getInstance().convertValue(data, toValueType);
+    }
+
     public static <T> T toPojo(JsonNode resultNode, Class<T> toValueType) {
         return getInstance().convertValue(resultNode, toValueType);
     }
