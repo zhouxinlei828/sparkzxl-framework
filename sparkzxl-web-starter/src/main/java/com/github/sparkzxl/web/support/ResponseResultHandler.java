@@ -40,10 +40,13 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<?
             extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        Object returnBody = body;
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        if (body instanceof ApiResult) {
+            return body;
+        }
+        Object returnBody = body;
         int code = ApiResponseStatus.SUCCESS.getCode();
         String message = ApiResponseStatus.SUCCESS.getMessage();
         String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
