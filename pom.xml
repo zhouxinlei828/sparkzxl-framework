@@ -84,6 +84,7 @@
         <logback-classic.version>1.2.3</logback-classic.version>
         <jsqlparser.version>3.2</jsqlparser.version>
         <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
+        <antisamy.version>1.5.10</antisamy.version>
     </properties>
 
     <modules>
@@ -114,6 +115,7 @@
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-hystrix-starter</module>
+        <module>sparkzxl-xss-starter</module>
     </modules>
 
     <distributionManagement>
@@ -574,6 +576,11 @@
                     </exclusion>
                 </exclusions>
                 <version>${xsx.slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.owasp.antisamy</groupId>
+                <artifactId>antisamy</artifactId>
+                <version>${antisamy.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

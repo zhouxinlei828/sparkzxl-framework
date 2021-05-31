@@ -68,7 +68,7 @@ public interface StrPool {
     String HASH_LEFT_BRACE = "#{";
     String CRLF = "\r\n";
     String HTML_NBSP = "&nbsp;";
-    String HTML_AMP = "&amp";
+    String HTML_AMP = "&amp;";
     String HTML_QUOTE = "&quot;";
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";

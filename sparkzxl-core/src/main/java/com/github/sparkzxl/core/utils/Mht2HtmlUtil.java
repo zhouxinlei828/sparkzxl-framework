@@ -259,7 +259,7 @@ public class Mht2HtmlUtil {
                     int pos = strType.indexOf("charset=");
                     if (pos >= 0) {
                         String strEncoding = strType.substring(pos + 8);
-                        if (strEncoding.startsWith("\"") || strEncoding.startsWith("\'")) {
+                        if (strEncoding.startsWith(StrPool.QUOTE) || strEncoding.startsWith("\'")) {
                             strEncoding = strEncoding.substring(1);
                         }
                         if (strEncoding.endsWith("\"") || strEncoding.endsWith("\'")) {
