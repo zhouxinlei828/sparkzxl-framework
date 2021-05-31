@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.xxl-job")
-public class XxlJobProperties {
+public class XxlExecutorProperties {
 
     private String accessToken;
 
