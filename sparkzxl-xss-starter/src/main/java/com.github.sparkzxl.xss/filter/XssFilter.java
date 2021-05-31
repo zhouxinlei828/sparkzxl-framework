@@ -1,12 +1,11 @@
 package com.github.sparkzxl.xss.filter;
 
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.utils.StringHandlerUtils;
 import com.github.sparkzxl.xss.wrapper.XssRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +30,6 @@ public class XssFilter implements Filter {
      * 可放行的参数值
      */
     public static final String IGNORE_PARAM_VALUE = "ignoreParamValue";
-    private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 
     /**
      * 可放行的请求路径列表
@@ -53,22 +51,12 @@ public class XssFilter implements Filter {
             throws IOException, ServletException {
         // 判断uri是否包含项目名称
         String uriPath = ((HttpServletRequest) request).getRequestURI();
-        if (isIgnorePath(uriPath)) {
+        if (StringHandlerUtils.matchUrl(ignorePathList, uriPath)) {
             log.debug("忽略过滤路径=[{}]", uriPath);
             chain.doFilter(request, response);
             return;
         }
         log.debug("过滤器包装请求路径=[{}]", uriPath);
         chain.doFilter(new XssRequestWrapper((HttpServletRequest) request, ignoreParamValueList), response);
-    }
-
-    private boolean isIgnorePath(String uriPath) {
-        if (StrUtil.isBlank(uriPath)) {
-            return true;
-        }
-        if (CollUtil.isEmpty(ignorePathList)) {
-            return false;
-        }
-        return ignorePathList.stream().anyMatch(url -> uriPath.startsWith(url) || ANT_PATH_MATCHER.match(url, uriPath));
     }
 }
