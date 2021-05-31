@@ -2,6 +2,7 @@ package com.github.sparkzxl.xss.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.owasp.validator.html.*;
 
@@ -58,13 +59,13 @@ public final class XssUtils {
                 final CleanResults cr = antiSamy.scan(paramValue, policy);
                 cr.getErrorMessages().forEach(log::debug);
                 String str = cr.getCleanHTML();
-                str = str.replaceAll("&quot;", "\"");
-                str = str.replaceAll("&amp;", "&");
-                str = str.replaceAll("'", "'");
-                str = str.replaceAll("'", "＇");
+                str = str.replaceAll(StrPool.HTML_QUOTE, "\"");
+                str = str.replaceAll(StrPool.HTML_AMP, "&");
+                str = str.replaceAll(StrPool.SINGLE_QUOTE, "'");
+                str = str.replaceAll(StrPool.SINGLE_QUOTE, "＇");
 
-                str = str.replaceAll("&lt;", "<");
-                str = str.replaceAll("&gt;", ">");
+                str = str.replaceAll(StrPool.HTML_LT, "<");
+                str = str.replaceAll(StrPool.HTML_GT, ">");
                 return str;
             }
         } catch (ScanException e) {

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.xss.wrapper;
 
+import com.github.sparkzxl.core.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     public Map<String, String[]> getParameterMap() {
         Map<String, String[]> requestMap = super.getParameterMap();
         for (Map.Entry<String, String[]> me : requestMap.entrySet()) {
-            log.debug(me.getKey() + ":");
+            log.debug(me.getKey() + StrPool.COLON);
             String[] values = me.getValue();
             for (int i = 0; i < values.length; i++) {
                 log.debug(values[i]);

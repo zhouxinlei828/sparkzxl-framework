@@ -2,6 +2,7 @@ package com.github.sparkzxl.elasticsearch.config;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class ElasticsearchAutoConfiguration {
         List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
         clusterNodes.forEach(node -> {
             try {
-                String[] parts = StringUtils.split(node, ":");
+                String[] parts = StringUtils.split(node, StrPool.COLON);
                 Assert.notNull(parts, "Must defined");
                 Assert.state(parts.length == 2, "Must be defined as 'host:port'");
                 httpHosts.add(new HttpHost(parts[0], Integer.parseInt(parts[1]), elasticsearchProperties.getSchema()));
