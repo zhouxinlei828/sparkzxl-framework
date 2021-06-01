@@ -15,16 +15,20 @@ import java.lang.annotation.Target;
 public @interface RedisLock {
 
     /**
-     * 特定参数识别，默认取第 0 个下标
-     */
-    int lockFiled() default 0;
-
-    /**
      * key的前缀
      *
      * @return String
      */
-    String keyPrefix() default "";
+    String prefix() default "";
+
+    /**
+     * 分隔符（默认 :）
+     * 生成的Key：N:SO1008:500
+     *
+     * @return String
+     */
+    String delimiter() default ":";
+
 
     /**
      * 获取锁等待时长（毫秒）

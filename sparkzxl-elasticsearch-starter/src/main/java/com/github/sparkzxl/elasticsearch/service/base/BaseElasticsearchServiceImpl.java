@@ -199,7 +199,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     @Override
     public <T> boolean saveDoc(String index, Serializable id, T object) {
         boolean result;
-        IndexRequest request = buildIndexRequest(index, id == null ? getESId(object) : String.valueOf(id), object);
+        IndexRequest request = buildIndexRequest(index, id == null ? getEsId(object) : String.valueOf(id), object);
         try {
             IndexResponse indexResponse = restHighLevelClient.index(request, COMMON_OPTIONS);
             result = indexResponse.status().equals(RestStatus.OK);
@@ -213,7 +213,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     @Override
     public <T> boolean updateDoc(String index, Serializable id, T object) {
         try {
-            return updateRequest(index, id == null ? getESId(object) : String.valueOf(id), object);
+            return updateRequest(index, id == null ? getEsId(object) : String.valueOf(id), object);
         } catch (Exception e) {
             log.error("更新索引 [{}] 数据 [{}] 失败：[{}]", index, object, e.getMessage());
             return false;
@@ -231,7 +231,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         try {
             BulkRequest request = new BulkRequest();
             objectList.forEach(o -> {
-                IndexRequest indexRequest = new IndexRequest(index).id(getESId(o))
+                IndexRequest indexRequest = new IndexRequest(index).id(getEsId(o))
                         .source(JsonUtil.toJson(o), XContentType.JSON);
                 request.add(indexRequest);
             });
@@ -476,7 +476,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         }
     }
 
-    private String getESId(Object obj) {
+    private String getEsId(Object obj) {
         JsonNode jsonNode = JsonUtil.readTree(JsonUtil.toJson(obj));
         assert jsonNode != null;
         JsonNode idNode = jsonNode.get("id");

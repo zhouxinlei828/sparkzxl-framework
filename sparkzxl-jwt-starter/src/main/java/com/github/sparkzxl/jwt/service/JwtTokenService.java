@@ -18,7 +18,6 @@ public interface JwtTokenService<ID extends Serializable> {
      *
      * @param jwtUserInfo 负载信息
      * @return String
-     * @throws JOSEException 抛出异常
      */
     String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo);
 

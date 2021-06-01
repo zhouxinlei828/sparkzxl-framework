@@ -9,6 +9,12 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * description: 公共服务类
+ *
+ * @author zhouxinlei
+ * @date 2021-05-15 13:51:54
+ */
 public interface ISuperService<T extends Entity> {
 
     boolean save(T entity);
@@ -19,7 +25,6 @@ public interface ISuperService<T extends Entity> {
 
     boolean saveOrUpdateBatch(Collection<T> entityList);
 
-
     boolean removeById(Serializable id);
 
     boolean removeByIds(Collection<? extends Serializable> idList);
@@ -29,7 +34,6 @@ public interface ISuperService<T extends Entity> {
     boolean update(T entity);
 
     boolean updateBatchById(Collection<T> entityList);
-
 
     T getById(Serializable id);
 

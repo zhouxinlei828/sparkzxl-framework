@@ -89,6 +89,20 @@ public class RedisCacheImpl implements GeneralCacheService {
     }
 
     @Override
+    public boolean setIfAbsent(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        if (expireTime > 0) {
+            return valueOperations.setIfAbsent(key, value, expireTime, timeUnit);
+        } else {
+            return setIfAbsent(key, value);
+        }
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value) {
+        return valueOperations.setIfAbsent(key, value);
+    }
+
+    @Override
     public Long increment(String key) {
         return valueOperations.increment(key);
     }

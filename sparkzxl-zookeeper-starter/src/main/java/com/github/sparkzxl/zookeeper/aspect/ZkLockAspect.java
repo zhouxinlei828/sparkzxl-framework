@@ -1,12 +1,15 @@
 package com.github.sparkzxl.zookeeper.aspect;
 
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.utils.AspectUtils;
 import com.github.sparkzxl.zookeeper.annotation.ZkLock;
 import com.github.sparkzxl.zookeeper.lock.ZkDistributedLock;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * description: zk锁
@@ -14,35 +17,49 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author zhouxinlei
  */
 @Aspect
+@Slf4j
 public class ZkLockAspect {
 
-    @Autowired
     private ZkDistributedLock zkDistributedLock;
+
 
     @Pointcut("@annotation(zkLock)")
     public void zkLockAspect(ZkLock zkLock) {
 
     }
 
-    @Around(value = "zkLockAspect(zkLock)", argNames = "proceedingJoinPoint,zkLock")
-    public Object around(ProceedingJoinPoint proceedingJoinPoint, ZkLock zkLock) {
+    public void setZkDistributedLock(ZkDistributedLock zkDistributedLock) {
+        this.zkDistributedLock = zkDistributedLock;
+    }
 
+    @Around(value = "zkLockAspect(zkLock)", argNames = "proceedingJoinPoint,zkLock")
+    public Object around(ProceedingJoinPoint proceedingJoinPoint, ZkLock zkLock) throws Throwable {
+        long threadId = Thread.currentThread().getId();
         String keyPrefix = zkLock.keyPrefix();
-        int lockFiled = zkLock.lockFiled();
-        Object[] args = proceedingJoinPoint.getArgs();
-        Object arg = args[lockFiled];
-        String lockKey = keyPrefix.concat("_").concat(String.valueOf(arg));
-        boolean lock = false;
-        Object result = null;
+        StringBuilder keyBuffer = new StringBuilder();
+        String lockKey = null;
         try {
-            lock = zkDistributedLock.lock(lockKey);
-            result = proceedingJoinPoint.proceed();
-        } catch (Throwable e) {
+            lockKey = AspectUtils.parseExpression(proceedingJoinPoint, zkLock.expression());
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
-        } finally {
-            if (lock) {
-                zkDistributedLock.releaseLock(lockKey);
+        }
+        keyBuffer.append(keyPrefix);
+        keyBuffer.append("_");
+        keyBuffer.append(lockKey);
+        String key = keyBuffer.toString();
+        log.info("线程[{}] -> 要加锁的key：[{}]，value：[{}]", threadId, key, lockKey);
+        Object result = null;
+        if (zkDistributedLock.lock(key)) {
+            log.info("线程[{}] -> 获取锁key[{}] 成功", threadId, key);
+            try {
+                result = proceedingJoinPoint.proceed();
+            } finally {
+                zkDistributedLock.releaseLock(key);
+                log.info("线程[{}] -> 释放锁 key [{}]", threadId, key);
             }
+        } else {
+            log.info("线程[{}] -> 获取锁key[{}] 失败", threadId, key);
+            BizExceptionAssert.businessFail(ApiResponseStatus.FAILURE);
         }
         return result;
     }

@@ -11,8 +11,9 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.core.enums.Enumerator;
-import com.github.sparkzxl.core.enums.EnumeratorSerializer;
+import com.github.sparkzxl.core.serializer.EnumeratorSerializer;
 import com.github.sparkzxl.core.jackson.CustomJacksonModule;
+import com.github.sparkzxl.core.jackson.CustomJavaTimeModule;
 import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomDeSerializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
@@ -53,7 +54,7 @@ public class JacksonConfig {
                 .put(Long.TYPE, ToStringSerializer.instance)
                 .put(BigInteger.class, ToStringSerializer.instance)
                 .put(BigDecimal.class, ToStringSerializer.instance)
-                .put(Date.class, new DateSerializer(true, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")))
+                .put(Date.class, new DateSerializer(true, new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN)))
                 .put(LocalDateTime.class, new LocalDateTimeCustomSerializer())
                 .put(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)))
                 .put(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)))
@@ -125,7 +126,7 @@ public class JacksonConfig {
                 .getDeserializationConfig()
                 .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        objectMapper.registerModule(new CustomJacksonModule());
+        objectMapper.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
         objectMapper.findAndRegisterModules();
         return objectMapper;
     }

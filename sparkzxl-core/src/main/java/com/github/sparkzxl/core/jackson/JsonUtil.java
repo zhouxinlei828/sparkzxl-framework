@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,11 +37,20 @@ public class JsonUtil {
         return null;
     }
 
+    public static <T> String toJsonPretty(T value) {
+        try {
+            return getInstance().writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
     public static byte[] toJsonAsBytes(Object object) {
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -59,7 +68,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, typeReference);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -68,7 +77,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, valueType);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -77,7 +86,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, typeReference);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -86,7 +95,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, valueType);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -95,7 +104,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, typeReference);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -155,6 +164,10 @@ public class JsonUtil {
         return getInstance().convertValue(fromValue, toValueType);
     }
 
+    public static <T> T toPojo(String data, Class<T> toValueType) {
+        return getInstance().convertValue(data, toValueType);
+    }
+
     public static <T> T toPojo(JsonNode resultNode, Class<T> toValueType) {
         return getInstance().convertValue(resultNode, toValueType);
     }
@@ -163,7 +176,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonString);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -172,7 +185,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(in);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -181,7 +194,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(content);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -190,7 +203,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
-            SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -223,7 +236,7 @@ public class JsonUtil {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
                     .getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            super.registerModule(new CustomJacksonModule());
+            super.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
             super.findAndRegisterModules();
         }
 
@@ -231,9 +244,5 @@ public class JsonUtil {
         public ObjectMapper copy() {
             return super.copy();
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
     }
 }

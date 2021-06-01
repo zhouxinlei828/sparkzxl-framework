@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.resource;
 
-import java.util.Arrays;
+import com.google.common.collect.Lists;
+
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class SwaggerStaticResource {
 
-    public static final List<String> EXCLUDE_STATIC_PATTERNS = Arrays.asList(
+    public static List<String> EXCLUDE_STATIC_PATTERNS = Lists.newArrayList(
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/swagger/**",

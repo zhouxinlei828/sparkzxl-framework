@@ -6,14 +6,14 @@
 
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-component</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>sparkzxl-component</name>
     <description>sparkzxl component framework</description>
     <url>https://github.com/sparkzxl/sparkzxl-component</url>
 
     <properties>
-        <sparkzxl.version>1.0.1.RELEASE</sparkzxl.version>
+        <sparkzxl.version>1.0.1-SNAPSHOT</sparkzxl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -25,8 +25,6 @@
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
-        <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-cloud-->
         <spring-cloud-alibaba-dependencies.version>2.2.5.RELEASE</spring-cloud-alibaba-dependencies.version>
         <spring-boot-dependencies.version>2.3.9.RELEASE</spring-boot-dependencies.version>
@@ -35,7 +33,7 @@
         <knife4j.version>2.0.8</knife4j.version>
 
         <!-- datasource-->
-        <mybatis-plus.version>3.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
         <p6spy.version>3.9.1</p6spy.version>
         <logstash.version>6.6</logstash.version>
@@ -43,8 +41,7 @@
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
-        <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
-        <spring-security-rsa.version>1.0.9.RELEASE</spring-security-rsa.version>
+        <spring-security-rsa.version>1.0.10.RELEASE</spring-security-rsa.version>
         <spring-data-commos.version>2.2.6.RELEASE</spring-data-commos.version>
         <!-- jwt组件-->
         <jwt.version>9.7</jwt.version>
@@ -53,9 +50,9 @@
         <!-- google-->
         <zxing.core.version>3.4.1</zxing.core.version>
         <guava.version>30.1-jre</guava.version>
-        <hutool.version>5.5.7</hutool.version>
+        <hutool.version>5.6.5</hutool.version>
         <!-- redisson -->
-        <redisson-spring-boot-starter.version>3.14.1</redisson-spring-boot-starter.version>
+        <redisson-spring-boot-starter.version>3.15.5</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
         <curator.version>5.1.0</curator.version>
 
@@ -64,7 +61,7 @@
         <html2pdf.version>3.0.3</html2pdf.version>
         <pdfbox.version>2.0.22</pdfbox.version>
         <itext.version>7.1.14</itext.version>
-        <xstream.version>1.4.16</xstream.version>
+        <xstream.version>1.4.17</xstream.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
@@ -72,7 +69,7 @@
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.8.8</caffeine.version>
         <fastjson.version>1.2.75</fastjson.version>
-        <easy-excel.version>2.2.7</easy-excel.version>
+        <easy-excel.version>2.2.10</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.1.3</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.2.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
@@ -86,6 +83,8 @@
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <jsqlparser.version>3.2</jsqlparser.version>
+        <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
+        <antisamy.version>1.5.10</antisamy.version>
     </properties>
 
     <modules>
@@ -93,7 +92,8 @@
         <module>sparkzxl-cache-starter</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-database-starter</module>
-        <module>sparkzxl-distributed</module>
+        <module>sparkzxl-distributed-cloud-starter</module>
+        <module>sparkzxl-distributed-dubbo-starter</module>
         <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
         <module>sparkzxl-feign-starter</module>
@@ -103,9 +103,7 @@
         <module>sparkzxl-log-starter</module>
         <module>sparkzxl-mail-starter</module>
         <module>sparkzxl-mongodb-starter</module>
-        <module>sparkzxl-oauth2-open-starter</module>
         <module>sparkzxl-oauth2-resource-starter</module>
-        <module>sparkzxl-oauth2-server-starter</module>
         <module>sparkzxl-oss-starter</module>
         <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-pdf-starter</module>
@@ -117,43 +115,19 @@
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-hystrix-starter</module>
+        <!--<module>sparkzxl-xss-starter</module>-->
     </modules>
 
-    <licenses>
-        <license>
-            <name>Apache 2.0 License</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>zhouxinlei</name>
-            <email>zhouxinlei298@163.com</email>
-            <roles>
-                <role>Java Development Engineer</role>
-            </roles>
-            <url>https://sparkzxl.github.io/sparkzxl-component</url>
-        </developer>
-    </developers>
-    <scm>
-        <url>https://github.com/sparkzxl/sparkzxl-component</url>
-        <connection>https://github.com/sparkzxl/sparkzxl-component.git</connection>
-    </scm>
-
     <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+        </repository>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
     </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -317,11 +291,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk16</artifactId>
-                <version>${bcprov-jdk16.version}</version>
             </dependency>
             <!--Spring Security RSA工具类-->
             <dependency>
@@ -597,6 +566,22 @@
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
             </dependency>
+            <dependency>
+                <groupId>wiki.xsx</groupId>
+                <artifactId>slf4j-spring-boot-starter</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-aop</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>${xsx.slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.owasp.antisamy</groupId>
+                <artifactId>antisamy</artifactId>
+                <version>${antisamy.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -700,33 +685,6 @@
                         <generateBackupPoms>false</generateBackupPoms>
                     </configuration>
                 </plugin>
-                <!-- gpg插件 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${maven-gpg-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <!-- sonatype自动release插件 -->
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus-staging-maven-plugin.version}</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -764,7 +722,7 @@
     <profiles>
         <profile>
             <!-- 打包的 -P参数 -->
-            <id>ossrh</id>
+            <id>release</id>
             <build>
                 <plugins>
                     <!-- Source -->
@@ -785,23 +743,21 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                    </plugin>
                 </plugins>
             </build>
+            <distributionManagement>
+                <repository>
+                    <id>maven-releases</id>
+                    <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>maven-snapshots</id>
+                    <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <gpg.executable>gpg</gpg.executable>
-                <gpg.passphrase>Zxl298828</gpg.passphrase>
-            </properties>
         </profile>
     </profiles>
 </project>

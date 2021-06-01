@@ -4,7 +4,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +47,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
-                SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
+                BizExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
             }
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);

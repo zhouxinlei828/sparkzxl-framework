@@ -6,9 +6,10 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.entity.JwtUserInfo;
+import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.core.utils.TimeUtils;
@@ -42,19 +43,12 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
 
     private final JwtProperties jwtProperties;
     private final KeyStoreProperties KeyStoreProperties;
-    private Map<String, KeyPair> keyPairMap;
+    private final Map<String, KeyPair> keyPairMap;
 
-    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties) {
+    public JwtTokenServiceImpl(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties, Map<String, KeyPair> keyPairMap) {
         this.jwtProperties = jwtProperties;
         this.KeyStoreProperties = keyStoreProperties;
-    }
-
-    public void setKeyPairMap(Map<String, KeyPair> keyPairMap) {
         this.keyPairMap = keyPairMap;
-    }
-
-    public Map<String, KeyPair> getKeyPairMap() {
-        return keyPairMap;
     }
 
     @Override
@@ -80,8 +74,8 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             return jwsObject.serialize();
         }).onFailure(throwable -> {
             log.error("根据RSA算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
-        }).getOrElse("");
+            BizExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
+        }).getOrElseGet(throwable -> "");
     }
 
     @Override
@@ -98,7 +92,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     public JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception {
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
-        return JSONUtil.toBean(payload, JwtUserInfo.class);
+        return JsonUtil.toPojo(payload, JwtUserInfo.class);
     }
 
     @Override
@@ -151,9 +145,9 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             return jwsObject.serialize();
         }).onFailure(throwable -> {
             log.error("根据HMAC算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            SparkZxlExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
+            BizExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
 
-        }).getOrElse("");
+        }).getOrElseGet(throwable -> "");
     }
 
     @Override
@@ -175,7 +169,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     private KeyPair getKeyPair() {
-        KeyPair keyPair = getKeyPairMap().get("keyPair");
+        KeyPair keyPair = this.keyPairMap.get("keyPair");
         if (ObjectUtils.isNotEmpty(keyPair)) {
             return keyPair;
         }

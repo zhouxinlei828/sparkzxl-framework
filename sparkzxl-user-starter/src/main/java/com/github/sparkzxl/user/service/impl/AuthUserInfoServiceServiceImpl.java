@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             String userId = BaseContextHandler.getUserId(String.class);
             authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
-                SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
+                BizExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
             }
         }
         return authUserInfo;
@@ -57,7 +57,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
         if (ObjectUtils.isNotEmpty(redisTemplate)) {
             return (AuthUserInfo) redisTemplate.opsForHash().get(key, accessToken);
         }
-        SparkZxlExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存");
+        BizExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存");
         return null;
     }
 }

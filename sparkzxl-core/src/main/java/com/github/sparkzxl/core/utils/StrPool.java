@@ -68,21 +68,19 @@ public interface StrPool {
     String HASH_LEFT_BRACE = "#{";
     String CRLF = "\r\n";
     String HTML_NBSP = "&nbsp;";
-    String HTML_AMP = "&amp";
+    String HTML_AMP = "&amp;";
     String HTML_QUOTE = "&quot;";
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";
     /**
      * 编码
      */
-    String UTF8 = "UTF-8";
+     String UTF8 = "UTF-8";
     /**
      * JSON 资源
      */
-    String CONTENT_TYPE = "application/json; charset=utf-8";
+    String CONTENT_TYPE = "application/json;charset=utf-8";
 
-
-    String TEST_TOKEN = "Bearer test";
     String TEST = "test";
     String PROD = "prod";
 
@@ -96,4 +94,8 @@ public interface StrPool {
     Long DEF_PARENT_ID = 0L;
 
     String UNKNOWN = "unknown";
+
+    String HTTP = "http";
+
+    String HTTPS = "https";
 }

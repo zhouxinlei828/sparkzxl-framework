@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.job.config.XxlJobConfig
+    com.github.sparkzxl.job.config.XxlJobAutoConfiguration

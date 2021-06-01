@@ -2,8 +2,9 @@ package com.github.sparkzxl.database.config;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.github.sparkzxl.database.aspect.InjectionResultAspect;
 import com.github.sparkzxl.database.enums.IdTypeEnum;
@@ -26,6 +27,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 
 /**
  * description: mybatis全局配置
@@ -50,18 +53,21 @@ public class MyBatisAutoConfiguration {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 乐观锁插件
+        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+
+        // 多租户插件
         if (customMybatisProperties.isEnableTenant()) {
             List<String> ignoreTableList = ArrayUtils.isEmpty(customMybatisProperties.getIgnoreTable()) ? Lists.newArrayList() :
                     Arrays.asList(customMybatisProperties.getIgnoreTable());
             interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(customMybatisProperties.getTenantIdColumn(),
                     ignoreTableList)));
         }
+        // 分页插件
+        if (customMybatisProperties.isEnablePage()) {
+            interceptor.addInnerInterceptor(new PaginationInnerInterceptor(customMybatisProperties.getDbType()));
+        }
         return interceptor;
-    }
-
-    @Bean
-    public ConfigurationCustomizer configurationCustomizer() {
-        return configuration -> configuration.setUseDeprecatedExecutor(false);
     }
 
     @Bean
@@ -72,7 +78,7 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MetaDataHandler metaDataHandler() {
+    public MetaObjectHandler metaDataHandler() {
         MetaDataHandler metaDataHandler = new MetaDataHandler();
         metaDataHandler.setIdType(customMybatisProperties.getIdType());
         if (IdTypeEnum.SNOWFLAKE_ID.equals(customMybatisProperties.getIdType())) {
