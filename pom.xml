@@ -115,7 +115,7 @@
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-hystrix-starter</module>
-        <module>sparkzxl-xss-starter</module>
+        <!--<module>sparkzxl-xss-starter</module>-->
     </modules>
 
     <distributionManagement>
