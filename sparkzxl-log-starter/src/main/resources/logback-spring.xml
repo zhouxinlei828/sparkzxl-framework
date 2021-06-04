@@ -6,7 +6,7 @@
     <springProperty name="springAppName" scope="context" source="spring.application.name" defaultValue="application"/>
 
     <!-- 日志文件保存路径 -->
-    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="logs"/>
+    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="../logs"/>
 
     <!-- 日志显隐控制方式 -->
     <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
@@ -39,6 +39,7 @@
             </layout>
             <charset>utf8</charset>
         </encoder>
+        <filter class="com.github.sparkzxl.log.realtime.ProcessLogFilter"></filter>
     </appender>
 
     <!--每天记录日志到文件appender-->

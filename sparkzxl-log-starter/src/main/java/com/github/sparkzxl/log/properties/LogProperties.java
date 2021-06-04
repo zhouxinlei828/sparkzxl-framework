@@ -24,10 +24,10 @@ public class LogProperties {
     private boolean storage = false;
 
     @NestedConfigurationProperty
-    private FileProperties file;
+    private FileProperties file = new FileProperties();
 
     @NestedConfigurationProperty
-    private KafkaProperties kafka;
+    private KafkaProperties kafka = new KafkaProperties();
 
 
 }
