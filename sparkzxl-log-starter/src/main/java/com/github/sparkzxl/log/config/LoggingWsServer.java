@@ -1,10 +1,17 @@
 package com.github.sparkzxl.log.config;
 
-
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ReUtil;
 import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.log.config.MyEndpointConfigure;
+import com.github.sparkzxl.log.properties.LogProperties;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import javax.websocket.*;
@@ -12,13 +19,12 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
@@ -34,6 +40,10 @@ public class LoggingWsServer {
 
     @Value("${spring.application.name}")
     private String applicationName;
+
+    @Autowired
+    private LogProperties logProperties;
+
 
     /**
      * 连接集合
@@ -59,27 +69,26 @@ public class LoggingWsServer {
         SESSION_MAP.put(session.getId(), session);
         //默认从第一行开始
         LENGTH_MAP.put(session.getId(), 1);
-
         log.info("LoggingWebSocketServer 任务开始");
         threadPoolExecutor.execute(() -> {
+            boolean first = true;
             while (SESSION_MAP.get(session.getId()) != null) {
                 //日志文件路径，获取最新的
-                String logPath = System.getProperty("user.home") + "/logs/" + applicationName + ".log";
+                String logPath = logProperties.getFile().getPath() + applicationName + ".log";
                 try {
                     File logFile = ResourceUtils.getFile(logPath);
                     RandomAccessFile randomFile = new RandomAccessFile(logFile, "rw");
                     try {
                         randomFile.seek(LENGTH_MAP.get(session.getId()));
                         String tmp;
-                        String result = "";
+                        List<String> resourceList = Lists.newArrayList();
                         while ((tmp = randomFile.readLine()) != null) {
                             String log = new String(tmp.getBytes("ISO8859-1"));
                             log = log.replaceAll("&", "&amp;")
                                     .replaceAll("<", "&lt;")
                                     .replaceAll(">", "&gt;")
                                     .replaceAll("\"", "&quot;")
-                                    .replace(" ", StrPool.HTML_NBSP)
-                                    .replace("\tat", StrPool.HTML_NBSP);
+                                    .replaceAll("\\s", StrPool.HTML_NBSP);
 
                             //处理等级
                             log = log.replace("DEBUG", "<span style='color: black;'>DEBUG</span>");
@@ -89,17 +98,21 @@ public class LoggingWsServer {
                             log = log.replace("application", "<span style='color: #3FB1F5;'>application</span>");
                             //处理类名
                             String regex = "\\[(.*?)]";
-                            Pattern pattern = Pattern.compile(regex);
-                            Matcher matcher = pattern.matcher(log);
-                            if (matcher.find()) {
-                                String group = matcher.group(1);
-                                log = log.replace(group, "<span style='color: #298a8a;'>" + group + "</span>");
+                            String result = ReUtil.get(regex, log, 1);
+                            if (StringUtils.isNotBlank(result)) {
+                                log = log.replace(result, "<span style='color: #298a8a;'>" + result + "</span>");
                             }
-                            result = result.concat(log).concat("<br/>");
+                            resourceList.add(log);
                         }
                         LENGTH_MAP.put(session.getId(), (int) randomFile.length());
-                        //发送
-                        send(session, result);
+
+                        //第一次如果太大，截取最新的200行就够了，避免传输的数据太大
+                        if (first && resourceList.size() > 1000) {
+                            resourceList = ListUtil.sub(resourceList, resourceList.size() - 200, resourceList.size());
+                            first = false;
+                        }
+
+                        send(session, StringUtils.join(resourceList, "<br/>"));
                         //休眠一秒
                         Thread.sleep(1000);
                     } catch (IOException | InterruptedException e) {
@@ -116,7 +129,7 @@ public class LoggingWsServer {
     /**
      * 连接关闭调用的方法
      *
-     * @param session
+     * @param session session
      */
     @OnClose
     public void onClose(Session session) {
@@ -128,8 +141,8 @@ public class LoggingWsServer {
     /**
      * 发生错误时调用
      *
-     * @param session
-     * @param error
+     * @param session session
+     * @param error   异常信息
      */
     @OnError
     public void onError(Session session, Throwable error) {
@@ -139,8 +152,8 @@ public class LoggingWsServer {
     /**
      * 服务器接收到客户端消息时调用的方法
      *
-     * @param message
-     * @param session
+     * @param message 客户端消息
+     * @param session session
      */
     @OnMessage
     public void onMessage(String message, Session session) {
@@ -150,8 +163,8 @@ public class LoggingWsServer {
     /**
      * 封装一个send方法，发送消息到前端
      *
-     * @param session
-     * @param message
+     * @param session session
+     * @param message 发送消息
      */
     private void send(Session session, String message) {
         try {
