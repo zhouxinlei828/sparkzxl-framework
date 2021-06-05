@@ -3,7 +3,6 @@ package com.github.sparkzxl.log.config;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ReUtil;
 import com.github.sparkzxl.core.utils.StrPool;
-import com.github.sparkzxl.log.config.MyEndpointConfigure;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import javax.websocket.*;
@@ -19,7 +17,6 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,7 +71,7 @@ public class LoggingWsServer {
             boolean first = true;
             while (SESSION_MAP.get(session.getId()) != null) {
                 //日志文件路径，获取最新的
-                String logPath = logProperties.getFile().getPath() + applicationName + ".log";
+                String logPath = logProperties.getFile().getPath().concat("/") + applicationName + ".log";
                 try {
                     File logFile = ResourceUtils.getFile(logPath);
                     RandomAccessFile randomFile = new RandomAccessFile(logFile, "rw");
