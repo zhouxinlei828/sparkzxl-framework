@@ -39,7 +39,6 @@
             </layout>
             <charset>utf8</charset>
         </encoder>
-        <filter class="com.github.sparkzxl.log.realtime.ProcessLogFilter"></filter>
     </appender>
 
     <!--每天记录日志到文件appender-->
