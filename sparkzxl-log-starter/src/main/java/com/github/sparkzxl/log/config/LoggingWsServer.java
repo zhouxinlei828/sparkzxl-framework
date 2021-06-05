@@ -92,9 +92,11 @@ public class LoggingWsServer {
                                     log = split[0] + "]" + "<span style='color: #298a8a;'>" + split1[0] + "</span>" + "-" + split1[1];
                                 }
                             }
-                            send(session, log.concat("<br/>"));
+                            result = result.concat(log).concat("<br/>");
                         }
                         LENGTH_MAP.put(session.getId(), (int) randomFile.length());
+                        //发送
+                        send(session, result);
                         //休眠一秒
                         Thread.sleep(1000);
                     } catch (IOException | InterruptedException e) {
