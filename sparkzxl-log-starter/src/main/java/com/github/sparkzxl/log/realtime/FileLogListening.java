@@ -13,7 +13,8 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
@@ -59,6 +60,24 @@ public class FileLogListening implements ApplicationContextAware {
                     String tmp;
                     while ((tmp = randomFile.readLine()) != null) {
                         String log = new String(tmp.getBytes("ISO8859-1"));
+                        log = log.replaceAll("&", "&amp;")
+                                .replaceAll("<", "&lt;")
+                                .replaceAll(">", "&gt;")
+                                .replaceAll("\"", "&quot;");
+
+                        //处理等级
+                        log = log.replace("DEBUG", "<span style='color: blue;'>DEBUG</span>");
+                        log = log.replace("INFO", "<span style='color: green;'>INFO</span>");
+                        log = log.replace("WARN", "<span style='color: orange;'>WARN</span>");
+                        log = log.replace("ERROR", "<span style='color: red;'>ERROR</span>");
+                        //处理类名
+                        String[] split = log.split("]");
+                        if (split.length >= 2) {
+                            String[] split1 = split[1].split("-");
+                            if (split1.length >= 2) {
+                                log = split[0] + "]" + "<span style='color: #298a8a;'>" + split1[0] + "</span>" + "-" + split1[1];
+                            }
+                        }
                         LoggerDisruptorQueue.publishEvent(log);
                     }
                     lastTimeFileSize = randomFile.length();
