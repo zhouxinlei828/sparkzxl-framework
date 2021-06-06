@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -34,10 +35,11 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
 /**
  * description: WebSocket处理器，处理websocket连接相关
  *
- * @author: zhouxinlei
- * @date: 2021-02-25 17:16:46
+ * @author zhouxinlei
+ * @date 2021-06-06 12:33:17
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LogWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private static final Map<String, Integer> LENGTH_MAP = Maps.newConcurrentMap();

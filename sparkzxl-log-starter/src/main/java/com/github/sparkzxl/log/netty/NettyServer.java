@@ -28,7 +28,7 @@ public class NettyServer {
         this.busChannelHandler = busChannelHandler;
     }
 
-    public void start() throws Exception {
+    public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -61,10 +61,16 @@ public class NettyServer {
             System.out.println(NettyServer.class + " 启动正在监听： " + cf.channel().localAddress());
             // 关闭服务器通道
             cf.channel().closeFuture().sync();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             // 释放线程池资源
-            group.shutdownGracefully().sync();
-            bossGroup.shutdownGracefully().sync();
+            try {
+                group.shutdownGracefully().sync();
+                bossGroup.shutdownGracefully().sync();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
