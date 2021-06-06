@@ -2,8 +2,6 @@ package com.github.sparkzxl.boot;
 
 import com.github.sparkzxl.boot.application.event.ApplicationInitRunner;
 import com.github.sparkzxl.boot.infrastructure.annonation.EnableSpringUtil;
-import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.log.netty.LogWebSocketHandler;
 import com.github.sparkzxl.log.netty.NettyServer;
 import io.netty.channel.ChannelHandler;
 import lombok.extern.slf4j.Slf4j;

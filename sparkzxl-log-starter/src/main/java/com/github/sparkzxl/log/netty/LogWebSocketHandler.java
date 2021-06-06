@@ -5,7 +5,6 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.HtmlUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.utils.StrPool;
-import com.github.sparkzxl.log.properties.LogProperties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.netty.channel.ChannelHandler;
@@ -15,18 +14,14 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 
