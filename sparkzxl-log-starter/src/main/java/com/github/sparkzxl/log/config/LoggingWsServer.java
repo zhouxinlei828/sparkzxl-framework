@@ -2,6 +2,7 @@ package com.github.sparkzxl.log.config;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.http.HtmlUtil;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.google.common.collect.Lists;
@@ -81,29 +82,27 @@ public class LoggingWsServer {
                         List<String> resourceList = Lists.newArrayList();
                         while ((tmp = randomFile.readLine()) != null) {
                             String log = new String(tmp.getBytes("ISO8859-1"));
-                            log = log.replaceAll("&", "&amp;")
-                                    .replaceAll("<", "&lt;")
-                                    .replaceAll(">", "&gt;")
-                                    .replaceAll("\"", "&quot;")
+                            String escapeLog = HtmlUtil.escape(log);
+                            escapeLog = escapeLog.replaceAll("\"", "&quot;")
                                     .replaceAll("\\s", StrPool.HTML_NBSP);
 
                             //处理等级
-                            log = log.replace("DEBUG", "<span style='color: black;'>DEBUG</span>");
-                            log = log.replace("INFO", "<span style='color: #3FB1F5;'>INFO</span>");
-                            log = log.replace("WARN", "<span style='color: #F16372;'>WARN</span>");
-                            log = log.replace("ERROR", "<span style='color: red;'>ERROR</span>");
-                            log = log.replace("application", "<span style='color: #3FB1F5;'>application</span>");
+                            escapeLog = escapeLog.replace("DEBUG", "<span style='color: black;'>DEBUG</span>");
+                            escapeLog = escapeLog.replace("INFO", "<span style='color: #3FB1F5;'>INFO</span>");
+                            escapeLog = escapeLog.replace("WARN", "<span style='color: #F16372;'>WARN</span>");
+                            escapeLog = escapeLog.replace("ERROR", "<span style='color: red;'>ERROR</span>");
+                            escapeLog = escapeLog.replace("application", "<span style='color: #3FB1F5;'>application</span>");
                             //处理类名
                             String regex = "\\[(.*?)]";
-                            String result = ReUtil.get(regex, log, 1);
+                            String result = ReUtil.get(regex, escapeLog, 1);
                             if (StringUtils.isNotBlank(result)) {
-                                log = log.replace(result, "<span style='color: #298a8a;'>" + result + "</span>");
+                                escapeLog = escapeLog.replace(result, "<span style='color: #298a8a;'>" + result + "</span>");
                             }
-                            resourceList.add(log);
+                            resourceList.add(escapeLog);
                         }
                         LENGTH_MAP.put(session.getId(), (int) randomFile.length());
 
-                        //第一次如果太大，截取最新的200行就够了，避免传输的数据太大
+                        //第一次如果太大，截取最新的1000行就够了，避免传输的数据太大
                         if (first && resourceList.size() > 1000) {
                             resourceList = ListUtil.sub(resourceList, resourceList.size() - 200, resourceList.size());
                             first = false;
