@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.log.config.LogAutoConfiguration,\
-  com.github.sparkzxl.log.config.WebSocketConfig
+    com.github.sparkzxl.log.config.LogAutoConfiguration

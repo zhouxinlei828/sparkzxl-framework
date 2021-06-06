@@ -4,6 +4,7 @@ import com.github.sparkzxl.log.aspect.WebLogAspect;
 import com.github.sparkzxl.log.properties.LogProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,5 +24,10 @@ public class LogAutoConfiguration {
         WebLogAspect webLogAspect = new WebLogAspect();
         webLogAspect.setStorage(logProperties.isStorage());
         return webLogAspect;
+    }
+
+    @Bean
+    public NettyServerRunner nettyServerRunner(LogProperties logProperties, ApplicationContext applicationContext) {
+        return new NettyServerRunner(applicationContext, logProperties);
     }
 }
