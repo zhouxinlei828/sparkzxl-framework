@@ -116,7 +116,7 @@ public class BaseContextHolder {
         return get(BaseContextConstants.JWT_KEY_REALM, String.class);
     }
 
-    public static void setTenant(String val) {
+    public static void setRealm(String val) {
         set(BaseContextConstants.JWT_KEY_REALM, val);
     }
 

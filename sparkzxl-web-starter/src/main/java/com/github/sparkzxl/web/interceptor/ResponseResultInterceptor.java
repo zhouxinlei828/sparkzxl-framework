@@ -31,7 +31,7 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
             BaseContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
             BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
             BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
-            BaseContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
+            BaseContextHolder.setRealm(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
             String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
             MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
             MDC.put(BaseContextConstants.JWT_KEY_REALM, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
