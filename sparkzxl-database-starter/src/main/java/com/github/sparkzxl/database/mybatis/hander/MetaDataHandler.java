@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.github.sparkzxl.core.context.BaseContextHandler;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.core.utils.ReflectObjectUtils;
 import com.github.sparkzxl.database.constant.EntityConstant;
 import com.github.sparkzxl.database.enums.IdTypeEnum;
@@ -131,7 +131,7 @@ public class MetaDataHandler implements MetaObjectHandler {
             Object userIdVal = ReflectObjectUtils.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(userIdVal) || userIdVal.equals(0)) {
                 Class<?> userIdClass = metaObject.getGetterType(field);
-                userIdVal = BaseContextHandler.getUserId(userIdClass);
+                userIdVal = BaseContextHolder.getUserId(userIdClass);
                 this.setFieldValByName(field, userIdVal, metaObject);
             }
         }
@@ -149,7 +149,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         if (userNameExistClass) {
             Object userNameVal = ReflectObjectUtils.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(userNameVal)) {
-                userNameVal = BaseContextHandler.getName();
+                userNameVal = BaseContextHolder.getName();
                 this.setFieldValByName(field, userNameVal, metaObject);
             }
         }

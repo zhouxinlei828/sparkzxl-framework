@@ -1,6 +1,5 @@
 package com.github.sparkzxl.hystrix.strategy;
 
-import com.github.sparkzxl.core.context.BaseContextHandler;
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
 import com.netflix.hystrix.strategy.HystrixPlugins;

@@ -1,8 +1,10 @@
 package com.github.sparkzxl.core.context;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.core.utils.StrPool;
+import com.google.common.collect.Maps;
+
+import java.util.Map;
 
 /**
  * description: 获取当前域中的 用户id, 用户昵称
@@ -10,29 +12,41 @@ import com.github.sparkzxl.core.utils.StrPool;
  *
  * @author zhouxinlei
  */
-public class BaseContextHandler {
+public class BaseContextHolder {
+
+    private static final ThreadLocal<Map<String, String>> CONTEXT_HOLDER_THREAD_LOCAL = new ThreadLocal<>();
 
     public static void set(String key, Object value) {
-        RequestContextHolderUtils.setAttribute(key, value == null ? StrPool.EMPTY : value.toString());
-    }
-
-    public static void remove(String key) {
-        RequestContextHolderUtils.removeAttribute(key);
+        Map<String, String> map = getLocalMap();
+        map.put(key, value == null ? StrPool.EMPTY : value.toString());
     }
 
     public static <T> T get(String key, Class<T> type) {
-        Object attribute = RequestContextHolderUtils.getAttribute(key);
-        return Convert.convert(type, attribute);
+        Map<String, String> map = getLocalMap();
+        return Convert.convert(type, map.get(key));
     }
 
     public static <T> T get(String key, Class<T> type, Object def) {
-        Object attribute = RequestContextHolderUtils.getAttribute(key);
-        return Convert.convert(type, attribute == null ? def : attribute);
+        Map<String, String> map = getLocalMap();
+        return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? StrPool.EMPTY : def)));
     }
 
     public static String get(String key) {
-        Object attribute = RequestContextHolderUtils.getAttribute(key);
-        return attribute == null ? "" : (String) attribute;
+        Map<String, String> map = getLocalMap();
+        return map.getOrDefault(key, StrPool.EMPTY);
+    }
+
+    public static Map<String, String> getLocalMap() {
+        Map<String, String> map = CONTEXT_HOLDER_THREAD_LOCAL.get();
+        if (map == null) {
+            map = Maps.newHashMap();
+            CONTEXT_HOLDER_THREAD_LOCAL.set(map);
+        }
+        return map;
+    }
+
+    public static void setLocalMap(Map<String, String> threadLocalMap) {
+        CONTEXT_HOLDER_THREAD_LOCAL.set(threadLocalMap);
     }
 
 
@@ -94,15 +108,15 @@ public class BaseContextHandler {
         set(BaseContextConstants.JWT_TOKEN_HEADER, token);
     }
 
-    public static String getRealm() {
+    public static String getTenant() {
         return get(BaseContextConstants.JWT_KEY_REALM, String.class, StrPool.EMPTY);
     }
 
     public static String getClientId() {
-        return get(BaseContextConstants.JWT_KEY_CLIENT_ID, String.class);
+        return get(BaseContextConstants.JWT_KEY_REALM, String.class);
     }
 
-    public static void setRealm(String val) {
+    public static void setTenant(String val) {
         set(BaseContextConstants.JWT_KEY_REALM, val);
     }
 
@@ -110,11 +124,21 @@ public class BaseContextHandler {
         set(BaseContextConstants.JWT_KEY_CLIENT_ID, val);
     }
 
+
     public static Boolean getBoot() {
         return get(BaseContextConstants.IS_BOOT, Boolean.class, false);
     }
 
+    /**
+     * 账号id
+     *
+     * @param val 是否boot
+     */
     public static void setBoot(Boolean val) {
         set(BaseContextConstants.IS_BOOT, val);
+    }
+
+    public static void remove() {
+        CONTEXT_HOLDER_THREAD_LOCAL.remove();
     }
 }

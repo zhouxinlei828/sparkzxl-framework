@@ -1,7 +1,7 @@
 package com.github.sparkzxl.database.plugins;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
-import com.github.sparkzxl.core.context.BaseContextHandler;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 
@@ -24,7 +24,7 @@ public class TenantLineHandlerImpl implements TenantLineHandler {
 
     @Override
     public Expression getTenantId() {
-        return new StringValue(BaseContextHandler.getRealm());
+        return new StringValue(BaseContextHolder.getTenant());
     }
 
     @Override
