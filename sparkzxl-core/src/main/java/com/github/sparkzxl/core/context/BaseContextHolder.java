@@ -108,16 +108,16 @@ public class BaseContextHolder {
         set(BaseContextConstants.JWT_TOKEN_HEADER, token);
     }
 
-    public static String getTenant() {
-        return get(BaseContextConstants.JWT_KEY_TENANT, String.class, StrPool.EMPTY);
+    public static String getRealm() {
+        return get(BaseContextConstants.JWT_KEY_REALM, String.class, StrPool.EMPTY);
     }
 
     public static String getClientId() {
-        return get(BaseContextConstants.JWT_KEY_TENANT, String.class);
+        return get(BaseContextConstants.JWT_KEY_REALM, String.class);
     }
 
     public static void setTenant(String val) {
-        set(BaseContextConstants.JWT_KEY_TENANT, val);
+        set(BaseContextConstants.JWT_KEY_REALM, val);
     }
 
     public static void setClientId(String val) {

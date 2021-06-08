@@ -24,7 +24,7 @@ public class TenantLineHandlerImpl implements TenantLineHandler {
 
     @Override
     public Expression getTenantId() {
-        return new StringValue(BaseContextHolder.getTenant());
+        return new StringValue(BaseContextHolder.getRealm());
     }
 
     @Override
