@@ -43,7 +43,7 @@ public class CustomMybatisProperties {
     /**
      * 租户字段
      */
-    private String tenantIdColumn = "realm_code";
+    private String tenantIdColumn = "tenant_code";
 
     /**
      * 租户默认不填充数据表

@@ -52,10 +52,10 @@ public class JwtUserInfo<T> {
     /**
      * 租户标识
      */
-    private String realm;
+    private String tenantId;
 
     /**
-     * 是否领域用户
+     * 是否租户管理员
      */
-    private boolean realmStatus;
+    private boolean tenantStatus;
 }

@@ -109,15 +109,15 @@ public class BaseContextHolder {
     }
 
     public static String getTenant() {
-        return get(BaseContextConstants.JWT_KEY_REALM, String.class, StrPool.EMPTY);
+        return get(BaseContextConstants.JWT_KEY_TENANT, String.class, StrPool.EMPTY);
     }
 
     public static String getClientId() {
-        return get(BaseContextConstants.JWT_KEY_REALM, String.class);
+        return get(BaseContextConstants.JWT_KEY_TENANT, String.class);
     }
 
     public static void setTenant(String val) {
-        set(BaseContextConstants.JWT_KEY_REALM, val);
+        set(BaseContextConstants.JWT_KEY_TENANT, val);
     }
 
     public static void setClientId(String val) {

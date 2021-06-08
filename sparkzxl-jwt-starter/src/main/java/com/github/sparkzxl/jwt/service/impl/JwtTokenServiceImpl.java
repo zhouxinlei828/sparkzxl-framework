@@ -119,12 +119,12 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         }
         String jti = jsonObject.getStr("jti");
         jwtUserInfo.setJti(jti);
-        String realm = jsonObject.getStr("realm");
-        jwtUserInfo.setRealm(realm);
+        String tenant = jsonObject.getStr("tenant");
+        jwtUserInfo.setTenantId(tenant);
         List authorities = jsonObject.get("authorities", List.class);
         jwtUserInfo.setAuthorities(authorities);
-        String realmStatus = jsonObject.getStr("realmStatus", "false");
-        jwtUserInfo.setRealmStatus(Boolean.parseBoolean(realmStatus));
+        String tenantStatus = jsonObject.getStr("tenantStatus", "false");
+        jwtUserInfo.setTenantStatus(Boolean.parseBoolean(tenantStatus));
         return jwtUserInfo;
     }
 

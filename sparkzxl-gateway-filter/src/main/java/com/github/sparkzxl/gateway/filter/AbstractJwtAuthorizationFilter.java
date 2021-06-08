@@ -67,11 +67,11 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
 
-                    String realm = WebFluxUtils.getHeader(BaseContextConstants.JWT_KEY_REALM, request);
-                    final String realmCode = StringUtils.isEmpty(realm) ? jwtUserInfo.getRealm() : realm;
-                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_REALM, realmCode);
+                    String tenantId = WebFluxUtils.getHeader(BaseContextConstants.JWT_KEY_TENANT, request);
+                    final String finalTenantId = StringUtils.isEmpty(tenantId) ? jwtUserInfo.getTenantId() : tenantId;
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_TENANT, finalTenantId);
                     MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
-                    MDC.put(BaseContextConstants.JWT_KEY_REALM, String.valueOf(realmCode));
+                    MDC.put(BaseContextConstants.JWT_KEY_TENANT, String.valueOf(finalTenantId));
                 }
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
