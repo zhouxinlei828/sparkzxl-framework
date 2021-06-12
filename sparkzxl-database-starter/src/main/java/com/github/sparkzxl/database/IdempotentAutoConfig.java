@@ -1,4 +1,4 @@
-package com.github.sparkzxl.database.config;
+package com.github.sparkzxl.database;
 
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.database.aspect.ApiIdempotentAspect;

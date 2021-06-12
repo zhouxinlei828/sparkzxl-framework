@@ -1,4 +1,4 @@
-package com.github.sparkzxl.database.config;
+package com.github.sparkzxl.database;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
@@ -6,11 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.github.sparkzxl.database.aspect.InjectionResultAspect;
 import com.github.sparkzxl.database.enums.IdTypeEnum;
-import com.github.sparkzxl.database.injection.InjectionCore;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
-import com.github.sparkzxl.database.mybatis.hander.RemoteDataTypeHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
@@ -19,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -91,32 +86,6 @@ public class MyBatisAutoConfiguration {
     @Bean
     public BaseSqlInjector sqlInjector() {
         return new BaseSqlInjector();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
-    public InjectionCore injectionCore(ApplicationContext applicationContext) {
-        return new InjectionCore(customMybatisProperties.getInjection(), applicationContext);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
-    public InjectionResultAspect getRemoteAspect(InjectionCore injectionCore) {
-        return new InjectionResultAspect(injectionCore);
-    }
-
-    /**
-     * Mybatis 类型处理器： 处理 RemoteData 类型的字段
-     *
-     * @return RemoteDataTypeHandler
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = {"mybatis-plus.custom.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
-    public RemoteDataTypeHandler remoteDataTypeHandler() {
-        return new RemoteDataTypeHandler();
     }
 
 }

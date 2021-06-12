@@ -74,7 +74,7 @@
 import groovy.json.JsonSlurper
 node {
     currentBuild.result = "SUCCESS"
-    echo "PWD: ${pwd()}"
+    echoField "PWD: ${pwd()}"
     env.PRO_ENV = "prod"
     // 默认设置
     env.VERSION = '1.0-SNAPSHOT'
@@ -90,11 +90,11 @@ node {
     try {
         stage('config') {
             maven_home = tool 'maven-3.6.3'
-            echo "Branch: ${env.BRANCH_NAME}, Environment: ${env.PRO_ENV}，maven_home：${maven_home}"
+            echoField "Branch: ${env.BRANCH_NAME}, Environment: ${env.PRO_ENV}，maven_home：${maven_home}"
             maven_home = tool 'maven-3.6.3'
         }
         stage('Prepare') {
-            echo "1.Prepare Stage"
+            echoField "1.Prepare Stage"
             checkout scm
             pom = readMavenPom file: 'pom.xml'
             // 读取配置信息
@@ -107,7 +107,7 @@ node {
                 appName = obj.appName
                 def envConfig = obj.env[env.PRO_ENV]
 
-                echo "envConfig: ${envConfig}"
+                echoField "envConfig: ${envConfig}"
 
                 env.VERSION = obj.version
 
@@ -117,23 +117,23 @@ node {
                 env.hostPort = envConfig.hostPort
                 env.serverPort = envConfig.serverPort
                 imageName = "${env.registryName}/${appName}:${env.PRO_ENV}-${env.VERSION}"
-                echo "VERSION: ${env.VERSION} imageName：${imageName}"
-                echo "host: ${env.host} containerName: ${env.containerName} hostPort: ${env.hostPort} serverPort: ${env.serverPort}"
+                echoField "VERSION: ${env.VERSION} imageName：${imageName}"
+                echoField "host: ${env.host} containerName: ${env.containerName} hostPort: ${env.hostPort} serverPort: ${env.serverPort}"
             }
             sh 'ls'
         }
 
         stage('Test') {
-            echo "2.Test Stage"
+            echoField "2.Test Stage"
         }
 
         stage('Build') {
-            echo "3.Build Maven Docker Image Stage"
+            echoField "3.Build Maven Docker Image Stage"
             sh "${maven_home}/bin/mvn clean package -Dmaven.test.skip=true -DsendCredentialsOverHttp=true"
         }
 
         stage('Deploy') {
-            echo "4.Deploy Docker Image Stage"
+            echoField "4.Deploy Docker Image Stage"
             withCredentials([usernamePassword(credentialsId: env.credentialsId, usernameVariable: 'USER', passwordVariable: 'PWD')]) {
                 def otherArgs = "-p ${env.hostPort}:${env.serverPort}" // 区分不同环境的启动参数
                 def remote = [:]

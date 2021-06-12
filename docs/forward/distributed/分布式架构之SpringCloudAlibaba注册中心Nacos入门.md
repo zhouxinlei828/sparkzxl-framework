@@ -411,9 +411,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "测试")
 public class TestController {
 
-    @ApiOperation("echo")
-    @GetMapping("/echo")
-    public String echo(String name) {
+    @ApiOperation("echoField")
+    @GetMapping("/echoField")
+    public String echoField(String name) {
         return "provider:" + name;
     }
 
@@ -428,7 +428,7 @@ public class TestController {
 > - 例如说，Spring Cloud Alibaba Nacos Discovery 提供了 **NacosDiscoveryClient** 实现，Spring Cloud Netflix Eureka 提供了 **EurekaDiscoveryClient** 实现。
 > - 如此，所有需要使用到的地方，只需要获取到 DiscoveryClient 客户端，而无需关注具体实现，保证其通用性。
 
-③ TestController 类，提供了 /echo 接口，返回 provider:${name} 结果。
+③ TestController 类，提供了 /echoField 接口，返回 provider:${name} 结果。
 
 #### 3.1.4 简单测试
 
@@ -564,7 +564,7 @@ public class TestController {
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
-    @ApiOperation("echo")
+    @ApiOperation("echoField")
     @GetMapping("/hello")
     public String hello(String name) {
         // <1> 获得服务 `nacos-provider` 的一个实例
@@ -581,7 +581,7 @@ public class TestController {
         if (instance == null) {
             throw new IllegalStateException("获取不到实例");
         }
-        String targetUrl = instance.getUri() + "/echo?name=" + name;
+        String targetUrl = instance.getUri() + "/echoField?name=" + name;
         String response = restTemplate.getForObject(targetUrl, String.class);
         // 返回结果
         return "consumer:" + response;

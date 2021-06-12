@@ -1,6 +1,7 @@
 package com.github.sparkzxl.database.properties;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.github.sparkzxl.database.echo.properties.EchoProperties;
 import com.github.sparkzxl.database.enums.IdTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -56,5 +57,5 @@ public class CustomMybatisProperties {
     private String[] mapperScan;
 
     @NestedConfigurationProperty
-    private InjectionProperties injection = new InjectionProperties();
+    private EchoProperties echo = new EchoProperties();
 }

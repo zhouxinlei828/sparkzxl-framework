@@ -107,7 +107,7 @@ public class InjectionCore {
     }
 
     /**
-     * 手动注入数据的3个步骤：（出现注入失败时，认真debug该方法）
+     * 回显数据的3个步骤：（出现回显失败时，认真debug该方法）
      * <p>
      * 1. 通过反射将obj的字段上标记了 @InjectionField 注解的字段解析出来
      * 2. 依次查询待注入的数据
@@ -288,11 +288,11 @@ public class InjectionCore {
             if (fieldParam == null) {
                 continue;
             }
-            InjectionField anno = fieldParam.getInjectionField();
+            InjectionField injectionField = fieldParam.getInjectionField();
             Object queryKey = fieldParam.getQueryKey();
             Object curField = fieldParam.getCurField();
 
-            InjectionFieldPo type = new InjectionFieldPo(anno);
+            InjectionFieldPo type = new InjectionFieldPo(injectionField);
             Map<Serializable, Object> valueMap = typeMap.get(type);
 
             if (valueMap == null || valueMap.isEmpty()) {
@@ -381,13 +381,13 @@ public class InjectionCore {
     /**
      * 获取查询用的key
      *
-     * @param anno
-     * @param curField
-     * @return
+     * @param injectionField 当前字段标记的注解
+     * @param curField       当前字段
+     * @return Serializable
      */
-    private Serializable getQueryKey(InjectionField anno, Object curField) {
-        String key = anno.key();
-        String dictType = anno.dictType();
+    private Serializable getQueryKey(InjectionField injectionField, Object curField) {
+        String key = injectionField.key();
+        String dictType = injectionField.dictType();
         Serializable queryKey;
         if (StrUtil.isNotEmpty(key)) {
             queryKey = key;

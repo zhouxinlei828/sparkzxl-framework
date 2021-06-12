@@ -20,5 +20,5 @@ public @interface InjectionResult {
      * <p>
      * 会有脏数据的可能，对数据敏感的系统请设置成false（或者全局设置成false），然后自行实现数据的缓存和淘汰。
      */
-    boolean isUseCache() default true;
+    boolean isUseCache() default false;
 }

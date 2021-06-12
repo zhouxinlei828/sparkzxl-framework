@@ -38,9 +38,9 @@
 ```dockerfile
 FROM centos:7
 MAINTAINER zhouxinlei <zhouxinlei298@163.com>
-RUN  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+RUN  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echoField 'Asia/Shanghai' >/etc/timezone
 ENV LANG="zh_CN.UTF-8"
-RUN echo "export LC_ALL=zh_CN.UTF-8"  >>  /etc/profile &&  echo "export LC_ALL=zh_CN.UTF-8" >>/root/.bashrc \
+RUN echoField "export LC_ALL=zh_CN.UTF-8"  >>  /etc/profile &&  echoField "export LC_ALL=zh_CN.UTF-8" >>/root/.bashrc \
         && localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
 RUN cd /usr/share/fonts/ \
         && chmod -R 755 /usr/share/fonts \

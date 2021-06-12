@@ -99,14 +99,14 @@ pipeline {
         stage('Example Build') {
             agent { docker 'maven:3-alpine' }
             steps {
-                echo 'Hello, Maven'
+                echoField 'Hello, Maven'
                 sh 'mvn --version'
             }
         }
         stage('Example Test') {
             agent { docker 'openjdk:8-jre' }
             steps {
-                echo 'Hello, JDK'
+                echoField 'Hello, JDK'
                 sh 'java -version'
             }
         }
@@ -220,7 +220,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
     }
@@ -247,14 +247,14 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo "Hello ${params.PERSON}"
+                echoField "Hello ${params.PERSON}"
                 script {
                     def split = ${params.server.split(",")}
                     serverIP = split[0]
                     sshport = split[1]
                     username = split[2]
                     password = split[3]
-                    echo "serverIP:${serverIP},sshport:${sshport},username:${username},password:${password}"
+                    echoField "serverIP:${serverIP},sshport:${sshport},username:${username},password:${password}"
                 }
             }
         }
@@ -263,7 +263,7 @@ pipeline {
                 script {
                     wrap([$class: 'BuildUser']) {
                         if(params.isCommit==false){
-                            echo "不需要通知部署人员人工验收"
+                            echoField "不需要通知部署人员人工验收"
                         }
                         else{
                             //邮件通知测试人员人工验收
@@ -295,7 +295,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
     }
@@ -312,7 +312,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
     }
@@ -364,7 +364,7 @@ pipeline {
     stages {
         stage('Example Build') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
         stage('Example Deploy') {
@@ -375,7 +375,7 @@ pipeline {
                 }
             }
             steps {
-                echo 'Deploying'
+                echoField 'Deploying'
             }
         }
     }
@@ -392,7 +392,7 @@ pipeline {
     stages {
         stage('Non-Parallel Stage') {
             steps {
-                echo 'This stage will be executed first.'
+                echoField 'This stage will be executed first.'
             }
         }
         stage('Parallel Stage') {
@@ -405,7 +405,7 @@ pipeline {
                         label "for-branch-a"
                     }
                     steps {
-                        echo "On Branch A"
+                        echoField "On Branch A"
                     }
                 }
                 stage('Branch B') {
@@ -413,7 +413,7 @@ pipeline {
                         label "for-branch-b"
                     }
                     steps {
-                        echo "On Branch B"
+                        echoField "On Branch B"
                     }
                 }
             }
@@ -436,11 +436,11 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
                 script {
                     def browsers = ['chrome', 'firefox']
                     for (int i = 0; i < browsers.size(); ++i) {
-                        echo "Testing the ${browsers[i]} browser"
+                        echoField "Testing the ${browsers[i]} browser"
                     }
                 }
             }
@@ -460,9 +460,9 @@ Jenkinsfile (Scripted Pipeline)
 node {
     stage('Example') {
         if (env.BRANCH_NAME == 'master') {
-            echo 'I only execute on the master branch'
+            echoField 'I only execute on the master branch'
         } else {
-            echo 'I execute elsewhere'
+            echoField 'I execute elsewhere'
         }
     }
 }
@@ -478,7 +478,7 @@ node {
             sh 'exit 1'
         }
         catch (exc) {
-            echo 'Something failed, I should sound the klaxons!'
+            echoField 'Something failed, I should sound the klaxons!'
             throw
         }
     }

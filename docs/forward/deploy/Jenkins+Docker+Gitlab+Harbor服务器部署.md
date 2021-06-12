@@ -14,10 +14,10 @@ chmod 777 install.sh
 ### 2.2 新建install.sh脚本文件
 ```bash
 #!/bin/bash
-echo "step 1 -> 创建jenkins挂载目录------"
+echoField "step 1 -> 创建jenkins挂载目录------"
 mkdir -p /usr/local/docker/jenkins/jenkins_home
 chmod 777 /usr/local/docker/jenkins/jenkins_home
-echo "step 2 -> 创建docker-compose.yaml模板文件------"
+echoField "step 2 -> 创建docker-compose.yaml模板文件------"
 cd /usr/local/docker/jenkins/
 cat <<EOF > docker-compose.yaml
 version: '3'
@@ -36,7 +36,7 @@ services:
    volumes:
     - '/usr/local/docker/jenkins/jenkins_home:/var/jenkins_home'
 EOF
-echo "step 3 -> docker-compose启动运行jenkins容器"
+echoField "step 3 -> docker-compose启动运行jenkins容器"
 docker-compose up -d
 sleep 1
 docker ps -a
