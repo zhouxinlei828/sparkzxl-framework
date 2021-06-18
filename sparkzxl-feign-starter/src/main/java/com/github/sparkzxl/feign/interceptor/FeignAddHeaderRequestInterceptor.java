@@ -50,10 +50,8 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
             return;
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
-            String header = BaseContextHolder.get(headerName);
-            if (StringUtils.isNotEmpty(header)) {
-                template.header(headerName, BaseContextHolder.get(headerName));
-            }
+            String header = requestAttributes.getRequest().getHeader(headerName);
+            template.header(headerName, StringUtils.isNotEmpty(header) ? header : BaseContextHolder.get(headerName));
         });
     }
 }

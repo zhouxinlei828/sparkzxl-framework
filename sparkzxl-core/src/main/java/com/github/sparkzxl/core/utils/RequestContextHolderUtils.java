@@ -27,7 +27,7 @@ public class RequestContextHolderUtils {
     }
 
     public static ServletRequestAttributes getRequestAttributes() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         RequestContextHolder.setRequestAttributes(servletRequestAttributes, true);
         return servletRequestAttributes;
     }
