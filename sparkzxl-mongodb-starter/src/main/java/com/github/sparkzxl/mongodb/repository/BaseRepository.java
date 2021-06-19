@@ -37,8 +37,12 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     protected Class<T> entityClass;
 
-    @Autowired
     protected MongoTemplate mongoTemplate;
+
+    @Autowired
+    public void setMongoTemplate(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
     public int insert(T entity) {
