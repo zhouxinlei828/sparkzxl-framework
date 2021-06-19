@@ -127,6 +127,8 @@
         <appender-ref ref="kafkaAppender"/>
     </appender>
 
+    <logger name="springfox.documentation" level="OFF"/>
+
     <root level="INFO">
         <if condition='property("enableFile").contains("true")'>
             <then>
