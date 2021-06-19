@@ -26,7 +26,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
     private final boolean seataEnable;
 
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            BaseContextConstants.JWT_KEY_REALM, BaseContextConstants.JWT_KEY_USER_ID,
+            BaseContextConstants.TENANT, BaseContextConstants.JWT_KEY_USER_ID,
             BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
             BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
     );
