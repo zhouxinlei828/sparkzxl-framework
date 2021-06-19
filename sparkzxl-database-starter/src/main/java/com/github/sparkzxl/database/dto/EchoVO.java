@@ -6,7 +6,6 @@ import java.util.Map;
  * description: 注入VO 父类
  *
  * @author zhouxinlei
- * @date 2021-06-09 10:24:25
  */
 public interface EchoVO {
 

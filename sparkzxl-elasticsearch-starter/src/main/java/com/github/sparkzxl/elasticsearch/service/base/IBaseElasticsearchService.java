@@ -11,7 +11,6 @@ import java.util.Map;
  * description: 通用es操作 服务类
  *
  * @author zhouxinlei
- * @date 2021-04-17 08:37:05
  */
 public interface IBaseElasticsearchService {
 

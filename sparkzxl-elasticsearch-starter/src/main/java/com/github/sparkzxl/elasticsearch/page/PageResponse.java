@@ -8,7 +8,6 @@ import java.util.List;
  * description: es分页实体类
  *
  * @author zhouxinlei
- * @date 2021-04-17 13:48:05
  */
 @Data
 public class PageResponse<T> {

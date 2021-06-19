@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
  * description: 基于xss的 json 序列化器
  *
  * @author zhouxinlei
- * @date 2021-05-31 14:01:46
  */
 @Slf4j
 public class XssStringJsonSerializer extends JsonSerializer<String> {

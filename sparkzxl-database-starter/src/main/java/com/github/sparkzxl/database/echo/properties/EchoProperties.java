@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * description: 回显配置类
  *
  * @author zhouxinlei
- * @date 2021-06-09 10:34:35
  */
 @Data
 @ConfigurationProperties(

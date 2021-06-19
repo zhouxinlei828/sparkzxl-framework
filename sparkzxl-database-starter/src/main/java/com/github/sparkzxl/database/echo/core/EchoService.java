@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * 3. 将查询出来结果回显到obj的 @Echo注解的字段中
  *
  * @author zuihou
- * @date 2019/11/13
  */
 @Slf4j
 public class EchoService {

@@ -8,7 +8,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
  * description: 进程日志事件处理器
  *
  * @author zhouxinlei
- * @date 2021-06-04 09:45:47
  */
 public class LoggerEventHandler implements EventHandler<LoggerEvent> {
 

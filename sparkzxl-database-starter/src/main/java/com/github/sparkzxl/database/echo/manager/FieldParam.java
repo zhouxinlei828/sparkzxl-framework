@@ -12,7 +12,6 @@ import java.io.Serializable;
  * description: 封装字段上标记了 Echo 注解的字段
  *
  * @author zhouxinlei
- * @date 2021-06-09 10:15:33
  */
 @Data
 @AllArgsConstructor

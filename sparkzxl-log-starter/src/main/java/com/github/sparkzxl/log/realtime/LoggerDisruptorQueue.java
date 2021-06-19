@@ -15,7 +15,6 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * description: Disruptor 环形队列
  *
  * @author zhouxinlei
- * @date 2021-06-04 10:08:47
  */
 public class LoggerDisruptorQueue {
 

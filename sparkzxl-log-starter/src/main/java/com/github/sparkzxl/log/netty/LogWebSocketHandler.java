@@ -31,7 +31,6 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * description: WebSocket处理器，处理websocket连接相关
  *
  * @author zhouxinlei
- * @date 2021-06-06 12:33:17
  */
 @Slf4j
 @ChannelHandler.Sharable

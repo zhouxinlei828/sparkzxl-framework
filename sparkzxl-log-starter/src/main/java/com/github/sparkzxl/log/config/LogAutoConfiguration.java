@@ -15,7 +15,6 @@ import org.springframework.core.env.Environment;
  * description: 日志增强自动装配
  *
  * @author zhouxinlei
- * @date 2021-05-23 13:07:55
  */
 @Configuration
 @EnableConfigurationProperties(value = {LogProperties.class})

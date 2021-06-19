@@ -13,10 +13,9 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import java.lang.reflect.Method;
 
 /**
- * description: 且免工具类
+ * description: 切面工具类
  *
  * @author charles.zhou
- * @date 2021-05-19 13:56:05
  */
 public class AspectUtils {
 

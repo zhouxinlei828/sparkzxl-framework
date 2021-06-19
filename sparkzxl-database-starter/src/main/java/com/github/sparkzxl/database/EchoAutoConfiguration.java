@@ -18,7 +18,6 @@ import java.util.Map;
  * description: 回显自动装配
  *
  * @author zhouxinlei
- * @date 2021-06-09 10:38
  */
 @Configuration
 @AllArgsConstructor

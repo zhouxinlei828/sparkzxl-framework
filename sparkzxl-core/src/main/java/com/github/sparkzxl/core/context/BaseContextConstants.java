@@ -74,9 +74,14 @@ public class BaseContextConstants {
     public static final String JWT_KEY_CLIENT_ID = "client_id";
 
     /**
-     * JWT中封装的 租户编码
+     * 租户标识
      */
     public static final String TENANT = "tenant";
+
+    /**
+     * 租户状态
+     */
+    public static final String TENANT_STATUS = "tenantStatus";
     /**
      * 刷新 Token
      */

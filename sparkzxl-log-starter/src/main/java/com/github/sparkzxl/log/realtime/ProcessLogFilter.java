@@ -15,7 +15,6 @@ import java.sql.Date;
  * description: 实时日志过滤器
  *
  * @author zhouxinlei
- * @date 2021-06-04 09:33
  */
 public class ProcessLogFilter extends Filter<ILoggingEvent> {
 

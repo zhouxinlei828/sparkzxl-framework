@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * description: api幂等自动装配
  *
  * @author charles.zhou
- * @date 2021-05-19 14:48:42
  */
 @Configuration
 public class IdempotentAutoConfig {

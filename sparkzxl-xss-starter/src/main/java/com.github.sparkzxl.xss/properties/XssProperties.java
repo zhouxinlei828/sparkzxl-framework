@@ -10,7 +10,6 @@ import java.util.List;
  * description: 忽略XSS 配置类
  *
  * @author zhouxinlei
- * @date 2021-05-31 13:54:47
  */
 @Data
 @ConfigurationProperties(prefix = XssProperties.PREFIX)

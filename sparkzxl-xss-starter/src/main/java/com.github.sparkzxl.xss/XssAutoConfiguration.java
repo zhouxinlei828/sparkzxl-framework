@@ -21,7 +21,6 @@ import static com.github.sparkzxl.xss.filter.XssFilter.IGNORE_PATH;
  * XSS 跨站攻击自动配置
  *
  * @author zuihou
- * @date 2019/07/25
  */
 @AllArgsConstructor
 @EnableConfigurationProperties({XssProperties.class})

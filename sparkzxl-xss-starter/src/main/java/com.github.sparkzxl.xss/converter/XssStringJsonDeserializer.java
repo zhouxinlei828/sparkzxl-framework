@@ -15,7 +15,6 @@ import java.util.List;
  * description: 过滤跨站脚本的 反序列化工具
  *
  * @author zhouxinlei
- * @date 2021-05-31 14:02:02
  */
 public class XssStringJsonDeserializer extends JsonDeserializer<String> {
 

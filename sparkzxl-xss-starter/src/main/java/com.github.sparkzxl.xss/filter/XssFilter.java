@@ -16,7 +16,6 @@ import java.util.List;
  * description: 跨站工具 过滤器
  *
  * @author zhouxinlei
- * @date 2021-05-31 14:02:15
  */
 @Slf4j
 public class XssFilter implements Filter {

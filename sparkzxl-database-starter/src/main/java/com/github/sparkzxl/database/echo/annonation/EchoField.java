@@ -21,7 +21,6 @@ import static cn.hutool.core.text.CharSequenceUtil.EMPTY;
  * private RemoteData<String, User>  user;
  *
  * @author zhouxinlei
- * @date 2021-06-09 10:08:25
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})

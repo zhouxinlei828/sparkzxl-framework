@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
  * description: 公共属性
  *
  * @author zhouxinlei
- * @date 2021-05-15 13:48:02
  */
 @Data
 public class Entity<E> implements Serializable {

@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
  * description: 短链生成工具
  *
  * @author charles.zhou
- * @date 2021-05-26 11:00:34
  */
 public class ShortUrlTool {
 

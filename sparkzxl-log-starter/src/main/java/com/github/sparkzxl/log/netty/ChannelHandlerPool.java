@@ -8,7 +8,6 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * description: 通道组池，管理所有websocket连接
  *
  * @author zhouxinlei
- * @date 2021-06-06 09:27
  */
 public class ChannelHandlerPool {
 

@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
  * description: 用户行为信息
  *
  * @author zhouxinlei
- * @date 2021-05-23 21:02:31
  */
 @Data
 public class UserBehaviorLogInfo {

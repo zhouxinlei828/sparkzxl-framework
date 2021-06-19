@@ -13,7 +13,6 @@ import java.util.List;
  * description: 公共服务类
  *
  * @author zhouxinlei
- * @date 2021-05-15 13:51:54
  */
 public interface ISuperService<T extends Entity> {
 

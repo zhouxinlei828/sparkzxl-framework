@@ -13,7 +13,6 @@ import java.sql.*;
  * 将数据库中 bigint、int、varchar类型的字段映射成JavaBean中 RemoteData 类型的字段
  *
  * @author zhouxinlei
- * @date 2021-06-09 10:15:50
  */
 public class RemoteDataTypeHandler extends BaseTypeHandler<RemoteData> {
     /**

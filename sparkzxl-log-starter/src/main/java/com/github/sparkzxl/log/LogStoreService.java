@@ -10,7 +10,6 @@ import java.util.Map;
  * description: 日志持久化存储 服务类
  *
  * @author zhouxinlei
- * @date 2021-05-23 16:25:21
  */
 public interface LogStoreService {
 

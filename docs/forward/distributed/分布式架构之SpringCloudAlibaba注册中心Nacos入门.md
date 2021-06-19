@@ -379,7 +379,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * description: nacos provider
  *
  * @author charles.zhou
- * @date 2021-05-11 10:41:35
  */
 @SpringBootApplication(scanBasePackages = {"com.github.sparkzxl.nacos"})
 public class NacosProviderApplication extends SparkBootApplication {

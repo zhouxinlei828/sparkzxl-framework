@@ -4,7 +4,6 @@ package com.github.sparkzxl.database.enums;
  * description: id生成策略枚举
  *
  * @author zhouxinlei
- * @date 2021-05-15 13:27:19
  */
 public enum IdTypeEnum {
 

@@ -6,7 +6,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-05-27 15:27
  */
 public interface CacheKeyGenerator {
 

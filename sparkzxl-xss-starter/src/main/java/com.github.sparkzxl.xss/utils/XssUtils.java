@@ -14,7 +14,6 @@ import java.util.List;
  * description: XSS 工具类， 用于过滤特殊字符
  *
  * @author zhouxinlei
- * @date 2021-05-31 14:02:59
  */
 @Slf4j
 public final class XssUtils {

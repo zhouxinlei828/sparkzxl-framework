@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * description: Swagger 配置
  *
  * @author charles.zhou
- * @date 2021-05-12 16:10:33
  */
 public class SwaggerWebMvcConfigurer implements WebMvcConfigurer {
     @Override
