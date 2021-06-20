@@ -29,7 +29,7 @@ public class UserAgentUtils extends UserAgentUtil {
         String browserVersion = userAgent.getVersion();
         String clientIp = ServletUtil.getClientIP(request);
         String region = AddressUtil.getRegion(clientIp);
-        if (StringUtils.isNotEmpty(region)){
+        if (StringUtils.isNotEmpty(region)) {
             JSONObject locationJsonObj = JSONObject.parseObject(region);
             String address = locationJsonObj.getString("region");
             String[] split = StringUtils.split(address, "|");

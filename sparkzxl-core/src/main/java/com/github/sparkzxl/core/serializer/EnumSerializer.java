@@ -14,7 +14,7 @@ import java.util.Map;
  * {"code": "XX","desc": "xxxx"}
  *
  * @author zhouxinlei
-*/
+ */
 public class EnumSerializer extends StdSerializer<Enumerator> {
 
     public final static EnumSerializer INSTANCE = new EnumSerializer();

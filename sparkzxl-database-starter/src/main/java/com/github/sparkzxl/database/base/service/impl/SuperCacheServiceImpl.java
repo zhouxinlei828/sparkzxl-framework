@@ -28,7 +28,6 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
 
-
     /**
      * 缓存key模板
      *

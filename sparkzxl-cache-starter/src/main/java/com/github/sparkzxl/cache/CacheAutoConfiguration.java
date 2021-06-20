@@ -1,4 +1,4 @@
-package com.github.sparkzxl.cache.config;
+package com.github.sparkzxl.cache;
 
 import com.github.sparkzxl.cache.template.CaffeineCacheImpl;
 import com.github.sparkzxl.cache.template.GeneralCacheService;

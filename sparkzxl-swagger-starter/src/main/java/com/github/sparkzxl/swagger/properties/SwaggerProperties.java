@@ -12,7 +12,7 @@ import java.util.Map;
  * description: swagger2 属性配置
  *
  * @author zhouxinlei
-*/
+ */
 @Data
 @ConfigurationProperties(prefix = SwaggerProperties.PREFIX)
 public class SwaggerProperties {

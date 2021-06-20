@@ -1,19 +1,23 @@
-package com.github.sparkzxl.cache.config;
+package com.github.sparkzxl.cache;
 
+import com.github.sparkzxl.cache.redis.RedisOps;
 import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.cache.template.RedisCacheImpl;
 import com.github.sparkzxl.cache.utils.CacheTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -48,6 +52,14 @@ public class RedisConfiguration {
         return redisTemplate;
     }
 
+    @Bean("stringRedisTemplate")
+    @ConditionalOnBean(RedisConnectionFactory.class)
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
+
     @Bean("redisCacheTemplate")
     @ConditionalOnBean(RedisTemplate.class)
     @Primary
@@ -61,5 +73,10 @@ public class RedisConfiguration {
         return new CacheTokenUtils(generalCacheService);
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisOps redisOps(@Qualifier("redisTemplate") RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
+        return new RedisOps(redisTemplate, stringRedisTemplate, true);
+    }
 
 }

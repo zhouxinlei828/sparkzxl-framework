@@ -16,7 +16,7 @@ import java.util.Map;
  * description: 分页参数
  *
  * @author zhouxinlei
-*/
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PageParams", description = "分页参数")

@@ -75,7 +75,7 @@ public interface StrPool {
     /**
      * 编码
      */
-     String UTF8 = "UTF-8";
+    String UTF8 = "UTF-8";
     /**
      * JSON 资源
      */

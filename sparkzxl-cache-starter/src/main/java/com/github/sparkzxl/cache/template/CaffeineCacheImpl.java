@@ -16,7 +16,6 @@ import java.util.function.Function;
  *
  * @author zhouxinlei
  */
-@SuppressWarnings("unchecked")
 public class CaffeineCacheImpl implements GeneralCacheService {
 
     long maxSize = 1000L;
