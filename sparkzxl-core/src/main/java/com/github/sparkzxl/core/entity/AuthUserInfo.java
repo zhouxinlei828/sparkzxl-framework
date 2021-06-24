@@ -56,4 +56,9 @@ public class AuthUserInfo<T> implements Serializable {
      */
     private String tenant;
 
+    /**
+     * 是否租户管理员
+     */
+    private Boolean tenantStatus;
+
 }
