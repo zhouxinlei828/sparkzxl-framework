@@ -22,7 +22,7 @@ import java.util.Objects;
 import static org.springframework.beans.factory.config.AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
 /**
- * description:
+ * description: feign异常处理
  *
  * @author zhouxinlei
  */

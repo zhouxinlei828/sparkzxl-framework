@@ -14,8 +14,7 @@ import java.util.Map;
 public class LogJdbcServiceImpl implements LogStoreService {
 
     @Override
-    public boolean saveLog(RequestInfo requestInfo) {
-        return false;
+    public void saveLog(RequestInfo requestInfo) {
     }
 
     @Override

@@ -17,9 +17,8 @@ public interface LogStoreService {
      * 保存web日志
      *
      * @param requestInfo 请求日志实
-     * @return boolean
      */
-    boolean saveLog(RequestInfo requestInfo);
+    void saveLog(RequestInfo requestInfo);
 
     /**
      * 保存日志
