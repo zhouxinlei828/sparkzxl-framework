@@ -1,8 +1,7 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.SneakyThrows;
@@ -32,7 +31,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.core.annotation.ResponseResult responseResult = (com.github.sparkzxl.core.annotation.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
 
@@ -43,7 +42,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (body instanceof ApiResult) {
+        if (body instanceof ResponseResult) {
             return body;
         }
         Object returnBody = body;
@@ -62,6 +61,6 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
             code = ApiResponseStatus.FAILURE.getCode();
             message = ApiResponseStatus.FAILURE.getMessage();
         }
-        return ApiResult.apiResult(code, message, returnBody);
+        return ResponseResult.apiResult(code, message, returnBody);
     }
 }

@@ -6,9 +6,8 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,7 @@ public class SentinelExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.core.annotation.ResponseResult responseResult = (com.github.sparkzxl.core.annotation.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
@@ -38,36 +37,36 @@ public class SentinelExceptionHandler {
     }
 
     @ExceptionHandler(value = FlowException.class)
-    public ApiResult blockExceptionHandler(FlowException flowException) {
+    public ResponseResult blockExceptionHandler(FlowException flowException) {
         handleResponseResult();
         log.error("请求被拦截，拦截类型为：[{}], message：[{}]", flowException.getClass().getSimpleName(), flowException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.REQ_LIMIT, flowException.getMessage());
+        return ResponseResult.apiResult(ApiResponseStatus.REQ_LIMIT, flowException.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
-    public ApiResult blockExceptionHandler(AuthorityException authorityException) {
+    public ResponseResult blockExceptionHandler(AuthorityException authorityException) {
         handleResponseResult();
         log.error("请求被拦截，拦截类型为：[{}], message：[{}]", authorityException.getClass().getSimpleName(), authorityException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.REQ_BLACKLIST, authorityException.getMessage());
+        return ResponseResult.apiResult(ApiResponseStatus.REQ_BLACKLIST, authorityException.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
-    public ApiResult blockExceptionHandler(SystemBlockException systemBlockException) {
+    public ResponseResult blockExceptionHandler(SystemBlockException systemBlockException) {
         handleResponseResult();
         log.error("请求被拦截，拦截类型为：[{}], message：[{}]", systemBlockException.getClass().getSimpleName(), systemBlockException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.SYSTEM_BLOCK, systemBlockException.getMessage());
+        return ResponseResult.apiResult(ApiResponseStatus.SYSTEM_BLOCK, systemBlockException.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
-    public ApiResult blockExceptionHandler(ParamFlowException paramFlowException) {
+    public ResponseResult blockExceptionHandler(ParamFlowException paramFlowException) {
         handleResponseResult();
         log.error("请求被拦截，拦截类型为：[{}], message：[{}]", paramFlowException.getClass().getSimpleName(), paramFlowException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_FLOW, paramFlowException.getMessage());
+        return ResponseResult.apiResult(ApiResponseStatus.PARAM_FLOW, paramFlowException.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
-    public ApiResult blockExceptionHandler(DegradeException degradeException) {
+    public ResponseResult blockExceptionHandler(DegradeException degradeException) {
         log.error("请求被拦截，拦截类型为：[{}], message：[{}]", degradeException.getClass().getSimpleName(), degradeException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
+        return ResponseResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
 }

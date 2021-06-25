@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.filter;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
@@ -137,7 +137,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
     protected Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
-        byte[] bytes = JSON.toJSONString(ApiResult.apiResult(code, message)).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(ResponseResult.apiResult(code, message)).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }

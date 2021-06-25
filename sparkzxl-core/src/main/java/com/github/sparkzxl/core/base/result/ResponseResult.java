@@ -1,39 +1,27 @@
 package com.github.sparkzxl.core.base.result;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 /**
- * description: API接口响应结果
+ * description: web接口响应结果
  *
  * @author zhouxinlei
  */
-@NoArgsConstructor
 @Setter
 @Getter
 @Accessors(chain = true)
-public class ApiResult<T> implements Serializable {
+public class ResponseResult<T> implements Serializable {
 
-    private static final long serialVersionUID = -219969750248052449L;
+    private static final long serialVersionUID = 2887200772504212877L;
+
     private int code;
     private boolean success;
     private String msg;
     private T data;
-
-    public ApiResult(int code, boolean success, String msg, T data) {
-        this.code = code;
-        this.success = success;
-        this.msg = msg;
-        this.data = data;
-    }
-
-    public static <T> ApiResultBuilder<T> builder() {
-        return new ApiResultBuilder<>();
-    }
 
     /**
      * 返回结果
@@ -42,8 +30,8 @@ public class ApiResult<T> implements Serializable {
      * @param msg  信息
      * @return ApiResult
      */
-    public static ApiResult apiResult(int code, String msg) {
-        return ApiResult.builder().code(code).msg(msg).build();
+    public static ResponseResult apiResult(int code, String msg) {
+        return ResponseResult.builder().code(code).msg(msg).build();
     }
 
     /**
@@ -54,8 +42,8 @@ public class ApiResult<T> implements Serializable {
      * @param data 数据
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(int code, String msg, T data) {
-        return ApiResult.builder().code(code).msg(msg).data(data).build();
+    public static <T> ResponseResult apiResult(int code, String msg, T data) {
+        return ResponseResult.builder().code(code).msg(msg).data(data).build();
     }
 
     /**
@@ -64,8 +52,8 @@ public class ApiResult<T> implements Serializable {
      * @param resultStatus API操作码
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(ApiResponseStatus resultStatus) {
-        return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).build();
+    public static <T> ResponseResult apiResult(ApiResponseStatus resultStatus) {
+        return ResponseResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).build();
     }
 
     /**
@@ -75,8 +63,8 @@ public class ApiResult<T> implements Serializable {
      * @param data         数据
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(ApiResponseStatus resultStatus, T data) {
-        return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).data(data).build();
+    public static <T> ResponseResult apiResult(ApiResponseStatus resultStatus, T data) {
+        return ResponseResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).data(data).build();
     }
 
     /**
@@ -84,13 +72,17 @@ public class ApiResult<T> implements Serializable {
      *
      * @return ApiResult
      */
-    public static <T> ApiResult timeOut() {
-        return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
+    public static <T> ResponseResult timeOut() {
+        return ResponseResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
+
+    public static <T> ApiResultBuilder<T> builder() {
+        return new ApiResultBuilder<>();
+    }
+
 
     public static class ApiResultBuilder<T> {
         private int code;
-        private boolean success;
         private String msg;
         private T data;
 
@@ -113,8 +105,12 @@ public class ApiResult<T> implements Serializable {
             return this;
         }
 
-        public ApiResult<T> build() {
-            return new ApiResult<>(this.code, this.code == ApiResponseStatus.SUCCESS.getCode(), this.msg, this.data);
+        public ResponseResult<T> build() {
+            return new ResponseResult<T>()
+                    .setCode(this.code)
+                    .setSuccess(this.code == ApiResponseStatus.SUCCESS.getCode())
+                    .setMsg(this.msg)
+                    .setData(this.data);
         }
     }
 }

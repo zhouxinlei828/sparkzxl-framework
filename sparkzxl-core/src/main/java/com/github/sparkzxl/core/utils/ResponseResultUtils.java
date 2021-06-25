@@ -3,7 +3,7 @@ package com.github.sparkzxl.core.utils;
 
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,7 @@ public class ResponseResultUtils {
         try {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.apiResult(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -42,7 +42,7 @@ public class ResponseResultUtils {
         try {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg, data)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.apiResult(code, msg, data)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -55,7 +55,7 @@ public class ResponseResultUtils {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(code);
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.apiResult(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -68,7 +68,7 @@ public class ResponseResultUtils {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(ApiResponseStatus.AUTHORIZED_DENIED.getCode());
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.apiResult(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -1,8 +1,7 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.core.annotation.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.context.BaseContextConstants;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
@@ -41,7 +40,7 @@ public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.core.annotation.ResponseResult responseResult = (com.github.sparkzxl.core.annotation.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
@@ -49,43 +48,43 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BizException.class)
-    public ApiResult businessException(BizException e) {
+    public ResponseResult businessException(BizException e) {
         handleResponseResult();
         log.error("BusinessException：[{}]", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
-        return ApiResult.apiResult(code, message);
+        return ResponseResult.apiResult(code, message);
     }
 
     @ExceptionHandler(NestedServletException.class)
-    public ApiResult businessException(NestedServletException e) {
+    public ResponseResult businessException(NestedServletException e) {
         handleResponseResult();
         log.error("NestedServletException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.FAILURE);
+        return ResponseResult.apiResult(ApiResponseStatus.FAILURE);
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
-    public ApiResult serviceDegradeException(ServiceDegradeException e) {
+    public ResponseResult serviceDegradeException(ServiceDegradeException e) {
         handleResponseResult();
         log.error("ServiceDegradeException：[{}]", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
-        return ApiResult.apiResult(code, message);
+        return ResponseResult.apiResult(code, message);
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ResponseResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
         handleResponseResult();
         log.error("MethodArgumentNotValidException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
+        return ResponseResult.apiResult(ApiResponseStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResult illegalArgumentException(IllegalArgumentException e) {
+    public ResponseResult illegalArgumentException(IllegalArgumentException e) {
         handleResponseResult();
         log.error("IllegalArgumentException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR);
+        return ResponseResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR);
     }
 
     private String bindingResult(BindingResult bindingResult) {
@@ -100,49 +99,49 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({AccountNotFoundException.class, PasswordException.class})
-    public ApiResult passwordException(Exception e) {
+    public ResponseResult passwordException(Exception e) {
         handleResponseResult();
         log.error("AccountNotFoundException|PasswordException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.UN_AUTHORIZED.getCode(), e.getMessage());
+        return ResponseResult.apiResult(ApiResponseStatus.UN_AUTHORIZED.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ApiResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ResponseResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         handleResponseResult();
         log.error("HttpRequestMethodNotSupportedException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.METHOD_NOT_SUPPORTED);
+        return ResponseResult.apiResult(ApiResponseStatus.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ApiResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public ResponseResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
         handleResponseResult();
         log.error("HttpMessageNotReadableException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.MSG_NOT_READABLE);
+        return ResponseResult.apiResult(ApiResponseStatus.MSG_NOT_READABLE);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ApiResult notFoundPage404(NoHandlerFoundException e) {
+    public ResponseResult notFoundPage404(NoHandlerFoundException e) {
         handleResponseResult();
         log.error("NoHandlerFoundException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.NOT_FOUND);
+        return ResponseResult.apiResult(ApiResponseStatus.NOT_FOUND);
     }
 
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ApiResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+    public ResponseResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         handleResponseResult();
         log.error("HttpMediaTypeNotSupportedException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED);
+        return ResponseResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
-    public ApiResult handleSqlException(SQLException e) {
+    public ResponseResult handleSqlException(SQLException e) {
         handleResponseResult();
         log.error("SQLException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
+        return ResponseResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
     }
 
 }
