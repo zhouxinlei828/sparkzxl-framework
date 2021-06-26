@@ -1,8 +1,8 @@
 package com.github.sparkzxl.web.interceptor;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.annotation.ResponseResult;
-import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.annotation.result.WebResult;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -46,10 +46,10 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
             final HandlerMethod handlerMethod = (HandlerMethod) handler;
             final Class<?> classz = handlerMethod.getBeanType();
             final Method method = handlerMethod.getMethod();
-            if (classz.isAnnotationPresent(ResponseResult.class)) {
-                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, classz.getAnnotation(ResponseResult.class));
-            } else if (method.isAnnotationPresent(ResponseResult.class)) {
-                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(ResponseResult.class));
+            if (classz.isAnnotationPresent(WebResult.class)) {
+                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, classz.getAnnotation(WebResult.class));
+            } else if (method.isAnnotationPresent(WebResult.class)) {
+                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(WebResult.class));
             }
         }
         return true;

@@ -4,15 +4,14 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.github.sparkzxl.constant.EntityConstant;
 import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.core.utils.ReflectObjectUtils;
-import com.github.sparkzxl.database.constant.EntityConstant;
-import com.github.sparkzxl.database.enums.IdTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-
+import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import java.time.LocalDateTime;
 import java.util.Date;
 

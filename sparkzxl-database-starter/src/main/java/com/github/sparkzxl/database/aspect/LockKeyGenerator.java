@@ -1,7 +1,7 @@
 package com.github.sparkzxl.database.aspect;
 
-import com.github.sparkzxl.core.annotation.ApiIdempotent;
-import com.github.sparkzxl.core.annotation.ApiIdempotentParam;
+import com.github.sparkzxl.annotation.ApiIdempotent;
+import com.github.sparkzxl.annotation.ApiIdempotentParam;
 import com.github.sparkzxl.core.generator.CacheKeyGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

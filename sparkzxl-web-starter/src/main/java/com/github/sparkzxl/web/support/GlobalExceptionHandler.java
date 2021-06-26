@@ -1,8 +1,9 @@
 package com.github.sparkzxl.web.support;
 
+import com.github.sparkzxl.annotation.result.WebResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
-import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -40,7 +41,8 @@ public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        com.github.sparkzxl.core.annotation.ResponseResult responseResult = (com.github.sparkzxl.core.annotation.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        WebResult responseResult =
+                (WebResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);

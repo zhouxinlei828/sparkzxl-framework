@@ -1,5 +1,6 @@
 package com.github.sparkzxl.swagger.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -14,10 +15,8 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = SwaggerProperties.PREFIX)
+@ConfigurationProperties(prefix = ConfigurationConstant.KNIFE4J_PREFIX)
 public class SwaggerProperties {
-
-    public static final String PREFIX = "knife4j";
 
     /**
      * 标题

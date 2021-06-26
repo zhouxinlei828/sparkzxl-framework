@@ -2,7 +2,7 @@ package com.github.sparkzxl.swagger.config;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;

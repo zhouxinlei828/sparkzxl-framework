@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.github.sparkzxl.database.enums.IdTypeEnum;
+import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;

@@ -2,11 +2,11 @@ package com.github.sparkzxl.security.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.entity.security.AuthUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
-import com.github.sparkzxl.security.entity.AuthUserDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,11 +53,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             log.info("checking username:[{}]", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 AuthUserDetail adminUserDetails = new AuthUserDetail(
-                        jwtUserInfo.getId(),
                         jwtUserInfo.getUsername(),
                         null,
-                        jwtUserInfo.getName(),
-                        true,
                         jwtUserInfo.getAuthorities()
                 );
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,

@@ -393,7 +393,7 @@ public class NacosProviderApplication extends SparkBootApplication {
 ```java
 package com.github.sparkzxl.nacos.controller;
 
-import com.github.sparkzxl.core.annotation.ResponseResult;
+import com.github.sparkzxl.annotation.echo.result.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -531,7 +531,7 @@ public class NacosConsumerApplication extends SparkBootApplication {
 ```java
 package com.github.sparkzxl.nacos.controller;
 
-import com.github.sparkzxl.core.annotation.ResponseResult;
+import com.github.sparkzxl.annotation.echo.result.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

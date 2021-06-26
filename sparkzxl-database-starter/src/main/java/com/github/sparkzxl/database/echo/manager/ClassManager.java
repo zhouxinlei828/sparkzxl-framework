@@ -3,7 +3,7 @@ package com.github.sparkzxl.database.echo.manager;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.database.echo.annonation.EchoField;
+import com.github.sparkzxl.annotation.echo.EchoField;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;

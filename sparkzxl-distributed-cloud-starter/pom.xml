@@ -33,9 +33,5 @@
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-feign-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-hystrix-starter</artifactId>
-        </dependency>
     </dependencies>
 </project>

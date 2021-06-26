@@ -2,7 +2,7 @@ package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.context.BaseContextHolder;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;

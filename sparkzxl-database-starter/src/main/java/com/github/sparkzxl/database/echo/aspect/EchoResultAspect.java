@@ -1,6 +1,6 @@
 package com.github.sparkzxl.database.echo.aspect;
 
-import com.github.sparkzxl.database.echo.annonation.EchoResult;
+import com.github.sparkzxl.annotation.echo.EchoResult;
 import com.github.sparkzxl.database.echo.core.EchoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class EchoResultAspect {
 
     private final EchoService echoService;
 
-    @Pointcut("@annotation(com.github.sparkzxl.database.echo.annonation.EchoResult)")
+    @Pointcut("@annotation(com.github.sparkzxl.annotation.echo.EchoResult)")
     public void methodPointcut() {
     }
 

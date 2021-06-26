@@ -1,5 +1,6 @@
 package com.github.sparkzxl.job.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.xxl-job")
+@ConfigurationProperties(prefix = ConfigurationConstant.XXL_JOB_PREFIX)
 public class XxlExecutorProperties {
 
     private String accessToken;

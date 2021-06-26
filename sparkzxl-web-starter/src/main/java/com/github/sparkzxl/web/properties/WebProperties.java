@@ -1,5 +1,6 @@
 package com.github.sparkzxl.web.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,8 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "web")
+@ConfigurationProperties(prefix = ConfigurationConstant.WEB_PREFIX)
 public class WebProperties {
 
     private String interceptor = "responseResultInterceptor";
+
 }

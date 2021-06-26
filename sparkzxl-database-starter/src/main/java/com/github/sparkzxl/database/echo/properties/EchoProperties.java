@@ -1,5 +1,6 @@
 package com.github.sparkzxl.database.echo.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,12 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(
-        prefix = EchoProperties.PREFIX
-)
+@ConfigurationProperties(prefix = ConfigurationConstant.DATA_ECHO_PREFIX)
 public class EchoProperties {
 
-    public static final String PREFIX = "sparkzxl.echo";
     /**
      * 是否启用远程查询
      */

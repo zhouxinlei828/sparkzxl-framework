@@ -1,8 +1,9 @@
 package com.github.sparkzxl.database.properties;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.github.sparkzxl.constant.ConfigurationConstant;
+import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.database.echo.properties.EchoProperties;
-import com.github.sparkzxl.database.enums.IdTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -14,7 +15,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  */
 @Data
 @ConfigurationProperties(
-        prefix = "mybatis-plus.custom"
+        prefix = ConfigurationConstant.DATA_PREFIX
 )
 public class CustomMybatisProperties {
 

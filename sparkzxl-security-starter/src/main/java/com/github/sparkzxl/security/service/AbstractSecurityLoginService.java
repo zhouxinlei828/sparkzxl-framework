@@ -1,28 +1,33 @@
 package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.entity.CaptchaInfo;
-import com.github.sparkzxl.core.entity.JwtUserInfo;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.TimeUtils;
+import com.github.sparkzxl.entity.core.CaptchaInfo;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.entity.security.AuthRequest;
+import com.github.sparkzxl.entity.security.AuthToken;
+import com.github.sparkzxl.entity.security.AuthUserDetail;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
-import com.github.sparkzxl.security.entity.AuthRequest;
-import com.github.sparkzxl.security.entity.AuthToken;
-import com.github.sparkzxl.security.entity.AuthUserDetail;
 import com.github.sparkzxl.security.entity.LoginStatus;
 import com.github.sparkzxl.security.event.LoginEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * description: 登录授权Service
@@ -83,7 +88,11 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         jwtUserInfo.setSub(authUserDetail.getUsername());
         jwtUserInfo.setIat(System.currentTimeMillis());
         jwtUserInfo.setExpire(expire);
-        jwtUserInfo.setAuthorities(authUserDetail.getAuthorityList());
+        Collection<GrantedAuthority> grantedAuthorities = authUserDetail.getAuthorities();
+        if (CollectionUtils.isNotEmpty(grantedAuthorities)) {
+            List<String> authorities = grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+            jwtUserInfo.setAuthorities(authorities);
+        }
         return getJwtTokenService().createTokenByHmac(jwtUserInfo);
     }
 

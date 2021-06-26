@@ -1,5 +1,6 @@
 package com.github.sparkzxl.feign.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -10,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(
-        prefix = "feign.seata"
+        prefix = ConfigurationConstant.FEIGN_SEATA_PREFIX
 )
 public class FeignProperties {
 

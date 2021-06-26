@@ -375,7 +375,7 @@ public class OssTemplate implements InitializingBean {
     public void afterPropertiesSet() {
         ClientConfiguration clientConfiguration = new ClientConfiguration();
         AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(
-                ossProperties.getEndpoint(), ossProperties.getRegion());
+                ossProperties.getEndpoint(), ossProperties.getRegion().getName());
         AWSCredentials awsCredentials = new BasicAWSCredentials(ossProperties.getAccessKey(),
                 ossProperties.getSecretKey());
         AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);

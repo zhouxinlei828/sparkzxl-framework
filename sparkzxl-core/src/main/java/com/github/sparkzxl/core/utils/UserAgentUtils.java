@@ -4,7 +4,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.core.entity.UserAgentEntity;
+import com.github.sparkzxl.entity.core.UserAgentEntity;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 

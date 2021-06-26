@@ -1,6 +1,6 @@
 package com.github.sparkzxl.database.mybatis.hander;
 
-import com.github.sparkzxl.database.entity.RemoteData;
+import com.github.sparkzxl.entity.data.RemoteData;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

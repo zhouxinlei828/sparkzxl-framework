@@ -8,13 +8,13 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.StrPool;
-import com.github.sparkzxl.database.dto.EchoVO;
-import com.github.sparkzxl.database.echo.annonation.EchoField;
+import com.github.sparkzxl.model.vo.EchoVO;
+import com.github.sparkzxl.annotation.echo.EchoField;
 import com.github.sparkzxl.database.echo.manager.ClassManager;
 import com.github.sparkzxl.database.echo.manager.FieldParam;
 import com.github.sparkzxl.database.echo.manager.LoadKey;
 import com.github.sparkzxl.database.echo.properties.EchoProperties;
-import com.github.sparkzxl.database.entity.RemoteData;
+import com.github.sparkzxl.entity.data.RemoteData;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 

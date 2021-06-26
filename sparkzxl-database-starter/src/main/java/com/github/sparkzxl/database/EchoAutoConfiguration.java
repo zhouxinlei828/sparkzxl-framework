@@ -1,5 +1,6 @@
 package com.github.sparkzxl.database;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.database.echo.aspect.EchoResultAspect;
 import com.github.sparkzxl.database.echo.core.EchoService;
 import com.github.sparkzxl.database.echo.core.LoadService;
@@ -28,14 +29,14 @@ public class EchoAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = EchoProperties.PREFIX, name = "aop-enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_ECHO_PREFIX, name = "aop-enabled", havingValue = "true", matchIfMissing = true)
     public EchoResultAspect getEchoResultAspect(EchoService echoService) {
         return new EchoResultAspect(echoService);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = EchoProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_ECHO_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public EchoService echoService(Map<String, LoadService> strategyMap) {
         return new EchoService(remoteProperties, strategyMap);
     }

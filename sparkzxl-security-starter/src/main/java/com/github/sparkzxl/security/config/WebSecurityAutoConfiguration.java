@@ -69,7 +69,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
-        List<String> excludePatterns = securityProperties.getIgnorePatterns();
+        List<String> excludePatterns = securityProperties.getIgnore();
         for (String url : excludePatterns) {
             registry.antMatchers(url).permitAll();
         }

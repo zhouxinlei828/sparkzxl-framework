@@ -1,6 +1,6 @@
 package com.github.sparkzxl.jwt.service;
 
-import com.github.sparkzxl.core.entity.JwtUserInfo;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.nimbusds.jose.jwk.RSAKey;
 
 import java.io.Serializable;

@@ -113,5 +113,9 @@
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-annotation</artifactId>
+        </dependency>
     </dependencies>
 </project>

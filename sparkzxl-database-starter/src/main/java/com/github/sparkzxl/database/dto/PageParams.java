@@ -3,7 +3,7 @@ package com.github.sparkzxl.database.dto;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pagehelper.PageHelper;
-import com.github.sparkzxl.database.constant.EntityConstant;
+import com.github.sparkzxl.constant.EntityConstant;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
