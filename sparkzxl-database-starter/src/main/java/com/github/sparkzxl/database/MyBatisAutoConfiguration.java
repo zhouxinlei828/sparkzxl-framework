@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.github.sparkzxl.constant.enums.IdTypeEnum;
+import com.github.sparkzxl.constant.enums.MultiTenantType;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
+import com.github.sparkzxl.database.plugins.SchemaInterceptor;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.google.common.collect.Lists;
@@ -50,12 +52,19 @@ public class MyBatisAutoConfiguration {
         // 乐观锁插件
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
 
-        // 多租户插件
-        if (customMybatisProperties.isEnableTenant()) {
-            List<String> ignoreTableList = ArrayUtils.isEmpty(customMybatisProperties.getIgnoreTable()) ? Lists.newArrayList() :
-                    Arrays.asList(customMybatisProperties.getIgnoreTable());
-            interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(customMybatisProperties.getTenantIdColumn(),
-                    ignoreTableList)));
+        MultiTenantType multiTenantType = customMybatisProperties.getMultiTenantType();
+        if (multiTenantType.eq(MultiTenantType.COLUMN)) {
+            // 多租户插件
+            if (customMybatisProperties.isEnableTenant()) {
+                List<String> ignoreTableList = ArrayUtils.isEmpty(customMybatisProperties.getIgnoreTable()) ? Lists.newArrayList() :
+                        Arrays.asList(customMybatisProperties.getIgnoreTable());
+                interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(customMybatisProperties.getTenantIdColumn(),
+                        ignoreTableList)));
+            }
+        } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
+            // 多租户插件
+            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(customMybatisProperties.getTenantDatabasePrefix());
+            interceptor.addInnerInterceptor(schemaInterceptor);
         }
         // 分页插件
         if (customMybatisProperties.isEnablePage()) {
