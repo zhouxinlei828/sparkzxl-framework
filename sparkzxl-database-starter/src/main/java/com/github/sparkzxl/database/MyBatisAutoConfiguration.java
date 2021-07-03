@@ -14,6 +14,7 @@ import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.plugins.SchemaInterceptor;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
+import com.github.sparkzxl.database.properties.DataProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -32,15 +33,17 @@ import java.util.List;
  * @author zhouxinlei7
  */
 @Configuration
-@EnableConfigurationProperties({CustomMybatisProperties.class})
+@EnableConfigurationProperties({CustomMybatisProperties.class, DataProperties.class})
 @MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
 public class MyBatisAutoConfiguration {
 
     private final CustomMybatisProperties customMybatisProperties;
+    private final DataProperties dataProperties;
 
-    public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties) {
+    public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties, DataProperties dataProperties) {
         this.customMybatisProperties = customMybatisProperties;
+        this.dataProperties = dataProperties;
     }
 
     /**
@@ -52,18 +55,18 @@ public class MyBatisAutoConfiguration {
         // 乐观锁插件
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
 
-        MultiTenantType multiTenantType = customMybatisProperties.getMultiTenantType();
+        MultiTenantType multiTenantType = dataProperties.getMultiTenantType();
         if (multiTenantType.eq(MultiTenantType.COLUMN)) {
             // 多租户插件
-            if (customMybatisProperties.isEnableTenant()) {
-                List<String> ignoreTableList = ArrayUtils.isEmpty(customMybatisProperties.getIgnoreTable()) ? Lists.newArrayList() :
-                        Arrays.asList(customMybatisProperties.getIgnoreTable());
-                interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(customMybatisProperties.getTenantIdColumn(),
+            if (dataProperties.isEnableTenant()) {
+                List<String> ignoreTableList = ArrayUtils.isEmpty(dataProperties.getIgnoreTable()) ? Lists.newArrayList() :
+                        Arrays.asList(dataProperties.getIgnoreTable());
+                interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(dataProperties.getTenantIdColumn(),
                         ignoreTableList)));
             }
         } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
             // 多租户插件
-            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(customMybatisProperties.getTenantDatabasePrefix());
+            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(dataProperties.getTenantDatabasePrefix());
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
         // 分页插件
@@ -75,16 +78,16 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     public Snowflake snowflake() {
-        return IdUtil.getSnowflake(customMybatisProperties.getWorkerId(),
-                customMybatisProperties.getDataCenterId());
+        return IdUtil.getSnowflake(dataProperties.getWorkerId(),
+                dataProperties.getDataCenterId());
     }
 
     @Bean
     @ConditionalOnMissingBean
     public MetaObjectHandler metaDataHandler() {
         MetaDataHandler metaDataHandler = new MetaDataHandler();
-        metaDataHandler.setIdType(customMybatisProperties.getIdType());
-        if (IdTypeEnum.SNOWFLAKE_ID.equals(customMybatisProperties.getIdType())) {
+        metaDataHandler.setIdType(dataProperties.getIdType());
+        if (IdTypeEnum.SNOWFLAKE_ID.equals(dataProperties.getIdType())) {
             Snowflake snowflake = snowflake();
             metaDataHandler.setSnowflake(snowflake);
         }

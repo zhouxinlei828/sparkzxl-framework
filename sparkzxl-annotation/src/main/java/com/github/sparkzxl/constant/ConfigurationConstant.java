@@ -8,7 +8,9 @@ package com.github.sparkzxl.constant;
  */
 public class ConfigurationConstant {
 
-    public static final String DATA_PREFIX = "mybatis-plus.custom";
+    public static final String DATA_PREFIX = "sparkzxl.data";
+
+    public static final String MYBATIS_CUSTOM_PREFIX = "mybatis-plus.custom";
 
     public static final String DATA_ECHO_PREFIX = "echo";
 

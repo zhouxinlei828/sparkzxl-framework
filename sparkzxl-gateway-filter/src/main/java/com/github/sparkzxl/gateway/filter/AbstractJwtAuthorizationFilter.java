@@ -2,14 +2,14 @@ package com.github.sparkzxl.gateway.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
-import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.utils.StringHandlerUtils;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,9 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         ServerHttpResponse response = exchange.getResponse();
         ServerHttpRequest.Builder mutate = request.mutate();
         String requestUrl = request.getPath().toString();
-        log.info("请求路径：[{}]", requestUrl);
+        String tenantId = WebFluxUtils.getHeader(BaseContextConstants.TENANT, request);
+        log.info("请求租户id：[{}]，请求路径：[{}]", tenantId, requestUrl);
+        WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT, tenantId);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
         if (StringHandlerUtils.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
@@ -66,10 +68,8 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
-
                     String tenant = WebFluxUtils.getHeader(BaseContextConstants.TENANT, request);
-                    final String tenantId = StringUtils.isEmpty(tenant) ? jwtUserInfo.getTenant() : tenant;
-                    WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT, tenantId);
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT, StringUtils.isEmpty(tenant) ? jwtUserInfo.getTenant() : tenant);
                     MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
                     MDC.put(BaseContextConstants.TENANT, String.valueOf(tenantId));
                 }

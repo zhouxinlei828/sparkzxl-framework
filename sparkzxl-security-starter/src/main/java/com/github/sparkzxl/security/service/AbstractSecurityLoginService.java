@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.TimeUtils;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.entity.core.CaptchaInfo;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.entity.security.AuthRequest;
@@ -67,13 +68,15 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         long seconds = TimeUtils.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
+        String username = authUserDetail.getUsername();
+        AuthUserInfo authUserInfo = getAuthUserInfo(username);
         AuthToken authToken = new AuthToken();
         authToken.setAccessToken(createJwtToken(authUserDetail));
         authToken.setExpiration(seconds);
-        authToken.setAuthUserDetail(authUserDetail);
+        authToken.setAuthUserInfo(authUserInfo);
         authToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
-        accessToken(authToken, authUserDetail);
+        accessToken(authToken, authUserInfo);
         return authToken;
     }
 
@@ -107,6 +110,14 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
 
 
     /**
+     * 获取全局用户
+     *
+     * @param username 用户名
+     * @return AuthUserInfo<T>
+     */
+    public abstract AuthUserInfo getAuthUserInfo(String username);
+
+    /**
      * 生成验证码
      *
      * @param type 验证码类型
@@ -130,10 +141,10 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
     /**
      * 设置accessToken缓存
      *
-     * @param authToken      用户token
-     * @param authUserDetail 认证用户
+     * @param authToken    用户token
+     * @param authUserInfo 全局用户
      */
-    public abstract void accessToken(AuthToken authToken, AuthUserDetail<ID> authUserDetail);
+    public abstract void accessToken(AuthToken authToken, AuthUserInfo authUserInfo);
 
     /**
      * 获取jwt配置属性

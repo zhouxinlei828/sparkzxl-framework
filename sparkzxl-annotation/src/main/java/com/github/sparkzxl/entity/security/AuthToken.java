@@ -1,5 +1,6 @@
 package com.github.sparkzxl.entity.security;
 
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -27,7 +28,7 @@ public class AuthToken implements Serializable {
     /**
      * 登录用户信息
      */
-    private AuthUserDetail authUserDetail;
+    private AuthUserInfo authUserInfo;
 
     /**
      * 访问令牌头前缀
