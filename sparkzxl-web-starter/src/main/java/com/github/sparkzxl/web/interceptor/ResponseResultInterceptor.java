@@ -26,20 +26,19 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         //设置当前请求线程全局信息
-        if (!BaseContextHolder.getBoot()) {
-            BaseContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-            BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
-            BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
-            BaseContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
-            String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
-            MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
-            MDC.put(BaseContextConstants.TENANT, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
-            MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-            String feign = request.getHeader(BaseContextConstants.REMOTE_CALL);
-            if (StringUtils.isNotEmpty(feign)) {
-                return true;
-            }
+        BaseContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
+        BaseContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
+        BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
+        String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
+        MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
+        MDC.put(BaseContextConstants.TENANT, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
+        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        String feign = request.getHeader(BaseContextConstants.REMOTE_CALL);
+        if (StringUtils.isNotEmpty(feign)) {
+            return true;
         }
 
         if (handler instanceof HandlerMethod) {
