@@ -9,7 +9,7 @@ import com.github.sparkzxl.entity.core.CaptchaInfo;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.entity.security.AuthRequest;
 import com.github.sparkzxl.entity.security.AuthToken;
-import com.github.sparkzxl.entity.security.AuthUserDetail;
+import com.github.sparkzxl.entity.security.SecurityUserDetail;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.LoginStatus;
@@ -45,8 +45,8 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @return java.lang.String
      */
     public AuthToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
-        String account = authRequest.getAccount();
-        AuthUserDetail<ID> authUserDetail = (AuthUserDetail<ID>) getUserDetailsService().loadUserByUsername(account);
+        String username = authRequest.getUsername();
+        SecurityUserDetail<ID> authUserDetail = (SecurityUserDetail<ID>) getUserDetailsService().loadUserByUsername(username);
         if (ObjectUtils.isEmpty(authUserDetail)) {
             throw new AccountNotFoundException("账户不存在");
         }
@@ -63,7 +63,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authUserDetail 授权用户
      * @return AuthToken
      */
-    public AuthToken authorization(AuthUserDetail<ID> authUserDetail) {
+    public AuthToken authorization(SecurityUserDetail<ID> authUserDetail) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -81,7 +81,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
     }
 
 
-    public String createJwtToken(AuthUserDetail<ID> authUserDetail) {
+    public String createJwtToken(SecurityUserDetail<ID> authUserDetail) {
         long seconds = TimeUtils.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         Date expire = DateUtil.offsetSecond(new Date(), (int) seconds);
         JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
@@ -91,7 +91,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         jwtUserInfo.setSub(authUserDetail.getUsername());
         jwtUserInfo.setIat(System.currentTimeMillis());
         jwtUserInfo.setExpire(expire);
-        Collection<GrantedAuthority> grantedAuthorities = authUserDetail.getAuthorities();
+        Collection<? extends GrantedAuthority> grantedAuthorities = authUserDetail.getAuthorities();
         if (CollectionUtils.isNotEmpty(grantedAuthorities)) {
             List<String> authorities = grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             jwtUserInfo.setAuthorities(authorities);
@@ -106,7 +106,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authUserDetail 用户信息
      * @throws PasswordException 密码校验异常
      */
-    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException;
+    public abstract void checkPasswordError(AuthRequest authRequest, SecurityUserDetail<ID> authUserDetail) throws PasswordException;
 
 
     /**

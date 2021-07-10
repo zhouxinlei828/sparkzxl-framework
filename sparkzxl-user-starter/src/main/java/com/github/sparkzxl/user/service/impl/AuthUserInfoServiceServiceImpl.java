@@ -1,17 +1,21 @@
 package com.github.sparkzxl.user.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHolder;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
+import com.nimbusds.jose.JWSObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import java.text.ParseException;
 
 
 /**
@@ -43,8 +47,16 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             authUserInfo = generalCacheService.get(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER, accessToken));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
-            String userId = BaseContextHolder.getUserId(String.class);
-            authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userId), accessToken);
+            JWSObject jwsObject = null;
+            try {
+                jwsObject = JWSObject.parse(accessToken);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String payload = jwsObject.getPayload().toString();
+            JwtUserInfo jwtUserInfo = JSONObject.parseObject(payload, JwtUserInfo.class);
+            Object userInfoId = jwtUserInfo.getId();
+            authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userInfoId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
                 BizExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
             }

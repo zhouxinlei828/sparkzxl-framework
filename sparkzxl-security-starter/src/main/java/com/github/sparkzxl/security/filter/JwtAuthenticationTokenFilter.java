@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
-import com.github.sparkzxl.entity.security.AuthUserDetail;
+import com.github.sparkzxl.entity.security.SecurityUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +30,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private JwtTokenService jwtTokenService;
 
-
     public void setJwtTokenService(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
@@ -52,13 +51,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                AuthUserDetail adminUserDetails = new AuthUserDetail(
+                SecurityUserDetail securityUserDetail = new SecurityUserDetail(
+                        jwtUserInfo.getId(),
                         jwtUserInfo.getUsername(),
                         null,
+                        jwtUserInfo.getName(),
+                        true,
                         jwtUserInfo.getAuthorities()
                 );
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
-                        null, adminUserDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUserDetail,
+                        null, securityUserDetail.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 log.info("authenticated user:[{}]", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

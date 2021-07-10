@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 public class AuthRequest {
 
     @NotEmpty(message = "账户不能为空")
-    private String account;
+    private String username;
 
     @NotEmpty(message = "密码不能为空")
     private String password;

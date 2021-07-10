@@ -46,14 +46,21 @@ import java.util.List;
 public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
-
-    @Autowired(required = false)
     private JwtTokenService jwtTokenService;
-    @Autowired(required = false)
     private DynamicSecurityService dynamicSecurityService;
 
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
+    }
+
+    @Autowired(required = false)
+    public void setJwtTokenService(JwtTokenService jwtTokenService) {
+        this.jwtTokenService = jwtTokenService;
+    }
+
+    @Autowired(required = false)
+    public void setDynamicSecurityService(DynamicSecurityService dynamicSecurityService) {
+        this.dynamicSecurityService = dynamicSecurityService;
     }
 
     @Override
