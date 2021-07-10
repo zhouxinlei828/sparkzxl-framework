@@ -5,7 +5,6 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
@@ -123,8 +122,6 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         jwtUserInfo.setTenant(tenant);
         List authorities = jsonObject.getObject("authorities", List.class);
         jwtUserInfo.setAuthorities(authorities);
-        Boolean tenantStatus = jsonObject.getBoolean(BaseContextConstants.TENANT_STATUS);
-        jwtUserInfo.setTenantStatus(tenantStatus);
         return jwtUserInfo;
     }
 
