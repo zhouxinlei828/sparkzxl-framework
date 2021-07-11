@@ -8,7 +8,7 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
  *
  * @author zhouxinlei
  */
-public class FallBackHandlerTool {
+public class ServiceDegradeUtils {
 
     public static void fallBack() {
         RequestContextHolderUtils.setAttribute(BaseContextConstants.FALLBACK, true);
