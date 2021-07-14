@@ -1,6 +1,6 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.annotation.result.WebResult;
+import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
@@ -32,7 +32,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        WebResult responseResult = (WebResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
 

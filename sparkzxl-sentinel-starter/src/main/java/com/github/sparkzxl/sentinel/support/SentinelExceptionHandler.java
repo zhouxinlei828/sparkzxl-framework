@@ -6,7 +6,7 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
-import com.github.sparkzxl.annotation.result.WebResult;
+import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
@@ -30,7 +30,7 @@ public class SentinelExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        WebResult responseResult = (WebResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
