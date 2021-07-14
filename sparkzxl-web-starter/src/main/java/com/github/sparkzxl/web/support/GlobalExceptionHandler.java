@@ -2,7 +2,7 @@ package com.github.sparkzxl.web.support;
 
 import com.github.sparkzxl.annotation.result.WebResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
@@ -50,43 +50,43 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BizException.class)
-    public ResponseResult businessException(BizException e) {
+    public ApiResult businessException(BizException e) {
         handleResponseResult();
         log.error("BusinessException：[{}]", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
-        return ResponseResult.apiResult(code, message);
+        return ApiResult.apiResult(code, message);
     }
 
     @ExceptionHandler(NestedServletException.class)
-    public ResponseResult businessException(NestedServletException e) {
+    public ApiResult businessException(NestedServletException e) {
         handleResponseResult();
         log.error("NestedServletException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.FAILURE);
+        return ApiResult.apiResult(ApiResponseStatus.FAILURE);
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
-    public ResponseResult serviceDegradeException(ServiceDegradeException e) {
+    public ApiResult serviceDegradeException(ServiceDegradeException e) {
         handleResponseResult();
         log.error("ServiceDegradeException：[{}]", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
-        return ResponseResult.apiResult(code, message);
+        return ApiResult.apiResult(code, message);
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ApiResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
         handleResponseResult();
         log.error("MethodArgumentNotValidException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
+        return ApiResult.apiResult(ApiResponseStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseResult illegalArgumentException(IllegalArgumentException e) {
+    public ApiResult illegalArgumentException(IllegalArgumentException e) {
         handleResponseResult();
         log.error("IllegalArgumentException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR);
+        return ApiResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR);
     }
 
     private String bindingResult(BindingResult bindingResult) {
@@ -101,49 +101,49 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({AccountNotFoundException.class, PasswordException.class})
-    public ResponseResult passwordException(Exception e) {
+    public ApiResult passwordException(Exception e) {
         handleResponseResult();
         log.error("AccountNotFoundException|PasswordException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.UN_AUTHORIZED.getCode(), e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.UN_AUTHORIZED.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ResponseResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ApiResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         handleResponseResult();
         log.error("HttpRequestMethodNotSupportedException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.METHOD_NOT_SUPPORTED);
+        return ApiResult.apiResult(ApiResponseStatus.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public ApiResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
         handleResponseResult();
         log.error("HttpMessageNotReadableException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.MSG_NOT_READABLE);
+        return ApiResult.apiResult(ApiResponseStatus.MSG_NOT_READABLE);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseResult notFoundPage404(NoHandlerFoundException e) {
+    public ApiResult notFoundPage404(NoHandlerFoundException e) {
         handleResponseResult();
         log.error("NoHandlerFoundException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.NOT_FOUND);
+        return ApiResult.apiResult(ApiResponseStatus.NOT_FOUND);
     }
 
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+    public ApiResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         handleResponseResult();
         log.error("HttpMediaTypeNotSupportedException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED);
+        return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
-    public ResponseResult handleSqlException(SQLException e) {
+    public ApiResult handleSqlException(SQLException e) {
         handleResponseResult();
         log.error("SQLException：[{}]", e.getMessage());
-        return ResponseResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
+        return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
     }
 
 }

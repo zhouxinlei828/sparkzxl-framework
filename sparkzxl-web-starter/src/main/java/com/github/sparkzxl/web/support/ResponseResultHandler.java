@@ -2,7 +2,7 @@ package com.github.sparkzxl.web.support;
 
 import com.github.sparkzxl.annotation.result.WebResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.SneakyThrows;
@@ -43,7 +43,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (body instanceof ResponseResult) {
+        if (body instanceof ApiResult) {
             return body;
         }
         Object returnBody = body;
@@ -62,6 +62,6 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
             code = ApiResponseStatus.FAILURE.getCode();
             message = ApiResponseStatus.FAILURE.getMessage();
         }
-        return ResponseResult.apiResult(code, message, returnBody);
+        return ApiResult.apiResult(code, message, returnBody);
     }
 }
