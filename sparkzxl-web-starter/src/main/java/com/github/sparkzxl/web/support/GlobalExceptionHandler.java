@@ -146,4 +146,12 @@ public class GlobalExceptionHandler {
         return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(NullPointerException.class)
+    public ApiResult handleNullPointerException(NullPointerException e) {
+        handleResponseResult();
+        log.error("NullPointerException：[{}]", e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.NULL_POINTER_EXCEPTION_ERROR);
+    }
+
 }
