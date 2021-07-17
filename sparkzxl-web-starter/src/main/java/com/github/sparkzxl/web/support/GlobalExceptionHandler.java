@@ -138,7 +138,6 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
     public ApiResult handleSqlException(SQLException e) {
         handleResponseResult();
@@ -146,7 +145,6 @@ public class GlobalExceptionHandler {
         return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(NullPointerException.class)
     public ApiResult handleNullPointerException(NullPointerException e) {
         handleResponseResult();
