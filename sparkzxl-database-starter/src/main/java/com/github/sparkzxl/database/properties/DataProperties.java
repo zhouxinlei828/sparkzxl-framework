@@ -59,4 +59,14 @@ public class DataProperties {
      * 租户默认不填充数据表
      */
     private String[] ignoreTable;
+
+    /**
+     * 是否启用  sql性能规范插件
+     */
+    private Boolean isIllegalSql = false;
+
+    /**
+     * 是否启用控制台sql记录
+     */
+    private Boolean p6spy = false;
 }

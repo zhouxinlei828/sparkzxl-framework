@@ -150,7 +150,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public ApiResult handleNullPointerException(NullPointerException e) {
         handleResponseResult();
-        log.error("NullPointerException：[{}]", e.getMessage());
+        e.printStackTrace();
         return ApiResult.apiResult(ApiResponseStatus.NULL_POINTER_EXCEPTION_ERROR);
     }
 
