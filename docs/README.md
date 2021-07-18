@@ -26,7 +26,23 @@
 
 - [spark auth](http://119.45.182.28:3000/login)
 
-!> 账户：admin 密码：123456
+!> 账户：test 密码：123456
+
+## 演示效果
+
+![sparkzxl-demo-7.png](https://oss.sparksys.top/images/sparkzxl-demo-7.png)
+
+![sparkzxl-demo-6.png](https://oss.sparksys.top/images/sparkzxl-demo-6.png)
+
+![sparkzxl-demo-5.png](https://oss.sparksys.top/images/sparkzxl-demo-5.png)
+
+![sparkzxl-demo-4.png](https://oss.sparksys.top/images/sparkzxl-demo-4.png)
+
+![sparkzxl-demo-3.png](https://oss.sparksys.top/images/sparkzxl-demo-3.png)
+
+![sparkzxl-demo-2.png](https://oss.sparksys.top/images/sparkzxl-demo-2.png)
+
+![sparkzxl-demo-1.png](https://oss.sparksys.top/images/sparkzxl-demo-1.png)
 
 ## 开源博客
 
