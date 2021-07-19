@@ -9,6 +9,7 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.database.base.listener.ImportDataListener;
 import com.github.sparkzxl.database.dto.DeleteDTO;
@@ -18,6 +19,7 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -111,6 +113,9 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     @ApiOperation(value = "删除数据")
     @DeleteMapping("/delete")
     default boolean delete(@RequestBody DeleteDTO<Id> deleteDTO) {
+        if (CollectionUtils.isEmpty(deleteDTO.getIds())) {
+            BizExceptionAssert.businessFail("id不能为空");
+        }
         boolean result = handlerDelete(deleteDTO.getIds());
         if (result) {
             return getBaseService().removeByIds(deleteDTO.getIds());
@@ -194,7 +199,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         handlerQueryParams(params);
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
         QueryWrapper<Entity> wrapper = handlerWrapper(model, params);
-        params.buildPage();
+        params.startPage();
         List<Entity> entityList = getBaseService().list(wrapper);
         PageInfo<Entity> pageInfo = PageInfoUtils.pageInfo(entityList);
         // 处理结果

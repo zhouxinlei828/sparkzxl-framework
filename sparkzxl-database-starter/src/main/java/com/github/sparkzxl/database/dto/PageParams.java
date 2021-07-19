@@ -35,13 +35,15 @@ public class PageParams<T> extends PageDTO {
      * 构建分页参数
      */
     @JsonIgnore
-    public void buildPage() {
+    public void startPage() {
         PageParams<T> params = this;
+        int pageNum = params.getPageNum() == null ? 1 : params.getPageNum();
+        int pageSize = params.getPageSize() == null ? 1 : params.getPageSize();
         //没有排序参数
         if (StrUtil.isEmpty(params.getSort())) {
-            PageHelper.startPage(params.getPageNum(), params.getPageSize());
+            PageHelper.startPage(pageNum, pageSize);
         }
-        PageHelper.startPage(params.getPageNum(), params.getPageSize(), params.getSort());
+        PageHelper.startPage(pageNum, pageSize, params.getSort());
     }
 
 }
