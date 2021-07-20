@@ -173,7 +173,9 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     @ApiOperation(value = "查询数据", notes = "查询")
     @GetMapping("/get")
     default Entity get(@RequestParam(value = "id") Id id) {
-        return getBaseService().getById(id);
+        Entity entity = getBaseService().getById(id);
+        handlerEntity(entity);
+        return entity;
     }
 
     /**
@@ -209,6 +211,14 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         } else {
             return pageInfo;
         }
+    }
+
+    /**
+     * 处理参数
+     *
+     * @param entity 实体对象
+     */
+    default void handlerEntity(Entity entity) {
     }
 
     /**
