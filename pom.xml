@@ -89,6 +89,7 @@
         <jsqlparser.version>3.2</jsqlparser.version>
         <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
         <antisamy.version>1.5.10</antisamy.version>
+        <sensitive-word.version>0.0.15</sensitive-word.version>
     </properties>
 
     <modules>
@@ -612,6 +613,11 @@
                 <groupId>org.owasp.antisamy</groupId>
                 <artifactId>antisamy</artifactId>
                 <version>${antisamy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>sensitive-word</artifactId>
+                <version>${sensitive-word.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
