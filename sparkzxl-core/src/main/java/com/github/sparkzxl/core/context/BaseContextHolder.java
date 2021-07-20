@@ -15,30 +15,30 @@ import java.util.Map;
  */
 public class BaseContextHolder {
 
-    private static final ThreadLocal<Map<String, String>> CONTEXT_HOLDER_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Object>> CONTEXT_HOLDER_THREAD_LOCAL = new ThreadLocal<>();
 
     public static void set(String key, Object value) {
-        Map<String, String> map = getLocalMap();
-        map.put(key, value == null ? StrPool.EMPTY : value.toString());
+        Map<String, Object> map = getLocalMap();
+        map.put(key, value == null ? StrPool.EMPTY : value);
     }
 
     public static <T> T get(String key, Class<T> type) {
-        Map<String, String> map = getLocalMap();
+        Map<String, Object> map = getLocalMap();
         return Convert.convert(type, map.get(key));
     }
 
     public static <T> T get(String key, Class<T> type, Object def) {
-        Map<String, String> map = getLocalMap();
+        Map<String, Object> map = getLocalMap();
         return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? StrPool.EMPTY : def)));
     }
 
     public static String get(String key) {
-        Map<String, String> map = getLocalMap();
-        return map.getOrDefault(key, StrPool.EMPTY);
+        Map<String, Object> map = getLocalMap();
+        return Convert.toStr(map.getOrDefault(key, StrPool.EMPTY));
     }
 
-    public static Map<String, String> getLocalMap() {
-        Map<String, String> map = CONTEXT_HOLDER_THREAD_LOCAL.get();
+    public static Map<String, Object> getLocalMap() {
+        Map<String, Object> map = CONTEXT_HOLDER_THREAD_LOCAL.get();
         if (map == null) {
             map = Maps.newHashMap();
             CONTEXT_HOLDER_THREAD_LOCAL.set(map);
@@ -46,7 +46,7 @@ public class BaseContextHolder {
         return map;
     }
 
-    public static void setLocalMap(Map<String, String> threadLocalMap) {
+    public static void setLocalMap(Map<String, Object> threadLocalMap) {
         CONTEXT_HOLDER_THREAD_LOCAL.set(threadLocalMap);
     }
 

@@ -127,7 +127,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         private final Callable<T> target;
         private final RequestAttributes requestAttributes;
         private final String xid;
-        private final Map<String, String> threadLocalMap; //研究并发是否会冲突
+        private final Map<String, Object> threadLocalMap; //研究并发是否会冲突
 
         WrappedCallable(Callable<T> target,RequestAttributes requestAttributes) {
             this.target = target;
