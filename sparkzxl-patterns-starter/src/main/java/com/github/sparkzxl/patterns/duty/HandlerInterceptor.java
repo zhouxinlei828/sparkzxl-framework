@@ -16,5 +16,4 @@ public interface HandlerInterceptor<R, T> {
      */
     R handle(T t);
 
-
 }
