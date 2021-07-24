@@ -4,7 +4,7 @@ import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import com.github.sparkzxl.core.entity.DateInfo;
+import com.github.sparkzxl.entity.core.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.DateFormat;

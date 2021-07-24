@@ -1,5 +1,6 @@
 package com.github.sparkzxl.security.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,10 +12,10 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.security")
+@ConfigurationProperties(prefix = ConfigurationConstant.SECURITY_PREFIX)
 public class SecurityProperties {
 
-    private List<String> ignorePatterns;
+    private List<String> ignore;
 
     private boolean builtInPermissions;
 

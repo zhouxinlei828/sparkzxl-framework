@@ -79,7 +79,7 @@ public class ListUtils {
      * @return List<T>
      */
     public static <T> List<T> arrayToList(T[] ts) {
-        if (ArrayUtils.isEmpty(ts)){
+        if (ArrayUtils.isEmpty(ts)) {
             return emptyList();
         }
         return Arrays.stream(ts).collect(Collectors.toList());
@@ -92,7 +92,7 @@ public class ListUtils {
      * @return List<T>
      */
     public static <T> Set<T> arrayToSet(T[] ts) {
-        if (ArrayUtils.isEmpty(ts)){
+        if (ArrayUtils.isEmpty(ts)) {
             return SetUtils.emptySet();
         }
         return Arrays.stream(ts).collect(Collectors.toSet());

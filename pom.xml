@@ -6,14 +6,14 @@
 
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-component</artifactId>
-    <version>1.0.2.RELEASE</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>sparkzxl-component</name>
     <description>sparkzxl component framework</description>
     <url>https://github.com/sparkzxl/sparkzxl-component</url>
 
     <properties>
-        <sparkzxl.version>1.0.2.RELEASE</sparkzxl.version>
+        <sparkzxl.version>1.0.4-SNAPSHOT</sparkzxl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -33,9 +33,13 @@
         <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
+        <springfox.version>2.10.5</springfox.version>
+        <swagger-models.version>1.5.22</swagger-models.version>
 
         <!-- datasource-->
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <dynamic-datasource.version>3.4.0</dynamic-datasource.version>
+        <druid.version>1.2.6</druid.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
         <p6spy.version>3.9.1</p6spy.version>
         <logstash.version>6.6</logstash.version>
@@ -87,6 +91,7 @@
         <jsqlparser.version>3.2</jsqlparser.version>
         <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
         <antisamy.version>1.5.10</antisamy.version>
+        <sensitive-word.version>0.0.15</sensitive-word.version>
     </properties>
 
     <modules>
@@ -116,8 +121,8 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-hystrix-starter</module>
-        <!--<module>sparkzxl-xss-starter</module>-->
+        <module>sparkzxl-annotation</module>
+        <module>sparkzxl-tenant-starter</module>
     </modules>
 
     <licenses>
@@ -188,6 +193,23 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-dependencies</artifactId>
+                <version>${knife4j.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-core</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-models.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
@@ -196,6 +218,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-annotation</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
@@ -220,11 +247,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-feign-starter</artifactId>
-                <version>${sparkzxl.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-hystrix-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
@@ -279,19 +301,29 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-annotation</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper-spring-boot-starter.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>p6spy</groupId>
                 <artifactId>p6spy</artifactId>
                 <version>${p6spy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
             </dependency>
             <!-- 兼容 S3 协议 SDK-->
             <dependency>
@@ -608,6 +640,11 @@
                 <groupId>org.owasp.antisamy</groupId>
                 <artifactId>antisamy</artifactId>
                 <version>${antisamy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>sensitive-word</artifactId>
+                <version>${sensitive-word.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -46,14 +46,21 @@ import java.util.List;
 public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
-
-    @Autowired(required = false)
     private JwtTokenService jwtTokenService;
-    @Autowired(required = false)
     private DynamicSecurityService dynamicSecurityService;
 
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
+    }
+
+    @Autowired(required = false)
+    public void setJwtTokenService(JwtTokenService jwtTokenService) {
+        this.jwtTokenService = jwtTokenService;
+    }
+
+    @Autowired(required = false)
+    public void setDynamicSecurityService(DynamicSecurityService dynamicSecurityService) {
+        this.dynamicSecurityService = dynamicSecurityService;
     }
 
     @Override
@@ -69,7 +76,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
-        List<String> excludePatterns = securityProperties.getIgnorePatterns();
+        List<String> excludePatterns = securityProperties.getIgnore();
         for (String url : excludePatterns) {
             registry.antMatchers(url).permitAll();
         }

@@ -2,6 +2,7 @@ package com.github.sparkzxl.swagger.config;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
@@ -144,6 +145,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                     .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
+                    .ignoredParameterTypes(AuthUserInfo.class)
                     .extensions(openApiExtensionResolver.buildExtensions(docketInfo.getGroup()));
 //                    .pathProvider(new ExtRelativePathProvider(servletContext, docketInfo.getBasePath().isEmpty() ? swaggerProperties.getBasePath() : docketInfo.getBasePath()));
 
@@ -207,7 +209,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-                .extensions(openApiExtensionResolver.buildExtensions(swaggerProperties.getGroup()));
+                .extensions(openApiExtensionResolver.buildExtensions(swaggerProperties.getGroup()))
+                .ignoredParameterTypes(AuthUserInfo.class);
         //.pathProvider(new ExtRelativePathProvider(servletContext, swaggerProperties.getBasePath()));
     }
 

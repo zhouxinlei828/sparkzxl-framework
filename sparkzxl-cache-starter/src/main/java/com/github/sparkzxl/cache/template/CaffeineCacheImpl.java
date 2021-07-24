@@ -1,5 +1,7 @@
 package com.github.sparkzxl.cache.template;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.util.ObjectUtils;
@@ -14,7 +16,6 @@ import java.util.function.Function;
  *
  * @author zhouxinlei
  */
-@SuppressWarnings("unchecked")
 public class CaffeineCacheImpl implements GeneralCacheService {
 
     long maxSize = 1000L;
@@ -142,7 +143,8 @@ public class CaffeineCacheImpl implements GeneralCacheService {
                 set(key, obj, expireTime, timeUnit);
             }
         } else if (ifPresent != null) {
-            obj = (T) ifPresent.getIfPresent(key);
+            obj = Convert.convert(new TypeReference<T>() {
+            }, ifPresent.getIfPresent(key));
         }
         return obj;
     }

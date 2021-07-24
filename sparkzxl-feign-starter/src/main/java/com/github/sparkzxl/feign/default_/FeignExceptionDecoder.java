@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.default_;
 
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.github.sparkzxl.feign.model.ExceptionInfo;
+import com.github.sparkzxl.model.exception.ExceptionInfo;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;

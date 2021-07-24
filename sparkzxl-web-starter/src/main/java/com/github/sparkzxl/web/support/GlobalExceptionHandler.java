@@ -1,10 +1,10 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.core.annotation.ResponseResult;
-import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.support.BizException;
+import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,8 @@ public class GlobalExceptionHandler {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult =
+                (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
@@ -137,12 +138,18 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLException.class)
     public ApiResult handleSqlException(SQLException e) {
         handleResponseResult();
         log.error("SQLException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ApiResult handleNullPointerException(NullPointerException e) {
+        handleResponseResult();
+        e.printStackTrace();
+        return ApiResult.apiResult(ApiResponseStatus.NULL_POINTER_EXCEPTION_ERROR);
     }
 
 }

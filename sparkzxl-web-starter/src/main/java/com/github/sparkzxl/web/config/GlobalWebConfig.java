@@ -77,4 +77,5 @@ public class GlobalWebConfig implements WebMvcConfigurer {
                     .addPathPatterns("/**").order(-99);
         }
     }
+
 }

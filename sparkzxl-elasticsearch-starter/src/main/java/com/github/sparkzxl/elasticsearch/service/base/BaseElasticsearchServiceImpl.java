@@ -1,8 +1,8 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.github.sparkzxl.constant.EntityConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.elasticsearch.contants.BaseElasticsearchConstant;
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
@@ -323,7 +323,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchRequest searchRequest = buildSearchRequest(index);
             log.debug("DSL语句为：{}", searchRequest.source().toString());
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.query(QueryBuilders.termQuery(BaseElasticsearchConstant.ES_ID, id));
+            searchSourceBuilder.query(QueryBuilders.termQuery(EntityConstant.ES_ID, id));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
@@ -346,7 +346,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         log.debug("DSL语句为：{}", searchRequest.source().toString());
         try {
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.query(QueryBuilders.termsQuery(BaseElasticsearchConstant.ES_ID, idList));
+            searchSourceBuilder.query(QueryBuilders.termsQuery(EntityConstant.ES_ID, idList));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
@@ -368,7 +368,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         log.debug("DSL语句为：{}", searchRequest.source().toString());
         try {
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.query(QueryBuilders.termsQuery(BaseElasticsearchConstant.ES_ID, idList));
+            searchSourceBuilder.query(QueryBuilders.termsQuery(EntityConstant.ES_ID, idList));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();

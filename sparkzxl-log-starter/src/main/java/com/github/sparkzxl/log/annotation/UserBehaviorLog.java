@@ -14,7 +14,6 @@ import java.lang.annotation.Target;
  * description: 用户行为日志注解
  *
  * @author zhouxinlei
- * @date 2021-05-23 20:47:55
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

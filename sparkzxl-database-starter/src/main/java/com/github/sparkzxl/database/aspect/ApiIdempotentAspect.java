@@ -1,7 +1,7 @@
 package com.github.sparkzxl.database.aspect;
 
 import com.github.sparkzxl.cache.template.GeneralCacheService;
-import com.github.sparkzxl.core.annotation.ApiIdempotent;
+import com.github.sparkzxl.annotation.ApiIdempotent;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
  * description: 接口幂等性校验切面
  *
  * @author charles.zhou
- * @date 2021-05-19 13:52:36
  */
 @Aspect
 @Slf4j
@@ -34,7 +33,7 @@ public class ApiIdempotentAspect {
         this.generalCacheService = generalCacheService;
     }
 
-    @Pointcut("@annotation(com.github.sparkzxl.core.annotation.ApiIdempotent)")
+    @Pointcut("@annotation(com.github.sparkzxl.annotation.ApiIdempotent)")
     public void executeApiIdempotent() {
 
     }

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.service;
 
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 
 /**
  * description: 全局用户获取 服务类

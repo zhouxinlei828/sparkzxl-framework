@@ -9,7 +9,6 @@ import java.util.Map;
  * description: 用户行为日志回调
  *
  * @author zhouxinlei
- * @date 2021-05-23 20:53:33
  */
 public interface UserBehaviorLogCallback {
 

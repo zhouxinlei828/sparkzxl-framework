@@ -29,6 +29,12 @@ public class SpringContextUtils implements ApplicationContextAware {
         return applicationContext;
     }
 
+    public static String getApplicationName() {
+        if (applicationContext == null) {
+            return "";
+        }
+        return applicationContext.getApplicationName();
+    }
     //通过name获取 Bean.
 
     /**

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.filter;
 
-import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.core.utils.StringHandlerUtils;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
@@ -38,7 +38,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
             }
             URI uri = request.getURI();
             //白名单路径移除JWT请求头
-            String[] ignorePatterns = resourceProperties.getIgnorePatterns();
+            String[] ignorePatterns = resourceProperties.getIgnore();
             List<String> ignoreUrls = ListUtils.arrayToList(ignorePatterns);
             boolean match = StringHandlerUtils.matchUrl(ignoreUrls, uri.getPath());
             if (match) {

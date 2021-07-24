@@ -3,7 +3,7 @@ package com.github.sparkzxl.core.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.github.sparkzxl.core.enums.Enumerator;
+import com.github.sparkzxl.constant.enums.Enumerator;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  * {"code": "XX","desc": "xxxx"}
  *
  * @author zhouxinlei
-*/
+ */
 public class EnumSerializer extends StdSerializer<Enumerator> {
 
     public final static EnumSerializer INSTANCE = new EnumSerializer();

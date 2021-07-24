@@ -9,7 +9,6 @@ import java.util.Map;
  * description: 默认用户行为回调
  *
  * @author zhouxinlei
- * @date 2021-05-23 21:07:56
  */
 public class DefaultUserBehaviorLogCallback implements UserBehaviorLogCallback {
     @Override

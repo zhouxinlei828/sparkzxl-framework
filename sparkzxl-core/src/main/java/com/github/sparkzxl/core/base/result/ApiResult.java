@@ -1,39 +1,27 @@
 package com.github.sparkzxl.core.base.result;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 /**
- * description: API接口响应结果
+ * description: web接口响应结果
  *
  * @author zhouxinlei
  */
-@NoArgsConstructor
 @Setter
 @Getter
 @Accessors(chain = true)
 public class ApiResult<T> implements Serializable {
 
-    private static final long serialVersionUID = -219969750248052449L;
+    private static final long serialVersionUID = 2887200772504212877L;
+
     private int code;
     private boolean success;
     private String msg;
     private T data;
-
-    public ApiResult(int code, boolean success, String msg, T data) {
-        this.code = code;
-        this.success = success;
-        this.msg = msg;
-        this.data = data;
-    }
-
-    public static <T> ApiResultBuilder<T> builder() {
-        return new ApiResultBuilder<>();
-    }
 
     /**
      * 返回结果
@@ -88,9 +76,13 @@ public class ApiResult<T> implements Serializable {
         return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
 
+    public static <T> ApiResultBuilder<T> builder() {
+        return new ApiResultBuilder<>();
+    }
+
+
     public static class ApiResultBuilder<T> {
         private int code;
-        private boolean success;
         private String msg;
         private T data;
 
@@ -114,7 +106,11 @@ public class ApiResult<T> implements Serializable {
         }
 
         public ApiResult<T> build() {
-            return new ApiResult<>(this.code, this.code == ApiResponseStatus.SUCCESS.getCode(), this.msg, this.data);
+            return new ApiResult<T>()
+                    .setCode(this.code)
+                    .setSuccess(this.code == ApiResponseStatus.SUCCESS.getCode())
+                    .setMsg(this.msg)
+                    .setData(this.data);
         }
     }
 }

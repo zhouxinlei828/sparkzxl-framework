@@ -10,7 +10,6 @@ import java.util.Map;
  * description: 日志持久化存储 服务类
  *
  * @author zhouxinlei
- * @date 2021-05-23 16:25:21
  */
 public interface LogStoreService {
 
@@ -18,9 +17,8 @@ public interface LogStoreService {
      * 保存web日志
      *
      * @param requestInfo 请求日志实
-     * @return boolean
      */
-    boolean saveLog(RequestInfo requestInfo);
+    void saveLog(RequestInfo requestInfo);
 
     /**
      * 保存日志

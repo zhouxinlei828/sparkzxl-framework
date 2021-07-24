@@ -1,5 +1,7 @@
 package com.github.sparkzxl.oss.properties;
 
+import com.amazonaws.regions.Regions;
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.oss")
+@ConfigurationProperties(prefix = ConfigurationConstant.OSS_PREFIX)
 public class OssProperties {
 
     /**
@@ -37,7 +39,7 @@ public class OssProperties {
     /**
      * 区域
      */
-    private String region;
+    private Regions region = Regions.CN_NORTH_1;
 
     /**
      * Access key就像用户ID，可以唯一标识你的账户

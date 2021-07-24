@@ -1,6 +1,6 @@
 package com.github.sparkzxl.database.utils;
 
-import com.github.sparkzxl.database.entity.TreeEntity;
+import com.github.sparkzxl.entity.data.TreeEntity;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;

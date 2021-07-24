@@ -26,7 +26,7 @@ public class FileProperties {
 
     private String totalSizeCap = "10GB";
 
-    private String path = "logs";
+    private String path = System.getProperty("user.home").concat("/logs");
 
     private int maxHistory = 7;
 

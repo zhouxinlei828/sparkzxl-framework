@@ -75,7 +75,7 @@ public interface StrPool {
     /**
      * 编码
      */
-     String UTF8 = "UTF-8";
+    String UTF8 = "UTF-8";
     /**
      * JSON 资源
      */
@@ -98,4 +98,22 @@ public interface StrPool {
     String HTTP = "http";
 
     String HTTPS = "https";
+
+    String STRING_TYPE_NAME = "java.lang.String";
+    String LONG_TYPE_NAME = "java.lang.Long";
+    String INTEGER_TYPE_NAME = "java.lang.Integer";
+    String SHORT_TYPE_NAME = "java.lang.Short";
+    String DOUBLE_TYPE_NAME = "java.lang.Double";
+    String BYTE_TYPE_NAME = "java.lang.Byte";
+    String FLOAT_TYPE_NAME = "java.lang.Float";
+    String BOOLEAN_TYPE_NAME = "java.lang.Boolean";
+    String SET_TYPE_NAME = "java.lang.Set";
+    String LIST_TYPE_NAME = "java.lang.List";
+    String COLLECTION_TYPE_NAME = "java.lang.Collection";
+    String CHARACTER_TYPE_NAME = "java.lang.Character";
+    String DATE_TYPE_NAME = "java.util.Date";
+    String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
+    String LOCAL_DATE_TYPE_NAME = "java.time.LocalDate";
+    String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";
+
 }

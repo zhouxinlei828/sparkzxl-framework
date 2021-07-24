@@ -1,8 +1,8 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.context.BaseContextHandler;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -128,8 +128,8 @@ public class WebLogAspect {
      * @return RequestParamInfo
      */
     private RequestInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
-        String userId = BaseContextHandler.getUserId(String.class);
-        String name = BaseContextHandler.getName();
+        String userId = BaseContextHolder.getUserId(String.class);
+        String name = BaseContextHolder.getName();
         return RequestInfo.builder()
                 .ip(NetworkUtil.getIpAddress(httpServletRequest))
                 .url(httpServletRequest.getRequestURL().toString())
@@ -151,8 +151,8 @@ public class WebLogAspect {
      * @return RequestInfo
      */
     private RequestInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
-        String userId = BaseContextHandler.getUserId(String.class);
-        String name = BaseContextHandler.getName();
+        String userId = BaseContextHolder.getUserId(String.class);
+        String name = BaseContextHolder.getName();
         return RequestInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .httpMethod(httpServletRequest.getMethod())
@@ -173,8 +173,8 @@ public class WebLogAspect {
      * @return RequestInfo
      */
     private RequestInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
-        String userId = BaseContextHandler.getUserId(String.class);
-        String name = BaseContextHandler.getName();
+        String userId = BaseContextHolder.getUserId(String.class);
+        String name = BaseContextHolder.getName();
         return RequestInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),

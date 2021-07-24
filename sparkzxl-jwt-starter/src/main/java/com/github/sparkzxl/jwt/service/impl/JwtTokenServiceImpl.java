@@ -3,16 +3,15 @@ package com.github.sparkzxl.jwt.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.core.entity.JwtUserInfo;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.github.sparkzxl.core.support.BizExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.core.utils.HuSecretUtils;
 import com.github.sparkzxl.core.utils.TimeUtils;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
@@ -92,7 +91,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     public JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception {
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
-        return JsonUtil.toPojo(payload, JwtUserInfo.class);
+        return JSONObject.parseObject(payload,JwtUserInfo.class);
     }
 
     @Override
@@ -100,16 +99,16 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
-        JSONObject jsonObject = JSONUtil.parseObj(payload);
+        JSONObject jsonObject = JSONObject.parseObject(payload);
         ID id = (ID) jsonObject.get("id");
         jwtUserInfo.setId(id);
-        String username = jsonObject.getStr("user_name");
+        String username = jsonObject.getString("user_name");
         jwtUserInfo.setUsername(username);
-        String name = jsonObject.getStr("name");
+        String name = jsonObject.getString("name");
         jwtUserInfo.setName(name);
-        String clientId = jsonObject.getStr("client_id");
+        String clientId = jsonObject.getString("client_id");
         jwtUserInfo.setClientId(clientId);
-        String sub = jsonObject.getStr("sub");
+        String sub = jsonObject.getString("sub");
         jwtUserInfo.setSub(sub);
         Long iat = jsonObject.getLong("iat");
         jwtUserInfo.setIat(iat);
@@ -117,14 +116,12 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         if (ObjectUtils.isNotEmpty(exp)) {
             jwtUserInfo.setExpire(DateUtils.date(exp * 1000));
         }
-        String jti = jsonObject.getStr("jti");
+        String jti = jsonObject.getString("jti");
         jwtUserInfo.setJti(jti);
-        String realm = jsonObject.getStr("realm");
-        jwtUserInfo.setRealm(realm);
-        List authorities = jsonObject.get("authorities", List.class);
+        String tenant = jsonObject.getString("tenant");
+        jwtUserInfo.setTenant(tenant);
+        List authorities = jsonObject.getObject("authorities", List.class);
         jwtUserInfo.setAuthorities(authorities);
-        String realmStatus = jsonObject.getStr("realmStatus", "false");
-        jwtUserInfo.setRealmStatus(Boolean.parseBoolean(realmStatus));
         return jwtUserInfo;
     }
 

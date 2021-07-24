@@ -16,7 +16,6 @@ import java.util.List;
  * description: 公共服务 实现类
  *
  * @author zhouxinlei
- * @date 2021-05-15 13:52:17
  */
 public class SuperServiceImpl<R extends IBaseRepository<T>, T extends Entity> implements ISuperService<T> {
 

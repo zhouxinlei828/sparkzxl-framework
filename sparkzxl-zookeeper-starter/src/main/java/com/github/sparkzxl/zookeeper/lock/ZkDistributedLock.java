@@ -64,7 +64,7 @@ public class ZkDistributedLock implements InitializingBean, DistributedLock {
                 curatorFramework.delete().forPath(keyPath);
             }
         } catch (Exception e) {
-            log.error("failed to release lock: [{}]",e.getMessage());
+            log.error("failed to release lock: [{}]", e.getMessage());
             return false;
         }
         return true;

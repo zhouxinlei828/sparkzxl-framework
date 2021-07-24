@@ -9,7 +9,6 @@ import java.util.List;
  * description: tree节点
  *
  * @author zhouxinlei
- * @date 2021-05-15 13:52:40
  */
 public class TreeNode<E, T extends Serializable> implements Cloneable, Serializable {
 

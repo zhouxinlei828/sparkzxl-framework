@@ -7,7 +7,6 @@ import wiki.xsx.core.log.Level;
  * description: 用户行为日志格式化
  *
  * @author zhouxinlei
- * @date 2021-05-23 20:56:18
  */
 public interface UserBehaviorLogFormatter {
 

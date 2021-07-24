@@ -3,7 +3,7 @@ package com.github.sparkzxl.feign.exception;
 import cn.hutool.core.date.DatePattern;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
-import com.github.sparkzxl.feign.model.ExceptionChain;
+import com.github.sparkzxl.model.exception.ExceptionChain;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
