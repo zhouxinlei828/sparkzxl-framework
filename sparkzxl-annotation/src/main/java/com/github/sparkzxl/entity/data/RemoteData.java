@@ -16,7 +16,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 public class RemoteData<K, D> implements Serializable {
 
     private K key;
@@ -41,5 +40,14 @@ public class RemoteData<K, D> implements Serializable {
 
     public void setData(D data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        String toString = key == null ? "" : String.valueOf(key);
+        if (ObjectUtil.isNotEmpty(this.data) && this.data instanceof String) {
+            toString = String.valueOf(data);
+        }
+        return toString;
     }
 }
