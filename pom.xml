@@ -6,7 +6,7 @@
 
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-component</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>pom</packaging>
     <name>sparkzxl-component</name>
     <description>sparkzxl component framework</description>
