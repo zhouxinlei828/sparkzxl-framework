@@ -19,7 +19,6 @@
 
 **落地最佳实践**：
 
-- [sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
 - [sparkzxl-auth](https://github.com/sparkzxl/sparkzxl-auth.git)
 
 ## 在线体验
