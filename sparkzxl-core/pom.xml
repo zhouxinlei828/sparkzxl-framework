@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sparkzxl-component</artifactId>
         <groupId>com.github.sparkzxl</groupId>
-        <version>1.0.2.RELEASE</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparkzxl-core</artifactId>
@@ -22,6 +22,10 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -108,6 +112,14 @@
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-annotation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.houbb</groupId>
+            <artifactId>sensitive-word</artifactId>
         </dependency>
     </dependencies>
 </project>
