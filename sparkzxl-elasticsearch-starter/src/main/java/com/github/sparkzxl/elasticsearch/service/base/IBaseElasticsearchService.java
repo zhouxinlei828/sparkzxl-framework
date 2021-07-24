@@ -11,14 +11,13 @@ import java.util.Map;
  * description: 通用es操作 服务类
  *
  * @author zhouxinlei
- * @date 2021-04-17 08:37:05
  */
 public interface IBaseElasticsearchService {
 
     /**
      * 创建索引
      *
-     * @param index 索引
+     * @param index   索引
      * @param mapping 索引映射
      * @return boolean
      */

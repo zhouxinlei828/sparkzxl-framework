@@ -7,6 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * description: 公共属性
+ *
+ * @author zhouxinlei
+ */
 @Data
 public class Entity<E> implements Serializable {
 

@@ -1,7 +1,6 @@
 package com.github.sparkzxl.jwt.service;
 
-import com.github.sparkzxl.core.entity.JwtUserInfo;
-import com.nimbusds.jose.JOSEException;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.nimbusds.jose.jwk.RSAKey;
 
 import java.io.Serializable;
@@ -18,7 +17,6 @@ public interface JwtTokenService<ID extends Serializable> {
      *
      * @param jwtUserInfo 负载信息
      * @return String
-     * @throws JOSEException 抛出异常
      */
     String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo);
 

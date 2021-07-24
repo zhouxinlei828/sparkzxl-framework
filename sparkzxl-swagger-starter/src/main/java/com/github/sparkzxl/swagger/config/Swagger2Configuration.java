@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+
 import static com.github.sparkzxl.swagger.config.Swagger2Configuration.TRUE;
+
 /**
  * description: 1，配置文件中： ${SwaggerProperties.PREFIX}.enable=true
  * 2，配置文件中不存在： ${SwaggerProperties.PREFIX}.enable 值

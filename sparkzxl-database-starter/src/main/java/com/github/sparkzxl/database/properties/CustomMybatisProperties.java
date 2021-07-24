@@ -1,6 +1,8 @@
 package com.github.sparkzxl.database.properties;
 
-import com.github.sparkzxl.database.enums.IdTypeEnum;
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.github.sparkzxl.constant.ConfigurationConstant;
+import com.github.sparkzxl.database.echo.properties.EchoProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -12,24 +14,27 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  */
 @Data
 @ConfigurationProperties(
-        prefix = "mybatis-plus.custom"
+        prefix = ConfigurationConstant.MYBATIS_CUSTOM_PREFIX
 )
 public class CustomMybatisProperties {
 
-    private IdTypeEnum idType = IdTypeEnum.SNOWFLAKE_ID;
 
-    private long workerId = 0;
-
-    private long dataCenterId = 10;
-
-    private boolean enableTenant;
-
-    private String tenantIdColumn = "realm_code";
-
-    private String[] ignoreTable;
-
+    /**
+     * mapper扫包路径
+     */
     private String[] mapperScan;
 
+    /**
+     * 使用分页
+     */
+    private boolean enablePage;
+
+    /**
+     * 数据库类型
+     */
+    private DbType dbType = DbType.MYSQL;
+
     @NestedConfigurationProperty
-    private InjectionProperties injection = new InjectionProperties();
+    private EchoProperties echo = new EchoProperties();
+
 }

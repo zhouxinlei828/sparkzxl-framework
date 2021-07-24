@@ -57,7 +57,7 @@
 
 2. 在controller层加入@ResponseResult注解，可加在方法上，也可加在类上
 
-![20200918100241.png](https://oss.sparksys.top/images/20200918100241.png)
+![20200918100241.png](https://oss.sparksys.top/https://oss.sparksys.top/sparkzxl-component/20200918100241.png)
 
 3. 异常的处理
 
@@ -292,4 +292,4 @@ SparkZxlExceptionAssert.businessFail("发生异常")
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

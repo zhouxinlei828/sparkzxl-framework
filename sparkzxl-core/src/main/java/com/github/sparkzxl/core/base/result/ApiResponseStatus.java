@@ -25,6 +25,7 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     FAILURE(HttpStatus.HTTP_BAD_REQUEST, "哎呀，开了个小差，请稍后再试"),
 
     JSON_PARSE_ERROR(-13, "JSON解析异常"),
+    NULL_POINTER_EXCEPTION_ERROR(HttpStatus.HTTP_BAD_REQUEST, "空指针异常"),
 
     /**
      * 未登录
@@ -142,6 +143,10 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
      * token签名不合法
      */
     JWT_VALID_ERROR(2002, "token校验失败"),
+
+    NOT_EMPTY(400, "不能为空"),
+
+    NOT_NULL(400, "不能为空"),
 
     /**
      * token为空

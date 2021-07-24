@@ -4,7 +4,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.core.entity.UserAgentEntity;
+import com.github.sparkzxl.entity.core.UserAgentEntity;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,7 +29,7 @@ public class UserAgentUtils extends UserAgentUtil {
         String browserVersion = userAgent.getVersion();
         String clientIp = ServletUtil.getClientIP(request);
         String region = AddressUtil.getRegion(clientIp);
-        if (StringUtils.isNotEmpty(region)){
+        if (StringUtils.isNotEmpty(region)) {
             JSONObject locationJsonObj = JSONObject.parseObject(region);
             String address = locationJsonObj.getString("region");
             String[] split = StringUtils.split(address, "|");

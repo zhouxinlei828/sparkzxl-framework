@@ -1,5 +1,7 @@
 package com.github.sparkzxl.cache.template;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.TypeReference;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -20,7 +22,7 @@ import java.util.function.Function;
  * @author zhouxinlei
  */
 @Slf4j
-@SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressWarnings({"ConstantConditions"})
 public class RedisCacheImpl implements GeneralCacheService {
 
     private final RedisTemplate<String, Object> redisTemplate;
@@ -63,7 +65,8 @@ public class RedisCacheImpl implements GeneralCacheService {
             return null;
         }
         try {
-            obj = (T) valueOperations.get(key);
+            obj = Convert.convert(new TypeReference<T>() {
+            }, valueOperations.get(key));
             if (obj == null && function != null) {
                 obj = function.apply(funcParam);
                 Optional.ofNullable(obj).ifPresent(value -> set(key, value, expireTime, timeUnit));
@@ -86,6 +89,20 @@ public class RedisCacheImpl implements GeneralCacheService {
         } else {
             valueOperations.set(key, value);
         }
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        if (expireTime > 0) {
+            return valueOperations.setIfAbsent(key, value, expireTime, timeUnit);
+        } else {
+            return setIfAbsent(key, value);
+        }
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value) {
+        return valueOperations.setIfAbsent(key, value);
     }
 
     @Override

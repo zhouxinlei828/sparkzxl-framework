@@ -74,7 +74,7 @@
 import groovy.json.JsonSlurper
 node {
     currentBuild.result = "SUCCESS"
-    echo "PWD: ${pwd()}"
+    echoField "PWD: ${pwd()}"
     env.PRO_ENV = "prod"
     // 默认设置
     env.VERSION = '1.0-SNAPSHOT'
@@ -90,11 +90,11 @@ node {
     try {
         stage('config') {
             maven_home = tool 'maven-3.6.3'
-            echo "Branch: ${env.BRANCH_NAME}, Environment: ${env.PRO_ENV}，maven_home：${maven_home}"
+            echoField "Branch: ${env.BRANCH_NAME}, Environment: ${env.PRO_ENV}，maven_home：${maven_home}"
             maven_home = tool 'maven-3.6.3'
         }
         stage('Prepare') {
-            echo "1.Prepare Stage"
+            echoField "1.Prepare Stage"
             checkout scm
             pom = readMavenPom file: 'pom.xml'
             // 读取配置信息
@@ -107,7 +107,7 @@ node {
                 appName = obj.appName
                 def envConfig = obj.env[env.PRO_ENV]
 
-                echo "envConfig: ${envConfig}"
+                echoField "envConfig: ${envConfig}"
 
                 env.VERSION = obj.version
 
@@ -117,23 +117,23 @@ node {
                 env.hostPort = envConfig.hostPort
                 env.serverPort = envConfig.serverPort
                 imageName = "${env.registryName}/${appName}:${env.PRO_ENV}-${env.VERSION}"
-                echo "VERSION: ${env.VERSION} imageName：${imageName}"
-                echo "host: ${env.host} containerName: ${env.containerName} hostPort: ${env.hostPort} serverPort: ${env.serverPort}"
+                echoField "VERSION: ${env.VERSION} imageName：${imageName}"
+                echoField "host: ${env.host} containerName: ${env.containerName} hostPort: ${env.hostPort} serverPort: ${env.serverPort}"
             }
             sh 'ls'
         }
 
         stage('Test') {
-            echo "2.Test Stage"
+            echoField "2.Test Stage"
         }
 
         stage('Build') {
-            echo "3.Build Maven Docker Image Stage"
+            echoField "3.Build Maven Docker Image Stage"
             sh "${maven_home}/bin/mvn clean package -Dmaven.test.skip=true -DsendCredentialsOverHttp=true"
         }
 
         stage('Deploy') {
-            echo "4.Deploy Docker Image Stage"
+            echoField "4.Deploy Docker Image Stage"
             withCredentials([usernamePassword(credentialsId: env.credentialsId, usernameVariable: 'USER', passwordVariable: 'PWD')]) {
                 def otherArgs = "-p ${env.hostPort}:${env.serverPort}" // 区分不同环境的启动参数
                 def remote = [:]
@@ -176,19 +176,19 @@ node {
 
 如图所示：
 
-![spring-boot-jenkins.png](../../images/spring-boot-jenkins.png)
+![spring-boot-jenkins.png](https://oss.sparksys.top/sparkzxl-component/spring-boot-jenkins.png)
 
-## Jenkins 流水线任务
+## 三. Jenkins 流水线任务
 
 ### 创建流水线任务
 
 **新建Jenkins流水线任务**
 
-![jenkins-Pipeline-Pipeline.png](../../images/jenkins-Pipeline.png)
+![jenkins-Pipeline-Pipeline.png](https://oss.sparksys.top/sparkzxl-component/jenkins-Pipeline.png)
 
 ### 配置流水线任务
 
-![Pipeline-config.png](../../images/Pipeline-config.png)
+![Pipeline-config.png](https://oss.sparksys.top/sparkzxl-component/Pipeline-config.png)
 
 点击保存即可建完Jenkins流水线任务
 
@@ -196,15 +196,15 @@ node {
 
 - 打开流水线面板
 
-![run-pipeline.png](../../images/run-pipeline.png)
+![run-pipeline.png](https://oss.sparksys.top/sparkzxl-component/run-pipeline.png)
 
 - 运行流水线任务
 
-![run-pipeline-1.png](../../images/run-pipeline-1.png)
+![run-pipeline-1.png](https://oss.sparksys.top/sparkzxl-component/run-pipeline-1.png)
 
 - 查看运行结果
 
-![run-pipeline-result.png](../../images/run-pipeline-result.png)
+![run-pipeline-result.png](https://oss.sparksys.top/sparkzxl-component/run-pipeline-result.png)
 
 绿色代表流水线执行成功
 
@@ -212,4 +212,4 @@ node {
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

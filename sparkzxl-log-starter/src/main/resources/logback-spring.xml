@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration>
-<configuration>
+<configuration debug="false" scan="true" scanPeriod="1 minutes">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <!--日志文件保存路径-->
+    <!-- 应用名称 -->
     <springProperty name="springAppName" scope="context" source="spring.application.name" defaultValue="application"/>
 
-    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="../logs"/>
+    <!-- 日志文件保存路径 -->
+    <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="${user.home}/logs"/>
 
-    <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
+    <!-- 日志显隐控制方式 -->
     <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
     <springProperty name="enableJson" scope="context" source="logging.file.enable-json" defaultValue="false"/>
+
+    <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
+    <springProperty name="maxHistory" scope="context" source="logging.file.maxHistory" defaultValue="7"/>
+    <springProperty name="maxFileSize" scope="context" source="logging.file.maxFileSize" defaultValue="10MB"/>
+    <springProperty name="totalSizeCap" scope="context" source="logging.file.totalSizeCap" defaultValue="10GB"/>
+
     <!-- kafka 配置 -->
     <springProperty name="enableKafka" scope="context" source="logging.kafka.enable" defaultValue="false"/>
     <springProperty name="kafka.servers" scope="context" source="logging.kafka.servers"/>
@@ -20,6 +26,9 @@
     <property name="CONSOLE_LOG_PATTERN"
               value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(application): %yellow(${springAppName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %tid %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
+    <property name="FILE_LOG_PATTERN"
+              value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} application: ${springAppName} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%-40.40logger{15}] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
     <!-- 控制台 Appender -->
     <appender name="ConsoleOutput" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>true</withJansi>
@@ -28,6 +37,7 @@
             <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
                 <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
             </layout>
+            <charset>utf8</charset>
         </encoder>
     </appender>
 
@@ -37,8 +47,9 @@
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${logHome}/${springAppName}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-            <maxHistory>7</maxHistory>
-            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
         </rollingPolicy>
         <if condition='property("enableJson").contains("true")'>
             <then>
@@ -62,11 +73,13 @@
             <else>
                 <!-- 日志的格式化 -->
                 <encoder>
-                    <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                    <pattern>${FILE_LOG_PATTERN}</pattern>
+                    <charset>utf8</charset>
                 </encoder>
             </else>
         </if>
     </appender>
+
     <!-- 日志信息发送kafka -->
     <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
         <encoder>
@@ -80,10 +93,10 @@
                 "class": "%logger{40}",
                 "message": "%message"}
             </pattern>
+            <charset>utf8</charset>
         </encoder>
         <!-- kafka topic -->
         <topic>${kafka.topic}</topic>
-        <!--<topic>test</topic>-->
         <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
         <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
         <!-- kafka 地址 -->
@@ -113,6 +126,8 @@
         <neverBlock>true</neverBlock>
         <appender-ref ref="kafkaAppender"/>
     </appender>
+
+    <logger name="springfox.documentation" level="OFF"/>
 
     <root level="INFO">
         <if condition='property("enableFile").contains("true")'>

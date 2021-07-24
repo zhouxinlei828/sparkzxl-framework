@@ -92,9 +92,9 @@ projects_path='/usr/local/projects/'
 
 # 停止删除容器
 docker stop ${app_name}
-echo 'stop container '${app_name}' success!'
+echoField 'stop container '${app_name}' success!'
 docker rm ${app_name}
-echo 'delete container '${app_name}' success!'
+echoField 'delete container '${app_name}' success!'
 
 # 复制jar包到指定目录
 # 注意：单体maven不需要加${app_name}，聚合项目需要加入${app_name}
@@ -114,7 +114,7 @@ docker rmi `docker images|grep none | awk '{print $3}'`
 docker rmi ${image_prefix}/${app_name}:${maven_version}
 # 运行容器
 docker run -p ${EXPOSE}:${INIT_EXPOSE} --name ${app_name} -v /etc/localtime:/etc/localtime -v ${projects_path}${app_name}/logs:/var/logs -d ${harbor_registry}/${image_prefix}/${app_name}:${version}
-echo 'run container '${app_name}' success!'
+echoField 'run container '${app_name}' success!'
 ```
 
 - Dockerfile文件编写
@@ -171,4 +171,4 @@ MAINTAINER zhouxinlei
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

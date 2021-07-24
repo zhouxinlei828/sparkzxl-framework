@@ -15,9 +15,9 @@ import java.lang.annotation.Target;
 public @interface ZkLock {
 
     /**
-     * 特定参数识别，默认取第 0 个下标
+     * spel表达式
      */
-    int lockFiled() default 0;
+    String expression() default "#p0";
 
     /**
      * key的前缀

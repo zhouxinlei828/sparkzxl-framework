@@ -2,14 +2,14 @@ package com.github.sparkzxl.gateway.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.utils.StringHandlerUtils;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -43,11 +43,13 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         ServerHttpResponse response = exchange.getResponse();
         ServerHttpRequest.Builder mutate = request.mutate();
         String requestUrl = request.getPath().toString();
-        log.info("请求路径：[{}]", requestUrl);
+        String tenantId = WebFluxUtils.getHeader(BaseContextConstants.TENANT, request);
+        log.info("请求租户id：[{}]，请求路径：[{}]", tenantId, requestUrl);
+        WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT, tenantId);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
-        if (StringHandlerUtils.isIgnore(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
-                || StringHandlerUtils.isIgnore(ignorePatterns(), request.getPath().toString())) {
+        if (StringHandlerUtils.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
+                || StringHandlerUtils.matchUrl(ignorePatterns(), request.getPath().toString())) {
             // 放行请求清除token
             clearTokenRequest(exchange);
             return chain.filter(exchange);
@@ -66,12 +68,10 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
                     WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
-
-                    String realm = WebFluxUtils.getHeader(BaseContextConstants.JWT_KEY_REALM, request);
-                    final String realmCode = StringUtils.isEmpty(realm) ? jwtUserInfo.getRealm() : realm;
-                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_REALM, realmCode);
+                    String tenant = WebFluxUtils.getHeader(BaseContextConstants.TENANT, request);
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT, StringUtils.isEmpty(tenant) ? jwtUserInfo.getTenant() : tenant);
                     MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
-                    MDC.put(BaseContextConstants.JWT_KEY_REALM, String.valueOf(realmCode));
+                    MDC.put(BaseContextConstants.TENANT, String.valueOf(tenantId));
                 }
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
@@ -125,6 +125,13 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         return jwtUserInfo;
     }
 
+    /**
+     * 获取token用户信息
+     *
+     * @param token token值
+     * @return JwtUserInfo
+     * @throws BaseException 异常
+     */
     public abstract JwtUserInfo getJwtUserInfo(String token) throws BaseException;
 
     protected Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {

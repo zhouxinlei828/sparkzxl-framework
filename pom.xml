@@ -6,14 +6,14 @@
 
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-component</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.1</version>
     <packaging>pom</packaging>
     <name>sparkzxl-component</name>
     <description>sparkzxl component framework</description>
     <url>https://github.com/sparkzxl/sparkzxl-component</url>
 
     <properties>
-        <sparkzxl.version>1.0.1.RELEASE</sparkzxl.version>
+        <sparkzxl.version>1.0</sparkzxl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -33,9 +33,13 @@
         <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
+        <springfox.version>2.10.5</springfox.version>
+        <swagger-models.version>1.5.22</swagger-models.version>
 
         <!-- datasource-->
-        <mybatis-plus.version>3.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <dynamic-datasource.version>3.4.0</dynamic-datasource.version>
+        <druid.version>1.2.6</druid.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
         <p6spy.version>3.9.1</p6spy.version>
         <logstash.version>6.6</logstash.version>
@@ -43,8 +47,7 @@
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
-        <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
-        <spring-security-rsa.version>1.0.9.RELEASE</spring-security-rsa.version>
+        <spring-security-rsa.version>1.0.10.RELEASE</spring-security-rsa.version>
         <spring-data-commos.version>2.2.6.RELEASE</spring-data-commos.version>
         <!-- jwt组件-->
         <jwt.version>9.7</jwt.version>
@@ -53,9 +56,9 @@
         <!-- google-->
         <zxing.core.version>3.4.1</zxing.core.version>
         <guava.version>30.1-jre</guava.version>
-        <hutool.version>5.5.7</hutool.version>
+        <hutool.version>5.6.5</hutool.version>
         <!-- redisson -->
-        <redisson-spring-boot-starter.version>3.14.1</redisson-spring-boot-starter.version>
+        <redisson-spring-boot-starter.version>3.15.5</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
         <curator.version>5.1.0</curator.version>
 
@@ -72,7 +75,7 @@
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.8.8</caffeine.version>
         <fastjson.version>1.2.75</fastjson.version>
-        <easy-excel.version>2.2.7</easy-excel.version>
+        <easy-excel.version>2.2.10</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.1.3</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.2.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
@@ -86,6 +89,9 @@
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <jsqlparser.version>3.2</jsqlparser.version>
+        <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
+        <antisamy.version>1.5.10</antisamy.version>
+        <sensitive-word.version>0.0.15</sensitive-word.version>
     </properties>
 
     <modules>
@@ -93,7 +99,8 @@
         <module>sparkzxl-cache-starter</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-database-starter</module>
-        <module>sparkzxl-distributed</module>
+        <module>sparkzxl-distributed-cloud-starter</module>
+        <module>sparkzxl-distributed-dubbo-starter</module>
         <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
         <module>sparkzxl-feign-starter</module>
@@ -103,9 +110,7 @@
         <module>sparkzxl-log-starter</module>
         <module>sparkzxl-mail-starter</module>
         <module>sparkzxl-mongodb-starter</module>
-        <module>sparkzxl-oauth2-open-starter</module>
         <module>sparkzxl-oauth2-resource-starter</module>
-        <module>sparkzxl-oauth2-server-starter</module>
         <module>sparkzxl-oss-starter</module>
         <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-pdf-starter</module>
@@ -116,7 +121,8 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-hystrix-starter</module>
+        <module>sparkzxl-annotation</module>
+        <module>sparkzxl-tenant-starter</module>
     </modules>
 
     <licenses>
@@ -187,6 +193,23 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-dependencies</artifactId>
+                <version>${knife4j.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-core</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-models.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
@@ -195,6 +218,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-annotation</artifactId>
+                <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
@@ -219,11 +247,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-feign-starter</artifactId>
-                <version>${sparkzxl.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-hystrix-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
@@ -278,19 +301,29 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-annotation</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper-spring-boot-starter.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>p6spy</groupId>
                 <artifactId>p6spy</artifactId>
                 <version>${p6spy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
             </dependency>
             <!-- 兼容 S3 协议 SDK-->
             <dependency>
@@ -317,11 +350,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk16</artifactId>
-                <version>${bcprov-jdk16.version}</version>
             </dependency>
             <!--Spring Security RSA工具类-->
             <dependency>
@@ -596,6 +624,27 @@
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>wiki.xsx</groupId>
+                <artifactId>slf4j-spring-boot-starter</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-aop</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>${xsx.slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.owasp.antisamy</groupId>
+                <artifactId>antisamy</artifactId>
+                <version>${antisamy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>sensitive-word</artifactId>
+                <version>${sensitive-word.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

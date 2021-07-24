@@ -1,9 +1,9 @@
 package com.github.sparkzxl.web.interceptor;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.annotation.ResponseResult;
-import com.github.sparkzxl.core.context.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHandler;
+import com.github.sparkzxl.annotation.result.ResponseResult;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,20 +26,19 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         //设置当前请求线程全局信息
-        if (!BaseContextHandler.getBoot()) {
-            BaseContextHandler.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-            BaseContextHandler.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
-            BaseContextHandler.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
-            BaseContextHandler.setRealm(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
-            String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
-            MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
-            MDC.put(BaseContextConstants.JWT_KEY_REALM, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_REALM));
-            MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-            String feign = request.getHeader(BaseContextConstants.REMOTE_CALL);
-            if (StringUtils.isNotEmpty(feign)) {
-                return true;
-            }
+        BaseContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
+        BaseContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
+        BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
+        String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
+        MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
+        MDC.put(BaseContextConstants.TENANT, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
+        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        String feign = request.getHeader(BaseContextConstants.REMOTE_CALL);
+        if (StringUtils.isNotEmpty(feign)) {
+            return true;
         }
 
         if (handler instanceof HandlerMethod) {

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.config;
 
-import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;
@@ -47,7 +47,7 @@ public class ResourceServerConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        String[] ignorePatterns = ArrayUtils.addAll(resourceProperties.getIgnorePatterns(),
+        String[] ignorePatterns = ArrayUtils.addAll(resourceProperties.getIgnore(),
                 SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS.toArray(new String[0]));
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
         //自定义处理JWT请求头过期或签名错误的结果

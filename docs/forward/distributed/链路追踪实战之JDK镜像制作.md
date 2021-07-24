@@ -19,7 +19,7 @@
 
 官网下载路径:[javase-jdk8-downloads](https://www.oracle.com/cn/java/technologies/javase/javase-jdk8-downloads.html)
 
-![jdk-download.png](../../images/jdk-download.png)
+![jdk-download.png](https://oss.sparksys.top/sparkzxl-component/jdk-download.png)
 
 下载对应的系统的jdk版本，本文使用的是Linux操作系统
 
@@ -27,7 +27,7 @@
 
 官网下载路径:[skywalking 8.5.0](https://archive.apache.org/dist/skywalking/8.5.0/)
 
-![skywalking-download.png](../../images/skywalking-download.png)
+![skywalking-download.png](https://oss.sparksys.top/sparkzxl-component/skywalking-download.png)
 
 下载对应的版本包，如果使用的是es7作为skywalking 存储db，则需要es7对应的包文件
 
@@ -38,9 +38,9 @@
 ```dockerfile
 FROM centos:7
 MAINTAINER zhouxinlei <zhouxinlei298@163.com>
-RUN  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+RUN  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echoField 'Asia/Shanghai' >/etc/timezone
 ENV LANG="zh_CN.UTF-8"
-RUN echo "export LC_ALL=zh_CN.UTF-8"  >>  /etc/profile &&  echo "export LC_ALL=zh_CN.UTF-8" >>/root/.bashrc \
+RUN echoField "export LC_ALL=zh_CN.UTF-8"  >>  /etc/profile &&  echoField "export LC_ALL=zh_CN.UTF-8" >>/root/.bashrc \
         && localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
 RUN cd /usr/share/fonts/ \
         && chmod -R 755 /usr/share/fonts \
@@ -70,11 +70,11 @@ CMD ["/bin/bash"]
 
 > 将下载JDK包和skywalking包 agent 下的放到Dockerfile同级目录
 
-![skywalking-agent.png](../../images/skywalking-agent.png)
+![skywalking-agent.png](https://oss.sparksys.top/sparkzxl-component/skywalking-agent.png)
 
 文件结构如下
 
-![jdk-build.png](../../images/jdk-build.png)
+![jdk-build.png](https://oss.sparksys.top/sparkzxl-component/jdk-build.png)
 
 ```bash
 docker build -t java:8 .
@@ -149,6 +149,7 @@ docker push registry.cn-hangzhou.aliyuncs.com/sparkzxl/java:8
 > - **SW_AGENT_SPAN_LIMIT**：配置链路的最大 Span 数量。一般情况下，不需要配置，默认为 300 。主要考虑，有些新上 SkyWalking Agent 的项目，代码可能比较糟糕
 
 - 运行容器
+
 > 示例
 
 ```bash
@@ -159,4 +160,4 @@ docker run -d --name spring-boot-demo --restart=always -v /logs/spring-boot-demo
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

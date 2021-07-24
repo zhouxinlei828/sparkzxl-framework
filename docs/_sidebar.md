@@ -1,7 +1,7 @@
 * 组件框架搭建
     * [1.框架搭建手册之maven私库nexus实战](forward/framework/框架搭建手册之maven私库nexus实战.md)
     * [2.框架搭建手册之idea搭建代码环境](forward/framework/框架搭建手册之idea搭建代码环境.md)
-  
+
 * 分布式架构篇
     * [1.Nacos注册&配置中心搭建](forward/distributed/分布式架构之Nacos注册&配置中心搭建.md)
     * [2.Spring Cloud Alibaba 注册中心 Nacos 入门](forward/distributed/分布式架构之SpringCloudAlibaba注册中心Nacos入门.md)
@@ -18,7 +18,7 @@
     * [13.Spring-cloud-gateway-oauth2实现统一认证和鉴权](forward/222)
     * [14.Spring Cloud Skywalking链路追踪](forward/222)
     * [15.Spring Cloud 微服务聚合swagger文档](forward/222)
-    * [16.「一站式」兼容所有云厂商文件存储Spring Boot实现](forward/distributed/一站式兼容所有云厂商文件存储实现.md)
+    * [16.我用AmazonS3解决了众多云厂商oss的痛点](forward/distributed/我用AmazonS3解决了众多云厂商oss的痛点.md)
     * [17.ELK+Filebeat+Kafka分布式日志管理平台搭建](forward/distributed/分布式架构之ELK+Filebeat+Kafka分布式日志管理平台搭建.md)
 
 * 应用部署实践

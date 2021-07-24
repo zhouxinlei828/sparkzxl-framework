@@ -5,6 +5,11 @@ import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * description: tree节点
+ *
+ * @author zhouxinlei
+ */
 public class TreeNode<E, T extends Serializable> implements Cloneable, Serializable {
 
     private T id;

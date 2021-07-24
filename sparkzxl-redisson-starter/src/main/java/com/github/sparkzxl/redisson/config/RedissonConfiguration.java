@@ -27,7 +27,7 @@ public class RedissonConfiguration {
     }
 
     @Bean
-    public RedisLockAspect redisLockAspect() {
-        return new RedisLockAspect();
+    public RedisLockAspect redisLockAspect(RedisDistributedLock redisDistributedLock) {
+        return new RedisLockAspect(redisDistributedLock);
     }
 }

@@ -5,7 +5,7 @@ import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.database.base.mapper.SuperMapper;
 import com.github.sparkzxl.database.base.service.SuperCacheService;
-import com.github.sparkzxl.database.entity.SuperEntity;
+import com.github.sparkzxl.entity.data.SuperEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +26,6 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     public void setGeneralCacheService(GeneralCacheService generalCacheService) {
         this.generalCacheService = generalCacheService;
     }
-
 
 
     /**

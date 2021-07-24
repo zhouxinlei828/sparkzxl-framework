@@ -12,6 +12,11 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * description: 公共服务 实现类
+ *
+ * @author zhouxinlei
+ */
 public class SuperServiceImpl<R extends IBaseRepository<T>, T extends Entity> implements ISuperService<T> {
 
     @Autowired

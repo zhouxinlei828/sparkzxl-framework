@@ -24,12 +24,12 @@ public class FileProperties {
 
     private boolean cleanHistoryOnStart;
 
-    private String totalSizeCap = "0B";
+    private String totalSizeCap = "10GB";
 
-    private String path = "../logs";
+    private String path = System.getProperty("user.home").concat("/logs");
 
     private int maxHistory = 7;
 
-    private String maxSize = "10MB";
+    private String maxFileSize = "10MB";
 
 }

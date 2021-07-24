@@ -1,7 +1,10 @@
 package com.github.sparkzxl.cache.template;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -13,7 +16,6 @@ import java.util.function.Function;
  *
  * @author zhouxinlei
  */
-@SuppressWarnings("unchecked")
 public class CaffeineCacheImpl implements GeneralCacheService {
 
     long maxSize = 1000L;
@@ -38,6 +40,26 @@ public class CaffeineCacheImpl implements GeneralCacheService {
         }
         cache.put(key, value);
         this.cacheMap.put(key, cache);
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        Cache<String, Object> ifPresent = this.cacheMap.getIfPresent(key);
+        if (ObjectUtils.isEmpty(ifPresent)) {
+            set(key, value, expireTime, timeUnit);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setIfAbsent(String key, Object value) {
+        Cache<String, Object> ifPresent = this.cacheMap.getIfPresent(key);
+        if (ObjectUtils.isEmpty(ifPresent)) {
+            set(key, value);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -121,7 +143,8 @@ public class CaffeineCacheImpl implements GeneralCacheService {
                 set(key, obj, expireTime, timeUnit);
             }
         } else if (ifPresent != null) {
-            obj = (T) ifPresent.getIfPresent(key);
+            obj = Convert.convert(new TypeReference<T>() {
+            }, ifPresent.getIfPresent(key));
         }
         return obj;
     }

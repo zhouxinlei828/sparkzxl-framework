@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.assert_;
 
 import com.github.sparkzxl.core.base.code.BaseEnumCode;
 import com.github.sparkzxl.core.support.BaseException;
-import com.github.sparkzxl.core.support.BusinessException;
+import com.github.sparkzxl.core.support.BizException;
 
 import java.text.MessageFormat;
 
@@ -11,7 +11,7 @@ import java.text.MessageFormat;
  *
  * @author zhouxinlei
  */
-public interface BusinessEnumSysAssert extends BaseEnumCode, SparkZxlAssert {
+public interface BusinessEnumSysAssert extends BaseEnumCode, BusinessAssert {
 
     /**
      * 创建异常
@@ -22,7 +22,7 @@ public interface BusinessEnumSysAssert extends BaseEnumCode, SparkZxlAssert {
     @Override
     default BaseException newException(Object... args) {
         String msg = MessageFormat.format(this.getMessage(), args);
-        return new BusinessException(this, args, msg);
+        return new BizException(this, args, msg);
     }
 
     /**
@@ -35,6 +35,6 @@ public interface BusinessEnumSysAssert extends BaseEnumCode, SparkZxlAssert {
     @Override
     default BaseException newException(Throwable t, Object... args) {
         String msg = MessageFormat.format(this.getMessage(), args);
-        return new BusinessException(this, args, msg, t);
+        return new BizException(this, args, msg, t);
     }
 }

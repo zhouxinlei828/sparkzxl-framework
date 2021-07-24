@@ -1,7 +1,6 @@
 package com.github.sparkzxl.jwt.config;
 
 import com.github.sparkzxl.jwt.properties.JwtProperties;
-import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.jwt.service.impl.JwtTokenServiceImpl;
 import com.google.common.collect.Maps;
@@ -15,13 +14,11 @@ import org.springframework.context.annotation.Configuration;
  * @author zhouxinlei
  */
 @Configuration
-@EnableConfigurationProperties({JwtProperties.class, KeyStoreProperties.class})
+@EnableConfigurationProperties({JwtProperties.class})
 public class JwtAutoConfiguration {
 
     @Bean
-    public JwtTokenService jwtTokenService(JwtProperties jwtProperties, KeyStoreProperties keyStoreProperties) {
-        JwtTokenServiceImpl jwtTokenService = new JwtTokenServiceImpl(jwtProperties, keyStoreProperties);
-        jwtTokenService.setKeyPairMap(Maps.newHashMap());
-        return jwtTokenService;
+    public JwtTokenService jwtTokenService(JwtProperties jwtProperties) {
+        return new JwtTokenServiceImpl(jwtProperties, jwtProperties.getKeyStore(), Maps.newHashMap());
     }
 }

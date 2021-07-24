@@ -1,5 +1,6 @@
 package com.github.sparkzxl.jwt.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -12,10 +13,11 @@ import java.util.concurrent.TimeUnit;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.jwt")
+@ConfigurationProperties(prefix = ConfigurationConstant.JWT_PREFIX)
 public class JwtProperties implements Serializable {
 
-    private static final long serialVersionUID = 6685832204171292577L;
+    private static final long serialVersionUID = 8890136349889379042L;
+
     /**
      * 过期时间 2h
      */
@@ -25,8 +27,10 @@ public class JwtProperties implements Serializable {
     /**
      * 刷新token的过期时间 8h
      */
-    private long refreshExpire = 2;
+    private long refreshExpire = 8;
 
     private String secret = "123456";
+
+    private KeyStoreProperties keyStore = new KeyStoreProperties();
 
 }

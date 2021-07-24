@@ -1,12 +1,12 @@
 package com.github.sparkzxl.security.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
-import com.github.sparkzxl.core.entity.JwtUserInfo;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.SparkZxlExceptionAssert;
+import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.entity.security.SecurityUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
-import com.github.sparkzxl.security.entity.AuthUserDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,7 +30,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private JwtTokenService jwtTokenService;
 
-
     public void setJwtTokenService(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
@@ -47,12 +46,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
-                SparkZxlExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
+                BizExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
             }
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                AuthUserDetail adminUserDetails = new AuthUserDetail(
+                SecurityUserDetail securityUserDetail = new SecurityUserDetail(
                         jwtUserInfo.getId(),
                         jwtUserInfo.getUsername(),
                         null,
@@ -60,8 +59,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                         true,
                         jwtUserInfo.getAuthorities()
                 );
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminUserDetails,
-                        null, adminUserDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUserDetail,
+                        null, securityUserDetail.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 log.info("authenticated user:[{}]", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

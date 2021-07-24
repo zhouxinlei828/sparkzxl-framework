@@ -24,7 +24,7 @@ public class CopyUtils {
             ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
             ObjectInputStream inStream = new ObjectInputStream(byteIn);
             return (List<T>) inStream.readObject();
-        }).onFailure(Throwable::printStackTrace).getOrElse(Lists.newArrayList());
+        }).onFailure(Throwable::printStackTrace).getOrElse(Lists::newArrayList);
     }
 
     public static <T extends Object> T deepCopy(T data) {

@@ -27,12 +27,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+/***
+ * description: 公共仓储层 实现类
+ *
+ * @author zhouxinlei
+ */
 public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T> {
 
     protected Class<T> entityClass;
 
-    @Autowired
     protected MongoTemplate mongoTemplate;
+
+    @Autowired
+    public void setMongoTemplate(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
     public int insert(T entity) {

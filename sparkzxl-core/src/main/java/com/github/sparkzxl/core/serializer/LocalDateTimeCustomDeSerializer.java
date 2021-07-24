@@ -118,8 +118,11 @@ public class LocalDateTimeCustomDeSerializer extends JSR310DateTimeDeserializerB
                 }
                 if (_formatter == DEFAULT_FORMATTER) {
                     // JavaScript by default includes time and zone in JSON serialized Dates (UTC/ISO instant format).
-                    if (string.length() > 10 && string.charAt(10) == 'T') {
-                        if (string.endsWith("Z")) {
+                    int length = 10;
+                    char match = 'T';
+                    if (string.length() > length && string.charAt(length) == match) {
+                        String matching = "Z";
+                        if (string.endsWith(matching)) {
                             return LocalDateTime.ofInstant(Instant.parse(string), ZoneOffset.UTC);
                         } else {
                             return LocalDateTime.parse(string, DEFAULT_FORMATTER);
@@ -139,12 +142,14 @@ public class LocalDateTimeCustomDeSerializer extends JSR310DateTimeDeserializerB
             if (t == JsonToken.END_ARRAY) {
                 return null;
             }
-            if ((t == JsonToken.VALUE_STRING || t == JsonToken.VALUE_EMBEDDED_OBJECT) && context.isEnabled(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)) {
-                final LocalDateTime parsed = deserialize(parser, context);
-                if (parser.nextToken() != JsonToken.END_ARRAY) {
-                    handleMissingEndArrayForSingle(parser, context);
+            if (t == JsonToken.VALUE_STRING || t == JsonToken.VALUE_EMBEDDED_OBJECT) {
+                if (context.isEnabled(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)) {
+                    final LocalDateTime parsed = deserialize(parser, context);
+                    if (parser.nextToken() != JsonToken.END_ARRAY) {
+                        handleMissingEndArrayForSingle(parser, context);
+                    }
+                    return parsed;
                 }
-                return parsed;
             }
             if (t == JsonToken.VALUE_NUMBER_INT) {
                 LocalDateTime result;

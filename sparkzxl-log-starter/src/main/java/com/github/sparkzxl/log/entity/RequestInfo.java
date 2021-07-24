@@ -1,5 +1,7 @@
 package com.github.sparkzxl.log.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +10,8 @@ import lombok.Data;
  * @author zhouxinlei
  */
 @Data
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestInfo {
 
     /**
@@ -26,25 +30,27 @@ public class RequestInfo {
      * 请求类方法
      */
     private String classMethod;
+
+    /**
+     * 用户id
+     */
+    private String userId;
+
+    /**
+     * 用户姓名
+     */
+    private String userName;
+
     /**
      * 请求参数
      */
-    private Object requestParams;
-
-    /**
-     * 请求来源
-     */
-    private String requestSource;
+    private Object params;
 
     /**
      * 请求结果
      */
     private Object result;
 
-    /**
-     * 日志类型 1: 操作日志, 2: 请求日志, 3：异常日志
-     */
-    private Integer logType;
     /**
      * 错误原因
      */
@@ -61,25 +67,5 @@ public class RequestInfo {
      * 请求耗时
      */
     private String timeCost;
-
-    /**
-     * 请求地点
-     */
-    private String location;
-
-    /**
-     * 浏览器名称
-     */
-    private String browser;
-
-    /**
-     * 浏览器版本
-     */
-    private String browserVersion;
-
-    /**
-     * 操作系统
-     */
-    private String operatingSystem;
 
 }

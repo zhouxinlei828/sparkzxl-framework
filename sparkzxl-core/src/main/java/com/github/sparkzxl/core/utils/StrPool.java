@@ -68,7 +68,7 @@ public interface StrPool {
     String HASH_LEFT_BRACE = "#{";
     String CRLF = "\r\n";
     String HTML_NBSP = "&nbsp;";
-    String HTML_AMP = "&amp";
+    String HTML_AMP = "&amp;";
     String HTML_QUOTE = "&quot;";
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";
@@ -79,10 +79,8 @@ public interface StrPool {
     /**
      * JSON 资源
      */
-    String CONTENT_TYPE = "application/json; charset=utf-8";
+    String CONTENT_TYPE = "application/json;charset=utf-8";
 
-
-    String TEST_TOKEN = "Bearer test";
     String TEST = "test";
     String PROD = "prod";
 
@@ -96,4 +94,26 @@ public interface StrPool {
     Long DEF_PARENT_ID = 0L;
 
     String UNKNOWN = "unknown";
+
+    String HTTP = "http";
+
+    String HTTPS = "https";
+
+    String STRING_TYPE_NAME = "java.lang.String";
+    String LONG_TYPE_NAME = "java.lang.Long";
+    String INTEGER_TYPE_NAME = "java.lang.Integer";
+    String SHORT_TYPE_NAME = "java.lang.Short";
+    String DOUBLE_TYPE_NAME = "java.lang.Double";
+    String BYTE_TYPE_NAME = "java.lang.Byte";
+    String FLOAT_TYPE_NAME = "java.lang.Float";
+    String BOOLEAN_TYPE_NAME = "java.lang.Boolean";
+    String SET_TYPE_NAME = "java.lang.Set";
+    String LIST_TYPE_NAME = "java.lang.List";
+    String COLLECTION_TYPE_NAME = "java.lang.Collection";
+    String CHARACTER_TYPE_NAME = "java.lang.Character";
+    String DATE_TYPE_NAME = "java.util.Date";
+    String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
+    String LOCAL_DATE_TYPE_NAME = "java.time.LocalDate";
+    String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";
+
 }

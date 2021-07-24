@@ -29,6 +29,12 @@ public class SpringContextUtils implements ApplicationContextAware {
         return applicationContext;
     }
 
+    public static String getApplicationName() {
+        if (applicationContext == null) {
+            return "";
+        }
+        return applicationContext.getApplicationName();
+    }
     //通过name获取 Bean.
 
     /**
@@ -108,6 +114,10 @@ public class SpringContextUtils implements ApplicationContextAware {
      */
     public static String[] getActiveProfiles() {
         return applicationContext.getEnvironment().getActiveProfiles();
+    }
+
+    public static <T> T getProperty(String name, Class<T> tClass) {
+        return applicationContext.getEnvironment().getRequiredProperty(name, tClass);
     }
 
     /**

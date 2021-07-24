@@ -1,10 +1,12 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.entity.UserAgentEntity;
+import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.core.utils.UserAgentUtils;
+import com.github.sparkzxl.log.LogStoreService;
 import com.github.sparkzxl.log.entity.RequestInfo;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
@@ -15,6 +17,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +26,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,9 +40,40 @@ public class WebLogAspect {
 
     private final ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
 
+    private boolean storage = false;
+
+    @Autowired(required = false)
+    private LogStoreService logStoreService;
+
+    public void setStorage(boolean storage) {
+        this.storage = storage;
+    }
+
     @Pointcut("@within(com.github.sparkzxl.log.annotation.WebLog)")
     public void pointCut() {
 
+    }
+
+    /**
+     * 对Controller下面的方法执行前进行切入，初始化开始时间
+     *
+     * @param joinPoint 切入点
+     */
+    @Before("pointCut()")
+    public void beforeMethod(JoinPoint joinPoint) {
+        Stopwatch stopwatch = get();
+        if (stopwatch.isRunning()) {
+            stopwatch.reset().start();
+        } else {
+            stopwatch.start();
+        }
+        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
+        RequestInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
+        String jsonStr = JsonUtil.toJson(requestParamInfo);
+        log.info("请求参数信息: [{}]", jsonStr);
+        if (storage) {
+            CompletableFuture.runAsync(() -> logStoreService.saveLog(requestParamInfo));
+        }
     }
 
     /**
@@ -50,53 +85,22 @@ public class WebLogAspect {
      */
     @Around("pointCut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Stopwatch stopwatch = get();
-        stopwatch.reset();
-        stopwatch.start();
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         Object result = proceedingJoinPoint.proceed();
-        RequestInfo requestInfo = buildRequestInfo(httpServletRequest, proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs());
-        requestInfo.setResult(result);
-        requestInfo.setLogType(2);
-        String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
-        requestInfo.setTimeCost(timeCost);
-        String jsonStr = JsonUtil.toJson(requestInfo);
-        log.info("Request Info : [{}]", jsonStr);
-        get().stop();
+        RequestInfo requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint.getSignature(), result);
+        String jsonStr = JsonUtil.toJson(requestResultInfo);
+        log.info("响应结果信息: [{}]", jsonStr);
         return result;
-    }
-
-    /**
-     * 构建请求日志
-     *
-     * @param httpServletRequest httpServletRequest
-     * @param signature          signature
-     * @param args               参数
-     * @return RequestInfo
-     */
-    private RequestInfo buildRequestInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
-        RequestInfo requestInfo = new RequestInfo();
-        UserAgentEntity userAgentEntity = UserAgentUtils.getUserAgentEntity();
-        String operatingSystem = userAgentEntity.getOperatingSystem();
-        requestInfo.setIp(userAgentEntity.getRequestIp());
-        requestInfo.setLocation(userAgentEntity.getLocation());
-        requestInfo.setBrowser(userAgentEntity.getBrowser());
-        requestInfo.setBrowserVersion(userAgentEntity.getBrowserVersion());
-        requestInfo.setRequestSource(userAgentEntity.isMobile() ? "Mobile" : "PC");
-        requestInfo.setOperatingSystem(operatingSystem);
-        requestInfo.setUrl(httpServletRequest.getRequestURL().toString());
-        requestInfo.setHttpMethod(httpServletRequest.getMethod());
-        requestInfo.setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
-                signature.getName()));
-        requestInfo.setRequestParams(getRequestParameterJson(signature, args));
-        return requestInfo;
     }
 
     /**
      * 后置通知
      */
     @AfterReturning("pointCut()")
-    public void afterReturning() {
+    public void afterReturning(JoinPoint joinPoint) {
+        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
+        String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
+        log.info("请求接口：[{}],总计耗时: [{}]", httpServletRequest.getRequestURL().toString(), timeCost);
         remove();
     }
 
@@ -104,17 +108,83 @@ public class WebLogAspect {
      * 异常通知，拦截记录异常日志
      */
     @AfterThrowing(pointcut = "pointCut()", throwing = "e")
-    public void doAfterThrow(JoinPoint joinPoint, RuntimeException e) {
+    public void doAfterThrow(JoinPoint joinPoint, Exception e) {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        RequestInfo requestInfo = buildRequestInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
-        requestInfo.setLogType(3);
-        requestInfo.setErrorMsg(e.getMessage());
-        String error = ExceptionUtil.getMessage(e);
-        requestInfo.setError(error);
-        requestInfo.setThrowExceptionClass(e.getClass().getTypeName());
+        RequestInfo requestInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
         String jsonStr = JsonUtil.toJson(requestInfo);
-        log.info("Error Request Info : [{}]", jsonStr);
+        log.info("请求接口发生异常 : [{}]", jsonStr);
+        if (storage) {
+            CompletableFuture.runAsync(() -> logStoreService.saveLog(requestInfo));
+        }
         remove();
+    }
+
+    /**
+     * 构建请求参数日志
+     *
+     * @param httpServletRequest httpServletRequest
+     * @param signature          signature
+     * @param args               请求参数
+     * @return RequestParamInfo
+     */
+    private RequestInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
+        String userId = BaseContextHolder.getUserId(String.class);
+        String name = BaseContextHolder.getName();
+        return RequestInfo.builder()
+                .ip(NetworkUtil.getIpAddress(httpServletRequest))
+                .url(httpServletRequest.getRequestURL().toString())
+                .httpMethod(httpServletRequest.getMethod())
+                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
+                        signature.getName()))
+                .userId(userId)
+                .userName(name)
+                .params(getRequestParameterJson(signature, args))
+                .build();
+    }
+
+    /**
+     * 构建请求结果日志
+     *
+     * @param httpServletRequest httpServletRequest
+     * @param signature          signature
+     * @param result             返回结果
+     * @return RequestInfo
+     */
+    private RequestInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
+        String userId = BaseContextHolder.getUserId(String.class);
+        String name = BaseContextHolder.getName();
+        return RequestInfo.builder()
+                .url(httpServletRequest.getRequestURL().toString())
+                .httpMethod(httpServletRequest.getMethod())
+                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
+                        signature.getName()))
+                .userId(userId)
+                .userName(name)
+                .result(result)
+                .build();
+    }
+
+    /**
+     * 构建请求异常日志
+     *
+     * @param httpServletRequest httpServletRequest
+     * @param signature          signature
+     * @param e                  异常
+     * @return RequestInfo
+     */
+    private RequestInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
+        String userId = BaseContextHolder.getUserId(String.class);
+        String name = BaseContextHolder.getName();
+        return RequestInfo.builder()
+                .url(httpServletRequest.getRequestURL().toString())
+                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
+                        signature.getName()))
+                .userId(userId)
+                .userName(name)
+                .errorMsg(e.getMessage())
+                .error(ExceptionUtil.getMessage(e))
+                .throwExceptionClass(e.getClass().getTypeName())
+                .build();
     }
 
     public Map<String, Object> getRequestParameterJson(Signature signature, Object[] args) {
@@ -133,6 +203,9 @@ public class WebLogAspect {
                 }
                 if (value instanceof ServletRequest
                         || value instanceof ServletResponse) {
+                    continue;
+                }
+                if (value instanceof AuthUserInfo) {
                     continue;
                 }
                 parameterMap.put(paramNames[i], value);

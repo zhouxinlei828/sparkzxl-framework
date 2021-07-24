@@ -1,5 +1,6 @@
 package com.github.sparkzxl.log.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -10,7 +11,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "logging")
+@ConfigurationProperties(prefix = ConfigurationConstant.LOG_PREFIX)
 public class LogProperties {
 
     /**
@@ -18,11 +19,16 @@ public class LogProperties {
      */
     private boolean enableConsole = true;
 
-    @NestedConfigurationProperty
-    private FileProperties file;
+    /**
+     * 是否开启日志存储
+     */
+    private boolean storage = false;
 
     @NestedConfigurationProperty
-    private KafkaProperties kafka;
+    private FileProperties file = new FileProperties();
+
+    @NestedConfigurationProperty
+    private KafkaProperties kafka = new KafkaProperties();
 
 
 }

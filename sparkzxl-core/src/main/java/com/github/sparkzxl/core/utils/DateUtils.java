@@ -1,10 +1,10 @@
 package com.github.sparkzxl.core.utils;
 
-import cn.hutool.core.date.BetweenFormater;
+import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import com.github.sparkzxl.core.entity.DateInfo;
+import com.github.sparkzxl.entity.core.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.DateFormat;
@@ -203,7 +203,7 @@ public class DateUtils extends DateUtil {
      * @param level         格式化类型
      * @return String
      */
-    public static String formatBetween(LocalDateTime localDateTime, Date endDate, BetweenFormater.Level level) {
+    public static String formatBetween(LocalDateTime localDateTime, Date endDate, BetweenFormatter.Level level) {
         return formatBetween(DateUtils.localDateTime2Date(localDateTime), endDate, level);
     }
 
@@ -225,12 +225,5 @@ public class DateUtils extends DateUtil {
         }
         ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
         return Date.from(zonedDateTime.toInstant());
-    }
-
-    public static void main(String[] args) {
-        String dateStr = "2021-04-28 09:15";
-        Date date = formatDate(dateStr, DatePattern.NORM_DATETIME_MINUTE_PATTERN);
-        System.out.println(formatDateTime(date));
-        System.out.println(date);
     }
 }

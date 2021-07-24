@@ -1,13 +1,13 @@
 package com.github.sparkzxl.feign.default_;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.annotation.ResponseResult;
-import com.github.sparkzxl.core.context.BaseContextConstants;
+import com.github.sparkzxl.annotation.result.ResponseResult;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
-import com.github.sparkzxl.feign.constant.ExceptionConstant;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.github.sparkzxl.feign.model.ExceptionChain;
+import com.github.sparkzxl.model.exception.ExceptionChain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;

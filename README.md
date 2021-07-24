@@ -1,5 +1,14 @@
 # sparkzxl-component学习教程
 
+<p>
+<a href="https://search.maven.org/"><img src="https://img.shields.io/badge/maven-1.1-blue" alt="maven"></a>
+<a href="https://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2.0"></a>
+<a href="https://github.com/sparkzxl/sparkzxl-component"><img src="https://img.shields.io/badge/组件-sparkzxl--component-orange" alt="sparkzxl-component"></a>
+<a href="https://github.com/sparkzxl/sparkzxl-auth"><img src="https://img.shields.io/badge/分布式认证-sparkzxl--auth-success" alt="分布式认证"></a>
+</p>
+
+[更新日志](docs/forward/CHANGELOG.md)
+
 ## 简介
 
 > sparkzxl-component包含springboot项目的封装，主要功能是统一了对外接口的api访问格式，web模块进行了封装，基于DDD领域驱动模型设计代码，具体落地实施，对常用的工具类包进行封装，简单易用，elasticsearch，mybatis组件。集成了oauth2，redis缓存，本地缓存的构建，分布式锁的封装等等，是快速开发的脚手架，简易适用于企业级框架搭建
@@ -17,7 +26,23 @@
 
 - [spark auth](http://119.45.182.28:3000/login)
 
-!> 账户：admin 密码：123456
+!> 账户：test 密码：123456
+
+## 演示效果
+
+![sparkzxl-demo-7.png](https://oss.sparksys.top/images/sparkzxl-demo-7.png)
+
+![sparkzxl-demo-6.png](https://oss.sparksys.top/images/sparkzxl-demo-6.png)
+
+![sparkzxl-demo-5.png](https://oss.sparksys.top/images/sparkzxl-demo-5.png)
+
+![sparkzxl-demo-4.png](https://oss.sparksys.top/images/sparkzxl-demo-4.png)
+
+![sparkzxl-demo-3.png](https://oss.sparksys.top/images/sparkzxl-demo-3.png)
+
+![sparkzxl-demo-2.png](https://oss.sparksys.top/images/sparkzxl-demo-2.png)
+
+![sparkzxl-demo-1.png](https://oss.sparksys.top/images/sparkzxl-demo-1.png)
 
 ## 开源博客
 
@@ -33,7 +58,7 @@
 
 > 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
 
-![nexus-compoment.png](docs/images/nexus-compoment.png)
+![nexus-compoment.png](https://oss.sparksys.top/sparkzxl-component/nexus-compoment.png)
 
 ## 组件框架搭建
 
@@ -57,7 +82,7 @@
 - [13.Spring-cloud-gateway-oauth2 实现统一认证和鉴权](docs/forward/222)
 - [14.Spring Cloud Skywalking链路追踪](docs/forward/222)
 - [15.Spring Cloud 微服务聚合swagger文档](docs/forward/222)
-- [16.一站式兼容所有云厂商文件存储实现](docs/forward/distributed/一站式兼容所有云厂商文件存储实现.md)
+- [16.我用AmazonS3解决了众多云厂商oss的痛点](docs/forward/distributed/我用AmazonS3解决了众多云厂商oss的痛点.md)
 - [17.ELK+Filebeat+Kafka分布式日志管理平台搭建](docs/forward/distributed/分布式架构之ELK+Filebeat+Kafka分布式日志管理平台搭建.md)
 
 ## 应用部署实践
@@ -85,4 +110,4 @@
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](docs/images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

@@ -42,8 +42,7 @@ agent {
 }
 ```
 
-- dockerfile: Dockerfile源存储库中包含的容器来构建执行Pipeline或stage。使用此参数，jenkinsfile必须从代码中加载使用“pipeline from SCM”或者“Multibranch
-  Pipeline”加载
+- dockerfile: Dockerfile源存储库中包含的容器来构建执行Pipeline或stage。使用此参数，jenkinsfile必须从代码中加载使用“pipeline from SCM”或者“Multibranch Pipeline”加载
 
 > 默认是Dockerfile在根目录： agent { dockerfile true } 如果Dockerfile在另一个目录，使用dir参数： agent { dockerfile { dir 'someSubDir' } } 可以使用docker build添加参数： agent { dockerfile { additionalBuildArgs '--build-arg foo=bar' } }
 
@@ -99,14 +98,14 @@ pipeline {
         stage('Example Build') {
             agent { docker 'maven:3-alpine' }
             steps {
-                echo 'Hello, Maven'
+                echoField 'Hello, Maven'
                 sh 'mvn --version'
             }
         }
         stage('Example Test') {
             agent { docker 'openjdk:8-jre' }
             steps {
-                echo 'Hello, JDK'
+                echoField 'Hello, JDK'
                 sh 'java -version'
             }
         }
@@ -220,7 +219,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
     }
@@ -247,14 +246,14 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo "Hello ${params.PERSON}"
+                echoField "Hello ${params.PERSON}"
                 script {
                     def split = ${params.server.split(",")}
                     serverIP = split[0]
                     sshport = split[1]
                     username = split[2]
                     password = split[3]
-                    echo "serverIP:${serverIP},sshport:${sshport},username:${username},password:${password}"
+                    echoField "serverIP:${serverIP},sshport:${sshport},username:${username},password:${password}"
                 }
             }
         }
@@ -263,7 +262,7 @@ pipeline {
                 script {
                     wrap([$class: 'BuildUser']) {
                         if(params.isCommit==false){
-                            echo "不需要通知部署人员人工验收"
+                            echoField "不需要通知部署人员人工验收"
                         }
                         else{
                             //邮件通知测试人员人工验收
@@ -295,7 +294,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
     }
@@ -312,7 +311,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
     }
@@ -354,8 +353,7 @@ pipeline {
 - environment: 当指定的环境变量设置为给定值时执行，例如： when { environment name: 'DEPLOY_TO', value: 'production' }
 - expression: 当指定的Groovy表达式求值为true时执行，例如： when { expression { return params.DEBUG_BUILD } }
 - not: 当嵌套条件为false时执行。必须包含一个条件。例如：when { not { branch 'master' } }
-- allOf: 当所有嵌套条件都为真时执行。必须至少包含一个条件。例如：when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production'
-  } }
+- allOf: 当所有嵌套条件都为真时执行。必须至少包含一个条件。例如：when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production' } }
 - anyOf: 当至少一个嵌套条件为真时执行。必须至少包含一个条件。例如：when { anyOf { branch 'master'; branch 'staging' } }
 
 ```text
@@ -364,7 +362,7 @@ pipeline {
     stages {
         stage('Example Build') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
             }
         }
         stage('Example Deploy') {
@@ -375,7 +373,7 @@ pipeline {
                 }
             }
             steps {
-                echo 'Deploying'
+                echoField 'Deploying'
             }
         }
     }
@@ -392,7 +390,7 @@ pipeline {
     stages {
         stage('Non-Parallel Stage') {
             steps {
-                echo 'This stage will be executed first.'
+                echoField 'This stage will be executed first.'
             }
         }
         stage('Parallel Stage') {
@@ -405,7 +403,7 @@ pipeline {
                         label "for-branch-a"
                     }
                     steps {
-                        echo "On Branch A"
+                        echoField "On Branch A"
                     }
                 }
                 stage('Branch B') {
@@ -413,7 +411,7 @@ pipeline {
                         label "for-branch-b"
                     }
                     steps {
-                        echo "On Branch B"
+                        echoField "On Branch B"
                     }
                 }
             }
@@ -436,11 +434,11 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                echo 'Hello World'
+                echoField 'Hello World'
                 script {
                     def browsers = ['chrome', 'firefox']
                     for (int i = 0; i < browsers.size(); ++i) {
-                        echo "Testing the ${browsers[i]} browser"
+                        echoField "Testing the ${browsers[i]} browser"
                     }
                 }
             }
@@ -460,9 +458,9 @@ Jenkinsfile (Scripted Pipeline)
 node {
     stage('Example') {
         if (env.BRANCH_NAME == 'master') {
-            echo 'I only execute on the master branch'
+            echoField 'I only execute on the master branch'
         } else {
-            echo 'I execute elsewhere'
+            echoField 'I execute elsewhere'
         }
     }
 }
@@ -478,7 +476,7 @@ node {
             sh 'exit 1'
         }
         catch (exc) {
-            echo 'Something failed, I should sound the klaxons!'
+            echoField 'Something failed, I should sound the klaxons!'
             throw
         }
     }
@@ -499,4 +497,4 @@ node {
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](../../images/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)

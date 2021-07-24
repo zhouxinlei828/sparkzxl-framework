@@ -769,10 +769,10 @@ public class DocumentPdfTemplate extends ITextClient {
     /**
      * 计算文本居中应该移动的宽度
      *
-     * @param str 字符串
-     * @param width 宽度
+     * @param str       字符串
+     * @param width     宽度
      * @param fontWidth 字体宽度
-     * @param numWidth 数字宽度
+     * @param numWidth  数字宽度
      */
     public Float textCenter(String str, float width, float fontWidth, float numWidth) {
         String reg = "/^[ ]*|[ ]*$/g";

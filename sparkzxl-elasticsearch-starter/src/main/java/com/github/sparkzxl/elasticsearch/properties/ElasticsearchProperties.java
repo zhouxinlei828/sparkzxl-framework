@@ -1,10 +1,10 @@
 package com.github.sparkzxl.elasticsearch.properties;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "elasticsearch")
+@ConfigurationProperties(prefix = ConfigurationConstant.ELASTICSEARCH_PREFIX)
 public class ElasticsearchProperties {
 
     /**
