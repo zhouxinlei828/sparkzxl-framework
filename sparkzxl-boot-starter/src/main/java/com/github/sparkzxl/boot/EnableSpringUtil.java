@@ -1,4 +1,4 @@
-package com.github.sparkzxl.boot.infrastructure.annonation;
+package com.github.sparkzxl.boot;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import org.springframework.context.annotation.Import;
