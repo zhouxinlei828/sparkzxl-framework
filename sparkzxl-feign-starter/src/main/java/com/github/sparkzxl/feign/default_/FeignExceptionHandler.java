@@ -8,7 +8,6 @@ import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
@@ -27,8 +26,8 @@ import java.util.Map;
 public class FeignExceptionHandler extends DefaultErrorAttributes {
 
     @Override
-    public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
+    public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
+        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, includeStackTrace);
         Throwable error = super.getError(webRequest);
         List<ExceptionChain> exceptionChains = null;
         if (error instanceof RemoteCallException) {
@@ -42,9 +41,9 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
                 exceptionChains = new ArrayList<>(1);
             }
         }
-
+        String message = error.getCause().getMessage();
         ExceptionChain exceptionChain = new ExceptionChain();
-        exceptionChain.setMsg(error.getMessage());
+        exceptionChain.setMsg(message);
         exceptionChain.setPath(errorAttributes.get("path").toString());
         exceptionChain.setTimestamp(new Date());
         exceptionChain.setApplicationName(FeignExceptionHandlerContext.getApplicationName());
@@ -55,7 +54,6 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
         exceptionChains.add(exceptionChain);
         errorAttributes.put(ExceptionConstant.EXCEPTION_CHAIN_KEY, exceptionChains);
         Integer status = (Integer) errorAttributes.get("status");
-        String message = (String) errorAttributes.get("message");
         ResponseResultUtils.clearResponseResult();
         return response(status, message);
     }
