@@ -3,7 +3,7 @@ package com.github.sparkzxl.database.aspect;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.annotation.ApiIdempotent;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +51,7 @@ public class ApiIdempotentAspect {
         //获取幂等注解
         ApiIdempotent apiIdempotent = method.getAnnotation(ApiIdempotent.class);
         if (StringUtils.isEmpty(apiIdempotent.prefix())) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.PARAM_VALID_ERROR.getCode(), "lock key don't null...");
+            ExceptionAssert.failure(ApiResponseStatus.PARAM_VALID_ERROR.getCode(), "lock key don't null...");
         }
         String message = apiIdempotent.message();
         final String lockKey = lockKeyGenerator.getLockKey(joinPoint);
@@ -62,7 +62,7 @@ public class ApiIdempotentAspect {
             result = joinPoint.proceed();
         } else {
             log.error("Idempotent hits, key：[{}], error msg：[{}]" + lockKey, message);
-            BizExceptionAssert.businessFail(ApiResponseStatus.FAILURE.getCode(), message);
+            ExceptionAssert.failure(ApiResponseStatus.FAILURE.getCode(), message);
         }
         return result;
     }

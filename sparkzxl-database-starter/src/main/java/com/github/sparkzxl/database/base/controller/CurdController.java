@@ -9,7 +9,7 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.database.base.listener.ImportDataListener;
 import com.github.sparkzxl.database.dto.DeleteDTO;
@@ -114,7 +114,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     @DeleteMapping("/delete")
     default boolean delete(@RequestBody DeleteDTO<Id> deleteDTO) {
         if (CollectionUtils.isEmpty(deleteDTO.getIds())) {
-            BizExceptionAssert.businessFail("id不能为空");
+            ExceptionAssert.failure("id不能为空");
         }
         boolean result = handlerDelete(deleteDTO.getIds());
         if (result) {

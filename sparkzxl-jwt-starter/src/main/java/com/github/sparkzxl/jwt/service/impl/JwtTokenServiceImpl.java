@@ -5,7 +5,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.utils.DateUtils;
@@ -73,7 +73,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             return jwsObject.serialize();
         }).onFailure(throwable -> {
             log.error("根据RSA算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            BizExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
+            ExceptionAssert.failure("生成token发生异常：".concat(throwable.getMessage()));
         }).getOrElseGet(throwable -> "");
     }
 
@@ -142,7 +142,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             return jwsObject.serialize();
         }).onFailure(throwable -> {
             log.error("根据HMAC算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            BizExceptionAssert.businessFail("生成token发生异常：".concat(throwable.getMessage()));
+            ExceptionAssert.failure("生成token发生异常：".concat(throwable.getMessage()));
 
         }).getOrElseGet(throwable -> "");
     }

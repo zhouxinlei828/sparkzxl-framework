@@ -1,20 +1,18 @@
 package com.github.sparkzxl.feign.default_;
 
-import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.annotation.result.ResponseResult;
-import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.constant.ExceptionConstant;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
+import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,15 +28,15 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        Map<String, Object> errorAttributes = this.getErrorAttributes(webRequest, options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
-        Throwable error = getError(webRequest);
+        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
+        Throwable error = super.getError(webRequest);
         List<ExceptionChain> exceptionChains = null;
         if (error instanceof RemoteCallException) {
             exceptionChains = ((RemoteCallException) error).getExceptionChains();
         } else {
             Object attribute = webRequest.getAttribute(ExceptionConstant.EXCEPTION_CHAIN_KEY, RequestAttributes.SCOPE_REQUEST);
             if (attribute != null) {
-                exceptionChains = JSON.parseArray(attribute.toString(), ExceptionChain.class);
+                exceptionChains = JsonUtil.parseArray(attribute.toString(), ExceptionChain.class);
             }
             if (exceptionChains == null) {
                 exceptionChains = new ArrayList<>(1);
@@ -58,24 +56,26 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
         errorAttributes.put(ExceptionConstant.EXCEPTION_CHAIN_KEY, exceptionChains);
         Integer status = (Integer) errorAttributes.get("status");
         String message = (String) errorAttributes.get("message");
-        errorAttributes.put("code", status);
-        errorAttributes.put("success", false);
-        errorAttributes.put("msg", message);
-        errorAttributes.remove("status");
-        errorAttributes.remove("message");
-        handleResponseResult();
-        return errorAttributes;
-    }
-
-    public void handleResponseResult() {
-        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        boolean result = responseResult != null;
-        if (result) {
-            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        }
+        ResponseResultUtils.clearResponseResult();
+        return response(status, message);
     }
 
 
+    /**
+     * 构建返回的JSON数据格式
+     *
+     * @param status       状态码
+     * @param errorMessage 异常信息
+     * @return Map<String, Object>
+     */
+    public static Map<String, Object> response(int status, String errorMessage) {
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("code", status);
+        map.put("msg", errorMessage);
+        map.put("data", null);
+        map.put("success", status == 200);
+        log.error(map.toString());
+        return map;
+    }
 }
 

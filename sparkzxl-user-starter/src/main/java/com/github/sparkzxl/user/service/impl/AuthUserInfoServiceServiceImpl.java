@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
@@ -58,7 +58,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             Object userInfoId = jwtUserInfo.getId();
             authUserInfo = getCache(BuildKeyUtils.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userInfoId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
-                BizExceptionAssert.businessFail(ApiResponseStatus.JWT_EXPIRED_ERROR);
+                ExceptionAssert.failure(ApiResponseStatus.JWT_EXPIRED_ERROR);
             }
         }
         return authUserInfo;
@@ -69,7 +69,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
         if (ObjectUtils.isNotEmpty(redisTemplate)) {
             return (AuthUserInfo) redisTemplate.opsForHash().get(key, accessToken);
         }
-        BizExceptionAssert.businessFail("无法获取到缓存，请确认是否开启缓存");
+        ExceptionAssert.failure("无法获取到缓存，请确认是否开启缓存");
         return null;
     }
 }
