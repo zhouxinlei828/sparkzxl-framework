@@ -165,7 +165,7 @@ public class Then {
         } catch (RuntimeException e) {
             throw e;
         } catch (Throwable e) {
-            log.error("异常Class'{}'中必须要有RuntimeException#Throwable(String)构造器,如果是内部类需要声明为public static", clazz);
+            log.error("异常Class{}中必须要有RuntimeException#Throwable(String)构造器,如果是内部类需要声明为public static", clazz);
             throw new RuntimeException(message);
         }
     }
