@@ -1,11 +1,11 @@
 package com.github.sparkzxl.web.config;
 
-import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.web.interceptor.ResponseResultInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
 import com.github.sparkzxl.web.support.ResponseResultHandler;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -29,7 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Configuration
 @Import({ResponseResultHandler.class, DefaultExceptionHandler.class})
 @EnableConfigurationProperties(WebProperties.class)
-public class GlobalWebConfig implements WebMvcConfigurer {
+@Slf4j
+public class DefaultWebConfig implements WebMvcConfigurer {
 
     private WebProperties webProperties;
 
@@ -63,19 +64,14 @@ public class GlobalWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        String interceptorStr = webProperties.getInterceptor();
-        if (StringUtils.isNotEmpty(interceptorStr)) {
-            List<String> interceptorList = ListUtils.stringToList(interceptorStr);
-            AtomicInteger atomicInteger = new AtomicInteger(-99);
-            interceptorList.forEach(interceptor -> {
-                int increment = atomicInteger.getAndIncrement();
-                registry.addInterceptor((HandlerInterceptor) applicationContext.getBean(interceptor))
-                        .addPathPatterns("/**").order(increment);
-            });
-        } else {
-            registry.addInterceptor(responseResultInterceptor())
-                    .addPathPatterns("/**").order(-99);
-        }
-    }
+        List<Class> interceptorList = webProperties.getInterceptor();
+        AtomicInteger atomicInteger = new AtomicInteger(-99);
 
+        interceptorList.forEach(interceptor -> {
+            int increment = atomicInteger.getAndIncrement();
+            registry.addInterceptor((HandlerInterceptor) applicationContext.getBean(interceptor))
+                    .addPathPatterns("/**").order(increment);
+            log.info("已加载拦截器：[{}]", ClassUtils.getName(interceptor));
+        });
+    }
 }

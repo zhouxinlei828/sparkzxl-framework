@@ -3,6 +3,7 @@ package com.github.sparkzxl.database;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
@@ -24,6 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +51,7 @@ public class MyBatisAutoConfiguration {
     private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
 
-    public static final String DATABASE_PREFIX = "master";
+    public static final String DATABASE_PREFIX = "default";
 
     public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties, DataProperties dataProperties) {
         this.customMybatisProperties = customMybatisProperties;
@@ -99,13 +101,14 @@ public class MyBatisAutoConfiguration {
      */
     @Primary
     @Bean(name = DATABASE_PREFIX + "TransactionManager")
-    public DataSourceTransactionManager dataSourceTransactionManager(@Qualifier(DATABASE_PREFIX + "DataSource") DataSource dataSource) {
+    public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
     @DependsOn("dataSource")
+    @ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "enabled", havingValue = "false")
     public DataSource dataSource(DataSource dataSource) {
         if (dataProperties.getP6spy()) {
             return new P6DataSource(dataSource);
