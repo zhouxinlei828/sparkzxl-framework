@@ -2,6 +2,7 @@ package com.github.sparkzxl.core.utils;
 
 
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
@@ -72,6 +73,15 @@ public class ResponseResultUtils {
             response.getWriter().flush();
         } catch (Exception e) {
             log.error(e.getMessage());
+        }
+    }
+
+    public static void clearResponseResult() {
+        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
+        ResponseResult responseResult =
+                (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        if (responseResult != null) {
+            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
     }
 }

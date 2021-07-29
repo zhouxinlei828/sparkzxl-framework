@@ -27,6 +27,20 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     JSON_PARSE_ERROR(-13, "JSON解析异常"),
     NULL_POINTER_EXCEPTION_ERROR(HttpStatus.HTTP_BAD_REQUEST, "空指针异常"),
 
+    CLUSTER_REDIRECT_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis集群异常"),
+
+    CLUSTER_STATE_FAILURE_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis集群状态故障异常"),
+
+    REDIS_CONNECTION_FAILURE_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis连接失败异常"),
+
+    REDIS_SYSTEM_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis系统异常"),
+
+    TOO_MANY_CLUSTER_REDIRECTIONS_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis集群重定向过多异常"),
+
+    CLUSTER_COMMAND_EXECUTION_FAILURE_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis集群命令执行失败异常"),
+
+    REDIS_SUBSCRIBED_CONNECTION_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis订阅连接异常"),
+
     /**
      * 未登录
      */

@@ -1,12 +1,10 @@
 package com.github.sparkzxl.web.support;
 
-import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.bouncycastle.openssl.PasswordException;
@@ -25,7 +23,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.security.auth.login.AccountNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -37,21 +34,11 @@ import java.util.List;
 @ControllerAdvice
 @RestController
 @Slf4j
-public class GlobalExceptionHandler {
-
-    public void handleResponseResult() {
-        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult =
-                (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        boolean result = responseResult != null;
-        if (result) {
-            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        }
-    }
+public class DefaultExceptionHandler {
 
     @ExceptionHandler(BizException.class)
     public ApiResult businessException(BizException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("BusinessException：[{}]", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
@@ -60,33 +47,31 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NestedServletException.class)
     public ApiResult businessException(NestedServletException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("NestedServletException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.FAILURE);
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
     public ApiResult serviceDegradeException(ServiceDegradeException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("ServiceDegradeException：[{}]", e.getMessage());
-        int code = e.getCode();
-        String message = e.getMessage();
-        return ApiResult.apiResult(code, message);
+        return ApiResult.apiResult(e.getCode(), e.getMessage());
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("MethodArgumentNotValidException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResult illegalArgumentException(IllegalArgumentException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("IllegalArgumentException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR);
+        return ApiResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR.getCode(), e.getMessage());
     }
 
     private String bindingResult(BindingResult bindingResult) {
@@ -102,7 +87,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({AccountNotFoundException.class, PasswordException.class})
     public ApiResult passwordException(Exception e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("AccountNotFoundException|PasswordException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.UN_AUTHORIZED.getCode(), e.getMessage());
     }
@@ -110,21 +95,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ApiResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("HttpRequestMethodNotSupportedException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResult httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("HttpMessageNotReadableException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.MSG_NOT_READABLE);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult notFoundPage404(NoHandlerFoundException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("NoHandlerFoundException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.NOT_FOUND);
     }
@@ -132,7 +117,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ApiResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("HttpMediaTypeNotSupportedException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED);
     }
@@ -140,16 +125,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SQLException.class)
     public ApiResult handleSqlException(SQLException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         log.error("SQLException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR);
+        return ApiResult.apiResult(ApiResponseStatus.SQL_EXCEPTION_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ApiResult handleNullPointerException(NullPointerException e) {
-        handleResponseResult();
+        ResponseResultUtils.clearResponseResult();
         e.printStackTrace();
         return ApiResult.apiResult(ApiResponseStatus.NULL_POINTER_EXCEPTION_ERROR);
     }
+
 
 }

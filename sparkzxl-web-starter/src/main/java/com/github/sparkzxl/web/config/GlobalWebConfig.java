@@ -3,7 +3,7 @@ package com.github.sparkzxl.web.config;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.web.interceptor.ResponseResultInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
-import com.github.sparkzxl.web.support.GlobalExceptionHandler;
+import com.github.sparkzxl.web.support.DefaultExceptionHandler;
 import com.github.sparkzxl.web.support.ResponseResultHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author zhouxinlei
  */
 @Configuration
-@Import({ResponseResultHandler.class, GlobalExceptionHandler.class})
+@Import({ResponseResultHandler.class, DefaultExceptionHandler.class})
 @EnableConfigurationProperties(WebProperties.class)
 public class GlobalWebConfig implements WebMvcConfigurer {
 

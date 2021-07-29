@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -92,16 +93,6 @@ public class MyBatisAutoConfiguration {
     }
 
     /**
-     * 数据源信息
-     *
-     * @return Druid数据源
-     */
-    @Bean(name = DATABASE_PREFIX + "DruidDataSource", initMethod = "init")
-    public DataSource druidDataSource() {
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    /**
      * 数据源事务管理器
      *
      * @return 数据源事务管理器
@@ -114,7 +105,8 @@ public class MyBatisAutoConfiguration {
 
     @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
-    public DataSource dataSource(@Qualifier(DATABASE_PREFIX + "DruidDataSource") DataSource dataSource) {
+    @DependsOn("dataSource")
+    public DataSource dataSource(DataSource dataSource) {
         if (dataProperties.getP6spy()) {
             return new P6DataSource(dataSource);
         } else {

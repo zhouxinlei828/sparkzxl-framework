@@ -120,7 +120,6 @@
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-annotation</module>
-        <module>sparkzxl-tenant-starter</module>
     </modules>
 
     <distributionManagement>
