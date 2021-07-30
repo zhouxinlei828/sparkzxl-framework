@@ -1,14 +1,17 @@
 # 1 场景分析
+
 ## 1.1 情景再现
+
 在微服务中经常会出现这样一个场景，比如我有一个服务`admin`，里面有着获取用户信息的接口，我有一个服务`service-a`，需要用户信息，这时我需要通过 `service-a` 去调用 `admin` 服务的接口来获得用户信息
 
 通过 `Feign`，我们不需要自己来写个http请求发送获取数据，也不需要引用其他服务来获取数据，做到服务间的解耦
 
-Feign 会自动通过轮询的方式去进行负载均衡，且开启Feign的Hystrix支持后就会自动对宕机的服务进行拦截，防止雪崩效应，
-但是有这么个场景：
-如果admin服务获取用户信息的接口发生了不可预知的异常，那么服务`service-a`有两种处理策略：
+Feign 会自动通过轮询的方式去进行负载均衡，且开启Feign的Hystrix支持后就会自动对宕机的服务进行拦截，防止雪崩效应， 但是有这么个场景： 如果admin服务获取用户信息的接口发生了不可预知的异常，那么服务`service-a`
+有两种处理策略：
+
 - 其一就是走`hystrix`熔断降级处理：设置feign降级处理策略，响应兜底结果，保证服务正常运行
 - 其二就是全局进行异常处理，但是如果服务`admin`设置了兜底异常的话，返回的结果就无法进行解析，举个例子，统一响应结果，在接口层统一API接口响应结构体，例如：
+
 ```Json
 {
   "code": 200,
@@ -18,43 +21,44 @@ Feign 会自动通过轮询的方式去进行负载均衡，且开启Feign的Hys
   }
 }
 ```
+
 但是这样，需要服务`admin`接口响应提供API接口响应结构体，在服务`service-a`进行判断响应接口结果，再进行合理的抛出响应上游异常结果
 
-> 在读的场景下，这种可以第一种和第二种方案都可以满足
-但是在写入数据的情况下第一种和第二种都无法满足；
+> 在读的场景下，这种可以第一种和第二种方案都可以满足 但是在写入数据的情况下第一种和第二种都无法满足；
 
 ## 1.2 为什么写入场景降级无法满足呢？
 
 - 在写入服务`admin`的时候，服务`admin`遇到了不可预知的异常，导致写入数据失败，但是在服务`service-a`无法捕获服务`admin`产生的异常，无法进行服务`service-a`的回滚业务
 
-- 你会说第二种可以满足，但是第二种的缺点就是你得需要判断服务`admin`的响应结果，返回异常，回滚`service-a`，假如有这么个场景，先写入服务`admin`，服务`admin`写入成功，`service-a`写入失败，这样无法回滚服务`admin`的数据；这种场景其实已经是分布式事务的场景，这边我们不做具体细化，调用步骤如图：
+- 你会说第二种可以满足，但是第二种的缺点就是你得需要判断服务`admin`的响应结果，返回异常，回滚`service-a`，假如有这么个场景，先写入服务`admin`，服务`admin`写入成功，`service-a`
+  写入失败，这样无法回滚服务`admin`的数据；这种场景其实已经是分布式事务的场景，这边我们不做具体细化，调用步骤如图：
 
 ![服务调用步骤.jpg](https://oss.sparksys.top/halo/%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E6%AD%A5%E9%AA%A4_1627628483917.jpg)
 
-> 重点就是：我们能否捕获服务之间的异常？
-答案：当然是可以的
+> 重点就是：我们能否捕获服务之间的异常？ 答案：当然是可以的
 
 ## 1.3 服务之间的异常如何进行传递？
+
 > 如何利用现有的spring cloud openfeign框架，优雅的进行服务之间的异常传递
 
-在springcloud中 服务与服务之间,通常使用feign进行服务调用。但是在fei中，默认返回feign包装后的异常。eg:如果服务a调用服务b，当服务b发生异常时，如果什么都不处理的话，将抛出feign自带的异常，结合Hystrix，异常最终都会被Hystrix`吃掉`
+在springcloud中 服务与服务之间,通常使用feign进行服务调用。但是在fei中，默认返回feign包装后的异常。eg:
+如果服务a调用服务b，当服务b发生异常时，如果什么都不处理的话，将抛出feign自带的异常，结合Hystrix，异常最终都会被Hystrix`吃掉`
 某些场景需要走服务降级处理，但是某些场景需要讲异常进行传递
 
 我的想法是**如果调用服务A时发生请求异常，服务B返回的能够返回服务A抛出的异常**
 
 ## 1.4 解决思路
+
 1. 通过网上一些资料的查询，看到很多文章会`HystrixBadRequestException`不会触发 hystrix 的熔断 –> 但是并没有介绍该异常的实践方案
 2. 感觉要解决项目的痛点，切入点应该就在`HystrixBadRequestException` 了。于是先看源码，一方面对 Hystrix 加深理解，尝试理解作者设计的初衷与想法，另一方面看看是否能找到其他方案达到较高的实践标准
 
-- Fallback
-  fallback 是 Hystrix 命令执行失败时使用的后备方法，用来实现服务的降级处理逻辑。在 HystrixCommand 中可以通过重载 getFallback() 方法来实现服务降级逻辑，Hystrix 会在 run() 执行过程中出现错误、超时、线程池拒绝、短路熔断等情况时，执行 getFallback() 方法内的逻辑。
-  通常，当 HystrixCommand 的主方法（run()） 中抛出异常时，便会触发 getFallback()。除了一个例外 —— HystrixBadRequestException。当抛出 HystrixBadRequestException，不论当前 Command 是否定义了 getFallback()，都不会触发，而是向上抛出异常。
-  如果实现业务时有一些异常希望能够向上抛出，而不是触发 Fallback 策略，便可以封装到 HystrixBadRequestException 中。
-  getFallback() 的执行时间并不受 HystrixCommand 的超时时间的控制。
+- Fallback fallback 是 Hystrix 命令执行失败时使用的后备方法，用来实现服务的降级处理逻辑。在 HystrixCommand 中可以通过重载 getFallback() 方法来实现服务降级逻辑，Hystrix 会在
+  run() 执行过程中出现错误、超时、线程池拒绝、短路熔断等情况时，执行 getFallback() 方法内的逻辑。 通常，当 HystrixCommand 的主方法（run()） 中抛出异常时，便会触发 getFallback()
+  。除了一个例外 —— HystrixBadRequestException。当抛出 HystrixBadRequestException，不论当前 Command 是否定义了 getFallback()，都不会触发，而是向上抛出异常。
+  如果实现业务时有一些异常希望能够向上抛出，而不是触发 Fallback 策略，便可以封装到 HystrixBadRequestException 中。 getFallback() 的执行时间并不受 HystrixCommand
+  的超时时间的控制。
 
-- Feign对异常的封装
-  通过实现FallbackFactory,可以在create方法中获取到服务抛出的异常。但是请注意，这里的异常是被Feign封装过的异常，不能直接在异常信息中看出原始方法抛出的异常。
-
+- Feign对异常的封装 通过实现FallbackFactory,可以在create方法中获取到服务抛出的异常。但是请注意，这里的异常是被Feign封装过的异常，不能直接在异常信息中看出原始方法抛出的异常。
 
 # 2 代码实现
 
@@ -180,6 +184,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
 ```
 
 ## 2.3 新建远程调用异常`RemoteCallException`，用于服务之间的异常传递
+
 ```Java
 
 import cn.hutool.core.date.DatePattern;
@@ -529,12 +534,12 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
 在spring boot启动类加上`@EnableFeignExceptionHandler`，设置异常抛出处理类,异常解析处理类，也可使用默认的
 
-
 ## 3.1 无降级测试
 
 1. 文件服务抛出异常
 
 ![image.png](https://oss.sparksys.top/halo/image_1627630454554.png)
+
 2. 文件服务feign接口
 
 ![image.png](https://oss.sparksys.top/halo/image_1627630552399.png)
@@ -555,11 +560,11 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
 ## 3.2 有熔断降级测试
 
--  admin服务feign接口添加降级工厂
+- admin服务feign接口添加降级工厂
 
 ![image.png](https://oss.sparksys.top/halo/image_1627633260188.png)
 
-降级处理策略
+- 降级处理策略
 
 ![image.png](https://oss.sparksys.top/halo/image_1627633337872.png)
 
@@ -569,6 +574,6 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
 ![image.png](https://oss.sparksys.top/halo/image_1627635271152.png)
 
-
 # 4. 代码地址
+
 [sparkzxl-feign-starter](https://gitee.com/AbsolutelyNT/sparkzxl-component/tree/nexus/sparkzxl-feign-starter/src/main/java/com/github/sparkzxl/feign)
