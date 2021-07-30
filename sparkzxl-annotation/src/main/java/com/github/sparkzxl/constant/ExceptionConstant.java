@@ -10,6 +10,6 @@ public interface ExceptionConstant {
     /**
      * 异常链
      */
-    String EXCEPTION_CHAIN_KEY = "exceptionChain";
+    String EXCEPTION_CHAIN_KEY = "exceptionChains";
 
 }

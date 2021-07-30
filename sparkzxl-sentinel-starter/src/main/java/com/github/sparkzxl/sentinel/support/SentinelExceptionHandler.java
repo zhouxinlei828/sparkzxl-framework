@@ -12,6 +12,7 @@ import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 @RestController
 @Slf4j
-public class SentinelExceptionHandler {
+public class SentinelExceptionHandler implements Ordered {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
@@ -69,5 +70,10 @@ public class SentinelExceptionHandler {
     public ApiResult blockExceptionHandler(DegradeException degradeException) {
         log.error("请求被拦截，拦截类型为：[{}], message：[{}]", degradeException.getClass().getSimpleName(), degradeException.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE + 13;
     }
 }

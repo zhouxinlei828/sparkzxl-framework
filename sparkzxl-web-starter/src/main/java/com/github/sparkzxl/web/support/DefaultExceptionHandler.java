@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.bouncycastle.openssl.PasswordException;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,7 @@ import java.util.List;
 @ControllerAdvice
 @RestController
 @Slf4j
-public class DefaultExceptionHandler {
+public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(BizException.class)
     public ApiResult businessException(BizException e) {
@@ -137,5 +138,8 @@ public class DefaultExceptionHandler {
         return ApiResult.apiResult(ApiResponseStatus.NULL_POINTER_EXCEPTION_ERROR);
     }
 
-
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE + 11;
+    }
 }

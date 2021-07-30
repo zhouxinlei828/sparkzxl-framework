@@ -134,6 +134,16 @@ public class JsonUtil {
         return null;
     }
 
+    public static <T> Map toMap(T val) {
+        try {
+            String jsonData = getInstance().writeValueAsString(val);
+            return getInstance().readValue(jsonData, Map.class);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
     public static <T> Map<String, T> toMap(String content, Class<T> valueTypeRef) {
         try {
             Map<String, Map<String, Object>> map = getInstance().readValue(content, new TypeReference<Map<String, Map<String, Object>>>() {

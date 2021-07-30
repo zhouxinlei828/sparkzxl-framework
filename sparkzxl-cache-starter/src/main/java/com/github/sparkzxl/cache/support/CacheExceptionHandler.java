@@ -4,6 +4,7 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
 import org.springframework.data.redis.*;
 import org.springframework.data.redis.connection.ClusterCommandExecutionFailureException;
 import org.springframework.data.redis.connection.RedisSubscribedConnectionException;
@@ -20,7 +21,7 @@ import redis.clients.jedis.exceptions.JedisException;
 @ControllerAdvice
 @RestController
 @Slf4j
-public class CacheExceptionHandler {
+public class CacheExceptionHandler implements Ordered {
 
     @ExceptionHandler(ClusterRedirectException.class)
     public ApiResult handleClusterRedirectException(ClusterRedirectException e) {
@@ -76,5 +77,10 @@ public class CacheExceptionHandler {
         ResponseResultUtils.clearResponseResult();
         log.error("RedisSubscribedConnectionException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.REDIS_SUBSCRIBED_CONNECTION_EXCEPTION);
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE + 12;
     }
 }
