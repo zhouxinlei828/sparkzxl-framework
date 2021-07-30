@@ -9,7 +9,6 @@ import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
-import com.google.common.collect.Maps;
 import io.seata.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
