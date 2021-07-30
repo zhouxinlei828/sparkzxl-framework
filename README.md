@@ -71,6 +71,7 @@
 - [2.Spring Cloud Alibaba 注册中心 Nacos 入门](docs/forward/distributed/分布式架构之SpringCloudAlibaba注册中心Nacos入门.md)
 - [3.Spring Cloud Alibaba 配置中心 Nacos 入门](docs/forward/distributed/分布式架构之SpringCloudAlibaba配置中心Nacos入门.md)
 - [4.Spring Cloud openfeign 服务调用](docs/forward/222)
+- [Spring Cloud Openfeign 异常信息传递](docs/forward/distributed/SpringCloudOpenfeign异常信息传递.md)
 - [5.Spring Cloud Ribbon 服务负载均衡](docs/forward/222)
 - [6.Spring Cloud hystrix 服务容错保护](docs/forward/222)
 - [7.Spring Cloud Gateway API网关服务](docs/forward/222)
