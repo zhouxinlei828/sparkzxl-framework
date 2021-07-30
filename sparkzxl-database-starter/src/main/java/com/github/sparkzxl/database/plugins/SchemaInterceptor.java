@@ -22,7 +22,7 @@ import java.sql.SQLException;
  * description: SCHEMA模式插件
  *
  * @author zhouxinlei
- * @date 2021-06-30 21:44:12
+ * @since 2021-06-30 21:44:12
  */
 @Slf4j
 public class SchemaInterceptor implements InnerInterceptor {
@@ -46,7 +46,7 @@ public class SchemaInterceptor implements InnerInterceptor {
     }
 
     @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         // 统一交给 beforePrepare 处理,防止某些sql解析不到，又被beforePrepare重复处理
     }
 

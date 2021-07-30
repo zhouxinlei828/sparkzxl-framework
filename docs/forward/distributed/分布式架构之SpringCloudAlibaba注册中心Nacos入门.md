@@ -403,7 +403,7 @@ import org.springframework.web.bind.annotation.RestController;
  * description: test
  *
  * @author charles.zhou
- * @date 2021-05-11 10:47:54
+ * @since 2021-05-11 10:47:54
  */
 @RestController
 @ResponseResult
@@ -506,7 +506,7 @@ import org.springframework.web.client.RestTemplate;
  * description: nacos consumer
  *
  * @author charles.zhou
- * @date 2021-05-11 10:41:35
+ * @since 2021-05-11 10:41:35
  */
 @SpringBootApplication(scanBasePackages = {"com.github.sparkzxl.nacos"})
 public class NacosConsumerApplication extends SparkBootApplication {
@@ -548,7 +548,7 @@ import java.util.List;
  * description: test
  *
  * @author charles.zhou
- * @date 2021-05-11 10:47:54
+ * @since 2021-05-11 10:47:54
  */
 @RestController
 @ResponseResult

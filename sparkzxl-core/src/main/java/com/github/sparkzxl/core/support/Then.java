@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * </pre>
  *
  * @author zhouxinlei
- * @date 2021-07-29 13:29
+ * @since 2021-07-29 13:29
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class Then {
     /**
      * 使用默认的exception
      *
-     * @param msg
+     * @param msg 异常信息
      */
     public void withDefaultException(String msg) {
         this.withCustomException(defaultException, msg);

@@ -1,24 +1,23 @@
 package com.github.sparkzxl.feign.default_;
 
+import cn.hutool.http.HttpStatus;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.constant.ExceptionConstant;
-import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
+import com.google.common.collect.Maps;
 import io.seata.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * description: 当服务内报错 返回给Feign的处理器
@@ -29,8 +28,8 @@ import java.util.Map;
 public class FeignExceptionHandler extends DefaultErrorAttributes {
 
     @Override
-    public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
-        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, includeStackTrace);
+    public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
         Throwable error = super.getError(webRequest);
         List<ExceptionChain> exceptionChains = null;
         if (error instanceof RemoteCallException) {
@@ -88,9 +87,13 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
      * @return Map<String, Object>
      */
     public static Map<String, Object> response(int status, String errorMessage) {
-        ApiResult apiResult = ApiResult.apiResult(status, errorMessage);
-        log.error("正常 请求拦截异常：[{}]", JsonUtil.toJson(apiResult));
-        return JsonUtil.toMap(apiResult);
+        Map<String, Object> responseMap = Maps.newLinkedHashMap();
+        responseMap.put("code", status);
+        responseMap.put("success", status == HttpStatus.HTTP_OK);
+        responseMap.put("msg", errorMessage);
+        responseMap.put("data", null);
+        log.error("正常请求拦截异常：[{}]", JsonUtil.toJson(responseMap));
+        return responseMap;
     }
 
     @Override

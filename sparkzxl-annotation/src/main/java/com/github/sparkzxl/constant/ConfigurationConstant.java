@@ -4,7 +4,7 @@ package com.github.sparkzxl.constant;
  * description: 配置常量类
  *
  * @author zhouxinlei
- * @date 2021-06-26 09:06:30
+ * @since 2021-06-26 09:06:30
  */
 public class ConfigurationConstant {
 

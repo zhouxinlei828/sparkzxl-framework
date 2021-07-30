@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * description: 信息加密注解
  *
  * @author zhouxinlei
- * @date 2021-06-25 22:25:04
+ * @since 2021-06-25 22:25:04
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

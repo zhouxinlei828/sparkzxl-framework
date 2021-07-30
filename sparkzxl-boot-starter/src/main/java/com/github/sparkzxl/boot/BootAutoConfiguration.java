@@ -10,7 +10,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * description: boot自动装配
  *
  * @author zhouxinlei
- * @date 2021-07-25 18:10:07
+ * @since 2021-07-25 18:10:07
  */
 @EnableSpringUtil
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)

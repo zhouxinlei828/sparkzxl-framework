@@ -14,7 +14,7 @@ import java.util.List;
  * description: 认证用户
  *
  * @author zhouxinlei
- * @date 2021-07-10 14:30:00
+ * @since 2021-07-10 14:30:00
  */
 @Data
 public class SecurityUserDetail<T> implements UserDetails {

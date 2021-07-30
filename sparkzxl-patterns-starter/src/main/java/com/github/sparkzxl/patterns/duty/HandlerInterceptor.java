@@ -4,7 +4,7 @@ package com.github.sparkzxl.patterns.duty;
  * description: 处理器接口
  *
  * @author zhoux
- * @date 2021-07-20 22:06:24
+ * @since 2021-07-20 22:06:24
  */
 public interface HandlerInterceptor<R, T> {
 

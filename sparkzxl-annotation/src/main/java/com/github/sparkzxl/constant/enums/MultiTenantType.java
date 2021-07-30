@@ -7,7 +7,7 @@ import lombok.Getter;
  * NONE、COLUMN、SCHEMA,DATASOURCE
  *
  * @author zhouxinlei
- * @date 2021-06-30 21:37:52
+ * @since 2021-06-30 21:37:52
  */
 @Getter
 public enum MultiTenantType {
