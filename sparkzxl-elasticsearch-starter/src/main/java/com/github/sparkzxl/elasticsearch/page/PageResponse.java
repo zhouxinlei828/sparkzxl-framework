@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 public class PageResponse<T> {
 
-    private int pageNum;
-    private int pageSize;
     protected long total;
     protected List<T> list;
+    private int pageNum;
+    private int pageSize;
 }

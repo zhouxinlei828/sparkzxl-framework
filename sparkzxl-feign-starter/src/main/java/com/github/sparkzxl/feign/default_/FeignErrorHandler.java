@@ -17,7 +17,10 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * description: 当服务内报错 返回给Feign的处理器
@@ -26,6 +29,37 @@ import java.util.*;
  */
 @Slf4j
 public class FeignErrorHandler extends DefaultErrorAttributes {
+
+    /**
+     * 构建返回的JSON数据格式
+     *
+     * @param status          状态码
+     * @param errorMessage    异常信息
+     * @param exceptionChains 异常链实
+     * @return Map<String, Object>
+     */
+    public static Map<String, Object> feignResponse(int status, String errorMessage, List<ExceptionChain> exceptionChains) {
+        FeignErrorResult feignErrorResult = FeignErrorResult.feignErrorResult(status, errorMessage, exceptionChains);
+        log.error("feign 请求拦截异常：[{}]", JsonUtil.toJson(feignErrorResult));
+        return JsonUtil.toMap(feignErrorResult);
+    }
+
+    /**
+     * 构建返回的JSON数据格式
+     *
+     * @param status       状态码
+     * @param errorMessage 异常信息
+     * @return Map<String, Object>
+     */
+    public static Map<String, Object> response(int status, String errorMessage) {
+        Map<String, Object> responseMap = Maps.newLinkedHashMap();
+        responseMap.put("code", status);
+        responseMap.put("success", status == HttpStatus.HTTP_OK);
+        responseMap.put("msg", errorMessage);
+        responseMap.put("data", null);
+        log.error("正常请求拦截异常：[{}]", JsonUtil.toJson(responseMap));
+        return responseMap;
+    }
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
@@ -62,38 +96,6 @@ public class FeignErrorHandler extends DefaultErrorAttributes {
             return feignResponse(status, message, exceptionChains);
         }
         return response(status, message);
-    }
-
-
-    /**
-     * 构建返回的JSON数据格式
-     *
-     * @param status          状态码
-     * @param errorMessage    异常信息
-     * @param exceptionChains 异常链实
-     * @return Map<String, Object>
-     */
-    public static Map<String, Object> feignResponse(int status, String errorMessage, List<ExceptionChain> exceptionChains) {
-        FeignErrorResult feignErrorResult = FeignErrorResult.feignErrorResult(status, errorMessage, exceptionChains);
-        log.error("feign 请求拦截异常：[{}]", JsonUtil.toJson(feignErrorResult));
-        return JsonUtil.toMap(feignErrorResult);
-    }
-
-    /**
-     * 构建返回的JSON数据格式
-     *
-     * @param status       状态码
-     * @param errorMessage 异常信息
-     * @return Map<String, Object>
-     */
-    public static Map<String, Object> response(int status, String errorMessage) {
-        Map<String, Object> responseMap = Maps.newLinkedHashMap();
-        responseMap.put("code", status);
-        responseMap.put("success", status == HttpStatus.HTTP_OK);
-        responseMap.put("msg", errorMessage);
-        responseMap.put("data", null);
-        log.error("正常请求拦截异常：[{}]", JsonUtil.toJson(responseMap));
-        return responseMap;
     }
 
     @Override

@@ -37,19 +37,34 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
 public class LogWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private static final Map<String, Integer> LENGTH_MAP = Maps.newConcurrentMap();
-
-    private String logPath;
-
-    public void setLogPath(String logPath) {
-        this.logPath = logPath;
-    }
-
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
             3,
             0,
             NANOSECONDS,
             new LinkedBlockingDeque<>(1000),
             new CustomizableThreadFactory());
+    private String logPath;
+
+    private static Map<String, String> getUrlParams(String url) {
+        Map<String, String> map = Maps.newHashMap();
+        url = url.replace(StrPool.QUESTION_MARK, StrPool.SEMICOLON);
+        if (!url.contains(StrPool.SEMICOLON)) {
+            return map;
+        }
+        if (url.split(StrPool.SEMICOLON).length > 0) {
+            String[] arr = url.split(StrPool.SEMICOLON)[1].split(StrPool.AMPERSAND);
+            for (String s : arr) {
+                String key = s.split(StrPool.EQUALS)[0];
+                String value = s.split(StrPool.EQUALS)[1];
+                map.put(key, value);
+            }
+        }
+        return map;
+    }
+
+    public void setLogPath(String logPath) {
+        this.logPath = logPath;
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -146,23 +161,6 @@ public class LogWebSocketHandler extends SimpleChannelInboundHandler<TextWebSock
     private void sendAllMessage(String message) {
         //收到信息后，群发给所有channel
         ChannelHandlerPool.channelGroup.writeAndFlush(new TextWebSocketFrame(message));
-    }
-
-    private static Map<String, String> getUrlParams(String url) {
-        Map<String, String> map = Maps.newHashMap();
-        url = url.replace(StrPool.QUESTION_MARK, StrPool.SEMICOLON);
-        if (!url.contains(StrPool.SEMICOLON)) {
-            return map;
-        }
-        if (url.split(StrPool.SEMICOLON).length > 0) {
-            String[] arr = url.split(StrPool.SEMICOLON)[1].split(StrPool.AMPERSAND);
-            for (String s : arr) {
-                String key = s.split(StrPool.EQUALS)[0];
-                String value = s.split(StrPool.EQUALS)[1];
-                map.put(key, value);
-            }
-        }
-        return map;
     }
 }
 

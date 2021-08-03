@@ -22,9 +22,8 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class Then {
 
-    private final boolean value;
-
     private static Class<? extends RuntimeException> defaultException = RuntimeException.class;
+    private final boolean value;
 
     /**
      * 设置全局默认异常
@@ -41,6 +40,21 @@ public class Then {
     }
 
     /**
+     * 必须实现此构造器
+     */
+    public static <T extends RuntimeException> T createInstance(Class<T> clazz, String message) {
+        try {
+            Constructor<? extends RuntimeException> constructor = clazz.getConstructor(String.class);
+            throw constructor.newInstance(message);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            log.error("异常Class{}中必须要有RuntimeException#Throwable(String)构造器,如果是内部类需要声明为public static", clazz);
+            throw new RuntimeException(message);
+        }
+    }
+
+    /**
      * 使用默认的exception
      *
      * @param msg 异常信息
@@ -48,7 +62,6 @@ public class Then {
     public void withDefaultException(String msg) {
         this.withCustomException(defaultException, msg);
     }
-
 
     /**
      * 将Value返回 手动处理
@@ -66,12 +79,12 @@ public class Then {
         }
     }
 
+    //********************************常用异常****************************************//
+
     @Override
     public String toString() {
         return String.valueOf(this.value);
     }
-
-    //********************************常用异常****************************************//
 
     /**
      * 抛出运行时异常
@@ -151,22 +164,6 @@ public class Then {
     public void withException(Exception exception) throws Exception {
         if (this.value) {
             throw exception;
-        }
-    }
-
-
-    /**
-     * 必须实现此构造器
-     */
-    public static <T extends RuntimeException> T createInstance(Class<T> clazz, String message) {
-        try {
-            Constructor<? extends RuntimeException> constructor = clazz.getConstructor(String.class);
-            throw constructor.newInstance(message);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Throwable e) {
-            log.error("异常Class{}中必须要有RuntimeException#Throwable(String)构造器,如果是内部类需要声明为public static", clazz);
-            throw new RuntimeException(message);
         }
     }
 }

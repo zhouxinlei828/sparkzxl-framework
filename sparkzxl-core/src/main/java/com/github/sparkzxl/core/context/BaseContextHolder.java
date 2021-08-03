@@ -113,12 +113,12 @@ public class BaseContextHolder {
         return get(BaseContextConstants.TENANT, String.class, StrPool.EMPTY);
     }
 
-    public static String getClientId() {
-        return get(BaseContextConstants.TENANT, String.class);
-    }
-
     public static void setTenant(String val) {
         set(BaseContextConstants.TENANT, val);
+    }
+
+    public static String getClientId() {
+        return get(BaseContextConstants.TENANT, String.class);
     }
 
     public static void setClientId(String val) {

@@ -18,32 +18,25 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  */
 public class LoggerDisruptorQueue {
 
+    private static RingBuffer<LoggerEvent> ringBuffer;
+    private static RingBuffer<FileLoggerEvent> fileLoggerEventRingBuffer;
+    /**
+     * Specify the size of the ring buffer, must be power of 2.
+     */
+    private final int bufferSize = 2 * 1024;
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
             3,
             0,
             NANOSECONDS,
             new LinkedBlockingDeque<>(1000),
             new CustomizableThreadFactory());
-
     /**
      * The factory for the event
      */
     private LoggerEventFactory factory = new LoggerEventFactory();
-
     private FileLoggerEventFactory fileLoggerEventFactory = new FileLoggerEventFactory();
-
-    /**
-     * Specify the size of the ring buffer, must be power of 2.
-     */
-    private final int bufferSize = 2 * 1024;
-
     private Disruptor<LoggerEvent> disruptor = new Disruptor<>(factory, bufferSize, threadPoolExecutor);
-
     private Disruptor<FileLoggerEvent> fileLoggerEventDisruptor = new Disruptor<>(fileLoggerEventFactory, bufferSize, threadPoolExecutor);
-
-    private static RingBuffer<LoggerEvent> ringBuffer;
-
-    private static RingBuffer<FileLoggerEvent> fileLoggerEventRingBuffer;
 
     public LoggerDisruptorQueue(LoggerEventHandler eventHandler, FileLoggerEventHandler fileLoggerEventHandler) {
         disruptor.handleEventsWith(eventHandler);

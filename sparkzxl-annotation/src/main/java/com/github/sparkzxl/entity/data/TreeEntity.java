@@ -51,21 +51,13 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
         return this.label;
     }
 
-    public T getParentId() {
-        return this.parentId;
-    }
-
-    public Integer getSortValue() {
-        return this.sortValue;
-    }
-
-    public List<E> getChildren() {
-        return this.children;
-    }
-
     public TreeEntity<E, T> setLabel(String label) {
         this.label = label;
         return this;
+    }
+
+    public T getParentId() {
+        return this.parentId;
     }
 
     public TreeEntity<E, T> setParentId(T parentId) {
@@ -73,9 +65,17 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
         return this;
     }
 
+    public Integer getSortValue() {
+        return this.sortValue;
+    }
+
     public TreeEntity<E, T> setSortValue(Integer sortValue) {
         this.sortValue = sortValue;
         return this;
+    }
+
+    public List<E> getChildren() {
+        return this.children;
     }
 
     public TreeEntity<E, T> setChildren(List<E> children) {

@@ -91,7 +91,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     public JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception {
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
-        return JSONObject.parseObject(payload,JwtUserInfo.class);
+        return JSONObject.parseObject(payload, JwtUserInfo.class);
     }
 
     @Override

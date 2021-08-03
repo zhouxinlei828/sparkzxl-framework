@@ -5,8 +5,8 @@
 ## 1. 概述
 
 本文我们来学习 [Spring Cloud Alibaba](https://spring.io/projects/spring-cloud-alibaba)
-提供的 [Spring Cloud Alibaba Nacos Discovery](https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-discovery) 组件，基于 Spring Cloud 的编程模型，接入
-Nacos 作为注册中心，实现服务的注册与发现。
+提供的 [Spring Cloud Alibaba Nacos Discovery](https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-discovery) 组件，基于
+Spring Cloud 的编程模型，接入 Nacos 作为注册中心，实现服务的注册与发现。
 > [服务注册/发现: Nacos Discovery](https://github.com/alibaba/spring-cloud-alibaba/blob/master/spring-cloud-alibaba-docs/src/main/asciidoc-zh/nacos-discovery.adoc)
 > - 服务发现是微服务架构体系中最关键的组件之一。如果尝试着用手动的方式来给每一个客户端来配置所有服务提供者的服务列表是一件非常困难的事，而且也不利于服务的动态扩缩容。
 > - Nacos Discovery 可以帮助您将服务自动注册到 Nacos 服务端并且能够动态感知和刷新某个服务实例的服务列表。
@@ -307,8 +307,9 @@ Nacos 作为注册中心，实现服务的注册与发现。
 
 > 友情提示：有点小长，不要慌~
 
-在 <dependencyManagement/> 中，我们引入了 sparkzxl-dependencies BOM 文件，进行依赖版本的管理，防止不兼容。 sparkzxl-dependencies BOM 文件中定义了Spring Boot、Spring
-Cloud、Spring Cloud Alibaba 三者 BOM 文件，进行依赖版本的管理 在[《Spring Cloud 官方文档 —— 版本说明》](https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明)
+在 <dependencyManagement/> 中，我们引入了 sparkzxl-dependencies BOM 文件，进行依赖版本的管理，防止不兼容。 sparkzxl-dependencies BOM 文件中定义了Spring
+Boot、Spring Cloud、Spring Cloud Alibaba 三者 BOM 文件，进行依赖版本的管理
+在[《Spring Cloud 官方文档 —— 版本说明》](https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明)
 文档中，推荐了三者的依赖关系。如下表格：
 
 |Spring Cloud Version|Spring Cloud Alibaba Version|Spring Boot Version
@@ -419,9 +420,10 @@ public class TestController {
 }
 ```
 
-① @SpringBootApplication 注解，被添加在类上，声明这是一个 Spring Boot 应用。Spring Cloud 是构建在 Spring Boot 之上的，所以需要添加。 ② @EnableDiscoveryClient 注解，开启 Spring
-Cloud 的注册发现功能。不过从 Spring Cloud Edgware 版本开始，实际上已经不需要添加 @EnableDiscoveryClient 注解，只需要引入 Spring Cloud 注册发现组件，就会自动开启注册发现的功能。例如说，我们这里已经引入了
-spring-cloud-starter-alibaba-nacos-discovery 依赖，就不用再添加 @EnableDiscoveryClient 注解了。
+① @SpringBootApplication 注解，被添加在类上，声明这是一个 Spring Boot 应用。Spring Cloud 是构建在 Spring Boot 之上的，所以需要添加。 ②
+@EnableDiscoveryClient 注解，开启 Spring Cloud 的注册发现功能。不过从 Spring Cloud Edgware 版本开始，实际上已经不需要添加 @EnableDiscoveryClient
+注解，只需要引入 Spring Cloud 注册发现组件，就会自动开启注册发现的功能。例如说，我们这里已经引入了 spring-cloud-starter-alibaba-nacos-discovery 依赖，就不用再添加
+@EnableDiscoveryClient 注解了。
 > - 拓展小知识：在 Spring Cloud Common 项目中，定义了 **DiscoveryClient** 接口，作为通用的发现客户端，提供读取服务和读取服务列表的 API 方法。而想要集成到 Spring Cloud 体系的注册中心的组件，需要提供对应的 DiscoveryClient 实现类。
 > - 例如说，Spring Cloud Alibaba Nacos Discovery 提供了 **NacosDiscoveryClient** 实现，Spring Cloud Netflix Eureka 提供了 **EurekaDiscoveryClient** 实现。
 > - 如此，所有需要使用到的地方，只需要获取到 DiscoveryClient 客户端，而无需关注具体实现，保证其通用性。
@@ -589,12 +591,13 @@ public class TestController {
 
 ① @EnableDiscoveryClient 注解，因为已经无需添加，所以我们进行了注释，原因在上面已经解释过。
 
-② RestTemplateConfiguration 配置类，创建 **RestTemplate** Bean。RestTemplate 是 Spring 提供的 HTTP 调用模板工具类，可以方便我们稍后调用服务提供者的 HTTP API。
+② RestTemplateConfiguration 配置类，创建 **RestTemplate** Bean。RestTemplate 是 Spring 提供的 HTTP 调用模板工具类，可以方便我们稍后调用服务提供者的 HTTP
+API。
 
 ③ TestController 提供了 /hello 接口，用于调用服务提供者的 /demo 接口。代码略微有几行，我们来稍微解释下哈。
 
-discoveryClient 属性，DiscoveryClient 对象，服务发现客户端，上文我们已经介绍过。这里我们注入的不是 Nacos Discovery 提供的 NacosDiscoveryClient，保证通用性。未来如果我们不使用 Nacos 作为注册中心，而是使用
-Eureka 或则 Zookeeper 时，则无需改动这里的代码。
+discoveryClient 属性，DiscoveryClient 对象，服务发现客户端，上文我们已经介绍过。这里我们注入的不是 Nacos Discovery 提供的
+NacosDiscoveryClient，保证通用性。未来如果我们不使用 Nacos 作为注册中心，而是使用 Eureka 或则 Zookeeper 时，则无需改动这里的代码。
 
 loadBalancerClient 属性，**LoadBalancerClient** 对象，负载均衡客户端。稍后我们会使用它，从 Nacos 获取的服务 demo-provider 的实例列表中，选择一个进行 HTTP 调用。
 
@@ -633,7 +636,8 @@ loadBalancerClient 属性，**LoadBalancerClient** 对象，负载均衡客户�
 
 ![nacos-consumer-sub.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-sub.png)
 
-⑤ 关闭服务提供者后，再次访问 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为报错提示 "获取不到实例"，说明我们本地缓存的服务 demo-provider 的实例列表已刷新，没有任何实例。
+⑤ 关闭服务提供者后，再次访问 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为报错提示 "获取不到实例"，说明我们本地缓存的服务 demo-provider
+的实例列表已刷新，没有任何实例。
 
 ![nacos-consumer-error.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-error.png)
 
@@ -781,7 +785,8 @@ Metadata|    spring.cloud.nacos.discovery.metadata    |使用Map格式配置，�
 > - 服务提供者：[sparkzxl-nacos-discovery-provider-env](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider-env)
 > - 服务消费者：[sparkzxl-nacos-discovery-consumer-env](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer-env)
 
-同一个服务，我们会部署到开发、测试、预发布、生产等环境中，那么我们需要在项目中，添加不同环境的 Nacos 配置。一般情况下，开发和测试使用同一个 Nacos，预发布和生产使用另一个 Nacos。那么针对相同的 Nacos，我们怎么实现不同环境的隔离呢？
+同一个服务，我们会部署到开发、测试、预发布、生产等环境中，那么我们需要在项目中，添加不同环境的 Nacos 配置。一般情况下，开发和测试使用同一个 Nacos，预发布和生产使用另一个 Nacos。那么针对相同的
+Nacos，我们怎么实现不同环境的隔离呢？
 
 实际上，Nacos 开发者已经告诉我们如何实现了，通过 Nacos Namespace 命名空间。文档说明如下：
 
@@ -896,7 +901,8 @@ knife4j:
 
 ### 6.3 搭建服务消费者
 
-从**3.2 搭建服务消费者**小节的 labx-01-sca-nacos-discovery-demo01-consumer 项目，复制出 labx-01-sca-nacos-discovery-demo02-consumer 项目。然后在其上进行修改，方便搭建~
+从**3.2 搭建服务消费者**小节的 labx-01-sca-nacos-discovery-demo01-consumer 项目，复制出 labx-01-sca-nacos-discovery-demo02-consumer
+项目。然后在其上进行修改，方便搭建~
 
 #### 6.3.1 配置文件
 
@@ -989,10 +995,11 @@ knife4j:
 
 访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 报错提示 "获取不到实例"。说明，调用远程的服务提供者【失败】。
 
-原因是，虽然说服务 demo-provider 已经启动，因为其注册在 Nacos 的 Namespace 为 dev，这就导致第 ① 步启动的服务 demo-consumer 可以调用到该服务，而第② 步启动的服务 nacos-consumer 无法调用到该服务。
+原因是，虽然说服务 demo-provider 已经启动，因为其注册在 Nacos 的 Namespace 为 dev，这就导致第 ① 步启动的服务 demo-consumer 可以调用到该服务，而第② 步启动的服务
+nacos-consumer 无法调用到该服务。
 
-即，我们可以通过 Nacos 的 Namespace 实现不同环境下的服务隔离。未来，在开源版本 Nacos 权限完善之后，每个 Namespace 提供不同的 AccessKey、SecretKey，保证只有知道账号密码的服务，才能连到对应的
-Namespace，进一步提升安全性。
+即，我们可以通过 Nacos 的 Namespace 实现不同环境下的服务隔离。未来，在开源版本 Nacos 权限完善之后，每个 Namespace 提供不同的
+AccessKey、SecretKey，保证只有知道账号密码的服务，才能连到对应的 Namespace，进一步提升安全性。
 
 ## 7. 监控端点
 
@@ -1014,7 +1021,8 @@ Nacos Discovery 基于 Spring Boot Actuator，提供了自定义监控端点 nac
   小节的 [sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
   项目即可。
 
-因为 **sparkzxl-nacos-discovery-provider** 项目没有从 Nacos 订阅任何服务，无法完整看到 nacos-discovery 端点的完整效果，所以我们暂时不配置该项目的 Nacos Discovery 监控端点。
+因为 **sparkzxl-nacos-discovery-provider** 项目没有从 Nacos 订阅任何服务，无法完整看到 nacos-discovery 端点的完整效果，所以我们暂时不配置该项目的 Nacos Discovery
+监控端点。
 
 不过实际项目中，配置下开启 Nacos Discovery 监控端点 还是可以的，至少可以看到 Nacos Discovery 配置项。
 
@@ -1063,7 +1071,8 @@ management:
 
 ![nacos-actuator.png](https://oss.sparksys.top/sparkzxl-component/nacos-actuator.png)
 
-理论来说，"subscribe" 字段应该返回订阅的服务 demo-provider 的信息，结果这里返回的是空。后来翻看了下源码，是需要主动向 Nacos EventDispatcher 注册 EventListener 才可以。咳咳咳，感觉这个设定有点神奇~
+理论来说，"subscribe" 字段应该返回订阅的服务 demo-provider 的信息，结果这里返回的是空。后来翻看了下源码，是需要主动向 Nacos EventDispatcher 注册 EventListener
+才可以。咳咳咳，感觉这个设定有点神奇~
 
 ③ 访问服务消费者的 health 监控端点 http://127.0.0.1:8081/actuator/health，返回结果如下图：
 
@@ -1077,7 +1086,8 @@ management:
 - [《Spring Cloud Alibaba 官方文档 —— Nacos Discovery》](https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-discovery)
 - [《Spring Cloud Alibaba 官方示例 —— Nacos Discovery》](https://github.com/alibaba/spring-cloud-alibaba/blob/master/spring-cloud-alibaba-examples/nacos-example/nacos-discovery-example/readme-zh.md)
 
-另外，想要在 Spring Boot 项目中使用 Nacos 作为注册中心的胖友，可以阅读[《芋道 Spring Boot 注册中心 Nacos 入门》](https://www.iocoder.cn/Spring-Boot/registry-nacos/?self)文章。
+另外，想要在 Spring Boot 项目中使用 Nacos
+作为注册中心的胖友，可以阅读[《芋道 Spring Boot 注册中心 Nacos 入门》](https://www.iocoder.cn/Spring-Boot/registry-nacos/?self)文章。
 
 # 公众号
 

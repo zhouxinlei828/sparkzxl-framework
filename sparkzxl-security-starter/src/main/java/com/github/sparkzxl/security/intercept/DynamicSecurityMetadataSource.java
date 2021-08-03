@@ -26,12 +26,12 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
 
     private DynamicSecurityService dynamicSecurityService;
 
-    public void setDynamicSecurityService(DynamicSecurityService dynamicSecurityService) {
-        this.dynamicSecurityService = dynamicSecurityService;
-    }
-
     public DynamicSecurityService getDynamicSecurityService() {
         return dynamicSecurityService;
+    }
+
+    public void setDynamicSecurityService(DynamicSecurityService dynamicSecurityService) {
+        this.dynamicSecurityService = dynamicSecurityService;
     }
 
     @PostConstruct

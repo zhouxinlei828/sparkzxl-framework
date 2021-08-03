@@ -21,11 +21,11 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    private final Class<T> clazz;
-
     static {
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
     }
+
+    private final Class<T> clazz;
 
     public FastJson2JsonRedisSerializer(Class<T> clazz) {
         super();

@@ -168,7 +168,10 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     JWT_EMPTY_ERROR(2003, "token为空"),
     TIME_OUT_ERROR(500, "服务请求超时"),
     RETRY_ABLE_EXCEPTION(500, "服务请求超时重试异常"),
-    OPEN_SERVICE_UNAVAILABLE(503,"【{}】服务不可用，请联系管理员！"),
+    OPEN_SERVICE_UNAVAILABLE(503, "【{}】服务不可用，请联系管理员！"),
+    SQL_EX(500, "运行SQL出现异常"),
+    REQUIRED_FILE_PARAM_EX(400, "请求中必须至少包含一个有效文件"),
+    ILLEGAL_ARGUMENT_EX(400, "无效参数异常"),
     ;
 
     final int code;

@@ -29,20 +29,16 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateTimeCustomDeSerializer extends JSR310DateTimeDeserializerBase<LocalDateTime> {
 
     public static final LocalDateTimeCustomDeSerializer INSTANCE = new LocalDateTimeCustomDeSerializer();
-    private static final long serialVersionUID = 1L;
-    private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-
     public static final String DEFAULT_DATE_FORMAT_MATCHES = "^\\d{4}-\\d{1,2}-\\d{1,2}$";
     public static final String DEFAULT_DATE_TIME_FORMAT_MATCHES = "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$";
     public static final String DEFAULT_DATE_FORMAT_EN_MATCHES = "^\\d{4}年\\d{1,2}月\\d{1,2}日$";
     public static final String DEFAULT_DATE_TIME_FORMAT_EN_MATCHES = "^\\d{4}年\\d{1,2}月\\d{1,2}日\\d{1,2}时\\d{1,2}分\\d{1,2}秒$";
     public static final String SLASH_DATE_FORMAT_MATCHES = "^\\d{4}/\\d{1,2}/\\d{1,2}$";
     public static final String SLASH_DATE_TIME_FORMAT_MATCHES = "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$";
-
     public static final String SLASH_DATE_FORMAT = "yyyy/MM/dd";
     public static final String SLASH_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
-
-
+    private static final long serialVersionUID = 1L;
+    private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     /**
      * 以下是支持的6种参数格式
      */

@@ -32,23 +32,14 @@ public class RemoteCallException extends RuntimeException {
     private boolean isAddThis = false;
 
     private Integer code;
-
-    @Override
-    public StackTraceElement[] getStackTrace() {
-        if (stackTraceElements.isEmpty()) {
-            return super.getStackTrace();
-        }
-        return stackTraceElements.toArray(new StackTraceElement[0]);
-    }
-
     @Getter
     private List<ExceptionChain> exceptionChains;
-
 
     public RemoteCallException(int code, String message) {
         super(message);
         this.code = code;
     }
+
 
     public RemoteCallException(int code, String message, Throwable cause) {
         super(message, cause);
@@ -66,6 +57,14 @@ public class RemoteCallException extends RuntimeException {
             }
         }
 
+    }
+
+    @Override
+    public StackTraceElement[] getStackTrace() {
+        if (stackTraceElements.isEmpty()) {
+            return super.getStackTrace();
+        }
+        return stackTraceElements.toArray(new StackTraceElement[0]);
     }
 
     /**

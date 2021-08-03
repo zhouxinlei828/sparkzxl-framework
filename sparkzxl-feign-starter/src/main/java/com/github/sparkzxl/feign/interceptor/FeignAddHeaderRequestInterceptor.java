@@ -27,20 +27,19 @@ import java.util.List;
 @Slf4j
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
-    private FeignProperties feignProperties;
-
-    @Autowired
-    public void setFeignProperties(FeignProperties feignProperties) {
-        this.feignProperties = feignProperties;
-    }
-
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
             BaseContextConstants.TENANT, BaseContextConstants.JWT_KEY_USER_ID,
             BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
             BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
     );
+    private FeignProperties feignProperties;
 
     public FeignAddHeaderRequestInterceptor() {
+    }
+
+    @Autowired
+    public void setFeignProperties(FeignProperties feignProperties) {
+        this.feignProperties = feignProperties;
     }
 
     @Override

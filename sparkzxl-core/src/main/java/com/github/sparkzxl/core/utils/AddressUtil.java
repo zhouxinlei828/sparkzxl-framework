@@ -25,6 +25,27 @@ public class AddressUtil {
     static DbConfig config = null;
     static DbSearcher searcher = null;
 
+    static {
+        try {
+            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
+            File file = new File(dbPath);
+            if (!file.exists()) {
+                String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
+                dbPath = tmpDir + "ip2region/ip2region.db";
+                file = new File(dbPath);
+                String classPath = "classpath:ip2region/ip2region.db";
+                InputStream resourceAsStream = ResourceUtil.getStreamSafe(classPath);
+                if (resourceAsStream != null) {
+                    FileUtils.copyInputStreamToFile(resourceAsStream, file);
+                }
+            }
+            config = new DbConfig();
+            searcher = new DbSearcher(config, dbPath);
+        } catch (Exception ignored) {
+        }
+
+    }
+
     public AddressUtil() {
     }
 
@@ -65,26 +86,5 @@ public class AddressUtil {
             log.error("error:[{}]", e.getMessage());
         }
         return "";
-    }
-
-    static {
-        try {
-            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
-            File file = new File(dbPath);
-            if (!file.exists()) {
-                String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
-                dbPath = tmpDir + "ip2region/ip2region.db";
-                file = new File(dbPath);
-                String classPath = "classpath:ip2region/ip2region.db";
-                InputStream resourceAsStream = ResourceUtil.getStreamSafe(classPath);
-                if (resourceAsStream != null) {
-                    FileUtils.copyInputStreamToFile(resourceAsStream, file);
-                }
-            }
-            config = new DbConfig();
-            searcher = new DbSearcher(config, dbPath);
-        } catch (Exception ignored) {
-        }
-
     }
 }

@@ -2,7 +2,6 @@ package com.github.sparkzxl.database;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -18,19 +17,16 @@ import com.github.sparkzxl.database.plugins.SchemaInterceptor;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.DataProperties;
+import com.github.sparkzxl.database.support.DataSourceExceptionHandler;
 import com.google.common.collect.Lists;
 import com.p6spy.engine.spy.P6DataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -44,14 +40,14 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties({CustomMybatisProperties.class, DataProperties.class})
+@Import(DataSourceExceptionHandler.class)
 @MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
 public class MyBatisAutoConfiguration {
 
+    public static final String DATABASE_PREFIX = "default";
     private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
-
-    public static final String DATABASE_PREFIX = "default";
 
     public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties, DataProperties dataProperties) {
         this.customMybatisProperties = customMybatisProperties;

@@ -26,7 +26,7 @@ public class FeignExceptionDecoder implements ErrorDecoder {
             Reader reader = response.body().asReader(StandardCharsets.UTF_8);
             String body = Util.toString(reader);
             FeignErrorResult feignErrorResult = JsonUtil.parse(body, FeignErrorResult.class);
-            return new RemoteCallException(feignErrorResult.getCode(),feignErrorResult.getMsg(), feignErrorResult.getExceptionChains());
+            return new RemoteCallException(feignErrorResult.getCode(), feignErrorResult.getMsg(), feignErrorResult.getExceptionChains());
         } catch (Exception e) {
             log.error("[{}] has an unknown exception.", methodKey, e);
             return new RemoteCallException(ApiResponseStatus.FAILURE.getCode(), "unKnowException", e);

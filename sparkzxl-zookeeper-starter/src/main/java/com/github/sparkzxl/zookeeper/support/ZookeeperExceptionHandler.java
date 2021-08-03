@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ZookeeperExceptionHandler implements Ordered {
 
     @ExceptionHandler(KeeperException.class)
-    public ApiResult handleKeeperException(KeeperException e) {
+    public ApiResult<?> handleKeeperException(KeeperException e) {
         ResponseResultUtils.clearResponseResult();
         log.error("ClusterRedirectException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());

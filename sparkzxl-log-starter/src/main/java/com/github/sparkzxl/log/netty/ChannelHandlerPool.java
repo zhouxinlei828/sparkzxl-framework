@@ -11,8 +11,8 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  */
 public class ChannelHandlerPool {
 
+    public static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
     public ChannelHandlerPool() {
     }
-
-    public static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 }
