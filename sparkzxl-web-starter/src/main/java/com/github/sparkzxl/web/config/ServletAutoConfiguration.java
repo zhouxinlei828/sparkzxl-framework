@@ -1,13 +1,14 @@
 package com.github.sparkzxl.web.config;
 
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.CustomDispatcherServlet;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.Servlet;
+import javax.servlet.MultipartConfigElement;
 
 /**
  * description: Servlet自动装配注入
@@ -18,8 +19,10 @@ import javax.servlet.Servlet;
 @Configuration
 public class ServletAutoConfiguration {
 
-    @Bean
-    public ServletRegistrationBean<Servlet> dispatcherRegistration() {
+    public static final String DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME = "dispatcherServletRegistration";
+
+    @Bean(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)
+    public DispatcherServletRegistrationBean dispatcherServletRegistration(ObjectProvider<MultipartConfigElement> multipartConfig) {
         //注解扫描上下文
         AnnotationConfigWebApplicationContext applicationContext
                 = new AnnotationConfigWebApplicationContext();
@@ -28,9 +31,10 @@ public class ServletAutoConfiguration {
         DispatcherServlet dispatcherServlet
                 = new CustomDispatcherServlet(applicationContext);
         //用ServletRegistrationBean包装servlet
-        ServletRegistrationBean<Servlet> registrationBean
-                = new ServletRegistrationBean<>(dispatcherServlet);
+        DispatcherServletRegistrationBean registrationBean
+                = new DispatcherServletRegistrationBean(dispatcherServlet, "/");
         registrationBean.setLoadOnStartup(1);
+        multipartConfig.ifAvailable(registrationBean::setMultipartConfig);
         return registrationBean;
     }
 
