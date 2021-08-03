@@ -24,7 +24,6 @@ public class HandlerChainExecute {
     public void setHandlerInterceptorMap(List<HandlerInterceptor> handlerInterceptorList) {
         handlerInterceptorMap = handlerInterceptorList.stream().collect(Collectors.groupingBy(handlerInterceptor ->
                 Objects.requireNonNull(AnnotationUtils.findAnnotation(handlerInterceptor.getClass(), DutyStrategy.class)).type()));
-        System.out.println(handlerInterceptorMap);
     }
 
     public HandlerChainExecute addInterceptor(HandlerInterceptor handlerInterceptor) {

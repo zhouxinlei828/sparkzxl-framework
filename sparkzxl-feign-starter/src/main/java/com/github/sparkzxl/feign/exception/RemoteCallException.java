@@ -5,6 +5,7 @@ import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.context.request.RequestAttributes;
@@ -22,11 +23,15 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Slf4j
+@Getter
+@Setter
 public class RemoteCallException extends RuntimeException {
 
     private final List<StackTraceElement> stackTraceElements = new ArrayList<>(2);
 
     private boolean isAddThis = false;
+
+    private Integer code;
 
     @Override
     public StackTraceElement[] getStackTrace() {
@@ -40,16 +45,19 @@ public class RemoteCallException extends RuntimeException {
     private List<ExceptionChain> exceptionChains;
 
 
-    public RemoteCallException(String message) {
+    public RemoteCallException(int code, String message) {
         super(message);
+        this.code = code;
     }
 
-    public RemoteCallException(String message, Throwable cause) {
+    public RemoteCallException(int code, String message, Throwable cause) {
         super(message, cause);
+        this.code = code;
     }
 
-    public RemoteCallException(String message, List<ExceptionChain> exceptionChains) {
+    public RemoteCallException(int code, String message, List<ExceptionChain> exceptionChains) {
         super(message);
+        this.code = code;
         this.exceptionChains = exceptionChains;
         if (CollectionUtils.isNotEmpty(exceptionChains)) {
             for (int i = 0; i < exceptionChains.size(); i++) {

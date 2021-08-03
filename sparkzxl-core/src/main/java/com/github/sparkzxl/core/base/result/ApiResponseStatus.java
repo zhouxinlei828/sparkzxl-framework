@@ -165,7 +165,11 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     /**
      * token为空
      */
-    JWT_EMPTY_ERROR(2003, "token为空");
+    JWT_EMPTY_ERROR(2003, "token为空"),
+    TIME_OUT_ERROR(500, "服务请求超时"),
+    RETRY_ABLE_EXCEPTION(500, "服务请求超时重试异常"),
+    OPEN_SERVICE_UNAVAILABLE(503,"【{}】服务不可用，请联系管理员！"),
+    ;
 
     final int code;
 

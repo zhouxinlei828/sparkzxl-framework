@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.github.sparkzxl.web.config.DefaultWebConfig, \
-    com.github.sparkzxl.web.config.JacksonConfig
+    com.github.sparkzxl.web.config.JacksonConfig, \
+    com.github.sparkzxl.web.config.ServletAutoConfiguration

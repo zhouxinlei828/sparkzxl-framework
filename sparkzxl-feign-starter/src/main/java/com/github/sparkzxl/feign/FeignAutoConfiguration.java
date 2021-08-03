@@ -3,6 +3,7 @@ package com.github.sparkzxl.feign;
 import com.github.sparkzxl.feign.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.github.sparkzxl.feign.interceptor.FeignAddHeaderRequestInterceptor;
 import com.github.sparkzxl.feign.properties.FeignProperties;
+import com.github.sparkzxl.feign.support.FeignExceptionHandler;
 import com.netflix.hystrix.HystrixCommand;
 import feign.Feign;
 import feign.RequestInterceptor;
@@ -19,6 +20,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +33,7 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Configuration
+@Import(FeignExceptionHandler.class)
 @EnableConfigurationProperties(FeignProperties.class)
 public class FeignAutoConfiguration {
 

@@ -25,7 +25,7 @@ import java.util.*;
  * @author zhouxinlei
  */
 @Slf4j
-public class FeignExceptionHandler extends DefaultErrorAttributes {
+public class FeignErrorHandler extends DefaultErrorAttributes {
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
