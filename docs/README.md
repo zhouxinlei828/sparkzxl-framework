@@ -24,7 +24,7 @@
 
 ## 在线体验
 
-- [spark auth](http://119.45.182.28:3000/login)
+- [spark auth](https://auth.sparksys.top)
 
 !> 账户：test 密码：123456
 
