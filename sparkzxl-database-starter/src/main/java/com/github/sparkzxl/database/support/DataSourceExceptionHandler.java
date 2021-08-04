@@ -9,11 +9,13 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.core.Ordered;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 
 /**
  * description: 数据源全局异常处理
@@ -25,6 +27,20 @@ import java.sql.SQLException;
 @RestController
 @Slf4j
 public class DataSourceExceptionHandler implements Ordered {
+
+    @ExceptionHandler(SQLSyntaxErrorException.class)
+    public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
+        ResponseResultUtils.clearResponseResult();
+        log.error("IllegalArgumentException：[{}]", e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(BadSqlGrammarException.class)
+    public ApiResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
+        ResponseResultUtils.clearResponseResult();
+        log.error("BadSqlGrammarException：[{}]", e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
+    }
 
     @ExceptionHandler(PersistenceException.class)
     public ApiResult<?> persistenceException(PersistenceException ex) {

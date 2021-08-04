@@ -87,11 +87,18 @@ public class DefaultExceptionHandler implements Ordered {
         return stringBuilder.toString();
     }
 
-    @ExceptionHandler({AccountNotFoundException.class, PasswordException.class})
-    public ApiResult<?> passwordException(Exception e) {
+    @ExceptionHandler(PasswordException.class)
+    public ApiResult<?> handlePasswordException(PasswordException e) {
         ResponseResultUtils.clearResponseResult();
-        log.error("AccountNotFoundException|PasswordException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.UN_AUTHORIZED.getCode(), e.getMessage());
+        log.error("PasswordException：[{}]", e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.PASSWORD_EXCEPTION.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler({AccountNotFoundException.class})
+    public ApiResult<?> handleAccountNotFoundException(AccountNotFoundException e) {
+        ResponseResultUtils.clearResponseResult();
+        log.error("AccountNotFoundException：[{}]", e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.ACCOUNT_NOT_FOUND_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -126,7 +133,7 @@ public class DefaultExceptionHandler implements Ordered {
         ResponseResultUtils.clearResponseResult();
         MediaType contentType = e.getContentType();
         if (contentType != null) {
-            return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配", e.getMessage());
+            return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配");
         }
         return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED);
     }
@@ -142,14 +149,14 @@ public class DefaultExceptionHandler implements Ordered {
     public ApiResult<?> multipartException(MultipartException ex) {
         ResponseResultUtils.clearResponseResult();
         log.warn("MultipartException:", ex);
-        return ApiResult.apiResult(ApiResponseStatus.REQUIRED_FILE_PARAM_EX.getCode(), ApiResponseStatus.REQUIRED_FILE_PARAM_EX.getMessage(), ex.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.REQUIRED_FILE_PARAM_EX.getCode(), ApiResponseStatus.REQUIRED_FILE_PARAM_EX.getMessage());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ApiResult<?> missingServletRequestParameterException(MissingServletRequestParameterException ex) {
         ResponseResultUtils.clearResponseResult();
         log.warn("MissingServletRequestParameterException:", ex);
-        return ApiResult.apiResult(ApiResponseStatus.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + ex.getParameterType() + "]类型的参数[" + ex.getParameterName() + "]", ex.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + ex.getParameterType() + "]类型的参数[" + ex.getParameterName() + "]");
     }
 
 

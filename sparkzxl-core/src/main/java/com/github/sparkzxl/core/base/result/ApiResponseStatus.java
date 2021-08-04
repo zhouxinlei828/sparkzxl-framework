@@ -46,6 +46,10 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
      */
     UN_AUTHORIZED(HttpStatus.HTTP_UNAUTHORIZED, "暂未登录或者token失效"),
 
+    ACCOUNT_NOT_FOUND_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "未知用户"),
+
+    PASSWORD_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "密码验证失败"),
+
     AUTHORIZED_FAIL(HttpStatus.HTTP_UNAUTHORIZED, "授权失败，请重新尝试"),
 
     AUTHORIZED_DENIED(HttpStatus.HTTP_FORBIDDEN, "该资源无权限访问"),
