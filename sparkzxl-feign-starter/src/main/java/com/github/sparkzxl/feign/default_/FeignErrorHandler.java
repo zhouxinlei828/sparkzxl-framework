@@ -1,5 +1,6 @@
 package com.github.sparkzxl.feign.default_;
 
+import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.http.HttpStatus;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.constant.ExceptionConstant;
@@ -78,7 +79,7 @@ public class FeignErrorHandler extends DefaultErrorAttributes {
             }
         }
         Integer status = (Integer) errorAttributes.get("status");
-        String message = error.getCause().getMessage();
+        String message = OptionalBean.ofNullable(error).getBean(Throwable::getCause).getBean(Throwable::getMessage).orElseGet(error::getMessage);
         ResponseResultUtils.clearResponseResult();
         // 判断是否是feign请求
         String feign = webRequest.getHeader(BaseContextConstants.REMOTE_CALL);
