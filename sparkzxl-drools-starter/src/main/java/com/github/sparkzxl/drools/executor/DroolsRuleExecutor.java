@@ -3,7 +3,6 @@ package com.github.sparkzxl.drools.executor;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.entity.DroolsRule;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +13,6 @@ import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -24,12 +22,14 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Slf4j
-@Component
-@RequiredArgsConstructor
-public abstract class DroolsRuleExecutor {
+public class DroolsRuleExecutor {
 
 
-    private final KieClient kieClient;
+    private KieClient kieClient;
+
+    public void setKieClient(KieClient kieClient) {
+        this.kieClient = kieClient;
+    }
 
     public <T> Object executeRule(DroolsRule droolsRule, List<T> tList) {
         KieSession kieSession = kieClient.getKieContainer().newKieSession();

@@ -1,11 +1,11 @@
 package com.github.sparkzxl.drools.config;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.drools.KieClient;
-import com.github.sparkzxl.drools.executor.DroolsRuleExecutor;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
 import com.github.sparkzxl.drools.service.impl.DroolsRuleServiceImpl;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
@@ -30,30 +30,31 @@ import java.io.IOException;
  * @author zhouxinlei
  */
 @Configuration
-@EnableConfigurationProperties({DroolsProperties.class})
-@RequiredArgsConstructor
+@EnableConfigurationProperties(value = {DroolsProperties.class})
+@Slf4j
 public class DroolsAutoConfiguration {
 
-    private final DroolsProperties droolsProperties;
+    @Bean
+    public DroolsProperties droolsProperties() {
+        return new DroolsProperties();
+    }
 
     @Bean
     @ConditionalOnMissingBean(KieFileSystem.class)
     public KieFileSystem kieFileSystem() {
         KieFileSystem kieFileSystem = kieServices().newKieFileSystem();
         try {
-            for (Resource file : ruleFiles()) {
-                kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties.getRulesPath() + file.getFilename(), "UTF-8"));
+            ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resourcePatternResolver.getResources("classpath*:" + droolsProperties().getRulesPath() + "**/*.*");
+            if (ArrayUtil.isNotEmpty(resources)) {
+                for (Resource file : resources) {
+                    kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties().getRulesPath() + file.getFilename(), "UTF-8"));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return kieFileSystem;
-    }
-
-    @Bean
-    public Resource[] ruleFiles() throws IOException {
-        ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        return resourcePatternResolver.getResources("classpath*:" + droolsProperties.getRulesPath() + "**/*.*");
     }
 
     @Bean
@@ -77,7 +78,7 @@ public class DroolsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(KieContainerSessionsPool.class)
     public KieContainerSessionsPool kieContainerSessionsPool() {
-        return kieContainer().newKieSessionsPool(droolsProperties.getPoolSize());
+        return kieContainer().newKieSessionsPool(droolsProperties().getPoolSize());
     }
 
     private KieServices kieServices() {
@@ -113,7 +114,7 @@ public class DroolsAutoConfiguration {
 
     @Bean
     public DroolsRuleService droolsRuleService() {
-        return new DroolsRuleServiceImpl(droolsProperties, kieClient());
+        return new DroolsRuleServiceImpl(droolsProperties(), kieClient());
     }
 
 }
