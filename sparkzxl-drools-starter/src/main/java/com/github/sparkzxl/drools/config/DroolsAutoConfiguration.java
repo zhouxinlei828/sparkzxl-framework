@@ -5,6 +5,7 @@ import com.github.sparkzxl.drools.executor.DroolsRuleExecutor;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
 import com.github.sparkzxl.drools.service.impl.DroolsRuleServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
@@ -13,7 +14,6 @@ import org.kie.api.runtime.KieContainerSessionsPool;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.spring.KModuleBeanFactoryPostProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,17 +31,21 @@ import java.io.IOException;
  */
 @Configuration
 @EnableConfigurationProperties({DroolsProperties.class})
+@RequiredArgsConstructor
 public class DroolsAutoConfiguration {
 
-    @Autowired
-    private DroolsProperties droolsProperties;
+    private final DroolsProperties droolsProperties;
 
     @Bean
     @ConditionalOnMissingBean(KieFileSystem.class)
-    public KieFileSystem kieFileSystem() throws IOException {
-        KieFileSystem kieFileSystem = getKieServices().newKieFileSystem();
-        for (Resource file : ruleFiles()) {
-            kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties.getRulesPath() + file.getFilename(), "UTF-8"));
+    public KieFileSystem kieFileSystem() {
+        KieFileSystem kieFileSystem = kieServices().newKieFileSystem();
+        try {
+            for (Resource file : ruleFiles()) {
+                kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties.getRulesPath() + file.getFilename(), "UTF-8"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return kieFileSystem;
     }
@@ -54,8 +58,8 @@ public class DroolsAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(KieContainer.class)
-    public KieContainer kieContainer() throws IOException {
-        KieServices kieServices = getKieServices();
+    public KieContainer kieContainer() {
+        KieServices kieServices = kieServices();
         final KieRepository kieRepository = kieServices.getRepository();
 
         kieRepository.addKieModule(kieRepository::getDefaultReleaseId);
@@ -66,35 +70,39 @@ public class DroolsAutoConfiguration {
             System.out.println(results.getMessages());
             throw new IllegalStateException("### errors ###");
         }
-
         kieBuilder.buildAll();
-
-        KieContainer kieContainer = kieServices.newKieContainer(kieRepository.getDefaultReleaseId());
-        KieClient.setKieContainer(kieContainer);
-        return kieContainer;
+        return kieServices.newKieContainer(kieRepository.getDefaultReleaseId());
     }
 
     @Bean
     @ConditionalOnMissingBean(KieContainerSessionsPool.class)
-    public KieContainerSessionsPool kieContainerSessionsPool() throws IOException {
+    public KieContainerSessionsPool kieContainerSessionsPool() {
         return kieContainer().newKieSessionsPool(droolsProperties.getPoolSize());
     }
 
-    private KieServices getKieServices() {
-        KieClient.setKieServices(KieServices.Factory.get());
+    private KieServices kieServices() {
         return KieServices.Factory.get();
     }
 
     @Bean
     @ConditionalOnMissingBean(KieBase.class)
-    public KieBase kieBase() throws IOException {
+    public KieBase kieBase() {
         return kieContainer().getKieBase();
     }
 
     @Bean
     @ConditionalOnMissingBean(KieSession.class)
-    public KieSession kieSession() throws IOException {
+    public KieSession kieSession() {
         return kieContainerSessionsPool().newKieSession();
+    }
+
+    @Bean
+    public KieClient kieClient() {
+        KieClient kieClient = new KieClient();
+        kieClient.setKieContainer(kieContainer());
+        kieClient.setKieServices(kieServices());
+        kieClient.setKieContainerSessionsPool(kieContainerSessionsPool());
+        return kieClient;
     }
 
     @Bean
@@ -105,12 +113,7 @@ public class DroolsAutoConfiguration {
 
     @Bean
     public DroolsRuleService droolsRuleService() {
-        return new DroolsRuleServiceImpl(droolsProperties);
-    }
-
-    @Bean
-    public DroolsRuleExecutor droolsRuleExecutor() {
-        return new DroolsRuleExecutor();
+        return new DroolsRuleServiceImpl(droolsProperties, kieClient());
     }
 
 }

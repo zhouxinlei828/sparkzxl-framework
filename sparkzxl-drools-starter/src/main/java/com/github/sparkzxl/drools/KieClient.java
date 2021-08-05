@@ -12,59 +12,57 @@ import org.kie.api.runtime.KieSession;
  * @author fin-9062
  */
 public class KieClient {
-    private static KieServices kieServices;
-    private static KieBase kieBase;
+    private KieServices kieServices;
 
-    private static KieContainer kieContainer;
+    private KieBase kieBase;
 
-    private static KieContainerSessionsPool kieContainerSessionsPool;
+    private KieContainer kieContainer;
 
-    public static KieServices getKieServices() {
-        return kieServices;
+    private KieContainerSessionsPool kieContainerSessionsPool;
+
+    public KieServices getKieServices() {
+        return this.kieServices;
     }
 
-    public static void setKieServices(KieServices kieServices) {
-        KieClient.kieServices = kieServices;
+    public void setKieServices(KieServices kieServices) {
+        this.kieServices = kieServices;
     }
 
-    public static KieSession getKieSession() {
+    public KieSession getKieSession() {
         return kieContainerSessionsPool.newKieSession("ksession-rule");
     }
 
-    public static void setKieSession(KieSession kieSession) {
-    }
-
-    public static KieBase getKieBase() {
+    public KieBase getKieBase() {
         return kieBase;
     }
 
-    public static void setKieBase(KieBase kieBase) {
-        KieClient.kieBase = kieBase;
+    public void setKieBase(KieBase kieBase) {
+        this.kieBase = kieBase;
     }
 
-    public static KieSession getKieSession(String agendaGroupName) {
+    public KieSession getKieSession(String agendaGroupName) {
         KieSession kieSession = getKieSession();
         kieSession.getAgenda().getAgendaGroup(agendaGroupName).setFocus();
         return kieSession;
     }
 
-    public static KieSession getKieSessionByName(String sessionName) {
+    public KieSession getKieSessionByName(String sessionName) {
         return kieContainerSessionsPool.newKieSession(sessionName);
     }
 
-    public static KieContainerSessionsPool getKieContainerSessionsPool() {
+    public KieContainerSessionsPool getKieContainerSessionsPool() {
         return kieContainerSessionsPool;
     }
 
-    public static void setKieContainerSessionsPool(KieContainerSessionsPool kieContainerSessionsPool) {
-        KieClient.kieContainerSessionsPool = kieContainerSessionsPool;
+    public void setKieContainerSessionsPool(KieContainerSessionsPool kieContainerSessionsPool) {
+        this.kieContainerSessionsPool = kieContainerSessionsPool;
     }
 
-    public static KieContainer getKieContainer() {
-        return kieContainer;
+    public KieContainer getKieContainer() {
+        return this.kieContainer;
     }
 
-    public static void setKieContainer(KieContainer kieContainer) {
-        KieClient.kieContainer = kieContainer;
+    public void setKieContainer(KieContainer kieContainer) {
+        this.kieContainer = kieContainer;
     }
 }
