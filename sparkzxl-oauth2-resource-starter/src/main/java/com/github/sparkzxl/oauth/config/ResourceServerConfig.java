@@ -9,6 +9,7 @@ import com.github.sparkzxl.oauth.properties.ResourceProperties;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -36,17 +37,18 @@ import reactor.core.publisher.Mono;
 @EnableConfigurationProperties(ResourceProperties.class)
 public class ResourceServerConfig {
 
-    private final ResourceProperties resourceProperties;
-
     private final ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager;
 
     @Bean
-    public IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter() {
+    @RefreshScope
+    public IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter(ResourceProperties resourceProperties) {
         return new IgnoreUrlsRemoveJwtFilter(resourceProperties);
     }
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    @RefreshScope
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ResourceProperties resourceProperties,
+                                                            IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter) {
         String[] ignorePatterns = ArrayUtils.addAll(resourceProperties.getIgnore(),
                 SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS.toArray(new String[0]));
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
@@ -55,7 +57,7 @@ public class ResourceServerConfig {
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
         http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
         //对白名单路径，直接移除JWT请求头
-        http.addFilterBefore(ignoreUrlsRemoveJwtFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
+        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
 
         http.authorizeExchange()
                 //白名单配置
