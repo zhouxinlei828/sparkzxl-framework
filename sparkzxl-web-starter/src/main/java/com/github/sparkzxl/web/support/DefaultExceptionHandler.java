@@ -12,7 +12,9 @@ import org.bouncycastle.openssl.PasswordException;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -27,6 +29,7 @@ import org.springframework.web.util.NestedServletException;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * description: 全局异常处理
@@ -73,7 +76,7 @@ public class DefaultExceptionHandler implements Ordered {
     public ApiResult<?> illegalArgumentException(IllegalArgumentException e) {
         ResponseResultUtils.clearResponseResult();
         log.error("IllegalArgumentException：[{}]", e.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_TYPE_ERROR.getCode(), e.getMessage());
+        return ApiResult.apiResult(ApiResponseStatus.ILLEGAL_ARGUMENT_EX.getCode(), e.getMessage());
     }
 
     private String bindingResult(BindingResult bindingResult) {
@@ -85,6 +88,35 @@ public class DefaultExceptionHandler implements Ordered {
             stringBuilder.append(ApiResponseStatus.PARAM_BIND_ERROR.getMessage());
         }
         return stringBuilder.toString();
+    }
+
+
+    /**
+     * form非法参数验证
+     *
+     * @param ex 异常
+     * @return CommonResult<?>
+     */
+    @ExceptionHandler(BindException.class)
+    public ApiResult<?> bindException(BindException ex) {
+        log.error("form非法参数验证异常======>：BindException:{}", ex.getMessage());
+        log.warn("BindException:", ex);
+        try {
+            String msg = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
+            if (StrUtil.isNotEmpty(msg)) {
+                return ApiResult.apiResult(ApiResponseStatus.PARAM_EX.getCode(), msg);
+            }
+        } catch (Exception ee) {
+            log.debug("获取异常描述失败", ee);
+        }
+        StringBuilder msg = new StringBuilder();
+        List<FieldError> fieldErrors = ex.getFieldErrors();
+        fieldErrors.forEach((oe) ->
+                msg.append("参数:[").append(oe.getObjectName())
+                        .append(".").append(oe.getField())
+                        .append("]的传入值:[").append(oe.getRejectedValue()).append("]与预期的字段类型不匹配.")
+        );
+        return ApiResult.apiResult(ApiResponseStatus.PARAM_EX.getCode(), msg.toString());
     }
 
     @ExceptionHandler(PasswordException.class)

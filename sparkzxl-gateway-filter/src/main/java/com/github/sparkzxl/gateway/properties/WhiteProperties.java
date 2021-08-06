@@ -14,9 +14,9 @@ import java.util.List;
  */
 @Data
 @ConfigurationProperties(prefix = ConfigurationConstant.BLACK_PREFIX)
-public class BlackProperties {
+public class WhiteProperties {
 
     private boolean enabled = false;
 
-    private List<String> blackList;
+    private List<String> whiteList;
 }
