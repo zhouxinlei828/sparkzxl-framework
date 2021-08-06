@@ -125,11 +125,11 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+            <url>https://nexus.sparksys.top/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>maven-snapshots</id>
-            <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+            <url>https://nexus.sparksys.top/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <dependencies>
@@ -784,11 +784,11 @@
             <distributionManagement>
                 <repository>
                     <id>maven-releases</id>
-                    <url>http://47.114.40.129:8764/repository/maven-releases/</url>
+                    <url>https://nexus.sparksys.top/repository/maven-releases/</url>
                 </repository>
                 <snapshotRepository>
                     <id>maven-snapshots</id>
-                    <url>http://47.114.40.129:8764/repository/maven-snapshots/</url>
+                    <url>https://nexus.sparksys.top/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
             <activation>
