@@ -38,4 +38,6 @@ public class ConfigurationConstant {
 
     public static final String ZOOKEEPER_PREFIX = "zookeeper";
 
+    public static final String BLACK_PREFIX = "gateway.black";
+
 }

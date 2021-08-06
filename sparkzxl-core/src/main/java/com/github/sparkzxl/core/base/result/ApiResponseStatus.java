@@ -162,10 +162,6 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
      */
     JWT_VALID_ERROR(2002, "token校验失败"),
 
-    NOT_EMPTY(400, "不能为空"),
-
-    NOT_NULL(400, "不能为空"),
-
     /**
      * token为空
      */
