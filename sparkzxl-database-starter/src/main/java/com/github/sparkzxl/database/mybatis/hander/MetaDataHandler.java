@@ -53,7 +53,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER);
         extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER_ID);
         // 创建人姓名
-        extractUserName(metaObject, targetObject, EntityConstant.COLUMN_CREATE_USER_NAME);
+        extractUserName(metaObject, targetObject, EntityConstant.CREATE_USER_NAME);
         // 创建时间
         extractDate(metaObject, targetObject, EntityConstant.CREATE_TIME);
 

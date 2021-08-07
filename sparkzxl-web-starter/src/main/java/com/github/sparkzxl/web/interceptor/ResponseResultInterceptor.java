@@ -57,5 +57,6 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         super.afterCompletion(request, response, handler, ex);
+        BaseContextHolder.remove();
     }
 }
