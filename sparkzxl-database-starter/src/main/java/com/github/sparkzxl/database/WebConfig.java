@@ -25,7 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     public static final String DEFAULT_DYNAMIC_DATASOURCE_INTERCEPTOR_NAME = "dynamicDataSourceInterceptor";
 
-
     private ApplicationContext applicationContext;
 
     @Autowired
