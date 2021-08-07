@@ -3,6 +3,7 @@ package com.github.sparkzxl.database.support;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BizException;
+import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -75,6 +76,13 @@ public class DataSourceExceptionHandler implements Ordered {
         ResponseResultUtils.clearResponseResult();
         log.error("DataIntegrityViolationException:", ex);
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), ex.getMessage());
+    }
+
+    @ExceptionHandler(TenantException.class)
+    public ApiResult<?> handleTenantException(TenantException ex) {
+        ResponseResultUtils.clearResponseResult();
+        log.error("TenantException:", ex);
+        return ApiResult.apiResult(ex.getCode(), ex.getMessage());
     }
 
     @Override
