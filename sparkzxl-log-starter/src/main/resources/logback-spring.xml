@@ -44,7 +44,7 @@
     <!--每天记录日志到文件appender-->
     <appender name="FileOutput" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logHome}/${springAppName}.log</file>
-        <append>true</append>
+        <immediateFlush>false</immediateFlush>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${logHome}/${springAppName}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
