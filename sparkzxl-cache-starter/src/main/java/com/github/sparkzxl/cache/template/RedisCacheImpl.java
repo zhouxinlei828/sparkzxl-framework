@@ -29,13 +29,13 @@ public class RedisCacheImpl implements GeneralCacheService {
 
     private ValueOperations<String, Object> valueOperations;
 
+    public RedisCacheImpl(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
     @PostConstruct
     public void initRedisOperation() {
         valueOperations = redisTemplate.opsForValue();
-    }
-
-    public RedisCacheImpl(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
     }
 
     @Override

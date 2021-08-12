@@ -4,7 +4,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
@@ -24,10 +24,11 @@ import java.io.IOException;
  * @author fin-9062
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DroolsRuleServiceImpl implements DroolsRuleService {
 
     private final DroolsProperties droolsProperties;
+    private final KieClient kieClient;
 
     @Override
     public boolean reloadRule() {
@@ -54,7 +55,7 @@ public class DroolsRuleServiceImpl implements DroolsRuleService {
             System.out.println(results.getMessages());
             throw new IllegalStateException("### errors ###");
         }
-        KieClient.setKieContainer(kieServices.newKieContainer(getKieServices().getRepository().getDefaultReleaseId()));
+        kieClient.setKieContainer(kieServices.newKieContainer(getKieServices().getRepository().getDefaultReleaseId()));
     }
 
     @Override

@@ -50,9 +50,42 @@ import java.util.*;
 @Slf4j
 public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
 
-    public RestHighLevelClient restHighLevelClient;
+    protected static final RequestOptions COMMON_OPTIONS;
 
+    static {
+        RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
+        // 默认缓冲限制为100MB，此处修改为30MB。
+        builder.setHttpAsyncResponseConsumerFactory(new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(30 * 1024 * 1024));
+        COMMON_OPTIONS = builder.build();
+    }
+
+    public RestHighLevelClient restHighLevelClient;
     private ElasticsearchProperties elasticsearchProperties;
+
+    /**
+     * build DeleteIndexRequest
+     *
+     * @param index elasticsearch index name
+     */
+    private static DeleteIndexRequest buildDeleteIndexRequest(String index) {
+        return new DeleteIndexRequest(index);
+    }
+
+    /**
+     * build IndexRequest
+     *
+     * @param index  elasticsearch index name
+     * @param id     request object id
+     * @param object request object
+     * @return {@link IndexRequest}
+     */
+    protected static IndexRequest buildIndexRequest(String index, String id, Object object) {
+        return new IndexRequest(index).id(id).source(JsonUtil.toJson(object), XContentType.JSON);
+    }
+
+    protected static SearchRequest buildSearchRequest(String index) {
+        return new SearchRequest(index);
+    }
 
     @Autowired
     public void setRestHighLevelClient(RestHighLevelClient restHighLevelClient) {
@@ -62,15 +95,6 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     @Autowired
     public void setElasticsearchProperties(ElasticsearchProperties elasticsearchProperties) {
         this.elasticsearchProperties = elasticsearchProperties;
-    }
-
-    protected static final RequestOptions COMMON_OPTIONS;
-
-    static {
-        RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
-        // 默认缓冲限制为100MB，此处修改为30MB。
-        builder.setHttpAsyncResponseConsumerFactory(new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(30 * 1024 * 1024));
-        COMMON_OPTIONS = builder.build();
     }
 
     /**
@@ -108,31 +132,6 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         } catch (IOException e) {
             throw new ElasticsearchException("删除索引 {" + index + "} 失败：{}", e.getMessage());
         }
-    }
-
-    /**
-     * build DeleteIndexRequest
-     *
-     * @param index elasticsearch index name
-     */
-    private static DeleteIndexRequest buildDeleteIndexRequest(String index) {
-        return new DeleteIndexRequest(index);
-    }
-
-    /**
-     * build IndexRequest
-     *
-     * @param index  elasticsearch index name
-     * @param id     request object id
-     * @param object request object
-     * @return {@link IndexRequest}
-     */
-    protected static IndexRequest buildIndexRequest(String index, String id, Object object) {
-        return new IndexRequest(index).id(id).source(JsonUtil.toJson(object), XContentType.JSON);
-    }
-
-    protected static SearchRequest buildSearchRequest(String index) {
-        return new SearchRequest(index);
     }
 
     /**

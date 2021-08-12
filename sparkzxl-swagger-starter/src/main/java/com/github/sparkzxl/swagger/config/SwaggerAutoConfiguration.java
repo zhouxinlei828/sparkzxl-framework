@@ -2,8 +2,8 @@ package com.github.sparkzxl.swagger.config;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import com.google.common.base.Predicate;
@@ -48,18 +48,13 @@ import java.util.stream.Collectors;
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
-    private SwaggerProperties swaggerProperties;
+    private final SwaggerProperties swaggerProperties;
     private BeanFactory beanFactory;
-    private OpenApiExtensionResolver openApiExtensionResolver;
+    private final OpenApiExtensionResolver openApiExtensionResolver;
 
     public SwaggerAutoConfiguration(SwaggerProperties swaggerProperties, OpenApiExtensionResolver openApiExtensionResolver) {
         this.swaggerProperties = swaggerProperties;
         this.openApiExtensionResolver = openApiExtensionResolver;
-    }
-
-    @Override
-    public void setBeanFactory(@NonNull BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
     }
 
     private static Predicate<String> ant(final String antPattern) {
@@ -76,6 +71,11 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
     private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
         return Optional.ofNullable(input.declaringClass());
+    }
+
+    @Override
+    public void setBeanFactory(@NonNull BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
     }
 
     @Bean

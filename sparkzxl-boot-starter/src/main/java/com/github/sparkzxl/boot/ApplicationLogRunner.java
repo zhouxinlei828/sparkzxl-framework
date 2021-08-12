@@ -1,4 +1,4 @@
-package com.github.sparkzxl.boot.application.event;
+package com.github.sparkzxl.boot;
 
 import cn.hutool.system.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import java.net.InetAddress;
  * @author zhouxinlei
  */
 @Slf4j
-public class ApplicationInitRunner implements ApplicationRunner, Ordered {
+public class ApplicationLogRunner implements ApplicationRunner, Ordered {
 
     private final ApplicationContext applicationContext;
 
-    public ApplicationInitRunner(ApplicationContext applicationContext) {
+    public ApplicationLogRunner(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 

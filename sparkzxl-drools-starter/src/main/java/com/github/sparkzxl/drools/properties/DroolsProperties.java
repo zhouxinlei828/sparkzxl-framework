@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = ConfigurationConstant.DROOLS_PREFIX)
 public class DroolsProperties {
 
-    private String rulesPath;
+    private String rulesPath = "rules";
 
     private int poolSize = 16;
 

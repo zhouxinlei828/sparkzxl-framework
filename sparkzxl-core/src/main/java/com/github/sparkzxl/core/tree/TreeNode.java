@@ -12,26 +12,23 @@ import java.util.List;
  */
 public class TreeNode<E, T extends Serializable> implements Cloneable, Serializable {
 
-    private T id;
     /**
      * 名称
      */
     protected String label;
-
     /**
      * 父ID
      */
     protected T parentId;
-
     /**
      * 排序号
      */
     protected Integer sortValue;
-
     /**
      * 子节点
      */
     protected List<E> children;
+    private T id;
 
     public TreeNode() {
     }
@@ -47,25 +44,13 @@ public class TreeNode<E, T extends Serializable> implements Cloneable, Serializa
         return this.id;
     }
 
-    public String getLabel() {
-        return this.label;
-    }
-
-    public T getParentId() {
-        return this.parentId;
-    }
-
-    public Integer getSortValue() {
-        return this.sortValue;
-    }
-
-    public List<E> getChildren() {
-        return this.children;
-    }
-
     public TreeNode<E, T> setId(T id) {
         this.id = id;
         return this;
+    }
+
+    public String getLabel() {
+        return this.label;
     }
 
     public TreeNode<E, T> setLabel(String label) {
@@ -73,14 +58,26 @@ public class TreeNode<E, T extends Serializable> implements Cloneable, Serializa
         return this;
     }
 
+    public T getParentId() {
+        return this.parentId;
+    }
+
     public TreeNode<E, T> setParentId(T parentId) {
         this.parentId = parentId;
         return this;
     }
 
+    public Integer getSortValue() {
+        return this.sortValue;
+    }
+
     public TreeNode<E, T> setSortValue(Integer sortValue) {
         this.sortValue = sortValue;
         return this;
+    }
+
+    public List<E> getChildren() {
+        return this.children;
     }
 
     public TreeNode<E, T> setChildren(List<E> children) {

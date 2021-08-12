@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
@@ -22,7 +22,7 @@ public class MapHelper {
      *
      * @param map
      */
-    public static void removeNullEntry(Map map) {
+    public static void removeNullEntry(Map<String, Object> map) {
         removeNullKey(map);
         removeNullValue(map);
     }
@@ -32,9 +32,9 @@ public class MapHelper {
      *
      * @param map
      */
-    public static void removeNullKey(Map map) {
-        Set set = map.keySet();
-        for (Iterator iterator = set.iterator(); iterator.hasNext(); ) {
+    public static void removeNullKey(Map<String, Object> map) {
+        Set<String> set = map.keySet();
+        for (Iterator<String> iterator = set.iterator(); iterator.hasNext(); ) {
             Object obj = iterator.next();
             remove(obj, iterator);
         }
@@ -45,9 +45,9 @@ public class MapHelper {
      *
      * @param map
      */
-    public static void removeNullValue(Map map) {
-        Set set = map.keySet();
-        for (Iterator iterator = set.iterator(); iterator.hasNext(); ) {
+    public static void removeNullValue(Map<String, Object> map) {
+        Set<String> set = map.keySet();
+        for (Iterator<String> iterator = set.iterator(); iterator.hasNext(); ) {
             Object obj = iterator.next();
             Object value = map.get(obj);
             remove(value, iterator);
@@ -66,7 +66,7 @@ public class MapHelper {
      * @param obj
      * @param iterator
      */
-    private static void remove(Object obj, Iterator iterator) {
+    private static void remove(Object obj, Iterator<String> iterator) {
         if (obj instanceof String) {
             String str = (String) obj;
             if (StringUtils.isBlank(str)) {
@@ -110,7 +110,7 @@ public class MapHelper {
         try {
             return builder.build();
         } catch (IllegalArgumentException var6) {
-            BizExceptionAssert.businessFail(var6.getMessage() + ".若要在键下索引多个值，请使用: Multimaps.index.");
+            ExceptionAssert.failure(var6.getMessage() + ".若要在键下索引多个值，请使用: Multimaps.index.");
         }
         return null;
     }

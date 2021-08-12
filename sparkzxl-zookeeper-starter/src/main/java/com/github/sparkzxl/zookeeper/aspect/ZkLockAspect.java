@@ -1,7 +1,7 @@
 package com.github.sparkzxl.zookeeper.aspect;
 
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.AspectUtils;
 import com.github.sparkzxl.zookeeper.annotation.ZkLock;
 import com.github.sparkzxl.zookeeper.lock.ZkDistributedLock;
@@ -59,7 +59,7 @@ public class ZkLockAspect {
             }
         } else {
             log.info("线程[{}] -> 获取锁key[{}] 失败", threadId, key);
-            BizExceptionAssert.businessFail(ApiResponseStatus.FAILURE);
+            ExceptionAssert.failure(ApiResponseStatus.FAILURE);
         }
         return result;
     }

@@ -25,7 +25,7 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         //设置当前请求线程全局信息
         BaseContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
@@ -57,5 +57,6 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         super.afterCompletion(request, response, handler, ex);
+        BaseContextHolder.remove();
     }
 }

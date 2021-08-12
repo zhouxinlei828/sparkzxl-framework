@@ -81,6 +81,31 @@ public class ITextClient {
 
     public PageSize pageSize = PageSize.A4;
 
+    /**
+     * html转pdf
+     *
+     * @param html html元素
+     * @return byte[] byte数组
+     * @throws IOException IO异常
+     */
+    public static byte[] html2Pdf(String html) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ConverterProperties props = new ConverterProperties();
+        // 提供解析用的字体
+        FontProvider fp = new FontProvider();
+        // 添加标准字体库、无中文
+        fp.addStandardPdfFonts();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        // 自定义字体路径、解决中文,可先用绝对路径测试。
+        fp.addDirectory(classLoader.getResource("font").getPath());
+        props.setFontProvider(fp);
+        // props.setBaseUri(baseResource); // 设置html资源的相对路径
+        HtmlConverter.convertToPdf(html, outputStream, props);
+        byte[] result = outputStream.toByteArray();
+        outputStream.close();
+        return result;
+    }
+
     public void initPdfData() {
         try {
             String osName = System.getProperty("os.name");
@@ -126,31 +151,6 @@ public class ITextClient {
         pdfPage = pdfDocument.getPage(pageNum);
         pdfCanvas = new PdfCanvas(pdfDocument.getPage(pageNum));
         canvas = new Canvas(pdfCanvas, pdfDocument, pdfPage.getPageSize());
-    }
-
-    /**
-     * html转pdf
-     *
-     * @param html html元素
-     * @return byte[] byte数组
-     * @throws IOException IO异常
-     */
-    public static byte[] html2Pdf(String html) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ConverterProperties props = new ConverterProperties();
-        // 提供解析用的字体
-        FontProvider fp = new FontProvider();
-        // 添加标准字体库、无中文
-        fp.addStandardPdfFonts();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        // 自定义字体路径、解决中文,可先用绝对路径测试。
-        fp.addDirectory(classLoader.getResource("font").getPath());
-        props.setFontProvider(fp);
-        // props.setBaseUri(baseResource); // 设置html资源的相对路径
-        HtmlConverter.convertToPdf(html, outputStream, props);
-        byte[] result = outputStream.toByteArray();
-        outputStream.close();
-        return result;
     }
 
     /**

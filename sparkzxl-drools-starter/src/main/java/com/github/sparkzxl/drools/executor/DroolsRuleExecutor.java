@@ -2,8 +2,10 @@ package com.github.sparkzxl.drools.executor;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.drools.KieClient;
+import com.github.sparkzxl.drools.entity.DroolsRule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kie.api.event.rule.ObjectDeletedEvent;
 import org.kie.api.event.rule.ObjectInsertedEvent;
 import org.kie.api.event.rule.ObjectUpdatedEvent;
@@ -22,11 +24,17 @@ import java.util.List;
 @Slf4j
 public class DroolsRuleExecutor {
 
-    public <T> Object executeRule(String agendaGroup, String resultQuery, String resultVariable, String className, List<T> tList) {
-        KieSession kieSession = KieClient.getKieContainer().newKieSession();
-        kieSession.getAgenda().getAgendaGroup(agendaGroup).setFocus();
-        kieSession.addEventListener(new RuleRuntimeEventListener() {
 
+    private KieClient kieClient;
+
+    public void setKieClient(KieClient kieClient) {
+        this.kieClient = kieClient;
+    }
+
+    public <T> Object executeRule(DroolsRule droolsRule, List<T> tList) {
+        KieSession kieSession = kieClient.getKieContainer().newKieSession();
+        kieSession.getAgenda().getAgendaGroup(droolsRule.getAgendaGroup()).setFocus();
+        kieSession.addEventListener(new RuleRuntimeEventListener() {
             @Override
             public void objectUpdated(ObjectUpdatedEvent event) {
                 log.info("Object--objectUpdated：[{}]", event.getObject().toString());
@@ -45,21 +53,22 @@ public class DroolsRuleExecutor {
         if (CollectionUtils.isNotEmpty(tList)) {
             tList.forEach(kieSession::insert);
         }
-        int ruleFiredCount = kieSession.fireAllRules();
-        QueryResults results = kieSession.getQueryResults(resultQuery);
         try {
-            Class rClass = Class.forName(className);
-            Object newInstance = rClass.newInstance();
-            for (QueryResultsRow row : results) {
-                newInstance = row.get("$".concat(resultVariable));
+            int ruleFiredCount = kieSession.fireAllRules();
+            log.info("命中了 [{}] 条drools规则", ruleFiredCount);
+            if (StringUtils.isNotEmpty(droolsRule.getResultQuery())) {
+                QueryResults results = kieSession.getQueryResults(droolsRule.getResultQuery());
+                Class rClass = Class.forName(droolsRule.getClassName());
+                Object newInstance = rClass.newInstance();
+                for (QueryResultsRow row : results) {
+                    newInstance = row.get("$".concat(droolsRule.getResultVariable()));
+                }
+                return newInstance;
             }
             kieSession.dispose();
-            log.info("命中了 [{}] 条drools规则", ruleFiredCount);
-            return newInstance;
         } catch (Exception exception) {
             log.error("drools查询结果发生异常 massage：[{}]", ExceptionUtil.getMessage(exception));
-            return null;
         }
-
+        return null;
     }
 }

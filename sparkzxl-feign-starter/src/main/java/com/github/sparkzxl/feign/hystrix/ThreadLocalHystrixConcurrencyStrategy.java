@@ -92,7 +92,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
             return wrappedCallable;
         }
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        return new WrappedCallable<>(callable,requestAttributes);
+        return new WrappedCallable<>(callable, requestAttributes);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         private final String xid;
         private final Map<String, Object> threadLocalMap; //研究并发是否会冲突
 
-        WrappedCallable(Callable<T> target,RequestAttributes requestAttributes) {
+        WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
             this.target = target;
             this.requestAttributes = requestAttributes;
             this.threadLocalMap = BaseContextHolder.getLocalMap();

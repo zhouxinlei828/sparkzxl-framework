@@ -34,26 +34,6 @@ public class ElasticsearchAutoConfiguration {
 
     private final List<HttpHost> httpHosts = Lists.newArrayList();
 
-    @Bean
-    @ConditionalOnMissingBean
-    public RestHighLevelClient restHighLevelClient(ElasticsearchProperties elasticsearchProperties) {
-        log.info("automatic injection Elasticsearch ElasticsearchProperties：[{}]", JSONUtil.toJsonPrettyStr(elasticsearchProperties));
-        List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
-        clusterNodes.forEach(node -> {
-            try {
-                String[] parts = StringUtils.split(node, StrPool.COLON);
-                Assert.notNull(parts, "Must defined");
-                Assert.state(parts.length == 2, "Must be defined as 'host:port'");
-                httpHosts.add(new HttpHost(parts[0], Integer.parseInt(parts[1]), elasticsearchProperties.getSchema()));
-            } catch (Exception e) {
-                throw new IllegalStateException("Invalid ES nodes " + "property '" + node + "'", e);
-            }
-        });
-        RestClientBuilder builder = RestClient.builder(httpHosts.toArray(new HttpHost[0]));
-        return getRestHighLevelClient(builder, elasticsearchProperties);
-    }
-
-
     /**
      * get restHistLevelClient
      *
@@ -80,6 +60,25 @@ public class ElasticsearchAutoConfiguration {
                     account.getPassword()));
         }
         return new RestHighLevelClient(builder);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RestHighLevelClient restHighLevelClient(ElasticsearchProperties elasticsearchProperties) {
+        log.info("automatic injection Elasticsearch ElasticsearchProperties：[{}]", JSONUtil.toJsonPrettyStr(elasticsearchProperties));
+        List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
+        clusterNodes.forEach(node -> {
+            try {
+                String[] parts = StringUtils.split(node, StrPool.COLON);
+                Assert.notNull(parts, "Must defined");
+                Assert.state(parts.length == 2, "Must be defined as 'host:port'");
+                httpHosts.add(new HttpHost(parts[0], Integer.parseInt(parts[1]), elasticsearchProperties.getSchema()));
+            } catch (Exception e) {
+                throw new IllegalStateException("Invalid ES nodes " + "property '" + node + "'", e);
+            }
+        });
+        RestClientBuilder builder = RestClient.builder(httpHosts.toArray(new HttpHost[0]));
+        return getRestHighLevelClient(builder, elasticsearchProperties);
     }
 
 

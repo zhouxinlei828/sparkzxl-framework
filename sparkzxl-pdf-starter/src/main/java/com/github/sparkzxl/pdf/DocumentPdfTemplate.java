@@ -53,8 +53,47 @@ public class DocumentPdfTemplate extends ITextClient {
     public float realTop = 0;
 
     public List<String> arrText = new ArrayList<>();
+    /**
+     * 是否退出文本打印
+     */
+    public boolean isQuit = false;
 
     public DocumentPdfTemplate() {
+    }
+
+    /**
+     * 半角转全角
+     *
+     * @param input String.
+     * @return String
+     */
+    public static String toSbc(String input) {
+        char[] c = input.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] == ' ') {
+                c[i] = '\u3000';
+            } else if (c[i] < '\177') {
+                c[i] = (char) (c[i] + 65248);
+            }
+        }
+        return new String(c);
+    }
+
+    /**
+     * 全角转半角
+     *
+     * @param input String
+     * @return String
+     */
+    public static String toDbc(String input) {
+        char[] c = input.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] > '\uFF00' && c[i] < '\uFF5F') {
+                c[i] = (char) (c[i] - 65248);
+
+            }
+        }
+        return new String(c);
     }
 
     /**
@@ -476,11 +515,6 @@ public class DocumentPdfTemplate extends ITextClient {
         addText("页");
     }
 
-    /**
-     * 是否退出文本打印
-     */
-    public boolean isQuit = false;
-
     /***
      * 文书内容超出本页
      * @param str 打印文本内容
@@ -631,7 +665,6 @@ public class DocumentPdfTemplate extends ITextClient {
         return map;
     }
 
-
     /**
      * 根据框架的高宽调整文字的大小与位置
      *
@@ -667,7 +700,6 @@ public class DocumentPdfTemplate extends ITextClient {
         }
         return getFontFloatMap(fontSize, topSpacing, fontWidth, numWidth, rowSpacing, index);
     }
-
 
     /**
      * 求页数
@@ -876,40 +908,5 @@ public class DocumentPdfTemplate extends ITextClient {
                 realTop = top;
             }
         }
-    }
-
-    /**
-     * 半角转全角
-     *
-     * @param input String.
-     * @return String
-     */
-    public static String toSbc(String input) {
-        char[] c = input.toCharArray();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] == ' ') {
-                c[i] = '\u3000';
-            } else if (c[i] < '\177') {
-                c[i] = (char) (c[i] + 65248);
-            }
-        }
-        return new String(c);
-    }
-
-    /**
-     * 全角转半角
-     *
-     * @param input String
-     * @return String
-     */
-    public static String toDbc(String input) {
-        char[] c = input.toCharArray();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] > '\uFF00' && c[i] < '\uFF5F') {
-                c[i] = (char) (c[i] - 65248);
-
-            }
-        }
-        return new String(c);
     }
 }

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.core.utils;
 
+import cn.hutool.core.text.StrSpliter;
 import cn.hutool.core.util.URLUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,4 +48,30 @@ public class StringHandlerUtils {
             return verifiedData == null;
         }
     }
+
+    public static String underscoreToCamelCase(String str) {
+        List<String> split = StrSpliter.split(str, "-", 0, true, true);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (CollectionUtils.isNotEmpty(split)) {
+            int index = 0;
+            for (String s : split) {
+                if (index == 0) {
+                    stringBuilder.append(s);
+                } else {
+                    // 进行字母的ascii编码前移，效率要高于截取字符串进行转换的操作
+                    char[] cs = s.toCharArray();
+                    cs[0] -= 32;
+                    stringBuilder.append(String.valueOf(cs));
+                }
+                index++;
+            }
+        } else {
+            // 进行字母的ascii编码前移，效率要高于截取字符串进行转换的操作
+            char[] cs = str.toCharArray();
+            cs[0] -= 32;
+            stringBuilder.append(String.valueOf(cs));
+        }
+        return stringBuilder.toString();
+    }
+
 }

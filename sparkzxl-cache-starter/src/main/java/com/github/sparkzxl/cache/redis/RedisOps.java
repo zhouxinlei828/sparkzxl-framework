@@ -63,12 +63,6 @@ public class RedisOps {
         this.defaultCacheNullVal = defaultCacheNullVal;
     }
 
-    private void setExpire(CacheKey key) {
-        if (key != null && key.getExpire() != null) {
-            redisTemplate.expire(key.getKey(), key.getExpire());
-        }
-    }
-
     /**
      * 判断缓存值是否为空对象
      *
@@ -79,6 +73,12 @@ public class RedisOps {
     private static <T> boolean isNullVal(T value) {
         boolean isNull = value == null || NullVal.class.equals(value.getClass());
         return isNull || value.getClass().equals(Object.class) || (value instanceof Map && ((Map<?, ?>) value).isEmpty());
+    }
+
+    private void setExpire(CacheKey key) {
+        if (key != null && key.getExpire() != null) {
+            redisTemplate.expire(key.getKey(), key.getExpire());
+        }
     }
 
     /**

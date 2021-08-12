@@ -4,7 +4,7 @@ package com.github.sparkzxl.constant;
  * description: 配置常量类
  *
  * @author zhouxinlei
- * @date 2021-06-26 09:06:30
+ * @since 2021-06-26 09:06:30
  */
 public class ConfigurationConstant {
 
@@ -37,5 +37,7 @@ public class ConfigurationConstant {
     public static final String WEB_PREFIX = "web";
 
     public static final String ZOOKEEPER_PREFIX = "zookeeper";
+
+    public static final String BLACK_PREFIX = "gateway.black";
 
 }

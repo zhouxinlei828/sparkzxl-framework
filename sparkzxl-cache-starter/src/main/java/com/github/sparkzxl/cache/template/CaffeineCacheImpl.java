@@ -18,8 +18,8 @@ import java.util.function.Function;
  */
 public class CaffeineCacheImpl implements GeneralCacheService {
 
-    long maxSize = 1000L;
     private final Cache<String, Cache<String, Object>> cacheMap;
+    long maxSize = 1000L;
 
     public CaffeineCacheImpl() {
         this.cacheMap = Caffeine.newBuilder().maximumSize(this.maxSize).build();

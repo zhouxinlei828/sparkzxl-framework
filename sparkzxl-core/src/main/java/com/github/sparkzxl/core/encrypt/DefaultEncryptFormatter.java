@@ -7,7 +7,7 @@ import com.github.sparkzxl.core.utils.HuSecretUtils;
  * description: md5 加密
  *
  * @author zhouxinlei
- * @date 2021-06-25 22:37:38
+ * @since 2021-06-25 22:37:38
  */
 public class DefaultEncryptFormatter implements EncryptFormatter {
 

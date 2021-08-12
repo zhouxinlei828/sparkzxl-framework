@@ -1,8 +1,9 @@
 package com.github.sparkzxl.feign.default_;
 
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.github.sparkzxl.model.exception.ExceptionInfo;
+import com.github.sparkzxl.model.exception.FeignErrorResult;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
@@ -24,11 +25,11 @@ public class FeignExceptionDecoder implements ErrorDecoder {
         try {
             Reader reader = response.body().asReader(StandardCharsets.UTF_8);
             String body = Util.toString(reader);
-            ExceptionInfo exceptionInfo = JsonUtil.parse(body, ExceptionInfo.class);
-            return new RemoteCallException(exceptionInfo.getMessage(), exceptionInfo.getExceptionChain());
+            FeignErrorResult feignErrorResult = JsonUtil.parse(body, FeignErrorResult.class);
+            return new RemoteCallException(feignErrorResult.getCode(), feignErrorResult.getMsg(), feignErrorResult.getExceptionChains());
         } catch (Exception e) {
             log.error("[{}] has an unknown exception.", methodKey, e);
-            return new RemoteCallException("unKnowException", e);
+            return new RemoteCallException(ApiResponseStatus.FAILURE.getCode(), "unKnowException", e);
         }
 
     }

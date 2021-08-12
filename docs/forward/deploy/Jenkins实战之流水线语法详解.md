@@ -42,7 +42,8 @@ agent {
 }
 ```
 
-- dockerfile: Dockerfile源存储库中包含的容器来构建执行Pipeline或stage。使用此参数，jenkinsfile必须从代码中加载使用“pipeline from SCM”或者“Multibranch Pipeline”加载
+- dockerfile: Dockerfile源存储库中包含的容器来构建执行Pipeline或stage。使用此参数，jenkinsfile必须从代码中加载使用“pipeline from SCM”或者“Multibranch
+  Pipeline”加载
 
 > 默认是Dockerfile在根目录： agent { dockerfile true } 如果Dockerfile在另一个目录，使用dir参数： agent { dockerfile { dir 'someSubDir' } } 可以使用docker build添加参数： agent { dockerfile { additionalBuildArgs '--build-arg foo=bar' } }
 
@@ -353,7 +354,8 @@ pipeline {
 - environment: 当指定的环境变量设置为给定值时执行，例如： when { environment name: 'DEPLOY_TO', value: 'production' }
 - expression: 当指定的Groovy表达式求值为true时执行，例如： when { expression { return params.DEBUG_BUILD } }
 - not: 当嵌套条件为false时执行。必须包含一个条件。例如：when { not { branch 'master' } }
-- allOf: 当所有嵌套条件都为真时执行。必须至少包含一个条件。例如：when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production' } }
+- allOf: 当所有嵌套条件都为真时执行。必须至少包含一个条件。例如：when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production'
+  } }
 - anyOf: 当至少一个嵌套条件为真时执行。必须至少包含一个条件。例如：when { anyOf { branch 'master'; branch 'staging' } }
 
 ```text

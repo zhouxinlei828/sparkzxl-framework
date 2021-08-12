@@ -16,13 +16,12 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * description: SCHEMA模式插件
  *
  * @author zhouxinlei
- * @date 2021-06-30 21:44:12
+ * @since 2021-06-30 21:44:12
  */
 @Slf4j
 public class SchemaInterceptor implements InnerInterceptor {
@@ -34,7 +33,7 @@ public class SchemaInterceptor implements InnerInterceptor {
     }
 
     protected String changeTable(String sql) {
-        // 想要 执行sql时， 不切换到 lamp_base_{TENANT} 库, 请直接返回null
+        // 想要 执行sql时， 不切换到 sparkzxl_auth_{TENANT} 库, 请直接返回null
         String tenantCode = BaseContextHolder.getTenant();
         if (StrUtil.isEmpty(tenantCode)) {
             return sql;
@@ -46,7 +45,7 @@ public class SchemaInterceptor implements InnerInterceptor {
     }
 
     @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         // 统一交给 beforePrepare 处理,防止某些sql解析不到，又被beforePrepare重复处理
     }
 

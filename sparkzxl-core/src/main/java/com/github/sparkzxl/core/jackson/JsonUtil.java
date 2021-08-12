@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.BizExceptionAssert;
+import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +50,7 @@ public class JsonUtil {
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -68,7 +68,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, typeReference);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -77,7 +77,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, valueType);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -86,7 +86,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, typeReference);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -95,7 +95,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, valueType);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -104,7 +104,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, typeReference);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -128,6 +128,16 @@ public class JsonUtil {
     public static Map toMap(String content) {
         try {
             return getInstance().readValue(content, Map.class);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static <T> Map toMap(T val) {
+        try {
+            String jsonData = getInstance().writeValueAsString(val);
+            return getInstance().readValue(jsonData, Map.class);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
@@ -176,7 +186,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonString);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -185,7 +195,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(in);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -194,7 +204,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(content);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -203,7 +213,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
-            BizExceptionAssert.businessFail(ApiResponseStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ApiResponseStatus.JSON_PARSE_ERROR);
             return null;
         }
     }

@@ -1,33 +1,22 @@
-package com.github.sparkzxl.boot;
+package com.github.sparkzxl.log.utils;
 
-import com.github.sparkzxl.boot.application.event.ApplicationInitRunner;
-import com.github.sparkzxl.boot.infrastructure.annonation.EnableSpringUtil;
 import com.github.sparkzxl.log.netty.NettyServer;
 import io.netty.channel.ChannelHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * description: sparkzxl boot 启动类
+ * description: Netty服务工具类
  *
  * @author zhouxinlei
+ * @since 2021-07-25 18:11
  */
-@EnableSpringUtil
-@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @Slf4j
-public class SparkBootApplication {
-
-    @Bean
-    public ApplicationInitRunner applicationRunner(ApplicationContext applicationContext) {
-        return new ApplicationInitRunner(applicationContext);
-    }
+public class NettyServerUtil {
 
     /**
      * 启动netty server

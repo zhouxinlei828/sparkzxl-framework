@@ -35,13 +35,13 @@ public class Entity<T> extends SuperEntity<T> {
         return this.updateTime;
     }
 
-    public T getUpdateUser() {
-        return this.updateUser;
-    }
-
     public Entity<T> setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
         return this;
+    }
+
+    public T getUpdateUser() {
+        return this.updateUser;
     }
 
     public Entity<T> setUpdateUser(T updateUser) {

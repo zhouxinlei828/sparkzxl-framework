@@ -3,6 +3,7 @@ package com.github.sparkzxl.zookeeper.config;
 import com.github.sparkzxl.zookeeper.aspect.ZkLockAspect;
 import com.github.sparkzxl.zookeeper.lock.ZkDistributedLock;
 import com.github.sparkzxl.zookeeper.properties.CuratorProperties;
+import com.github.sparkzxl.zookeeper.support.ZookeeperExceptionHandler;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -10,6 +11,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * description:
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(CuratorProperties.class)
+@Import(ZookeeperExceptionHandler.class)
 public class CuratorConfig {
 
     @Bean(initMethod = "start")

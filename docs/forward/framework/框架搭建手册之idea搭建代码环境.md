@@ -396,7 +396,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * description: 启动类
  *
  * @author charles.zhou
- * @date 2021-02-01 11:18:40
+ * @since 2021-02-01 11:18:40
  */
 @SpringBootApplication(scanBasePackages = {"org.example.demo"})
 @Slf4j
