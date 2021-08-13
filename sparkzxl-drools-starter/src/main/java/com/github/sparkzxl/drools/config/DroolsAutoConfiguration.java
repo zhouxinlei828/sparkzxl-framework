@@ -1,11 +1,11 @@
 package com.github.sparkzxl.drools.config;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
 import com.github.sparkzxl.drools.service.impl.DroolsRuleServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
@@ -46,7 +46,7 @@ public class DroolsAutoConfiguration {
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             Resource[] resources = resourcePatternResolver.getResources("classpath*:" + droolsProperties().getRulesPath() + "**/*.*");
-            if (ArrayUtil.isNotEmpty(resources)) {
+            if (ArrayUtils.isNotEmpty(resources)) {
                 for (Resource file : resources) {
                     kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties().getRulesPath() + file.getFilename(), "UTF-8"));
                 }

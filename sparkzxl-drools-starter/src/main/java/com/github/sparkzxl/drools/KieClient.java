@@ -9,7 +9,7 @@ import org.kie.api.runtime.KieSession;
 /**
  * description: kie工具类
  *
- * @author fin-9062
+ * @author zhouxinlei
  */
 public class KieClient {
     private KieServices kieServices;

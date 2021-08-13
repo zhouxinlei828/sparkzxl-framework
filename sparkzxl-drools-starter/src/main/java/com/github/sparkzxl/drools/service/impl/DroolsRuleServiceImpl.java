@@ -1,6 +1,5 @@
 package com.github.sparkzxl.drools.service.impl;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
@@ -40,7 +39,7 @@ public class DroolsRuleServiceImpl implements DroolsRuleService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            log.info("reload新规则重载失败：message：[{}]", ExceptionUtil.getMessage(e));
+            log.info("reload新规则重载失败：message：[{}]", e.getMessage());
             return false;
         }
         reloadRules(kieServices, kfs);
