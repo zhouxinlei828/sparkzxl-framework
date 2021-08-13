@@ -1,6 +1,5 @@
 package com.github.sparkzxl.drools.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -10,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.DROOLS_PREFIX)
+@ConfigurationProperties(prefix = "drools")
 public class DroolsProperties {
 
     private String rulesPath = "rules";

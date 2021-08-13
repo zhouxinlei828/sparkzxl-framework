@@ -1,6 +1,5 @@
 package com.github.sparkzxl.drools.executor;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.entity.DroolsRule;
 import lombok.extern.slf4j.Slf4j;
@@ -66,9 +65,9 @@ public class DroolsRuleExecutor {
                 return newInstance;
             }
             kieSession.dispose();
-        } catch (Exception exception) {
-            log.error("drools查询结果发生异常 massage：[{}]", ExceptionUtil.getMessage(exception));
+        } catch (Exception e) {
+            log.error("drools查询结果发生异常 massage：[{}]", e.getMessage());
         }
         return null;
-    }
+   }
 }

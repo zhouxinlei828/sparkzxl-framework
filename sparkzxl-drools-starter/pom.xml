@@ -26,8 +26,14 @@
             <artifactId>drools-compiler</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
