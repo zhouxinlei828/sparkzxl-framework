@@ -69,7 +69,7 @@
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
-        <apm-toolkit-trace.version>8.3.0</apm-toolkit-trace.version>
+        <apm-toolkit-trace.version>8.7.0</apm-toolkit-trace.version>
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.8.8</caffeine.version>
         <fastjson.version>1.2.75</fastjson.version>

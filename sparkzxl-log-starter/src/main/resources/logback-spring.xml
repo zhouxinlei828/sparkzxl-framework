@@ -24,7 +24,7 @@
 
     <!-- 控制台 日志格式化 -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(application): %yellow(${springAppName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %tid %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(application): %yellow(${springAppName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} [%X{tid}] %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <property name="FILE_LOG_PATTERN"
               value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} application: ${springAppName} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%-40.40logger{15}] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
@@ -60,7 +60,7 @@
                                 {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
                                 "level": "%level",
                                 "service": "${springAppName}",
-                                "traceId": "%tid",
+                                "traceId": "%X{tid}",
                                 "pid": "${PID:-}",
                                 "thread": "%thread",
                                 "class": "%logger{15}",
@@ -87,7 +87,7 @@
                 {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
                 "level": "%level",
                 "service": "${springAppName:-}",
-                "traceId": "%tid",
+                "traceId": "%X{tid}",
                 "pid": "${PID:-}",
                 "thread": "%thread",
                 "class": "%logger{40}",
@@ -101,6 +101,15 @@
         <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
         <!-- kafka 地址 -->
         <producerConfig>bootstrap.servers=${kafka.servers}</producerConfig>
+    </appender>
+
+    <!-- skywalking grpc日志传输-->
+    <appender name="grpc-log" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+                <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            </layout>
+        </encoder>
     </appender>
 
     <!-- 异步控制台打印 -->
@@ -119,6 +128,13 @@
         <appender-ref ref="FileOutput"/>
     </appender>
 
+    <appender name="AsyncGrpcLog" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>100</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="grpc-log"/>
+    </appender>
+
     <!-- 异步传递策略，建议选择异步，不然连接kafka失败，会阻挡服务启动 -->
     <appender name="AsyncKafka" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
@@ -130,6 +146,7 @@
     <logger name="springfox.documentation" level="OFF"/>
 
     <root level="INFO">
+        <appender-ref ref="grpc-log"/>
         <if condition='property("enableFile").contains("true")'>
             <then>
                 <appender-ref ref="AsyncFile"/>
