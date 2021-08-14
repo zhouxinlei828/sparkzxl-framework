@@ -15,14 +15,14 @@ import java.util.Set;
  * @author zhouxinlei
  * @date 2021-08-14 14:32:50
  */
-public class CustomMdcAdapter implements MDCAdapter {
+public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
     private static final int WRITE_OPERATION = 1;
     private static final int MAP_COPY_OPERATION = 2;
-    private static final CustomMdcAdapter customMdcAdapter;
+    private static final TransmittableThreadLocalMdcAdapter CUSTOM_MDC_ADAPTER;
 
     static {
-        customMdcAdapter = new CustomMdcAdapter();
-        MDC.mdcAdapter = customMdcAdapter;
+        CUSTOM_MDC_ADAPTER = new TransmittableThreadLocalMdcAdapter();
+        MDC.mdcAdapter = CUSTOM_MDC_ADAPTER;
     }
 
     private final ThreadLocal<Map<String, String>> copyOnInheritThreadLocal = new TransmittableThreadLocal<>();
@@ -32,7 +32,7 @@ public class CustomMdcAdapter implements MDCAdapter {
     private final ThreadLocal<Integer> lastOperation = new ThreadLocal<>();
 
     public static MDCAdapter getInstance() {
-        return customMdcAdapter;
+        return CUSTOM_MDC_ADAPTER;
     }
 
     private static boolean wasLastOpReadOrNull(Integer lastOp) {
