@@ -1,6 +1,6 @@
 package com.github.sparkzxl.log;
 
-import com.github.sparkzxl.log.entity.RequestInfo;
+import com.github.sparkzxl.log.entity.HttpLogInfo;
 import wiki.xsx.core.support.MethodInfo;
 
 import java.lang.annotation.Annotation;
@@ -16,9 +16,9 @@ public interface LogStoreService {
     /**
      * 保存web日志
      *
-     * @param requestInfo 请求日志实
+     * @param httpLogInfo 请求日志实
      */
-    void saveLog(RequestInfo requestInfo);
+    void saveLog(HttpLogInfo httpLogInfo);
 
     /**
      * 保存日志

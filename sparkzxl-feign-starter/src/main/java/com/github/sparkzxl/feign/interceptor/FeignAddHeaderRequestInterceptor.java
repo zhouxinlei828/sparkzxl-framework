@@ -3,6 +3,7 @@ package com.github.sparkzxl.feign.interceptor;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -44,7 +45,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header(BaseContextConstants.REMOTE_CALL, BaseContextConstants.REMOTE_CALL);
+        template.header(BaseContextConstants.REMOTE_CALL, StrPool.TRUE);
         if (feignProperties.isEnable()) {
             String xid = RootContext.getXID();
             if (StrUtil.isNotEmpty(xid)) {

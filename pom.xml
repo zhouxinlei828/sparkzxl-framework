@@ -85,11 +85,11 @@
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <vavr.version>1.0.0-alpha-3</vavr.version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
-        <logback-classic.version>1.2.3</logback-classic.version>
         <jsqlparser.version>3.2</jsqlparser.version>
         <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
         <antisamy.version>1.5.10</antisamy.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
+        <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
     </properties>
 
     <modules>
@@ -588,11 +588,6 @@
             </dependency>
 
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback-classic.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
@@ -617,6 +612,11 @@
                 <groupId>com.github.houbb</groupId>
                 <artifactId>sensitive-word</artifactId>
                 <version>${sensitive-word.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

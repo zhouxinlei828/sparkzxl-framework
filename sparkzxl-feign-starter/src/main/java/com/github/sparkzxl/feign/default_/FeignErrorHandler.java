@@ -1,11 +1,13 @@
 package com.github.sparkzxl.feign.default_;
 
 import cn.hutool.core.bean.OptionalBean;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.http.HttpStatus;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
@@ -13,6 +15,7 @@ import com.github.sparkzxl.model.exception.FeignErrorResult;
 import com.google.common.collect.Maps;
 import io.seata.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.RequestAttributes;
@@ -79,11 +82,16 @@ public class FeignErrorHandler extends DefaultErrorAttributes {
             }
         }
         Integer status = (Integer) errorAttributes.get("status");
-        String message = OptionalBean.ofNullable(error).getBean(Throwable::getCause).getBean(Throwable::getMessage).orElseGet(error::getMessage);
+        String message;
+        if (ObjectUtils.isEmpty(error)){
+            message = (String) errorAttributes.get("message");
+        }else {
+            message = OptionalBean.ofNullable(error).getBean(Throwable::getCause).getBean(Throwable::getMessage).orElseGet(error::getMessage);
+        }
         ResponseResultUtils.clearResponseResult();
         // 判断是否是feign请求
-        String feign = webRequest.getHeader(BaseContextConstants.REMOTE_CALL);
-        if (StringUtils.isNotEmpty(feign)) {
+        Boolean feign = Convert.toBool(webRequest.getHeader(BaseContextConstants.REMOTE_CALL),Boolean.FALSE);
+        if (feign) {
             ExceptionChain exceptionChain = new ExceptionChain();
             exceptionChain.setMsg(message);
             exceptionChain.setPath(errorAttributes.get("path").toString());

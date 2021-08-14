@@ -1,4 +1,4 @@
-package com.github.sparkzxl.log.utils;
+package com.github.sparkzxl.log.netty;
 
 import com.github.sparkzxl.log.netty.NettyServer;
 import io.netty.channel.ChannelHandler;

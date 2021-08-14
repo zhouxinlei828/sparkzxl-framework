@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RequestInfo {
+public class HttpLogInfo {
 
     /**
      * 请求IP

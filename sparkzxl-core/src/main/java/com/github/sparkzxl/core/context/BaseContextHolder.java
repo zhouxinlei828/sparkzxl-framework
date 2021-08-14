@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.context;
 
 import cn.hutool.core.convert.Convert;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.google.common.collect.Maps;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public class BaseContextHolder {
 
-    private static final ThreadLocal<Map<String, Object>> CONTEXT_HOLDER_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Object>> TRANSMITTABLE_THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     public static void set(String key, Object value) {
         Map<String, Object> map = getLocalMap();
@@ -38,16 +39,16 @@ public class BaseContextHolder {
     }
 
     public static Map<String, Object> getLocalMap() {
-        Map<String, Object> map = CONTEXT_HOLDER_THREAD_LOCAL.get();
+        Map<String, Object> map = TRANSMITTABLE_THREAD_LOCAL.get();
         if (map == null) {
             map = Maps.newHashMap();
-            CONTEXT_HOLDER_THREAD_LOCAL.set(map);
+            TRANSMITTABLE_THREAD_LOCAL.set(map);
         }
         return map;
     }
 
     public static void setLocalMap(Map<String, Object> threadLocalMap) {
-        CONTEXT_HOLDER_THREAD_LOCAL.set(threadLocalMap);
+        TRANSMITTABLE_THREAD_LOCAL.set(threadLocalMap);
     }
 
 
@@ -140,6 +141,6 @@ public class BaseContextHolder {
     }
 
     public static void remove() {
-        CONTEXT_HOLDER_THREAD_LOCAL.remove();
+        TRANSMITTABLE_THREAD_LOCAL.remove();
     }
 }
