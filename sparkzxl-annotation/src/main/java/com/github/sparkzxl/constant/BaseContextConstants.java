@@ -89,7 +89,7 @@ public class BaseContextConstants {
     /**
      * 日志链路追踪id日志标志
      */
-    public static final String LOG_TRACE_ID = "trace";
+    public static final String LOG_TRACE_ID = "tid";
     /**
      * 登录账户 前缀
      * 完整key: authUser:{key} -> str

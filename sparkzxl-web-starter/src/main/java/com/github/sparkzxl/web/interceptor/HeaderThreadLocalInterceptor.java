@@ -1,5 +1,7 @@
 package com.github.sparkzxl.web.interceptor;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
@@ -21,7 +23,7 @@ import java.lang.reflect.Method;
  * @author zhouxinlei
  */
 @Slf4j
-public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
+public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
 
 
     @Override
@@ -33,11 +35,11 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
         BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
         BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
         String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
-        MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
+        MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? IdUtil.fastSimpleUUID() : traceId);
         MDC.put(BaseContextConstants.TENANT, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
         MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-        String feign = request.getHeader(BaseContextConstants.REMOTE_CALL);
-        if (StringUtils.isNotEmpty(feign)) {
+        Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
+        if (feign) {
             return true;
         }
 
@@ -56,7 +58,7 @@ public class ResponseResultInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        super.afterCompletion(request, response, handler, ex);
         BaseContextHolder.remove();
+        super.afterCompletion(request, response, handler, ex);
     }
 }

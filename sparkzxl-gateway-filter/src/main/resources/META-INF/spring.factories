@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.gateway.config.CustomGatewayConfig
+    com.github.sparkzxl.gateway.GatewayAutoConfig

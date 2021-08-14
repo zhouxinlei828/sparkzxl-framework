@@ -1,6 +1,6 @@
 package com.github.sparkzxl.log;
 
-import com.github.sparkzxl.log.entity.RequestInfo;
+import com.github.sparkzxl.log.entity.HttpLogInfo;
 import wiki.xsx.core.support.MethodInfo;
 
 import java.lang.annotation.Annotation;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class LogJdbcServiceImpl implements LogStoreService {
 
     @Override
-    public void saveLog(RequestInfo requestInfo) {
+    public void saveLog(HttpLogInfo httpLogInfo) {
     }
 
     @Override

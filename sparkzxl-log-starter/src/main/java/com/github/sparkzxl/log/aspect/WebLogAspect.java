@@ -7,7 +7,7 @@ import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.log.LogStoreService;
-import com.github.sparkzxl.log.entity.RequestInfo;
+import com.github.sparkzxl.log.entity.HttpLogInfo;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class WebLogAspect {
             stopwatch.start();
         }
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        RequestInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
+        HttpLogInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
         String jsonStr = JsonUtil.toJson(requestParamInfo);
         log.info("请求参数信息: [{}]", jsonStr);
         if (storage) {
@@ -87,7 +87,7 @@ public class WebLogAspect {
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         Object result = proceedingJoinPoint.proceed();
-        RequestInfo requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint.getSignature(), result);
+        HttpLogInfo requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint.getSignature(), result);
         String jsonStr = JsonUtil.toJson(requestResultInfo);
         log.info("响应结果信息: [{}]", jsonStr);
         return result;
@@ -110,11 +110,11 @@ public class WebLogAspect {
     @AfterThrowing(pointcut = "pointCut()", throwing = "e")
     public void doAfterThrow(JoinPoint joinPoint, Exception e) {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        RequestInfo requestInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
-        String jsonStr = JsonUtil.toJson(requestInfo);
+        HttpLogInfo httpLogInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
+        String jsonStr = JsonUtil.toJson(httpLogInfo);
         log.info("请求接口发生异常 : [{}]", jsonStr);
         if (storage) {
-            CompletableFuture.runAsync(() -> logStoreService.saveLog(requestInfo));
+            CompletableFuture.runAsync(() -> logStoreService.saveLog(httpLogInfo));
         }
         remove();
     }
@@ -127,10 +127,10 @@ public class WebLogAspect {
      * @param args               请求参数
      * @return RequestParamInfo
      */
-    private RequestInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
+    private HttpLogInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
         String userId = BaseContextHolder.getUserId(String.class);
         String name = BaseContextHolder.getName();
-        return RequestInfo.builder()
+        return HttpLogInfo.builder()
                 .ip(NetworkUtil.getIpAddress(httpServletRequest))
                 .url(httpServletRequest.getRequestURL().toString())
                 .httpMethod(httpServletRequest.getMethod())
@@ -150,10 +150,10 @@ public class WebLogAspect {
      * @param result             返回结果
      * @return RequestInfo
      */
-    private RequestInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
+    private HttpLogInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
         String userId = BaseContextHolder.getUserId(String.class);
         String name = BaseContextHolder.getName();
-        return RequestInfo.builder()
+        return HttpLogInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .httpMethod(httpServletRequest.getMethod())
                 .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
@@ -172,10 +172,10 @@ public class WebLogAspect {
      * @param e                  异常
      * @return RequestInfo
      */
-    private RequestInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
+    private HttpLogInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
         String userId = BaseContextHolder.getUserId(String.class);
         String name = BaseContextHolder.getName();
-        return RequestInfo.builder()
+        return HttpLogInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
                         signature.getName()))

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.web.config;
 
-import com.github.sparkzxl.web.interceptor.ResponseResultInterceptor;
+import com.github.sparkzxl.web.interceptor.HeaderThreadLocalInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
 import com.github.sparkzxl.web.support.ResponseResultHandler;
@@ -47,8 +47,8 @@ public class DefaultWebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ResponseResultInterceptor responseResultInterceptor() {
-        return new ResponseResultInterceptor();
+    public HeaderThreadLocalInterceptor responseResultInterceptor() {
+        return new HeaderThreadLocalInterceptor();
     }
 
     @Override
