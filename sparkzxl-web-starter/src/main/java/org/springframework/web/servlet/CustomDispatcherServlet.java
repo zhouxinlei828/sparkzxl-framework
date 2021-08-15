@@ -1,8 +1,7 @@
 package org.springframework.web.servlet;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.constant.BaseContextConstants;
-import org.apache.commons.lang3.StringUtils;
+import com.github.sparkzxl.constant.AppContextConstants;
 import org.springframework.lang.Nullable;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -22,7 +21,7 @@ public class CustomDispatcherServlet extends DispatcherServlet {
 
     @Override
     protected ModelAndView processHandlerException(HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) throws Exception {
-        Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
+        Boolean feign = Convert.toBool(request.getHeader(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (feign) {
             throw ex;
         } else {

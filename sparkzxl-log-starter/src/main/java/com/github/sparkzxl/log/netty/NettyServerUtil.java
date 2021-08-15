@@ -1,6 +1,5 @@
 package com.github.sparkzxl.log.netty;
 
-import com.github.sparkzxl.log.netty.NettyServer;
 import io.netty.channel.ChannelHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;

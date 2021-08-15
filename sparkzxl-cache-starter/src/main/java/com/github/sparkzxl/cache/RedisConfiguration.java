@@ -4,7 +4,6 @@ import com.github.sparkzxl.cache.redis.RedisOps;
 import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.cache.template.RedisCacheImpl;
-import com.github.sparkzxl.cache.utils.CacheTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,11 +65,6 @@ public class RedisConfiguration {
     public GeneralCacheService redisCacheTemplate(RedisTemplate<String, Object> redisTemplate) {
         log.info("Autowired redisCacheTemplate success!");
         return new RedisCacheImpl(redisTemplate);
-    }
-
-    @Bean
-    public CacheTokenUtils tokenUtil(GeneralCacheService generalCacheService) {
-        return new CacheTokenUtils(generalCacheService);
     }
 
     @Bean

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.interceptor;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.constant.AppContextConstants;
 import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
@@ -28,9 +28,9 @@ import java.util.List;
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            BaseContextConstants.TENANT, BaseContextConstants.JWT_KEY_USER_ID,
-            BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
-            BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
+            AppContextConstants.TENANT, AppContextConstants.JWT_KEY_USER_ID,
+            AppContextConstants.JWT_KEY_ACCOUNT, AppContextConstants.JWT_KEY_NAME,
+            AppContextConstants.TRACE_ID_HEADER, AppContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
     );
     private FeignProperties feignProperties;
 
@@ -44,7 +44,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header(BaseContextConstants.REMOTE_CALL, StrPool.TRUE);
+        template.header(AppContextConstants.REMOTE_CALL, StrPool.TRUE);
         if (feignProperties.isEnable()) {
             String xid = RootContext.getXID();
             if (StrUtil.isNotEmpty(xid)) {
