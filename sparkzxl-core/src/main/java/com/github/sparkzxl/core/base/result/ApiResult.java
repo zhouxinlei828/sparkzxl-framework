@@ -30,7 +30,7 @@ public class ApiResult<T> implements Serializable {
      * @param msg  信息
      * @return ApiResult
      */
-    public static ApiResult apiResult(int code, String msg) {
+    public static ApiResult<?> apiResult(int code, String msg) {
         return ApiResult.builder().code(code).msg(msg).build();
     }
 
@@ -42,7 +42,7 @@ public class ApiResult<T> implements Serializable {
      * @param data 数据
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(int code, String msg, T data) {
+    public static <T> ApiResult<?> apiResult(int code, String msg, T data) {
         return ApiResult.builder().code(code).msg(msg).data(data).build();
     }
 
@@ -52,7 +52,7 @@ public class ApiResult<T> implements Serializable {
      * @param resultStatus API操作码
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(ApiResponseStatus resultStatus) {
+    public static <T> ApiResult<?> apiResult(ApiResponseStatus resultStatus) {
         return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).build();
     }
 
@@ -63,7 +63,7 @@ public class ApiResult<T> implements Serializable {
      * @param data         数据
      * @return ApiResult
      */
-    public static <T> ApiResult apiResult(ApiResponseStatus resultStatus, T data) {
+    public static <T> ApiResult<?> apiResult(ApiResponseStatus resultStatus, T data) {
         return ApiResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).data(data).build();
     }
 
@@ -72,7 +72,7 @@ public class ApiResult<T> implements Serializable {
      *
      * @return ApiResult
      */
-    public static <T> ApiResult timeOut() {
+    public static <T> ApiResult<?> timeOut() {
         return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
 
