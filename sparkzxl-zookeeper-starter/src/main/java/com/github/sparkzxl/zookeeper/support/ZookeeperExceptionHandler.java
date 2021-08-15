@@ -2,7 +2,7 @@ package com.github.sparkzxl.zookeeper.support;
 
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.KeeperException;
 import org.springframework.core.Ordered;
@@ -22,7 +22,7 @@ public class ZookeeperExceptionHandler implements Ordered {
 
     @ExceptionHandler(KeeperException.class)
     public ApiResult<?> handleKeeperException(KeeperException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("ClusterRedirectException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }

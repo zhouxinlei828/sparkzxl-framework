@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mongodb.utils;
 
-import com.github.sparkzxl.core.utils.ReflectObjectUtils;
+import com.github.sparkzxl.core.utils.ReflectObjectUtil;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -17,7 +17,7 @@ public class MongoDbHandleUtil {
 
     public static Map<String, Object> getAndAnnotationValue(Object model) {
         Map<String, Object> annotationMap = Maps.newHashMap();
-        List<Field> fields = ReflectObjectUtils.getAllField(model);
+        List<Field> fields = ReflectObjectUtil.getAllField(model);
         for (Field field : fields) {
             field.setAccessible(true);
             try {

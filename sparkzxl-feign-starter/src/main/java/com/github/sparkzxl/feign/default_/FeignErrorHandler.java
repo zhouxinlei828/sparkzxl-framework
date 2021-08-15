@@ -6,14 +6,12 @@ import cn.hutool.http.HttpStatus;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import com.google.common.collect.Maps;
-import io.seata.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -88,7 +86,7 @@ public class FeignErrorHandler extends DefaultErrorAttributes {
         }else {
             message = OptionalBean.ofNullable(error).getBean(Throwable::getCause).getBean(Throwable::getMessage).orElseGet(error::getMessage);
         }
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         // 判断是否是feign请求
         Boolean feign = Convert.toBool(webRequest.getHeader(BaseContextConstants.REMOTE_CALL),Boolean.FALSE);
         if (feign) {

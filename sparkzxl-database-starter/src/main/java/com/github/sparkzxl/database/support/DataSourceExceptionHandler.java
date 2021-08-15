@@ -4,7 +4,7 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
@@ -31,21 +31,21 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLSyntaxErrorException.class)
     public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("IllegalArgumentException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
     public ApiResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("BadSqlGrammarException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(PersistenceException.class)
     public ApiResult<?> persistenceException(PersistenceException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("PersistenceException:", ex);
         if (ex.getCause() instanceof BizException) {
             BizException cause = (BizException) ex.getCause();
@@ -56,7 +56,7 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(MyBatisSystemException.class)
     public ApiResult<?> myBatisSystemException(MyBatisSystemException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("PersistenceException:", ex);
         if (ex.getCause() instanceof PersistenceException) {
             return this.persistenceException((PersistenceException) ex.getCause());
@@ -66,21 +66,21 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLException.class)
     public ApiResult<?> sqlException(SQLException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("SQLException:", ex);
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ApiResult<?> dataIntegrityViolationException(DataIntegrityViolationException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("DataIntegrityViolationException:", ex);
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(TenantException.class)
     public ApiResult<?> handleTenantException(TenantException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("TenantException:", ex);
         return ApiResult.apiResult(ex.getCode(), ex.getMessage());
     }

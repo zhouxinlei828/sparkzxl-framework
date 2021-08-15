@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class ReflectObjectUtils {
+public class ReflectObjectUtil {
 
     /**
      * 单个对象的所有键值

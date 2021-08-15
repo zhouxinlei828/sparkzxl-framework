@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class StringHandlerUtils {
+public class StringHandlerUtil {
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 

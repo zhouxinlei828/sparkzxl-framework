@@ -14,9 +14,9 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class BaseContextHolder {
+public class AppContextHolder {
 
-    private static final ThreadLocal<Map<String, Object>> TRANSMITTABLE_THREAD_LOCAL = new TransmittableThreadLocal<>();
+    private static final TransmittableThreadLocal<Map<String, Object>> THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     public static void set(String key, Object value) {
         Map<String, Object> map = getLocalMap();
@@ -39,16 +39,16 @@ public class BaseContextHolder {
     }
 
     public static Map<String, Object> getLocalMap() {
-        Map<String, Object> map = TRANSMITTABLE_THREAD_LOCAL.get();
+        Map<String, Object> map = THREAD_LOCAL.get();
         if (map == null) {
             map = Maps.newHashMap();
-            TRANSMITTABLE_THREAD_LOCAL.set(map);
+            THREAD_LOCAL.set(map);
         }
         return map;
     }
 
     public static void setLocalMap(Map<String, Object> threadLocalMap) {
-        TRANSMITTABLE_THREAD_LOCAL.set(threadLocalMap);
+        THREAD_LOCAL.set(threadLocalMap);
     }
 
 
@@ -141,6 +141,6 @@ public class BaseContextHolder {
     }
 
     public static void remove() {
-        TRANSMITTABLE_THREAD_LOCAL.remove();
+        THREAD_LOCAL.remove();
     }
 }

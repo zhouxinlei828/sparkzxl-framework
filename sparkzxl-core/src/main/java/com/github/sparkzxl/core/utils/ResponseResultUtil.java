@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  * @author zhouxinlei
  */
 @Slf4j
-public class ResponseResultUtils {
+public class ResponseResultUtil {
 
     public static String getAuthHeader(HttpServletRequest httpRequest) {
         String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);

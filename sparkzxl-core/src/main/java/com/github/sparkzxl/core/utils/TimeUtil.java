@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhouxinlei
  */
-public class TimeUtils {
+public class TimeUtil {
 
     public static boolean hasMillis(Duration duration) {
         return duration.toMillis() % 1000L != 0L;

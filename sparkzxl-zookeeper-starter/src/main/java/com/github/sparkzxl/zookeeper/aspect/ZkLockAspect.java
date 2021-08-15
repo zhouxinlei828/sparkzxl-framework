@@ -2,7 +2,7 @@ package com.github.sparkzxl.zookeeper.aspect;
 
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.utils.AspectUtils;
+import com.github.sparkzxl.core.utils.AspectUtil;
 import com.github.sparkzxl.zookeeper.annotation.ZkLock;
 import com.github.sparkzxl.zookeeper.lock.ZkDistributedLock;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class ZkLockAspect {
         StringBuilder keyBuffer = new StringBuilder();
         String lockKey = null;
         try {
-            lockKey = AspectUtils.parseExpression(proceedingJoinPoint, zkLock.expression());
+            lockKey = AspectUtil.parseExpression(proceedingJoinPoint, zkLock.expression());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }

@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import feign.RequestInterceptor;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,9 +51,9 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
                 template.header(RootContext.KEY_XID, xid);
             }
         }
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, BaseContextHolder.get(headerName)));
+            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, AppContextHolder.get(headerName)));
             return;
         }
 
@@ -65,7 +64,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
             String header = request.getHeader(headerName);
-            template.header(headerName, StringUtils.isEmpty(header) ? BaseContextHolder.get(headerName) : header);
+            template.header(headerName, StringUtils.isEmpty(header) ? AppContextHolder.get(headerName) : header);
         });
     }
 }

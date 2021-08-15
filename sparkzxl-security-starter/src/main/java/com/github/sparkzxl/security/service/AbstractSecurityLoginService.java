@@ -3,7 +3,7 @@ package com.github.sparkzxl.security.service;
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.utils.TimeUtils;
+import com.github.sparkzxl.core.utils.TimeUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.entity.core.CaptchaInfo;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
@@ -67,7 +67,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        long seconds = TimeUtils.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
+        long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         String username = authUserDetail.getUsername();
         AuthUserInfo authUserInfo = getAuthUserInfo(username);
         AuthToken authToken = new AuthToken();
@@ -82,7 +82,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
 
 
     public String createJwtToken(SecurityUserDetail<ID> authUserDetail) {
-        long seconds = TimeUtils.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
+        long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         Date expire = DateUtil.offsetSecond(new Date(), (int) seconds);
         JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
         jwtUserInfo.setId(authUserDetail.getId());

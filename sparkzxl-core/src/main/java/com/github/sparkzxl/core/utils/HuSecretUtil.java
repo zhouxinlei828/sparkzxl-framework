@@ -22,7 +22,7 @@ import java.security.PublicKey;
  *
  * @author zhouxinlei
  */
-public class HuSecretUtils {
+public class HuSecretUtil {
 
     private static final AES AES;
 
@@ -39,7 +39,7 @@ public class HuSecretUtils {
         rsa = new RSA(privateKey, publicKey);
     }
 
-    private HuSecretUtils() {
+    private HuSecretUtil() {
 
     }
 

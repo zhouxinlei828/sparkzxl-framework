@@ -6,7 +6,7 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.resource.SwaggerStaticResource;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.JwtExpireException;
-import com.github.sparkzxl.core.utils.StringHandlerUtils;
+import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
 import com.google.common.collect.Lists;
@@ -42,8 +42,8 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT, tenantId);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
-        if (StringHandlerUtils.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
-                || StringHandlerUtils.matchUrl(ignorePatterns(), request.getPath().toString())) {
+        if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
+                || StringHandlerUtil.matchUrl(ignorePatterns(), request.getPath().toString())) {
             // 放行请求清除token
             clearTokenRequest(exchange);
             return chain.filter(exchange);

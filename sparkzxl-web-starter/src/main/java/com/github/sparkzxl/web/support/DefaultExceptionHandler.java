@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.bouncycastle.openssl.PasswordException;
@@ -43,7 +43,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(BizException.class)
     public ApiResult<?> businessException(BizException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("BusinessException：[{}]", e.getMessage());
         int code = e.getCode();
         String message = e.getMessage();
@@ -52,14 +52,14 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(NestedServletException.class)
     public ApiResult<?> businessException(NestedServletException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("NestedServletException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.FAILURE);
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
     public ApiResult<?> serviceDegradeException(ServiceDegradeException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("ServiceDegradeException：[{}]", e.getMessage());
         return ApiResult.apiResult(e.getCode(), e.getMessage());
     }
@@ -67,14 +67,14 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("MethodArgumentNotValidException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResult<?> illegalArgumentException(IllegalArgumentException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("IllegalArgumentException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.ILLEGAL_ARGUMENT_EX.getCode(), e.getMessage());
     }
@@ -121,28 +121,28 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(PasswordException.class)
     public ApiResult<?> handlePasswordException(PasswordException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("PasswordException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.PASSWORD_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler({AccountNotFoundException.class})
     public ApiResult<?> handleAccountNotFoundException(AccountNotFoundException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("AccountNotFoundException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.ACCOUNT_NOT_FOUND_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ApiResult<?> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("HttpRequestMethodNotSupportedException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResult<?> httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("HttpMessageNotReadableException：[{}]", e.getMessage());
         String message = e.getMessage();
         if (StrUtil.containsAny(message, "Could not read document:")) {
@@ -153,7 +153,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult<?> notFoundPage404(NoHandlerFoundException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.error("NoHandlerFoundException：[{}]", e.getMessage());
         return ApiResult.apiResult(ApiResponseStatus.NOT_FOUND);
     }
@@ -162,7 +162,7 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ApiResult<?> httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         log.error("HttpMediaTypeNotSupportedException：[{}]", e.getMessage());
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         MediaType contentType = e.getContentType();
         if (contentType != null) {
             return ApiResult.apiResult(ApiResponseStatus.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配");
@@ -172,21 +172,21 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(NullPointerException.class)
     public ApiResult<?> handleNullPointerException(NullPointerException e) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         e.printStackTrace();
         return ApiResult.apiResult(ApiResponseStatus.NULL_POINTER_EXCEPTION_ERROR);
     }
 
     @ExceptionHandler(MultipartException.class)
     public ApiResult<?> multipartException(MultipartException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.warn("MultipartException:", ex);
         return ApiResult.apiResult(ApiResponseStatus.REQUIRED_FILE_PARAM_EX.getCode(), ApiResponseStatus.REQUIRED_FILE_PARAM_EX.getMessage());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ApiResult<?> missingServletRequestParameterException(MissingServletRequestParameterException ex) {
-        ResponseResultUtils.clearResponseResult();
+        ResponseResultUtil.clearResponseResult();
         log.warn("MissingServletRequestParameterException:", ex);
         return ApiResult.apiResult(ApiResponseStatus.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + ex.getParameterType() + "]类型的参数[" + ex.getParameterName() + "]");
     }

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -128,8 +128,8 @@ public class WebLogAspect {
      * @return RequestParamInfo
      */
     private HttpLogInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = AppContextHolder.getUserId(String.class);
+        String name = AppContextHolder.getName();
         return HttpLogInfo.builder()
                 .ip(NetworkUtil.getIpAddress(httpServletRequest))
                 .url(httpServletRequest.getRequestURL().toString())
@@ -151,8 +151,8 @@ public class WebLogAspect {
      * @return RequestInfo
      */
     private HttpLogInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = AppContextHolder.getUserId(String.class);
+        String name = AppContextHolder.getName();
         return HttpLogInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .httpMethod(httpServletRequest.getMethod())
@@ -173,8 +173,8 @@ public class WebLogAspect {
      * @return RequestInfo
      */
     private HttpLogInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = AppContextHolder.getUserId(String.class);
+        String name = AppContextHolder.getName();
         return HttpLogInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),

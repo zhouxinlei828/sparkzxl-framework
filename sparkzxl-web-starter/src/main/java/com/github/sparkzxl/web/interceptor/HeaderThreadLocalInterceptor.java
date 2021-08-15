@@ -5,10 +5,9 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -30,10 +29,10 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         //设置当前请求线程全局信息
-        BaseContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
-        BaseContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-        BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
-        BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
+        AppContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
+        AppContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        AppContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
+        AppContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
         String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
         MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? IdUtil.fastSimpleUUID() : traceId);
         MDC.put(BaseContextConstants.TENANT, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT));
@@ -58,7 +57,7 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        BaseContextHolder.remove();
+        AppContextHolder.remove();
         super.afterCompletion(request, response, handler, ex);
     }
 }

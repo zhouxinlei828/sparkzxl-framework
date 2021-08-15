@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.support;
 
 import com.github.sparkzxl.core.base.code.BaseEnumCode;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.utils.StringHandlerUtils;
+import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import lombok.NonNull;
 
 import java.util.Objects;
@@ -104,6 +104,6 @@ public class ExceptionAssert {
      * 判断对象是否为空
      */
     static <T> Then isEmpty(T param) {
-        return new Then(StringHandlerUtils.isBlank(param));
+        return new Then(StringHandlerUtil.isBlank(param));
     }
 }

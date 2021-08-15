@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.resolver;
 
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.user.service.IAuthUserInfoService;
 import org.springframework.core.MethodParameter;
@@ -35,7 +35,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             , WebDataBinderFactory binderFactory) {
         HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         assert servletRequest != null;
-        String accessToken = ResponseResultUtils.getAuthHeader(servletRequest);
+        String accessToken = ResponseResultUtil.getAuthHeader(servletRequest);
         return globalUserService.getUserInfo(accessToken);
     }
 }
