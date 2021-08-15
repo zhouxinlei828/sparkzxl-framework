@@ -25,8 +25,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         int code = ApiResponseStatus.UN_AUTHORIZED.getCode();
         String message = ApiResponseStatus.UN_AUTHORIZED.getMessage();
         if (e instanceof AccountExpiredException) {
-            code = ApiResponseStatus.JWT_EXPIRED_ERROR.getCode();
-            message = ApiResponseStatus.JWT_EXPIRED_ERROR.getMessage();
+            code = ApiResponseStatus.TOKEN_EXPIRED_ERROR.getCode();
+            message = ApiResponseStatus.TOKEN_EXPIRED_ERROR.getMessage();
         }
         ResponseResultUtil.writeResponseOutMsg(response,
                 code, message);

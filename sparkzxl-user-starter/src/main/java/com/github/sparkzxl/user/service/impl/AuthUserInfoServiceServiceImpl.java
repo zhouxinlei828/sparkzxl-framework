@@ -58,7 +58,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             Object userInfoId = jwtUserInfo.getId();
             authUserInfo = getCache(BuildKeyUtil.generateKey(AppContextConstants.AUTH_USER_TOKEN, userInfoId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
-                ExceptionAssert.failure(ApiResponseStatus.JWT_EXPIRED_ERROR);
+                ExceptionAssert.failure(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
             }
         }
         return authUserInfo;

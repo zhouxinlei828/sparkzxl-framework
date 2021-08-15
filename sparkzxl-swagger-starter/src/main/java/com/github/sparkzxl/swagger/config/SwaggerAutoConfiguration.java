@@ -2,6 +2,7 @@ package com.github.sparkzxl.swagger.config;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
@@ -49,8 +50,8 @@ import java.util.stream.Collectors;
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
     private final SwaggerProperties swaggerProperties;
-    private BeanFactory beanFactory;
     private final OpenApiExtensionResolver openApiExtensionResolver;
+    private BeanFactory beanFactory;
 
     public SwaggerAutoConfiguration(SwaggerProperties swaggerProperties, OpenApiExtensionResolver openApiExtensionResolver) {
         this.swaggerProperties = swaggerProperties;
@@ -216,11 +217,11 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
     private List<ResponseMessage> getResponseMessages() {
         return Arrays.asList(
-                new ResponseMessageBuilder().code(0).message("成功").build(),
-                new ResponseMessageBuilder().code(-1).message("系统繁忙").build(),
-                new ResponseMessageBuilder().code(-2).message("服务超时").build(),
-                new ResponseMessageBuilder().code(40001).message("会话超时，请重新登录").build(),
-                new ResponseMessageBuilder().code(40003).message("缺少token参数").build()
+                new ResponseMessageBuilder().code(ApiResponseStatus.SUCCESS.getCode()).message(ApiResponseStatus.SUCCESS.getMessage()).build(),
+                new ResponseMessageBuilder().code(ApiResponseStatus.FAILURE.getCode()).message(ApiResponseStatus.FAILURE.getMessage()).build(),
+                new ResponseMessageBuilder().code(ApiResponseStatus.UN_AUTHORIZED.getCode()).message(ApiResponseStatus.UN_AUTHORIZED.getMessage()).build(),
+                new ResponseMessageBuilder().code(ApiResponseStatus.AUTHORIZED_DENIED.getCode()).message(ApiResponseStatus.AUTHORIZED_DENIED.getMessage()).build(),
+                new ResponseMessageBuilder().code(ApiResponseStatus.TOKEN_EXPIRED_ERROR.getCode()).message(ApiResponseStatus.TOKEN_EXPIRED_ERROR.getMessage()).build()
         );
     }
 

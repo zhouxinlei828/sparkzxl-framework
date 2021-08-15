@@ -51,7 +51,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         int code = ApiResponseStatus.SUCCESS.getCode();
         String message = ApiResponseStatus.SUCCESS.getMessage();
         String attribute = (String) RequestContextHolderUtils.getAttribute(AppContextConstants.EXCEPTION_ATTR_MSG);
-        Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(AppContextConstants.REMOTE_CALL),Boolean.FALSE);
+        Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (fallback) {
             code = ApiResponseStatus.SERVICE_DEGRADATION.getCode();
             message = ApiResponseStatus.SERVICE_DEGRADATION.getMessage();

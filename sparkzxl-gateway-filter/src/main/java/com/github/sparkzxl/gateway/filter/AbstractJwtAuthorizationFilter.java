@@ -114,7 +114,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
     protected JwtUserInfo verifyToken(String token) throws BaseException {
         JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new JwtExpireException(ApiResponseStatus.JWT_EXPIRED_ERROR);
+            throw new JwtExpireException(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
         }
         return jwtUserInfo;
     }

@@ -81,14 +81,14 @@ public class FeignErrorHandler extends DefaultErrorAttributes {
         }
         Integer status = (Integer) errorAttributes.get("status");
         String message;
-        if (ObjectUtils.isEmpty(error)){
+        if (ObjectUtils.isEmpty(error)) {
             message = (String) errorAttributes.get("message");
-        }else {
+        } else {
             message = OptionalBean.ofNullable(error).getBean(Throwable::getCause).getBean(Throwable::getMessage).orElseGet(error::getMessage);
         }
         ResponseResultUtil.clearResponseResult();
         // 判断是否是feign请求
-        Boolean feign = Convert.toBool(webRequest.getHeader(AppContextConstants.REMOTE_CALL),Boolean.FALSE);
+        Boolean feign = Convert.toBool(webRequest.getHeader(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (feign) {
             ExceptionChain exceptionChain = new ExceptionChain();
             exceptionChain.setMsg(message);

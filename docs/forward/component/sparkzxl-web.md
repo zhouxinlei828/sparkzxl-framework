@@ -181,12 +181,12 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     /**
      * token签名不合法
      */
-    JWT_VALID_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token签名不合法"),
+    TOKEN_VALID_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token校验失败"),
 
     /**
      * token已过期
      */
-    JWT_EXPIRED_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token已过期");
+    TOKEN_EXPIRED_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token已过期");
 
     final int code;
 
