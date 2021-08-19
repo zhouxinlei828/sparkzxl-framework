@@ -67,7 +67,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
     }
 
     private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
-        return input -> Arrays.stream(StrUtil.split(basePackage, StrPool.SEMICOLON)).anyMatch(ClassUtils.getPackageName(input)::startsWith);
+        return input -> StrUtil.split(basePackage, StrPool.SEMICOLON).stream().anyMatch(ClassUtils.getPackageName(input)::startsWith);
     }
 
     private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {

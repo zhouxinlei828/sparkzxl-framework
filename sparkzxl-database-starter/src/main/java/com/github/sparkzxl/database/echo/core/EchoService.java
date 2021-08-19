@@ -297,9 +297,9 @@ public class EchoService {
         newVal = valueMap.get(actualValue.toString());
         // 可能由于是多key原因导致get失败
         if (ObjectUtil.isNull(newVal) && StrUtil.isNotEmpty(echoField.dictType())) {
-            String[] codes = StrUtil.split(originalValue.toString(), ips.getDictItemSeparator());
+            List<String> codes = StrUtil.split(originalValue.toString(), ips.getDictItemSeparator());
 
-            newVal = Arrays.stream(codes).map(item -> {
+            newVal = codes.stream().map(item -> {
                 String val = valueMap.getOrDefault(echoField.dictType() + ips.getDictSeparator() + item, StrPool.EMPTY).toString();
                 return val == null ? StrPool.EMPTY : val;
             }).collect(Collectors.joining(ips.getDictItemSeparator()));
