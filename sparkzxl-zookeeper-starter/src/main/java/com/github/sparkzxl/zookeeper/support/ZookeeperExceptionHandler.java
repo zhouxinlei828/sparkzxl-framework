@@ -1,5 +1,6 @@
 package com.github.sparkzxl.zookeeper.support;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.utils.ResponseResultUtil;
@@ -23,7 +24,7 @@ public class ZookeeperExceptionHandler implements Ordered {
     @ExceptionHandler(KeeperException.class)
     public ApiResult<?> handleKeeperException(KeeperException e) {
         ResponseResultUtil.clearResponseResult();
-        log.error("ClusterRedirectException：[{}]", e.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 

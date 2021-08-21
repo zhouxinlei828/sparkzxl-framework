@@ -1,6 +1,7 @@
 package com.github.sparkzxl.sentinel.support;
 
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.csp.sentinel.slots.block.authority.AuthorityException;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
@@ -39,36 +40,36 @@ public class SentinelExceptionHandler implements Ordered {
     }
 
     @ExceptionHandler(value = FlowException.class)
-    public ApiResult<?> blockExceptionHandler(FlowException flowException) {
+    public ApiResult<?> blockExceptionHandler(FlowException e) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", flowException.getClass().getSimpleName(), flowException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.REQ_LIMIT, flowException.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
+        return ApiResult.apiResult(ApiResponseStatus.REQ_LIMIT, e.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
-    public ApiResult<?> blockExceptionHandler(AuthorityException authorityException) {
+    public ApiResult<?> blockExceptionHandler(AuthorityException e) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", authorityException.getClass().getSimpleName(), authorityException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.REQ_BLACKLIST, authorityException.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
+        return ApiResult.apiResult(ApiResponseStatus.REQ_BLACKLIST, e.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
-    public ApiResult<?> blockExceptionHandler(SystemBlockException systemBlockException) {
+    public ApiResult<?> blockExceptionHandler(SystemBlockException e) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", systemBlockException.getClass().getSimpleName(), systemBlockException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.SYSTEM_BLOCK, systemBlockException.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
+        return ApiResult.apiResult(ApiResponseStatus.SYSTEM_BLOCK, e.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
-    public ApiResult<?> blockExceptionHandler(ParamFlowException paramFlowException) {
+    public ApiResult<?> blockExceptionHandler(ParamFlowException e) {
         handleResponseResult();
-        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", paramFlowException.getClass().getSimpleName(), paramFlowException.getMessage());
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_FLOW, paramFlowException.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
+        return ApiResult.apiResult(ApiResponseStatus.PARAM_FLOW, e.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
-    public ApiResult<?> blockExceptionHandler(DegradeException degradeException) {
-        log.error("请求被拦截，拦截类型为：[{}], message：[{}]", degradeException.getClass().getSimpleName(), degradeException.getMessage());
+    public ApiResult<?> blockExceptionHandler(DegradeException e) {
+        log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
 

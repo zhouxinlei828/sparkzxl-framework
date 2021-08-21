@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.log.config.LogAutoConfiguration
+    com.github.sparkzxl.log.LogAutoConfiguration
 org.springframework.context.ApplicationContextInitializer=\
-    com.github.sparkzxl.log.TransmittableThreadLocalMdcAdapterInitializer
+    com.github.sparkzxl.log.initializer.TransmittableThreadLocalMdcAdapterInitializer

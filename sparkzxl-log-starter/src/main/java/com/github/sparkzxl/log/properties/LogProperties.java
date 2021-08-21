@@ -22,9 +22,9 @@ public class LogProperties {
     private boolean enableConsole = true;
 
     /**
-     * 是否开启日志存储
+     * 是否开启日志告警
      */
-    private boolean storage = false;
+    private boolean enableAlarm = false;
 
     @NestedConfigurationProperty
     private FileProperties file = new FileProperties();

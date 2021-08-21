@@ -105,6 +105,7 @@
         <module>sparkzxl-job-executor-starter</module>
         <module>sparkzxl-jwt-starter</module>
         <module>sparkzxl-log-starter</module>
+        <module>sparkzxl-log-alarm-starter</module>
         <module>sparkzxl-mail-starter</module>
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-oauth2-resource-starter</module>
@@ -228,6 +229,11 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-log-starter</artifactId>
+                <version>${sparkzxl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-log-alarm-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
@@ -478,6 +484,12 @@
                 <artifactId>apm-toolkit-logback-1.x</artifactId>
                 <version>${apm-toolkit-trace.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${apm-toolkit-trace.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>

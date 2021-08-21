@@ -1,6 +1,7 @@
 package com.github.sparkzxl.feign.support;
 
 import cn.hutool.core.bean.OptionalBean;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
@@ -31,14 +32,14 @@ public class FeignExceptionHandler implements Ordered {
     @ExceptionHandler(SocketTimeoutException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResult<?> handleSocketTimeoutException(SocketTimeoutException e) {
-        log.error("SocketTimeoutException：[{}]", e.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.TIME_OUT_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResult<?> handleRetryableException(FeignException e) {
-        log.error("FeignException：[{}]", e.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
     }
 
@@ -46,14 +47,14 @@ public class FeignExceptionHandler implements Ordered {
     public ApiResult<?> handleRemoteCallException(RemoteCallException e) {
         String applicationName = OptionalBean.ofNullable(e.getRawExceptionInfo()).getBean(ExceptionChain::getApplicationName).orElseGet(() -> "unKnownServer");
         String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getMessage());
-        log.error("RemoteCallException：[{}]", message);
+        log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(e.getCode(), message);
     }
 
     @ExceptionHandler(ClientException.class)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ApiResult<?> handleClientException(ClientException e) {
-        log.error("ClientException：[{}]", e.getMessage());
+        log.error(ExceptionUtil.getMessage(e));
         String matchString = "Load balancer does not have available server for client: ";
         String message = e.getMessage();
         if (message.contains(matchString)) {

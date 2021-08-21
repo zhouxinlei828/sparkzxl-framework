@@ -1,4 +1,4 @@
-package com.github.sparkzxl.log.config;
+package com.github.sparkzxl.log;
 
 import com.github.sparkzxl.log.aspect.WebLogAspect;
 import com.github.sparkzxl.log.netty.LogWebSocketHandler;
@@ -27,10 +27,8 @@ public class LogAutoConfiguration {
     private ApplicationContext applicationContext;
 
     @Bean
-    public WebLogAspect webLogAspect(LogProperties logProperties) {
-        WebLogAspect webLogAspect = new WebLogAspect();
-        webLogAspect.setStorage(logProperties.isStorage());
-        return webLogAspect;
+    public WebLogAspect webLogAspect() {
+        return new WebLogAspect();
     }
 
     @Bean

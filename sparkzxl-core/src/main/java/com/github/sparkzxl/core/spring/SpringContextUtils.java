@@ -33,7 +33,7 @@ public class SpringContextUtils implements ApplicationContextAware {
         if (applicationContext == null) {
             return "";
         }
-        return applicationContext.getApplicationName();
+        return getProperty("spring.application.name");
     }
 
     /**
