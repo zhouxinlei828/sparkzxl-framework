@@ -2,9 +2,10 @@ package com.github.sparkzxl.utils;
 
 
 import com.github.sparkzxl.AlarmLogContext;
-import com.github.sparkzxl.entity.core.ErrorInfo;
+import com.github.sparkzxl.entity.AlarmLogInfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,22 +16,22 @@ public class ThrowableUtils {
     private static final String SEPARATOR = "\n";
     private static final String HTML_SEPARATOR = "<br />";
 
-    public static String workWeChatContent(ErrorInfo context, Throwable throwable) {
+    public static String workWeChatContent(AlarmLogInfo context, Throwable throwable) {
         return defaultContent(context, throwable, SEPARATOR);
     }
 
-    public static String dingTalkContent(ErrorInfo context, Throwable throwable) {
+    public static String dingTalkContent(AlarmLogInfo context, Throwable throwable) {
         return defaultContent(context, throwable, SEPARATOR);
     }
 
-    public static Map<String, String> mailSubjectContent(ErrorInfo context, Throwable throwable) {
+    public static Map<String, String> mailSubjectContent(AlarmLogInfo context, Throwable throwable) {
         Map<String, String> result = new HashMap<>(2);
         result.put("subject", context.getMessage());
         result.put("content", defaultContent(context, throwable, HTML_SEPARATOR));
         return result;
     }
 
-    private static String defaultContent(ErrorInfo context, Throwable throwable, String separator) {
+    private static String defaultContent(AlarmLogInfo context, Throwable throwable, String separator) {
         StringBuilder stringBuilder = new StringBuilder();
         if (!AlarmLogContext.getSimpleWarnInfo()) {
             stringBuilder.append("告警服务:").append(context.getApplicationName()).append(separator);
@@ -61,6 +62,20 @@ public class ThrowableUtils {
 
     private static boolean isNativeMethod(int lineNumber) {
         return lineNumber == -2;
+    }
+
+
+    public static boolean doWarnExceptionName(Throwable warnExceptionClass, List<Class<? extends Throwable>> doWarnExceptionList) {
+        return doWarnExceptionList.contains(warnExceptionClass.getClass());
+    }
+
+    public static boolean doWarnExceptionExtend(Throwable warnExceptionClass, List<Class<? extends Throwable>> doExtendWarnExceptionList) {
+        for (Class<?> aClass : doExtendWarnExceptionList) {
+            if (aClass.isAssignableFrom(warnExceptionClass.getClass())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

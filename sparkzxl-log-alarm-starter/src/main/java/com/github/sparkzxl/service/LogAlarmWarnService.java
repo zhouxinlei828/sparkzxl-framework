@@ -1,6 +1,6 @@
 package com.github.sparkzxl.service;
 
-import com.github.sparkzxl.entity.core.ErrorInfo;
+import com.github.sparkzxl.entity.AlarmLogInfo;
 
 /**
  * description: 日志告警服务类
@@ -8,6 +8,7 @@ import com.github.sparkzxl.entity.core.ErrorInfo;
  * @author zhoux
  * @date 2021-08-21 11:36:13
  */
+@FunctionalInterface
 public interface LogAlarmWarnService {
 
     /**
@@ -17,5 +18,5 @@ public interface LogAlarmWarnService {
      * @param throwable 异常
      * @return boolean
      */
-    boolean send(ErrorInfo context, Throwable throwable);
+    boolean send(AlarmLogInfo context, Throwable throwable);
 }

@@ -2,7 +2,7 @@ package com.github.sparkzxl.service.wechat;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.excel.util.StringUtils;
-import com.github.sparkzxl.entity.core.ErrorInfo;
+import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.cache.CaffeineCache;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.service.BaseWarnService;
@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
  * @author zhoux
  * @date 2021-08-21 12:11:31
  */
-public class WorkWechatWarnService extends BaseWarnService {
+public class WorkWeXinWarnService extends BaseWarnService {
 
-    private final Logger logger = LoggerFactory.getLogger(WorkWechatWarnService.class);
+    private final Logger logger = LoggerFactory.getLogger(WorkWeXinWarnService.class);
 
     private static final String GET_TOKEN_URL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s";
 
@@ -44,7 +44,7 @@ public class WorkWechatWarnService extends BaseWarnService {
 
     private final String corpSecret;
 
-    public WorkWechatWarnService(String to, Integer applicationId, String corpId, String corpSecret) {
+    public WorkWeXinWarnService(String to, Integer applicationId, String corpId, String corpSecret) {
         this.to = to;
         this.applicationId = applicationId;
         this.corpId = corpId;
@@ -73,7 +73,7 @@ public class WorkWechatWarnService extends BaseWarnService {
     }
 
     private String createPostData(String touser, String msgtype, String contentValue) {
-        WorkWechatSendParam wcd = new WorkWechatSendParam();
+        WorkWeXinSendRequest wcd = new WorkWeXinSendRequest();
         wcd.setTouser(touser);
         wcd.setAgentid(applicationId);
         wcd.setMsgtype(msgtype);
@@ -107,8 +107,8 @@ public class WorkWechatWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(ErrorInfo context, Throwable throwable) throws Exception {
-        String data = createPostData(toUser(to.split(",")), WorkWechatSendMsgTypeEnum.TEXT.name(), ThrowableUtils.workWeChatContent(context, throwable));
+    protected void doSend(AlarmLogInfo context, Throwable throwable) throws Exception {
+        String data = createPostData(toUser(to.split(",")), WorkWeXinSendMsgTypeEnum.TEXT.name(), ThrowableUtils.workWeChatContent(context, throwable));
         String url = String.format(SEND_MESSAGE_URL, getToken());
         String resp = HttpRequest.post(url).body(data).execute().body();
         logger.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);

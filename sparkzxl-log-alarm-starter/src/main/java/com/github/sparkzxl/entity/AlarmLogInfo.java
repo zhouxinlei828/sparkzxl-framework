@@ -1,4 +1,4 @@
-package com.github.sparkzxl.entity.core;
+package com.github.sparkzxl.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * description: 异常信息
+ * description: 日志告警信息
  *
  * @author zhoux
  * @date 2021-08-21 11:34:12
@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-public class ErrorInfo {
+public class AlarmLogInfo {
 
     private String applicationName;
 

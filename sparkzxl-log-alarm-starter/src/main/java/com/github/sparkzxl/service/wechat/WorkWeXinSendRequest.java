@@ -8,7 +8,7 @@ import java.util.Map;
  * @author weilai
  */
 @Data
-public class WorkWechatSendParam {
+public class WorkWeXinSendRequest {
 
     private String touser;
 

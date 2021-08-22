@@ -1,10 +1,10 @@
 package com.github.sparkzxl.autoconfigure;
 
+import com.github.sparkzxl.AlarmLogFactoryExecute;
 import com.github.sparkzxl.AlarmLogContext;
-import com.github.sparkzxl.factory.AlarmLogWarnServiceFactory;
 import com.github.sparkzxl.service.dingtalk.DingTalkWarnService;
 import com.github.sparkzxl.service.mail.MailWarnService;
-import com.github.sparkzxl.service.wechat.WorkWechatWarnService;
+import com.github.sparkzxl.service.wechat.WorkWeXinWarnService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -51,41 +51,41 @@ public class AlarmLogAutoConfiguration {
 
         @Autowired
         void setDataChangedListener(MailWarnService mailWarnService) {
-            AlarmLogWarnServiceFactory.setAlarmLogWarnService(mailWarnService);
+            AlarmLogFactoryExecute.addAlarmLogWarnService(mailWarnService);
         }
     }
 
     @Configuration
     @ConditionalOnProperty(value = "spring.alarm-log.warn.wechat.enabled", havingValue = "true")
-    @EnableConfigurationProperties(WorkWechatConfig.class)
+    @EnableConfigurationProperties(WorkWeXinConfig.class)
     static class WorkWechatWarnServiceMethod {
 
         @Bean
         @ConditionalOnMissingBean(MailWarnService.class)
-        public WorkWechatWarnService workWechatWarnService(final WorkWechatConfig workWechatConfig) {
-            return new WorkWechatWarnService(workWechatConfig.getTo(), workWechatConfig.getApplicationId(), workWechatConfig.getCorpId(), workWechatConfig.getCorpSecret());
+        public WorkWeXinWarnService workWechatWarnService(final WorkWeXinConfig workWeXinConfig) {
+            return new WorkWeXinWarnService(workWeXinConfig.getTo(), workWeXinConfig.getApplicationId(), workWeXinConfig.getCorpId(), workWeXinConfig.getCorpSecret());
         }
 
         @Autowired
-        void setDataChangedListener(WorkWechatWarnService workWechatWarnService) {
-            AlarmLogWarnServiceFactory.setAlarmLogWarnService(workWechatWarnService);
+        void setDataChangedListener(WorkWeXinWarnService workWeXinWarnService) {
+            AlarmLogFactoryExecute.addAlarmLogWarnService(workWeXinWarnService);
         }
     }
 
     @Configuration
     @ConditionalOnProperty(value = "spring.alarm-log.warn.dingtalk.enabled", havingValue = "true")
-    @EnableConfigurationProperties(DingtalkConfig.class)
+    @EnableConfigurationProperties(DingTalkConfig.class)
     static class DingTalkWarnServiceMethod {
 
         @Bean
         @ConditionalOnMissingBean(DingTalkWarnService.class)
-        public DingTalkWarnService dingTalkWarnService(final DingtalkConfig dingtalkConfig) {
+        public DingTalkWarnService dingTalkWarnService(final DingTalkConfig dingtalkConfig) {
             return new DingTalkWarnService(dingtalkConfig.getToken(), dingtalkConfig.getSecret());
         }
 
         @Autowired
         void setDataChangedListener(DingTalkWarnService dingTalkWarnService) {
-            AlarmLogWarnServiceFactory.setAlarmLogWarnService(dingTalkWarnService);
+            AlarmLogFactoryExecute.addAlarmLogWarnService(dingTalkWarnService);
         }
     }
 }

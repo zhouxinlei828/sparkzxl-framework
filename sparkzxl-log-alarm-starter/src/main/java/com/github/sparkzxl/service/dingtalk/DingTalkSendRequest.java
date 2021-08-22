@@ -7,7 +7,7 @@ import lombok.Data;
  * @author weilai
  */
 @Data
-public class DingTalkSendParam {
+public class DingTalkSendRequest {
 
     private String msgtype;
 

@@ -6,7 +6,7 @@ package com.github.sparkzxl.service.wechat;
  * @author zhoux
  * @date 2021-08-21 11:55:29
  */
-public enum WorkWechatSendMsgTypeEnum {
+public enum WorkWeXinSendMsgTypeEnum {
 
     TEXT,
 }

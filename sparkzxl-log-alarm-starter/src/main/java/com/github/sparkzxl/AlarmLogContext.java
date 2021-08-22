@@ -1,12 +1,15 @@
 package com.github.sparkzxl;
 
-import com.github.sparkzxl.utils.ExceptionUtils;
+import com.github.sparkzxl.utils.ThrowableUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author weilai
+ * description: 日志告警全局信息
+ *
+ * @author zhoux
+ * @date 2021-08-22 09:35:44
  */
 public class AlarmLogContext {
 
@@ -66,7 +69,7 @@ public class AlarmLogContext {
     }
 
     public static boolean doWarnException(Throwable warnExceptionClass) {
-        return AlarmLogContext.warnExceptionExtend ? ExceptionUtils.doWarnExceptionExtend(warnExceptionClass, AlarmLogContext.DO_EXTEND_WARN_EXCEPTION_LIST) : ExceptionUtils.doWarnExceptionName(warnExceptionClass, AlarmLogContext.doWarnExceptionList);
+        return AlarmLogContext.warnExceptionExtend ? ThrowableUtils.doWarnExceptionExtend(warnExceptionClass, AlarmLogContext.DO_EXTEND_WARN_EXCEPTION_LIST) : ThrowableUtils.doWarnExceptionName(warnExceptionClass, AlarmLogContext.doWarnExceptionList);
     }
 
     private static void genExtendWarnExceptionList() {
@@ -76,4 +79,5 @@ public class AlarmLogContext {
     private static void genExtendWarnExceptionList(List<Class<? extends Throwable>> doWarnExceptionList) {
         AlarmLogContext.DO_EXTEND_WARN_EXCEPTION_LIST.addAll(doWarnExceptionList);
     }
+
 }

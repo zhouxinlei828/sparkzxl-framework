@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "spring.alarm-log.warn.dingtalk")
-public class DingtalkConfig {
+public class DingTalkConfig {
 
     private boolean enabled;
 

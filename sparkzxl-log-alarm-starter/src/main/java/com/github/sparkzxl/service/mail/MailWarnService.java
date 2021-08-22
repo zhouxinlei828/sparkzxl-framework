@@ -1,7 +1,7 @@
 package com.github.sparkzxl.service.mail;
 
 
-import com.github.sparkzxl.entity.core.ErrorInfo;
+import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.service.BaseWarnService;
 import com.github.sparkzxl.utils.ThrowableUtils;
 
@@ -63,7 +63,7 @@ public class MailWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(ErrorInfo context, Throwable throwable) throws Exception {
+    protected void doSend(AlarmLogInfo context, Throwable throwable) throws Exception {
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.transport.protocol", "smtp");
