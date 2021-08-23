@@ -34,6 +34,7 @@ public class ThrowableUtils {
     private static String defaultContent(AlarmLogInfo context, Throwable throwable, String separator) {
         StringBuilder stringBuilder = new StringBuilder();
         if (!AlarmLogContext.getSimpleWarnInfo()) {
+            stringBuilder.append("告警环境:").append(context.getEnvironment()).append(separator);
             stringBuilder.append("告警服务:").append(context.getApplicationName()).append(separator);
             stringBuilder.append("异常类:").append(context.getThrowableName()).append(separator);
             stringBuilder.append("错误信息:").append(context.getMessage()).append(separator);

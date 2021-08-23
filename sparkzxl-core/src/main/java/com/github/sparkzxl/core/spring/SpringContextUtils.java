@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.spring;
 
 import cn.hutool.core.util.ArrayUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -34,6 +35,13 @@ public class SpringContextUtils implements ApplicationContextAware {
             return "";
         }
         return getProperty("spring.application.name");
+    }
+
+    public static String getEnvironment() {
+        if (applicationContext == null) {
+            return "dev";
+        }
+        return StringUtils.isNotBlank(getProperty("spring.profiles.active")) ? getProperty("spring.profiles.active") : "dev";
     }
 
     /**

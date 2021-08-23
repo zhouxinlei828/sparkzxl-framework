@@ -19,6 +19,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AlarmLogInfo {
 
+    private String environment;
+
     private String applicationName;
 
     private String traceId;
