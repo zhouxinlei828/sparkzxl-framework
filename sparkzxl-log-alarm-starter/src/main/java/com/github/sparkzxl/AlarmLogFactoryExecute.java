@@ -2,9 +2,9 @@ package com.github.sparkzxl;
 
 import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.service.LogAlarmWarnService;
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class AlarmLogFactoryExecute {
 
-    private static List<LogAlarmWarnService> serviceList = Lists.newArrayList();
+    private static List<LogAlarmWarnService> serviceList = new ArrayList<>();
 
     public AlarmLogFactoryExecute(List<LogAlarmWarnService> alarmLogWarnServices) {
         serviceList = alarmLogWarnServices;
@@ -30,7 +30,7 @@ public class AlarmLogFactoryExecute {
     }
 
     public static void execute(AlarmLogInfo alarmLogInfo, Throwable throwable) {
-        if (ObjectUtils.isNotEmpty(alarmLogInfo)) {
+        if (!ObjectUtils.isEmpty(alarmLogInfo)) {
             for (LogAlarmWarnService logAlarmWarnService : getServiceList()) {
                 logAlarmWarnService.send(alarmLogInfo, throwable);
             }

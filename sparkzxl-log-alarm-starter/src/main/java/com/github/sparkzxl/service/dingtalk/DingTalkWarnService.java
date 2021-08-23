@@ -2,11 +2,13 @@ package com.github.sparkzxl.service.dingtalk;
 
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.service.BaseWarnService;
 import com.github.sparkzxl.utils.ThrowableUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -23,6 +25,8 @@ import java.util.Base64;
 @Slf4j
 public class DingTalkWarnService extends BaseWarnService {
 
+    private Logger logger = LoggerFactory.getLogger(DingTalkWarnService.class);
+
     private final String token;
 
     private final String secret;
@@ -38,10 +42,10 @@ public class DingTalkWarnService extends BaseWarnService {
         DingTalkSendRequest param = new DingTalkSendRequest();
         param.setMsgtype(DingTalkSendMsgTypeEnum.TEXT.getType());
         param.setText(new DingTalkSendRequest.Text(message));
-        String json = JsonUtil.toJson(param);
+        String json = JSONUtil.toJsonStr(param);
         String sign = getSign();
         String body = HttpRequest.post(sign).contentType(ContentType.JSON.getValue()).body(json).execute().body();
-        log.info("钉钉机器人通知结果：{}", body);
+        logger.info("钉钉机器人通知结果：{}", body);
     }
 
     /**

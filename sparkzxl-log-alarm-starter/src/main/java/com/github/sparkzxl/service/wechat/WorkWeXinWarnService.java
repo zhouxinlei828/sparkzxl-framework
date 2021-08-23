@@ -1,14 +1,15 @@
 package com.github.sparkzxl.service.wechat;
 
+import cn.hutool.core.lang.TypeReference;
 import cn.hutool.http.HttpRequest;
-import com.alibaba.excel.util.StringUtils;
-import com.github.sparkzxl.entity.AlarmLogInfo;
+import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.cache.CaffeineCache;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.service.BaseWarnService;
 import com.github.sparkzxl.utils.ThrowableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -64,7 +65,8 @@ public class WorkWeXinWarnService extends BaseWarnService {
         String accessToken = caffeineCache.get(WECHAT_AUTH_TOKEN);
         if (StringUtils.isEmpty(accessToken)) {
             String resp = toAuth(String.format(GET_TOKEN_URL, corpId, corpSecret));
-            Map<String, Object> responseMap = JsonUtil.toMap(resp, Object.class);
+            Map<String, Object> responseMap = JSONUtil.toBean(resp, new TypeReference<Map<String, Object>>() {
+            }, true);
             assert responseMap != null;
             accessToken = responseMap.get("access_token").toString();
             caffeineCache.set(WECHAT_AUTH_TOKEN, accessToken, TOKEN_EXPIRES_IN, TimeUnit.MILLISECONDS);
@@ -80,7 +82,7 @@ public class WorkWeXinWarnService extends BaseWarnService {
         Map<String, Object> content = new HashMap<>();
         content.put("content", contentValue);
         wcd.setText(content);
-        return JsonUtil.toJson(wcd);
+        return JSONUtil.toJsonStr(wcd);
     }
 
     private String toUser(String[] receiver) {
