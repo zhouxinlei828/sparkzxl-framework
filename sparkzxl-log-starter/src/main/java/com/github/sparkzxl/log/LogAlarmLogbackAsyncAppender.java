@@ -5,8 +5,8 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.classic.spi.ThrowableProxy;
-import com.github.sparkzxl.AlarmLogFactoryExecute;
 import com.github.sparkzxl.AlarmLogContext;
+import com.github.sparkzxl.AlarmLogFactoryExecute;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.entity.AlarmLogInfo;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -43,11 +43,13 @@ public class LogAlarmLogbackAsyncAppender extends AsyncAppender {
             String traceId = TraceContext.traceId();
             if (Objects.nonNull(throwableProxy)) {
                 String applicationName = SpringContextUtils.getApplicationName();
+                String environment = SpringContextUtils.getEnvironment();
                 Throwable throwable = throwableProxy.getThrowable();
                 if (AlarmLogContext.doWarnException(throwable)) {
                     StackTraceElement[] stackTraceElements = throwable.getStackTrace();
                     AlarmLogInfo alarmLogInfo = AlarmLogInfo.builder()
                             .applicationName(applicationName)
+                            .environment(environment)
                             .message(loggingEvent.getFormattedMessage())
                             .throwableName(throwable.getClass().getName())
                             .threadName(loggingEvent.getThreadName())
@@ -65,8 +67,10 @@ public class LogAlarmLogbackAsyncAppender extends AsyncAppender {
                 }
             } else if (level.equals(Level.ERROR)) {
                 String applicationName = SpringContextUtils.getApplicationName();
+                String environment = SpringContextUtils.getEnvironment();
                 AlarmLogInfo alarmLogInfo = AlarmLogInfo.builder()
                         .applicationName(applicationName)
+                        .environment(environment)
                         .message(loggingEvent.getFormattedMessage())
                         .threadName(loggingEvent.getThreadName())
                         .traceId(traceId)
