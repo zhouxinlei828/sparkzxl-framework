@@ -35,7 +35,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
                 }
             }
         }
-        ApiResponseStatus.UN_PERMISSION.newException(configAttributes);
+        ApiResponseStatus.AUTHORIZED_DENIED.newException(configAttributes);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.context;
 
 import cn.hutool.core.convert.Convert;
 import com.alibaba.ttl.TransmittableThreadLocal;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.constant.AppContextConstants;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.google.common.collect.Maps;
 
@@ -14,9 +14,9 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class BaseContextHolder {
+public class AppContextHolder {
 
-    private static final ThreadLocal<Map<String, Object>> TRANSMITTABLE_THREAD_LOCAL = new TransmittableThreadLocal<>();
+    private static final TransmittableThreadLocal<Map<String, Object>> THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     public static void set(String key, Object value) {
         Map<String, Object> map = getLocalMap();
@@ -39,25 +39,25 @@ public class BaseContextHolder {
     }
 
     public static Map<String, Object> getLocalMap() {
-        Map<String, Object> map = TRANSMITTABLE_THREAD_LOCAL.get();
+        Map<String, Object> map = THREAD_LOCAL.get();
         if (map == null) {
             map = Maps.newHashMap();
-            TRANSMITTABLE_THREAD_LOCAL.set(map);
+            THREAD_LOCAL.set(map);
         }
         return map;
     }
 
     public static void setLocalMap(Map<String, Object> threadLocalMap) {
-        TRANSMITTABLE_THREAD_LOCAL.set(threadLocalMap);
+        THREAD_LOCAL.set(threadLocalMap);
     }
 
 
     public static <T> T getUserId(Class<T> tClass) {
-        return get(BaseContextConstants.JWT_KEY_USER_ID, tClass, 0L);
+        return get(AppContextConstants.JWT_KEY_USER_ID, tClass, 0L);
     }
 
     public static <T> void setUserId(T userId) {
-        set(BaseContextConstants.JWT_KEY_USER_ID, userId);
+        set(AppContextConstants.JWT_KEY_USER_ID, userId);
     }
 
     /**
@@ -66,7 +66,7 @@ public class BaseContextHolder {
      * @return String
      */
     public static String getAccount() {
-        return get(BaseContextConstants.JWT_KEY_ACCOUNT, String.class);
+        return get(AppContextConstants.JWT_KEY_ACCOUNT, String.class);
     }
 
     /**
@@ -75,7 +75,7 @@ public class BaseContextHolder {
      * @param account 账户
      */
     public static void setAccount(String account) {
-        set(BaseContextConstants.JWT_KEY_ACCOUNT, account);
+        set(AppContextConstants.JWT_KEY_ACCOUNT, account);
     }
 
 
@@ -85,7 +85,7 @@ public class BaseContextHolder {
      * @return String
      */
     public static String getName() {
-        return get(BaseContextConstants.JWT_KEY_NAME, String.class);
+        return get(AppContextConstants.JWT_KEY_NAME, String.class);
     }
 
     /**
@@ -94,7 +94,7 @@ public class BaseContextHolder {
      * @param name 用户姓名
      */
     public static void setName(String name) {
-        set(BaseContextConstants.JWT_KEY_NAME, name);
+        set(AppContextConstants.JWT_KEY_NAME, name);
     }
 
     /**
@@ -103,32 +103,32 @@ public class BaseContextHolder {
      * @return String
      */
     public static String getToken() {
-        return get(BaseContextConstants.JWT_TOKEN_HEADER, String.class);
+        return get(AppContextConstants.JWT_TOKEN_HEADER, String.class);
     }
 
     public static void setToken(String token) {
-        set(BaseContextConstants.JWT_TOKEN_HEADER, token);
+        set(AppContextConstants.JWT_TOKEN_HEADER, token);
     }
 
     public static String getTenant() {
-        return get(BaseContextConstants.TENANT, String.class, StrPool.EMPTY);
+        return get(AppContextConstants.TENANT, String.class, StrPool.EMPTY);
     }
 
     public static void setTenant(String val) {
-        set(BaseContextConstants.TENANT, val);
+        set(AppContextConstants.TENANT, val);
     }
 
     public static String getClientId() {
-        return get(BaseContextConstants.TENANT, String.class);
+        return get(AppContextConstants.TENANT, String.class);
     }
 
     public static void setClientId(String val) {
-        set(BaseContextConstants.JWT_KEY_CLIENT_ID, val);
+        set(AppContextConstants.JWT_KEY_CLIENT_ID, val);
     }
 
 
     public static Boolean getBoot() {
-        return get(BaseContextConstants.IS_BOOT, Boolean.class, false);
+        return get(AppContextConstants.IS_BOOT, Boolean.class, false);
     }
 
     /**
@@ -137,10 +137,10 @@ public class BaseContextHolder {
      * @param val 是否boot
      */
     public static void setBoot(Boolean val) {
-        set(BaseContextConstants.IS_BOOT, val);
+        set(AppContextConstants.IS_BOOT, val);
     }
 
     public static void remove() {
-        TRANSMITTABLE_THREAD_LOCAL.remove();
+        THREAD_LOCAL.remove();
     }
 }

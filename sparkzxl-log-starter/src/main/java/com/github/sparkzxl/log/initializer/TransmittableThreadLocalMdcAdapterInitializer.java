@@ -1,4 +1,4 @@
-package com.github.sparkzxl.log;
+package com.github.sparkzxl.log.initializer;
 
 import org.slf4j.TransmittableThreadLocalMdcAdapter;
 import org.springframework.context.ApplicationContextInitializer;

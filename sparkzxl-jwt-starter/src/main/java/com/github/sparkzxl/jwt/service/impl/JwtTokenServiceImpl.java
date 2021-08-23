@@ -9,8 +9,8 @@ import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.utils.DateUtils;
-import com.github.sparkzxl.core.utils.HuSecretUtils;
-import com.github.sparkzxl.core.utils.TimeUtils;
+import com.github.sparkzxl.core.utils.HuSecretUtil;
+import com.github.sparkzxl.core.utils.TimeUtil;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
@@ -57,7 +57,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .type(JOSEObjectType.JWT)
                     .build();
-            long seconds = TimeUtils.toSeconds(jwtProperties.getExpire(), jwtProperties.getUnit());
+            long seconds = TimeUtil.toSeconds(jwtProperties.getExpire(), jwtProperties.getUnit());
             Date expire = DateUtil.offsetSecond(new Date(), (int) seconds);
             jwtUserInfo.setExpire(expire);
             jwtUserInfo.setJti(UUID.randomUUID().toString());
@@ -137,7 +137,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             Payload payload = new Payload(payloadStr);
             //创建JWS对象
             JWSObject jwsObject = new JWSObject(jwsHeader, payload);
-            JWSSigner jwsSigner = new MACSigner(HuSecretUtils.encryptMd5(jwtProperties.getSecret()));
+            JWSSigner jwsSigner = new MACSigner(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         }).onFailure(throwable -> {
@@ -153,7 +153,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         //从token中解析JWS对象
         JWSObject jwsObject = JWSObject.parse(token);
         //创建HMAC验证器
-        JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtils.encryptMd5(jwtProperties.getSecret()));
+        JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
         if (!jwsObject.verify(jwsVerifier)) {
             throw new JwtInvalidException("token签名不合法");
         }
@@ -170,7 +170,7 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         if (ObjectUtils.isNotEmpty(keyPair)) {
             return keyPair;
         }
-        keyPair = HuSecretUtils.keyPair(KeyStoreProperties.getPath(), "jwt", KeyStoreProperties.getPassword());
+        keyPair = HuSecretUtil.keyPair(KeyStoreProperties.getPath(), "jwt", KeyStoreProperties.getPassword());
         keyPairMap.put("keyPair", keyPair);
         return keyPair;
     }

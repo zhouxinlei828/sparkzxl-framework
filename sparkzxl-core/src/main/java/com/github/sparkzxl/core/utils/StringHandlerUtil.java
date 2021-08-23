@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.utils;
 
-import cn.hutool.core.text.StrSpliter;
+import cn.hutool.core.text.StrSplitter;
 import cn.hutool.core.util.URLUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class StringHandlerUtils {
+public class StringHandlerUtil {
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 
@@ -50,7 +50,7 @@ public class StringHandlerUtils {
     }
 
     public static String underscoreToCamelCase(String str) {
-        List<String> split = StrSpliter.split(str, "-", 0, true, true);
+        List<String> split = StrSplitter.split(str, "-", 0, true, true);
         StringBuilder stringBuilder = new StringBuilder();
         if (CollectionUtils.isNotEmpty(split)) {
             int index = 0;

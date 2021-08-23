@@ -69,5 +69,5 @@ public class DroolsRuleExecutor {
             log.error("drools查询结果发生异常 massage：[{}]", e.getMessage());
         }
         return null;
-   }
+    }
 }

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.feign.hystrix;
 
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.AppContextHolder;
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
 import com.netflix.hystrix.strategy.HystrixPlugins;
@@ -16,7 +16,6 @@ import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -91,7 +90,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         if (wrappedCallable instanceof WrappedCallable) {
             return wrappedCallable;
         }
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
         return new WrappedCallable<>(callable, requestAttributes);
     }
 
@@ -132,25 +131,25 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
             this.target = target;
             this.requestAttributes = requestAttributes;
-            this.threadLocalMap = BaseContextHolder.getLocalMap();
+            this.threadLocalMap = AppContextHolder.getLocalMap();
             this.xid = RootContext.getXID();
         }
 
         @Override
         public T call() throws Exception {
             try {
-                RequestContextHolder.setRequestAttributes(this.requestAttributes);
-                BaseContextHolder.setLocalMap(this.threadLocalMap);
+                org.springframework.web.context.request.RequestContextHolder.setRequestAttributes(this.requestAttributes);
+                AppContextHolder.setLocalMap(this.threadLocalMap);
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.bind(this.xid);
                 }
                 return this.target.call();
             } finally {
-                RequestContextHolder.resetRequestAttributes();
+                org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes();
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.unbind();
                 }
-                BaseContextHolder.remove();
+                AppContextHolder.remove();
             }
         }
     }

@@ -11,6 +11,7 @@
     <!-- 日志显隐控制方式 -->
     <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
     <springProperty name="enableJson" scope="context" source="logging.file.enable-json" defaultValue="false"/>
+    <springProperty name="enableAlarm" scope="context" source="logging.enable-alarm" defaultValue="false"/>
 
     <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
     <springProperty name="maxHistory" scope="context" source="logging.file.maxHistory" defaultValue="7"/>
@@ -139,6 +140,11 @@
         <appender-ref ref="kafkaAppender"/>
     </appender>
 
+
+    <appender name="AlarmLog" class="com.github.sparkzxl.log.LogAlarmLogbackAsyncAppender">
+        <appender-ref ref="ConsoleOutput"/>
+    </appender>
+
     <logger name="springfox.documentation" level="ERROR"/>
 
     <root level="${log.level.console}">
@@ -156,6 +162,11 @@
         <if condition='property("enableKafka").contains("true")'>
             <then>
                 <appender-ref ref="AsyncKafka"/>
+            </then>
+        </if>
+        <if condition='property("enableAlarm").contains("true")'>
+            <then>
+                <appender-ref ref="AlarmLog"/>
             </then>
         </if>
     </root>

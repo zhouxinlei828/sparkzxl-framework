@@ -21,7 +21,6 @@ public class RequestContextHolderUtils {
         return getRequestAttributes().getRequest();
     }
 
-
     public static HttpServletResponse getResponse() {
         return getRequestAttributes().getResponse();
     }

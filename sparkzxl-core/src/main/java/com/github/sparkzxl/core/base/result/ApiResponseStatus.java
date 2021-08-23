@@ -25,6 +25,7 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     FAILURE(HttpStatus.HTTP_BAD_REQUEST, "哎呀，开了个小差，请稍后再试"),
 
     JSON_PARSE_ERROR(-13, "JSON解析异常"),
+    
     NULL_POINTER_EXCEPTION_ERROR(HttpStatus.HTTP_BAD_REQUEST, "空指针异常"),
 
     CLUSTER_REDIRECT_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis集群异常"),
@@ -54,7 +55,6 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
 
     AUTHORIZED_DENIED(HttpStatus.HTTP_FORBIDDEN, "该资源无权限访问"),
 
-    UN_PERMISSION(HttpStatus.HTTP_FORBIDDEN, "抱歉，您没有访问权限"),
     /**
      * 404 没找到请求
      */
@@ -155,12 +155,12 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     /**
      * token已过期
      */
-    JWT_EXPIRED_ERROR(2001, "token已过期"),
+    TOKEN_EXPIRED_ERROR(2001, "token已过期"),
 
     /**
      * token签名不合法
      */
-    JWT_VALID_ERROR(2002, "token校验失败"),
+    TOKEN_VALID_ERROR(2002, "token校验失败"),
 
     /**
      * token为空
@@ -170,6 +170,7 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     RETRY_ABLE_EXCEPTION(HttpStatus.HTTP_INTERNAL_ERROR, "服务请求超时重试异常"),
     OPEN_SERVICE_UNAVAILABLE(HttpStatus.HTTP_UNAVAILABLE, "【{}】服务不可用，请联系管理员！"),
     SQL_EX(500, "运行SQL出现异常"),
+    SQL_MANY_RESULT_EX(500, "SQL查询出多条记录异常"),
     REQUIRED_FILE_PARAM_EX(HttpStatus.HTTP_BAD_REQUEST, "请求中必须至少包含一个有效文件"),
     ILLEGAL_ARGUMENT_EX(HttpStatus.HTTP_BAD_REQUEST, "无效参数异常"),
     PARAM_EX(HttpStatus.HTTP_BAD_REQUEST, "参数类型解析异常"),

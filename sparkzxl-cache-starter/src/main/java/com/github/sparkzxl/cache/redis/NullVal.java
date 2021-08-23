@@ -8,5 +8,7 @@ import java.io.Serializable;
  * @author zhouxinlei
  */
 public class NullVal implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 4377861078595325538L;
+
 }

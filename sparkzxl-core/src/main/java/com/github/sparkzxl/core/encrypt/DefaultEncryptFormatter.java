@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.encrypt;
 
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.core.utils.HuSecretUtils;
+import com.github.sparkzxl.core.utils.HuSecretUtil;
 
 /**
  * description: md5 加密
@@ -14,6 +14,6 @@ public class DefaultEncryptFormatter implements EncryptFormatter {
     @Override
     public String encrypted(Object source) {
         String json = JsonUtil.toJson(source);
-        return HuSecretUtils.encryptMd5(json);
+        return HuSecretUtil.encryptMd5(json);
     }
 }

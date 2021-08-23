@@ -17,6 +17,10 @@ import java.util.function.Function;
  */
 public class MapHelper {
 
+    public MapHelper() {
+
+    }
+
     /**
      * 移除map中空key或者value空值
      *

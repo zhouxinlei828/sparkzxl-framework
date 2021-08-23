@@ -5,7 +5,7 @@ package com.github.sparkzxl.constant;
  *
  * @author zhouxinlei
  */
-public class BaseContextConstants {
+public class AppContextConstants {
 
     public static final String REMOTE_CALL = "remote_call";
 

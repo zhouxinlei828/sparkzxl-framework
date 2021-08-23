@@ -1,8 +1,8 @@
 package com.github.sparkzxl.oauth.filter;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.constant.AppContextConstants;
 import com.github.sparkzxl.core.utils.ListUtils;
-import com.github.sparkzxl.core.utils.StringHandlerUtils;
+import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
 import com.github.sparkzxl.oauth.utils.WebFluxUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,18 +31,18 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        String header = WebFluxUtils.getHeader(BaseContextConstants.JWT_TOKEN_HEADER, request);
+        String header = WebFluxUtils.getHeader(AppContextConstants.JWT_TOKEN_HEADER, request);
         if (StringUtils.isNotEmpty(header)) {
-            if (header.startsWith(BaseContextConstants.BASIC_AUTH)) {
+            if (header.startsWith(AppContextConstants.BASIC_AUTH)) {
                 return chain.filter(exchange);
             }
             URI uri = request.getURI();
             //白名单路径移除JWT请求头
             String[] ignorePatterns = resourceProperties.getIgnore();
             List<String> ignoreUrls = ListUtils.arrayToList(ignorePatterns);
-            boolean match = StringHandlerUtils.matchUrl(ignoreUrls, uri.getPath());
+            boolean match = StringHandlerUtil.matchUrl(ignoreUrls, uri.getPath());
             if (match) {
-                request = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
+                request = exchange.getRequest().mutate().header(AppContextConstants.JWT_TOKEN_HEADER, "").build();
                 exchange = exchange.mutate().request(request).build();
             }
         }

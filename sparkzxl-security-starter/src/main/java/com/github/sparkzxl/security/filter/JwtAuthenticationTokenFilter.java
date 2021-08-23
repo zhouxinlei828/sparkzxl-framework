@@ -3,7 +3,7 @@ package com.github.sparkzxl.security.filter;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.entity.security.SecurityUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
@@ -38,7 +38,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        String accessToken = ResponseResultUtils.getAuthHeader(request);
+        String accessToken = ResponseResultUtil.getAuthHeader(request);
         if (StringUtils.isNotEmpty(accessToken)) {
             JwtUserInfo jwtUserInfo = null;
             try {
@@ -46,7 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
-                ExceptionAssert.failure(ApiResponseStatus.JWT_EXPIRED_ERROR);
+                ExceptionAssert.failure(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
             }
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);

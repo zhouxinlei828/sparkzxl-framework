@@ -8,7 +8,7 @@ import cn.hutool.core.util.StrUtil;
  *
  * @author zhouxinlei
  */
-public class BuildKeyUtils {
+public class BuildKeyUtil {
 
     /**
      * 构建key

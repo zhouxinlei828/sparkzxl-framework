@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter;
 
 import cn.hutool.core.util.IdUtil;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.constant.AppContextConstants;
 import org.slf4j.MDC;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -21,9 +21,9 @@ public class TraceFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         //链路追踪id
         String traceId = IdUtil.fastSimpleUUID();
-        MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
+        MDC.put(AppContextConstants.LOG_TRACE_ID, traceId);
         ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate()
-                .headers(h -> h.add(BaseContextConstants.TRACE_ID_HEADER, traceId))
+                .headers(h -> h.add(AppContextConstants.TRACE_ID_HEADER, traceId))
                 .build();
 
         ServerWebExchange build = exchange.mutate().request(serverHttpRequest).build();

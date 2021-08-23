@@ -1,12 +1,11 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
-import com.github.sparkzxl.log.LogStoreService;
 import com.github.sparkzxl.log.entity.HttpLogInfo;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
@@ -17,7 +16,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +24,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,15 +36,6 @@ import java.util.concurrent.TimeUnit;
 public class WebLogAspect {
 
     private final ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
-
-    private boolean storage = false;
-
-    @Autowired(required = false)
-    private LogStoreService logStoreService;
-
-    public void setStorage(boolean storage) {
-        this.storage = storage;
-    }
 
     @Pointcut("@within(com.github.sparkzxl.log.annotation.WebLog)")
     public void pointCut() {
@@ -71,9 +59,6 @@ public class WebLogAspect {
         HttpLogInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
         String jsonStr = JsonUtil.toJson(requestParamInfo);
         log.info("请求参数信息: [{}]", jsonStr);
-        if (storage) {
-            CompletableFuture.runAsync(() -> logStoreService.saveLog(requestParamInfo));
-        }
     }
 
     /**
@@ -113,9 +98,6 @@ public class WebLogAspect {
         HttpLogInfo httpLogInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
         String jsonStr = JsonUtil.toJson(httpLogInfo);
         log.info("请求接口发生异常 : [{}]", jsonStr);
-        if (storage) {
-            CompletableFuture.runAsync(() -> logStoreService.saveLog(httpLogInfo));
-        }
         remove();
     }
 
@@ -128,8 +110,8 @@ public class WebLogAspect {
      * @return RequestParamInfo
      */
     private HttpLogInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = AppContextHolder.getUserId(String.class);
+        String name = AppContextHolder.getName();
         return HttpLogInfo.builder()
                 .ip(NetworkUtil.getIpAddress(httpServletRequest))
                 .url(httpServletRequest.getRequestURL().toString())
@@ -151,8 +133,8 @@ public class WebLogAspect {
      * @return RequestInfo
      */
     private HttpLogInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = AppContextHolder.getUserId(String.class);
+        String name = AppContextHolder.getName();
         return HttpLogInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .httpMethod(httpServletRequest.getMethod())
@@ -173,8 +155,8 @@ public class WebLogAspect {
      * @return RequestInfo
      */
     private HttpLogInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = AppContextHolder.getUserId(String.class);
+        String name = AppContextHolder.getName();
         return HttpLogInfo.builder()
                 .url(httpServletRequest.getRequestURL().toString())
                 .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),

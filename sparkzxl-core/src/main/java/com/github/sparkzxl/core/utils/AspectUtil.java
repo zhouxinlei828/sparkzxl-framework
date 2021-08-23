@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
  *
  * @author charles.zhou
  */
-public class AspectUtils {
+public class AspectUtil {
 
     public static Method getTargetMethod(ProceedingJoinPoint pjp) throws NoSuchMethodException {
         Signature signature = pjp.getSignature();

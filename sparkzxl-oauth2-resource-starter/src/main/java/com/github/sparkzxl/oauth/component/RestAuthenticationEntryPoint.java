@@ -34,8 +34,8 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         int code = ApiResponseStatus.UN_AUTHORIZED.getCode();
         String message = ApiResponseStatus.UN_AUTHORIZED.getMessage();
         if (e instanceof InvalidBearerTokenException) {
-            code = ApiResponseStatus.JWT_EXPIRED_ERROR.getCode();
-            message = ApiResponseStatus.JWT_EXPIRED_ERROR.getMessage();
+            code = ApiResponseStatus.TOKEN_EXPIRED_ERROR.getCode();
+            message = ApiResponseStatus.TOKEN_EXPIRED_ERROR.getMessage();
         }
         String body = JSONUtil.toJsonStr(ApiResult.apiResult(code, message));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));

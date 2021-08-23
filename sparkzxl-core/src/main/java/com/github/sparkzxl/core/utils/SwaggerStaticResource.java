@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.resource;
+package com.github.sparkzxl.core.utils;
 
 import com.google.common.collect.Lists;
 
