@@ -6,7 +6,6 @@ import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.netflix.client.ClientException;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class FeignExceptionHandler implements Ordered {
 
     @ExceptionHandler(RemoteCallException.class)
     public ApiResult<?> handleRemoteCallException(RemoteCallException e) {
-        String applicationName = OptionalBean.ofNullable(e.getRawExceptionInfo()).getBean(ExceptionChain::getApplicationName).orElseGet(() -> "unKnownServer");
+        String applicationName = OptionalBean.ofNullable(e.getApplicationName()).orElseGet(() -> "unKnownServer");
         String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getMessage());
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(e.getCode(), message);

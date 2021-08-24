@@ -32,25 +32,30 @@ public class RemoteCallException extends RuntimeException {
     private boolean isAddThis = false;
 
     private Integer code;
+
+    private String applicationName;
+
     @Getter
     private List<ExceptionChain> exceptionChains;
 
-    public RemoteCallException(int code, String message) {
+    public RemoteCallException(int code, String message, String applicationName) {
         super(message);
         this.code = code;
+        this.applicationName = applicationName;
     }
 
-
-    public RemoteCallException(int code, String message, Throwable cause) {
+    public RemoteCallException(int code, String message, String applicationName, Throwable cause) {
         super(message, cause);
         this.code = code;
+        this.applicationName = applicationName;
     }
 
-    public RemoteCallException(int code, String message, List<ExceptionChain> exceptionChains) {
+    public RemoteCallException(int code, String message, String applicationName, List<ExceptionChain> exceptionChains) {
         super(message);
         this.code = code;
+        this.applicationName = applicationName;
         this.exceptionChains = exceptionChains;
-        if (CollectionUtils.isNotEmpty(exceptionChains)) {
+        if (!org.springframework.util.CollectionUtils.isEmpty(exceptionChains)) {
             for (int i = 0; i < exceptionChains.size(); i++) {
                 String status = i == 0 ? "HAPPEN" : "THROW";
                 this.create(exceptionChains.get(i), status);

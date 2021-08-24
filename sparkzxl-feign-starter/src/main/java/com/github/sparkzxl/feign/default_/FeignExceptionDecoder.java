@@ -1,11 +1,11 @@
 package com.github.sparkzxl.feign.default_;
 
+import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.github.sparkzxl.model.exception.FeignErrorResult;
-import feign.Response;
-import feign.Util;
+import feign.*;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,14 +22,15 @@ public class FeignExceptionDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
+        String applicationName = OptionalBean.ofNullable(response.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name).orElseGet(() -> "unKnownServer");
         try {
             Reader reader = response.body().asReader(StandardCharsets.UTF_8);
             String body = Util.toString(reader);
-            FeignErrorResult feignErrorResult = JsonUtil.parse(body, FeignErrorResult.class);
-            return new RemoteCallException(feignErrorResult.getCode(), feignErrorResult.getMsg(), feignErrorResult.getExceptionChains());
+            ApiResult<?> apiResult = JsonUtil.parse(body, ApiResult.class);
+            return new RemoteCallException(apiResult.getCode(), apiResult.getMsg(), applicationName);
         } catch (Exception e) {
             log.error("[{}] has an unknown exception.", methodKey, e);
-            return new RemoteCallException(ApiResponseStatus.FAILURE.getCode(), "unKnowException", e);
+            return new RemoteCallException(ApiResponseStatus.FAILURE.getCode(), "unKnowException", applicationName, e);
         }
 
     }
