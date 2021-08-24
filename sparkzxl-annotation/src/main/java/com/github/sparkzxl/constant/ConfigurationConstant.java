@@ -18,7 +18,7 @@ public class ConfigurationConstant {
 
     public static final String ELASTICSEARCH_PREFIX = "elasticsearch";
 
-    public static final String FEIGN_SEATA_PREFIX = "feign.seata";
+    public static final String FEIGN_SEATA_PREFIX = "feign";
 
     public static final String XXL_JOB_PREFIX = "xxl-job";
 

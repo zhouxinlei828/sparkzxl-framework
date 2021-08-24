@@ -14,7 +14,6 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
@@ -67,11 +66,10 @@ public class FeignAutoConfiguration {
          */
         @Bean
         @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-        @ConditionalOnProperty("feign.hystrix.enabled")
-        public Feign.Builder feignHystrixBuilder(RequestInterceptor requestInterceptor) {
+        public Feign.Builder feignHystrixBuilder(List<RequestInterceptor> requestInterceptor) {
             return HystrixFeign.builder()
                     .decode404()
-                    .requestInterceptor(requestInterceptor);
+                    .requestInterceptors(requestInterceptor);
         }
 
         /**

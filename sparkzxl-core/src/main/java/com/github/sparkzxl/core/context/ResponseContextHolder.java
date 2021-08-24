@@ -1,13 +1,16 @@
-package com.github.sparkzxl.core.utils;
+package com.github.sparkzxl.core.context;
 
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.AppContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +19,18 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * description: ResponseResult工具类
+ * description: 全局响应处理
  *
  * @author zhouxinlei
  */
 @Slf4j
-public class ResponseResultUtil {
+public class ResponseContextHolder {
+
+    public static boolean feignStatus;
+
+    public static void setFeignStatus(boolean feignStatus) {
+        ResponseContextHolder.feignStatus = feignStatus;
+    }
 
     public static String getAuthHeader(HttpServletRequest httpRequest) {
         String header = httpRequest.getHeader(AppContextConstants.JWT_TOKEN_HEADER);
@@ -82,6 +91,11 @@ public class ResponseResultUtil {
                 (ResponseResult) servletRequest.getAttribute(AppContextConstants.RESPONSE_RESULT_ANN);
         if (responseResult != null) {
             servletRequest.removeAttribute(AppContextConstants.RESPONSE_RESULT_ANN);
+        }
+        // 判断是否是feign请求
+        Boolean feign = Convert.toBool(servletRequest.getHeader(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
+        if (feign && ResponseContextHolder.feignStatus) {
+            RequestContextHolderUtils.getResponse().setStatus(HttpStatus.BAD_REQUEST.value());
         }
     }
 }

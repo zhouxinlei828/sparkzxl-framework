@@ -1,4 +1,4 @@
-package com.github.sparkzxl.feign.default_;
+package com.github.sparkzxl.feign.config;
 
 import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
