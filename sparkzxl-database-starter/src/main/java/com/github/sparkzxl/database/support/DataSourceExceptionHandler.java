@@ -33,25 +33,25 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLSyntaxErrorException.class)
     public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX);
     }
 
     @ExceptionHandler(TooManyResultsException.class)
     public ApiResult<?> handleTooManyResultsException(TooManyResultsException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_MANY_RESULT_EX);
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
     public ApiResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(PersistenceException.class)
     public ApiResult<?> persistenceException(PersistenceException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         if (e.getCause() instanceof BizException) {
             BizException cause = (BizException) e.getCause();
             return ApiResult.apiResult(cause.getCode(), cause.getMessage());
@@ -61,7 +61,7 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(MyBatisSystemException.class)
     public ApiResult<?> myBatisSystemException(MyBatisSystemException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         if (e.getCause() instanceof PersistenceException) {
             return this.persistenceException((PersistenceException) e.getCause());
         }
@@ -70,19 +70,19 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLException.class)
     public ApiResult<?> sqlException(SQLException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ApiResult<?> dataIntegrityViolationException(DataIntegrityViolationException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(TenantException.class)
     public ApiResult<?> handleTenantException(TenantException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(e.getCode(), e.getMessage());
     }
 

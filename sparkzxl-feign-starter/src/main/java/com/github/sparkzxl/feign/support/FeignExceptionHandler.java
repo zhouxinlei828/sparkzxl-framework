@@ -29,13 +29,13 @@ public class FeignExceptionHandler implements Ordered {
 
     @ExceptionHandler(SocketTimeoutException.class)
     public ApiResult<?> handleSocketTimeoutException(SocketTimeoutException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.TIME_OUT_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
     public ApiResult<?> handleRetryableException(FeignException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(ApiResponseStatus.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
     }
 
@@ -43,13 +43,13 @@ public class FeignExceptionHandler implements Ordered {
     public ApiResult<?> handleRemoteCallException(RemoteCallException e) {
         String applicationName = OptionalBean.ofNullable(e.getApplicationName()).orElseGet(() -> "unKnownServer");
         String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getMessage());
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         return ApiResult.apiResult(e.getCode(), message);
     }
 
     @ExceptionHandler(ClientException.class)
     public ApiResult<?> handleClientException(ClientException e) {
-        log.error(ExceptionUtil.getMessage(e));
+        log.error(ExceptionUtil.stacktraceToOneLineString(e));
         String matchString = "Load balancer does not have available server for client: ";
         String message = e.getMessage();
         if (message.contains(matchString)) {
