@@ -5,6 +5,7 @@ import com.github.sparkzxl.web.interceptor.HeaderThreadLocalInterceptor;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.List;
 
@@ -17,6 +18,10 @@ import java.util.List;
 @ConfigurationProperties(prefix = ConfigurationConstant.WEB_PREFIX)
 public class WebProperties {
 
-    private List<Class> interceptor = Lists.newArrayList(HeaderThreadLocalInterceptor.class);
+    private List<Class<? extends HandlerInterceptor>> interceptor = Lists.newArrayList(HeaderThreadLocalInterceptor.class);
+
+    private boolean transferException = false;
+
+    private boolean enableTransferStatus = false;
 
 }

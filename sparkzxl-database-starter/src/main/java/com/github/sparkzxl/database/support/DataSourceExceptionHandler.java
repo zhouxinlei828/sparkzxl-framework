@@ -1,11 +1,11 @@
 package com.github.sparkzxl.database.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;
-import com.github.sparkzxl.core.context.ResponseContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -28,32 +28,29 @@ import java.sql.SQLSyntaxErrorException;
 @RestControllerAdvice
 @RestController
 @Slf4j
+@ResponseResultStatus
 public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLSyntaxErrorException.class)
     public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX);
     }
 
     @ExceptionHandler(TooManyResultsException.class)
     public ApiResult<?> handleTooManyResultsException(TooManyResultsException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_MANY_RESULT_EX);
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
     public ApiResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(PersistenceException.class)
     public ApiResult<?> persistenceException(PersistenceException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         if (e.getCause() instanceof BizException) {
             BizException cause = (BizException) e.getCause();
@@ -64,7 +61,6 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(MyBatisSystemException.class)
     public ApiResult<?> myBatisSystemException(MyBatisSystemException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         if (e.getCause() instanceof PersistenceException) {
             return this.persistenceException((PersistenceException) e.getCause());
@@ -74,21 +70,18 @@ public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLException.class)
     public ApiResult<?> sqlException(SQLException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ApiResult<?> dataIntegrityViolationException(DataIntegrityViolationException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(TenantException.class)
     public ApiResult<?> handleTenantException(TenantException e) {
-        ResponseContextHolder.clearResponseResult();
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(e.getCode(), e.getMessage());
     }

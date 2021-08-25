@@ -1,7 +1,7 @@
 package com.github.sparkzxl.autoconfigure;
 
-import com.github.sparkzxl.AlarmLogFactoryExecute;
 import com.github.sparkzxl.AlarmLogContext;
+import com.github.sparkzxl.AlarmLogFactoryExecute;
 import com.github.sparkzxl.service.dingtalk.DingTalkWarnService;
 import com.github.sparkzxl.service.mail.MailWarnService;
 import com.github.sparkzxl.service.wechat.WorkWeXinWarnService;

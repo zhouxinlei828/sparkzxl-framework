@@ -1,7 +1,5 @@
 package com.github.sparkzxl.feign.config;
 
-import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.core.context.ResponseContextHolder;
 import com.github.sparkzxl.feign.annoation.EnableFeignExceptionHandler;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +35,6 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
                 .setAutowireMode(AUTOWIRE_BY_TYPE)
                 .getBeanDefinition();
         registry.registerBeanDefinition(Objects.requireNonNull(decoder.getBeanClassName()), decoder);
-        Boolean transferException = Convert.toBool(annotationAttributes.get("transferException"),Boolean.FALSE);
-        System.out.println(transferException);
-        ResponseContextHolder.setFeignStatus(transferException);
     }
 
     @Override

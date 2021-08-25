@@ -1,5 +1,6 @@
 package com.github.sparkzxl.web.config;
 
+import com.github.sparkzxl.web.aspect.ResponseResultStatusAspect;
 import com.github.sparkzxl.web.interceptor.HeaderThreadLocalInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
@@ -64,14 +65,21 @@ public class DefaultWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<Class> interceptorList = webProperties.getInterceptor();
+        List<Class<? extends HandlerInterceptor>> interceptorList = webProperties.getInterceptor();
         AtomicInteger atomicInteger = new AtomicInteger(-99);
-
         interceptorList.forEach(interceptor -> {
             int increment = atomicInteger.getAndIncrement();
             registry.addInterceptor((HandlerInterceptor) applicationContext.getBean(interceptor))
                     .addPathPatterns("/**").order(increment);
             log.info("已加载拦截器：[{}]", ClassUtils.getName(interceptor));
         });
+    }
+
+    @Bean
+    public ResponseResultStatusAspect responseResultStatusAspect() {
+        ResponseResultStatusAspect responseResultStatusAspect = new ResponseResultStatusAspect();
+        responseResultStatusAspect.setEnableTransferStatus(webProperties.isEnableTransferStatus());
+        responseResultStatusAspect.setTransferExceptionStatus(webProperties.isTransferException());
+        return responseResultStatusAspect;
     }
 }

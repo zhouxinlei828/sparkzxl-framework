@@ -7,6 +7,7 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
+import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.AppContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author zhouxinlei
  */
 @ControllerAdvice
+@ResponseResultStatus
 @RestController
 @Slf4j
 public class SentinelExceptionHandler implements Ordered {

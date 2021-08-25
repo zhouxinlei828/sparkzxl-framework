@@ -3,6 +3,7 @@ package com.github.sparkzxl.feign.support;
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.StrFormatter;
+import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
@@ -10,33 +11,29 @@ import com.netflix.client.ClientException;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.SocketTimeoutException;
 
 /**
- * Springboot WEB应用全局异常处理
+ * description: Springboot WEB应用全局异常处理
  *
- * @author wh_king
+ * @author zhouxinlei
+ * @date 2021-08-25 12:05:06
  */
 @Slf4j
-@ResponseBody
+@ResponseResultStatus
 @RestControllerAdvice
 public class FeignExceptionHandler implements Ordered {
 
     @ExceptionHandler(SocketTimeoutException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResult<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.TIME_OUT_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResult<?> handleRetryableException(FeignException e) {
         log.error(ExceptionUtil.getMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
@@ -51,7 +48,6 @@ public class FeignExceptionHandler implements Ordered {
     }
 
     @ExceptionHandler(ClientException.class)
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ApiResult<?> handleClientException(ClientException e) {
         log.error(ExceptionUtil.getMessage(e));
         String matchString = "Load balancer does not have available server for client: ";

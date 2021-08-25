@@ -24,12 +24,4 @@ public @interface EnableFeignExceptionHandler {
      * @return Class<? extends ErrorDecoder>
      */
     Class<? extends ErrorDecoder> decoderClass() default FeignExceptionDecoder.class;
-
-    /**
-     * 异常传递
-     *
-     * @return boolean
-     */
-    boolean transferException() default false;
-
 }
