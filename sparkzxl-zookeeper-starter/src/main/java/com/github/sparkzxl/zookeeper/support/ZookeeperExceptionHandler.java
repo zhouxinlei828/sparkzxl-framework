@@ -24,7 +24,8 @@ public class ZookeeperExceptionHandler implements Ordered {
 
     @ExceptionHandler(KeeperException.class)
     public ApiResult<?> handleKeeperException(KeeperException e) {
-        log.error(ExceptionUtil.stacktraceToOneLineString(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 

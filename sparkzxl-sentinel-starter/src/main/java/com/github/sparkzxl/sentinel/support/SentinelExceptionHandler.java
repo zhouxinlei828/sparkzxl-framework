@@ -44,34 +44,39 @@ public class SentinelExceptionHandler implements Ordered {
     @ExceptionHandler(value = FlowException.class)
     public ApiResult<?> blockExceptionHandler(FlowException e) {
         handleResponseResult();
-        log.error(ExceptionUtil.stacktraceToOneLineString(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.REQ_LIMIT, e.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
     public ApiResult<?> blockExceptionHandler(AuthorityException e) {
         handleResponseResult();
-        log.error(ExceptionUtil.stacktraceToOneLineString(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.REQ_BLACKLIST, e.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
     public ApiResult<?> blockExceptionHandler(SystemBlockException e) {
         handleResponseResult();
-        log.error(ExceptionUtil.stacktraceToOneLineString(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SYSTEM_BLOCK, e.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
     public ApiResult<?> blockExceptionHandler(ParamFlowException e) {
         handleResponseResult();
-        log.error(ExceptionUtil.stacktraceToOneLineString(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.PARAM_FLOW, e.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
     public ApiResult<?> blockExceptionHandler(DegradeException e) {
-        log.error(ExceptionUtil.stacktraceToOneLineString(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
     }
 
