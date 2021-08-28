@@ -1,6 +1,7 @@
 package com.github.sparkzxl.mongodb.repository;
 
 import cn.hutool.core.util.IdUtil;
+import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.utils.MapHelper;
 import com.github.sparkzxl.mongodb.constant.EntityConstant;
 import com.github.sparkzxl.mongodb.entity.SuperEntity;
@@ -48,6 +49,8 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
         entity.setBusinessId(IdUtil.objectId());
         entity.setCreateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
         entity.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        entity.setCreateUser(AppContextHolder.getUserId(String.class));
+        entity.setUpdateUser(AppContextHolder.getUserId(String.class));
         T insert = mongoTemplate.insert(entity);
         return ObjectUtils.isNotEmpty(insert.getId()) ? 1 : 0;
     }
@@ -57,10 +60,12 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
     public int insertMulti(Collection<T> entityList) {
         for (T entity : entityList) {
             entity.setBusinessId(IdUtil.objectId());
-            entity.setCreateTime(LocalDateTime.now());
-            entity.setUpdateTime(LocalDateTime.now());
+            entity.setCreateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+            entity.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+            entity.setCreateUser(AppContextHolder.getUserId(String.class));
+            entity.setUpdateUser(AppContextHolder.getUserId(String.class));
         }
-        Collection<T> collection = mongoTemplate.insert(entityList, getEntityClass());
+        Collection<T> collection = mongoTemplate.insertAll(entityList);
         return collection.size();
     }
 
@@ -93,7 +98,8 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public long updateById(T entity) {
-        entity.setUpdateTime(LocalDateTime.now());
+        entity.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        entity.setUpdateUser(AppContextHolder.getUserId(String.class));
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
         Update update = new Update();
         MapHelper.removeNullValue(annotationValueMap);
@@ -107,7 +113,8 @@ public class BaseRepository<T extends SuperEntity> implements IBaseRepository<T>
 
     @Override
     public long update(T entity) {
-        entity.setUpdateTime(LocalDateTime.now());
+        entity.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        entity.setUpdateUser(AppContextHolder.getUserId(String.class));
         Map<String, Object> annotationValueMap = MongoDbHandleUtil.getAndAnnotationValue(entity);
         annotationValueMap.remove(EntityConstant.COLUMN_CREATE_USER);
         annotationValueMap.remove(EntityConstant.COLUMN_CREATE_TIME);
