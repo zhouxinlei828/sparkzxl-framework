@@ -29,4 +29,14 @@ public class Entity<E> implements Serializable {
 
     @Field(value = "create_time")
     public LocalDateTime createTime;
+
+    @Field(value = "update_user")
+    public String updateUser;
+
+    @Field(value = "update_user_name")
+    public String updateUserName;
+
+    @Field(value = "update_time")
+    public LocalDateTime updateTime;
+
 }
