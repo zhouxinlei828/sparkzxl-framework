@@ -25,14 +25,20 @@ public class MongoInsertEventListener extends AbstractMongoEventListener<Entity>
         Entity entity = event.getSource();
         // 判断 id 为空
         if (entity.getId() == null) {
-            // 获得下一个编号
             Number id = snowflake.nextId();
-            // 设置到实体中
             // noinspection unchecked
             entity.setId(id);
+            entity.setCreateTime(LocalDateTime.now(ZoneOffset.of("+8")));
+            entity.setCreateUser(AppContextHolder.getUserId(String.class));
+            entity.setCreateUserName(AppContextHolder.getName());
+            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("+8")));
+            entity.setUpdateUser(AppContextHolder.getUserId(String.class));
+            entity.setUpdateUserName(AppContextHolder.getName());
+        } else {
+            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("+8")));
+            entity.setUpdateUser(AppContextHolder.getUserId(String.class));
+            entity.setUpdateUserName(AppContextHolder.getName());
         }
-        entity.setCreateTime(LocalDateTime.now(ZoneOffset.of("+8")));
-        entity.setCreateUser(AppContextHolder.getUserId(String.class));
     }
 
 }
