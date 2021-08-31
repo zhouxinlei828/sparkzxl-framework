@@ -28,14 +28,14 @@ public class MongoInsertEventListener extends AbstractMongoEventListener<Entity>
             Number id = snowflake.nextId();
             // noinspection unchecked
             entity.setId(id);
-            entity.setCreateTime(LocalDateTime.now(ZoneOffset.of("Asia/Shanghai")));
+            entity.setCreateTime(LocalDateTime.now(ZoneOffset.of("+8")));
             entity.setCreateUser(AppContextHolder.getUserId(String.class));
             entity.setCreateUserName(AppContextHolder.getName());
-            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("Asia/Shanghai")));
+            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("+8")));
             entity.setUpdateUser(AppContextHolder.getUserId(String.class));
             entity.setUpdateUserName(AppContextHolder.getName());
         } else {
-            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("Asia/Shanghai")));
+            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("+8")));
             entity.setUpdateUser(AppContextHolder.getUserId(String.class));
             entity.setUpdateUserName(AppContextHolder.getName());
         }
