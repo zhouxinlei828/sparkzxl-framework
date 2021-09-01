@@ -23,19 +23,20 @@ public class MongoInsertEventListener extends AbstractMongoEventListener<Entity>
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Entity> event) {
         Entity entity = event.getSource();
+        LocalDateTime dateTime = LocalDateTime.now(ZoneOffset.of("+8"));
         // 判断 id 为空
         if (entity.getId() == null) {
             Number id = snowflake.nextId();
             // noinspection unchecked
             entity.setId(id);
-            entity.setCreateTime(LocalDateTime.now(ZoneOffset.of("+8")));
+            entity.setCreateTime(dateTime);
             entity.setCreateUser(AppContextHolder.getUserId(String.class));
             entity.setCreateUserName(AppContextHolder.getName());
-            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("+8")));
+            entity.setUpdateTime(dateTime);
             entity.setUpdateUser(AppContextHolder.getUserId(String.class));
             entity.setUpdateUserName(AppContextHolder.getName());
         } else {
-            entity.setUpdateTime(LocalDateTime.now(ZoneOffset.of("+8")));
+            entity.setUpdateTime(dateTime);
             entity.setUpdateUser(AppContextHolder.getUserId(String.class));
             entity.setUpdateUserName(AppContextHolder.getName());
         }
