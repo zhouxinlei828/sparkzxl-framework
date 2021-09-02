@@ -40,23 +40,22 @@ public class MongoDynamicAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public MongoTemplate mongoTemplate(DynamicMongoDatabaseFactoryProvider dynamicMongoDatabaseFactoryProvider) {
+    public MongoDatabaseFactoryContext mongoDatabaseFactoryContext(DynamicMongoDatabaseFactoryProvider dynamicMongoDatabaseFactoryProvider) {
         String primary = dynamicMongoProperties.getPrimary();
-        Map<String, MongoDatabaseFactory> mongoDatabaseFactoryMap = dynamicMongoDatabaseFactoryProvider.loadMongoDatabaseFactories();
-        MongoDatabaseFactory databaseFactory = mongoDatabaseFactoryMap.get(primary);
-        DynamicMongoTemplate dynamicMongoTemplate = new DynamicMongoTemplate(databaseFactory, dynamicMongoProperties.isRemoveClass());
-        dynamicMongoTemplate.setPrimary(primary);
-        dynamicMongoTemplate.setMongoDataSourceProvider(dynamicMongoDatabaseFactoryProvider);
-        return dynamicMongoTemplate;
+        MongoDatabaseFactoryContext mongoDatabaseFactoryContext = new MongoDatabaseFactoryContext(dynamicMongoDatabaseFactoryProvider);
+        mongoDatabaseFactoryContext.setPrimary(primary);
+        return mongoDatabaseFactoryContext;
     }
 
     @Bean
-    public PlatformTransactionManager mongoTransactionManager(DynamicMongoDatabaseFactoryProvider dynamicMongoDatabaseFactoryProvider) {
-        String primary = dynamicMongoProperties.getPrimary();
-        Map<String, MongoDatabaseFactory> mongoDatabaseFactoryMap = dynamicMongoDatabaseFactoryProvider.loadMongoDatabaseFactories();
-        MongoDatabaseFactory databaseFactory = mongoDatabaseFactoryMap.get(primary);
-        DynamicMongoTransactionManager dynamicMongoTransactionManager = new DynamicMongoTransactionManager(databaseFactory, dynamicMongoDatabaseFactoryProvider);
-        return dynamicMongoTransactionManager;
+    @ConditionalOnMissingBean
+    public MongoTemplate mongoTemplate(MongoDatabaseFactoryContext mongoDatabaseFactoryContext) {
+        return new DynamicMongoTemplate(mongoDatabaseFactoryContext.determinePrimaryMongoDatabaseFactory(), mongoDatabaseFactoryContext, dynamicMongoProperties.isRemoveClass());
+    }
+
+    @Bean
+    public PlatformTransactionManager mongoTransactionManager(MongoDatabaseFactoryContext mongoDatabaseFactoryContext) {
+        return new DynamicMongoTransactionManager(mongoDatabaseFactoryContext.determinePrimaryMongoDatabaseFactory(), mongoDatabaseFactoryContext);
     }
 
 }
