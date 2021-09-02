@@ -1,9 +1,13 @@
 package com.github.sparkzxl.mongodb.config;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.mongodb.event.MongoInsertEventListener;
+import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -17,16 +21,26 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  * @author zhouxinlei
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnClass({MongoClient.class})
 @EnableTransactionManagement
 public class MongoAutoConfig {
 
     @Bean
-    public MongoInsertEventListener mongoInsertEventListener(){
+    public MongoInsertEventListener mongoInsertEventListener() {
         return new MongoInsertEventListener();
     }
-    // 目的，就是为了移除 _class field 。参考博客 https://blog.csdn.net/bigtree_3721/article/details/82787411
+
+    /**
+     * 目的，就是为了移除 _class field 。参考博客 https://blog.csdn.net/bigtree_3721/article/details/82787411
+     *
+     * @param mongoDatabaseFactory 数据工厂
+     * @param context              上下文
+     * @param beanFactory          bean工厂
+     * @return
+     */
     @Bean
+    @ConditionalOnProperty(prefix = ConfigurationConstant.MONGO_PREFIX, name = "enabled", havingValue = "false")
     public MappingMongoConverter mappingMongoConverter(MongoDatabaseFactory mongoDatabaseFactory,
                                                        MongoMappingContext context,
                                                        BeanFactory beanFactory) {
@@ -45,6 +59,7 @@ public class MongoAutoConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = ConfigurationConstant.MONGO_PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
     public MongoTransactionManager mongoTransactionManager(@Autowired MongoDatabaseFactory mongoDbFactory) {
         return new MongoTransactionManager(mongoDbFactory);
     }

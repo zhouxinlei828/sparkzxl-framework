@@ -40,4 +40,6 @@ public class ConfigurationConstant {
 
     public static final String BLACK_PREFIX = "gateway.black";
 
+    public static final String MONGO_PREFIX = "spring.dynamic.mongodb";
+
 }
