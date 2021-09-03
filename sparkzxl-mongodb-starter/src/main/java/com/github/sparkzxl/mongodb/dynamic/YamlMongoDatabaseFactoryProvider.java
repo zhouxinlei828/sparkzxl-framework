@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import java.util.Map;
 
 /**
- * description:
+ * description: 通过yaml属性加载数据源工厂
  *
  * @author zhouxinlei
  * @date 2021-09-02 08:41:55

@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 
 /**
- * description:
+ * description: MongoDB动态数据模板
  *
  * @author zhouxinlei
  * @date 2021-09-01 17:43:21

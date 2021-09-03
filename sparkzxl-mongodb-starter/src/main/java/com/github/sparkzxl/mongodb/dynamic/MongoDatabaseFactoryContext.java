@@ -40,7 +40,7 @@ public class MongoDatabaseFactoryContext implements InitializingBean, Disposable
      */
     public synchronized void addDatabaseFactory(String ds, MongoDatabaseFactory databaseFactory) {
         databaseFactories.put(ds, databaseFactory);
-        log.info("dynamic-database-factory - add a datasource named [{}] success", ds);
+        log.info("dynamic-database-factory - add a database-factory named [{}] success", ds);
     }
 
     public MongoDatabaseFactory determineMongoDatabaseFactory() {
@@ -58,19 +58,19 @@ public class MongoDatabaseFactoryContext implements InitializingBean, Disposable
         if (StringUtils.isEmpty(ds)) {
             return determinePrimaryMongoDatabaseFactory();
         } else if (databaseFactories.containsKey(ds)) {
-            log.debug("dynamic-database-factory switch to the datasource named [{}]", ds);
+            log.debug("dynamic-database-factory switch to the database-factory named [{}]", ds);
             return databaseFactories.get(ds);
         }
         return determinePrimaryMongoDatabaseFactory();
     }
 
     public MongoDatabaseFactory determinePrimaryMongoDatabaseFactory() {
-        log.debug("dynamic-database-factory switch to the primary datasource");
+        log.debug("dynamic-database-factory switch to the primary database-factory");
         MongoDatabaseFactory databaseFactory = databaseFactories.get(primary);
         if (databaseFactory != null) {
             return databaseFactory;
         }
-        throw new MongoException("dynamic-database-factory can not find primary datasource");
+        throw new MongoException("dynamic-database-factory can not find primary database-factory");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MongoDatabaseFactoryContext implements InitializingBean, Disposable
         // 检测默认数据源是否设置
         MongoDatabaseFactory mongoDatabaseFactory = databaseFactories.get(primary);
         if (ObjectUtils.isEmpty(mongoDatabaseFactory)) {
-            throw new MongoException("默认数据源未配置");
+            throw new MongoException("默认数据源工厂未配置");
         }
     }
 }
