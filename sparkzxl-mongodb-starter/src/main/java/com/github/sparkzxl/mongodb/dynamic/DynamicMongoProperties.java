@@ -27,9 +27,4 @@ public class DynamicMongoProperties {
 
     private Map<String, MongoDatabaseProperty> provider;
 
-    @Data
-    public static class MongoDatabaseProperty {
-        private String url;
-        private String database;
-    }
 }

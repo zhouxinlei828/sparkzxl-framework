@@ -14,10 +14,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class YamlMongoDatabaseFactoryProvider extends AbstractMongoDatabaseFactoryProvider {
 
-    private final Map<String, DynamicMongoProperties.MongoDatabaseProperty> mongoDatabasePropertyMap;
+    private final Map<String, MongoDatabaseProperty> mongoDatabasePropertyMap;
 
     @Override
     public Map<String, MongoDatabaseFactory> loadMongoDatabaseFactories() {
-        return createMongoDatabaseMap(mongoDatabasePropertyMap);
+        return createMongoDatabaseFactoryMap(mongoDatabasePropertyMap);
     }
 }

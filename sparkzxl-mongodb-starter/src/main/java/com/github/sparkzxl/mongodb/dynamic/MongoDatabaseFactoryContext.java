@@ -43,6 +43,26 @@ public class MongoDatabaseFactoryContext implements InitializingBean, Disposable
         log.info("dynamic-database-factory - add a database-factory named [{}] success", ds);
     }
 
+    /**
+     * 删除数据源
+     *
+     * @param ds 数据源名称
+     */
+    public synchronized void removeDataSource(String ds) {
+        if (!StringUtils.hasText(ds)) {
+            throw new RuntimeException("remove parameter could not be empty");
+        }
+        if (primary.equals(ds)) {
+            throw new RuntimeException("could not remove primary database-factory");
+        }
+        if (databaseFactories.containsKey(ds)) {
+            databaseFactories.remove(ds);
+            log.info("dynamic-database-factory - remove the database named [{}] success", ds);
+        } else {
+            log.warn("dynamic-database-factory - could not find a database named [{}]", ds);
+        }
+    }
+
     public MongoDatabaseFactory determineMongoDatabaseFactory() {
         String dsKey = DynamicDatabaseContextHolder.peek();
         return getDatabaseFactory(dsKey);

@@ -16,6 +16,6 @@ public interface MongoDatabaseFactoryCreator {
      * @param mongoDatabaseProperty 数据源属性
      * @return MongoDatabaseFactory
      */
-    MongoDatabaseFactory createMongoDatabaseFactory(DynamicMongoProperties.MongoDatabaseProperty mongoDatabaseProperty);
+    MongoDatabaseFactory createMongoDatabaseFactory(MongoDatabaseProperty mongoDatabaseProperty);
 
 }
