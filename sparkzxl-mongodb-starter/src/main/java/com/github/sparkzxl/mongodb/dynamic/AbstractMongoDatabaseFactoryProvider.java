@@ -17,12 +17,12 @@ public abstract class AbstractMongoDatabaseFactoryProvider implements DynamicMon
 
     private final DefaultMongoDatabaseFactoryCreator mongoDatabaseFactoryCreator = new DefaultMongoDatabaseFactoryCreator();
 
-    protected Map<String, MongoDatabaseFactory> createMongoDatabaseFactoryMap(Map<String, MongoDatabaseProperty> mongoDatabasePropertyMap) {
+    protected Map<String, MongoDatabaseFactory> createMongoDatabaseFactoryMap(Map<String, DynamicMongoProperties.MongoDatabaseProperty> mongoDatabasePropertyMap) {
         log.info("MongoDatabase创建连接工厂====");
         Map<String, MongoDatabaseFactory> databaseFactoryMap = Maps.newHashMapWithExpectedSize(mongoDatabasePropertyMap.size() * 2);
-        for (Map.Entry<String, MongoDatabaseProperty> databasePropertyEntry : mongoDatabasePropertyMap.entrySet()) {
+        for (Map.Entry<String, DynamicMongoProperties.MongoDatabaseProperty> databasePropertyEntry : mongoDatabasePropertyMap.entrySet()) {
             String key = databasePropertyEntry.getKey();
-            MongoDatabaseProperty databaseProperty = databasePropertyEntry.getValue();
+            DynamicMongoProperties.MongoDatabaseProperty databaseProperty = databasePropertyEntry.getValue();
             databaseFactoryMap.put(key, mongoDatabaseFactoryCreator.createMongoDatabaseFactory(databaseProperty));
         }
         return databaseFactoryMap;

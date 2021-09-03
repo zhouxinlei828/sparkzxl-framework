@@ -33,7 +33,7 @@ public class MongoDynamicAutoConfig {
     @Bean
     @ConditionalOnMissingBean
     public DynamicMongoDatabaseFactoryProvider dynamicMongoDatabaseFactoryProvider() {
-        Map<String, MongoDatabaseProperty> databasePropertyMap = dynamicMongoProperties.getProvider();
+        Map<String, DynamicMongoProperties.MongoDatabaseProperty> databasePropertyMap = dynamicMongoProperties.getProvider();
         return new YamlMongoDatabaseFactoryProvider(databasePropertyMap);
     }
 

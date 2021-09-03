@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 public class DefaultMongoDatabaseFactoryCreator implements MongoDatabaseFactoryCreator {
 
     @Override
-    public MongoDatabaseFactory createMongoDatabaseFactory(MongoDatabaseProperty mongoDatabaseProperty) {
+    public MongoDatabaseFactory createMongoDatabaseFactory(DynamicMongoProperties.MongoDatabaseProperty mongoDatabaseProperty) {
         ConnectionString connectionString;
         if (StringUtils.isNotBlank(mongoDatabaseProperty.getUri())) {
             connectionString = new ConnectionString(mongoDatabaseProperty.getUri());

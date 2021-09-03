@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class YamlMongoDatabaseFactoryProvider extends AbstractMongoDatabaseFactoryProvider {
 
-    private final Map<String, MongoDatabaseProperty> mongoDatabasePropertyMap;
+    private final Map<String, DynamicMongoProperties.MongoDatabaseProperty> mongoDatabasePropertyMap;
 
     @Override
     public Map<String, MongoDatabaseFactory> loadMongoDatabaseFactories() {
