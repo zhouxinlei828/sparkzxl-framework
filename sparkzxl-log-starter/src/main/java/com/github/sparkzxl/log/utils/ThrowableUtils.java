@@ -1,15 +1,18 @@
-package com.github.sparkzxl.utils;
+package com.github.sparkzxl.log.utils;
 
 
-import com.github.sparkzxl.AlarmLogContext;
-import com.github.sparkzxl.entity.AlarmLogInfo;
+import com.github.sparkzxl.log.AlarmLogContext;
+import com.github.sparkzxl.entity.log.AlarmLogInfo;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author weilai
+ * description: 异常处理工具类
+ *
+ * @author zhouxinlei
+ * @date 2021-09-07 20:54:24
  */
 public class ThrowableUtils {
 

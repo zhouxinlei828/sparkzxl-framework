@@ -1,4 +1,4 @@
-package com.github.sparkzxl.entity;
+package com.github.sparkzxl.entity.log;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

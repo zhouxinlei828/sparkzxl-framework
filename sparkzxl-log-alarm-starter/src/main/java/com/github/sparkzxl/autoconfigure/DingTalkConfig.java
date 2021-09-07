@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2021-08-21 13:48:15
  */
 @Data
-@ConfigurationProperties(prefix = "spring.alarm-log.warn.dingtalk")
+@ConfigurationProperties(prefix = "spring.alarm.dingtalk")
 public class DingTalkConfig {
 
     private boolean enabled;

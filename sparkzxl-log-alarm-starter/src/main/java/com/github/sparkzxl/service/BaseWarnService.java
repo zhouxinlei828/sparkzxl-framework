@@ -1,6 +1,5 @@
 package com.github.sparkzxl.service;
 
-import com.github.sparkzxl.entity.AlarmLogInfo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -10,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2021-08-21 12:11:43
  */
 @Slf4j
-public abstract class BaseWarnService implements LogAlarmWarnService {
+public abstract class BaseWarnService implements AlarmWarnService {
 
     @Override
-    public boolean send(AlarmLogInfo context, Throwable throwable) {
+    public boolean send(String message) {
         try {
-            doSend(context, throwable);
+            doSend(message);
             return true;
         } catch (Exception e) {
             log.error("send warn message error", e);
@@ -23,5 +22,5 @@ public abstract class BaseWarnService implements LogAlarmWarnService {
         }
     }
 
-    protected abstract void doSend(AlarmLogInfo context, Throwable throwable) throws Exception;
+    protected abstract void doSend(String message) throws Exception;
 }

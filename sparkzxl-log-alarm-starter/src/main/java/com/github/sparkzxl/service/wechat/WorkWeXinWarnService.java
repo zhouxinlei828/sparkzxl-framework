@@ -4,9 +4,7 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.cache.CaffeineCache;
-import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.service.BaseWarnService;
-import com.github.sparkzxl.utils.ThrowableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -109,8 +107,8 @@ public class WorkWeXinWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(AlarmLogInfo context, Throwable throwable) throws Exception {
-        String data = createPostData(toUser(to.split(",")), WorkWeXinSendMsgTypeEnum.TEXT.name(), ThrowableUtils.workWeChatContent(context, throwable));
+    protected void doSend(String message) throws Exception {
+        String data = createPostData(toUser(to.split(",")), WorkWeXinSendMsgTypeEnum.TEXT.name(), message);
         String url = String.format(SEND_MESSAGE_URL, getToken());
         String resp = HttpRequest.post(url).body(data).execute().body();
         logger.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);

@@ -1,9 +1,8 @@
 package com.github.sparkzxl.service.mail;
 
 
-import com.github.sparkzxl.entity.AlarmLogInfo;
+import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.service.BaseWarnService;
-import com.github.sparkzxl.utils.ThrowableUtils;
 
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -63,7 +62,7 @@ public class MailWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(AlarmLogInfo context, Throwable throwable) throws Exception {
+    protected void doSend(String message) throws Exception {
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.transport.protocol", "smtp");
@@ -77,7 +76,7 @@ public class MailWarnService extends BaseWarnService {
         for (String toUser : to.split(",")) {
             msg.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(toUser));
         }
-        Map<String, String> map = ThrowableUtils.mailSubjectContent(context, throwable);
+        Map<String, String> map = JSONUtil.toBean(message, Map.class);
         msg.setSubject(map.get("subject"), "UTF-8");
         msg.setContent(map.get("content"), "text/html;charset=UTF-8");
         msg.setSentDate(new Date());

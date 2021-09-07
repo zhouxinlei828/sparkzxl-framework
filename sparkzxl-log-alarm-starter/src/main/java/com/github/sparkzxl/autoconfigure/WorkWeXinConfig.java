@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2021-08-21 13:48:40
  */
 @Data
-@ConfigurationProperties(prefix = "spring.alarm-log.warn.wechat")
+@ConfigurationProperties(prefix = "spring.alarm.wechat")
 public class WorkWeXinConfig {
 
     private boolean enabled;

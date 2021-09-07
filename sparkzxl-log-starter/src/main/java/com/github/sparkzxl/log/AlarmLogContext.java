@@ -1,6 +1,6 @@
-package com.github.sparkzxl;
+package com.github.sparkzxl.log;
 
-import com.github.sparkzxl.utils.ThrowableUtils;
+import com.github.sparkzxl.log.utils.ThrowableUtils;
 
 import java.util.ArrayList;
 import java.util.List;

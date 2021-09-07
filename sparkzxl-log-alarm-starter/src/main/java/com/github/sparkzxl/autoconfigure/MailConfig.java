@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2021-08-21 13:48:29
  */
 @Data
-@ConfigurationProperties(prefix = "spring.alarm-log.warn.mail")
+@ConfigurationProperties(prefix = "spring.alarm.mail")
 public class MailConfig {
 
     private boolean enabled;

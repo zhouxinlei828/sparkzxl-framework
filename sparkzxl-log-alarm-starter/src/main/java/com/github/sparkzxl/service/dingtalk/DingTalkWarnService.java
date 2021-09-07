@@ -3,9 +3,7 @@ package com.github.sparkzxl.service.dingtalk;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.entity.AlarmLogInfo;
 import com.github.sparkzxl.service.BaseWarnService;
-import com.github.sparkzxl.utils.ThrowableUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +61,7 @@ public class DingTalkWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(AlarmLogInfo context, Throwable throwable) throws Exception {
-        sendRobotMessage(ThrowableUtils.dingTalkContent(context, throwable));
+    protected void doSend(String message) throws Exception {
+        sendRobotMessage(message);
     }
 }

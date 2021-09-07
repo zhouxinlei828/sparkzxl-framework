@@ -1,7 +1,6 @@
 package com.github.sparkzxl.autoconfigure;
 
-import com.github.sparkzxl.AlarmLogContext;
-import com.github.sparkzxl.AlarmLogFactoryExecute;
+import com.github.sparkzxl.AlarmFactoryExecute;
 import com.github.sparkzxl.service.dingtalk.DingTalkWarnService;
 import com.github.sparkzxl.service.mail.MailWarnService;
 import com.github.sparkzxl.service.wechat.WorkWeXinWarnService;
@@ -13,8 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Optional;
-
 /**
  * description: 日志告警自动装配
  *
@@ -23,20 +20,10 @@ import java.util.Optional;
  */
 @Slf4j
 @Configuration
-@ConditionalOnProperty(name = "logging.enable-alarm", havingValue = "true")
-@EnableConfigurationProperties(AlarmLogConfig.class)
-public class AlarmLogAutoConfiguration {
-
-    @Autowired
-    void setAlarmLogConfig(AlarmLogConfig alarmLogConfig) {
-        Optional.ofNullable(alarmLogConfig.getDoWarnException()).ifPresent(AlarmLogContext::addDoWarnExceptionList);
-        Optional.ofNullable(alarmLogConfig.getWarnExceptionExtend()).ifPresent(AlarmLogContext::setWarnExceptionExtend);
-        Optional.ofNullable(alarmLogConfig.getPrintStackTrace()).ifPresent(AlarmLogContext::setPrintStackTrace);
-        Optional.ofNullable(alarmLogConfig.getSimpleWarnInfo()).ifPresent(AlarmLogContext::setSimpleWarnInfo);
-    }
+public class AlarmAutoConfiguration {
 
     @Configuration
-    @ConditionalOnProperty(name = "spring.alarm-log.warn.mail.enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "spring.alarm.mail.enabled", havingValue = "true")
     @EnableConfigurationProperties(MailConfig.class)
     static class MailWarnServiceMethod {
 
@@ -51,12 +38,12 @@ public class AlarmLogAutoConfiguration {
 
         @Autowired
         void setDataChangedListener(MailWarnService mailWarnService) {
-            AlarmLogFactoryExecute.addAlarmLogWarnService(mailWarnService);
+            AlarmFactoryExecute.addAlarmLogWarnService(mailWarnService);
         }
     }
 
     @Configuration
-    @ConditionalOnProperty(value = "spring.alarm-log.warn.wechat.enabled", havingValue = "true")
+    @ConditionalOnProperty(value = "spring.alarm.wechat.enabled", havingValue = "true")
     @EnableConfigurationProperties(WorkWeXinConfig.class)
     static class WorkWechatWarnServiceMethod {
 
@@ -68,12 +55,12 @@ public class AlarmLogAutoConfiguration {
 
         @Autowired
         void setDataChangedListener(WorkWeXinWarnService workWeXinWarnService) {
-            AlarmLogFactoryExecute.addAlarmLogWarnService(workWeXinWarnService);
+            AlarmFactoryExecute.addAlarmLogWarnService(workWeXinWarnService);
         }
     }
 
     @Configuration
-    @ConditionalOnProperty(value = "spring.alarm-log.warn.dingtalk.enabled", havingValue = "true")
+    @ConditionalOnProperty(value = "spring.alarm.dingtalk.enabled", havingValue = "true")
     @EnableConfigurationProperties(DingTalkConfig.class)
     static class DingTalkWarnServiceMethod {
 
@@ -85,7 +72,7 @@ public class AlarmLogAutoConfiguration {
 
         @Autowired
         void setDataChangedListener(DingTalkWarnService dingTalkWarnService) {
-            AlarmLogFactoryExecute.addAlarmLogWarnService(dingTalkWarnService);
+            AlarmFactoryExecute.addAlarmLogWarnService(dingTalkWarnService);
         }
     }
 }
