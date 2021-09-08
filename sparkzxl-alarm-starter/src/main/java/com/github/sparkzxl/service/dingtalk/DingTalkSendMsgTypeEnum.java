@@ -12,6 +12,8 @@ public enum DingTalkSendMsgTypeEnum {
      * text
      */
     TEXT("text"),
+    LINK("link"),
+    MARKDOWN("markdown"),
     ;
 
     private String type;
