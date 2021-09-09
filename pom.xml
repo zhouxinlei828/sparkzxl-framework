@@ -233,7 +233,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-log-alarm-starter</artifactId>
+                <artifactId>sparkzxl-alarm-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>

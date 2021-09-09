@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-log-alarm-starter</artifactId>
+            <artifactId>sparkzxl-alarm-starter</artifactId>
         </dependency>
         <!-- 自定义的元数据依赖 -->
         <dependency>
