@@ -2,8 +2,8 @@ package com.github.sparkzxl.security.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.core.context.ResponseContextHolder;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.entity.security.SecurityUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
@@ -38,7 +38,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        String accessToken = ResponseResultUtil.getAuthHeader(request);
+        String accessToken = ResponseContextHolder.getAuthHeader(request);
         if (StringUtils.isNotEmpty(accessToken)) {
             JwtUserInfo jwtUserInfo = null;
             try {

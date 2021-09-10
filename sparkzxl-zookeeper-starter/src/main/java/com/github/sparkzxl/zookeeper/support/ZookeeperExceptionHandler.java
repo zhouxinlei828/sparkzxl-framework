@@ -1,9 +1,9 @@
 package com.github.sparkzxl.zookeeper.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.utils.ResponseResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.KeeperException;
 import org.springframework.core.Ordered;
@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice
 @RestController
 @Slf4j
+@ResponseResultStatus
 public class ZookeeperExceptionHandler implements Ordered {
 
     @ExceptionHandler(KeeperException.class)
     public ApiResult<?> handleKeeperException(KeeperException e) {
-        ResponseResultUtil.clearResponseResult();
-        log.error(ExceptionUtil.getMessage(e));
+        e.printStackTrace();
+        log.error(ExceptionUtil.getSimpleMessage(e));
         return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
     }
 

@@ -11,7 +11,7 @@
     <!-- 日志显隐控制方式 -->
     <springProperty name="enableConsole" scope="context" source="logging.enable-console" defaultValue="true"/>
     <springProperty name="enableJson" scope="context" source="logging.file.enable-json" defaultValue="false"/>
-    <springProperty name="enableAlarm" scope="context" source="logging.enable-alarm" defaultValue="false"/>
+    <springProperty name="enableAlarm" scope="context" source="logging.alarm.enabled" defaultValue="false"/>
 
     <springProperty name="enableFile" scope="context" source="logging.file.enable" defaultValue="false"/>
     <springProperty name="maxHistory" scope="context" source="logging.file.maxHistory" defaultValue="7"/>

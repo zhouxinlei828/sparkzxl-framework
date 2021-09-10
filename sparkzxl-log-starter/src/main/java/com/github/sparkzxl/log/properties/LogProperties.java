@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+import java.util.List;
+
 /**
  * description: 日志配置类
  *
@@ -21,17 +23,17 @@ public class LogProperties {
      */
     private boolean enableConsole = true;
 
-    /**
-     * 是否开启日志告警
-     */
-    private boolean enableAlarm = false;
-
     @NestedConfigurationProperty
     private FileProperties file = new FileProperties();
 
     @NestedConfigurationProperty
     private KafkaProperties kafka = new KafkaProperties();
 
+    /**
+     * 日志告警
+     */
+    @NestedConfigurationProperty
+    private AlarmProperties alarm = new AlarmProperties();
 
     /**
      * description: 日志文件配置类
@@ -91,7 +93,28 @@ public class LogProperties {
          */
         private String topic;
 
+    }
 
+
+    /**
+     * description: 日志告警全局配置
+     *
+     * @author zhoux
+     * @date 2021-08-21 13:47:51
+     */
+    @Getter
+    @Setter
+    public static class AlarmProperties {
+
+        private boolean enabled = false;
+
+        private boolean printStackTrace = false;
+
+        private boolean simpleWarnInfo = false;
+
+        private boolean warnExceptionExtend = false;
+
+        private List<Class<? extends Throwable>> doWarnException;
     }
 
 }

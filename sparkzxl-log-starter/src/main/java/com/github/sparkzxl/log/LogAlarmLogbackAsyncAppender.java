@@ -5,10 +5,10 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.classic.spi.ThrowableProxy;
-import com.github.sparkzxl.AlarmLogContext;
-import com.github.sparkzxl.AlarmLogFactoryExecute;
+import com.github.sparkzxl.AlarmFactoryExecute;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.entity.AlarmLogInfo;
+import com.github.sparkzxl.entity.log.AlarmLogInfo;
+import com.github.sparkzxl.log.utils.ThrowableUtils;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
@@ -62,8 +62,8 @@ public class LogAlarmLogbackAsyncAppender extends AsyncAppender {
                                 .setMethodName(stackTraceElement.getMethodName())
                                 .setLineNumber(stackTraceElement.getLineNumber());
                     }
-                    CompletableFuture.runAsync(() -> AlarmLogFactoryExecute.execute(alarmLogInfo
-                            , throwable), threadPoolExecutor);
+                    String message = ThrowableUtils.dingTalkContent(alarmLogInfo, throwable);
+                    CompletableFuture.runAsync(() -> AlarmFactoryExecute.execute(message), threadPoolExecutor);
                 }
             } else if (level.equals(Level.ERROR)) {
                 String applicationName = SpringContextUtils.getApplicationName();
@@ -75,8 +75,8 @@ public class LogAlarmLogbackAsyncAppender extends AsyncAppender {
                         .threadName(loggingEvent.getThreadName())
                         .traceId(traceId)
                         .build();
-                CompletableFuture.runAsync(() -> AlarmLogFactoryExecute.execute(alarmLogInfo
-                        , null), threadPoolExecutor);
+                String message = ThrowableUtils.dingTalkContent(alarmLogInfo, null);
+                CompletableFuture.runAsync(() -> AlarmFactoryExecute.execute(message), threadPoolExecutor);
             }
         }
     }
