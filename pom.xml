@@ -6,14 +6,14 @@
 
     <groupId>com.github.sparkzxl</groupId>
     <artifactId>sparkzxl-component</artifactId>
-    <version>1.3.5-SNAPSHOT</version>
+    <version>1.3.5</version>
     <packaging>pom</packaging>
     <name>sparkzxl-component</name>
     <description>sparkzxl component framework</description>
     <url>https://github.com/sparkzxl/sparkzxl-component</url>
 
     <properties>
-        <sparkzxl.version>1.3.5-SNAPSHOT</sparkzxl.version>
+        <sparkzxl.version>1.3.5</sparkzxl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
