@@ -2,12 +2,14 @@ package com.github.sparkzxl.mongodb.config;
 
 import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.mongodb.event.MongoInsertEventListener;
+import com.github.sparkzxl.mongodb.properties.DataProperties;
 import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({MongoClient.class})
 @EnableTransactionManagement
+@EnableConfigurationProperties(DataProperties.class)
 public class MongoAutoConfig {
 
     @Bean
