@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+
 
 /**
  * description: mongodb 插入时间监听
@@ -23,22 +23,17 @@ public class MongoInsertEventListener extends AbstractMongoEventListener<Entity>
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Entity> event) {
         Entity entity = event.getSource();
-        LocalDateTime dateTime = LocalDateTime.now(ZoneOffset.of("+8"));
+        String name = AppContextHolder.getName();
         // 判断 id 为空
         if (entity.getId() == null) {
             Number id = snowflake.nextId();
             // noinspection unchecked
             entity.setId(id);
-            entity.setCreateTime(dateTime);
-            entity.setCreateUser(AppContextHolder.getUserId(String.class));
-            entity.setCreateUserName(AppContextHolder.getName());
-            entity.setUpdateTime(dateTime);
-            entity.setUpdateUser(AppContextHolder.getUserId(String.class));
-            entity.setUpdateUserName(AppContextHolder.getName());
+            entity.setCreatedTime(LocalDateTime.now());
+            entity.setCreatedBy(AppContextHolder.getUserId(String.class));
+            entity.setCreateUserName(name);
         } else {
-            entity.setUpdateTime(dateTime);
-            entity.setUpdateUser(AppContextHolder.getUserId(String.class));
-            entity.setUpdateUserName(AppContextHolder.getName());
+            entity.setUpdateUserName(name);
         }
     }
 
