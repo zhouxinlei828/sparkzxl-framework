@@ -1,7 +1,5 @@
 package com.github.sparkzxl.mongodb.entity;
 
-import cn.hutool.core.date.DateTime;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.*;

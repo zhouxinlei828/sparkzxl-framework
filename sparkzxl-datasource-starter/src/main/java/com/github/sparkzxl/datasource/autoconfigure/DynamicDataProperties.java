@@ -1,4 +1,4 @@
-package com.github.sparkzxl.database.properties;
+package com.github.sparkzxl.datasource.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

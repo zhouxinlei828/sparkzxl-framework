@@ -1,8 +1,7 @@
-package com.github.sparkzxl.database;
+package com.github.sparkzxl.datasource.autoconfigure;
 
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
-import com.github.sparkzxl.database.interceptor.DynamicDataSourceInterceptor;
-import com.github.sparkzxl.database.properties.DynamicDataProperties;
+import com.github.sparkzxl.constant.ConfigurationConstant;
+import com.github.sparkzxl.datasource.interceptor.DynamicDataSourceInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
         this.dynamicDataProperties = dynamicDataProperties;
     }
 
-    @ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "enabled", havingValue = "true",
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_SOURCE_DYNAMIC_PREFIX, name = "enabled", havingValue = "true",
             matchIfMissing = true)
     @Bean(name = DEFAULT_DYNAMIC_DATASOURCE_INTERCEPTOR_NAME)
     public DynamicDataSourceInterceptor dynamicDataSourceInterceptor() {

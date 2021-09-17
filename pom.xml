@@ -89,6 +89,7 @@
         <antisamy.version>1.5.10</antisamy.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
+        <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
     </properties>
 
     <modules>
@@ -96,7 +97,7 @@
         <module>sparkzxl-boot-starter</module>
         <module>sparkzxl-cache-starter</module>
         <module>sparkzxl-core</module>
-        <module>sparkzxl-database-starter</module>
+        <module>sparkzxl-mybatis-starter</module>
         <module>sparkzxl-distributed-cloud-starter</module>
         <module>sparkzxl-distributed-dubbo-starter</module>
         <module>sparkzxl-drools-starter</module>
@@ -120,6 +121,7 @@
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-annotation</module>
+        <module>sparkzxl-datasource-starter</module>
     </modules>
 
     <distributionManagement>
@@ -208,7 +210,12 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-database-starter</artifactId>
+                <artifactId>sparkzxl-mybatis-starter</artifactId>
+                <version>${sparkzxl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-datasource-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
             <dependency>
@@ -283,6 +290,11 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper-spring-boot-starter.version}</version>
@@ -295,6 +307,11 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
             <dependency>

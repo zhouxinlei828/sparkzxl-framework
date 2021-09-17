@@ -4,7 +4,6 @@ import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.mongodb.aware.AuditAwareImpl;
 import com.github.sparkzxl.mongodb.event.MongoInsertEventListener;
 import com.github.sparkzxl.mongodb.properties.DataProperties;
-import com.google.common.collect.Lists;
 import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -14,7 +13,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
@@ -22,8 +20,6 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.*;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.util.List;
 
 /**
  * description: MongoDB事务自动管理

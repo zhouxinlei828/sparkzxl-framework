@@ -12,12 +12,12 @@ import java.util.List;
  *
  * @author zhouxinlei
  */
-public class TenantLineHandlerImpl implements TenantLineHandler {
+public class TenantLineHandlerInterceptor implements TenantLineHandler {
 
     private final String tenantIdColumn;
     private final List<String> ignoreTableList;
 
-    public TenantLineHandlerImpl(String tenantIdColumn, List<String> ignoreTableList) {
+    public TenantLineHandlerInterceptor(String tenantIdColumn, List<String> ignoreTableList) {
         this.tenantIdColumn = tenantIdColumn;
         this.ignoreTableList = ignoreTableList;
     }

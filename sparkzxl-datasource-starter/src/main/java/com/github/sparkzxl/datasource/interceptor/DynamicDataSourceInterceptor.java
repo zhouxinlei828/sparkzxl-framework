@@ -1,4 +1,4 @@
-package com.github.sparkzxl.database.interceptor;
+package com.github.sparkzxl.datasource.interceptor;
 
 import cn.hutool.core.text.StrFormatter;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;

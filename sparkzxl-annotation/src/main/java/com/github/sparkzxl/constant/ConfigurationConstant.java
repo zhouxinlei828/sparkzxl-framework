@@ -9,6 +9,8 @@ package com.github.sparkzxl.constant;
 public class ConfigurationConstant {
 
     public static final String DATA_PREFIX = "sparkzxl.data";
+    public static final String DATA_SOURCE_PREFIX = "sparkzxl.datasource";
+    public static final String DATA_SOURCE_DYNAMIC_PREFIX = "spring.datasource.dynamic";
 
     public static final String MYBATIS_CUSTOM_PREFIX = "mybatis-plus.custom";
 

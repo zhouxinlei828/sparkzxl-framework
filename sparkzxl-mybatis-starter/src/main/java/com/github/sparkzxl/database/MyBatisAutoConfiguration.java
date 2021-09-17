@@ -2,24 +2,26 @@ package com.github.sparkzxl.database;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.plugins.SchemaInterceptor;
-import com.github.sparkzxl.database.plugins.TenantLineHandlerImpl;
+import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
+import com.github.sparkzxl.database.plugins.TenantLineHandlerInterceptor;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.DataProperties;
 import com.github.sparkzxl.database.support.DataSourceExceptionHandler;
 import com.google.common.collect.Lists;
 import com.p6spy.engine.spy.P6DataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.mybatis.spring.annotation.MapperScan;
@@ -43,16 +45,12 @@ import java.util.List;
 @Import(DataSourceExceptionHandler.class)
 @MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
+@RequiredArgsConstructor
 public class MyBatisAutoConfiguration {
 
     public static final String DATABASE_PREFIX = "default";
     private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
-
-    public MyBatisAutoConfiguration(CustomMybatisProperties customMybatisProperties, DataProperties dataProperties) {
-        this.customMybatisProperties = customMybatisProperties;
-        this.dataProperties = dataProperties;
-    }
 
     /**
      * 多租户插件配置,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存万一出现问题
@@ -69,7 +67,7 @@ public class MyBatisAutoConfiguration {
             if (dataProperties.isEnableTenant()) {
                 List<String> ignoreTableList = ArrayUtils.isEmpty(dataProperties.getIgnoreTable()) ? Lists.newArrayList() :
                         Arrays.asList(dataProperties.getIgnoreTable());
-                interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerImpl(dataProperties.getTenantIdColumn(),
+                interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerInterceptor(dataProperties.getTenantIdColumn(),
                         ignoreTableList)));
             }
         } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
@@ -104,7 +102,7 @@ public class MyBatisAutoConfiguration {
     @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
     @DependsOn("dataSource")
-    @ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "enabled", havingValue = "false")
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_SOURCE_DYNAMIC_PREFIX, name = "enabled", havingValue = "false")
     public DataSource dataSource(DataSource dataSource) {
         if (dataProperties.getP6spy()) {
             return new P6DataSource(dataSource);
@@ -133,6 +131,11 @@ public class MyBatisAutoConfiguration {
     @Bean
     public BaseSqlInjector sqlInjector() {
         return new BaseSqlInjector();
+    }
+
+    @Bean
+    public SlowSqlMonitorInterceptor slowSqlMonitorInterceptor() {
+        return new SlowSqlMonitorInterceptor();
     }
 
 }

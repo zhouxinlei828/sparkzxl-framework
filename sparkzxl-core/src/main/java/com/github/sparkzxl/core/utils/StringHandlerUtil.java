@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.utils;
 
 import cn.hutool.core.text.StrSplitter;
+import cn.hutool.core.util.CreditCodeUtil;
 import cn.hutool.core.util.URLUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -74,4 +75,9 @@ public class StringHandlerUtil {
         return stringBuilder.toString();
     }
 
+    public static void main(String[] args) {
+        for (int i = 0; i < 20; i++) {
+            System.out.println(CreditCodeUtil.randomCreditCode());
+        }
+    }
 }
