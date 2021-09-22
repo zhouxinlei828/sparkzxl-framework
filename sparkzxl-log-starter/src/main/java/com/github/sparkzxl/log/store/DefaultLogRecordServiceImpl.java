@@ -1,6 +1,5 @@
 package com.github.sparkzxl.log.store;
 
-import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.log.entity.OptLogRecordDetail;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +14,6 @@ public class DefaultLogRecordServiceImpl implements ILogRecordService {
 
     @Override
     public void record(OptLogRecordDetail optLogRecordDetail) {
-        log.info("【optLogRecord】log={}", JsonUtil.toJsonPretty(optLogRecordDetail));
+        log.info("操作人【{}】：操作日志：【{}】", optLogRecordDetail.getOperator(), optLogRecordDetail.getDetail());
     }
 }
