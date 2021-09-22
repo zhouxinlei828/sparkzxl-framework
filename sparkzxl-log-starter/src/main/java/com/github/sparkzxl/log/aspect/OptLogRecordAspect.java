@@ -1,7 +1,6 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.text.StrFormatter;
-import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.core.utils.AspectUtil;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.core.utils.NetworkUtil;
@@ -15,9 +14,10 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -47,15 +47,21 @@ public class OptLogRecordAspect {
             new ArrayBlockingQueue<>(30),
             new DefaultThreadFactory("opt-log-record"));
 
-    private final ThreadLocal<OptLogRecordDetail> logRecordDetailThreadLocal = new TransmittableThreadLocal<>();
-
     @Pointcut("@annotation(optLogRecord)")
     public void pointCut(OptLogRecord optLogRecord) {
 
     }
 
-    @Before(value = "pointCut(optLogRecord)", argNames = "joinPoint,optLogRecord")
-    public void beforeMethod(JoinPoint joinPoint, OptLogRecord optLogRecord) throws Throwable {
+    /**
+     * 环绕操作
+     *
+     * @param joinPoint    切入点
+     * @param optLogRecord 日志注解
+     * @return 原方法返回值
+     * @throws Throwable 异常信息
+     */
+    @Around(value = "pointCut(optLogRecord)", argNames = "joinPoint,optLogRecord")
+    public Object around(ProceedingJoinPoint joinPoint, OptLogRecord optLogRecord) throws Throwable {
         String userId = operatorService.getUserId();
         String name = operatorService.getUserName();
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
@@ -89,42 +95,8 @@ public class OptLogRecordAspect {
                 .setCategory(optLogRecord.category())
                 .setUserId(userId)
                 .setOperator(name);
-        set(logRecord);
-    }
-
-    /**
-     * 环绕操作
-     *
-     * @param joinPoint    切入点
-     * @param optLogRecord 日志注解
-     * @return 原方法返回值
-     * @throws Throwable 异常信息
-     */
-    @Around(value = "pointCut(optLogRecord)", argNames = "joinPoint,optLogRecord")
-    public Object around(ProceedingJoinPoint joinPoint, OptLogRecord optLogRecord) throws Throwable {
-        OptLogRecordDetail optLogRecordDetail = get();
         Object proceed = joinPoint.proceed();
-        CompletableFuture.runAsync(() -> logRecordService.record(optLogRecordDetail), threadPoolExecutor);
+        CompletableFuture.runAsync(() -> logRecordService.record(logRecord), threadPoolExecutor);
         return proceed;
-    }
-
-    /**
-     * 后置通知
-     */
-    @AfterReturning(value = "pointCut(optLogRecord)", argNames = "optLogRecord")
-    public void afterReturning(OptLogRecord optLogRecord) {
-        remove();
-    }
-
-    public OptLogRecordDetail get() {
-        return logRecordDetailThreadLocal.get();
-    }
-
-    public void set(OptLogRecordDetail optLogRecordDetail) {
-        logRecordDetailThreadLocal.set(optLogRecordDetail);
-    }
-
-    public void remove() {
-        logRecordDetailThreadLocal.remove();
     }
 }
