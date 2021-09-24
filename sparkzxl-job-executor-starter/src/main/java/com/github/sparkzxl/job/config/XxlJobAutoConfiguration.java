@@ -35,7 +35,7 @@ public class XxlJobAutoConfiguration {
         }
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(xxlExecutorProperties.getAdminAddresses());
-        xxlJobSpringExecutor.setAppname(xxlExecutorProperties.getAppName());
+        xxlJobSpringExecutor.setAppname(appName);
         xxlJobSpringExecutor.setAddress(xxlExecutorProperties.getAddress());
         xxlJobSpringExecutor.setIp(xxlExecutorProperties.getIp());
         xxlJobSpringExecutor.setPort(xxlExecutorProperties.getPort());
