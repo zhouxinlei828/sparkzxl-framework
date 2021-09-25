@@ -1,7 +1,7 @@
 package com.github.sparkzxl.log;
 
 import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
-import com.github.sparkzxl.log.aspect.WebLogAspect;
+import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
 import com.github.sparkzxl.log.netty.LogWebSocketHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.DefaultLogRecordServiceImpl;
@@ -46,8 +46,8 @@ public class LogAutoConfiguration {
     }
 
     @Bean
-    public WebLogAspect webLogAspect() {
-        return new WebLogAspect();
+    public HttpRequestLogAspect webLogAspect() {
+        return new HttpRequestLogAspect();
     }
 
     @Bean

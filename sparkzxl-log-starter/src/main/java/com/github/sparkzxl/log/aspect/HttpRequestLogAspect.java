@@ -1,12 +1,13 @@
 package com.github.sparkzxl.log.aspect;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.context.AppContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
-import com.github.sparkzxl.log.entity.HttpLogInfo;
+import com.github.sparkzxl.log.entity.RequestInfoLog;
+import com.github.sparkzxl.log.event.HttpRequestLogEvent;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -33,32 +35,26 @@ import java.util.concurrent.TimeUnit;
  */
 @Aspect
 @Slf4j
-public class WebLogAspect {
+public class HttpRequestLogAspect {
 
     private final ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
 
-    @Pointcut("@within(com.github.sparkzxl.log.annotation.WebLog)")
+    @Pointcut("@within(com.github.sparkzxl.log.annotation.HttpRequestLog)|| @annotation(com.github.sparkzxl.log.annotation.HttpRequestLog)")
     public void pointCut() {
 
     }
 
     /**
      * 对Controller下面的方法执行前进行切入，初始化开始时间
-     *
-     * @param joinPoint 切入点
      */
     @Before("pointCut()")
-    public void beforeMethod(JoinPoint joinPoint) {
+    public void beforeMethod() {
         Stopwatch stopwatch = get();
         if (stopwatch.isRunning()) {
             stopwatch.reset().start();
         } else {
             stopwatch.start();
         }
-        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        HttpLogInfo requestParamInfo = buildRequestParamInfo(httpServletRequest, joinPoint.getSignature(), joinPoint.getArgs());
-        String jsonStr = JsonUtil.toJson(requestParamInfo);
-        log.info("请求参数信息: [{}]", jsonStr);
     }
 
     /**
@@ -72,9 +68,8 @@ public class WebLogAspect {
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         Object result = proceedingJoinPoint.proceed();
-        HttpLogInfo requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint.getSignature(), result);
-        String jsonStr = JsonUtil.toJson(requestResultInfo);
-        log.info("响应结果信息: [{}]", jsonStr);
+        RequestInfoLog requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint, result);
+        SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestResultInfo));
         return result;
     }
 
@@ -95,78 +90,68 @@ public class WebLogAspect {
     @AfterThrowing(pointcut = "pointCut()", throwing = "e")
     public void doAfterThrow(JoinPoint joinPoint, Exception e) {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        HttpLogInfo httpLogInfo = buildRequestErrorInfo(httpServletRequest, joinPoint.getSignature(), e);
-        String jsonStr = JsonUtil.toJson(httpLogInfo);
-        log.info("请求接口发生异常 : [{}]", jsonStr);
+        RequestInfoLog requestInfoLog = buildRequestErrorInfo(httpServletRequest, joinPoint, e);
+        SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
+        log.info("请求接口发生异常 : [{}]", requestInfoLog.getErrorMsg());
         remove();
     }
 
     /**
-     * 构建请求参数日志
+     * 构建基本请求日志
      *
      * @param httpServletRequest httpServletRequest
-     * @param signature          signature
-     * @param args               请求参数
-     * @return RequestParamInfo
+     * @param joinPoint          joinPoint
+     * @return RequestInfoLog
      */
-    private HttpLogInfo buildRequestParamInfo(HttpServletRequest httpServletRequest, Signature signature, Object[] args) {
+    private RequestInfoLog buildBaseRequestInfo(HttpServletRequest httpServletRequest, JoinPoint joinPoint) {
         String userId = AppContextHolder.getUserId(String.class);
         String name = AppContextHolder.getName();
-        return HttpLogInfo.builder()
-                .ip(NetworkUtil.getIpAddress(httpServletRequest))
-                .url(httpServletRequest.getRequestURL().toString())
-                .httpMethod(httpServletRequest.getMethod())
-                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
+        Signature signature = joinPoint.getSignature();
+        String category = LockKeyGenerator.getLockKey(joinPoint);
+        Map<String, Object> requestParameterJson = getRequestParameterJson(signature, joinPoint.getArgs());
+        String parameterJson = JsonUtil.toJson(requestParameterJson);
+        return new RequestInfoLog()
+                .setCategory(category)
+                .setUserId(Integer.valueOf(userId))
+                .setUserName(name)
+                .setIp(NetworkUtil.getIpAddress(httpServletRequest))
+                .setRequestUrl(httpServletRequest.getRequestURL().toString())
+                .setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
                         signature.getName()))
-                .userId(userId)
-                .userName(name)
-                .params(getRequestParameterJson(signature, args))
-                .build();
+                .setRequestParams(parameterJson)
+                .setCreateTime(LocalDateTime.now())
+                .setTenantId(AppContextHolder.getTenant());
     }
 
     /**
      * 构建请求结果日志
      *
-     * @param httpServletRequest httpServletRequest
-     * @param signature          signature
-     * @param result             返回结果
+     * @param httpServletRequest  httpServletRequest
+     * @param proceedingJoinPoint proceedingJoinPoint
+     * @param result              返回结果
      * @return RequestInfo
      */
-    private HttpLogInfo buildRequestResultInfo(HttpServletRequest httpServletRequest, Signature signature, Object result) {
-        String userId = AppContextHolder.getUserId(String.class);
-        String name = AppContextHolder.getName();
-        return HttpLogInfo.builder()
-                .url(httpServletRequest.getRequestURL().toString())
-                .httpMethod(httpServletRequest.getMethod())
-                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
-                        signature.getName()))
-                .userId(userId)
-                .userName(name)
-                .result(result)
-                .build();
+    private RequestInfoLog buildRequestResultInfo(HttpServletRequest httpServletRequest, ProceedingJoinPoint proceedingJoinPoint, Object result) {
+        RequestInfoLog requestInfoLog = buildBaseRequestInfo(httpServletRequest, proceedingJoinPoint);
+        if (ObjectUtils.isNotEmpty(result)) {
+            requestInfoLog.setResponseResult(JsonUtil.toJson(result));
+        }
+        return requestInfoLog;
     }
 
     /**
      * 构建请求异常日志
      *
      * @param httpServletRequest httpServletRequest
-     * @param signature          signature
+     * @param joinPoint          signature
      * @param e                  异常
-     * @return RequestInfo
+     * @return RequestInfoLog
      */
-    private HttpLogInfo buildRequestErrorInfo(HttpServletRequest httpServletRequest, Signature signature, Exception e) {
-        String userId = AppContextHolder.getUserId(String.class);
-        String name = AppContextHolder.getName();
-        return HttpLogInfo.builder()
-                .url(httpServletRequest.getRequestURL().toString())
-                .classMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
-                        signature.getName()))
-                .userId(userId)
-                .userName(name)
-                .errorMsg(e.getMessage())
-                .error(ExceptionUtil.getMessage(e))
-                .throwExceptionClass(e.getClass().getTypeName())
-                .build();
+    private RequestInfoLog buildRequestErrorInfo(HttpServletRequest httpServletRequest, JoinPoint joinPoint, Exception e) {
+        RequestInfoLog requestInfoLog = buildBaseRequestInfo(httpServletRequest, joinPoint);
+        requestInfoLog.setErrorMsg(e.getMessage());
+        requestInfoLog.setThrowExceptionClass(e.getClass().getTypeName());
+        return requestInfoLog;
     }
 
     public Map<String, Object> getRequestParameterJson(Signature signature, Object[] args) {

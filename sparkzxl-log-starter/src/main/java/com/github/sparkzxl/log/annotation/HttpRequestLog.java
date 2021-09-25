@@ -12,5 +12,19 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WebLog {
+public @interface HttpRequestLog {
+
+    /**
+     * 业务类型
+     */
+    String value() default "";
+
+    /**
+     * 分隔符（默认 :）
+     * 生成的Key：业务类型:500
+     *
+     * @return String
+     */
+    String delimiter() default ":";
+
 }
