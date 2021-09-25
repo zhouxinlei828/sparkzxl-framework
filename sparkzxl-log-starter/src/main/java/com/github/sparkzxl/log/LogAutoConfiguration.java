@@ -1,12 +1,12 @@
 package com.github.sparkzxl.log;
 
-import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
 import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
+import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
+import com.github.sparkzxl.log.event.HttpRequestLogListener;
+import com.github.sparkzxl.log.event.OptLogListener;
 import com.github.sparkzxl.log.netty.LogWebSocketHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
-import com.github.sparkzxl.log.store.DefaultLogRecordServiceImpl;
 import com.github.sparkzxl.log.store.DefaultOperatorServiceImpl;
-import com.github.sparkzxl.log.store.ILogRecordService;
 import com.github.sparkzxl.log.store.IOperatorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +51,13 @@ public class LogAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
+    public HttpRequestLogListener httpRequestLogListener() {
+        return new HttpRequestLogListener(log -> {
+        });
+    }
+
+    @Bean
     public LogWebSocketHandler logWebSocketHandler() {
         Environment env = applicationContext.getEnvironment();
         String applicationName = env.getProperty("spring.application.name");
@@ -61,19 +68,20 @@ public class LogAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ILogRecordService.class)
-    public ILogRecordService logRecordService() {
-        return new DefaultLogRecordServiceImpl();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(IOperatorService.class)
     public IOperatorService operatorService() {
         return new DefaultOperatorServiceImpl();
     }
 
     @Bean
-    public OptLogRecordAspect optLogRecordAspect(ILogRecordService logRecordService, IOperatorService operatorService) {
-        return new OptLogRecordAspect(logRecordService, operatorService);
+    public OptLogRecordAspect optLogRecordAspect(IOperatorService operatorService) {
+        return new OptLogRecordAspect(operatorService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public OptLogListener optLogListener() {
+        return new OptLogListener(log -> {
+        });
     }
 }

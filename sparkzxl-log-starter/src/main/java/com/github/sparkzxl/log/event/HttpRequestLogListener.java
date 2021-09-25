@@ -34,6 +34,11 @@ public class HttpRequestLogListener {
             return;
         }
         Optional.ofNullable(requestInfoLog.getTenantId()).ifPresent(AppContextHolder::setTenant);
+        if (log.isDebugEnabled()) {
+            log.debug("租户:【{}】 用户名:【{}】 请求接口:【{}】 请求参数:【{}】",
+                    requestInfoLog.getTenantId(), requestInfoLog.getUserName(),
+                    requestInfoLog.getRequestUrl(), requestInfoLog.getRequestParams());
+        }
         consumer.accept(requestInfoLog);
     }
 

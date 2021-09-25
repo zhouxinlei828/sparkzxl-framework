@@ -4,6 +4,8 @@ import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.annotation.RequestLogParam;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +24,10 @@ public class LockKeyGenerator {
     public static String getLockKey(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        HttpRequestLog httpRequestLog = method.getAnnotation(HttpRequestLog.class);
+        HttpRequestLog httpRequestLog = AnnotationUtils.getAnnotation(method, HttpRequestLog.class);
+        if (httpRequestLog == null) {
+            httpRequestLog = AnnotatedElementUtils.findMergedAnnotation(joinPoint.getTarget().getClass(), HttpRequestLog.class);
+        }
         final Object[] args = joinPoint.getArgs();
         final Parameter[] parameters = method.getParameters();
         String value = httpRequestLog.value();

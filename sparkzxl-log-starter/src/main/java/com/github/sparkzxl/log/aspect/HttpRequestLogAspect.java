@@ -91,8 +91,8 @@ public class HttpRequestLogAspect {
     public void doAfterThrow(JoinPoint joinPoint, Exception e) {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         RequestInfoLog requestInfoLog = buildRequestErrorInfo(httpServletRequest, joinPoint, e);
-        SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
         log.info("请求接口发生异常 : [{}]", requestInfoLog.getErrorMsg());
+        SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
         remove();
     }
 
@@ -112,7 +112,7 @@ public class HttpRequestLogAspect {
         String parameterJson = JsonUtil.toJson(requestParameterJson);
         return new RequestInfoLog()
                 .setCategory(category)
-                .setUserId(Integer.valueOf(userId))
+                .setUserId(userId)
                 .setUserName(name)
                 .setIp(NetworkUtil.getIpAddress(httpServletRequest))
                 .setRequestUrl(httpServletRequest.getRequestURL().toString())

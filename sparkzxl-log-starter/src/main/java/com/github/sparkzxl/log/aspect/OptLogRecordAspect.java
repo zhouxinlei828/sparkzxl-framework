@@ -1,16 +1,17 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.text.StrFormatter;
+import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.AspectUtil;
 import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.core.utils.NetworkUtil;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import com.github.sparkzxl.log.entity.OptLogRecordDetail;
-import com.github.sparkzxl.log.store.ILogRecordService;
+import com.github.sparkzxl.log.event.OptLogEvent;
 import com.github.sparkzxl.log.store.IOperatorService;
 import com.google.common.collect.Lists;
-import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -21,13 +22,9 @@ import org.aspectj.lang.annotation.Pointcut;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
- * description:
+ * description: 操作行为日志切面
  *
  * @author zhouxinlei
  * @date 2021-09-22 09:26:21
@@ -37,15 +34,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class OptLogRecordAspect {
 
-    private final ILogRecordService logRecordService;
     private final IOperatorService operatorService;
-
-    private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
-            4,
-            10,
-            TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<>(30),
-            new DefaultThreadFactory("opt-log-record"));
 
     @Pointcut("@annotation(optLogRecord)")
     public void pointCut(OptLogRecord optLogRecord) {
@@ -65,11 +54,6 @@ public class OptLogRecordAspect {
         String userId = operatorService.getUserId();
         String name = operatorService.getUserName();
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        log.info("用户行为记录：操作人【{}】,业务类型：【{}】,请求IP：【{}】,请求接口：【{}】", name,
-                optLogRecord.category(),
-                NetworkUtil.getIpAddress(httpServletRequest),
-                httpServletRequest.getRequestURL().toString());
-
         String conditionExpression = optLogRecord.condition();
         String bizNo = "";
         if (StringUtils.isNotBlank(optLogRecord.bizNo())) {
@@ -89,14 +73,17 @@ public class OptLogRecordAspect {
         }
         Object[] params = ListUtils.listToArray(variables);
         String formatLogContent = StrFormatter.format(optLogRecord.detail(), params);
-        OptLogRecordDetail logRecord = new OptLogRecordDetail()
+        OptLogRecordDetail optLogRecordDetail = new OptLogRecordDetail()
+                .setIp(NetworkUtil.getIpAddress(httpServletRequest))
+                .setRequestUrl(httpServletRequest.getRequestURL().toString())
                 .setBizNo(bizNo)
                 .setDetail(formatLogContent)
                 .setCategory(optLogRecord.category())
                 .setUserId(userId)
-                .setOperator(name);
+                .setOperator(name)
+                .setTenantId(AppContextHolder.getTenant());
         Object proceed = joinPoint.proceed();
-        CompletableFuture.runAsync(() -> logRecordService.record(logRecord), threadPoolExecutor);
+        SpringContextUtils.publishEvent(new OptLogEvent(optLogRecordDetail));
         return proceed;
     }
 }

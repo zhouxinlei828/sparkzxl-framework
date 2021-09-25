@@ -27,7 +27,7 @@ public class RequestInfoLog implements Serializable {
     private String category;
 
     @ApiModelProperty(value = "用户id")
-    private Integer userId;
+    private String userId;
 
     @ApiModelProperty(value = "用户姓名")
     private String userName;
@@ -35,7 +35,7 @@ public class RequestInfoLog implements Serializable {
     @ApiModelProperty(value = "请求IP")
     private String ip;
 
-    @ApiModelProperty(value = "请求路径")
+    @ApiModelProperty(value = "请求接口")
     private String requestUrl;
 
     @ApiModelProperty(value = "请求类方法")
