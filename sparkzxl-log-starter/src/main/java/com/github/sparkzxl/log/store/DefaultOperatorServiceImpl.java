@@ -14,15 +14,11 @@ public class DefaultOperatorServiceImpl implements IOperatorService {
 
     @Override
     public String getUserId() {
-        String userId = AppContextHolder.getUserId(String.class);
-        log.info("获取操作人唯一标识:{}", userId);
-        return userId;
+        return AppContextHolder.getUserId(String.class);
     }
 
     @Override
     public String getUserName() {
-        String name = AppContextHolder.getName();
-        log.info("获取操作人姓名:{}", name);
-        return name;
+        return AppContextHolder.getName();
     }
 }

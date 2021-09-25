@@ -19,7 +19,6 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.ObjectUtils;
 
@@ -156,23 +155,22 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
                      */
                     BoundSql boundSql = mappedStatement.getBoundSql(parameter);
                     Configuration configuration = mappedStatement.getConfiguration();
-                    /*
-                      主要耗时在这里，这里会根据parameter，
-                      将 select * from x where id = ？ 解析成 select * from x where id = 1
-                      对于 insert into X (1,2) values (?,?),(?,?),(?,?),(?,?)这种批量的SQL，这里的解析会特别慢。
-                      因为他是挨个挨个把 ？ 替换成对应的参数值。
-                      最后拼成SQL insert into X (1,2) values (1,2),(3,4)
-                      如果这个是复杂对象（自定义bean），会根据反射一个个进行操作。
-                     */
+                    // 主要耗时在这里，这里会根据parameter，
+                    // 将 select * from x where id = ？ 解析成 select * from x where id = 1
+                    // 对于 insert into X (1,2) values (?,?),(?,?),(?,?),(?,?)这种批量的SQL，这里的解析会特别慢。
+                    // 因为他是挨个挨个把 ？ 替换成对应的参数值。
+                    // 最后拼成SQL insert into X (1,2) values (1,2),(3,4)
+                    // 如果这个是复杂对象（自定义bean），会根据反射一个个进行操作。
                     String sql = parseSql(configuration, boundSql);
 
                     switch (type) {
                         case SLOW_SQL:
-                            //检测慢sql
                             checkSlowSql(sqlId, sql, executeTime, checkTime.elapsed(TimeUnit.MILLISECONDS));
                             break;
                         case SQL_EXCEPTION:
                             sendSqlExceptionMsg(sqlId, sql, exceptionMsg, checkTime.elapsed(TimeUnit.MILLISECONDS));
+                            break;
+                        default:
                             break;
                     }
                 } catch (Exception e) {
