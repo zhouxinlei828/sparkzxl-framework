@@ -25,7 +25,7 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
     FAILURE(HttpStatus.HTTP_BAD_REQUEST, "哎呀，开了个小差，请稍后再试"),
 
     JSON_PARSE_ERROR(-13, "JSON解析异常"),
-    
+
     NULL_POINTER_EXCEPTION_ERROR(HttpStatus.HTTP_BAD_REQUEST, "空指针异常"),
 
     CLUSTER_REDIRECT_EXCEPTION(HttpStatus.HTTP_BAD_REQUEST, "Redis集群异常"),

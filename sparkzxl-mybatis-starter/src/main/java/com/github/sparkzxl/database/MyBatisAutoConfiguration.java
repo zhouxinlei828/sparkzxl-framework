@@ -28,6 +28,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -134,8 +135,10 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
-    public SlowSqlMonitorInterceptor slowSqlMonitorInterceptor() {
-        return new SlowSqlMonitorInterceptor();
+    public SlowSqlMonitorInterceptor slowSqlMonitorInterceptor(ApplicationContext applicationContext) {
+        SlowSqlMonitorInterceptor slowSqlMonitorInterceptor = new SlowSqlMonitorInterceptor();
+        slowSqlMonitorInterceptor.setApplicationContext(applicationContext);
+        return slowSqlMonitorInterceptor;
     }
 
 }

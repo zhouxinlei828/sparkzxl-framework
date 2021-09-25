@@ -21,12 +21,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class MongoDatabaseFactoryContext implements InitializingBean, DisposableBean {
 
+    private final Map<String, MongoDatabaseFactory> databaseFactories = new ConcurrentHashMap<>();
+    private final DynamicMongoDatabaseFactoryProvider mongoDataSourceProvider;
     @Setter
     private String primary = "master";
-
-    private final Map<String, MongoDatabaseFactory> databaseFactories = new ConcurrentHashMap<>();
-
-    private final DynamicMongoDatabaseFactoryProvider mongoDataSourceProvider;
 
     public MongoDatabaseFactoryContext(DynamicMongoDatabaseFactoryProvider mongoDataSourceProvider) {
         this.mongoDataSourceProvider = mongoDataSourceProvider;

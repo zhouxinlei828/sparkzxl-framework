@@ -55,7 +55,28 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
 
     private ApplicationContext applicationContext;
 
-    @Autowired
+    /**
+     * 将对象转换为字符串
+     *
+     * @param obj 对象
+     * @return 字符串
+     */
+    private static String getParameterValue(Object obj) {
+        if (obj instanceof String) {
+            return "'" + obj + "'";
+        }
+
+        if (obj instanceof Date) {
+            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
+            return "'" + formatter.format(new Date()) + "'";
+        }
+        if (Objects.isNull(obj)) {
+            return StringUtils.EMPTY;
+        }
+
+        return obj.toString();
+    }
+
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
@@ -97,12 +118,7 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
         doSomething(invocation, 0, exceptionMsg, type);
     }
 
-    /**
-     * 根据结果做一些需要的操作
-     *
-     * @param invocation
-     * @param executeTime
-     */
+
     private void doSomething(Invocation invocation, long executeTime, String exceptionMsg, Type type) {
 
         try {
@@ -112,6 +128,7 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
             }
 
             CONTEXT.set(getStackTrace());
+            assert THREAD_POOL != null;
             THREAD_POOL.execute(() -> {
                 try {
 
@@ -126,26 +143,26 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
                     }
 
                     String sqlId = mappedStatement.getId();
-                    /**
-                     * 这个boundSql会将XML里面所有的#{id,jdbcType=BIGINT} 都解析并替换成 ？
-                     * select * from x where id = #{id,jdbcType=BIGINT}
-                     * 会被解析成 select * from x where id = ？，这个语句就可以用jdbc 的 PrepareStatement 进行编译执行了。
-                     * 然后将对应的javaType、jdbcType 保存起来，在执行SQL时传入statement中。
-                     *
-                     * PreparedStatement statement = connection.prepareStatement(sql)
-                     * statement.setLong(1, excel.getUserId());
-                     * statement.executeBatch();
-                     * connection.commit();
+                    /*
+                      这个boundSql会将XML里面所有的#{id,jdbcType=BIGINT} 都解析并替换成 ？
+                      select * from x where id = #{id,jdbcType=BIGINT}
+                      会被解析成 select * from x where id = ？，这个语句就可以用jdbc 的 PrepareStatement 进行编译执行了。
+                      然后将对应的javaType、jdbcType 保存起来，在执行SQL时传入statement中。
+
+                      PreparedStatement statement = connection.prepareStatement(sql)
+                      statement.setLong(1, excel.getUserId());
+                      statement.executeBatch();
+                      connection.commit();
                      */
                     BoundSql boundSql = mappedStatement.getBoundSql(parameter);
                     Configuration configuration = mappedStatement.getConfiguration();
-                    /**
-                     * 主要耗时在这里，这里会根据parameter，
-                     * 将 select * from x where id = ？ 解析成 select * from x where id = 1
-                     * 对于 insert into X (1,2) values (?,?),(?,?),(?,?),(?,?)这种批量的SQL，这里的解析会特别慢。
-                     * 因为他是挨个挨个把 ？ 替换成对应的参数值。
-                     * 最后拼成SQL insert into X (1,2) values (1,2),(3,4)
-                     * 如果这个是复杂对象（自定义bean），会根据反射一个个进行操作。
+                    /*
+                      主要耗时在这里，这里会根据parameter，
+                      将 select * from x where id = ？ 解析成 select * from x where id = 1
+                      对于 insert into X (1,2) values (?,?),(?,?),(?,?),(?,?)这种批量的SQL，这里的解析会特别慢。
+                      因为他是挨个挨个把 ？ 替换成对应的参数值。
+                      最后拼成SQL insert into X (1,2) values (1,2),(3,4)
+                      如果这个是复杂对象（自定义bean），会根据反射一个个进行操作。
                      */
                     String sql = parseSql(configuration, boundSql);
 
@@ -170,9 +187,9 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     /**
      * 发送异常sql信息
      *
-     * @param exceptionMsg
-     * @param sqlId
-     * @param sql
+     * @param exceptionMsg 异常信息
+     * @param sqlId        sqlId
+     * @param sql          sql
      */
     private void sendSqlExceptionMsg(String sqlId, String sql, String exceptionMsg, long checkTime) {
 
@@ -184,9 +201,9 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     /**
      * 检测慢sql
      *
-     * @param executeTime
-     * @param sqlId
-     * @param sql
+     * @param executeTime 执行时间
+     * @param sqlId       sqlId
+     * @param sql         sql
      */
     private void checkSlowSql(String sqlId, String sql, long executeTime, long checkTime) {
 
@@ -203,7 +220,7 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     /**
      * 发送钉钉消息
      *
-     * @param msg
+     * @param msg 消息
      */
     private void sendMsg(String msg) {
         msg += CONTEXT.get();
@@ -235,12 +252,12 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
             }
 
             // 防止打印信息过多
-            if (!className.startsWith("com.raycloud")) {
+            if (!className.startsWith("com.github.sparkzxl")) {
                 continue;
             }
 
             // 过滤当前方法
-            if (className.equals("com.raycloud.qnee.idpt.commons.plugins.SlowSqlMonitor.intercept")) {
+            if (className.equals(SlowSqlMonitorInterceptor.class.getName())) {
                 continue;
             }
 
@@ -257,28 +274,6 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
         }
 
         return sb.toString();
-    }
-
-    /**
-     * 将对象转换为字符串
-     *
-     * @param obj 对象
-     * @return 字符串
-     */
-    private static String getParameterValue(Object obj) {
-        if (obj instanceof String) {
-            return "'" + obj.toString() + "'";
-        }
-
-        if (obj instanceof Date) {
-            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
-            return "'" + formatter.format(new Date()) + "'";
-        }
-        if (Objects.isNull(obj)) {
-            return StringUtils.EMPTY;
-        }
-
-        return obj.toString();
     }
 
     /**
@@ -349,11 +344,6 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
         return sql.replaceFirst("\\?", Matcher.quoteReplacement(getParameterValue(obj)));
     }
 
-    enum Type {
-        SLOW_SQL,
-        SQL_EXCEPTION
-    }
-
     @Override
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
@@ -361,5 +351,10 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {
+    }
+
+    enum Type {
+        SLOW_SQL,
+        SQL_EXCEPTION
     }
 }

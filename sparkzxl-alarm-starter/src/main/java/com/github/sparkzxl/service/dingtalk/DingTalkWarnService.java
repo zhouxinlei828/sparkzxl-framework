@@ -23,13 +23,11 @@ import java.util.Base64;
 @Slf4j
 public class DingTalkWarnService extends BaseWarnService {
 
-    private Logger logger = LoggerFactory.getLogger(DingTalkWarnService.class);
-
+    private static final String ROBOT_SEND_URL = "https://oapi.dingtalk.com/robot/send?access_token=";
     private final String token;
 
     private final String secret;
-
-    private static final String ROBOT_SEND_URL = "https://oapi.dingtalk.com/robot/send?access_token=";
+    private Logger logger = LoggerFactory.getLogger(DingTalkWarnService.class);
 
     public DingTalkWarnService(String token, String secret) {
         this.token = token;

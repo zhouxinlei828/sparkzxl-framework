@@ -20,27 +20,20 @@ public class Entity<E> implements Serializable {
 
 
     private static final long serialVersionUID = 1932221777234584892L;
-
+    @CreatedBy
+    public String createdBy;
+    @Field(value = "create_user_name")
+    public String createUserName;
+    @CreatedDate
+    public LocalDateTime createdTime;
+    @LastModifiedBy
+    public String updatedBy;
+    @Field(value = "update_user_name")
+    public String updateUserName;
+    @LastModifiedDate
+    public LocalDateTime updatedTime;
     @Id
     @Indexed(unique = true)
     private E id;
-
-    @CreatedBy
-    public String createdBy;
-
-    @Field(value = "create_user_name")
-    public String createUserName;
-
-    @CreatedDate
-    public LocalDateTime createdTime;
-
-    @LastModifiedBy
-    public String updatedBy;
-
-    @Field(value = "update_user_name")
-    public String updateUserName;
-
-    @LastModifiedDate
-    public LocalDateTime updatedTime;
 
 }
