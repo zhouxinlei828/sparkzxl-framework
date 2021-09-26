@@ -20,10 +20,8 @@ import java.util.List;
  * @since 2021-06-30 21:42:08
  */
 @Slf4j
-public final class ReplaceSql {
-
+public class ReplaceSql {
     private ReplaceSql() {
-
     }
 
     public static String replaceSql(String schemaName, String sql) {
@@ -32,31 +30,31 @@ public final class ReplaceSql {
         if (sqlStatement instanceof SQLSelectStatement) {
             SQLSelectStatement sqlSelectStatement = (SQLSelectStatement) sqlStatement;
             SQLSelectQuery sqlSelectQuery = sqlSelectStatement.getSelect().getQuery();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQuery);
         }
         if (sqlStatement instanceof SQLUpdateStatement) {
             SQLUpdateStatement sqlUpdateStatement = (SQLUpdateStatement) sqlStatement;
             SQLTableSource sqlTableSource = sqlUpdateStatement.getTableSource();
-            setSqlSchemaBySqlTableSource(schemaName, sqlTableSource);
+            setSQLSchemaBySqlTableSource(schemaName, sqlTableSource);
             SQLExpr where = sqlUpdateStatement.getWhere();
-            setSqlSchemaBySqlExpr(schemaName, where);
+            setSQLSchemaBySqlExpr(schemaName, where);
         }
         if (sqlStatement instanceof SQLInsertStatement) {
             SQLInsertStatement sqlInsertStatement = (SQLInsertStatement) sqlStatement;
             SQLExprTableSource tableSource = sqlInsertStatement.getTableSource();
-            setSqlSchemaBySqlTableSource(schemaName, tableSource);
+            setSQLSchemaBySqlTableSource(schemaName, tableSource);
         }
         if (sqlStatement instanceof SQLDeleteStatement) {
             SQLDeleteStatement sqlDeleteStatement = (SQLDeleteStatement) sqlStatement;
             SQLTableSource tableSource = sqlDeleteStatement.getTableSource();
-            setSqlSchemaBySqlTableSource(schemaName, tableSource);
+            setSQLSchemaBySqlTableSource(schemaName, tableSource);
             SQLExpr where = sqlDeleteStatement.getWhere();
-            setSqlSchemaBySqlExpr(schemaName, where);
+            setSQLSchemaBySqlExpr(schemaName, where);
         }
-        if (sqlStatement instanceof SQLCreateTableStatement) {
+        if (sqlStatement instanceof SQLCreateStatement) {
             SQLCreateTableStatement sqlCreateStatement = (SQLCreateTableStatement) sqlStatement;
             SQLExprTableSource tableSource = sqlCreateStatement.getTableSource();
-            setSqlSchemaBySqlTableSource(schemaName, tableSource);
+            setSQLSchemaBySqlTableSource(schemaName, tableSource);
         }
         if (sqlStatement instanceof SQLCallStatement) {
             log.info("执行到 存储过程 这里了");
@@ -73,27 +71,27 @@ public final class ReplaceSql {
         return sqlStatement.toString();
     }
 
-    private static void setSqlSchemaBySqlTableSource(String schemaName, SQLTableSource sqlTableSource) {
+    private static void setSQLSchemaBySqlTableSource(String schemaName, SQLTableSource sqlTableSource) {
         if (sqlTableSource instanceof SQLJoinTableSource) {
             SQLJoinTableSource sqlJoinTableSource = (SQLJoinTableSource) sqlTableSource;
             SQLTableSource sqlTableSourceLeft = sqlJoinTableSource.getLeft();
-            setSqlSchemaBySqlTableSource(schemaName, sqlTableSourceLeft);
+            setSQLSchemaBySqlTableSource(schemaName, sqlTableSourceLeft);
             SQLTableSource sqlTableSourceRight = sqlJoinTableSource.getRight();
-            setSqlSchemaBySqlTableSource(schemaName, sqlTableSourceRight);
+            setSQLSchemaBySqlTableSource(schemaName, sqlTableSourceRight);
             SQLExpr condition = sqlJoinTableSource.getCondition();
-            setSqlSchemaBySqlExpr(schemaName, condition);
+            setSQLSchemaBySqlExpr(schemaName, condition);
         }
         if (sqlTableSource instanceof SQLSubqueryTableSource) {
             SQLSubqueryTableSource sqlSubqueryTableSource = (SQLSubqueryTableSource) sqlTableSource;
             SQLSelectQuery sqlSelectQuery = sqlSubqueryTableSource.getSelect().getQuery();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQuery);
         }
         if (sqlTableSource instanceof SQLUnionQueryTableSource) {
             SQLUnionQueryTableSource sqlUnionQueryTableSource = (SQLUnionQueryTableSource) sqlTableSource;
             SQLSelectQuery sqlSelectQueryLeft = sqlUnionQueryTableSource.getUnion().getLeft();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQueryLeft);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQueryLeft);
             SQLSelectQuery sqlSelectQueryRight = sqlUnionQueryTableSource.getUnion().getRight();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQueryRight);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQueryRight);
         }
         if (sqlTableSource instanceof SQLExprTableSource) {
             SQLExprTableSource sqlExprTableSource = (SQLExprTableSource) sqlTableSource;
@@ -101,95 +99,97 @@ public final class ReplaceSql {
             if (sqlObject instanceof MySqlDeleteStatement) {
                 MySqlDeleteStatement mySqlDeleteStatement = (MySqlDeleteStatement) sqlObject;
                 SQLExpr sqlExpr = mySqlDeleteStatement.getWhere();
-                setSqlSchemaBySqlExpr(schemaName, sqlExpr);
+                setSQLSchemaBySqlExpr(schemaName, sqlExpr);
             }
             if (sqlObject instanceof MySqlInsertStatement) {
                 MySqlInsertStatement mySqlInsertStatement = (MySqlInsertStatement) sqlObject;
                 SQLSelect sqlSelect = mySqlInsertStatement.getQuery();
                 if (sqlSelect != null) {
                     SQLSelectQuery sqlSelectQuery = sqlSelect.getQuery();
-                    setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);
+                    setSQLSchemaBySelectQuery(schemaName, sqlSelectQuery);
                 }
             }
             sqlExprTableSource.setSchema(schemaName);
         }
     }
 
-    private static void setSqlSchemaBySqlBinaryExpr(String schemaName, SQLBinaryOpExpr sqlBinaryOpExpr) {
+    private static void setSQLSchemaBySqlBinaryExpr(String schemaName, SQLBinaryOpExpr sqlBinaryOpExpr) {
         SQLExpr sqlExprLeft = sqlBinaryOpExpr.getLeft();
-        setSqlSchemaBySqlExpr(schemaName, sqlExprLeft);
+        setSQLSchemaBySqlExpr(schemaName, sqlExprLeft);
         SQLExpr sqlExprRight = sqlBinaryOpExpr.getRight();
-        setSqlSchemaBySqlExpr(schemaName, sqlExprRight);
+        setSQLSchemaBySqlExpr(schemaName, sqlExprRight);
     }
 
-    private static void setSqlSchemaBySqlExpr(String schemaName, SQLExpr sqlExpr) {
+    private static void setSQLSchemaBySqlExpr(String schemaName, SQLExpr sqlExpr) {
         if (sqlExpr instanceof SQLInSubQueryExpr) {
             SQLInSubQueryExpr sqlInSubQueryExpr = (SQLInSubQueryExpr) sqlExpr;
             SQLSelectQuery sqlSelectQuery = sqlInSubQueryExpr.getSubQuery().getQuery();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQuery);
         }
         if (sqlExpr instanceof SQLExistsExpr) {
             SQLExistsExpr sqlExistsExpr = (SQLExistsExpr) sqlExpr;
             SQLSelectQuery sqlSelectQuery = sqlExistsExpr.getSubQuery().getQuery();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQuery);
         }
         if (sqlExpr instanceof SQLCaseExpr) {
             SQLCaseExpr sqlCaseExpr = (SQLCaseExpr) sqlExpr;
             List<SQLCaseExpr.Item> sqlCaseExprItemList = sqlCaseExpr.getItems();
             for (SQLCaseExpr.Item item : sqlCaseExprItemList) {
                 SQLExpr sqlExprItem = item.getValueExpr();
-                setSqlSchemaBySqlExpr(schemaName, sqlExprItem);
+                setSQLSchemaBySqlExpr(schemaName, sqlExprItem);
             }
         }
         if (sqlExpr instanceof SQLQueryExpr) {
             SQLQueryExpr sqlQueryExpr = (SQLQueryExpr) sqlExpr;
             SQLSelectQuery sqlSelectQuery = sqlQueryExpr.getSubQuery().getQuery();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQuery);
         }
         if (sqlExpr instanceof SQLBinaryOpExpr) {
             SQLBinaryOpExpr sqlBinaryOpExpr = (SQLBinaryOpExpr) sqlExpr;
-            setSqlSchemaBySqlBinaryExpr(schemaName, sqlBinaryOpExpr);
+            setSQLSchemaBySqlBinaryExpr(schemaName, sqlBinaryOpExpr);
         }
         if (sqlExpr instanceof SQLAggregateExpr) {
             SQLAggregateExpr sqlAggregateExpr = (SQLAggregateExpr) sqlExpr;
             List<SQLExpr> arguments = sqlAggregateExpr.getArguments();
             for (SQLExpr argument : arguments) {
-                setSqlSchemaBySqlExpr(schemaName, argument);
+                setSQLSchemaBySqlExpr(schemaName, argument);
             }
         }
     }
 
-    private static void setSqlSchemaBySelectQuery(String schemaName, SQLSelectQuery sqlSelectQuery) {
+    private static void setSQLSchemaBySelectQuery(String schemaName, SQLSelectQuery sqlSelectQuery) {
         if (sqlSelectQuery instanceof SQLUnionQuery) {
             SQLUnionQuery sqlUnionQuery = (SQLUnionQuery) sqlSelectQuery;
             SQLSelectQuery sqlSelectQueryLeft = sqlUnionQuery.getLeft();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQueryLeft);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQueryLeft);
             SQLSelectQuery sqlSelectQueryRight = sqlUnionQuery.getRight();
-            setSqlSchemaBySelectQuery(schemaName, sqlSelectQueryRight);
+            setSQLSchemaBySelectQuery(schemaName, sqlSelectQueryRight);
         }
         if (sqlSelectQuery instanceof SQLSelectQueryBlock) {
             SQLSelectQueryBlock sqlSelectQueryBlock = (SQLSelectQueryBlock) sqlSelectQuery;
             SQLTableSource sqlTableSource = sqlSelectQueryBlock.getFrom();
-            setSqlSchemaBySqlTableSource(schemaName, sqlTableSource);
+            setSQLSchemaBySqlTableSource(schemaName, sqlTableSource);
             SQLExpr whereSqlExpr = sqlSelectQueryBlock.getWhere();
             if (whereSqlExpr instanceof SQLInSubQueryExpr) {
                 SQLInSubQueryExpr sqlInSubQueryExpr = (SQLInSubQueryExpr) whereSqlExpr;
                 SQLSelectQuery sqlSelectQueryIn = sqlInSubQueryExpr.getSubQuery().getQuery();
-                setSqlSchemaBySelectQuery(schemaName, sqlSelectQueryIn);
+                setSQLSchemaBySelectQuery(schemaName, sqlSelectQueryIn);
             }
             if (whereSqlExpr instanceof SQLBinaryOpExpr) {
                 SQLBinaryOpExpr sqlBinaryOpExpr = (SQLBinaryOpExpr) whereSqlExpr;
-                setSqlSchemaBySqlBinaryExpr(schemaName, sqlBinaryOpExpr);
+                setSQLSchemaBySqlBinaryExpr(schemaName, sqlBinaryOpExpr);
             }
             List<SQLSelectItem> sqlSelectItemList = sqlSelectQueryBlock.getSelectList();
             for (SQLSelectItem sqlSelectItem : sqlSelectItemList) {
                 SQLExpr sqlExpr = sqlSelectItem.getExpr();
-                setSqlSchemaBySqlExpr(schemaName, sqlExpr);
+                setSQLSchemaBySqlExpr(schemaName, sqlExpr);
 
                 //函数
-                if (sqlExpr instanceof SQLMethodInvokeExpr && sqlSelectQuery instanceof SQLSelectQueryBlock && ((SQLSelectQueryBlock) sqlSelectQuery).getFrom() == null) {
-                    log.info("执行到 函数 这里了");
-                    ((SQLMethodInvokeExpr) sqlExpr).setOwner(new SQLIdentifierExpr(schemaName));
+                if (sqlExpr instanceof SQLMethodInvokeExpr) {
+                    if (sqlSelectQuery instanceof SQLSelectQueryBlock && ((SQLSelectQueryBlock) sqlSelectQuery).getFrom() == null) {
+                        log.info("执行到 函数 这里了");
+                        ((SQLMethodInvokeExpr) sqlExpr).setOwner(new SQLIdentifierExpr(schemaName));
+                    }
                 }
             }
         }
