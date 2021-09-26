@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
  * description: 请求日志实体类
  *
  * @author zhouxinlei
- * @date 2021-09-25 16:04:19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

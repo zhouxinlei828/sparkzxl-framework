@@ -64,7 +64,7 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT")
     public UidGenerator getDefaultUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
         DefaultUidGenerator uidGenerator = new DefaultUidGenerator();
         BeanUtil.copyProperties(dataProperties.getDefaultId(), uidGenerator);
@@ -93,7 +93,7 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL")
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL", matchIfMissing = true)
     public UidGenerator getHuToolUidGenerator() {
         DataProperties.HutoolId id = dataProperties.getHutoolId();
         return new HuToolUidGenerator(id.getWorkerId(), id.getDataCenterId());

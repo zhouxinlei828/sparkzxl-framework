@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationEvent;
  * description: 请求日志事件
  *
  * @author charles.zhou
- * @date 2021-05-24 12:17:23
  */
 public class HttpRequestLogEvent extends ApplicationEvent {
 

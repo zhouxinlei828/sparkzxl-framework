@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
  * description: 拦截执行时间过长的sql语句并发送钉钉消息
  *
  * @author zhouxinlei
- * @date 2021-09-17 15:21:50
  */
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),

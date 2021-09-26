@@ -9,7 +9,6 @@ import com.baidu.fsg.uid.exception.UidGenerateException;
  * description: 基于Hutool 工具类实现的雪花id生成器
  *
  * @author zhouxinlei
- * @date 2021-09-26 22:18:38
  */
 public class HuToolUidGenerator implements UidGenerator {
     private final Snowflake snowflake;

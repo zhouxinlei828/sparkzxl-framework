@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
  * description: 日志埋点工具类
  *
  * @author zhouxinlei
- * @date 2021-09-25 19:21:42
  */
 @Slf4j
 public final class PointUtil {

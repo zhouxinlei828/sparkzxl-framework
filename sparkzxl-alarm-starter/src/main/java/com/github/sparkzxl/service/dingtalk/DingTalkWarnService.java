@@ -18,7 +18,6 @@ import java.util.Base64;
  * description: 钉钉告警服务实现类
  *
  * @author zhoux
- * @date 2021-08-21 12:12:35
  */
 @Slf4j
 public class DingTalkWarnService extends BaseWarnService {

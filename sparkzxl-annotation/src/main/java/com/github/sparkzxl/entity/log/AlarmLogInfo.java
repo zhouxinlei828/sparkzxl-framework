@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
  * description: 日志告警信息
  *
  * @author zhoux
- * @date 2021-08-21 11:34:12
  */
 @Data
 @NoArgsConstructor

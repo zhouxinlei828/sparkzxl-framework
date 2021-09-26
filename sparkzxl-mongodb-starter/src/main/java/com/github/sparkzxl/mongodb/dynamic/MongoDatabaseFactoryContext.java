@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * description: 动态数据源工厂应用上下文
  *
  * @author zhouxinlei
- * @date 2021-09-02 21:32:10
  */
 @Slf4j
 public class MongoDatabaseFactoryContext implements InitializingBean, DisposableBean {

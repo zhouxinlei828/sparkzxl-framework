@@ -11,7 +11,6 @@ import java.io.Serializable;
  * description: 操作日志实体类
  *
  * @author zhouxinlei
- * @date 2021-09-22 10:59:46
  */
 @Data
 @Accessors(chain = true)

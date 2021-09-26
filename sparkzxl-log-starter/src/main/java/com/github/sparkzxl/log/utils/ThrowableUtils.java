@@ -12,7 +12,6 @@ import java.util.Map;
  * description: 异常处理工具类
  *
  * @author zhouxinlei
- * @date 2021-09-07 20:54:24
  */
 public class ThrowableUtils {
 

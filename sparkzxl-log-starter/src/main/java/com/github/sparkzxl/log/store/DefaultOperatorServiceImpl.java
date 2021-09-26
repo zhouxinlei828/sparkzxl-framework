@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
  * description: 获取操作人 服务实现类
  *
  * @author zhouxinlei
- * @date 2021-09-22 11:10:13
  */
 @Slf4j
 public class DefaultOperatorServiceImpl implements IOperatorService {

@@ -12,7 +12,6 @@ import java.util.Map;
  * description: 动态数据源配置属性
  *
  * @author zhouxinlei
- * @date 2021-09-02 08:43:30
  */
 @Data
 @ConfigurationProperties(prefix = ConfigurationConstant.DYNAMIC_MONGO_PREFIX)
@@ -53,7 +52,6 @@ public class DynamicMongoProperties {
      * description:  MongoDB数据源属性类
      *
      * @author zhouxinlei
-     * @date 2021-09-03 13:29:25
      */
     @Data
     public static class MongoDatabaseProperty {

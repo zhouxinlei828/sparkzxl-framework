@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * description: 全局异常状态注解
  *
  * @author zhouxinlei
- * @date 2021-08-25 08:35:38
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

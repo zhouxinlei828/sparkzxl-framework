@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
  * description: mongodb 插入时间监听
  *
  * @author zhouxinlei
- * @date 2021-08-28 19:23:46
  */
 public class MongoInsertEventListener extends AbstractMongoEventListener<Entity> {
 

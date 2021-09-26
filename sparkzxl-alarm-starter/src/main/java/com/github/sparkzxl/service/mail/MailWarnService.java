@@ -15,8 +15,7 @@ import java.util.Properties;
 /**
  * description: 邮件告警服务实现类
  *
- * @author zhoux
- * @date 2021-08-21 11:54:27
+ * @author zhouxinlei
  */
 public class MailWarnService extends BaseWarnService {
 

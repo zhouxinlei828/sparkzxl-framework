@@ -20,7 +20,6 @@ import java.net.SocketTimeoutException;
  * description: Springboot WEB应用全局异常处理
  *
  * @author zhouxinlei
- * @date 2021-08-25 12:05:06
  */
 @Slf4j
 @ResponseResultStatus

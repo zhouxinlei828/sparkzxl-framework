@@ -9,7 +9,6 @@ import java.util.List;
  * description: 日志告警全局信息
  *
  * @author zhoux
- * @date 2021-08-22 09:35:44
  */
 public class AlarmLogContext {
 

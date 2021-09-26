@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
  * description: 日志告警Appender
  *
  * @author zhoux
- * @date 2021-08-21 13:19:52
  */
 public class LogAlarmLogbackAsyncAppender extends AsyncAppender {
 

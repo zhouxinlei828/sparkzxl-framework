@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
  * description: 日志企业微信告警服务实现类
  *
  * @author zhoux
- * @date 2021-08-21 12:11:31
  */
 public class WorkWeXinWarnService extends BaseWarnService {
 

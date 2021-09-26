@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * description: 异步监听请求日志
  *
  * @author charles.zhou
- * @date 2021-05-24 12:19:34
  */
 @Slf4j
 @RequiredArgsConstructor

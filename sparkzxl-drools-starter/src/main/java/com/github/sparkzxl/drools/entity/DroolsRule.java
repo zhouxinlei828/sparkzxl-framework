@@ -8,7 +8,6 @@ import lombok.Data;
  * description: drools 规则父类
  *
  * @author zhouxinlei
- * @date 2021-08-05 15:51:27
  */
 @ApiModel(value = "DroolsRule", description = "drools规则父类")
 @Data

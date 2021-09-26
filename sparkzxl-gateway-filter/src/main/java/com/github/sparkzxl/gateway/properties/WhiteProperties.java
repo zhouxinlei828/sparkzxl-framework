@@ -10,7 +10,6 @@ import java.util.List;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-08-06 09:38:34
  */
 @Data
 @ConfigurationProperties(prefix = ConfigurationConstant.BLACK_PREFIX)

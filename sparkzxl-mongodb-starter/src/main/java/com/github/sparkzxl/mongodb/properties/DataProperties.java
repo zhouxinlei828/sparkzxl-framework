@@ -10,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * description: MongoDB配置属性
  *
  * @author zhouxinlei
- * @date 2021-09-02 08:43:30
  */
 @Data
 @ConfigurationProperties(prefix = ConfigurationConstant.MONGO_PREFIX)

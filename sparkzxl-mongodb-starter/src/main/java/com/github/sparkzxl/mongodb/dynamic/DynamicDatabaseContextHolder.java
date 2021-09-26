@@ -25,7 +25,6 @@ import java.util.Deque;
  * description: 核心基于ThreadLocal的切换数据源工具类
  *
  * @author zhouxinlei
- * @date 2021-09-02 11:01:25
  */
 public final class DynamicDatabaseContextHolder {
 

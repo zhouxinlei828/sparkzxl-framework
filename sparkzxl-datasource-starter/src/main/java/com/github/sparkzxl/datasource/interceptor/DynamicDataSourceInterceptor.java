@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
  * description: 动态数据源拦截器
  *
  * @author zhoux
- * @date 2021-08-07 11:25:16
  */
 @Slf4j
 public class DynamicDataSourceInterceptor implements HandlerInterceptor {

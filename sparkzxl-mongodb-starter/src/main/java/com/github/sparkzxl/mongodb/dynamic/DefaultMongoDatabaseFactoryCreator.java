@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
  * description: 默认数据源工厂构造实现
  *
  * @author zhouxinlei
- * @date 2021-09-01 18:10:48
  */
 @Slf4j
 public class DefaultMongoDatabaseFactoryCreator implements MongoDatabaseFactoryCreator {
