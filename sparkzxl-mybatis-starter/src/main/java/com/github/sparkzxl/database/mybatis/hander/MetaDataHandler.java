@@ -1,18 +1,23 @@
 package com.github.sparkzxl.database.mybatis.hander;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
+import com.baidu.fsg.uid.UidGenerator;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.github.sparkzxl.constant.EntityConstant;
-import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.ReflectObjectUtil;
+import com.github.sparkzxl.core.utils.StrPool;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -26,9 +31,7 @@ import java.util.Date;
 @Setter
 public class MetaDataHandler implements MetaObjectHandler {
 
-    private IdTypeEnum idType;
-
-    private Snowflake snowflake;
+    private UidGenerator uidGenerator;
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -48,7 +51,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         log.debug("start update fill ....");
         Object targetObject = metaObject.getOriginalObject();
         // 主键
-        extractId(metaObject, targetObject, idType, EntityConstant.ID);
+        extractId(metaObject, targetObject, EntityConstant.ID);
         // 创建人Id
         extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER);
         extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER_ID);
@@ -93,27 +96,52 @@ public class MetaDataHandler implements MetaObjectHandler {
      *
      * @param metaObject   元对象
      * @param targetObject 目标对象
-     * @param idType       生成类型
      * @param field        用户id属性
      */
-    private void extractId(MetaObject metaObject, Object targetObject, IdTypeEnum idType, String field) {
+    private void extractId(MetaObject metaObject, Object targetObject, String field) {
         boolean idExistClass = ReflectObjectUtil.existProperty(targetObject, field);
         if (idExistClass) {
+            if (uidGenerator == null) {
+                // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
+                uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
+            }
+            Long id = uidGenerator.getUid();
             Object idVal = ReflectObjectUtil.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(idVal)) {
-                if (idType.equals(IdTypeEnum.RANDOM_UUID)) {
-                    idVal = IdUtil.randomUUID();
-                } else if (idType.equals(IdTypeEnum.SIMPLE_UUID)) {
-                    idVal = IdUtil.simpleUUID();
-                } else if (idType.equals(IdTypeEnum.OBJECT_Id)) {
-                    idVal = IdUtil.objectId();
-                } else if (idType.equals(IdTypeEnum.SNOWFLAKE_ID)) {
-                    Long id = snowflake.nextId();
-                    Class<?> idClass = metaObject.getGetterType(field);
-                    idVal = String.class.getName().equals(idClass.getTypeName()) ? String.valueOf(id) : snowflake.nextId();
-                }
+                idVal = String.class.getName().equals(metaObject.getGetterType(field).getTypeName()) ? String.valueOf(id) : id;
                 this.setFieldValByName(field, idVal, metaObject);
             }
+        } else {
+            if (uidGenerator == null) {
+                // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
+                uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
+            }
+            Long id = uidGenerator.getUid();
+            TableInfo tableInfo = TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
+            if (tableInfo == null) {
+                return;
+            }
+            // 主键类型
+            Class<?> keyType = tableInfo.getKeyType();
+            if (keyType == null) {
+                return;
+            }
+            // id 字段名
+            String keyProperty = tableInfo.getKeyProperty();
+            Object oldId = metaObject.getValue(keyProperty);
+            if (oldId != null) {
+                return;
+            }
+
+            // 反射得到 主键的值
+            Field idField = ReflectUtil.getField(metaObject.getOriginalObject().getClass(), keyProperty);
+            Object fieldValue = ReflectUtil.getFieldValue(metaObject.getOriginalObject(), idField);
+            // 判断ID 是否有值，有值就不
+            if (ObjectUtil.isNotEmpty(fieldValue)) {
+                return;
+            }
+            Object idVal = keyType.getName().equalsIgnoreCase(StrPool.STRING_TYPE_NAME) ? String.valueOf(id) : id;
+            this.setFieldValByName(keyProperty, idVal, metaObject);
         }
     }
 

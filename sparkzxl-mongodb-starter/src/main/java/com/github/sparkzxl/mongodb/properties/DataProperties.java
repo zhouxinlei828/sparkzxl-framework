@@ -19,7 +19,7 @@ public class DataProperties {
     /**
      * 主键生成策略
      */
-    private IdTypeEnum idType = IdTypeEnum.SNOWFLAKE_ID;
+    private IdTypeEnum idType = IdTypeEnum.HU_TOOL;
 
     /**
      * 多租户模式

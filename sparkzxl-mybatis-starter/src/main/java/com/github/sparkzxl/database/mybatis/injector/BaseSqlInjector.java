@@ -22,9 +22,9 @@ public class BaseSqlInjector extends DefaultSqlInjector {
         List<AbstractMethod> methodList = super.getMethodList(mapperClass);
         //增加自定义方法
         methodList.add(new DeleteAll());
-        /**
-         * 以下 3 个为内置选装件
-         * 头 2 个支持字段筛选函数
+        /*
+          以下 3 个为内置选装件
+          头 2 个支持字段筛选函数
          */
         // 例: 不要指定了 update 填充的字段
         methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));

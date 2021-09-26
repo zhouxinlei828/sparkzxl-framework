@@ -16,6 +16,10 @@
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-uid</artifactId>
+        </dependency>
         <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>

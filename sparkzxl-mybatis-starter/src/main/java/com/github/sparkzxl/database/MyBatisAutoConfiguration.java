@@ -1,7 +1,16 @@
 package com.github.sparkzxl.database;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ReflectUtil;
+import com.baidu.fsg.uid.UidGenerator;
+import com.baidu.fsg.uid.buffer.RejectedPutBufferHandler;
+import com.baidu.fsg.uid.buffer.RejectedTakeBufferHandler;
+import com.baidu.fsg.uid.impl.CachedUidGenerator;
+import com.baidu.fsg.uid.impl.DefaultUidGenerator;
+import com.baidu.fsg.uid.impl.HuToolUidGenerator;
+import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
@@ -9,7 +18,6 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.github.sparkzxl.constant.ConfigurationConstant;
-import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
@@ -52,6 +60,44 @@ public class MyBatisAutoConfiguration {
     public static final String DATABASE_PREFIX = "default";
     private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
+
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT", matchIfMissing = true)
+    public UidGenerator getDefaultUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
+        DefaultUidGenerator uidGenerator = new DefaultUidGenerator();
+        BeanUtil.copyProperties(dataProperties.getDefaultId(), uidGenerator);
+        uidGenerator.setWorkerIdAssigner(disposableWorkerIdAssigner);
+        return uidGenerator;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "CACHE")
+    public UidGenerator getCacheUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
+        CachedUidGenerator uidGenerator = new CachedUidGenerator();
+        DataProperties.CacheId cacheId = dataProperties.getCacheId();
+        BeanUtil.copyProperties(cacheId, uidGenerator);
+        if (cacheId.getRejectedPutBufferHandlerClass() != null) {
+            RejectedPutBufferHandler rejectedPutBufferHandler = ReflectUtil.newInstance(cacheId.getRejectedPutBufferHandlerClass());
+            uidGenerator.setRejectedPutBufferHandler(rejectedPutBufferHandler);
+        }
+        if (cacheId.getRejectedTakeBufferHandlerClass() != null) {
+            RejectedTakeBufferHandler rejectedTakeBufferHandler = ReflectUtil.newInstance(cacheId.getRejectedTakeBufferHandlerClass());
+            uidGenerator.setRejectedTakeBufferHandler(rejectedTakeBufferHandler);
+        }
+        uidGenerator.setWorkerIdAssigner(disposableWorkerIdAssigner);
+        return uidGenerator;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL")
+    public UidGenerator getHuToolUidGenerator() {
+        DataProperties.HutoolId id = dataProperties.getHutoolId();
+        return new HuToolUidGenerator(id.getWorkerId(), id.getDataCenterId());
+    }
 
     /**
      * 多租户插件配置,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存万一出现问题
@@ -121,12 +167,7 @@ public class MyBatisAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public MetaObjectHandler metaDataHandler() {
-        MetaDataHandler metaDataHandler = new MetaDataHandler();
-        metaDataHandler.setIdType(dataProperties.getIdType());
-        if (IdTypeEnum.SNOWFLAKE_ID.equals(dataProperties.getIdType())) {
-            metaDataHandler.setSnowflake(snowflake());
-        }
-        return metaDataHandler;
+        return new MetaDataHandler();
     }
 
     @Bean

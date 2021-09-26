@@ -35,7 +35,8 @@
         <swagger-models.version>1.5.22</swagger-models.version>
 
         <!-- datasource-->
-        <mybatis-plus.version>3.4.3.4</mybatis-plus.version>
+        <mybatis.version>3.5.7</mybatis.version>
+        <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
         <druid.version>1.2.6</druid.version>
         <pagehelper-spring-boot-starter.version>1.3.1</pagehelper-spring-boot-starter.version>
@@ -122,6 +123,7 @@
         <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-annotation</module>
         <module>sparkzxl-datasource-starter</module>
+        <module>sparkzxl-uid</module>
     </modules>
 
     <distributionManagement>
@@ -265,6 +267,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-uid</artifactId>
+                <version>${sparkzxl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-user-starter</artifactId>
                 <version>${sparkzxl.version}</version>
             </dependency>
@@ -277,6 +284,11 @@
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-zookeeper-starter</artifactId>
                 <version>${sparkzxl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>
