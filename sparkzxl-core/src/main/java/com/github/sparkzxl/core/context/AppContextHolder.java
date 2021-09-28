@@ -111,15 +111,15 @@ public class AppContextHolder {
     }
 
     public static String getTenant() {
-        return get(AppContextConstants.TENANT, String.class, StrPool.EMPTY);
+        return get(AppContextConstants.TENANT_ID, String.class, StrPool.EMPTY);
     }
 
     public static void setTenant(String val) {
-        set(AppContextConstants.TENANT, val);
+        set(AppContextConstants.TENANT_ID, val);
     }
 
     public static String getClientId() {
-        return get(AppContextConstants.TENANT, String.class);
+        return get(AppContextConstants.TENANT_ID, String.class);
     }
 
     public static void setClientId(String val) {

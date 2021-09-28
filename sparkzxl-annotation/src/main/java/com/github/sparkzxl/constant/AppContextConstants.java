@@ -57,7 +57,7 @@ public class AppContextConstants {
     /**
      * 租户标识
      */
-    public static final String TENANT = "tenant";
+    public static final String TENANT_ID = "tenantId";
     /**
      * 租户状态
      */

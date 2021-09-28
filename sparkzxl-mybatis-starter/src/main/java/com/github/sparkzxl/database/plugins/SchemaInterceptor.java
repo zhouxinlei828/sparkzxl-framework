@@ -34,12 +34,12 @@ public class SchemaInterceptor implements InnerInterceptor {
 
     protected String changeTable(String sql) {
         // 想要 执行sql时， 不切换到 sparkzxl_auth_{TENANT} 库, 请直接返回null
-        String tenantCode = AppContextHolder.getTenant();
-        if (StrUtil.isEmpty(tenantCode)) {
+        String tenantId = AppContextHolder.getTenant();
+        if (StrUtil.isEmpty(tenantId)) {
             return sql;
         }
 
-        String schemaName = StrUtil.format("{}_{}", tenantDatabasePrefix, tenantCode);
+        String schemaName = StrUtil.format("{}_{}", tenantDatabasePrefix, tenantId);
         // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
         return ReplaceSql.replaceSql(schemaName, sql);
     }

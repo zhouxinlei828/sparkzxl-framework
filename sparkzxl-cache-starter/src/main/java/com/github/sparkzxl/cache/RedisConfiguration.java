@@ -5,8 +5,6 @@ import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.cache.template.RedisCacheImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,6 +15,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -38,7 +37,7 @@ public class RedisConfiguration {
      */
     @Bean
     @ConditionalOnBean(RedisConnectionFactory.class)
-    public RedisTemplate<String, Object> redisTemplate(@Autowired RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
@@ -69,8 +68,17 @@ public class RedisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RedisOps redisOps(@Qualifier("redisTemplate") RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
+    public RedisOps redisOps(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
         return new RedisOps(redisTemplate, stringRedisTemplate, true);
+    }
+
+    @Bean
+    @ConditionalOnBean(RedisConnectionFactory.class)
+    @ConditionalOnMissingBean
+    RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
+        RedisMessageListenerContainer messageListenerContainer = new RedisMessageListenerContainer();
+        messageListenerContainer.setConnectionFactory(redisConnectionFactory);
+        return messageListenerContainer;
     }
 
 }

@@ -29,13 +29,13 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         //设置当前请求线程全局信息
-        AppContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, AppContextConstants.TENANT));
+        AppContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, AppContextConstants.TENANT_ID));
         AppContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, AppContextConstants.JWT_KEY_USER_ID));
         AppContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, AppContextConstants.JWT_KEY_ACCOUNT));
         AppContextHolder.setName(RequestContextHolderUtils.getHeader(request, AppContextConstants.JWT_KEY_NAME));
         String traceId = request.getHeader(AppContextConstants.TRACE_ID_HEADER);
         MDC.put(AppContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? IdUtil.fastSimpleUUID() : traceId);
-        MDC.put(AppContextConstants.TENANT, RequestContextHolderUtils.getHeader(request, AppContextConstants.TENANT));
+        MDC.put(AppContextConstants.TENANT_ID, RequestContextHolderUtils.getHeader(request, AppContextConstants.TENANT_ID));
         MDC.put(AppContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, AppContextConstants.JWT_KEY_USER_ID));
         Boolean feign = Convert.toBool(request.getHeader(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (feign) {

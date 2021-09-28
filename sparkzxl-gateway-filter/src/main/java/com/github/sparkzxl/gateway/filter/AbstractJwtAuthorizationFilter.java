@@ -37,9 +37,9 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         ServerHttpResponse response = exchange.getResponse();
         ServerHttpRequest.Builder mutate = request.mutate();
         String requestUrl = request.getPath().toString();
-        String tenantId = WebFluxUtils.getHeader(AppContextConstants.TENANT, request);
+        String tenantId = WebFluxUtils.getHeader(AppContextConstants.TENANT_ID, request);
         log.info("请求租户id：[{}]，请求接口：[{}]", tenantId, requestUrl);
-        WebFluxUtils.addHeader(mutate, AppContextConstants.TENANT, tenantId);
+        WebFluxUtils.addHeader(mutate, AppContextConstants.TENANT_ID, tenantId);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
         if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
@@ -62,10 +62,10 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                     WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
                     WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
                     WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
-                    String tenant = WebFluxUtils.getHeader(AppContextConstants.TENANT, request);
-                    WebFluxUtils.addHeader(mutate, AppContextConstants.TENANT, StringUtils.isEmpty(tenant) ? jwtUserInfo.getTenant() : tenant);
+                    tenantId = WebFluxUtils.getHeader(AppContextConstants.TENANT_ID, request);
+                    WebFluxUtils.addHeader(mutate, AppContextConstants.TENANT_ID, StringUtils.isEmpty(tenantId) ? jwtUserInfo.getTenantId() : tenantId);
                     MDC.put(AppContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
-                    MDC.put(AppContextConstants.TENANT, String.valueOf(tenantId));
+                    MDC.put(AppContextConstants.TENANT_ID, String.valueOf(tenantId));
                 }
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();

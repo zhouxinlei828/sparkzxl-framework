@@ -31,7 +31,7 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String tenantId = RequestContextHolderUtils.getHeader(AppContextConstants.TENANT);
+        String tenantId = RequestContextHolderUtils.getHeader(AppContextConstants.TENANT_ID);
         DynamicDataSourceContextHolder.poll();
         log.info("当前租户Id:{}", tenantId);
         if (StringUtils.isNotBlank(tenantId)) {
