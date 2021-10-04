@@ -30,6 +30,8 @@ public class ConfigurationConstant {
 
     public static final String RESOURCE_PREFIX = "sparkzxl.oauth2.resource";
 
+    public static final String GATEWAY_RESOURCE_PREFIX = "gateway.resource";
+
     public static final String OSS_PREFIX = "oss";
 
     public static final String SECURITY_PREFIX = "security";

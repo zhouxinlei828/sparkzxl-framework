@@ -91,6 +91,10 @@ public class AppContextConstants {
      */
     public static final String LOG_TRACE_ID = "tid";
     /**
+     * 角色资源常量
+     */
+    public static final String RESOURCE_ROLES_MAP = "auth:resource_roles_map";
+    /**
      * 登录账户 前缀
      * 完整key: authUser:{key} -> str
      */

@@ -2,6 +2,7 @@ package com.github.sparkzxl.gateway;
 
 import com.github.sparkzxl.gateway.filter.TraceFilter;
 import com.github.sparkzxl.gateway.filter.WhiteListFilter;
+import com.github.sparkzxl.gateway.properties.ResourceProperties;
 import com.github.sparkzxl.gateway.properties.WhiteProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @author zhouxinlei
  */
 @Configuration
-@EnableConfigurationProperties({WhiteProperties.class})
+@EnableConfigurationProperties({WhiteProperties.class, ResourceProperties.class})
 public class GatewayAutoConfig {
 
     @Bean

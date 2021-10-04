@@ -3,11 +3,10 @@ package com.github.sparkzxl.gateway.filter;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.constant.AppContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.support.BaseException;
-import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import com.github.sparkzxl.core.utils.SwaggerStaticResource;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.gateway.support.GatewayAuthenticationException;
 import com.github.sparkzxl.gateway.utils.WebFluxUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +56,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
             }
             token = StringUtils.removeStartIgnoreCase(token, AppContextConstants.BEARER_TOKEN);
             try {
-                JwtUserInfo jwtUserInfo = verifyToken(token);
+                JwtUserInfo jwtUserInfo = checkTokenAuthority(token, exchange);
                 if (jwtUserInfo != null) {
                     WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
                     WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
@@ -69,8 +68,8 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
                 }
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
-            } catch (BaseException e) {
-                log.error("jwt 获取用户发生异常：[{}]", ExceptionUtil.getMessage(e));
+            } catch (GatewayAuthenticationException e) {
+                log.error("网关鉴权发生异常：[{}]", ExceptionUtil.getMessage(e));
                 return WebFluxUtils.errorResponse(response, e.getCode(), e.getMessage());
             }
         }
@@ -111,10 +110,10 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         exchange.mutate().request(serverHttpRequest).build();
     }
 
-    protected JwtUserInfo verifyToken(String token) throws BaseException {
+    protected JwtUserInfo checkTokenAuthority(String token, ServerWebExchange exchange) throws GatewayAuthenticationException {
         JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new JwtExpireException(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
+            throw new GatewayAuthenticationException(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
         }
         return jwtUserInfo;
     }
@@ -124,8 +123,8 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
      *
      * @param token token值
      * @return JwtUserInfo
-     * @throws BaseException 异常
+     * @throws GatewayAuthenticationException 异常
      */
-    public abstract JwtUserInfo getJwtUserInfo(String token) throws BaseException;
+    public abstract JwtUserInfo getJwtUserInfo(String token) throws GatewayAuthenticationException;
 
 }
