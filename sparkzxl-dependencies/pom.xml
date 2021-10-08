@@ -86,7 +86,6 @@
         <vavr.version>1.0.0-alpha-3</vavr.version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <jsqlparser.version>4.1</jsqlparser.version>
-        <xsx.slf4j.version>1.4.6</xsx.slf4j.version>
         <antisamy.version>1.5.10</antisamy.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
@@ -635,17 +634,6 @@
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>wiki.xsx</groupId>
-                <artifactId>slf4j-spring-boot-starter</artifactId>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-aop</artifactId>
-                    </exclusion>
-                </exclusions>
-                <version>${xsx.slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.owasp.antisamy</groupId>
