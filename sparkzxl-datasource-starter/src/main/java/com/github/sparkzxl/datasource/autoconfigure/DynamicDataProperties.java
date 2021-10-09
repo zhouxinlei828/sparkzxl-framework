@@ -1,5 +1,6 @@
 package com.github.sparkzxl.datasource.autoconfigure;
 
+import com.github.sparkzxl.datasource.constant.DataSourceProviderEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -15,4 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DynamicDataProperties {
 
     private boolean enabled = true;
+
+    private DataSourceProviderEnum dataProvider = DataSourceProviderEnum.MEMORY;
+
 }

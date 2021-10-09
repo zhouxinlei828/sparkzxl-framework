@@ -22,10 +22,9 @@ import java.util.Optional;
 @Configuration
 @EnableConfigurationProperties(DynamicDataProperties.class)
 @Slf4j
-public class WebConfig implements WebMvcConfigurer {
+public class DynamicDataSourceAutoConfig implements WebMvcConfigurer {
 
     public static final String DEFAULT_DYNAMIC_DATASOURCE_INTERCEPTOR_NAME = "dynamicDataSourceInterceptor";
-
 
     private DynamicDataProperties dynamicDataProperties;
 
@@ -38,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
             matchIfMissing = true)
     @Bean(name = DEFAULT_DYNAMIC_DATASOURCE_INTERCEPTOR_NAME)
     public DynamicDataSourceInterceptor dynamicDataSourceInterceptor() {
-        return new DynamicDataSourceInterceptor();
+        return new DynamicDataSourceInterceptor(tenantId -> null);
     }
 
     @Override

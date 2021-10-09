@@ -47,7 +47,7 @@ public class ExceptionAssert {
     /**
      * 是否不为空 一个不为空则返回true
      */
-    static Then isNotNull(Object... param) {
+    public static Then isNotNull(Object... param) {
         boolean flag = false;
         for (Object o : param) {
             if (o != null) {
@@ -61,7 +61,7 @@ public class ExceptionAssert {
     /**
      * 是否不为空 一个为空则返回true
      */
-    static Then isNull(Object... param) {
+    public static Then isNull(Object... param) {
         boolean flag = false;
         for (Object o : param) {
             if (o == null) {
@@ -75,35 +75,35 @@ public class ExceptionAssert {
     /**
      * 如果不相等则返回true
      */
-    static Then isNotEqual(Object arg1, Object arg2) {
+    public static Then isNotEqual(Object arg1, Object arg2) {
         return new Then(Objects.equals(arg1, arg2));
     }
 
     /**
      * 如果相等则返回true
      */
-    static Then isEqual(Object arg1, Object arg2) {
+    public static Then isEqual(Object arg1, Object arg2) {
         return new Then(!Objects.equals(arg1, arg2));
     }
 
     /**
      * 如果为true则返回true
      */
-    static Then isTrue(boolean expression) {
+    public static Then isTrue(boolean expression) {
         return new Then(expression);
     }
 
     /**
      * 如果为false则返回true
      */
-    static Then isFalse(boolean expression) {
+    public static Then isFalse(boolean expression) {
         return new Then(expression);
     }
 
     /**
      * 判断对象是否为空
      */
-    static <T> Then isEmpty(T param) {
+    public static <T> Then isEmpty(T param) {
         return new Then(StringHandlerUtil.isBlank(param));
     }
 }
