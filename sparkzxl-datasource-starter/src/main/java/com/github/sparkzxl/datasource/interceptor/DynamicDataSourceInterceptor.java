@@ -68,8 +68,8 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
             } else {
                 ExceptionAssert.isTrue(dynamicDataProperties.getDataProvider().equals(DataSourceProviderEnum.MEMORY)).withRuntimeException(new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
             }
-            DynamicDataSourceContextHolder.push(tenantId);
         }
+        DynamicDataSourceContextHolder.push(tenantId);
         return true;
     }
 
