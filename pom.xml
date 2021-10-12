@@ -76,7 +76,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <easy-excel.version>2.2.10</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.2.14</retrofit-spring-boot-starter.version>
-        <xxl-job.version>2.2.0</xxl-job.version>
+        <xxl-job.version>2.3.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
