@@ -14,6 +14,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = ConfigurationConstant.OSS_PREFIX)
 public class OssProperties {
 
+    private boolean enabled = false;
+
     /**
      * 对象存储服务的URL
      */
@@ -22,7 +24,7 @@ public class OssProperties {
     /**
      * 自定义域名
      */
-    private String customDomain;
+    private String domain;
 
     /**
      * true path-style nginx 反向代理和S3默认支持 pathStyle {http://endpoint/bucketname} false
