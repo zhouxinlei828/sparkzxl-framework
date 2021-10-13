@@ -1,5 +1,6 @@
 package com.github.sparkzxl.oss.service;
 
+import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.SdkClientException;
@@ -7,23 +8,29 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.policy.Policy;
+import com.amazonaws.auth.policy.Principal;
+import com.amazonaws.auth.policy.Statement;
+import com.amazonaws.auth.policy.actions.S3Actions;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.oss.AmazonS3Load;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * aws-s3 通用存储操作 支持所有兼容s3协议的云存储: {阿里云OSS，腾讯云COS，七牛云，京东云，minio 等}
@@ -31,11 +38,44 @@ import java.util.*;
  * @author zhouxinlei
  */
 @RequiredArgsConstructor
-public class OssTemplate implements InitializingBean {
+public class OssTemplate implements AmazonS3Load {
 
-    private final OssProperties ossProperties;
+    private OssProperties ossProperties;
+    private final String AMAZONS3_INSTANCE = "amazons3_instance";
 
-    private AmazonS3 amazonS3;
+    private final Supplier<OssProperties> ossPropertiesSupplier;
+
+    public void setOssProperties(OssProperties ossProperties) {
+        this.ossProperties = ossProperties;
+    }
+
+    public OssProperties getOssProperties() {
+        return ossPropertiesSupplier.get();
+    }
+
+    @Override
+    public AmazonS3 amazonS3Instance() {
+        OssProperties ossProperties = ossPropertiesSupplier.get();
+        setOssProperties(ossProperties);
+        if (ossProperties.isEnabled()) {
+            AmazonS3 amazonS3 = AppContextHolder.get(AMAZONS3_INSTANCE, AmazonS3.class);
+            Optional.ofNullable(amazonS3).orElseGet(() -> {
+                ClientConfiguration clientConfiguration = new ClientConfiguration();
+                AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(
+                        ossProperties.getEndpoint(), ossProperties.getRegion().getName());
+                AWSCredentials awsCredentials = new BasicAWSCredentials(ossProperties.getAccessKey(),
+                        ossProperties.getSecretKey());
+                AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
+                AmazonS3 build = AmazonS3Client.builder().withEndpointConfiguration(endpointConfiguration)
+                        .withClientConfiguration(clientConfiguration).withCredentials(awsCredentialsProvider)
+                        .disableChunkedEncoding().withPathStyleAccessEnabled(ossProperties.getPathStyleAccess()).build();
+                AppContextHolder.set(AMAZONS3_INSTANCE, build);
+                return build;
+            });
+            return amazonS3;
+        }
+        throw new AmazonS3Exception("未能加载到oss配置");
+    }
 
     /**
      * 创建bucket
@@ -44,8 +84,20 @@ public class OssTemplate implements InitializingBean {
      */
     @SneakyThrows
     public void createBucket(String bucketName) {
+        AmazonS3 amazonS3 = amazonS3Instance();
         if (!amazonS3.doesBucketExistV2(bucketName)) {
+            Statement allowPublicReadStatement = new Statement(Statement.Effect.Allow)
+                    .withPrincipals(Principal.AllUsers)
+                    .withActions(S3Actions.GetObject)
+                    .withResources(new com.amazonaws.auth.policy.resources.S3ObjectResource(bucketName, "*"));
+            Statement allowRestrictedWriteStatement = new Statement(Statement.Effect.Allow)
+                    .withPrincipals(new Principal(ossProperties.getAccessKey()))
+                    .withActions(S3Actions.PutObject)
+                    .withResources(new com.amazonaws.auth.policy.resources.S3ObjectResource(bucketName, "*"));
+            Policy policy = new Policy()
+                    .withStatements(allowPublicReadStatement, allowRestrictedWriteStatement);
             amazonS3.createBucket((bucketName));
+            amazonS3.setBucketPolicy(bucketName, policy.toJson());
         }
     }
 
@@ -58,7 +110,7 @@ public class OssTemplate implements InitializingBean {
      */
     @SneakyThrows
     public List<Bucket> getAllBuckets() {
-        return amazonS3.listBuckets();
+        return amazonS3Instance().listBuckets();
     }
 
     /**
@@ -68,7 +120,7 @@ public class OssTemplate implements InitializingBean {
      */
     @SneakyThrows
     public Optional<Bucket> getBucket(String bucketName) {
-        return amazonS3.listBuckets().stream().filter(b -> b.getName().equals(bucketName)).findFirst();
+        return amazonS3Instance().listBuckets().stream().filter(b -> b.getName().equals(bucketName)).findFirst();
     }
 
     /**
@@ -79,7 +131,7 @@ public class OssTemplate implements InitializingBean {
      */
     @SneakyThrows
     public void removeBucket(String bucketName) {
-        amazonS3.deleteBucket(bucketName);
+        amazonS3Instance().deleteBucket(bucketName);
     }
 
     /**
@@ -89,7 +141,7 @@ public class OssTemplate implements InitializingBean {
      * @return List<Grant>
      */
     public List<Grant> getGrantsAsList(String bucketName) {
-        AccessControlList acl = amazonS3.getBucketAcl(bucketName);
+        AccessControlList acl = amazonS3Instance().getBucketAcl(bucketName);
         return acl.getGrantsAsList();
     }
 
@@ -102,6 +154,7 @@ public class OssTemplate implements InitializingBean {
      * @see com.amazonaws.services.s3.model.Permission
      */
     public void setGrantsAsList(String bucketName, String email, Permission permission) {
+        AmazonS3 amazonS3 = amazonS3Instance();
         AccessControlList acl = amazonS3.getBucketAcl(bucketName);
         EmailAddressGrantee grantee = new EmailAddressGrantee(email);
         acl.grantPermission(grantee, permission);
@@ -120,7 +173,7 @@ public class OssTemplate implements InitializingBean {
      */
     @SneakyThrows
     public List<S3ObjectSummary> getAllObjectsByPrefix(String bucketName, String prefix, boolean recursive) {
-        ObjectListing objectListing = amazonS3.listObjects(bucketName, prefix);
+        ObjectListing objectListing = amazonS3Instance().listObjects(bucketName, prefix);
         return new ArrayList<>(objectListing.getObjectSummaries());
     }
 
@@ -139,19 +192,20 @@ public class OssTemplate implements InitializingBean {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, expires);
-        URL url = amazonS3.generatePresignedUrl(bucketName, objectName, calendar.getTime());
+        URL url = amazonS3Instance().generatePresignedUrl(bucketName, objectName, calendar.getTime());
         return replaceHttpDomain(url);
     }
 
     private String replaceHttpDomain(URL url) {
         String objectUrl = url.toString();
-        String customDomain = ossProperties.getCustomDomain();
-        if (StringUtils.isNotEmpty(customDomain)) {
-            String host = URLUtil.getHost(url).toString();
-            if (!StringUtils.startsWithAny(customDomain, StrPool.HTTP, StrPool.HTTPS)) {
-                customDomain = "https://".concat(customDomain);
-            }
-            objectUrl = objectUrl.replace(host, customDomain);
+        String domain = ossProperties.getDomain();
+        if (StringUtils.isNotEmpty(domain)) {
+            String buildUrl = UrlBuilder.create()
+                    .setScheme(url.getProtocol())
+                    .setHost(url.getHost())
+                    .setPort(url.getPort()).build();
+            UrlBuilder urlBuilder = UrlBuilder.ofHttp(domain, Charset.defaultCharset());
+            objectUrl = objectUrl.replace(buildUrl, urlBuilder.build());
         }
         return URLUtil.decode(objectUrl);
     }
@@ -162,8 +216,7 @@ public class OssTemplate implements InitializingBean {
     }
 
     public String getObjectUrl(String bucketName, String objectName) {
-        URL url = amazonS3.getUrl(bucketName, objectName);
-        return replaceHttpDomain(url);
+        return replaceHttpDomain(amazonS3Instance().getUrl(bucketName, objectName));
     }
 
     /**
@@ -177,7 +230,7 @@ public class OssTemplate implements InitializingBean {
      */
     @SneakyThrows
     public S3Object getObject(String bucketName, String objectName) {
-        return amazonS3.getObject(bucketName, objectName);
+        return amazonS3Instance().getObject(bucketName, objectName);
     }
 
     /**
@@ -213,16 +266,17 @@ public class OssTemplate implements InitializingBean {
         objectMetadata.setContentType(contentType);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         // 上传
-        return amazonS3.putObject(bucketName, objectName, byteArrayInputStream, objectMetadata);
+        return amazonS3Instance().putObject(bucketName, objectName, byteArrayInputStream, objectMetadata);
 
     }
 
     public UploadPartResult uploadPart(UploadPartRequest uploadPartRequest) throws SdkClientException {
-        return amazonS3.uploadPart(uploadPartRequest);
+        return amazonS3Instance().uploadPart(uploadPartRequest);
     }
 
     @SneakyThrows
     public CompleteMultipartUploadResult multipartUpload(String bucketName, String objectName, String path) {
+        AmazonS3 amazonS3 = amazonS3Instance();
         //创建InitiateMultipartUploadRequest对象
         InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(bucketName, objectName);
         // 初始化分片
@@ -277,7 +331,7 @@ public class OssTemplate implements InitializingBean {
         //创建InitiateMultipartUploadRequest对象
         InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(bucketName, objectName);
         // 初始化分片
-        InitiateMultipartUploadResult initiateMultipartUploadResult = amazonS3.initiateMultipartUpload(initiateMultipartUploadRequest);
+        InitiateMultipartUploadResult initiateMultipartUploadResult = amazonS3Instance().initiateMultipartUpload(initiateMultipartUploadRequest);
         // 返回uploadId，它是分片上传事件的唯一标识，您可以根据这个uploadId发起相关的操作，如取消分片上传、查询分片上传等。
         String uploadId = initiateMultipartUploadResult.getUploadId();
 
@@ -315,7 +369,7 @@ public class OssTemplate implements InitializingBean {
         }
         CompleteMultipartUploadRequest completeMultipartUploadRequest =
                 new CompleteMultipartUploadRequest(bucketName, objectName, uploadId, partTagList);
-        return amazonS3.completeMultipartUpload(completeMultipartUploadRequest);
+        return amazonS3Instance().completeMultipartUpload(completeMultipartUploadRequest);
     }
 
     @SneakyThrows
@@ -323,7 +377,7 @@ public class OssTemplate implements InitializingBean {
         //创建InitiateMultipartUploadRequest对象
         InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(bucketName, objectName);
         // 初始化分片
-        InitiateMultipartUploadResult initiateMultipartUploadResult = amazonS3.initiateMultipartUpload(initiateMultipartUploadRequest);
+        InitiateMultipartUploadResult initiateMultipartUploadResult = amazonS3Instance().initiateMultipartUpload(initiateMultipartUploadRequest);
         // 返回uploadId，它是分片上传事件的唯一标识，您可以根据这个uploadId发起相关的操作，如取消分片上传、查询分片上传等。
         String uploadId = initiateMultipartUploadResult.getUploadId();
 
@@ -349,7 +403,7 @@ public class OssTemplate implements InitializingBean {
      * API Documentation</a>
      */
     public S3Object getObjectInfo(String bucketName, String objectName) {
-        return amazonS3.getObject(bucketName, objectName);
+        return amazonS3Instance().getObject(bucketName, objectName);
     }
 
     /**
@@ -362,26 +416,12 @@ public class OssTemplate implements InitializingBean {
      * Documentation</a>
      */
     public void removeObject(String bucketName, String objectName) {
-        amazonS3.deleteObject(bucketName, objectName);
+        amazonS3Instance().deleteObject(bucketName, objectName);
     }
 
     public void removeObjects(String bucketName, String... objectName) {
         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName)
                 .withKeys(objectName);
-        amazonS3.deleteObjects(deleteObjectsRequest);
+        amazonS3Instance().deleteObjects(deleteObjectsRequest);
     }
-
-    @Override
-    public void afterPropertiesSet() {
-        ClientConfiguration clientConfiguration = new ClientConfiguration();
-        AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(
-                ossProperties.getEndpoint(), ossProperties.getRegion().getName());
-        AWSCredentials awsCredentials = new BasicAWSCredentials(ossProperties.getAccessKey(),
-                ossProperties.getSecretKey());
-        AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
-        this.amazonS3 = AmazonS3Client.builder().withEndpointConfiguration(endpointConfiguration)
-                .withClientConfiguration(clientConfiguration).withCredentials(awsCredentialsProvider)
-                .disableChunkedEncoding().withPathStyleAccessEnabled(ossProperties.getPathStyleAccess()).build();
-    }
-
 }
