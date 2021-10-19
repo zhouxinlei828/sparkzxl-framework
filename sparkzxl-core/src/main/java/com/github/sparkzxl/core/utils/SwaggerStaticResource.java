@@ -15,7 +15,7 @@ public class SwaggerStaticResource {
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/swagger/**",
-            "/**/v2/api-docs",
+            "/v2/api-docs",
             "/v3/api-docs",
             "/**/*.js",
             "/**/*.css",

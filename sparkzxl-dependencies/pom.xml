@@ -23,7 +23,7 @@
         <spring-boot-dependencies.version>2.3.9.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
         <servlet-api.version>4.0.1</servlet-api.version>
-        <knife4j.version>2.0.8</knife4j.version>
+        <knife4j.version>2.0.9</knife4j.version>
         <springfox.version>2.10.5</springfox.version>
         <swagger-models.version>1.5.22</swagger-models.version>
 

@@ -53,7 +53,7 @@ public enum ApiResponseStatus implements BusinessEnumSysAssert {
 
     AUTHORIZED_FAIL(HttpStatus.HTTP_UNAUTHORIZED, "授权失败，请重新尝试"),
 
-    AUTHORIZED_DENIED(HttpStatus.HTTP_FORBIDDEN, "该资源无权限访问"),
+    AUTHORIZED_DENIED(HttpStatus.HTTP_FORBIDDEN, "无权限访问"),
 
     /**
      * 404 没找到请求
