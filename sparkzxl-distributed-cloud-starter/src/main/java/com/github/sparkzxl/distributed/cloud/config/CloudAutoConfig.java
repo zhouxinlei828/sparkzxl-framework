@@ -29,7 +29,7 @@ public class CloudAutoConfig {
     }
 
     @Bean
-    public NacosDiscoveryProperties nacosDiscoveryProperties() {
+    public NacosDiscoveryProperties nacosProperties() {
         NacosDiscoveryProperties nacosDiscoveryProperties = new NacosDiscoveryProperties();
         Map<String, String> metadata = nacosDiscoveryProperties.getMetadata();
         metadata.put("startup.time", DateUtils.formatDateTime(new Date()));
