@@ -1,17 +1,23 @@
 package com.github.sparkzxl.distributed.cloud.loadbalancer;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import com.alibaba.cloud.nacos.NacosServiceManager;
+import com.alibaba.cloud.nacos.ribbon.ExtendBalancer;
+import com.alibaba.cloud.nacos.ribbon.NacosRule;
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
+import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHolder;
-import com.netflix.loadbalancer.ILoadBalancer;
-import com.netflix.loadbalancer.RoundRobinRule;
+import com.netflix.loadbalancer.DynamicServerListLoadBalancer;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -23,69 +29,57 @@ import java.util.stream.Collectors;
  * @date 2021-10-21 14:52:49
  */
 @Slf4j
-public class TopChoiceVersionIsolationRule extends RoundRobinRule {
+public class TopChoiceVersionIsolationRule extends NacosRule {
 
-    private final AtomicInteger nextServerCyclicCounter;
-
-    public TopChoiceVersionIsolationRule() {
-        this.nextServerCyclicCounter = new AtomicInteger(0);
-    }
+    @Autowired
+    private NacosDiscoveryProperties nacosDiscoveryProperties;
+    @Autowired
+    private NacosServiceManager nacosServiceManager;
 
     /**
      * 优先根据版本号取实例
      */
     @Override
-    public Server choose(ILoadBalancer lb, Object key) {
-        if (lb == null) {
+    public Server choose(Object key) {
+        try {
+            String clusterName = this.nacosDiscoveryProperties.getClusterName();
+            String group = this.nacosDiscoveryProperties.getGroup();
+            DynamicServerListLoadBalancer loadBalancer = (DynamicServerListLoadBalancer) this.getLoadBalancer();
+            String name = loadBalancer.getName();
+            NamingService namingService = this.nacosServiceManager.getNamingService(this.nacosDiscoveryProperties.getNacosProperties());
+            List<Instance> instances = namingService.selectInstances(name, group, true);
+            if (CollectionUtils.isEmpty(instances)) {
+                log.warn("no instance in service {}", name);
+                return null;
+            } else {
+                List<Instance> instancesToChoose = instances;
+                if (StringUtils.isNotBlank(clusterName)) {
+                    List<Instance> sameClusterInstances = instances.stream().filter((instance) -> Objects.equals(clusterName, instance.getClusterName())).collect(Collectors.toList());
+                    if (!CollectionUtils.isEmpty(sameClusterInstances)) {
+                        instancesToChoose = sameClusterInstances;
+                    } else {
+                        log.warn("A cross-cluster call occurs，name = {}, clusterName = {}, instance = {}", new Object[]{name, clusterName, instances});
+                    }
+                }
+                // 判断版本号是否存在
+                String version = BaseContextHolder.get(BaseContextConstants.REQUEST_VERSION);
+                List<Instance> targetInstanceList = null;
+                if (StringUtils.isNotBlank(version)) {
+                    //取指定版本号的实例
+                    targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
+                            .collect(Collectors.toList());
+                }
+                if (CollectionUtils.isEmpty(targetInstanceList)) {
+                    //只取无版本号的实例
+                    targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
+                            .collect(Collectors.toList());
+                }
+                Instance instance = ExtendBalancer.getHostByRandomWeight2(targetInstanceList);
+                return new NacosServer(instance);
+            }
+        } catch (Exception e) {
+            log.warn("TopChoiceVersionIsolationRule error", e);
             return null;
         }
-        String version = BaseContextHolder.get(BaseContextConstants.REQUEST_VERSION);
-        List<Server> targetList = null;
-        List<Server> upList = lb.getReachableServers();
-        if (StrUtil.isNotEmpty(version)) {
-            //取指定版本号的实例
-            targetList = upList.stream().filter(
-                    server -> version.equals(
-                            ((NacosServer) server).getMetadata().get(BaseContextConstants.REQUEST_VERSION)
-                    )
-            ).collect(Collectors.toList());
-        }
-
-        if (CollUtil.isEmpty(targetList)) {
-            //只取无版本号的实例
-            targetList = upList.stream().filter(
-                    server -> {
-                        String metadataVersion = ((NacosServer) server).getMetadata().get(BaseContextConstants.REQUEST_VERSION);
-                        return StrUtil.isEmpty(metadataVersion);
-                    }
-            ).collect(Collectors.toList());
-        }
-
-        if (CollUtil.isNotEmpty(targetList)) {
-            return getServer(targetList);
-        }
-        return super.choose(lb, key);
     }
-
-    /**
-     * 随机取一个实例
-     */
-    private Server getServer(List<Server> upList) {
-        int nextServerIndex = this.incrementAndGetModulo(upList.size());
-        Server server = upList.get(nextServerIndex);
-        log.info("请求服务实例ip:{}", server.getHostPort());
-        return server;
-    }
-
-    private int incrementAndGetModulo(int modulo) {
-        int current;
-        int next;
-        do {
-            current = this.nextServerCyclicCounter.get();
-            next = (current + 1) % modulo;
-        } while (!this.nextServerCyclicCounter.compareAndSet(current, next));
-
-        return next;
-    }
-
 }
