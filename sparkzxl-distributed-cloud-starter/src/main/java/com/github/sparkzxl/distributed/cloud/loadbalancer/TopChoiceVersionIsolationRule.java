@@ -1,7 +1,6 @@
 package com.github.sparkzxl.distributed.cloud.loadbalancer;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.github.sparkzxl.constant.BaseContextConstants;
@@ -12,6 +11,7 @@ import com.netflix.loadbalancer.Server;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +24,12 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class TopChoiceVersionIsolationRule extends RoundRobinRule {
+
+    private final AtomicInteger nextServerCyclicCounter;
+
+    public TopChoiceVersionIsolationRule() {
+        this.nextServerCyclicCounter = new AtomicInteger(0);
+    }
 
     /**
      * 优先根据版本号取实例
@@ -65,9 +71,21 @@ public class TopChoiceVersionIsolationRule extends RoundRobinRule {
      * 随机取一个实例
      */
     private Server getServer(List<Server> upList) {
-        int nextInt = RandomUtil.randomInt(upList.size());
-        Server server = upList.get(nextInt);
+        int nextServerIndex = this.incrementAndGetModulo(upList.size());
+        Server server = upList.get(nextServerIndex);
         log.info("请求服务实例ip:{}", server.getHostPort());
         return server;
     }
+
+    private int incrementAndGetModulo(int modulo) {
+        int current;
+        int next;
+        do {
+            current = this.nextServerCyclicCounter.get();
+            next = (current + 1) % modulo;
+        } while (!this.nextServerCyclicCounter.compareAndSet(current, next));
+
+        return next;
+    }
+
 }
