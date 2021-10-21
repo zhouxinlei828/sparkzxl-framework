@@ -1,7 +1,7 @@
 package com.github.sparkzxl.distributed.cloud.http;
 
-import com.github.sparkzxl.constant.AppContextConstants;
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,9 +30,9 @@ import java.util.List;
 public class RestTemplateHeaderInterceptor implements ClientHttpRequestInterceptor {
 
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            AppContextConstants.TENANT_ID, AppContextConstants.JWT_KEY_USER_ID,
-            AppContextConstants.JWT_KEY_ACCOUNT, AppContextConstants.JWT_KEY_NAME,
-            AppContextConstants.TRACE_ID_HEADER, AppContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
+            BaseContextConstants.TENANT_ID, BaseContextConstants.JWT_KEY_USER_ID,
+            BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
+            BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
     );
 
     @Override
@@ -43,7 +43,7 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> httpHeaders.add(headerName, AppContextHolder.get(headerName)));
+            HEADER_NAME_LIST.forEach((headerName) -> httpHeaders.add(headerName, BaseContextHolder.get(headerName)));
             return execution.execute(request, bytes);
         }
 
@@ -54,7 +54,7 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
             String header = httpServletRequest.getHeader(headerName);
-            httpHeaders.add(headerName, StringUtils.isEmpty(header) ? AppContextHolder.get(headerName) : header);
+            httpHeaders.add(headerName, StringUtils.isEmpty(header) ? BaseContextHolder.get(headerName) : header);
         });
         return execution.execute(request, bytes);
     }

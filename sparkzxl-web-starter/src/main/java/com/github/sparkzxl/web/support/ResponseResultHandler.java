@@ -2,7 +2,7 @@ package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.result.ResponseResult;
-import com.github.sparkzxl.constant.AppContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -33,7 +33,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(AppContextConstants.RESPONSE_RESULT_ANN);
+        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
 
@@ -50,8 +50,8 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         Object returnBody = body;
         int code = ApiResponseStatus.SUCCESS.getCode();
         String message = ApiResponseStatus.SUCCESS.getMessage();
-        String attribute = (String) RequestContextHolderUtils.getAttribute(AppContextConstants.EXCEPTION_ATTR_MSG);
-        Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
+        String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
+        Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (fallback) {
             code = ApiResponseStatus.SERVICE_DEGRADATION.getCode();
             message = ApiResponseStatus.SERVICE_DEGRADATION.getMessage();

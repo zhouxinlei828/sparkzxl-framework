@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mongodb.aware;
 
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
 
@@ -16,6 +16,6 @@ public class AuditAwareImpl implements AuditorAware<String> {
     @NonNull
     @Override
     public Optional<String> getCurrentAuditor() {
-        return Optional.of(AppContextHolder.getUserId(String.class));
+        return Optional.of(BaseContextHolder.getUserId(String.class));
     }
 }

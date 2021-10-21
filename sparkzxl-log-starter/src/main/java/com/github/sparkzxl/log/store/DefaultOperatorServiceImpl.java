@@ -1,6 +1,6 @@
 package com.github.sparkzxl.log.store;
 
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,11 +13,11 @@ public class DefaultOperatorServiceImpl implements IOperatorService {
 
     @Override
     public String getUserId() {
-        return AppContextHolder.getUserId(String.class);
+        return BaseContextHolder.getUserId(String.class);
     }
 
     @Override
     public String getUserName() {
-        return AppContextHolder.getName();
+        return BaseContextHolder.getName();
     }
 }

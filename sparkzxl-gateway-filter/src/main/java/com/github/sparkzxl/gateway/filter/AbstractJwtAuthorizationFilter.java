@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.constant.AppContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResponseStatus;
 import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import com.github.sparkzxl.core.utils.SwaggerStaticResource;
@@ -36,9 +36,9 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         ServerHttpResponse response = exchange.getResponse();
         ServerHttpRequest.Builder mutate = request.mutate();
         String requestUrl = request.getPath().toString();
-        String tenantId = WebFluxUtils.getHeader(AppContextConstants.TENANT_ID, request);
+        String tenantId = WebFluxUtils.getHeader(BaseContextConstants.TENANT_ID, request);
         log.info("请求租户id：[{}]，请求接口：[{}]", tenantId, requestUrl);
-        WebFluxUtils.addHeader(mutate, AppContextConstants.TENANT_ID, tenantId);
+        WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT_ID, tenantId);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
         // 校验是否需要拦截地址
         if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
@@ -51,20 +51,20 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         if (StringUtils.isEmpty(token)) {
             return handleTokenEmpty(exchange, chain, token);
         } else {
-            if (token.startsWith(AppContextConstants.BASIC_AUTH)) {
+            if (token.startsWith(BaseContextConstants.BASIC_AUTH)) {
                 return chain.filter(exchange);
             }
-            token = StringUtils.removeStartIgnoreCase(token, AppContextConstants.BEARER_TOKEN);
+            token = StringUtils.removeStartIgnoreCase(token, BaseContextConstants.BEARER_TOKEN);
             try {
                 JwtUserInfo jwtUserInfo = checkTokenAuthority(token, exchange);
                 if (jwtUserInfo != null) {
-                    WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
-                    WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
-                    WebFluxUtils.addHeader(mutate, AppContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
-                    tenantId = WebFluxUtils.getHeader(AppContextConstants.TENANT_ID, request);
-                    WebFluxUtils.addHeader(mutate, AppContextConstants.TENANT_ID, StringUtils.isEmpty(tenantId) ? jwtUserInfo.getTenantId() : tenantId);
-                    MDC.put(AppContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
-                    MDC.put(AppContextConstants.TENANT_ID, String.valueOf(tenantId));
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
+                    tenantId = WebFluxUtils.getHeader(BaseContextConstants.TENANT_ID, request);
+                    WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT_ID, StringUtils.isEmpty(tenantId) ? jwtUserInfo.getTenantId() : tenantId);
+                    MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
+                    MDC.put(BaseContextConstants.TENANT_ID, String.valueOf(tenantId));
                 }
                 ServerHttpRequest serverHttpRequest = mutate.build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
@@ -106,7 +106,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
     }
 
     protected void clearTokenRequest(ServerWebExchange exchange) {
-        ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().header(AppContextConstants.JWT_TOKEN_HEADER, "").build();
+        ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
         exchange.mutate().request(serverHttpRequest).build();
     }
 

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.github.sparkzxl.constant.AppContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.TimeUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
@@ -74,7 +74,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         authToken.setAccessToken(createJwtToken(authUserDetail));
         authToken.setExpiration(seconds);
         authToken.setAuthUserInfo(authUserInfo);
-        authToken.setTokenType(AppContextConstants.BEARER_TOKEN);
+        authToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
         accessToken(authToken, authUserInfo);
         return authToken;

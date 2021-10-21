@@ -1,6 +1,6 @@
 package com.github.sparkzxl.feign.utils;
 
-import com.github.sparkzxl.constant.AppContextConstants;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 
 /**
@@ -11,6 +11,6 @@ import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 public class ServiceDegradeUtils {
 
     public static void fallBack() {
-        RequestContextHolderUtils.setAttribute(AppContextConstants.FALLBACK, Boolean.TRUE);
+        RequestContextHolderUtils.setAttribute(BaseContextConstants.FALLBACK, Boolean.TRUE);
     }
 }

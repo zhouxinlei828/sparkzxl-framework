@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.database.parsers.ReplaceSql;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
@@ -34,7 +34,7 @@ public class SchemaInterceptor implements InnerInterceptor {
 
     protected String changeTable(String sql) {
         // 想要 执行sql时， 不切换到 sparkzxl_auth_{TENANT} 库, 请直接返回null
-        String tenantId = AppContextHolder.getTenant();
+        String tenantId = BaseContextHolder.getTenant();
         if (StrUtil.isEmpty(tenantId)) {
             return sql;
         }

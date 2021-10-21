@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.github.sparkzxl.constant.EntityConstant;
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.ReflectObjectUtil;
 import com.github.sparkzxl.core.utils.StrPool;
@@ -159,7 +159,7 @@ public class MetaDataHandler implements MetaObjectHandler {
             Object userIdVal = ReflectObjectUtil.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(userIdVal) || userIdVal.equals(0)) {
                 Class<?> userIdClass = metaObject.getGetterType(field);
-                userIdVal = AppContextHolder.getUserId(userIdClass);
+                userIdVal = BaseContextHolder.getUserId(userIdClass);
                 this.setFieldValByName(field, userIdVal, metaObject);
             }
         }
@@ -177,7 +177,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         if (userNameExistClass) {
             Object userNameVal = ReflectObjectUtil.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(userNameVal)) {
-                userNameVal = AppContextHolder.getName();
+                userNameVal = BaseContextHolder.getName();
                 this.setFieldValByName(field, userNameVal, metaObject);
             }
         }
