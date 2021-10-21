@@ -3,12 +3,14 @@ package com.github.sparkzxl.distributed.cloud.loadbalancer;
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.cloud.nacos.NacosServiceManager;
 import com.alibaba.cloud.nacos.ribbon.ExtendBalancer;
-import com.alibaba.cloud.nacos.ribbon.NacosRule;
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.google.common.collect.Lists;
+import com.netflix.client.config.IClientConfig;
+import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.DynamicServerListLoadBalancer;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ import java.util.stream.Collectors;
  * @date 2021-10-21 14:52:49
  */
 @Slf4j
-public class TopChoiceVersionIsolationRule extends NacosRule {
+public class PreferredVersionRule extends AbstractLoadBalancerRule {
 
     @Autowired
     private NacosDiscoveryProperties nacosDiscoveryProperties;
@@ -58,12 +60,12 @@ public class TopChoiceVersionIsolationRule extends NacosRule {
                     if (!CollectionUtils.isEmpty(sameClusterInstances)) {
                         instancesToChoose = sameClusterInstances;
                     } else {
-                        log.warn("A cross-cluster call occurs，name = {}, clusterName = {}, instance = {}", new Object[]{name, clusterName, instances});
+                        log.warn("A cross-cluster call occurs，name = {}, clusterName = {}, instance = {}", name, clusterName, instances);
                     }
                 }
                 // 判断版本号是否存在
                 String version = BaseContextHolder.get(BaseContextConstants.REQUEST_VERSION);
-                List<Instance> targetInstanceList = null;
+                List<Instance> targetInstanceList = Lists.newArrayList();
                 if (StringUtils.isNotBlank(version)) {
                     //取指定版本号的实例
                     targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
@@ -74,12 +76,23 @@ public class TopChoiceVersionIsolationRule extends NacosRule {
                     targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
                             .collect(Collectors.toList());
                 }
+                if (CollectionUtils.isEmpty(targetInstanceList)) {
+                    // 取所有的实例
+                    targetInstanceList = instancesToChoose;
+                }
                 Instance instance = ExtendBalancer.getHostByRandomWeight2(targetInstanceList);
+                log.warn("请求实例名：{}, clusterName = {}, instance = {}", name, instance.getClusterName(), instance.getIp().concat(":").concat(String.valueOf(instance.getPort())));
                 return new NacosServer(instance);
+
             }
         } catch (Exception e) {
-            log.warn("TopChoiceVersionIsolationRule error", e);
+            log.warn("PreferredVersionRule error", e);
             return null;
         }
+    }
+
+    @Override
+    public void initWithNiwsConfig(IClientConfig iClientConfig) {
+
     }
 }
