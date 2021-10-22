@@ -67,17 +67,17 @@ public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
                     }
                 }
                 List<Instance> targetInstanceList = Lists.newArrayList();
+                String version = BaseContextHolder.getVersion();
                 if (loadBalancerRuleProperties.isEnabled()) {
                     // 判断版本号是否存在
-                    String version = BaseContextHolder.getRequestVersion();
                     if (StringUtils.isNotBlank(version)) {
                         //取指定版本号的实例
-                        targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
+                        targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.VERSION)))
                                 .collect(Collectors.toList());
                     }
                     if (CollectionUtils.isEmpty(targetInstanceList)) {
                         //只取无版本号的实例
-                        targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
+                        targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.VERSION)))
                                 .collect(Collectors.toList());
                     }
                 }
@@ -86,7 +86,7 @@ public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
                     targetInstanceList = instancesToChoose;
                 }
                 Instance instance = ExtendBalancer.getHostByRandomWeight2(targetInstanceList);
-                log.warn("请求实例名：{}, clusterName = {}, instance = {}", name, instance.getClusterName(), instance.getIp().concat(":").concat(String.valueOf(instance.getPort())));
+                log.warn("请求实例 = {}, version = {}, instance = {}", name, version, instance.getIp().concat(":").concat(String.valueOf(instance.getPort())));
                 return new NacosServer(instance);
 
             }

@@ -104,6 +104,6 @@ public class BaseContextConstants {
      */
     public static String AUTH_USER_TOKEN = "login_user_token";
 
-    public static final String REQUEST_VERSION = "request-version";
+    public static final String VERSION = "version";
 
 }

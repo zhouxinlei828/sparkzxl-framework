@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 @Slf4j
 public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
@@ -33,7 +32,7 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
         BaseContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
         BaseContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
         BaseContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
-        BaseContextHolder.setRequestVersion(RequestContextHolderUtils.getHeader(request, BaseContextConstants.REQUEST_VERSION));
+        BaseContextHolder.setVersion(RequestContextHolderUtils.getHeader(request, BaseContextConstants.VERSION));
         String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
         MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? IdUtil.fastSimpleUUID() : traceId);
         MDC.put(BaseContextConstants.TENANT_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT_ID));

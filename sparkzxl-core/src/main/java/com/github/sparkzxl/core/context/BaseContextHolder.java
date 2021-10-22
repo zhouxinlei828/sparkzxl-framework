@@ -118,12 +118,12 @@ public class BaseContextHolder {
         set(BaseContextConstants.TENANT_ID, val);
     }
 
-    public static void setRequestVersion(String val) {
-        set(BaseContextConstants.REQUEST_VERSION, val);
+    public static void setVersion(String val) {
+        set(BaseContextConstants.VERSION, val);
     }
 
-    public static String getRequestVersion() {
-        return get(BaseContextConstants.REQUEST_VERSION, String.class);
+    public static String getVersion() {
+        return get(BaseContextConstants.VERSION, String.class);
     }
 
     public static void setClientId(String val) {
