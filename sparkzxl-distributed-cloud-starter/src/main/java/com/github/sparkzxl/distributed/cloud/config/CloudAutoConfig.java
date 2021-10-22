@@ -6,6 +6,7 @@ import com.github.sparkzxl.distributed.cloud.loadbalancer.PreferredVersionIsolat
 import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +28,7 @@ public class CloudAutoConfig {
      * @return PreferredVersionRule
      */
     @Bean
+    @RefreshScope
     @ConditionalOnProperty(name = "ribbon.isolation.enabled", havingValue = "true")
     public PreferredVersionIsolationRule preferredVersionIsolationRule() {
         return new PreferredVersionIsolationRule();
