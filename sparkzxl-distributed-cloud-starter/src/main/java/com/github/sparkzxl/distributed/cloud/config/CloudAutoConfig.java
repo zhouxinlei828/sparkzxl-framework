@@ -2,8 +2,9 @@ package com.github.sparkzxl.distributed.cloud.config;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.github.sparkzxl.core.utils.DateUtils;
-import com.github.sparkzxl.distributed.cloud.event.CloudApplicationInitRunner;
-import com.github.sparkzxl.distributed.cloud.loadbalancer.PreferredVersionRule;
+import com.github.sparkzxl.distributed.cloud.loadbalancer.PreferredVersionIsolationRule;
+import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,16 +17,17 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Configuration
+@EnableConfigurationProperties(LoadBalancerRuleProperties.class)
 public class CloudAutoConfig {
 
+    /**
+     * 版本隔离优先选择负载均衡规则
+     *
+     * @return PreferredVersionRule
+     */
     @Bean
-    public CloudApplicationInitRunner cloudApplicationInitRunner() {
-        return new CloudApplicationInitRunner();
-    }
-
-    @Bean
-    public PreferredVersionRule preferredVersionRule() {
-        return new PreferredVersionRule();
+    public PreferredVersionIsolationRule preferredVersionIsolationRule() {
+        return new PreferredVersionIsolationRule();
     }
 
     @Bean

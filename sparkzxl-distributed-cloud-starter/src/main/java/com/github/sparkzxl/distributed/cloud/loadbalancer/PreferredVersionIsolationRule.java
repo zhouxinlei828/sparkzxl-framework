@@ -8,6 +8,7 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
 import com.google.common.collect.Lists;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
@@ -23,7 +24,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * description: 版本优先选择负载均衡规则
+ * description: 版本隔离优先选择负载均衡规则
  * 开发A访问时，请求的所有路由优先调用开发A本机启动的实例，如果没有则调用服务器上的实例
  * 开发B访问时同上，请求的所有路由优先调用开发B本机启动的实例，如果没有则调用服务器上的实例
  *
@@ -31,12 +32,14 @@ import java.util.stream.Collectors;
  * @date 2021-10-21 14:52:49
  */
 @Slf4j
-public class PreferredVersionRule extends AbstractLoadBalancerRule {
+public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
 
     @Autowired
     private NacosDiscoveryProperties nacosDiscoveryProperties;
     @Autowired
     private NacosServiceManager nacosServiceManager;
+    @Autowired
+    private LoadBalancerRuleProperties loadBalancerRuleProperties;
 
     /**
      * 优先根据版本号取实例
@@ -63,18 +66,20 @@ public class PreferredVersionRule extends AbstractLoadBalancerRule {
                         log.warn("A cross-cluster call occurs，name = {}, clusterName = {}, instance = {}", name, clusterName, instances);
                     }
                 }
-                // 判断版本号是否存在
-                String version = BaseContextHolder.get(BaseContextConstants.REQUEST_VERSION);
                 List<Instance> targetInstanceList = Lists.newArrayList();
-                if (StringUtils.isNotBlank(version)) {
-                    //取指定版本号的实例
-                    targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
-                            .collect(Collectors.toList());
-                }
-                if (CollectionUtils.isEmpty(targetInstanceList)) {
-                    //只取无版本号的实例
-                    targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
-                            .collect(Collectors.toList());
+                if (loadBalancerRuleProperties.isEnabled()) {
+                    // 判断版本号是否存在
+                    String version = BaseContextHolder.get(BaseContextConstants.REQUEST_VERSION);
+                    if (StringUtils.isNotBlank(version)) {
+                        //取指定版本号的实例
+                        targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
+                                .collect(Collectors.toList());
+                    }
+                    if (CollectionUtils.isEmpty(targetInstanceList)) {
+                        //只取无版本号的实例
+                        targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))
+                                .collect(Collectors.toList());
+                    }
                 }
                 if (CollectionUtils.isEmpty(targetInstanceList)) {
                     // 取所有的实例

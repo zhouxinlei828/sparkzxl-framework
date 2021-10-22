@@ -48,4 +48,6 @@ public class ConfigurationConstant {
 
     public static final String MONGO_PREFIX = "spring.data.mongodb";
 
+    public static final String RIBBON_PREFIX = "ribbon.isolation";
+
 }
