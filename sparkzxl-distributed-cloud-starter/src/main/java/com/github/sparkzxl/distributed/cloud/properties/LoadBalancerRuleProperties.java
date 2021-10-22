@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * description: 动态数据源配置类
+ * description: 负载均衡配置类
  *
  * @author zhouxinlei
  */
