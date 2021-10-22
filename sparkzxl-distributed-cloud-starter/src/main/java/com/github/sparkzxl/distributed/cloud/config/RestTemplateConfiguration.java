@@ -52,7 +52,7 @@ public class RestTemplateConfiguration {
     }
 
     @Bean
-    @Profile({"docker", "uat", "prod"})
+    @Profile({"uat", "pre", "prod"})
     Logger.Level prodFeignLoggerLevel() {
         return Logger.Level.BASIC;
     }

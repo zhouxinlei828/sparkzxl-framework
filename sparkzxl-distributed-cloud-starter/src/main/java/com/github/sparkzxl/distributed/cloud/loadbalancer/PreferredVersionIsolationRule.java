@@ -69,7 +69,7 @@ public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
                 List<Instance> targetInstanceList = Lists.newArrayList();
                 if (loadBalancerRuleProperties.isEnabled()) {
                     // 判断版本号是否存在
-                    String version = BaseContextHolder.get(BaseContextConstants.REQUEST_VERSION);
+                    String version = BaseContextHolder.getRequestVersion();
                     if (StringUtils.isNotBlank(version)) {
                         //取指定版本号的实例
                         targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.REQUEST_VERSION)))

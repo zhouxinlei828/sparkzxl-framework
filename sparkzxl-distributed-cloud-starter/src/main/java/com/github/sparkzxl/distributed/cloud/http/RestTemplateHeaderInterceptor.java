@@ -32,7 +32,8 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
             BaseContextConstants.TENANT_ID, BaseContextConstants.JWT_KEY_USER_ID,
             BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
-            BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
+            BaseContextConstants.REQUEST_VERSION,
+            BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", com.google.common.net.HttpHeaders.X_FORWARDED_FOR
     );
 
     @Override

@@ -41,9 +41,7 @@ public abstract class AbstractJwtAuthorizationFilter implements GlobalFilter, Or
         log.info("请求租户id：[{}]，请求接口：[{}]", tenantId, requestUrl);
         WebFluxUtils.addHeader(mutate, BaseContextConstants.TENANT_ID, tenantId);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
-        String requestVersion = WebFluxUtils.getHeader(BaseContextConstants.REQUEST_VERSION, request);
-        BaseContextHolder.set(BaseContextConstants.REQUEST_VERSION, requestVersion);
-        WebFluxUtils.addHeader(mutate, BaseContextConstants.REQUEST_VERSION, requestVersion);
+        BaseContextHolder.setRequestVersion(WebFluxUtils.getHeader(BaseContextConstants.REQUEST_VERSION, request));
         // 校验是否需要拦截地址
         if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
                 || StringHandlerUtil.matchUrl(ignorePatterns(), request.getPath().toString())) {

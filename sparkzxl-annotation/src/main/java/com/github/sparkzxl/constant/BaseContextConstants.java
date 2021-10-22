@@ -53,7 +53,7 @@ public class BaseContextConstants {
     /**
      * JWT中封装的 客户端id
      */
-    public static final String JWT_KEY_CLIENT_ID = "client_id";
+    public static final String CLIENT_ID = "client_id";
     /**
      * 租户标识
      */
