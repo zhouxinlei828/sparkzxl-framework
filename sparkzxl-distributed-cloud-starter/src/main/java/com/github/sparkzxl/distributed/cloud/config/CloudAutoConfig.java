@@ -4,6 +4,7 @@ import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.github.sparkzxl.core.utils.DateUtils;
 import com.github.sparkzxl.distributed.cloud.loadbalancer.PreferredVersionIsolationRule;
 import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ public class CloudAutoConfig {
      * @return PreferredVersionRule
      */
     @Bean
+    @ConditionalOnProperty(name = "ribbon.isolation.enabled", havingValue = "true")
     public PreferredVersionIsolationRule preferredVersionIsolationRule() {
         return new PreferredVersionIsolationRule();
     }
