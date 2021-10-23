@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.github.sparkzxl.gateway.GatewayAutoConfig,\
+  com.github.sparkzxl.gateway.config.RouteLoadBalancerClientConfig
