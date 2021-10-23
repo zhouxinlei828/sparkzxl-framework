@@ -1,6 +1,7 @@
 package com.github.sparkzxl.gateway.config;
 
 import com.github.sparkzxl.gateway.filter.RequestLogFilter;
+import com.github.sparkzxl.gateway.filter.ResponseLogFilter;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,6 +26,15 @@ public class RequestResponseLogConfig {
         RequestLogFilter requestLogFilter = new RequestLogFilter();
         log.debug("Load Request Log Filter Config Bean");
         return requestLogFilter;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RequestLogFilter.class)
+    @ConditionalOnProperty(prefix = GatewayPluginProperties.GATEWAY_PLUGIN_PROPERTIES_PREFIX, value = "log-request", havingValue = "true")
+    public ResponseLogFilter responseLogFilter() {
+        ResponseLogFilter responseLogFilter = new ResponseLogFilter();
+        log.debug("Load Response Log Filter Config Bean");
+        return responseLogFilter;
     }
 
 }

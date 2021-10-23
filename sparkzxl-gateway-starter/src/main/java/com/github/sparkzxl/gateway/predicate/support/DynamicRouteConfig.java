@@ -1,10 +1,10 @@
 package com.github.sparkzxl.gateway.predicate.support;
 
 /**
- * DynamicRoute Config to unify all support config
+ * description: DynamicRoute Config to unify all support config
  *
- * @author chenggang
- * @date 2019/07/17
+ * @author zhoux
+ * @date 2021-10-23 21:32:41
  */
 public interface DynamicRouteConfig {
 

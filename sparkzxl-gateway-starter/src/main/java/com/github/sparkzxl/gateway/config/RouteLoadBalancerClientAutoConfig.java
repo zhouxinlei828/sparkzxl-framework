@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX, value = "enable", havingValue = "true")
 @EnableConfigurationProperties({GrayProperties.class})
 @Slf4j
-public class RouteLoadBalancerClientConfig {
+public class RouteLoadBalancerClientAutoConfig {
 
     @Bean
     public ReactiveLoadBalancerClientFilter gatewayLoadBalancerClientFilter(@Autowired(required = false) RouteLoadBalancer grayLoadBalancer,

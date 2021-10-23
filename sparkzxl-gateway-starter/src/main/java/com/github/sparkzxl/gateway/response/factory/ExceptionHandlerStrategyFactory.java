@@ -3,10 +3,10 @@ package com.github.sparkzxl.gateway.response.factory;
 import com.github.sparkzxl.gateway.response.strategy.ExceptionHandlerStrategy;
 
 /**
- * Exception Handler Strategy Factory
+ * description: 异常处理策略工厂
  *
- * @author chenggang
- * @date 2019/01/29
+ * @author zhoux
+ * @date 2021-10-23 21:33:01
  */
 public interface ExceptionHandlerStrategyFactory {
 
@@ -14,7 +14,7 @@ public interface ExceptionHandlerStrategyFactory {
      * Get Strategy
      *
      * @param clazz
-     * @return if strategy not exist just return null
+     * @return ExceptionHandlerStrategy
      */
     ExceptionHandlerStrategy getStrategy(Class<? extends Throwable> clazz);
 

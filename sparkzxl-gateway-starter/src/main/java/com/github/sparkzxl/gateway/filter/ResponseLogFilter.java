@@ -37,7 +37,7 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
-        if (!gatewayContext.getReadResponseData()) {
+        if (!gatewayContext.isReadResponseData()) {
             log.debug("[ResponseLogFilter]Properties Set Not To Read Response Data");
             return chain.filter(exchange);
         }

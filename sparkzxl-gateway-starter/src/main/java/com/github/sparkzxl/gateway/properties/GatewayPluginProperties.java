@@ -27,23 +27,23 @@ public class GatewayPluginProperties implements InitializingBean {
     /**
      * Enable Or Disable Read Request Data 。 If true, all request body will cached
      */
-    private Boolean readRequestData = false;
+    private boolean readRequestData = false;
     /**
      * Enable Or Disable Read Response Data
      */
-    private Boolean readResponseData = false;
+    private boolean readResponseData = false;
     /**
      * Enable Or Disable Log Request Detail
      */
-    private Boolean logRequest = false;
+    private boolean logRequest = false;
     /**
      * Enable Or Disable Global Exception Json Handler
      */
-    private Boolean exceptionJsonHandler = false;
+    private boolean exceptionJsonHandler = false;
     /**
      * Enable Or Disable Dynamic Route
      */
-    private Boolean enableDynamicRoute = false;
+    private boolean enableDynamicRoute = false;
     /**
      * Enable Read Request Data When use discover route by serviceId
      */

@@ -26,38 +26,34 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Json Exception Handler{@link org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler}
+ * description: Json Exception Handler{@link org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler}
  *
- * @author chenggang
- * @date 2019/01/29
+ * @author zhoux
+ * @date 2021-10-23 21:31:43
  */
 @Slf4j
 public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     /**
-     * MessageReader
-     */
-    private List<HttpMessageReader<?>> messageReaders = Collections.emptyList();
-
-    /**
-     * MessageWriter
-     */
-    private List<HttpMessageWriter<?>> messageWriters = Collections.emptyList();
-
-    /**
-     * ViewResolvers
-     */
-    private List<ViewResolver> viewResolvers = Collections.emptyList();
-
-    /**
      * temporary cache exception handler result for another method
      */
     private final ThreadLocal<ExceptionHandlerResult> exceptionHandlerResult = new ThreadLocal<>();
-
     /**
      * Strategy Factory
      */
     private final ExceptionHandlerStrategyFactory exceptionHandlerStrategyFactory;
+    /**
+     * MessageReader
+     */
+    private List<HttpMessageReader<?>> messageReaders = Collections.emptyList();
+    /**
+     * MessageWriter
+     */
+    private List<HttpMessageWriter<?>> messageWriters = Collections.emptyList();
+    /**
+     * ViewResolvers
+     */
+    private List<ViewResolver> viewResolvers = Collections.emptyList();
 
     public JsonExceptionHandler(ExceptionHandlerStrategyFactory exceptionHandlerStrategyFactory) {
         Assert.notNull(exceptionHandlerStrategyFactory, "'ExceptionHandlerStrategyFactory' must not be null");

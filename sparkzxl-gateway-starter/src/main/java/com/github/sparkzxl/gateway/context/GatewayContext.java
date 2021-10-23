@@ -22,11 +22,11 @@ public class GatewayContext {
     /**
      * whether read request data
      */
-    protected Boolean readRequestData = false;
+    protected boolean readRequestData;
     /**
      * whether read response data
      */
-    protected Boolean readResponseData = false;
+    protected boolean readResponseData;
     /**
      * cache json body
      */

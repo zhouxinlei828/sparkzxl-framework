@@ -34,8 +34,8 @@ public class DynamicRoutePredicateHandlerMapping extends RoutePredicateHandlerMa
     private final FilteringWebHandler webHandler;
     private final RouteLocator routeLocator;
     private final Integer managementPort;
-    private DynamicRouteProcessor dynamicRouteProcessor;
     private final Map<Class<? extends AbstractRoutePredicateFactory>, AbstractRoutePredicateFactory> routePredicateFactoryMap = new HashMap<>();
+    private DynamicRouteProcessor dynamicRouteProcessor;
 
     public DynamicRoutePredicateHandlerMapping(FilteringWebHandler webHandler, RouteLocator routeLocator, GlobalCorsProperties globalCorsProperties, Environment environment, DynamicRouteProcessor dynamicRouteProcessor,
                                                List<AbstractRoutePredicateFactory> routePredicateFactoryList) {

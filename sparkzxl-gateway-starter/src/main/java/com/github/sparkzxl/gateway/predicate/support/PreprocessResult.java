@@ -3,10 +3,10 @@ package com.github.sparkzxl.gateway.predicate.support;
 import lombok.*;
 
 /**
- * Pre process ServerWebExchange Result
+ * description: Pre process ServerWebExchange Result
  *
- * @author chenggang
- * @date 2019/07/17
+ * @author zhoux
+ * @date 2021-10-23 21:32:50
  */
 @Getter
 @Setter

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.filter;
 
+import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
@@ -23,6 +24,7 @@ import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerStrategies;
@@ -40,10 +42,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Gateway Context Filter
+ * description: Gateway Context Filter
  *
- * @author chenggang
- * @date 2019/01/29
+ * @author zhoux
+ * @date 2021-10-23 21:32:32
  */
 @Slf4j
 @AllArgsConstructor
@@ -61,10 +63,10 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         GatewayContext gatewayContext = new GatewayContext();
         gatewayContext.setReadRequestData(shouldReadRequestData(exchange));
-        gatewayContext.setReadResponseData(gatewayPluginProperties.getReadResponseData());
+        gatewayContext.setReadResponseData(gatewayPluginProperties.isReadResponseData());
         HttpHeaders headers = request.getHeaders();
         gatewayContext.setRequestHeaders(headers);
-        if (!gatewayContext.getReadRequestData()) {
+        if (!gatewayContext.isReadRequestData()) {
             exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
             log.debug("[GatewayContext]Properties Set To Not Read Request Data");
             return chain.filter(exchange);
@@ -75,10 +77,10 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
          */
         exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
         MediaType contentType = headers.getContentType();
+        String contentTypeStr = OptionalBean.ofNullable(contentType).getBean(MediaType::toString).orElse("");
         if (headers.getContentLength() > 0) {
-            if (MediaType.APPLICATION_JSON.equals(contentType)
-                    || MediaType.APPLICATION_JSON_UTF8.equals(contentType)
-                    || MediaType.MULTIPART_FORM_DATA.equals(contentType)) {
+            if (StringUtils.startsWithIgnoreCase(contentTypeStr, MediaType.APPLICATION_JSON_VALUE)
+                    || StringUtils.startsWithIgnoreCase(contentTypeStr, MediaType.MULTIPART_FORM_DATA_VALUE)) {
                 return readBody(exchange, chain, gatewayContext);
             }
             if (MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
@@ -102,7 +104,7 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
      * @return boolean
      */
     private boolean shouldReadRequestData(ServerWebExchange exchange) {
-        if (gatewayPluginProperties.getReadRequestData()) {
+        if (gatewayPluginProperties.isReadRequestData()) {
             log.debug("[GatewayContext]Properties Set Read All Request Data");
             return true;
         }

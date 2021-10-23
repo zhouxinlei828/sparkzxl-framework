@@ -1,4 +1,4 @@
-package com.github.sparkzxl.boot;
+package com.github.sparkzxl.gateway.event;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.net.url.UrlBuilder;

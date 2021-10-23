@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.gateway.config.AuthorizationAutoConfig,\
-  com.github.sparkzxl.gateway.config.RouteLoadBalancerClientConfig
+    com.github.sparkzxl.gateway.config.GatewayAutoConfig,\
+    com.github.sparkzxl.gateway.config.CorsConfig,\
+    com.github.sparkzxl.gateway.config.RouteLoadBalancerClientAutoConfig

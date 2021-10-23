@@ -3,10 +3,10 @@ package com.github.sparkzxl.gateway.option;
 import org.springframework.cloud.gateway.filter.NettyWriteResponseFilter;
 
 /**
- * The Order Of Plugin Filter
+ * description: The Order Of Plugin Filter
  *
- * @author chenggang
- * @date 2019/01/29
+ * @author zhoux
+ * @date 2021-10-23 21:32:22
  */
 public enum FilterOrderEnum {
 
