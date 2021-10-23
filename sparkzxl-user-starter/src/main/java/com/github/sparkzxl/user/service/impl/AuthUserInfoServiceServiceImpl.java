@@ -3,7 +3,7 @@ package com.github.sparkzxl.user.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
@@ -58,7 +58,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             Object userInfoId = jwtUserInfo.getId();
             authUserInfo = getCache(BuildKeyUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userInfoId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
-                ExceptionAssert.failure(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
+                ExceptionAssert.failure(ResponseInfoStatus.TOKEN_EXPIRED_ERROR);
             }
         }
         return authUserInfo;

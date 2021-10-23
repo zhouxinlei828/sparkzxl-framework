@@ -1,6 +1,7 @@
 package com.github.sparkzxl.boot;
 
 import cn.hutool.system.SystemUtil;
+import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -52,6 +53,6 @@ public class ApplicationLogRunner implements ApplicationRunner, Ordered {
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE + 1;
+        return BeanOrderEnum.APPLICATION_LOG_ORDER.getOrder();
     }
 }

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.assert_;
 
-import com.github.sparkzxl.core.base.code.BaseEnumCode;
+import com.github.sparkzxl.core.base.code.ResponseInfo;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.BizException;
 
@@ -11,7 +11,7 @@ import java.text.MessageFormat;
  *
  * @author zhouxinlei
  */
-public interface BusinessEnumSysAssert extends BaseEnumCode, BusinessAssert {
+public interface BusinessEnumSysAssert extends ResponseInfo, BusinessAssert {
 
     /**
      * 创建异常

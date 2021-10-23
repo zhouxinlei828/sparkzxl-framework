@@ -709,7 +709,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-filter</artifactId>
+                <artifactId>sparkzxl-gateway-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

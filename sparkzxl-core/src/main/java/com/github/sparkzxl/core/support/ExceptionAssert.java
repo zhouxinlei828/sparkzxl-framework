@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.BaseEnumCode;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.core.base.code.ResponseInfo;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import lombok.NonNull;
 
@@ -16,22 +16,22 @@ public class ExceptionAssert {
 
 
     public static void failure(String message) {
-        throw new BizException(ApiResponseStatus.FAILURE.getCode(), message);
+        throw new BizException(ResponseInfoStatus.FAILURE.getCode(), message);
     }
 
     public static void failure(int code, String message) {
         throw new BizException(code, message);
     }
 
-    public static void failure(BaseEnumCode baseEnumCode) {
-        throw new BizException(baseEnumCode);
+    public static void failure(ResponseInfo responseInfo) {
+        throw new BizException(responseInfo);
     }
 
     /**
      * 服务降级异常处理
      */
     public static void serviceDegrade() {
-        throw new ServiceDegradeException(ApiResponseStatus.SERVICE_DEGRADATION);
+        throw new ServiceDegradeException(ResponseInfoStatus.SERVICE_DEGRADATION);
     }
 
     /**

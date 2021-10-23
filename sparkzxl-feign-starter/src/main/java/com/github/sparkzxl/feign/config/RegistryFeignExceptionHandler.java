@@ -1,5 +1,6 @@
 package com.github.sparkzxl.feign.config;
 
+import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.feign.annoation.EnableFeignExceptionHandler;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,6 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
     @Override
     public int getOrder() {
-        return 88;
+        return BeanOrderEnum.REGISTRY_FEIGN_FILTER.getOrder();
     }
 }

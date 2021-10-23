@@ -2,8 +2,9 @@ package com.github.sparkzxl.database.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,70 +33,70 @@ import java.sql.SQLSyntaxErrorException;
 public class DataSourceExceptionHandler implements Ordered {
 
     @ExceptionHandler(SQLSyntaxErrorException.class)
-    public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
+    public ResponseResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EX);
+        return ResponseResult.result(ResponseInfoStatus.SQL_EX);
     }
 
     @ExceptionHandler(TooManyResultsException.class)
-    public ApiResult<?> handleTooManyResultsException(TooManyResultsException e) {
+    public ResponseResult<?> handleTooManyResultsException(TooManyResultsException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.SQL_MANY_RESULT_EX);
+        return ResponseResult.result(ResponseInfoStatus.SQL_MANY_RESULT_EX);
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
-    public ApiResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
+    public ResponseResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.FAILURE.getCode(), e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.FAILURE.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(PersistenceException.class)
-    public ApiResult<?> persistenceException(PersistenceException e) {
+    public ResponseResult<?> persistenceException(PersistenceException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
         if (e.getCause() instanceof BizException) {
             BizException cause = (BizException) e.getCause();
-            return ApiResult.apiResult(cause.getCode(), cause.getMessage());
+            return ResponseResult.result(cause.getCode(), cause.getMessage());
         }
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(MyBatisSystemException.class)
-    public ApiResult<?> myBatisSystemException(MyBatisSystemException e) {
+    public ResponseResult<?> myBatisSystemException(MyBatisSystemException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
         if (e.getCause() instanceof PersistenceException) {
             return this.persistenceException((PersistenceException) e.getCause());
         }
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), ApiResponseStatus.SQL_EX.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.SQL_EX.getCode(), ResponseInfoStatus.SQL_EX.getMessage());
     }
 
     @ExceptionHandler(SQLException.class)
-    public ApiResult<?> sqlException(SQLException e) {
+    public ResponseResult<?> sqlException(SQLException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ApiResult<?> dataIntegrityViolationException(DataIntegrityViolationException e) {
+    public ResponseResult<?> dataIntegrityViolationException(DataIntegrityViolationException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.SQL_EX.getCode(), e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.SQL_EX.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(TenantException.class)
-    public ApiResult<?> handleTenantException(TenantException e) {
+    public ResponseResult<?> handleTenantException(TenantException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(e.getCode(), e.getMessage());
+        return ResponseResult.result(e.getCode(), e.getMessage());
     }
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE + 15;
+        return BeanOrderEnum.DATASOURCE_EXCEPTION_HANDLER_ORDER.getOrder();
     }
 }

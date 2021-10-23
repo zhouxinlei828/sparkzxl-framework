@@ -8,10 +8,10 @@ import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
-import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -34,7 +34,7 @@ public class SentinelExceptionHandler implements Ordered {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.annotation.result.ResponseResult responseResult = (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         boolean result = responseResult != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
@@ -42,46 +42,46 @@ public class SentinelExceptionHandler implements Ordered {
     }
 
     @ExceptionHandler(value = FlowException.class)
-    public ApiResult<?> blockExceptionHandler(FlowException e) {
+    public ResponseResult<?> blockExceptionHandler(FlowException e) {
         handleResponseResult();
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.REQ_LIMIT, e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.REQ_LIMIT, e.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
-    public ApiResult<?> blockExceptionHandler(AuthorityException e) {
+    public ResponseResult<?> blockExceptionHandler(AuthorityException e) {
         handleResponseResult();
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.REQ_BLACKLIST, e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.REQ_BLACKLIST, e.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
-    public ApiResult<?> blockExceptionHandler(SystemBlockException e) {
+    public ResponseResult<?> blockExceptionHandler(SystemBlockException e) {
         handleResponseResult();
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.SYSTEM_BLOCK, e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.SYSTEM_BLOCK, e.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
-    public ApiResult<?> blockExceptionHandler(ParamFlowException e) {
+    public ResponseResult<?> blockExceptionHandler(ParamFlowException e) {
         handleResponseResult();
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.PARAM_FLOW, e.getMessage());
+        return ResponseResult.result(ResponseInfoStatus.PARAM_FLOW, e.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
-    public ApiResult<?> blockExceptionHandler(DegradeException e) {
+    public ResponseResult<?> blockExceptionHandler(DegradeException e) {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
-        return ApiResult.apiResult(ApiResponseStatus.SERVICE_DEGRADATION);
+        return ResponseResult.result(ResponseInfoStatus.SERVICE_DEGRADATION);
     }
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE + 13;
+        return BeanOrderEnum.SENTINEL_EXCEPTION_ORDER.getOrder();
     }
 }

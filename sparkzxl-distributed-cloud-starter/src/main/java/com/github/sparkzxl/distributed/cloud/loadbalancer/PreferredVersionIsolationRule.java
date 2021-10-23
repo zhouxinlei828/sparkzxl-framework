@@ -7,7 +7,7 @@ import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
 import com.google.common.collect.Lists;
 import com.netflix.client.config.IClientConfig;
@@ -67,7 +67,7 @@ public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
                     }
                 }
                 List<Instance> targetInstanceList = Lists.newArrayList();
-                String version = BaseContextHolder.getVersion();
+                String version = RequestContextHolderUtils.getRequest().getHeader(BaseContextConstants.VERSION);
                 if (loadBalancerRuleProperties.isEnabled()) {
                     // 判断版本号是否存在
                     if (StringUtils.isNotBlank(version)) {

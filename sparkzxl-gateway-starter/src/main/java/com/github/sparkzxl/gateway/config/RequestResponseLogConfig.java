@@ -1,0 +1,30 @@
+package com.github.sparkzxl.gateway.config;
+
+import com.github.sparkzxl.gateway.filter.RequestLogFilter;
+import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * description: 日志配置
+ *
+ * @author zhoux
+ * @date 2021-10-23 17:27:30
+ */
+@Slf4j
+@Configuration
+public class RequestResponseLogConfig {
+
+    @Bean
+    @ConditionalOnMissingBean(RequestLogFilter.class)
+    @ConditionalOnProperty(prefix = GatewayPluginProperties.GATEWAY_PLUGIN_PROPERTIES_PREFIX, value = "log-request", havingValue = "true")
+    public RequestLogFilter requestLogFilter() {
+        RequestLogFilter requestLogFilter = new RequestLogFilter();
+        log.debug("Load Request Log Filter Config Bean");
+        return requestLogFilter;
+    }
+
+}

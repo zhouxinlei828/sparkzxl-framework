@@ -1,10 +1,9 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult = (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.annotation.result.ResponseResult responseResult = (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         return responseResult != null;
     }
 
@@ -44,26 +43,26 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (body instanceof ApiResult) {
+        if (body instanceof ResponseResult) {
             return body;
         }
         Object returnBody = body;
-        int code = ApiResponseStatus.SUCCESS.getCode();
-        String message = ApiResponseStatus.SUCCESS.getMessage();
+        int code = ResponseInfoStatus.SUCCESS.getCode();
+        String message = ResponseInfoStatus.SUCCESS.getMessage();
         String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
         Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (fallback) {
-            code = ApiResponseStatus.SERVICE_DEGRADATION.getCode();
-            message = ApiResponseStatus.SERVICE_DEGRADATION.getMessage();
+            code = ResponseInfoStatus.SERVICE_DEGRADATION.getCode();
+            message = ResponseInfoStatus.SERVICE_DEGRADATION.getMessage();
             returnBody = null;
         } else if (ObjectUtils.isNotEmpty(attribute)) {
-            code = ApiResponseStatus.FAILURE.getCode();
+            code = ResponseInfoStatus.FAILURE.getCode();
             message = attribute;
             returnBody = null;
         } else if (returnBody instanceof Boolean && !(Boolean) returnBody) {
-            code = ApiResponseStatus.FAILURE.getCode();
-            message = ApiResponseStatus.FAILURE.getMessage();
+            code = ResponseInfoStatus.FAILURE.getCode();
+            message = ResponseInfoStatus.FAILURE.getMessage();
         }
-        return ApiResult.apiResult(code, message, returnBody);
+        return ResponseResult.result(code, message, returnBody);
     }
 }

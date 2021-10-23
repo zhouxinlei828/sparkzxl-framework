@@ -2,10 +2,9 @@ package com.github.sparkzxl.core.context;
 
 
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.annotation.result.ResponseResult;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +34,7 @@ public class ResponseContextHolder {
         try {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.result(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -46,7 +45,7 @@ public class ResponseContextHolder {
         try {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg, data)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.result(code, msg, data)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -55,11 +54,11 @@ public class ResponseContextHolder {
 
     public static void unauthorized(HttpServletResponse response, String msg) {
         try {
-            int code = ApiResponseStatus.UN_AUTHORIZED.getCode();
+            int code = ResponseInfoStatus.UN_AUTHORIZED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(code);
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.result(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -68,11 +67,11 @@ public class ResponseContextHolder {
 
     public static void forbidden(HttpServletResponse response, String msg) {
         try {
-            int code = ApiResponseStatus.AUTHORIZED_DENIED.getCode();
+            int code = ResponseInfoStatus.AUTHORIZED_DENIED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(ApiResponseStatus.AUTHORIZED_DENIED.getCode());
-            response.getWriter().println(JSONUtil.parseObj(ApiResult.apiResult(code, msg)).toStringPretty());
+            response.setStatus(ResponseInfoStatus.AUTHORIZED_DENIED.getCode());
+            response.getWriter().println(JSONUtil.parseObj(ResponseResult.result(code, msg)).toStringPretty());
             response.getWriter().flush();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -81,8 +80,8 @@ public class ResponseContextHolder {
 
     public static void clearResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        ResponseResult responseResult =
-                (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.annotation.result.ResponseResult responseResult =
+                (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         if (responseResult != null) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
