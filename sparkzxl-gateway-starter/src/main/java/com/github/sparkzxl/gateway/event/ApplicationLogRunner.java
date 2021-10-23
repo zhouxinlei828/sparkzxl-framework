@@ -40,9 +40,9 @@ public class ApplicationLogRunner implements ApplicationRunner, Ordered {
         log.info("\n______________________________________________________________\n\t" +
                         "Java Version: {} \n\t" +
                         "Operating System: {} \n\t" +
-                        "Application: {} is running! \n\t" +
-                        "API接口文档：{}/doc.html\n" +
-                        "Health Check Endpoint：{}/actuator/health\n" +
+                        "Application: {} \n\t" +
+                        "API接口文档：{}doc.html\n\t" +
+                        "Health Check Endpoint：{}actuator/health\n" +
                         "______________________________________________________________",
                 SystemUtil.getJavaInfo().getVersion(),
                 SystemUtil.getOsInfo().getName(),
