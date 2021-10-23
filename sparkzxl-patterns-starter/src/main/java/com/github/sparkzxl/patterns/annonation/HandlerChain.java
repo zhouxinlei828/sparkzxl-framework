@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Service
-public @interface DutyStrategy {
+public @interface HandlerChain {
 
     String type() default "";
 

@@ -14,7 +14,7 @@ public class BusinessStrategyImpl implements BusinessStrategy {
     private final String type;
     private final String source;
 
-    BusinessStrategyImpl(String type, String source) {
+    public BusinessStrategyImpl(String type, String source) {
         this.source = source;
         this.type = type;
     }

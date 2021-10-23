@@ -94,6 +94,7 @@ public class BaseContextConstants {
      * 角色资源常量
      */
     public static final String RESOURCE_ROLES_MAP = "auth:resource_roles_map";
+    public static final String VERSION = "version";
     /**
      * 登录账户 前缀
      * 完整key: authUser:{key} -> str
@@ -103,7 +104,5 @@ public class BaseContextConstants {
      * 登录账户token 前缀
      */
     public static String AUTH_USER_TOKEN = "login_user_token";
-
-    public static final String VERSION = "version";
 
 }

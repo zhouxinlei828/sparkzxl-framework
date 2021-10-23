@@ -31,13 +31,19 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class DynamicDataSourceInterceptor implements HandlerInterceptor {
 
+    private final Function<String, DataSourceProperty> function;
     private DynamicRoutingDataSource dynamicRoutingDataSource;
-
     private DataSourceCreator dataSourceCreator;
-
     private DynamicDataProperties dynamicDataProperties;
 
-    private final Function<String, DataSourceProperty> function;
+    public static void main(String[] args) {
+        String data = null;
+        try {
+            ExceptionAssert.isEmpty(data).withException(new TenantException(StrFormatter.format("无此租户[{}]", "dev")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Autowired(required = false)
     public void setDynamicRoutingDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
@@ -76,14 +82,5 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         DynamicDataSourceContextHolder.clear();
-    }
-
-    public static void main(String[] args) {
-        String data = null;
-        try {
-            ExceptionAssert.isEmpty(data).withException(new TenantException(StrFormatter.format("无此租户[{}]", "dev")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

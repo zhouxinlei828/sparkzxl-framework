@@ -39,16 +39,16 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class OssTemplate implements AmazonS3Load {
 
+    private final Supplier<OssProperties> ossPropertiesSupplier;
     private OssProperties ossProperties;
     private AmazonS3 amazonS3;
-    private final Supplier<OssProperties> ossPropertiesSupplier;
-
-    public void setOssProperties(OssProperties ossProperties) {
-        this.ossProperties = ossProperties;
-    }
 
     public OssProperties getOssProperties() {
         return ossPropertiesSupplier.get();
+    }
+
+    public void setOssProperties(OssProperties ossProperties) {
+        this.ossProperties = ossProperties;
     }
 
     @Override
