@@ -48,9 +48,4 @@ public class GatewayContext {
      */
     protected MultiValueMap<String, String> allRequestData = new LinkedMultiValueMap<>(0);
 
-    /**
-     * Gateway Extra Data
-     */
-    protected GatewayContextExtraData gatewayContextExtraData;
-
 }

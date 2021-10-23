@@ -1,8 +1,8 @@
-package com.github.sparkzxl.gateway;
+package com.github.sparkzxl.gateway.config;
 
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.filter.AbstractAuthorizationFilter;
-import com.github.sparkzxl.gateway.properties.ResourceProperties;
+import com.github.sparkzxl.gateway.properties.GatewayResourceProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
  * @author zhouxinlei
  */
 @Configuration
-@EnableConfigurationProperties({ResourceProperties.class})
-public class GatewayAutoConfig {
+@EnableConfigurationProperties({GatewayResourceProperties.class})
+public class AuthorizationAutoConfig {
 
     private final static String DEFAULT_AUTHORIZATION_FILTER_NAME = "authorizationFilter";
 

@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.config;
 
-import com.github.sparkzxl.gateway.context.ContextExtraDataGenerator;
 import com.github.sparkzxl.gateway.filter.GatewayContextFilter;
 import com.github.sparkzxl.gateway.filter.RemoveGatewayContextFilter;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
@@ -32,8 +31,8 @@ public class GatewayPluginConfig {
     @Bean
     @ConditionalOnBean(GatewayPluginProperties.class)
     @ConditionalOnMissingBean(GatewayContextFilter.class)
-    public GatewayContextFilter gatewayContextFilter(@Autowired GatewayPluginProperties gatewayPluginProperties, @Autowired(required = false) ContextExtraDataGenerator contextExtraDataGenerator) {
-        GatewayContextFilter gatewayContextFilter = new GatewayContextFilter(gatewayPluginProperties, contextExtraDataGenerator);
+    public GatewayContextFilter gatewayContextFilter(@Autowired GatewayPluginProperties gatewayPluginProperties) {
+        GatewayContextFilter gatewayContextFilter = new GatewayContextFilter(gatewayPluginProperties);
         log.debug("Load GatewayContextFilter Config Bean");
         return gatewayContextFilter;
     }

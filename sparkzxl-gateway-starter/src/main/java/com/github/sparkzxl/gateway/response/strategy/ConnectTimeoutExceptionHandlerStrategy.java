@@ -15,10 +15,10 @@ import org.springframework.http.HttpStatus;
  * @date 2021-10-23 16:34:14
  */
 @Slf4j
-public class ConnectTimeoutExceptionHandlerStrategy implements ExceptionHandlerStrategy<ConnectTimeoutException> {
+public class ConnectTimeoutExceptionHandlerStrategy implements ExceptionHandlerStrategy {
 
     @Override
-    public Class<ConnectTimeoutException> getHandleClass() {
+    public Class getHandleClass() {
         return ConnectTimeoutException.class;
     }
 

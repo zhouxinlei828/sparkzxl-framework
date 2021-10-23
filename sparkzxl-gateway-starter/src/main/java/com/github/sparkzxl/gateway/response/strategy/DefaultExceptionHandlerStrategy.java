@@ -15,10 +15,10 @@ import org.springframework.http.HttpStatus;
  * @date 2021-10-23 17:21:12
  */
 @Slf4j
-public class DefaultExceptionHandlerStrategy implements ExceptionHandlerStrategy<Throwable> {
+public class DefaultExceptionHandlerStrategy implements ExceptionHandlerStrategy {
 
     @Override
-    public Class<Throwable> getHandleClass() {
+    public Class getHandleClass() {
         return Throwable.class;
     }
 

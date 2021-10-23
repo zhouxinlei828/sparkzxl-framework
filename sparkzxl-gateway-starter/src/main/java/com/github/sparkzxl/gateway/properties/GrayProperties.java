@@ -15,10 +15,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Slf4j
 @ToString
-@ConfigurationProperties(prefix = GreyProperties.GREY_PROPERTIES_PREFIX)
-public class GreyProperties {
+@ConfigurationProperties(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX)
+public class GrayProperties {
 
-    public static final String GREY_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin.grey";
+    public static final String GRAY_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin.gray";
 
     /**
      * Enable Grey Route

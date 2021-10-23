@@ -1,8 +1,6 @@
 package com.github.sparkzxl.gateway.filter;
 
-import com.github.sparkzxl.gateway.context.ContextExtraDataGenerator;
 import com.github.sparkzxl.gateway.context.GatewayContext;
-import com.github.sparkzxl.gateway.context.GatewayContextExtraData;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import lombok.AllArgsConstructor;
@@ -40,7 +38,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Gateway Context Filter
@@ -58,7 +55,6 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
      */
     private static final List<HttpMessageReader<?>> MESSAGE_READERS = HandlerStrategies.withDefaults().messageReaders();
     private GatewayPluginProperties gatewayPluginProperties;
-    private ContextExtraDataGenerator contextExtraDataGenerator;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -68,10 +64,6 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
         gatewayContext.setReadResponseData(gatewayPluginProperties.getReadResponseData());
         HttpHeaders headers = request.getHeaders();
         gatewayContext.setRequestHeaders(headers);
-        if (Objects.nonNull(contextExtraDataGenerator)) {
-            GatewayContextExtraData gatewayContextExtraData = contextExtraDataGenerator.generateContextExtraData(exchange);
-            gatewayContext.setGatewayContextExtraData(gatewayContextExtraData);
-        }
         if (!gatewayContext.getReadRequestData()) {
             exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
             log.debug("[GatewayContext]Properties Set To Not Read Request Data");

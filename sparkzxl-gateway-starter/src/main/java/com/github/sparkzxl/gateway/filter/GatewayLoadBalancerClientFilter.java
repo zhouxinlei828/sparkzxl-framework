@@ -45,12 +45,10 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         URI url = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
         String schemePrefix = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR);
-//        StrUtil.equalsAny(LB, url.getScheme(), schemePrefix)
         if (url == null || (!LB.equals(url.getScheme()) && !LB.equals(schemePrefix))) {
             return chain.filter(exchange);
         }
 
-        // preserve the original url
         ServerWebExchangeUtils.addOriginalRequestUrl(exchange, url);
 
         if (log.isTraceEnabled()) {

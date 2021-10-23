@@ -5,13 +5,13 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * description:  oauth resource属性
+ * description:  网关resource属性
  *
  * @author zhouxinlei
  */
 @Data
 @ConfigurationProperties(prefix = ConfigurationConstant.GATEWAY_RESOURCE_PREFIX)
-public class ResourceProperties {
+public class GatewayResourceProperties {
 
     /**
      * 需要放行的资源路径

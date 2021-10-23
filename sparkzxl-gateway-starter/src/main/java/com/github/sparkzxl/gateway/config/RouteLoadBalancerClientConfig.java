@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.config;
 
 import com.github.sparkzxl.gateway.filter.GatewayLoadBalancerClientFilter;
-import com.github.sparkzxl.gateway.properties.GreyProperties;
+import com.github.sparkzxl.gateway.properties.GrayProperties;
 import com.github.sparkzxl.gateway.rule.RouteLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureBefore(GatewayReactiveLoadBalancerClientAutoConfiguration.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-@ConditionalOnProperty(prefix = GreyProperties.GREY_PROPERTIES_PREFIX, value = "enable", havingValue = "true")
-@EnableConfigurationProperties({GreyProperties.class})
+@ConditionalOnProperty(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX, value = "enable", havingValue = "true")
+@EnableConfigurationProperties({GrayProperties.class})
 @Slf4j
 public class RouteLoadBalancerClientConfig {
 

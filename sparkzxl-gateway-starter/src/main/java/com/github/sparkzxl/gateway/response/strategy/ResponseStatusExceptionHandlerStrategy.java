@@ -14,10 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
  * @date 2021-10-23 16:34:14
  */
 @Slf4j
-public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerStrategy<ResponseStatusException> {
+public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerStrategy {
 
     @Override
-    public Class<ResponseStatusException> getHandleClass() {
+    public Class getHandleClass() {
         return ResponseStatusException.class;
     }
 

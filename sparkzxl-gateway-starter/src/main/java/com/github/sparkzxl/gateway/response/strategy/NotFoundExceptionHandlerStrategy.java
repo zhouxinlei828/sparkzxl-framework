@@ -17,10 +17,10 @@ import org.springframework.http.HttpStatus;
  * @date 2021-10-23 16:33:21
  */
 @Slf4j
-public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrategy<NotFoundException> {
+public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrategy {
 
     @Override
-    public Class<NotFoundException> getHandleClass() {
+    public Class getHandleClass() {
         return NotFoundException.class;
     }
 
