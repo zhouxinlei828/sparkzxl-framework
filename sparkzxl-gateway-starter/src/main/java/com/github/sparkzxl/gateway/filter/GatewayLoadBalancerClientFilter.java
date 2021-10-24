@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.filter;
 
-import com.github.sparkzxl.gateway.rule.RouteLoadBalancer;
+import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
@@ -31,13 +31,13 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
     private static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = 10150;
     private static final String LB = "lb";
 
-    private final RouteLoadBalancer routeLoadBalancer;
+    private final IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer;
     private final LoadBalancerProperties properties;
 
 
-    public GatewayLoadBalancerClientFilter(RouteLoadBalancer routeLoadBalancer, LoadBalancerProperties properties) {
+    public GatewayLoadBalancerClientFilter(IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer, LoadBalancerProperties properties) {
         super(null, properties);
-        this.routeLoadBalancer = routeLoadBalancer;
+        this.serviceInstanceLoadBalancer = serviceInstanceLoadBalancer;
         this.properties = properties;
     }
 
@@ -84,8 +84,7 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
 
     private Mono<Response<ServiceInstance>> choose(ServerWebExchange exchange) {
         URI uri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
-        ServiceInstance serviceInstance = routeLoadBalancer.choose(uri.getHost(), exchange.getRequest());
-        return Mono.just(new DefaultResponse(serviceInstance));
+        return serviceInstanceLoadBalancer.choose(uri.getHost(), exchange.getRequest());
     }
 
     @Override

@@ -66,10 +66,10 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         HttpHeaders headers = request.getHeaders();
         long startTime = System.currentTimeMillis();
         exchange.getAttributes().put(START_TIME, startTime);
-        log.info("[RequestLogFilter] (Request) Start dateTime:{}", DateUtils.formatDateTime(new Date()));
-        log.info("[RequestLogFilter] (Request) Scheme:{},Path:{},Method:{},IP:{},Host:{}", scheme, requestURI.getPath(), request.getMethod(),
+        log.info("Request Start dateTime:{}", DateUtils.formatDateTime(new Date()));
+        log.info("Scheme:{},Path:{},Method:{},IP:{},Host:{}", scheme, requestURI.getPath(), request.getMethod(),
                 WebFluxUtils.getIpAddress(request), requestURI.getHost());
-        headers.forEach((key, value) -> log.debug("[RequestLogFilter] (Request) Headers:Key->{},Value->{}", key, value));
+        headers.forEach((key, value) -> log.debug("Headers:Key->{},Value->{}", key, value));
         GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
         if (!gatewayContext.isReadRequestData()) {
             log.debug("[RequestLogFilter] Properties Set Not To Read Request Data");
@@ -77,17 +77,17 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         }
         MultiValueMap<String, String> queryParams = request.getQueryParams();
         if (!queryParams.isEmpty()) {
-            queryParams.forEach((key, value) -> log.info("[RequestLogFilter] (Request) Query Param :Key->({}),Value->({})", key, value));
+            queryParams.forEach((key, value) -> log.info("Query Param :Key->({}),Value->({})", key, value));
         }
         MediaType contentType = headers.getContentType();
         long length = headers.getContentLength();
-        log.info("[RequestLogFilter] (Request) ContentType:{},Content Length:{}", contentType, length);
+        log.info("ContentType:{},Content Length:{}", contentType, length);
         if (length > 0 && null != contentType && (contentType.includes(MediaType.APPLICATION_JSON)
                 || contentType.includes(MediaType.APPLICATION_JSON_UTF8))) {
-            log.info("[RequestLogFilter] (Request) JsonBody:{}", gatewayContext.getRequestBody());
+            log.info("JsonBody:{}", gatewayContext.getRequestBody());
         }
         if (length > 0 && null != contentType && contentType.includes(MediaType.APPLICATION_FORM_URLENCODED)) {
-            log.info("[RequestLogFilter] (Request) FormData:{}", gatewayContext.getFormData());
+            log.info("FormData:{}", gatewayContext.getFormData());
         }
     }
 
@@ -100,17 +100,17 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         Long startTime = exchange.getAttribute(START_TIME);
         Long executeTime = (System.currentTimeMillis() - startTime);
         ServerHttpResponse response = exchange.getResponse();
-        log.info("[RequestLogFilter] (Response) HttpStatus:{}", response.getStatusCode());
+        log.info("HttpStatus:{}", response.getStatusCode());
         HttpHeaders headers = response.getHeaders();
-        headers.forEach((key, value) -> log.debug("[RequestLogFilter] Headers:Key->{},Value->{}", key, value));
+        headers.forEach((key, value) -> log.debug("Headers:Key->{},Value->{}", key, value));
         MediaType contentType = headers.getContentType();
         long length = headers.getContentLength();
-        log.info("[RequestLogFilter] (Response) ContentType:{},Content Length:{}", contentType, length);
+        log.info("ContentType:{},Content Length:{}", contentType, length);
         GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
         if (gatewayContext.isReadResponseData()) {
-            log.info("[RequestLogFilter] (Response) Response Body:{}", gatewayContext.getResponseBody());
+            log.info("Response Body:{}", gatewayContext.getResponseBody());
         }
-        log.info("[RequestLogFilter]( Response) Original Path:{},Cost:{} ms", exchange.getRequest().getURI().getPath(), executeTime);
+        log.info("Original Path:{},Cost:{} ms", exchange.getRequest().getURI().getPath(), executeTime);
     }
 
 }

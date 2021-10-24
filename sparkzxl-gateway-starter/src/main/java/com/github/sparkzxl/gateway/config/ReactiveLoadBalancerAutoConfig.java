@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.config;
 
 import com.github.sparkzxl.gateway.filter.GatewayLoadBalancerClientFilter;
 import com.github.sparkzxl.gateway.properties.GrayProperties;
-import com.github.sparkzxl.gateway.rule.RouteLoadBalancer;
+import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +28,15 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX, value = "enable", havingValue = "true")
 @EnableConfigurationProperties({GrayProperties.class})
 @Slf4j
-public class RouteLoadBalancerClientAutoConfig {
+public class ReactiveLoadBalancerAutoConfig {
 
     @Bean
-    public ReactiveLoadBalancerClientFilter gatewayLoadBalancerClientFilter(@Autowired(required = false) RouteLoadBalancer grayLoadBalancer,
+    public ReactiveLoadBalancerClientFilter gatewayLoadBalancerClientFilter(@Autowired(required = false) IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer,
                                                                             @Autowired(required = false) LoadBalancerProperties properties) {
-        if (ObjectUtils.isEmpty(grayLoadBalancer)) {
-            throw new IllegalArgumentException("not found RouteLoadBalancer，please confirm whether it has been loaded routeLoadBalancer bean");
+        if (ObjectUtils.isEmpty(serviceInstanceLoadBalancer)) {
+            throw new IllegalArgumentException("not found ReactorServiceInstanceLoadBalancer,please confirm whether it has been loaded routeLoadBalancer bean");
         }
-        return new GatewayLoadBalancerClientFilter(grayLoadBalancer, properties);
+        return new GatewayLoadBalancerClientFilter(serviceInstanceLoadBalancer, properties);
     }
 
 }
