@@ -32,6 +32,8 @@ public class ResponseContextHolder {
 
     public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg) {
         try {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().println(JSONUtil.parseObj(ResponseResult.result(code, msg)).toStringPretty());
@@ -43,6 +45,8 @@ public class ResponseContextHolder {
 
     public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg, Object data) {
         try {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().println(JSONUtil.parseObj(ResponseResult.result(code, msg, data)).toStringPretty());

@@ -8,8 +8,8 @@ import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.entity.core.CaptchaInfo;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.entity.security.AuthRequest;
-import com.github.sparkzxl.entity.security.AuthToken;
-import com.github.sparkzxl.entity.security.SecurityUserDetail;
+import com.github.sparkzxl.entity.security.UserToken;
+import com.github.sparkzxl.entity.security.AuthUserDetail;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.LoginStatus;
@@ -44,44 +44,44 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authRequest 登录认证
      * @return java.lang.String
      */
-    public AuthToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
+    public UserToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
         String username = authRequest.getUsername();
-        SecurityUserDetail<ID> authUserDetail = (SecurityUserDetail<ID>) getUserDetailsService().loadUserByUsername(username);
+        AuthUserDetail<ID> authUserDetail = (AuthUserDetail<ID>) getUserDetailsService().loadUserByUsername(username);
         if (ObjectUtils.isEmpty(authUserDetail)) {
             throw new AccountNotFoundException("账户不存在");
         }
         //校验密码输入是否正确
         checkPasswordError(authRequest, authUserDetail);
-        AuthToken authToken = authorization(authUserDetail);
+        UserToken userToken = authorization(authUserDetail);
         SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserDetail.getId(), authUserDetail.getUsername())));
-        return authToken;
+        return userToken;
     }
 
     /**
-     * 授权登录获取token
+     * 认证登录获取token
      *
      * @param authUserDetail 授权用户
      * @return AuthToken
      */
-    public AuthToken authorization(SecurityUserDetail<ID> authUserDetail) {
+    public UserToken authorization(AuthUserDetail<ID> authUserDetail) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         String username = authUserDetail.getUsername();
         AuthUserInfo authUserInfo = getAuthUserInfo(username);
-        AuthToken authToken = new AuthToken();
-        authToken.setAccessToken(createJwtToken(authUserDetail));
-        authToken.setExpiration(seconds);
-        authToken.setAuthUserInfo(authUserInfo);
-        authToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
+        UserToken userToken = new UserToken();
+        userToken.setAccessToken(createJwtToken(authUserDetail));
+        userToken.setExpiration(seconds);
+        userToken.setAuthUserInfo(authUserInfo);
+        userToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
-        accessToken(authToken, authUserInfo);
-        return authToken;
+        settingCacheToken(userToken, authUserInfo);
+        return userToken;
     }
 
 
-    public String createJwtToken(SecurityUserDetail<ID> authUserDetail) {
+    public String createJwtToken(AuthUserDetail<ID> authUserDetail) {
         long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         Date expire = DateUtil.offsetSecond(new Date(), (int) seconds);
         JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
@@ -106,7 +106,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authUserDetail 用户信息
      * @throws PasswordException 密码校验异常
      */
-    public abstract void checkPasswordError(AuthRequest authRequest, SecurityUserDetail<ID> authUserDetail) throws PasswordException;
+    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException;
 
 
     /**
@@ -141,10 +141,10 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
     /**
      * 设置accessToken缓存
      *
-     * @param authToken    用户token
+     * @param userToken    用户token
      * @param authUserInfo 全局用户
      */
-    public abstract void accessToken(AuthToken authToken, AuthUserInfo authUserInfo);
+    public abstract void settingCacheToken(UserToken userToken, AuthUserInfo authUserInfo);
 
     /**
      * 获取jwt配置属性

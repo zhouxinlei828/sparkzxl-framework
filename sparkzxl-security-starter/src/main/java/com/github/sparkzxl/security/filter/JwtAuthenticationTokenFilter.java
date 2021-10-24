@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.context.ResponseContextHolder;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
-import com.github.sparkzxl.entity.security.SecurityUserDetail;
+import com.github.sparkzxl.entity.security.AuthUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,16 +51,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                SecurityUserDetail securityUserDetail = new SecurityUserDetail(
+                AuthUserDetail authUserDetail = new AuthUserDetail(
                         jwtUserInfo.getId(),
                         jwtUserInfo.getUsername(),
                         null,
                         jwtUserInfo.getName(),
-                        true,
                         jwtUserInfo.getAuthorities()
                 );
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUserDetail,
-                        null, securityUserDetail.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
+                        null, authUserDetail.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 log.info("authenticated user:[{}]", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

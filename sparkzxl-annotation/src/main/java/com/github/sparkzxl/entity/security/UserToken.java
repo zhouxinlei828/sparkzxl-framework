@@ -11,10 +11,9 @@ import java.io.Serializable;
  * @author zhouxinlei
  */
 @Data
-public class AuthToken implements Serializable {
+public class UserToken implements Serializable {
 
-    private static final long serialVersionUID = 7794601812288371305L;
-
+    private static final long serialVersionUID = 7155188090339340337L;
     /**
      * token
      */
@@ -34,6 +33,5 @@ public class AuthToken implements Serializable {
      * 访问令牌头前缀
      */
     private String tokenType;
-
 
 }
