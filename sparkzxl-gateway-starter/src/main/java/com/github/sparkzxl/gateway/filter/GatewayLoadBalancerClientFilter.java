@@ -3,7 +3,6 @@ package com.github.sparkzxl.gateway.filter;
 import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
 import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
@@ -76,7 +75,7 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
             URI requestUrl = LoadBalancerUriTools.reconstructURI(serviceInstance, uri);
 
             if (log.isTraceEnabled()) {
-                log.trace("LoadBalancerClientFilter url chosen: " + requestUrl);
+                log.trace("GatewayLoadBalancerClientFilter url chosen: " + requestUrl);
             }
             exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, requestUrl);
         }).then(chain.filter(exchange));
