@@ -31,7 +31,7 @@ public class RouteLoadBalancerClientConfig {
     @Bean
     @RefreshScope
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-    @ConditionalOnProperty(name = "ribbon.isolation.enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = "feign.ribbon.isolation", name = "enabled",havingValue = "true")
     public PreferredVersionIsolationRule preferredVersionIsolationRule() {
         return new PreferredVersionIsolationRule();
     }

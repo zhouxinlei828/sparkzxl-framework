@@ -15,6 +15,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 )
 public class LoadBalancerRuleProperties {
 
-    private boolean enabled = true;
+    private boolean enabled;
 
 }
