@@ -8,7 +8,6 @@ import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.netflix.client.ClientException;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -48,21 +47,6 @@ public class FeignExceptionHandler implements Ordered {
         e.printStackTrace();
         log.error(ExceptionUtil.getSimpleMessage(e));
         return ResponseResult.result(e.getCode(), message);
-    }
-
-    @ExceptionHandler(ClientException.class)
-    public ResponseResult<?> handleClientException(ClientException e) {
-        e.printStackTrace();
-        log.error(ExceptionUtil.getSimpleMessage(e));
-        String matchString = "Load balancer does not have available server for client: ";
-        String message = e.getMessage();
-        if (message.contains(matchString)) {
-            int indexOf = message.lastIndexOf(": ") + 2;
-            String serviceName = message.substring(indexOf);
-            String applicationName = OptionalBean.ofNullable(serviceName).orElseGet(() -> "unKnownServer");
-            message = StrFormatter.format(ResponseInfoStatus.OPEN_SERVICE_UNAVAILABLE.getMessage(), applicationName);
-        }
-        return ResponseResult.result(ResponseInfoStatus.OPEN_SERVICE_UNAVAILABLE.getCode(), message);
     }
 
     @Override
