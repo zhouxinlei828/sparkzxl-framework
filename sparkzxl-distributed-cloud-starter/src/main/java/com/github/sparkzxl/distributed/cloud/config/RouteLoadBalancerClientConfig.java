@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * description: 负载模式自动装配
+ * description: 负载均衡自动装配
  *
  * @author zhouxinlei
  */
