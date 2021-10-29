@@ -1,5 +1,6 @@
 package com.github.sparkzxl.distributed.cloud.config;
 
+import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021-10-29 09:57:04
  */
 @Configuration
-@ConditionalOnProperty(prefix = "feign.ribbon.gray", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = ConfigurationConstant.RIBBON_PREFIX, name = "enabled", havingValue = "true")
 @RibbonClients(defaultConfiguration = GlobalRibbonConfig.class)
 @EnableConfigurationProperties(LoadBalancerRuleProperties.class)
 @Slf4j
