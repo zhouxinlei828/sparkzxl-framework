@@ -1,6 +1,6 @@
 package com.github.sparkzxl.feign.hystrix;
 
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
 import com.netflix.hystrix.strategy.HystrixPlugins;
@@ -131,7 +131,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
             this.target = target;
             this.requestAttributes = requestAttributes;
-            this.threadLocalMap = AppContextHolder.getLocalMap();
+            this.threadLocalMap = BaseContextHolder.getLocalMap();
             this.xid = RootContext.getXID();
         }
 
@@ -139,7 +139,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         public T call() throws Exception {
             try {
                 org.springframework.web.context.request.RequestContextHolder.setRequestAttributes(this.requestAttributes);
-                AppContextHolder.setLocalMap(this.threadLocalMap);
+                BaseContextHolder.setLocalMap(this.threadLocalMap);
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.bind(this.xid);
                 }
@@ -149,7 +149,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.unbind();
                 }
-                AppContextHolder.remove();
+                BaseContextHolder.remove();
             }
         }
     }

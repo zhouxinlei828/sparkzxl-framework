@@ -31,7 +31,7 @@
 - sparkzxl-drools-starter
 - sparkzxl-elasticsearch-starter
 - sparkzxl-feign-starter
-- sparkzxl-gateway-filter
+- sparkzxl-gateway-starter
 - sparkzxl-job-executor-starter
 - sparkzxl-jwt-starter
 - sparkzxl-log-starter

@@ -9,7 +9,6 @@ import java.util.Map;
  * description: 通过yaml属性加载数据源工厂
  *
  * @author zhouxinlei
- * @date 2021-09-02 08:41:55
  */
 @AllArgsConstructor
 public class YamlMongoDatabaseFactoryProvider extends AbstractMongoDatabaseFactoryProvider {

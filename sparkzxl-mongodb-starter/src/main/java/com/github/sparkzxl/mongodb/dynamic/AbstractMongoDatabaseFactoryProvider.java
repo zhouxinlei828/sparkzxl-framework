@@ -10,7 +10,6 @@ import java.util.Map;
  * description: 抽象mongodb多数据源加载
  *
  * @author zhouxinlei
- * @date 2021-09-03 08:57:16
  */
 @Slf4j
 public abstract class AbstractMongoDatabaseFactoryProvider implements DynamicMongoDatabaseFactoryProvider {

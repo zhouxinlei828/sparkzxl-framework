@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
  * description: 日志告警自动装配
  *
  * @author zhoux
- * @date 2021-08-21 13:30:21
  */
 @Slf4j
 @Configuration

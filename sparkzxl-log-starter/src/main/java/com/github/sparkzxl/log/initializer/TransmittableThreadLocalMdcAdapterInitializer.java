@@ -9,7 +9,6 @@ import org.springframework.lang.NonNull;
  * description: 初始化TtlMDCAdapter实例，并替换MDC中的adapter对象
  *
  * @author zhouxinlei
- * @date 2021-08-14 14:34:48
  */
 public class TransmittableThreadLocalMdcAdapterInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override

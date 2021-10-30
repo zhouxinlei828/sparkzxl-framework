@@ -118,8 +118,8 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
         }
         String jti = jsonObject.getString("jti");
         jwtUserInfo.setJti(jti);
-        String tenant = jsonObject.getString("tenant");
-        jwtUserInfo.setTenant(tenant);
+        String tenantId = jsonObject.getString("tenantId");
+        jwtUserInfo.setTenantId(tenantId);
         List authorities = jsonObject.getObject("authorities", List.class);
         jwtUserInfo.setAuthorities(authorities);
         return jwtUserInfo;

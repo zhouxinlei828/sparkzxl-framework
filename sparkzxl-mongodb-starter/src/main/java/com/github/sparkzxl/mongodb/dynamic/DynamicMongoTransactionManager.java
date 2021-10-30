@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.MongoTransactionManager;
  * description: 动态数据工厂事务管理器
  *
  * @author zhouxinlei
- * @date 2021-09-02 14:22:22
  */
 @Slf4j
 public class DynamicMongoTransactionManager extends MongoTransactionManager {

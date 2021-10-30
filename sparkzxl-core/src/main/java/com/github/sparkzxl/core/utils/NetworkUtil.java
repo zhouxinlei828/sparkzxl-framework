@@ -31,6 +31,9 @@ public class NetworkUtil {
                 ip = request.getHeader("HTTP_X_FORWARDED_FOR");
             }
             if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("X-Real-IP");
+            }
+            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getRemoteAddr();
             }
         } else if (ip.length() > 15) {

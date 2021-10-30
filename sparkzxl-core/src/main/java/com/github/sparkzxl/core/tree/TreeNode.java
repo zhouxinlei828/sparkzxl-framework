@@ -23,7 +23,7 @@ public class TreeNode<E, T extends Serializable> implements Cloneable, Serializa
     /**
      * 排序号
      */
-    protected Integer sortValue;
+    protected Integer sortNumber;
     /**
      * 子节点
      */
@@ -67,12 +67,12 @@ public class TreeNode<E, T extends Serializable> implements Cloneable, Serializa
         return this;
     }
 
-    public Integer getSortValue() {
-        return this.sortValue;
+    public Integer getSortNumber() {
+        return this.sortNumber;
     }
 
-    public TreeNode<E, T> setSortValue(Integer sortValue) {
-        this.sortValue = sortValue;
+    public TreeNode<E, T> setSortNumber(Integer sortNumber) {
+        this.sortNumber = sortNumber;
         return this;
     }
 
@@ -101,7 +101,7 @@ public class TreeNode<E, T extends Serializable> implements Cloneable, Serializa
         return "TreeNode{" +
                 "label='" + label + '\'' +
                 ", parentId=" + parentId +
-                ", sortValue=" + sortValue +
+                ", sortNumber=" + sortNumber +
                 ", children=" + children +
                 '}';
     }

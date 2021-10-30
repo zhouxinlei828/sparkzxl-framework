@@ -14,6 +14,6 @@ public interface HandlerInterceptor<R, T> {
      * @param t 请求参数
      * @return 返回结果
      */
-    R handle(T t);
+    R execute(T t);
 
 }

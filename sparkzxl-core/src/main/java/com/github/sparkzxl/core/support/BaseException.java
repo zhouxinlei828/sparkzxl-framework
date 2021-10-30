@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.BaseEnumCode;
+import com.github.sparkzxl.core.base.code.ResponseInfo;
 import lombok.Getter;
 
 /**
@@ -19,9 +19,9 @@ public class BaseException extends RuntimeException {
 
     private String message;
 
-    public BaseException(BaseEnumCode baseEnumCode) {
-        this.code = baseEnumCode.getCode();
-        this.message = baseEnumCode.getMessage();
+    public BaseException(ResponseInfo responseInfo) {
+        this.code = responseInfo.getCode();
+        this.message = responseInfo.getMessage();
     }
 
     public BaseException(Throwable cause) {
@@ -33,14 +33,14 @@ public class BaseException extends RuntimeException {
         this.message = message;
     }
 
-    public BaseException(BaseEnumCode baseEnumCode, Object[] args, String message) {
-        this.code = baseEnumCode.getCode();
+    public BaseException(ResponseInfo responseInfo, Object[] args, String message) {
+        this.code = responseInfo.getCode();
         this.args = args;
         this.message = message;
     }
 
-    public BaseException(BaseEnumCode baseEnumCode, Object[] args, String message, Throwable cause) {
-        this.code = baseEnumCode.getCode();
+    public BaseException(ResponseInfo responseInfo, Object[] args, String message, Throwable cause) {
+        this.code = responseInfo.getCode();
         this.args = args;
         this.message = message;
     }

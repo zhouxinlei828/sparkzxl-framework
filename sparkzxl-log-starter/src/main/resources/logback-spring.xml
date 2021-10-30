@@ -146,6 +146,7 @@
     </appender>
 
     <logger name="springfox.documentation" level="ERROR"/>
+    <logger name="com.alibaba.nacos" level="ERROR"/>
 
     <root level="${log.level.console}">
         <appender-ref ref="grpc-log"/>

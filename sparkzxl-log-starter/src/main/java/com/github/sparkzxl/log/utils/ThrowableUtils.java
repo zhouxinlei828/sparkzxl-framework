@@ -1,8 +1,8 @@
 package com.github.sparkzxl.log.utils;
 
 
-import com.github.sparkzxl.log.AlarmLogContext;
 import com.github.sparkzxl.entity.log.AlarmLogInfo;
+import com.github.sparkzxl.log.AlarmLogContext;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +12,6 @@ import java.util.Map;
  * description: 异常处理工具类
  *
  * @author zhouxinlei
- * @date 2021-09-07 20:54:24
  */
 public class ThrowableUtils {
 

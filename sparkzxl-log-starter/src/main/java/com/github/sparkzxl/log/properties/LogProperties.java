@@ -100,7 +100,6 @@ public class LogProperties {
      * description: 日志告警全局配置
      *
      * @author zhoux
-     * @date 2021-08-21 13:47:51
      */
     @Getter
     @Setter

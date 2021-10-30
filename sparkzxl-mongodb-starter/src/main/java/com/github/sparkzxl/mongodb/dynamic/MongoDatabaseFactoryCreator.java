@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
  * description: 数据源工厂构造接口
  *
  * @author zhouxinlei
- * @date 2021-09-03 08:55:03
  */
 public interface MongoDatabaseFactoryCreator {
 

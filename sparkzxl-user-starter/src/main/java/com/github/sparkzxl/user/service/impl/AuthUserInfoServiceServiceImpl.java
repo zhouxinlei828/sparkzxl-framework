@@ -2,8 +2,8 @@ package com.github.sparkzxl.user.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.sparkzxl.cache.template.GeneralCacheService;
-import com.github.sparkzxl.constant.AppContextConstants;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
@@ -44,7 +44,7 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
         log.info("accessToken : [{}]", accessToken);
         AuthUserInfo authUserInfo = null;
         if (ObjectUtils.isNotEmpty(generalCacheService)) {
-            authUserInfo = generalCacheService.get(BuildKeyUtil.generateKey(AppContextConstants.AUTH_USER, accessToken));
+            authUserInfo = generalCacheService.get(BuildKeyUtil.generateKey(BaseContextConstants.AUTH_USER, accessToken));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
             JWSObject jwsObject = null;
@@ -56,9 +56,9 @@ public class AuthUserInfoServiceServiceImpl implements IAuthUserInfoService {
             String payload = jwsObject.getPayload().toString();
             JwtUserInfo jwtUserInfo = JSONObject.parseObject(payload, JwtUserInfo.class);
             Object userInfoId = jwtUserInfo.getId();
-            authUserInfo = getCache(BuildKeyUtil.generateKey(AppContextConstants.AUTH_USER_TOKEN, userInfoId), accessToken);
+            authUserInfo = getCache(BuildKeyUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, userInfoId), accessToken);
             if (ObjectUtils.isEmpty(authUserInfo)) {
-                ExceptionAssert.failure(ApiResponseStatus.TOKEN_EXPIRED_ERROR);
+                ExceptionAssert.failure(ResponseInfoStatus.TOKEN_EXPIRED_ERROR);
             }
         }
         return authUserInfo;

@@ -9,19 +9,14 @@ import java.util.List;
  * description: 日志告警全局信息
  *
  * @author zhoux
- * @date 2021-08-22 09:35:44
  */
 public class AlarmLogContext {
 
-    private static Boolean printStackTrace = false;
-
-    private static Boolean simpleWarnInfo = false;
-
-    private static Boolean warnExceptionExtend = false;
-
-    private static List<Class<? extends Throwable>> doWarnExceptionList = new ArrayList<>();
-
     private static final List<Class<? extends Throwable>> DO_EXTEND_WARN_EXCEPTION_LIST = new ArrayList<>();
+    private static Boolean printStackTrace = false;
+    private static Boolean simpleWarnInfo = false;
+    private static Boolean warnExceptionExtend = false;
+    private static List<Class<? extends Throwable>> doWarnExceptionList = new ArrayList<>();
 
     public static Boolean getPrintStackTrace() {
         return printStackTrace;
@@ -54,17 +49,17 @@ public class AlarmLogContext {
         return doWarnExceptionList;
     }
 
-    public static void addDoWarnExceptionList(List<Class<? extends Throwable>> doWarnExceptionList) {
-        AlarmLogContext.doWarnExceptionList.addAll(doWarnExceptionList);
-        if (AlarmLogContext.warnExceptionExtend) {
-            genExtendWarnExceptionList(doWarnExceptionList);
-        }
-    }
-
     public static void setDoWarnExceptionList(List<Class<? extends Throwable>> doWarnExceptionList) {
         AlarmLogContext.doWarnExceptionList = doWarnExceptionList;
         if (AlarmLogContext.warnExceptionExtend) {
             genExtendWarnExceptionList();
+        }
+    }
+
+    public static void addDoWarnExceptionList(List<Class<? extends Throwable>> doWarnExceptionList) {
+        AlarmLogContext.doWarnExceptionList.addAll(doWarnExceptionList);
+        if (AlarmLogContext.warnExceptionExtend) {
+            genExtendWarnExceptionList(doWarnExceptionList);
         }
     }
 

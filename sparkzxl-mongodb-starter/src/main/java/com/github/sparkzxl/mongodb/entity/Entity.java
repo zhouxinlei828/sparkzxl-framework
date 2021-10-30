@@ -1,7 +1,9 @@
 package com.github.sparkzxl.mongodb.entity;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.*;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
@@ -12,30 +14,26 @@ import java.time.LocalDateTime;
  *
  * @author zhouxinlei
  */
-@Data
+@Getter
+@Setter
 public class Entity<E> implements Serializable {
 
-    private static final long serialVersionUID = -6141149323457188297L;
 
-    @Id
-    private E id;
-
-    @Field(value = "create_user")
-    public String createUser;
-
+    private static final long serialVersionUID = 1932221777234584892L;
+    @CreatedBy
+    public String createdBy;
     @Field(value = "create_user_name")
     public String createUserName;
-
-    @Field(value = "create_time")
-    public LocalDateTime createTime;
-
-    @Field(value = "update_user")
-    public String updateUser;
-
+    @CreatedDate
+    public LocalDateTime createdTime;
+    @LastModifiedBy
+    public String updatedBy;
     @Field(value = "update_user_name")
     public String updateUserName;
-
-    @Field(value = "update_time")
-    public LocalDateTime updateTime;
+    @LastModifiedDate
+    public LocalDateTime updatedTime;
+    @Id
+    @Indexed(unique = true)
+    private E id;
 
 }

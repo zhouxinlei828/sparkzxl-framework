@@ -1,10 +1,16 @@
 package com.github.sparkzxl.log;
 
-import com.github.sparkzxl.log.aspect.WebLogAspect;
+import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
+import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
+import com.github.sparkzxl.log.event.HttpRequestLogListener;
+import com.github.sparkzxl.log.event.OptLogListener;
 import com.github.sparkzxl.log.netty.LogWebSocketHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
+import com.github.sparkzxl.log.store.DefaultOperatorServiceImpl;
+import com.github.sparkzxl.log.store.IOperatorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -40,8 +46,15 @@ public class LogAutoConfiguration {
     }
 
     @Bean
-    public WebLogAspect webLogAspect() {
-        return new WebLogAspect();
+    public HttpRequestLogAspect webLogAspect() {
+        return new HttpRequestLogAspect();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public HttpRequestLogListener httpRequestLogListener() {
+        return new HttpRequestLogListener(log -> {
+        });
     }
 
     @Bean
@@ -52,5 +65,23 @@ public class LogAutoConfiguration {
         LogWebSocketHandler logWebSocketHandler = new LogWebSocketHandler();
         logWebSocketHandler.setLogPath(logPath);
         return logWebSocketHandler;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IOperatorService.class)
+    public IOperatorService operatorService() {
+        return new DefaultOperatorServiceImpl();
+    }
+
+    @Bean
+    public OptLogRecordAspect optLogRecordAspect(IOperatorService operatorService) {
+        return new OptLogRecordAspect(operatorService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public OptLogListener optLogListener() {
+        return new OptLogListener(log -> {
+        });
     }
 }

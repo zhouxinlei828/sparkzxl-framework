@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * description: 邮件告警
  *
  * @author zhoux
- * @date 2021-08-21 13:48:29
  */
 @Data
 @ConfigurationProperties(prefix = "spring.alarm.mail")

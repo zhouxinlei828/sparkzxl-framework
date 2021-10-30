@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -18,30 +17,20 @@ import java.util.concurrent.TimeUnit;
  * description: 日志企业微信告警服务实现类
  *
  * @author zhoux
- * @date 2021-08-21 12:11:31
  */
 public class WorkWeXinWarnService extends BaseWarnService {
 
-    private final Logger logger = LoggerFactory.getLogger(WorkWeXinWarnService.class);
-
     private static final String GET_TOKEN_URL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s";
-
     private static final String SEND_MESSAGE_URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s";
     private static final String WECHAT_AUTH_TOKEN = "wechat_auth_token";
-
     private static final Long TOKEN_EXPIRES_IN = 7000000L;
-
+    private final Logger logger = LoggerFactory.getLogger(WorkWeXinWarnService.class);
     private final CaffeineCache caffeineCache = new CaffeineCache();
-
-    long maxSize = 1000L;
-
-    private String to;
-
     private final Integer applicationId;
-
     private final String corpId;
-
     private final String corpSecret;
+    long maxSize = 1000L;
+    private String to;
 
     public WorkWeXinWarnService(String to, Integer applicationId, String corpId, String corpSecret) {
         this.to = to;
@@ -53,13 +42,13 @@ public class WorkWeXinWarnService extends BaseWarnService {
     /**
      * 微信授权请求，GET类型，获取授权响应，用于其他方法截取token
      */
-    private String toAuth(String getTokenUrl) throws IOException {
+    private String toAuth(String getTokenUrl) {
         String resp = HttpRequest.get(getTokenUrl).execute().body();
         logger.info("get work weixin token resp:{}", resp);
         return resp;
     }
 
-    private String getToken() throws IOException {
+    private String getToken() {
         String accessToken = caffeineCache.get(WECHAT_AUTH_TOKEN);
         if (StringUtils.isEmpty(accessToken)) {
             String resp = toAuth(String.format(GET_TOKEN_URL, corpId, corpSecret));

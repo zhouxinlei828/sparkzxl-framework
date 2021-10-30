@@ -28,8 +28,8 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
     /**
      * 排序号
      */
-    @TableField("sort_value")
-    protected Integer sortValue;
+    @TableField("sort_number")
+    protected Integer sortNumber;
 
     /**
      * 子节点
@@ -65,12 +65,12 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
         return this;
     }
 
-    public Integer getSortValue() {
-        return this.sortValue;
+    public Integer getSortNumber() {
+        return this.sortNumber;
     }
 
-    public TreeEntity<E, T> setSortValue(Integer sortValue) {
-        this.sortValue = sortValue;
+    public TreeEntity<E, T> setSortNumber(Integer sortNumber) {
+        this.sortNumber = sortNumber;
         return this;
     }
 
@@ -85,6 +85,6 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
 
     @Override
     public String toString() {
-        return "TreeEntity(super=" + super.toString() + ", label=" + this.getLabel() + ", parentId=" + this.getParentId() + ", sortValue=" + this.getSortValue() + ", children=" + this.getChildren() + ")";
+        return "TreeEntity(super=" + super.toString() + ", label=" + this.getLabel() + ", parentId=" + this.getParentId() + ", sortNumber=" + this.getSortNumber() + ", children=" + this.getChildren() + ")";
     }
 }

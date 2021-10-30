@@ -1,19 +1,20 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
 import com.github.sparkzxl.constant.ConfigurationConstant;
+import com.github.sparkzxl.constant.enums.IdTypeEnum;
+import com.github.sparkzxl.constant.enums.MultiTenantType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Map;
 
 /**
- * description:
+ * description: 动态数据源配置属性
  *
  * @author zhouxinlei
- * @date 2021-09-02 08:43:30
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.MONGO_PREFIX)
+@ConfigurationProperties(prefix = ConfigurationConstant.DYNAMIC_MONGO_PREFIX)
 public class DynamicMongoProperties {
 
     private boolean enabled;
@@ -25,6 +26,25 @@ public class DynamicMongoProperties {
 
     private boolean removeClass = true;
 
+    /**
+     * 主键生成策略
+     */
+    private IdTypeEnum idType = IdTypeEnum.HU_TOOL;
+
+    /**
+     * 多租户模式
+     */
+    private MultiTenantType multiTenantType = MultiTenantType.DATASOURCE;
+
+    /**
+     * 租户库 前缀
+     */
+    private String tenantDatabasePrefix = "sparkzxl_auth";
+    /**
+     * 租户字段
+     */
+    private String tenantIdColumn = "tenant_id";
+
     private Map<String, MongoDatabaseProperty> provider;
 
 
@@ -32,7 +52,6 @@ public class DynamicMongoProperties {
      * description:  MongoDB数据源属性类
      *
      * @author zhouxinlei
-     * @date 2021-09-03 13:29:25
      */
     @Data
     public static class MongoDatabaseProperty {

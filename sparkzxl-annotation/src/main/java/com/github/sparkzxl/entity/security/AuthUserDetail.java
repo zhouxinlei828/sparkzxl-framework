@@ -19,13 +19,15 @@ public class AuthUserDetail<T> extends User {
 
     private T id;
 
-    private String tenant;
+    private String tenantId;
 
     private String name;
 
     private boolean tenantStatus;
 
-    public AuthUserDetail(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUserDetail(T id, String username, String password, String name, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
+        this.id = id;
+        this.name = name;
     }
 }

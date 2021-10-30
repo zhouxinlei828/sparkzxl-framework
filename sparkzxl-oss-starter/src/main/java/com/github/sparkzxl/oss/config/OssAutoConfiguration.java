@@ -19,13 +19,11 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(OssProperties.class)
 public class OssAutoConfiguration {
 
-    private final OssProperties ossProperties;
-
     @Bean
     @ConditionalOnMissingBean(OssTemplate.class)
-    @ConditionalOnProperty(name = "sparkzxl.oss.enable", havingValue = "true", matchIfMissing = true)
-    public OssTemplate ossTemplate() {
-        return new OssTemplate(ossProperties);
+    @ConditionalOnProperty(name = "oss.enabled", havingValue = "true")
+    public OssTemplate ossTemplate(OssProperties ossProperties) {
+        return new OssTemplate(() -> ossProperties);
     }
 
 }

@@ -1,10 +1,11 @@
 package com.github.sparkzxl.feign.interceptor;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.constant.AppContextConstants;
-import com.github.sparkzxl.core.context.AppContextHolder;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.context.BaseContextHolder;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
+import com.google.common.net.HttpHeaders;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import io.seata.core.context.RootContext;
@@ -28,9 +29,10 @@ import java.util.List;
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            AppContextConstants.TENANT, AppContextConstants.JWT_KEY_USER_ID,
-            AppContextConstants.JWT_KEY_ACCOUNT, AppContextConstants.JWT_KEY_NAME,
-            AppContextConstants.TRACE_ID_HEADER, AppContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", "x-forwarded-for"
+            BaseContextConstants.TENANT_ID, BaseContextConstants.JWT_KEY_USER_ID,
+            BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
+            BaseContextConstants.VERSION,
+            BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", HttpHeaders.X_FORWARDED_FOR
     );
     private FeignProperties feignProperties;
 
@@ -44,7 +46,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header(AppContextConstants.REMOTE_CALL, StrPool.TRUE);
+        template.header(BaseContextConstants.REMOTE_CALL, StrPool.TRUE);
         if (feignProperties.isEnable()) {
             String xid = RootContext.getXID();
             if (StrUtil.isNotEmpty(xid)) {
@@ -53,7 +55,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
         }
         RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, AppContextHolder.get(headerName)));
+            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, BaseContextHolder.get(headerName)));
             return;
         }
 
@@ -64,7 +66,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
             String header = request.getHeader(headerName);
-            template.header(headerName, StringUtils.isEmpty(header) ? AppContextHolder.get(headerName) : header);
+            template.header(headerName, StringUtils.isEmpty(header) ? BaseContextHolder.get(headerName) : header);
         });
     }
 }

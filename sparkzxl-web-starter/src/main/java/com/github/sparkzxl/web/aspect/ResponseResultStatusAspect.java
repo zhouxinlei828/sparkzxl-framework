@@ -2,9 +2,8 @@ package com.github.sparkzxl.web.aspect;
 
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
-import com.github.sparkzxl.annotation.result.ResponseResult;
-import com.github.sparkzxl.constant.AppContextConstants;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -65,15 +64,15 @@ public class ResponseResultStatusAspect {
     @Around(value = "pointCut()", argNames = "proceedingJoinPoint")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object proceed = proceedingJoinPoint.proceed();
-        if (ObjectUtils.isNotEmpty(proceed) && proceed instanceof ApiResult) {
+        if (ObjectUtils.isNotEmpty(proceed) && proceed instanceof ResponseResult) {
             HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
             HttpServletResponse response = RequestContextHolderUtils.getResponse();
-            ResponseResult responseResult =
-                    (ResponseResult) servletRequest.getAttribute(AppContextConstants.RESPONSE_RESULT_ANN);
+            com.github.sparkzxl.annotation.result.ResponseResult responseResult =
+                    (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             if (responseResult != null) {
-                servletRequest.removeAttribute(AppContextConstants.RESPONSE_RESULT_ANN);
+                servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             }
-            ApiResult<?> apiResult = (ApiResult<?>) proceed;
+            ResponseResult<?> apiResult = (ResponseResult<?>) proceed;
             ResponseResultStatus status = AnnotatedElementUtils.findMergedAnnotation(proceedingJoinPoint.getTarget().getClass(), ResponseResultStatus.class);
             int code = HttpStatus.BAD_REQUEST.value();
             if (ObjectUtils.isNotEmpty(status)) {
@@ -84,7 +83,7 @@ public class ResponseResultStatusAspect {
                 response.setStatus(code);
             }
             // 判断是否是feign请求&& 是否需要异常传递
-            Boolean feign = Convert.toBool(servletRequest.getHeader(AppContextConstants.REMOTE_CALL), Boolean.FALSE);
+            Boolean feign = Convert.toBool(servletRequest.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
             if (feign && transferExceptionStatus) {
                 response.setStatus(code);
             }

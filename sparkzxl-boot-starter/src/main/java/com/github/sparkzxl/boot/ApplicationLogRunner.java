@@ -1,8 +1,10 @@
 package com.github.sparkzxl.boot;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.system.SystemUtil;
+import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
@@ -29,29 +31,28 @@ public class ApplicationLogRunner implements ApplicationRunner, Ordered {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Environment env = applicationContext.getEnvironment();
-        String contextPath = env.getProperty("server.servlet.context-path") == null ? "/" : env.getProperty("server.servlet.context-path");
-        if (StringUtils.isNotBlank(contextPath)) {
-            contextPath = contextPath.replaceFirst("/", "");
-        }
+        String applicationName = env.getProperty("spring.application.name");
+        String hostAddress = InetAddress.getLocalHost().getHostAddress();
+        int port = Convert.toInt(env.getProperty("server.port"), -1);
+        String url = UrlBuilder.create()
+                .setHost(hostAddress)
+                .setPort(port).build();
         log.info("\n______________________________________________________________\n\t" +
                         "Java Version: {} \n\t" +
-                        "运行系统: {} \n\t" +
-                        "Application: {} is running! \n\t" +
-                        "访问连接: http://{}:{}/{}\n\t" +
-                        "API接口文档：http://{}:{}/doc.html\n" +
+                        "Operating System: {} \n\t" +
+                        "Application: {} \n\t" +
+                        "API接口文档：{}doc.html\n\t" +
+                        "Health Check Endpoint：{}actuator/health\n" +
                         "______________________________________________________________",
                 SystemUtil.getJavaInfo().getVersion(),
                 SystemUtil.getOsInfo().getName(),
-                env.getProperty("spring.application.name"),
-                InetAddress.getLocalHost().getHostAddress(),
-                env.getProperty("server.port"),
-                contextPath,
-                InetAddress.getLocalHost().getHostAddress(),
-                env.getProperty("server.port"));
+                applicationName,
+                url,
+                url);
     }
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE + 1;
+        return BeanOrderEnum.APPLICATION_LOG_ORDER.getOrder();
     }
 }

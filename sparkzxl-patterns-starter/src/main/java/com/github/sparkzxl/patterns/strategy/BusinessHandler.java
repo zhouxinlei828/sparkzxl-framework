@@ -13,6 +13,6 @@ public interface BusinessHandler<R, T> {
      * @param t 业务实体参数
      * @return R 返回结果
      */
-    R businessHandler(T t);
+    R execute(T t);
 
 }

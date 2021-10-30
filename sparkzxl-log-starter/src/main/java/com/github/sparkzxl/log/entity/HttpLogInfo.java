@@ -19,7 +19,7 @@ public class HttpLogInfo {
      */
     private String ip;
     /**
-     * 请求路径
+     * 请求接口
      */
     private String url;
     /**

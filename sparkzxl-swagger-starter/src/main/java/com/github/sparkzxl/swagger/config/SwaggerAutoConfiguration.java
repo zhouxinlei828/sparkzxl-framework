@@ -1,10 +1,8 @@
 package com.github.sparkzxl.swagger.config;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.base.result.ApiResponseStatus;
-import com.github.sparkzxl.core.utils.StrPool;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.swagger.properties.SwaggerProperties;
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import com.google.common.base.Predicate;
@@ -48,7 +46,7 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
-
+    private static final String SEMICOLON = ";";
     private final SwaggerProperties swaggerProperties;
     private final OpenApiExtensionResolver openApiExtensionResolver;
     private BeanFactory beanFactory;
@@ -67,7 +65,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
     }
 
     private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
-        return input -> StrUtil.split(basePackage, StrPool.SEMICOLON).stream().anyMatch(ClassUtils.getPackageName(input)::startsWith);
+        return input -> StrUtil.split(basePackage, SEMICOLON).stream().anyMatch(ClassUtils.getPackageName(input)::startsWith);
     }
 
     private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
@@ -146,10 +144,10 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                     .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-                    .ignoredParameterTypes(AuthUserInfo.class)
                     .extensions(openApiExtensionResolver.buildExtensions(docketInfo.getGroup()));
-//                    .pathProvider(new ExtRelativePathProvider(servletContext, docketInfo.getBasePath().isEmpty() ? swaggerProperties.getBasePath() : docketInfo.getBasePath()));
-
+            if (ArrayUtil.isNotEmpty(swaggerProperties.getIgnoredClasses())) {
+                docket.ignoredParameterTypes(swaggerProperties.getIgnoredClasses());
+            }
             configurableBeanFactory.registerSingleton(groupName, docket);
             docketList.add(docket);
         }
@@ -192,7 +190,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
             excludePath.add(ant(path));
         }
 
-        return new Docket(DocumentationType.SWAGGER_2)
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .host(swaggerProperties.getHost())
                 .apiInfo(apiInfo)
                 .groupName(swaggerProperties.getGroup())
@@ -210,18 +208,20 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-                .extensions(openApiExtensionResolver.buildExtensions(swaggerProperties.getGroup()))
-                .ignoredParameterTypes(AuthUserInfo.class);
-        //.pathProvider(new ExtRelativePathProvider(servletContext, swaggerProperties.getBasePath()));
+                .extensions(openApiExtensionResolver.buildExtensions(swaggerProperties.getGroup()));
+        if (ArrayUtil.isNotEmpty(swaggerProperties.getIgnoredClasses())) {
+            docket.ignoredParameterTypes(swaggerProperties.getIgnoredClasses());
+        }
+        return docket;
     }
 
     private List<ResponseMessage> getResponseMessages() {
         return Arrays.asList(
-                new ResponseMessageBuilder().code(ApiResponseStatus.SUCCESS.getCode()).message(ApiResponseStatus.SUCCESS.getMessage()).build(),
-                new ResponseMessageBuilder().code(ApiResponseStatus.FAILURE.getCode()).message(ApiResponseStatus.FAILURE.getMessage()).build(),
-                new ResponseMessageBuilder().code(ApiResponseStatus.UN_AUTHORIZED.getCode()).message(ApiResponseStatus.UN_AUTHORIZED.getMessage()).build(),
-                new ResponseMessageBuilder().code(ApiResponseStatus.AUTHORIZED_DENIED.getCode()).message(ApiResponseStatus.AUTHORIZED_DENIED.getMessage()).build(),
-                new ResponseMessageBuilder().code(ApiResponseStatus.TOKEN_EXPIRED_ERROR.getCode()).message(ApiResponseStatus.TOKEN_EXPIRED_ERROR.getMessage()).build()
+                new ResponseMessageBuilder().code(200).message("操作成功").build(),
+                new ResponseMessageBuilder().code(500).message("哎呀，开了个小差，请稍后再试").build(),
+                new ResponseMessageBuilder().code(401).message("暂未登录或者token失效").build(),
+                new ResponseMessageBuilder().code(403).message("无权限访问").build(),
+                new ResponseMessageBuilder().code(2001).message("Token过期").build()
         );
     }
 

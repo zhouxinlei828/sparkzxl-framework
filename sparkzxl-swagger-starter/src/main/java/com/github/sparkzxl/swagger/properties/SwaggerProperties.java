@@ -1,6 +1,5 @@
 package com.github.sparkzxl.swagger.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.KNIFE4J_PREFIX)
+@ConfigurationProperties(prefix = "knife4j")
 public class SwaggerProperties {
 
     /**
@@ -54,6 +53,8 @@ public class SwaggerProperties {
      * 扩展swagger 基础路径
      */
     private String basePath = "/";
+
+    private Class[] ignoredClasses;
     /**
      * SpringSecurity 全局统一鉴权配置
      **/
