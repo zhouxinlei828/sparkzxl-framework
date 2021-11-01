@@ -4,12 +4,11 @@ import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.format.FastDateFormat;
 import com.github.sparkzxl.entity.core.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -60,9 +59,9 @@ public class DateUtils extends DateUtil {
     }
 
     public static Date formatDate(String dateStr, String datePattern) {
-        DateFormat fmt = new SimpleDateFormat(datePattern);
+        FastDateFormat fastDateFormat = FastDateFormat.getInstance(datePattern);
         try {
-            return fmt.parse(dateStr);
+            return fastDateFormat.parse(dateStr);
         } catch (ParseException e) {
             log.error("格式化日期发生异常：[{}]", e.getMessage());
             e.printStackTrace();
@@ -153,11 +152,11 @@ public class DateUtils extends DateUtil {
     }
 
     public static boolean isThisTime(Date date, String pattern) {
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        FastDateFormat fastDateFormat = FastDateFormat.getInstance(pattern);
         //参数时间
-        String param = sdf.format(date);
+        String param = fastDateFormat.format(date);
         //当前时间
-        String now = sdf.format(new Date());
+        String now = fastDateFormat.format(new Date());
         return param.equals(now);
     }
 
