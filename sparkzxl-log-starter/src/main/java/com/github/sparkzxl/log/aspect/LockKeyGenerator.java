@@ -36,7 +36,6 @@ public class LockKeyGenerator {
         final Object[] args = joinPoint.getArgs();
         List<Object> argList = ListUtils.arrayToList(args);
         argList.removeAll(Collections.singleton(null));
-        boolean empty = CollectionUtils.isEmpty(argList);
         final Parameter[] parameters = method.getParameters();
         String value = httpRequestLog.value();
         StringBuilder builder = new StringBuilder(value);
@@ -51,26 +50,6 @@ public class LockKeyGenerator {
                         .append(annotation.value())
                         .append(httpRequestLog.delimiter())
                         .append(argList.get(i));
-            }
-        }
-        if (StringUtils.isEmpty(builder.toString())) {
-            final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-            for (int i = 0; i < parameterAnnotations.length; i++) {
-                if (!empty) {
-                    final Object object = argList.get(i);
-                    final Field[] fields = object.getClass().getDeclaredFields();
-                    for (Field field : fields) {
-                        final RequestLogParam annotation = field.getAnnotation(RequestLogParam.class);
-                        if (annotation == null) {
-                            continue;
-                        }
-                        field.setAccessible(true);
-                        builder.append(httpRequestLog.delimiter())
-                                .append(annotation.value())
-                                .append(httpRequestLog.delimiter())
-                                .append(ReflectionUtils.getField(field, object));
-                    }
-                }
             }
         }
         return builder.toString();
