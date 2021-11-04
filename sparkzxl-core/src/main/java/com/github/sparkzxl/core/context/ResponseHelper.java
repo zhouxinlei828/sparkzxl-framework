@@ -16,12 +16,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * description: 全局响应处理
+ * description: 响应处理工具类
  *
  * @author zhouxinlei
  */
 @Slf4j
-public class ResponseContextHolder {
+public class ResponseHelper {
 
     public static String getAuthHeader(HttpServletRequest httpRequest) {
         String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);

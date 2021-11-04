@@ -3,6 +3,7 @@ package com.github.sparkzxl.user.manager;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 /**
  * description: 用户状态管理
@@ -17,8 +18,10 @@ public interface UserStateManager {
      *
      * @param token        用户token
      * @param authUserInfo 用户
+     * @param expiresIn    有效期
+     * @param timeUnit     时间单位
      */
-    void addUser(String token, AuthUserInfo authUserInfo);
+    void addUser(String token, AuthUserInfo authUserInfo, int expiresIn, TimeUnit timeUnit);
 
     /**
      * 移除用户信息

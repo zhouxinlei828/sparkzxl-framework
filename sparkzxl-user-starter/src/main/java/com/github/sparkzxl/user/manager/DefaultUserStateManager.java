@@ -3,7 +3,7 @@ package com.github.sparkzxl.user.manager;
 import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.context.ResponseContextHolder;
+import com.github.sparkzxl.core.context.ResponseHelper;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.utils.BuildKeyUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 /**
  * description: 用户状态管理实现
@@ -30,9 +31,9 @@ public class DefaultUserStateManager implements UserStateManager {
     }
 
     @Override
-    public void addUser(String token, AuthUserInfo authUserInfo) {
+    public void addUser(String token, AuthUserInfo authUserInfo, int expiresIn, TimeUnit timeUnit) {
         if (ObjectUtils.isNotEmpty(generalCacheService)) {
-            generalCacheService.set(BuildKeyUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token), authUserInfo);
+            generalCacheService.set(BuildKeyUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token), authUserInfo, (long) expiresIn, timeUnit);
         }
     }
 
@@ -58,7 +59,7 @@ public class DefaultUserStateManager implements UserStateManager {
 
     @Override
     public AuthUserInfo getUser(HttpServletRequest servletRequest) {
-        String token = ResponseContextHolder.getAuthHeader(servletRequest);
+        String token = ResponseHelper.getAuthHeader(servletRequest);
         return getUser(token);
     }
 

@@ -1,10 +1,10 @@
 package com.github.sparkzxl.patterns.config;
 
-import com.github.sparkzxl.patterns.pipeline.HandlerInterceptor;
 import com.github.sparkzxl.patterns.factory.BusinessStrategyFactory;
 import com.github.sparkzxl.patterns.factory.DefaultBusinessStrategyFactory;
 import com.github.sparkzxl.patterns.factory.DefaultHandlerInterceptorFactory;
 import com.github.sparkzxl.patterns.factory.HandlerInterceptorFactory;
+import com.github.sparkzxl.patterns.pipeline.HandlerInterceptor;
 import com.github.sparkzxl.patterns.strategy.BusinessHandler;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
