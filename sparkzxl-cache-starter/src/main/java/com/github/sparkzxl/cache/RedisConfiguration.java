@@ -2,8 +2,8 @@ package com.github.sparkzxl.cache;
 
 import com.github.sparkzxl.cache.redis.RedisOps;
 import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
-import com.github.sparkzxl.cache.template.GeneralCacheService;
-import com.github.sparkzxl.cache.template.RedisCacheImpl;
+import com.github.sparkzxl.cache.service.GeneralCacheService;
+import com.github.sparkzxl.cache.service.RedisCacheImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

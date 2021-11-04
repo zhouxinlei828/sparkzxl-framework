@@ -1,7 +1,7 @@
 package com.github.sparkzxl.log.event;
 
 
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class HttpRequestLogListener {
             log.warn("忽略请求日志记录");
             return;
         }
-        Optional.ofNullable(requestInfoLog.getTenantId()).ifPresent(BaseContextHolder::setTenant);
+        Optional.ofNullable(requestInfoLog.getTenantId()).ifPresent(RequestLocalContextHolder::setTenant);
         if (log.isDebugEnabled()) {
             log.debug("租户:【{}】 用户名:【{}】 请求接口:【{}】 请求参数:【{}】",
                     requestInfoLog.getTenantId(), requestInfoLog.getUserName(),

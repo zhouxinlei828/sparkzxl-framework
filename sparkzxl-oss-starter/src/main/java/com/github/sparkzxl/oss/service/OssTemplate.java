@@ -1,5 +1,6 @@
 package com.github.sparkzxl.oss.service;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
 import com.amazonaws.ClientConfiguration;
@@ -22,12 +23,17 @@ import com.github.sparkzxl.oss.properties.OssProperties;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -37,6 +43,7 @@ import java.util.function.Supplier;
  * @author zhouxinlei
  */
 @RequiredArgsConstructor
+@Slf4j
 public class OssTemplate implements AmazonS3Load {
 
     private final Supplier<OssProperties> ossPropertiesSupplier;
@@ -423,5 +430,54 @@ public class OssTemplate implements AmazonS3Load {
         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName)
                 .withKeys(objectName);
         amazonS3Instance().deleteObjects(deleteObjectsRequest);
+    }
+
+    @SneakyThrows
+    public void downloadFile(String fileUrl, HttpServletResponse response) {
+        URL url = new URL(fileUrl);
+        InputStream inputStream = url.openStream();
+        String fileName = FileNameUtil.getName(fileUrl);
+        handleDownloadFile(fileName, response, url, inputStream);
+    }
+
+    @SneakyThrows
+    public void downloadFile(String fileUrl, String fileName, HttpServletResponse response) {
+        URL url = new URL(fileUrl);
+        InputStream inputStream = url.openStream();
+        handleDownloadFile(fileName, response, url, inputStream);
+    }
+
+    private void handleDownloadFile(String fileName, HttpServletResponse response, URL url, InputStream inputStream) throws IOException {
+        ServletOutputStream outputStream = null;
+        try {
+            PresignedUrlDownloadRequest urlDownloadRequest = new PresignedUrlDownloadRequest(url);
+            PresignedUrlDownloadResult presignedUrlDownloadResult = amazonS3Instance().download(urlDownloadRequest);
+            ObjectMetadata objectMetadata = presignedUrlDownloadResult.getS3Object().getObjectMetadata();
+            String contentLength = String.valueOf(objectMetadata.getContentLength());
+            S3ObjectInputStream s3ObjectInputStream = presignedUrlDownloadResult.getS3Object().getObjectContent();
+            InputStream delegateStream = s3ObjectInputStream.getDelegateStream();
+            // 清空response
+            response.reset();
+            response.setContentType(objectMetadata.getContentType());
+            // 设置response的Header
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.addHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
+            response.addHeader("Content-Length", contentLength);
+            outputStream = response.getOutputStream();
+            int length;
+            byte[] bs = new byte[1024];
+            while ((length = delegateStream.read(bs)) != -1) {
+                outputStream.write(bs, 0, length);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (Objects.nonNull(outputStream)) {
+                outputStream.close();
+            }
+            if (Objects.nonNull(inputStream)) {
+                inputStream.close();
+            }
+        }
     }
 }

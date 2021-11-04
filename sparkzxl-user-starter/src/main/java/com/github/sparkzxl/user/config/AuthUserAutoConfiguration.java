@@ -1,8 +1,8 @@
 package com.github.sparkzxl.user.config;
 
+import com.github.sparkzxl.user.manager.DefaultUserStateManager;
+import com.github.sparkzxl.user.manager.UserStateManager;
 import com.github.sparkzxl.user.resolver.AuthUserArgumentResolver;
-import com.github.sparkzxl.user.service.IAuthUserInfoService;
-import com.github.sparkzxl.user.service.impl.AuthUserInfoServiceServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
- * description: 全局用户配置类
+ * description: 用户配置类
  *
  * @author zhouxinlei
  */
@@ -21,19 +21,19 @@ import java.util.List;
 public class AuthUserAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
-    public IAuthUserInfoService authUserInfoService() {
-        return new AuthUserInfoServiceServiceImpl();
+    public UserStateManager userStateManager() {
+        return new DefaultUserStateManager();
     }
 
     @Bean
-    public AuthUserArgumentResolver globalUserArgumentResolver() {
+    public AuthUserArgumentResolver authUserArgumentResolver() {
         log.info("Automatic injection of global user information acquisition");
-        return new AuthUserArgumentResolver(authUserInfoService());
+        return new AuthUserArgumentResolver(userStateManager());
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(globalUserArgumentResolver());
+        resolvers.add(authUserArgumentResolver());
     }
 
 }

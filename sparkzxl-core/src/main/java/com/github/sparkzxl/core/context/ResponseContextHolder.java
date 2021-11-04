@@ -23,8 +23,6 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class ResponseContextHolder {
 
-    public static boolean feignStatus;
-
     public static String getAuthHeader(HttpServletRequest httpRequest) {
         String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);
         return StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);

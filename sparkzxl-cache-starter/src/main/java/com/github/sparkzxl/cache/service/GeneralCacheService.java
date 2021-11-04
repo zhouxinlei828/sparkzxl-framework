@@ -1,4 +1,4 @@
-package com.github.sparkzxl.cache.template;
+package com.github.sparkzxl.cache.service;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;

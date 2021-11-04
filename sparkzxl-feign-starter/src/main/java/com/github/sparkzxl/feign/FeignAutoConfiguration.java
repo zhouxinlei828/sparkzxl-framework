@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign;
 
 import com.github.sparkzxl.feign.hystrix.ThreadLocalHystrixConcurrencyStrategy;
-import com.github.sparkzxl.feign.interceptor.FeignAddHeaderRequestInterceptor;
+import com.github.sparkzxl.feign.interceptor.FeignHeaderRequestInterceptor;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.github.sparkzxl.feign.support.FeignExceptionHandler;
 import com.netflix.hystrix.HystrixCommand;
@@ -79,8 +79,8 @@ public class FeignAutoConfiguration {
          */
         @ConditionalOnMissingBean
         @Bean
-        public FeignAddHeaderRequestInterceptor getClientTokenInterceptor() {
-            return new FeignAddHeaderRequestInterceptor();
+        public FeignHeaderRequestInterceptor feignHeaderRequestInterceptor() {
+            return new FeignHeaderRequestInterceptor();
         }
     }
 
