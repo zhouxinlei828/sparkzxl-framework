@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhoux
  */
-public class LogAlarmLogbackAsyncAppender extends AsyncAppender {
+public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
 
     private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2,
             4,

@@ -141,7 +141,7 @@
     </appender>
 
 
-    <appender name="AlarmLog" class="com.github.sparkzxl.log.LogAlarmLogbackAsyncAppender">
+    <appender name="AlarmLog" class="com.github.sparkzxl.log.AlarmLogLogbackAsyncAppender">
         <appender-ref ref="ConsoleOutput"/>
     </appender>
 
