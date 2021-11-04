@@ -1,11 +1,14 @@
 package com.github.sparkzxl.log.aspect;
 
+import com.github.sparkzxl.core.utils.ListUtils;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.annotation.RequestLogParam;
+import org.apache.commons.lang3.ObjectUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +16,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * description: 业务描述生成工具类
@@ -29,6 +34,9 @@ public class LockKeyGenerator {
             httpRequestLog = AnnotatedElementUtils.findMergedAnnotation(joinPoint.getTarget().getClass(), HttpRequestLog.class);
         }
         final Object[] args = joinPoint.getArgs();
+        List<Object> argList = ListUtils.arrayToList(args);
+        argList.removeAll(Collections.singleton(null));
+        boolean empty = CollectionUtils.isEmpty(argList);
         final Parameter[] parameters = method.getParameters();
         String value = httpRequestLog.value();
         StringBuilder builder = new StringBuilder(value);
@@ -38,26 +46,30 @@ public class LockKeyGenerator {
             if (annotation == null) {
                 continue;
             }
-            builder.append(httpRequestLog.delimiter())
-                    .append(annotation.value())
-                    .append(httpRequestLog.delimiter())
-                    .append(args[i]);
+            if (ObjectUtils.isNotEmpty(annotation)) {
+                builder.append(httpRequestLog.delimiter())
+                        .append(annotation.value())
+                        .append(httpRequestLog.delimiter())
+                        .append(argList.get(i));
+            }
         }
         if (StringUtils.isEmpty(builder.toString())) {
             final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
             for (int i = 0; i < parameterAnnotations.length; i++) {
-                final Object object = args[i];
-                final Field[] fields = object.getClass().getDeclaredFields();
-                for (Field field : fields) {
-                    final RequestLogParam annotation = field.getAnnotation(RequestLogParam.class);
-                    if (annotation == null) {
-                        continue;
+                if (!empty) {
+                    final Object object = argList.get(i);
+                    final Field[] fields = object.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        final RequestLogParam annotation = field.getAnnotation(RequestLogParam.class);
+                        if (annotation == null) {
+                            continue;
+                        }
+                        field.setAccessible(true);
+                        builder.append(httpRequestLog.delimiter())
+                                .append(annotation.value())
+                                .append(httpRequestLog.delimiter())
+                                .append(ReflectionUtils.getField(field, object));
                     }
-                    field.setAccessible(true);
-                    builder.append(httpRequestLog.delimiter())
-                            .append(annotation.value())
-                            .append(httpRequestLog.delimiter())
-                            .append(ReflectionUtils.getField(field, object));
                 }
             }
         }
