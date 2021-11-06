@@ -9,7 +9,7 @@
     <version>2.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>sparkzxl-framework</name>
-    <description>sparkzxl component framework</description>
+    <description>sparkzxl framework</description>
     <url>https://github.com/sparkzxl/sparkzxl-framework</url>
 
     <properties>
