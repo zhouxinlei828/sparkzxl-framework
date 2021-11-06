@@ -1,7 +1,7 @@
 package com.github.sparkzxl.log.event;
 
 
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.log.entity.OptLogRecordDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class OptLogListener {
             log.warn("忽略操作日志记录");
             return;
         }
-        Optional.ofNullable(optLogRecordDetail.getTenantId()).ifPresent(BaseContextHolder::setTenant);
+        Optional.ofNullable(optLogRecordDetail.getTenantId()).ifPresent(RequestLocalContextHolder::setTenant);
         if (log.isDebugEnabled()) {
             log.debug("用户行为记录：租户：【{}】 请求接口：【{}】 操作人【{}】 业务类型：【{}】 业务日志：【{}】",
                     optLogRecordDetail.getTenantId(), optLogRecordDetail.getRequestUrl(), optLogRecordDetail.getOperator(),

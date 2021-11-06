@@ -1,6 +1,8 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
+import com.github.sparkzxl.annotation.response.IgnoreResponseWrap;
+import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
@@ -27,13 +29,19 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @ControllerAdvice
-public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
+public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+        final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable().getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        com.github.sparkzxl.annotation.result.ResponseResult responseResult = (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        return responseResult != null;
+        Response response = (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        Boolean supported = ObjectUtils.isNotEmpty(response) && declaredAnnotationsByType.length == 0;
+        if (log.isDebugEnabled()) {
+            log.debug("判断是否需要全局统一API响应：{}", supported ? "是" : "否");
+        }
+        return supported;
+        // return response != null;
     }
 
     @SneakyThrows

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.sparkzxl</groupId>
-    <artifactId>sparkzxl-component</artifactId>
-    <version>1.3.6</version>
+    <artifactId>sparkzxl-framework</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>sparkzxl-component</name>
-    <description>sparkzxl component framework</description>
-    <url>https://github.com/sparkzxl/sparkzxl-component</url>
+    <name>sparkzxl-framework</name>
+    <description>sparkzxl framework</description>
+    <url>https://github.com/sparkzxl/sparkzxl-framework</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,12 +76,12 @@
             <roles>
                 <role>Java Development Engineer</role>
             </roles>
-            <url>https://sparkzxl.github.io/sparkzxl-component</url>
+            <url>https://sparkzxl.github.io/sparkzxl-framework</url>
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/sparkzxl/sparkzxl-component</url>
-        <connection>https://github.com/sparkzxl/sparkzxl-component.git</connection>
+        <url>https://github.com/sparkzxl/sparkzxl-framework</url>
+        <connection>https://github.com/sparkzxl/sparkzxl-framework.git</connection>
     </scm>
 
     <distributionManagement>

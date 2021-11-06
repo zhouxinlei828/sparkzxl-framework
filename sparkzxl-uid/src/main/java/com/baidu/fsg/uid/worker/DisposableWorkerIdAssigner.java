@@ -19,11 +19,12 @@ import cn.hutool.core.util.RandomUtil;
 import com.baidu.fsg.uid.utils.DockerUtils;
 import com.baidu.fsg.uid.utils.NetUtils;
 import com.baidu.fsg.uid.worker.entity.WorkerNodeEntity;
-import com.github.sparkzxl.uid.dao.WorkerNodeDao;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Consumer;
 
 /**
  * Represents an implementation of {@link WorkerIdAssigner},
@@ -42,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
     private static final Logger LOGGER = LoggerFactory.getLogger(DisposableWorkerIdAssigner.class);
 
-    private final WorkerNodeDao workerNodeDao;
+    private final Consumer<WorkerNodeEntity> consumer;
 
     /**
      * Assign worker id base on database.<p>
@@ -56,11 +57,9 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
     public long assignWorkerId() {
         // build worker node entity
         WorkerNodeEntity workerNodeEntity = buildWorkerNode();
-
         // add worker node for new (ignore the same IP + PORT)
-        workerNodeDao.addWorkerNode(workerNodeEntity);
+        consumer.accept(workerNodeEntity);
         LOGGER.info("Add worker node:" + workerNodeEntity);
-
         return workerNodeEntity.getId();
     }
 

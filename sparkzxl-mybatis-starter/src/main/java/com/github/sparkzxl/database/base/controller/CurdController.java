@@ -339,7 +339,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         }
         List<ExcelEntity> excelEntities = convertExcels(entityList);
         response.setContentType("application/vnd.ms-excel");
-        response.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String fileName = getFileName();
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
         Class excelClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[6];

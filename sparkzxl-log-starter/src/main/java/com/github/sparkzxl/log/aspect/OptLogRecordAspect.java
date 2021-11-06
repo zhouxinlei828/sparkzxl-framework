@@ -1,7 +1,7 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.text.StrFormatter;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.AspectUtil;
 import com.github.sparkzxl.core.utils.ListUtils;
@@ -80,7 +80,7 @@ public class OptLogRecordAspect {
                 .setCategory(optLogRecord.category())
                 .setUserId(userId)
                 .setOperator(name)
-                .setTenantId(BaseContextHolder.getTenant());
+                .setTenantId(RequestLocalContextHolder.getTenant());
         Object proceed = joinPoint.proceed();
         SpringContextUtils.publishEvent(new OptLogEvent(optLogRecordDetail));
         return proceed;

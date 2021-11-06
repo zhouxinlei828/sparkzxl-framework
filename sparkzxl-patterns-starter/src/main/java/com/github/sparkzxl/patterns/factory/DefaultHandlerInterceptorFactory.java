@@ -2,7 +2,6 @@ package com.github.sparkzxl.patterns.factory;
 
 import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.patterns.annonation.HandlerChain;
-import com.github.sparkzxl.patterns.duty.HandlerInterceptor;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -17,22 +16,22 @@ import java.util.Objects;
  * @author zhoux
  * @date 2021-10-23 13:02:34
  */
-public class DefaultHandlerChainFactory implements HandlerChainFactory {
+public class DefaultHandlerInterceptorFactory implements HandlerInterceptorFactory {
 
-    private final Map<String, List<HandlerInterceptor>> interceptorContainer;
+    private final Map<String, List<com.github.sparkzxl.patterns.pipeline.HandlerInterceptor>> interceptorContainer;
 
-    public DefaultHandlerChainFactory() {
+    public DefaultHandlerInterceptorFactory() {
         interceptorContainer = Maps.newHashMap();
     }
 
     @Override
-    public List<HandlerInterceptor> getInterceptorList(String type) {
+    public List<com.github.sparkzxl.patterns.pipeline.HandlerInterceptor> getInterceptorList(String type) {
         return interceptorContainer.get(type);
     }
 
-    public DefaultHandlerChainFactory addInterceptor(HandlerInterceptor handlerInterceptor) {
+    public DefaultHandlerInterceptorFactory addInterceptor(com.github.sparkzxl.patterns.pipeline.HandlerInterceptor handlerInterceptor) {
         String type = Objects.requireNonNull(AnnotationUtils.findAnnotation(handlerInterceptor.getClass(), HandlerChain.class)).type();
-        List<HandlerInterceptor> handlerInterceptors = OptionalBean.ofNullable(interceptorContainer.get(type)).orElseGet(Lists::newArrayList);
+        List<com.github.sparkzxl.patterns.pipeline.HandlerInterceptor> handlerInterceptors = OptionalBean.ofNullable(interceptorContainer.get(type)).orElseGet(Lists::newArrayList);
         interceptorContainer.put(type, handlerInterceptors);
         return this;
     }

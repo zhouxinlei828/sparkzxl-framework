@@ -1,9 +1,9 @@
-# sparkzxl-component学习教程
+# sparkzxl-framework学习教程
 
 <p>
 <a href="https://search.maven.org/search?q=sparkzxl"><img src="https://img.shields.io/badge/sparkzxl--component-1.3-blue" alt="maven"></a>
 <a href="https://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2.0"></a>
-<a href="https://github.com/sparkzxl/sparkzxl-component"><img src="https://img.shields.io/badge/组件-sparkzxl--component-orange" alt="sparkzxl-component"></a>
+<a href="https://github.com/sparkzxl/sparkzxl-framework"><img src="https://img.shields.io/badge/组件-sparkzxl--component-orange" alt="sparkzxl-framework"></a>
 <a href="https://github.com/sparkzxl/sparkzxl-auth"><img src="https://img.shields.io/badge/分布式认证-sparkzxl--auth-success" alt="分布式认证"></a>
 </p>
 
@@ -11,11 +11,11 @@
 
 ## 简介
 
-> sparkzxl-component包含springboot项目的封装，主要功能是统一了对外接口的api访问格式，web模块进行了封装，基于DDD领域驱动模型设计代码，具体落地实施，对常用的工具类包进行封装，简单易用，elasticsearch，mybatis组件。集成了oauth2，redis缓存，本地缓存的构建，分布式锁的封装等等，是快速开发的脚手架，简易适用于企业级框架搭建
+> sparkzxl-framework包含springboot项目的封装，主要功能是统一了对外接口的api访问格式，web模块进行了封装，基于DDD领域驱动模型设计代码，具体落地实施，对常用的工具类包进行封装，简单易用，elasticsearch，mybatis组件。集成了oauth2，redis缓存，本地缓存的构建，分布式锁的封装等等，是快速开发的脚手架，简易适用于企业级框架搭建
 
 ## 项目地址
 
-[sparkzxl-component](https://github.com/sparkzxl/sparkzxl-component.git)
+[sparkzxl-framework](https://github.com/sparkzxl/sparkzxl-framework.git)
 
 **落地最佳实践**：
 
@@ -50,7 +50,7 @@
 
 ## 核心架构
 
-![分布式系统架构](https://oss.sparksys.top/sparkzxl-component/distributed-architecture.jpg)
+![分布式系统架构](https://oss.sparksys.top/sparkzxl-framework/distributed-architecture.jpg)
 
 ## 未来展望
 
@@ -58,7 +58,7 @@
 
 > 组件jar包已上传maven中央仓库，可进入[maven中央仓库](https://search.maven.org/) 搜索下载
 
-![nexus-compoment.png](https://oss.sparksys.top/sparkzxl-component/nexus-compoment.png)
+![nexus-compoment.png](https://oss.sparksys.top/sparkzxl-framework/nexus-compoment.png)
 
 ## 组件框架搭建
 
@@ -111,4 +111,4 @@
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-framework/wechat-sparkzxl.jpg)

@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.utils.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.google.common.net.HttpHeaders;
@@ -26,7 +26,7 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Slf4j
-public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
+public class FeignHeaderRequestInterceptor implements RequestInterceptor {
 
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
             BaseContextConstants.TENANT_ID, BaseContextConstants.JWT_KEY_USER_ID,
@@ -36,7 +36,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
     );
     private FeignProperties feignProperties;
 
-    public FeignAddHeaderRequestInterceptor() {
+    public FeignHeaderRequestInterceptor() {
     }
 
     @Autowired
@@ -55,7 +55,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
         }
         RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, BaseContextHolder.get(headerName)));
+            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, RequestLocalContextHolder.get(headerName)));
             return;
         }
 
@@ -66,7 +66,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
             String header = request.getHeader(headerName);
-            template.header(headerName, StringUtils.isEmpty(header) ? BaseContextHolder.get(headerName) : header);
+            template.header(headerName, StringUtils.isEmpty(header) ? RequestLocalContextHolder.get(headerName) : header);
         });
     }
 }

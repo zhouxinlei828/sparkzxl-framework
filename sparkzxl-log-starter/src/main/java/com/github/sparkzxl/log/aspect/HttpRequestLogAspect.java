@@ -1,6 +1,6 @@
 package com.github.sparkzxl.log.aspect;
 
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.NetworkUtil;
@@ -104,8 +104,8 @@ public class HttpRequestLogAspect {
      * @return RequestInfoLog
      */
     private RequestInfoLog buildBaseRequestInfo(HttpServletRequest httpServletRequest, JoinPoint joinPoint) {
-        String userId = BaseContextHolder.getUserId(String.class);
-        String name = BaseContextHolder.getName();
+        String userId = RequestLocalContextHolder.getUserId(String.class);
+        String name = RequestLocalContextHolder.getName();
         Signature signature = joinPoint.getSignature();
         String category = LockKeyGenerator.getLockKey(joinPoint);
         Map<String, Object> requestParameterJson = getRequestParameterJson(signature, joinPoint.getArgs());
@@ -120,7 +120,7 @@ public class HttpRequestLogAspect {
                         signature.getName()))
                 .setRequestParams(parameterJson)
                 .setCreateTime(LocalDateTime.now())
-                .setTenantId(BaseContextHolder.getTenant());
+                .setTenantId(RequestLocalContextHolder.getTenant());
     }
 
     /**

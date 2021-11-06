@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.filter;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.utils.StringHandlerUtil;
 import com.github.sparkzxl.core.utils.SwaggerStaticResource;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
@@ -41,7 +41,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
         MDC.put(BaseContextConstants.TENANT_ID, String.valueOf(tenantId));
         log.info("请求租户id：[{}]，请求接口：[{}]", tenantId, requestUrl);
         String token = WebFluxUtils.getHeader(getHeaderKey(), request);
-        BaseContextHolder.setVersion(WebFluxUtils.getHeader(BaseContextConstants.VERSION, request));
+        RequestLocalContextHolder.setVersion(WebFluxUtils.getHeader(BaseContextConstants.VERSION, request));
         // 校验是否需要拦截地址
         if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
                 || StringHandlerUtil.matchUrl(ignorePatterns(), request.getPath().toString())) {

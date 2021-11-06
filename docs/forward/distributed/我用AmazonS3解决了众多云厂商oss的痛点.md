@@ -67,7 +67,7 @@ Configuration cfg=new Configuration(Region.region0());
 
 ### 3.1 新建 sparkzxl-oss-starter 项目
 
-![sparkzxl-oss-starter.png](https://oss.sparksys.top/sparkzxl-component/sparkzxl-oss-starter-idea.png)
+![sparkzxl-oss-starter.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-oss-starter-idea.png)
 
 ### 3.2 pom 文件配置
 
@@ -77,7 +77,7 @@ Configuration cfg=new Configuration(Region.region0());
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sparkzxl-component</artifactId>
+        <artifactId>sparkzxl-framework</artifactId>
         <groupId>com.github.sparkzxl</groupId>
         <version>1.0.1.RELEASE</version>
     </parent>
@@ -623,7 +623,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 
 在[maven 中央仓库](https://search.maven.org/) 搜索 sparkzxl-oss-starter
 
-![nexus-sparkzxl-oss-starter.png.png](https://oss.sparksys.top/sparkzxl-component/nexus-sparkzxl-oss-starter.png)
+![nexus-sparkzxl-oss-starter.png.png](https://oss.sparksys.top/sparkzxl-framework/nexus-sparkzxl-oss-starter.png)
 
 > 支持 MINIO 等自建文件存储
 
@@ -650,10 +650,10 @@ sparkzxl:
 
 ### 4.2 源码地址
 
-[sparkzxl-component](https://github.com/sparkzxl/sparkzxl-component.git)
+[sparkzxl-framework](https://github.com/sparkzxl/sparkzxl-framework.git)
 
 # 公众号
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-framework/wechat-sparkzxl.jpg)

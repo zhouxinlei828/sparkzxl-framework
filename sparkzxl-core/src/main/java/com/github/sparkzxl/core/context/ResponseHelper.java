@@ -2,6 +2,7 @@ package com.github.sparkzxl.core.context;
 
 
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
@@ -16,14 +17,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * description: 全局响应处理
+ * description: 响应处理工具类
  *
  * @author zhouxinlei
  */
 @Slf4j
-public class ResponseContextHolder {
-
-    public static boolean feignStatus;
+public class ResponseHelper {
 
     public static String getAuthHeader(HttpServletRequest httpRequest) {
         String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);
@@ -84,9 +83,9 @@ public class ResponseContextHolder {
 
     public static void clearResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        com.github.sparkzxl.annotation.result.ResponseResult responseResult =
-                (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        if (responseResult != null) {
+        Response response =
+                (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        if (response != null) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
     }

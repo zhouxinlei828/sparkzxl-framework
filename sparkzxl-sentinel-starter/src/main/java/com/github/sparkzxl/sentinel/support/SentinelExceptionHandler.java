@@ -8,6 +8,7 @@ import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
+import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
@@ -34,8 +35,8 @@ public class SentinelExceptionHandler implements Ordered {
 
     public void handleResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        com.github.sparkzxl.annotation.result.ResponseResult responseResult = (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        boolean result = responseResult != null;
+        Response response = (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        boolean result = response != null;
         if (result) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }

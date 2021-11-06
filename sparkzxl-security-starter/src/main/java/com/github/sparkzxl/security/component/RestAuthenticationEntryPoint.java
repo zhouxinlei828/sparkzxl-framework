@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.component;
 
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.context.ResponseContextHolder;
+import com.github.sparkzxl.core.context.ResponseHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.AuthenticationException;
@@ -28,7 +28,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             code = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getCode();
             message = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getMessage();
         }
-        ResponseContextHolder.writeResponseOutMsg(response,
+        ResponseHelper.writeResponseOutMsg(response,
                 code, message);
     }
 

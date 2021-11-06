@@ -1,7 +1,7 @@
 package com.github.sparkzxl.database.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.sparkzxl.cache.template.GeneralCacheService;
+import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.core.utils.BuildKeyUtil;
 import com.github.sparkzxl.database.base.mapper.SuperMapper;
 import com.github.sparkzxl.database.base.service.SuperCacheService;

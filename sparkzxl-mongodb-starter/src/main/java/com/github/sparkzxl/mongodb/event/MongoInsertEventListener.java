@@ -2,7 +2,7 @@ package com.github.sparkzxl.mongodb.event;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.mongodb.entity.Entity;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
@@ -22,14 +22,14 @@ public class MongoInsertEventListener extends AbstractMongoEventListener<Entity>
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Entity> event) {
         Entity entity = event.getSource();
-        String name = BaseContextHolder.getName();
+        String name = RequestLocalContextHolder.getName();
         // 判断 id 为空
         if (entity.getId() == null) {
             Number id = snowflake.nextId();
             // noinspection unchecked
             entity.setId(id);
             entity.setCreatedTime(LocalDateTime.now());
-            entity.setCreatedBy(BaseContextHolder.getUserId(String.class));
+            entity.setCreatedBy(RequestLocalContextHolder.getUserId(String.class));
             entity.setCreateUserName(name);
         } else {
             entity.setUpdateUserName(name);

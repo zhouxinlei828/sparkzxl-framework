@@ -1,4 +1,4 @@
-package com.github.sparkzxl.patterns.duty;
+package com.github.sparkzxl.patterns.pipeline;
 
 /**
  * description: 处理器接口

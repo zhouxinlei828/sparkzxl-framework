@@ -14,9 +14,9 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class BaseContextHolder {
+public class RequestLocalContextHolder {
 
-    private static final TransmittableThreadLocal<Map<String, Object>> THREAD_LOCAL = new TransmittableThreadLocal<>();
+    private static final ThreadLocal<Map<String, Object>> THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     public static void set(String key, Object value) {
         Map<String, Object> map = getLocalMap();

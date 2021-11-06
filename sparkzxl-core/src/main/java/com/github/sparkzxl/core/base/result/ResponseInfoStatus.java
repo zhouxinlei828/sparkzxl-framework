@@ -152,6 +152,7 @@ public enum ResponseInfoStatus implements BusinessEnumSysAssert {
 
     UPLOAD_FAILURE(1009, "上传文件失败了哦"),
 
+
     /**
      * token已过期
      */
@@ -166,6 +167,11 @@ public enum ResponseInfoStatus implements BusinessEnumSysAssert {
      * token为空
      */
     JWT_EMPTY_ERROR(2003, "token为空"),
+    /**
+     * 未找到用户信息
+     */
+    NO_FOUND_USER(2004, "未找到用户信息"),
+
     TIME_OUT_ERROR(HttpStatus.HTTP_INTERNAL_ERROR, "服务请求超时"),
     RETRY_ABLE_EXCEPTION(HttpStatus.HTTP_INTERNAL_ERROR, "服务请求超时重试异常"),
     OPEN_SERVICE_UNAVAILABLE(HttpStatus.HTTP_UNAVAILABLE, "【{}】服务不可用，请联系管理员！"),

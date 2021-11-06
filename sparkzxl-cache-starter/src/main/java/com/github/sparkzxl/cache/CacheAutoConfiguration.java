@@ -1,8 +1,8 @@
 package com.github.sparkzxl.cache;
 
+import com.github.sparkzxl.cache.service.CaffeineCacheImpl;
+import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.cache.support.CacheExceptionHandler;
-import com.github.sparkzxl.cache.template.CaffeineCacheImpl;
-import com.github.sparkzxl.cache.template.GeneralCacheService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

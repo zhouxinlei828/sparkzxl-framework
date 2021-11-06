@@ -1,7 +1,7 @@
 package com.github.sparkzxl.distributed.cloud.http;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.context.BaseContextHolder;
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +44,7 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> httpHeaders.add(headerName, BaseContextHolder.get(headerName)));
+            HEADER_NAME_LIST.forEach((headerName) -> httpHeaders.add(headerName, RequestLocalContextHolder.get(headerName)));
             return execution.execute(request, bytes);
         }
 
@@ -55,7 +55,7 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
             String header = httpServletRequest.getHeader(headerName);
-            httpHeaders.add(headerName, StringUtils.isEmpty(header) ? BaseContextHolder.get(headerName) : header);
+            httpHeaders.add(headerName, StringUtils.isEmpty(header) ? RequestLocalContextHolder.get(headerName) : header);
         });
         return execution.execute(request, bytes);
     }

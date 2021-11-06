@@ -1,4 +1,4 @@
-# sparkzxl-component框架使用手册
+# sparkzxl-framework框架使用手册
 
 ## 1. spring boot框架搭建步骤
 
@@ -6,7 +6,7 @@
 
 ### 1.1 在idea新建maven项目
 
-![idea-new-project](https://oss.sparksys.top/sparkzxl-component/idea-new-project.png)
+![idea-new-project](https://oss.sparksys.top/sparkzxl-framework/idea-new-project.png)
 
 ### 1.2 pom定义
 
@@ -259,7 +259,7 @@
 ```
 
 ```text
-repositories:主要设置你的maven私库地址，你也可以不用，将sparkzxl-component 通过mvn install安装到本地即可，具体用法可参考下文链接
+repositories:主要设置你的maven私库地址，你也可以不用，将sparkzxl-framework 通过mvn install安装到本地即可，具体用法可参考下文链接
 jib-maven-plugin:maven 打包应用代码为docker images 插件，
 使用方法可见链接
 ```
@@ -281,7 +281,7 @@ jib-maven-plugin:maven 打包应用代码为docker images 插件，
 
 截图示例：
 
-![import-maven](https://oss.sparksys.top/sparkzxl-component/import-maven.png)
+![import-maven](https://oss.sparksys.top/sparkzxl-framework/import-maven.png)
 
 ### 1.4 组件自动装配
 
@@ -507,4 +507,4 @@ hystrix:
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-framework/wechat-sparkzxl.jpg)

@@ -1,4 +1,4 @@
-package com.github.sparkzxl.cache.template;
+package com.github.sparkzxl.cache.service;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;

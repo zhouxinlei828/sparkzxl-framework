@@ -1,6 +1,6 @@
 package com.github.sparkzxl.database;
 
-import com.github.sparkzxl.cache.template.GeneralCacheService;
+import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.database.aspect.ApiIdempotentAspect;
 import com.github.sparkzxl.database.aspect.LockKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
