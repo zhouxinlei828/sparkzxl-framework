@@ -68,7 +68,7 @@ docker-compose up -d
 
 4. 如下图所示，则说明skywalking安装成功
 
-![skywalking-ui.png](https://oss.sparksys.top/sparkzxl-component/skywalking-ui.png)
+![skywalking-ui.png](https://oss.sparksys.top/sparkzxl-framework/skywalking-ui.png)
 等待一会
 
 ### 1.2 使用教程
@@ -81,4 +81,4 @@ docker-compose up -d
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-framework/wechat-sparkzxl.jpg)

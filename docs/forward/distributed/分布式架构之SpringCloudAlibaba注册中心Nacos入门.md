@@ -23,7 +23,7 @@ Spring Cloud 的编程模型，接入 Nacos 作为注册中心，实现服务的
 > 在一些文章中，服务提供者被称为 Server，服务消费者被称为 Client。胖友们知道即可。
 
 三个角色交互如下图所示：
-![nacos-discovery.png](https://oss.sparksys.top/sparkzxl-component/nacos-discovery.png)
+![nacos-discovery.png](https://oss.sparksys.top/sparkzxl-framework/nacos-discovery.png)
 
 ① Provider：
 
@@ -62,7 +62,7 @@ Spring Cloud 的编程模型，接入 Nacos 作为注册中心，实现服务的
 
 创建 sparkzxl-nacos-discovery-provider 项目，作为服务提供者 nacos-provider。最终项目代码如下图所示：
 
-![sparkzxl-nacos-discovery-provider](https://oss.sparksys.top/sparkzxl-component/sparkzxl-nacos-discovery-provider.png)
+![sparkzxl-nacos-discovery-provider](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-nacos-discovery-provider.png)
 
 #### 3.1.1 引入依赖
 
@@ -363,7 +363,7 @@ knife4j:
 
 重点看 spring.cloud.nacos.discovery 配置项，它是 Nacos Discovery 配置项的前缀，对应 NacosDiscoveryProperties 配置项。
 
-![NacosDiscoveryProperties.png](https://oss.sparksys.top/sparkzxl-component/NacosDiscoveryProperties.png)
+![NacosDiscoveryProperties.png](https://oss.sparksys.top/sparkzxl-framework/NacosDiscoveryProperties.png)
 
 #### 3.1.3 NacosProviderApplication
 
@@ -442,13 +442,13 @@ public class TestController {
 
 ② 打开 Nacos 控制台，可以在服务列表看到服务 nacos-provider。如下图：
 
-![nacos-provider-img.png](https://oss.sparksys.top/sparkzxl-component/nacos-provider-img.png)
+![nacos-provider-img.png](https://oss.sparksys.top/sparkzxl-framework/nacos-provider-img.png)
 
 ### 3.2 搭建服务消费者
 
 创建 sparkzxl-nacos-discovery-consumer 项目，作为服务提供者 nacos-consumer。最终项目代码如下图所示：
 
-![sparkzxl-nacos-discovery-consumer.png](https://oss.sparksys.top/sparkzxl-component/sparkzxl-nacos-discovery-consumer.png)
+![sparkzxl-nacos-discovery-consumer.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-nacos-discovery-consumer.png)
 
 整个项目的代码，和服务提供者是基本一致的，毕竟是示例代码 😜
 
@@ -626,20 +626,20 @@ loadBalancerClient 属性，**LoadBalancerClient** 对象，负载均衡客户�
 
 ② 打开 Nacos 控制台，可以在服务列表看到服务 nacos-consumer。如下图：
 
-![nacos-consumer-console.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-console.png)
+![nacos-consumer-console.png](https://oss.sparksys.top/sparkzxl-framework/nacos-consumer-console.png)
 
 ③ 访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口。
 
-![nacos-consumer-httpRequest.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-httpRequest.png)
+![nacos-consumer-httpRequest.png](https://oss.sparksys.top/sparkzxl-framework/nacos-consumer-httpRequest.png)
 
 ④ 打开 Nacos 控制台，可以在订阅者列表看到订阅关系。如下图：
 
-![nacos-consumer-sub.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-sub.png)
+![nacos-consumer-sub.png](https://oss.sparksys.top/sparkzxl-framework/nacos-consumer-sub.png)
 
 ⑤ 关闭服务提供者后，再次访问 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为报错提示 "获取不到实例"，说明我们本地缓存的服务 demo-provider
 的实例列表已刷新，没有任何实例。
 
-![nacos-consumer-error.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-error.png)
+![nacos-consumer-error.png](https://oss.sparksys.top/sparkzxl-framework/nacos-consumer-error.png)
 
 😈 这里我们并没有演示启动多个服务提供者的测试，胖友可以自己尝试下哟。
 
@@ -653,7 +653,7 @@ loadBalancerClient 属性，**LoadBalancerClient** 对象，负载均衡客户�
 
 Nacos 数据模型 Key 由三元组唯一确认。如下图所示：
 
-![nacos-data-model.png](https://oss.sparksys.top/sparkzxl-component/nacos-data-model.png)
+![nacos-data-model.png](https://oss.sparksys.top/sparkzxl-framework/nacos-data-model.png)
 
 - 作为注册中心时，Namespace + Group + Service
 - 作为配置中心时，Namespace + Group + DataId
@@ -680,7 +680,7 @@ Nacos 数据模型 Key 由三元组唯一确认。如下图所示：
 
 Service 可以进一步细拆服务领域模型，如下图：
 
-![nacos-service-level.png](https://oss.sparksys.top/sparkzxl-component/nacos-service-level.png)
+![nacos-service-level.png](https://oss.sparksys.top/sparkzxl-framework/nacos-service-level.png)
 
 我们来看看图中的每个**节点**的概念。
 
@@ -705,9 +705,9 @@ Nacos 元数据（如配置和服务）描述信息，如服务版本、权重�
 
 从作用范围来看，分为服务级别的元信息、集群的元信息及实例的元信息。如下图：
 
-![nacos-instance-example.png](https://oss.sparksys.top/sparkzxl-component/nacos-instance-example.png)
+![nacos-instance-example.png](https://oss.sparksys.top/sparkzxl-framework/nacos-instance-example.png)
 
-![nacos-instance-example1.png](https://oss.sparksys.top/sparkzxl-component/nacos-instance-example1.png)
+![nacos-instance-example1.png](https://oss.sparksys.top/sparkzxl-framework/nacos-instance-example1.png)
 
 以 Nacos 元数据的服务版本举例子。当一个接口实现，出现不兼容升级时，可以用版本号过渡，版本号不同的服务相互间不引用。
 
@@ -719,7 +719,7 @@ Nacos 元数据（如配置和服务）描述信息，如服务版本、权重�
 
 再次 Nacos 元数据的鉴权配置举例子。通过令牌验证在注册中心控制权限，以决定要不要下发令牌给消费者，可以防止消费者绕过注册中心访问提供者。另外，通过注册中心可灵活改变授权方式，而不需修改或升级提供者。
 
-![nacos-security-1.png](https://oss.sparksys.top/sparkzxl-component/nacos-security-1.png)
+![nacos-security-1.png](https://oss.sparksys.top/sparkzxl-framework/nacos-security-1.png)
 
 #### 4.2.4 Health Check 健康检查
 
@@ -737,7 +737,7 @@ Nacos 元数据（如配置和服务）描述信息，如服务版本、权重�
 
 为了让胖友更好理解，我们把数据模型和服务领域模型整理如下图所示：
 
-![img.png](https://oss.sparksys.top/sparkzxl-component/nacos-example-1.png)
+![img.png](https://oss.sparksys.top/sparkzxl-framework/nacos-example-1.png)
 
 ## 5. 更多的配置项信息
 
@@ -807,15 +807,15 @@ Nacos，我们怎么实现不同环境的隔离呢？
 
 ① 打开 Nacos UI 界面的「命名空间」菜单，进入「命名空间」功能。如下图所示：
 
-![nacos-namespace-1.png](https://oss.sparksys.top/sparkzxl-component/nacos-namespace-1.png)
+![nacos-namespace-1.png](https://oss.sparksys.top/sparkzxl-framework/nacos-namespace-1.png)
 
 ② 点击列表右上角的「新建命名空间」按钮，弹出「新建命名空间」窗口，创建一个 **dev** 命名空间。输入如下内容，并点击「确定」按钮，完成创建。如下图所示：
 
-![nacos-namespace-2.png](https://oss.sparksys.top/sparkzxl-component/nacos-namespace-2.png)
+![nacos-namespace-2.png](https://oss.sparksys.top/sparkzxl-framework/nacos-namespace-2.png)
 
 ③ 重复该操作，继续创建一个 uat 命名空间。最终 **dev** 和 **uat** 信息如下图：
 
-![nacos-namespace-3.png](https://oss.sparksys.top/sparkzxl-component/nacos-namespace-3.png)
+![nacos-namespace-3.png](https://oss.sparksys.top/sparkzxl-framework/nacos-namespace-3.png)
 
 ### 6.2 搭建服务提供者
 
@@ -891,13 +891,13 @@ knife4j:
 
 ① 先配置 --spring.profiles.active 为 dev，设置 NacosProviderEnvApplication 读取 application-dev.yaml 配置文件。如下图所示：
 
-![nacos-namespace-swtich-env.png](https://oss.sparksys.top/sparkzxl-component/nacos-namespace-swtich-env.png)
+![nacos-namespace-swtich-env.png](https://oss.sparksys.top/sparkzxl-framework/nacos-namespace-swtich-env.png)
 
 之后通过 NacosProviderEnvApplication 启动服务提供者。
 
 ② 打开 Nacos 控制台，可以在服务列表看到服务 nacos-provider 注册在命名空间 dev 下。如下图：
 
-![nacos-console-swtich-env.png](https://oss.sparksys.top/sparkzxl-component/nacos-console-swtich-env.png)
+![nacos-console-swtich-env.png](https://oss.sparksys.top/sparkzxl-framework/nacos-console-swtich-env.png)
 
 ### 6.3 搭建服务消费者
 
@@ -979,17 +979,17 @@ knife4j:
 
 ① 先配置 --spring.profiles.active 为 dev，设置 NacosConsumerEnvApplication 读取 application-dev.yaml 配置文件。如下图所示：
 
-![nacos-console-swtich-env1.png](https://oss.sparksys.top/sparkzxl-component/nacos-console-swtich-env1.png)
+![nacos-console-swtich-env1.png](https://oss.sparksys.top/sparkzxl-framework/nacos-console-swtich-env1.png)
 
 之后通过 NacosConsumerEnvApplication 启动服务消费者。
 
 访问服务消费者的 http://127.0.0.1:8081/hello?name=helloWorld 接口，返回结果为 "consumer:provider:helloWorld"。说明，调用远程的服务提供者【成功】。
 
-![nacos-consumer-httpRequest.png](https://oss.sparksys.top/sparkzxl-component/nacos-consumer-httpRequest.png)
+![nacos-consumer-httpRequest.png](https://oss.sparksys.top/sparkzxl-framework/nacos-consumer-httpRequest.png)
 
 ② 再配置 --spring.profiles.active 为 uat，设置 NacosConsumerEnvApplication 读取 application-uat.yaml 配置文件。如下图所示：
 
-![nacos-console-swtich-env2.png](https://oss.sparksys.top/sparkzxl-component/nacos-console-swtich-env2.png)
+![nacos-console-swtich-env2.png](https://oss.sparksys.top/sparkzxl-framework/nacos-console-swtich-env2.png)
 
 之后通过 NacosConsumerEnvApplication 启动服务消费者。
 
@@ -1069,14 +1069,14 @@ management:
 
 ② 访问服务消费者的 nacos-discovery 监控端点 http://127.0.0.1:8081/actuator/nacos-discovery，返回结果如下图：
 
-![nacos-actuator.png](https://oss.sparksys.top/sparkzxl-component/nacos-actuator.png)
+![nacos-actuator.png](https://oss.sparksys.top/sparkzxl-framework/nacos-actuator.png)
 
 理论来说，"subscribe" 字段应该返回订阅的服务 demo-provider 的信息，结果这里返回的是空。后来翻看了下源码，是需要主动向 Nacos EventDispatcher 注册 EventListener
 才可以。咳咳咳，感觉这个设定有点神奇~
 
 ③ 访问服务消费者的 health 监控端点 http://127.0.0.1:8081/actuator/health，返回结果如下图：
 
-![nacos-actuator-1.png](https://oss.sparksys.top/sparkzxl-component/nacos-actuator-1.png)
+![nacos-actuator-1.png](https://oss.sparksys.top/sparkzxl-framework/nacos-actuator-1.png)
 
 #### 666. 彩蛋
 
@@ -1093,4 +1093,4 @@ management:
 
 学习不走弯路，关注公众号「凛冬王昭君」
 
-![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-component/wechat-sparkzxl.jpg)
+![wechat-sparkzxl.jpg](https://oss.sparksys.top/sparkzxl-framework/wechat-sparkzxl.jpg)

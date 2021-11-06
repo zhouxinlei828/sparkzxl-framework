@@ -118,7 +118,7 @@
             <roles>
                 <role>Java Development Engineer</role>
             </roles>
-            <url>https://sparkzxl.github.io/sparkzxl-component</url>
+            <url>https://sparkzxl.github.io/sparkzxl-framework</url>
         </developer>
     </developers>
     <scm>
@@ -688,7 +688,7 @@
                 <version>${transmittable-thread-local.version}</version>
             </dependency>
 
-            <!-- sparkzxl-component 组件库-->
+            <!-- sparkzxl-framework 组件库-->
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-alarm-starter</artifactId>

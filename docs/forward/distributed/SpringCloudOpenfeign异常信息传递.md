@@ -576,4 +576,4 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
 # 4. 代码地址
 
-[sparkzxl-feign-starter](https://gitee.com/AbsolutelyNT/sparkzxl-component/tree/nexus/sparkzxl-feign-starter/src/main/java/com/github/sparkzxl/feign)
+[sparkzxl-feign-starter](https://gitee.com/AbsolutelyNT/sparkzxl-framework/tree/nexus/sparkzxl-feign-starter/src/main/java/com/github/sparkzxl/feign)
