@@ -3,7 +3,7 @@ package com.github.sparkzxl.web.interceptor;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.annotation.result.ResponseResult;
+import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -46,10 +46,10 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
             final HandlerMethod handlerMethod = (HandlerMethod) handler;
             final Class<?> classz = handlerMethod.getBeanType();
             final Method method = handlerMethod.getMethod();
-            if (classz.isAnnotationPresent(ResponseResult.class)) {
-                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, classz.getAnnotation(ResponseResult.class));
-            } else if (method.isAnnotationPresent(ResponseResult.class)) {
-                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(ResponseResult.class));
+            if (classz.isAnnotationPresent(Response.class)) {
+                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, classz.getAnnotation(Response.class));
+            } else if (method.isAnnotationPresent(Response.class)) {
+                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(Response.class));
             }
         }
         return true;

@@ -4,7 +4,7 @@ import com.github.sparkzxl.web.aspect.ResponseResultStatusAspect;
 import com.github.sparkzxl.web.interceptor.HeaderThreadLocalInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
-import com.github.sparkzxl.web.support.ResponseResultHandler;
+import com.github.sparkzxl.web.support.ResponseResultAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author zhouxinlei
  */
 @Configuration
-@Import({ResponseResultHandler.class, DefaultExceptionHandler.class})
+@Import({ResponseResultAdvice.class, DefaultExceptionHandler.class})
 @EnableConfigurationProperties(WebProperties.class)
 @Slf4j
 public class DefaultWebConfig implements WebMvcConfigurer {

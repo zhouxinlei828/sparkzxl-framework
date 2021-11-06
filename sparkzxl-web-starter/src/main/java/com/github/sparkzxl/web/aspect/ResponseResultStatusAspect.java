@@ -2,6 +2,7 @@ package com.github.sparkzxl.web.aspect;
 
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
+import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseResult;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
@@ -67,8 +68,8 @@ public class ResponseResultStatusAspect {
         if (ObjectUtils.isNotEmpty(proceed) && proceed instanceof ResponseResult) {
             HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
             HttpServletResponse response = RequestContextHolderUtils.getResponse();
-            com.github.sparkzxl.annotation.result.ResponseResult responseResult =
-                    (com.github.sparkzxl.annotation.result.ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+            Response responseResult =
+                    (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             if (responseResult != null) {
                 servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             }

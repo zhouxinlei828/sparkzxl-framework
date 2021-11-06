@@ -37,6 +37,11 @@ import java.util.List;
 @EnableConfigurationProperties(FeignProperties.class)
 public class FeignAutoConfiguration {
 
+    @Bean
+    public DateFormatRegister dateFormatRegister() {
+        return new DateFormatRegister();
+    }
+
     /**
      * feign 支持MultipartFile上传文件
      *
