@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sparkzxl-framework</artifactId>
         <groupId>com.github.sparkzxl</groupId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>1.3.7</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparkzxl-swagger-starter</artifactId>
