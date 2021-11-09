@@ -1,16 +1,10 @@
 package com.github.sparkzxl.datasource.interceptor;
 
-import cn.hutool.core.text.StrFormatter;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
-import com.baomidou.dynamic.datasource.creator.DataSourceCreator;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
-import com.github.sparkzxl.datasource.autoconfigure.DynamicDataProperties;
-import com.github.sparkzxl.datasource.constant.DataSourceProviderEnum;
+import com.github.sparkzxl.datasource.provider.DataSourceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +14,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.util.function.Function;
 
 /**
  * description: 动态数据源拦截器
@@ -31,19 +24,8 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class DynamicDataSourceInterceptor implements HandlerInterceptor {
 
-    private final Function<String, DataSourceProperty> function;
+    private DataSourceProvider dataSourceProvider;
     private DynamicRoutingDataSource dynamicRoutingDataSource;
-    private DataSourceCreator dataSourceCreator;
-    private DynamicDataProperties dynamicDataProperties;
-
-    public static void main(String[] args) {
-        String data = null;
-        try {
-            ExceptionAssert.isEmpty(data).withException(new TenantException(StrFormatter.format("无此租户[{}]", "dev")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Autowired(required = false)
     public void setDynamicRoutingDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
@@ -51,13 +33,8 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
     }
 
     @Autowired(required = false)
-    public void setDataSourceCreator(DataSourceCreator dataSourceCreator) {
-        this.dataSourceCreator = dataSourceCreator;
-    }
-
-    @Autowired(required = false)
-    public void setDynamicDataProperties(DynamicDataProperties dynamicDataProperties) {
-        this.dynamicDataProperties = dynamicDataProperties;
+    public void setDataSourceProvider(DataSourceProvider dataSourceProvider) {
+        this.dataSourceProvider = dataSourceProvider;
     }
 
     @Override
@@ -66,14 +43,8 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
         DynamicDataSourceContextHolder.poll();
         log.info("当前租户Id:{}", tenantId);
         if (StringUtils.isNotBlank(tenantId) && !dynamicRoutingDataSource.getDataSources().containsKey(tenantId)) {
-            if (dynamicDataProperties.getDataProvider().equals(DataSourceProviderEnum.JDBC)) {
-                DataSourceProperty dataSourceProperty = function.apply(tenantId);
-                ExceptionAssert.isEmpty(dataSourceProperty).withRuntimeException(new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
-                DataSource dataSource = dataSourceCreator.createDataSource(dataSourceProperty);
-                dynamicRoutingDataSource.addDataSource(tenantId, dataSource);
-            } else {
-                ExceptionAssert.isTrue(dynamicDataProperties.getDataProvider().equals(DataSourceProviderEnum.MEMORY)).withRuntimeException(new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
-            }
+            DataSource dataSource = dataSourceProvider.loadSelectedDataSource(tenantId);
+            dynamicRoutingDataSource.addDataSource(tenantId, dataSource);
         }
         DynamicDataSourceContextHolder.push(tenantId);
         return true;

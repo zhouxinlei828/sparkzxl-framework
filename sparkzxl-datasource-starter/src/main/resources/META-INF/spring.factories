@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.datasource.autoconfigure.DynamicDataSourceAutoConfig
+    com.github.sparkzxl.datasource.autoconfigure.DynamicDataSourceAutoConfig,\
+    com.github.sparkzxl.datasource.autoconfigure.DataSourceProviderAutoConfig
