@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.tree;
 
-import com.github.sparkzxl.core.utils.CopyUtils;
+import com.github.sparkzxl.core.util.CopyUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;

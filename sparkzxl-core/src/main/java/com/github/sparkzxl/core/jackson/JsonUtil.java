@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

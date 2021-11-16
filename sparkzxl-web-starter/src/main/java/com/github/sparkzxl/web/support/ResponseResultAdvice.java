@@ -6,7 +6,7 @@ import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
+import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;

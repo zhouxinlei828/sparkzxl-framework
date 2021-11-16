@@ -1,6 +1,6 @@
 package com.github.sparkzxl.security.entity;
 
-import com.github.sparkzxl.core.utils.UserAgentUtils;
+import com.github.sparkzxl.core.util.UserAgentUtils;
 import com.github.sparkzxl.entity.core.UserAgentEntity;
 import lombok.*;
 import lombok.experimental.Accessors;

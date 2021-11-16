@@ -110,7 +110,7 @@ package com.github.sparkzxl.feign.default_;
 
 import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.core.utils.ResponseResultUtils;
+import com.github.sparkzxl.core.util.ResponseResultUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
@@ -188,7 +188,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
 ```Java
 
 import cn.hutool.core.date.DatePattern;
-import com.github.sparkzxl.core.utils.DateUtils;
+import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import lombok.Getter;

@@ -15,7 +15,7 @@
  */
 package com.baidu.fsg.uid.worker;
 
-import com.baidu.fsg.uid.utils.ValuedEnum;
+import com.baidu.fsg.uid.util.ValuedEnum;
 
 /**
  * WorkerNodeType

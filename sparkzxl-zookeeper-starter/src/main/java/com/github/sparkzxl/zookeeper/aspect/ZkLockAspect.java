@@ -2,7 +2,7 @@ package com.github.sparkzxl.zookeeper.aspect;
 
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.utils.AspectUtil;
+import com.github.sparkzxl.core.util.AspectUtil;
 import com.github.sparkzxl.zookeeper.annotation.ZkLock;
 import com.github.sparkzxl.zookeeper.lock.ZkDistributedLock;
 import lombok.extern.slf4j.Slf4j;

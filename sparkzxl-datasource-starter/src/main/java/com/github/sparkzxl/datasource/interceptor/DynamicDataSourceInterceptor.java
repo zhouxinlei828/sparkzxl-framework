@@ -3,7 +3,7 @@ package com.github.sparkzxl.datasource.interceptor;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
+import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.datasource.provider.DataSourceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

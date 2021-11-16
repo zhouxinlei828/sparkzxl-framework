@@ -3,7 +3,7 @@ package com.github.sparkzxl.feign.interceptor;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.google.common.net.HttpHeaders;
 import feign.RequestInterceptor;

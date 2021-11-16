@@ -1,7 +1,7 @@
 package com.github.sparkzxl.cache.redis;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

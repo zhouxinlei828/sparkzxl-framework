@@ -1,9 +1,9 @@
 package com.github.sparkzxl.gateway.filter;
 
-import com.github.sparkzxl.core.utils.DateUtils;
+import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
-import com.github.sparkzxl.gateway.utils.WebFluxUtils;
+import com.github.sparkzxl.gateway.util.WebFluxUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;

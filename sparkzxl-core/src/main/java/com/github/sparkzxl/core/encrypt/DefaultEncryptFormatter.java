@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.encrypt;
 
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.core.utils.HuSecretUtil;
+import com.github.sparkzxl.core.util.HuSecretUtil;
 
 /**
  * description: md5 加密

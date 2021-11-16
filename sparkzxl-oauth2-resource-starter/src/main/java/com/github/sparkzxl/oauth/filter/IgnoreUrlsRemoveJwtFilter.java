@@ -1,10 +1,10 @@
 package com.github.sparkzxl.oauth.filter;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.utils.ListUtils;
-import com.github.sparkzxl.core.utils.StringHandlerUtil;
+import com.github.sparkzxl.core.util.ListUtils;
+import com.github.sparkzxl.core.util.StringHandlerUtil;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
-import com.github.sparkzxl.oauth.utils.WebFluxUtils;
+import com.github.sparkzxl.oauth.util.WebFluxUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;

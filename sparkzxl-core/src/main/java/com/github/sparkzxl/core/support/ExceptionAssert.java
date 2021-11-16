@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.support;
 
 import com.github.sparkzxl.core.base.code.ResponseInfo;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.utils.StringHandlerUtil;
+import com.github.sparkzxl.core.util.StringHandlerUtil;
 import lombok.NonNull;
 
 import java.util.Objects;

@@ -15,8 +15,8 @@
  */
 package com.baidu.fsg.uid.buffer;
 
-import com.baidu.fsg.uid.utils.NamingThreadFactory;
-import com.baidu.fsg.uid.utils.PaddedAtomicLong;
+import com.baidu.fsg.uid.util.NamingThreadFactory;
+import com.baidu.fsg.uid.util.PaddedAtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;

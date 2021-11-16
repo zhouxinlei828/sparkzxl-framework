@@ -7,7 +7,7 @@ import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.utils.RequestContextHolderUtils;
+import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.distributed.cloud.properties.LoadBalancerRuleProperties;
 import com.google.common.collect.Lists;
 import com.netflix.client.config.IClientConfig;

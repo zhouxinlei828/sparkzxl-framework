@@ -3,7 +3,7 @@ package com.github.sparkzxl.core.context;
 import cn.hutool.core.convert.Convert;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 import com.google.common.collect.Maps;
 
 import java.util.Map;

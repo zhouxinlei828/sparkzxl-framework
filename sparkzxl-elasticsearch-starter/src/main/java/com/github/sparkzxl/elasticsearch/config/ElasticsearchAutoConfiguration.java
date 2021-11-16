@@ -2,7 +2,7 @@ package com.github.sparkzxl.elasticsearch.config;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;

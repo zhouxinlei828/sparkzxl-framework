@@ -5,7 +5,7 @@ import cn.hutool.core.util.NumberUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.github.sparkzxl.core.utils.DateUtils;
+import com.github.sparkzxl.core.util.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;

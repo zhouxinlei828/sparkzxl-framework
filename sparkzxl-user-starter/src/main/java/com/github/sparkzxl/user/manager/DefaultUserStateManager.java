@@ -5,7 +5,7 @@ import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.context.ResponseHelper;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.utils.BuildKeyUtil;
+import com.github.sparkzxl.core.util.BuildKeyUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.log.aspect;
 
-import com.github.sparkzxl.core.utils.ListUtils;
+import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.annotation.RequestLogParam;
 import org.apache.commons.lang3.ObjectUtils;
@@ -8,12 +8,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Collections;

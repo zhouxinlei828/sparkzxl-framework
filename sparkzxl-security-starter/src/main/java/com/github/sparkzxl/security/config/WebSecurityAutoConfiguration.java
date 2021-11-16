@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.config;
 
-import com.github.sparkzxl.core.utils.ListUtils;
-import com.github.sparkzxl.core.utils.SwaggerStaticResource;
+import com.github.sparkzxl.core.util.ListUtils;
+import com.github.sparkzxl.core.util.SwaggerStaticResource;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.authorization.DynamicAccessDecisionManager;
 import com.github.sparkzxl.security.component.RestAuthenticationEntryPoint;

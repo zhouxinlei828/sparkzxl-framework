@@ -16,8 +16,8 @@
 package com.baidu.fsg.uid.worker;
 
 import cn.hutool.core.util.RandomUtil;
-import com.baidu.fsg.uid.utils.DockerUtils;
-import com.baidu.fsg.uid.utils.NetUtils;
+import com.baidu.fsg.uid.util.DockerUtils;
+import com.baidu.fsg.uid.util.NetUtils;
 import com.baidu.fsg.uid.worker.entity.WorkerNodeEntity;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

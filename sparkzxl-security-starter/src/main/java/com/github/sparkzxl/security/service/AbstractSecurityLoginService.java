@@ -3,7 +3,7 @@ package com.github.sparkzxl.security.service;
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.utils.TimeUtil;
+import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.entity.core.CaptchaInfo;
 import com.github.sparkzxl.entity.core.JwtUserInfo;

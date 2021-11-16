@@ -1,6 +1,6 @@
 package com.github.sparkzxl.pdf;
 
-import com.github.sparkzxl.core.utils.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
