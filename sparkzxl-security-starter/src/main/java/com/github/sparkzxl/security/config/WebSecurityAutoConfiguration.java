@@ -101,7 +101,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
-        if (securityProperties.isBuiltInPermissions()) {
+        if (securityProperties.isAllowUrlCtrl()) {
             registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
         }
     }
@@ -130,20 +130,20 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"security.allow-url-ctrl"}, havingValue = "true")
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         log.info("DynamicAccessDecisionManager registered success! ");
         return new DynamicAccessDecisionManager();
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"security.allow-url-ctrl"}, havingValue = "true")
     public DynamicSecurityFilter dynamicSecurityFilter() {
         return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"security.allow-url-ctrl"}, havingValue = "true")
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
         DynamicSecurityMetadataSource dynamicSecurityMetadataSource = new DynamicSecurityMetadataSource();
         dynamicSecurityMetadataSource.setDynamicSecurityService(dynamicSecurityService);
