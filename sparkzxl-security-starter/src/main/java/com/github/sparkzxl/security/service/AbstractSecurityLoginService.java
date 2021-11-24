@@ -2,7 +2,6 @@ package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.utils.TimeUtil;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.entity.core.CaptchaInfo;
@@ -12,8 +11,6 @@ import com.github.sparkzxl.entity.security.AuthUserDetail;
 import com.github.sparkzxl.entity.security.UserToken;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
-import com.github.sparkzxl.security.entity.LoginStatus;
-import com.github.sparkzxl.security.event.LoginEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -53,7 +50,6 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         //校验密码输入是否正确
         checkPasswordError(authRequest, authUserDetail);
         UserToken userToken = authorization(authUserDetail);
-        SpringContextUtils.publishEvent(new LoginEvent(LoginStatus.success(authUserDetail.getId(), authUserDetail.getUsername())));
         return userToken;
     }
 

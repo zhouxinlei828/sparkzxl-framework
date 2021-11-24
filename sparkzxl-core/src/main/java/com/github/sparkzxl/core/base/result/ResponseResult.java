@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.base.result;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,13 +19,13 @@ public class ResponseResult<T> implements Serializable {
 
     private static final long serialVersionUID = 6322130956803761582L;
 
-    @JSONField(ordinal = 1)
+    @JsonProperty(index = 1)
     private int code;
-    @JSONField(ordinal = 2)
+    @JsonProperty(index = 2)
     private boolean success;
-    @JSONField(ordinal = 3)
+    @JsonProperty(index = 3)
     private String msg;
-    @JSONField(ordinal = 4)
+    @JsonProperty(index = 4)
     private T data;
 
     /**
@@ -57,7 +57,7 @@ public class ResponseResult<T> implements Serializable {
      * @param resultStatus API操作码
      * @return ApiResult
      */
-    public static <T> ResponseResult<?> result(ResponseInfoStatus resultStatus) {
+    public static ResponseResult<?> result(ResponseInfoStatus resultStatus) {
         return ResponseResult.builder().code(resultStatus.getCode()).msg(resultStatus.getMessage()).build();
     }
 
