@@ -24,16 +24,16 @@ public class RequestResponseLogConfig {
     @ConditionalOnProperty(prefix = GatewayPluginProperties.GATEWAY_PLUGIN_PROPERTIES_PREFIX, value = "log-request", havingValue = "true")
     public RequestLogFilter requestLogFilter() {
         RequestLogFilter requestLogFilter = new RequestLogFilter();
-        log.debug("Load Request Log Filter Config Bean");
+        log.info("Load Request Log Filter Config Bean");
         return requestLogFilter;
     }
 
     @Bean
-    @ConditionalOnMissingBean(RequestLogFilter.class)
+    @ConditionalOnMissingBean(ResponseLogFilter.class)
     @ConditionalOnProperty(prefix = GatewayPluginProperties.GATEWAY_PLUGIN_PROPERTIES_PREFIX, value = "log-request", havingValue = "true")
     public ResponseLogFilter responseLogFilter() {
         ResponseLogFilter responseLogFilter = new ResponseLogFilter();
-        log.debug("Load Response Log Filter Config Bean");
+        log.info("Load Response Log Filter Config Bean");
         return responseLogFilter;
     }
 
