@@ -1,11 +1,12 @@
 package com.github.sparkzxl.gateway.config;
 
-import com.github.sparkzxl.gateway.filter.RequestLogFilter;
-import com.github.sparkzxl.gateway.filter.ResponseLogFilter;
+import com.github.sparkzxl.gateway.filter.log.AccessLogFilter;
+import com.github.sparkzxl.gateway.filter.log.ResponseLogCachedBodyStrFilter;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,21 +21,16 @@ import org.springframework.context.annotation.Configuration;
 public class RequestResponseLogConfig {
 
     @Bean
-    @ConditionalOnMissingBean(RequestLogFilter.class)
+    @ConditionalOnMissingBean(AccessLogFilter.class)
     @ConditionalOnProperty(prefix = GatewayPluginProperties.GATEWAY_PLUGIN_PROPERTIES_PREFIX, value = "log-request", havingValue = "true")
-    public RequestLogFilter requestLogFilter() {
-        RequestLogFilter requestLogFilter = new RequestLogFilter();
-        log.info("Load Request Log Filter Config Bean");
-        return requestLogFilter;
+    public AccessLogFilter accessLogFilter() {
+        return new AccessLogFilter();
     }
 
     @Bean
-    @ConditionalOnMissingBean(ResponseLogFilter.class)
+    @ConditionalOnMissingBean(ResponseLogCachedBodyStrFilter.class)
     @ConditionalOnProperty(prefix = GatewayPluginProperties.GATEWAY_PLUGIN_PROPERTIES_PREFIX, value = "log-request", havingValue = "true")
-    public ResponseLogFilter responseLogFilter() {
-        ResponseLogFilter responseLogFilter = new ResponseLogFilter();
-        log.info("Load Response Log Filter Config Bean");
-        return responseLogFilter;
+    public ResponseLogCachedBodyStrFilter responseLogCachedBodyStrFilter(ApplicationContext applicationContext) {
+        return new ResponseLogCachedBodyStrFilter(applicationContext);
     }
-
 }

@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.filter;
+package com.github.sparkzxl.gateway.filter.authorization;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
@@ -7,6 +7,7 @@ import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.StringHandlerUtil;
 import com.github.sparkzxl.core.util.SwaggerStaticResource;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.util.WebFluxUtils;
 import com.google.common.collect.Lists;
@@ -77,7 +78,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE + 2;
+        return FilterOrderEnum.AUTHORIZATION_FILTER.getOrder();
     }
 
     /**

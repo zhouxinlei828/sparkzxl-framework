@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.filter;
+package com.github.sparkzxl.gateway.filter.context;
 
 import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.gateway.context.GatewayContext;
@@ -21,8 +21,6 @@ import org.springframework.http.ReactiveHttpOutputMessage;
 import org.springframework.http.codec.HttpMessageReader;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.BodyInserter;
@@ -34,7 +32,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -49,9 +46,8 @@ import java.util.Map;
  */
 @Slf4j
 @AllArgsConstructor
-public class GatewayContextFilter implements GlobalFilter, Ordered {
+public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
 
-    private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
     /**
      * default HttpMessageReader
      */
@@ -61,7 +57,10 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         GatewayContext gatewayContext = new GatewayContext();
+        gatewayContext.setRouteId(route.getId());
+        gatewayContext.setLogRequest(gatewayPluginProperties.isLogRequest());
         gatewayContext.setReadRequestData(shouldReadRequestData(exchange));
         gatewayContext.setReadResponseData(gatewayPluginProperties.isReadResponseData());
         HttpHeaders headers = request.getHeaders();
@@ -107,29 +106,6 @@ public class GatewayContextFilter implements GlobalFilter, Ordered {
         if (gatewayPluginProperties.isReadRequestData()) {
             log.debug("[GatewayContext]Properties Set Read All Request Data");
             return true;
-        }
-        List<String> readRequestDataServiceIdList = gatewayPluginProperties.getReadRequestDataServiceIdList();
-        List<String> readRequestDataPathList = gatewayPluginProperties.getReadRequestDataPathList();
-        if (!CollectionUtils.isEmpty(readRequestDataPathList)) {
-            String requestPath = exchange.getRequest().getPath().pathWithinApplication().value();
-            for (String path : readRequestDataPathList) {
-                if (ANT_PATH_MATCHER.match(path, requestPath)) {
-                    log.debug("[GatewayContext]Properties Set Read Specific Request Data With Request Path:{},Math Pattern:{}", requestPath, path);
-                    return true;
-                }
-            }
-        }
-        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-        URI routeUri = route.getUri();
-        if (!"lb".equalsIgnoreCase(routeUri.getScheme())) {
-            return false;
-        }
-        String routeServiceId = routeUri.getHost().toLowerCase();
-        if (!CollectionUtils.isEmpty(readRequestDataServiceIdList)) {
-            if (readRequestDataServiceIdList.contains(routeServiceId)) {
-                log.debug("[GatewayContext]Properties Set Read Specific Request Data With ServiceId:{}", routeServiceId);
-                return true;
-            }
         }
         return false;
     }

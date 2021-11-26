@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDateTime;
+
 /**
  * description: Context Use Cache Request Content
  *
@@ -19,6 +21,8 @@ import org.springframework.util.MultiValueMap;
 public class GatewayContext {
 
     public static final String CACHE_GATEWAY_CONTEXT = "cacheGatewayContext";
+
+    protected LocalDateTime requestDateTime = LocalDateTime.now();
     /**
      * whether read request data
      */
@@ -34,7 +38,7 @@ public class GatewayContext {
     /**
      * cache Response Body
      */
-    protected Object responseBody;
+    protected String responseBody;
     /**
      * request headers
      */
@@ -47,5 +51,10 @@ public class GatewayContext {
      * cache all request data include:form data and query param
      */
     protected MultiValueMap<String, String> allRequestData = new LinkedMultiValueMap<>(0);
+    private String routeId;
+    /**
+     * whether log request data
+     */
+    private boolean logRequest = false;
 
 }

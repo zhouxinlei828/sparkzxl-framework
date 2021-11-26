@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.config;
 
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.event.ApplicationLogRunner;
-import com.github.sparkzxl.gateway.filter.AbstractAuthorizationFilter;
+import com.github.sparkzxl.gateway.filter.authorization.AbstractAuthorizationFilter;
 import com.github.sparkzxl.gateway.properties.GatewayResourceProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

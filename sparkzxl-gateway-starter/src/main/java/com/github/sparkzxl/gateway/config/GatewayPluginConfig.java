@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.config;
 
-import com.github.sparkzxl.gateway.filter.GatewayContextFilter;
-import com.github.sparkzxl.gateway.filter.RemoveGatewayContextFilter;
+import com.github.sparkzxl.gateway.filter.context.GatewayRequestContextFilter;
+import com.github.sparkzxl.gateway.filter.context.RemoveGatewayContextFilter;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,11 @@ public class GatewayPluginConfig {
 
     @Bean
     @ConditionalOnBean(GatewayPluginProperties.class)
-    @ConditionalOnMissingBean(GatewayContextFilter.class)
-    public GatewayContextFilter gatewayContextFilter(@Autowired GatewayPluginProperties gatewayPluginProperties) {
-        GatewayContextFilter gatewayContextFilter = new GatewayContextFilter(gatewayPluginProperties);
+    @ConditionalOnMissingBean(GatewayRequestContextFilter.class)
+    public GatewayRequestContextFilter gatewayContextFilter(@Autowired GatewayPluginProperties gatewayPluginProperties) {
+        GatewayRequestContextFilter gatewayRequestContextFilter = new GatewayRequestContextFilter(gatewayPluginProperties);
         log.debug("Load GatewayContextFilter Config Bean");
-        return gatewayContextFilter;
+        return gatewayRequestContextFilter;
     }
 
     @Bean

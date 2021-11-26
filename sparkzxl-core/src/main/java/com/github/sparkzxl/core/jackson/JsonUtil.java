@@ -13,6 +13,7 @@ import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.StrPool;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +30,9 @@ import java.util.stream.Collectors;
 public class JsonUtil {
 
     public static <T> String toJson(T value) {
+        if (ObjectUtils.isEmpty(value)) {
+            return null;
+        }
         try {
             return getInstance().writeValueAsString(value);
         } catch (Exception e) {
@@ -38,6 +42,9 @@ public class JsonUtil {
     }
 
     public static <T> String toJsonPretty(T value) {
+        if (ObjectUtils.isEmpty(value)) {
+            return null;
+        }
         try {
             return getInstance().writerWithDefaultPrettyPrinter().writeValueAsString(value);
         } catch (Exception e) {
@@ -47,6 +54,9 @@ public class JsonUtil {
     }
 
     public static byte[] toJsonAsBytes(Object object) {
+        if (ObjectUtils.isEmpty(object)) {
+            return null;
+        }
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (JsonProcessingException e) {

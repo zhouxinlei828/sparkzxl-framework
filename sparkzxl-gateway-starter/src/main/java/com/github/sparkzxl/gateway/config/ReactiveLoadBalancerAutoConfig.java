@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.config;
 
-import com.github.sparkzxl.gateway.filter.GatewayLoadBalancerClientFilter;
+import com.github.sparkzxl.gateway.filter.lb.GatewayLoadBalancerClientFilter;
 import com.github.sparkzxl.gateway.properties.GrayProperties;
 import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureBefore(GatewayReactiveLoadBalancerClientAutoConfiguration.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-@ConditionalOnProperty(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX, value = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({GrayProperties.class})
 @Slf4j
 public class ReactiveLoadBalancerAutoConfig {

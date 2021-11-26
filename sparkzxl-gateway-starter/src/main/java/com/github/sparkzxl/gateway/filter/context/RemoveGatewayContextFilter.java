@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.filter;
+package com.github.sparkzxl.gateway.filter.context;
 
 import com.github.sparkzxl.gateway.context.GatewayContext;
 import lombok.extern.slf4j.Slf4j;

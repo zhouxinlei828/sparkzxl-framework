@@ -5,11 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.CollectionUtils;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * description: 网关插件属性配置
@@ -44,22 +39,8 @@ public class GatewayPluginProperties implements InitializingBean {
      * Enable Or Disable Dynamic Route
      */
     private boolean enableDynamicRoute = false;
-    /**
-     * Enable Read Request Data When use discover route by serviceId
-     */
-    private List<String> readRequestDataServiceIdList = Collections.emptyList();
-    /**
-     * Enable Read Request Data by specific path
-     */
-    private List<String> readRequestDataPathList = Collections.emptyList();
 
     @Override
     public void afterPropertiesSet() {
-        if (!CollectionUtils.isEmpty(readRequestDataServiceIdList)) {
-            readRequestDataServiceIdList = readRequestDataServiceIdList.stream().map(String::toLowerCase).collect(Collectors.toList());
-        }
-        if (!CollectionUtils.isEmpty(readRequestDataPathList)) {
-            readRequestDataPathList = readRequestDataPathList.stream().map(String::toLowerCase).collect(Collectors.toList());
-        }
     }
 }

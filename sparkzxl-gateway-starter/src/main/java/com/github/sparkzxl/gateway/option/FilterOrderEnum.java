@@ -19,6 +19,10 @@ public enum FilterOrderEnum {
      */
     REQUEST_LOG_FILTER(Integer.MIN_VALUE + 2),
     /**
+     * Request Log Filter
+     */
+    AUTHORIZATION_FILTER(Integer.MIN_VALUE + 3),
+    /**
      * Cache Response Data Filter
      */
     RESPONSE_DATA_FILTER(NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER - 1),

@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.filter;
+package com.github.sparkzxl.gateway.filter.lb;
 
 import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;

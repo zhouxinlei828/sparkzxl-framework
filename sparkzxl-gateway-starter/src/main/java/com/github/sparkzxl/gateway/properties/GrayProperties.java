@@ -25,5 +25,5 @@ public class GrayProperties {
      */
     @Getter
     @Setter
-    private Boolean enable = false;
+    private Boolean enabled = false;
 }
