@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.filter.log;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.jackson.JsonUtil;

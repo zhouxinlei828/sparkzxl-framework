@@ -3,9 +3,9 @@ package com.github.sparkzxl.user.manager;
 import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.context.ResponseHelper;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.BuildKeyUtil;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -59,7 +59,7 @@ public class DefaultUserStateManager implements UserStateManager {
 
     @Override
     public AuthUserInfo getUser(HttpServletRequest servletRequest) {
-        String token = ResponseHelper.getAuthHeader(servletRequest);
+        String token = HttpRequestUtils.getAuthHeader(servletRequest);
         return getUser(token);
     }
 

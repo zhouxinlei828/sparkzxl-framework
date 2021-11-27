@@ -1,7 +1,13 @@
 package com.github.sparkzxl.core.util;
 
+import com.github.sparkzxl.annotation.response.Response;
+import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
@@ -9,11 +15,13 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,6 +32,7 @@ import java.util.stream.Collectors;
  * @author zhouxinlei
  * @date 2021-11-27 12:11:18
  */
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpRequestUtils {
 
@@ -34,8 +43,8 @@ public class HttpRequestUtils {
     /**
      * 是否为json 请求
      *
-     * @param contentType
-     * @return
+     * @param contentType contentType
+     * @return boolean
      */
     public static boolean isJsonRequest(String contentType) {
         return StringUtils.isNotBlank(contentType) &&
@@ -45,10 +54,9 @@ public class HttpRequestUtils {
     /**
      * 获取请求属性
      *
-     * @param requestAttributes
-     * @param name
-     * @param <T>
-     * @return
+     * @param requestAttributes 请求属性
+     * @param name              key
+     * @return T
      */
     @SuppressWarnings("unchecked")
     public static <T> T getRequestAttribute(RequestAttributes requestAttributes, String name) {
@@ -58,9 +66,9 @@ public class HttpRequestUtils {
     /**
      * 读取json请求流
      *
-     * @param request
-     * @return
-     * @throws IOException
+     * @param request    请求
+     * @param useWrapper useWrapper
+     * @return String
      */
     public static String readRequestBodyForJson(HttpServletRequest request, boolean useWrapper) {
         if (request instanceof ContentCachingRequestWrapper && useWrapper) {
@@ -91,9 +99,9 @@ public class HttpRequestUtils {
 
 
     public static String readFromRequest(HttpServletRequest request) {
-        String str = null;
+        String str;
         StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader reader = null;
+        BufferedReader reader;
         try {
             reader = request.getReader();
             while ((str = reader.readLine()) != null) {
@@ -116,18 +124,18 @@ public class HttpRequestUtils {
     /**
      * 路径是否匹配
      *
-     * @param pattern
-     * @param path
-     * @return
+     * @param pattern pattern
+     * @param path    路径
+     * @return boolean
      */
     public static boolean isMatchPath(String pattern, String path) {
         return ANT_PATH_MATCHER.match(pattern, path);
     }
 
     /**
-     * 出去多余的 /
+     * 移除多余的 /
      *
-     * @param path
+     * @param path 路径
      * @return
      */
     public static String sanitizedPath(final String path) {
@@ -147,8 +155,8 @@ public class HttpRequestUtils {
     /**
      * URL 解码
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return String
      */
     public static String urlDecode(String str) {
         try {
@@ -164,6 +172,72 @@ public class HttpRequestUtils {
             return readFromRequestWrapper((ContentCachingRequestWrapper) request);
         } else {
             return readFromRequest(request);
+        }
+    }
+
+    public static String getAuthHeader(HttpServletRequest httpRequest) {
+        String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);
+        return StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
+    }
+
+    public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg) {
+        try {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg)));
+            response.getWriter().flush();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg, Object data) {
+        try {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg, data)));
+            response.getWriter().flush();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public static void unauthorized(HttpServletResponse response, String msg) {
+        try {
+            int code = ResponseInfoStatus.UN_AUTHORIZED.getCode();
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(code);
+            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg)));
+            response.getWriter().flush();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public static void forbidden(HttpServletResponse response, String msg) {
+        try {
+            int code = ResponseInfoStatus.AUTHORIZED_DENIED.getCode();
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(ResponseInfoStatus.AUTHORIZED_DENIED.getCode());
+            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg)));
+            response.getWriter().flush();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public static void clearResponseResult() {
+        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
+        Response response =
+                (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        if (response != null) {
+            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }
     }
 
