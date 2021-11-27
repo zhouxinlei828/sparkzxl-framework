@@ -19,11 +19,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Http请求工具
+ * description: Http请求工具
  *
- * @author durenhao
- * @date 2020/6/2 23:27
- **/
+ * @author zhouxinlei
+ * @date 2021-11-27 12:11:18
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpRequestUtils {
 

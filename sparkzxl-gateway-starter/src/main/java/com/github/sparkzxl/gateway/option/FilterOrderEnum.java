@@ -17,11 +17,11 @@ public enum FilterOrderEnum {
     /**
      * Request Log Filter
      */
-    REQUEST_LOG_FILTER(Integer.MIN_VALUE + 2),
+    AUTHORIZATION_FILTER(Integer.MIN_VALUE + 2),
     /**
      * Request Log Filter
      */
-    AUTHORIZATION_FILTER(Integer.MIN_VALUE + 3),
+    REQUEST_LOG_FILTER(Integer.MIN_VALUE + 3),
     /**
      * Cache Response Data Filter
      */
@@ -31,7 +31,6 @@ public enum FilterOrderEnum {
      * load balancer client filter
      */
     LOAD_BALANCER_CLIENT_FILTER(10150),
-
     ;
 
     private final int order;

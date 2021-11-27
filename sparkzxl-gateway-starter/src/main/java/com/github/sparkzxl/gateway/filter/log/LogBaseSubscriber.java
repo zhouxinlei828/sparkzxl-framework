@@ -1,10 +1,13 @@
 package com.github.sparkzxl.gateway.filter.log;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.util.RequestIpUtil;
+import com.github.sparkzxl.gateway.util.WebFluxUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Subscriber;
@@ -74,14 +77,14 @@ public class LogBaseSubscriber extends BaseSubscriber {
         ServerHttpRequest request = exchange.getRequest();
         URI uri = request.getURI();
         HttpHeaders headers = request.getHeaders();
-        String username = exchange.getAttribute(BaseContextConstants.JWT_KEY_NAME);
+        String username = HttpRequestUtils.urlDecode(WebFluxUtils.getHeader(BaseContextConstants.JWT_KEY_NAME, request));
         logParam.setIp(RequestIpUtil.getIp(request))
                 .setUsername(username)
                 .setHttpMethod(request.getMethod())
                 .setHttpStatus(exchange.getResponse().getStatusCode().value())
                 .setPath(uri.getPath())
                 .setHost(headers.getFirst(HttpHeaders.HOST))
-                .setRouteId(gatewayContext.getRouteId())
+                .setRouteId(route.getId())
                 .setRouterToUri(route.getUri().toString())
                 .setReqTime(requestDateTime)
                 .setReqBody(gatewayContext.getRequestBody())
