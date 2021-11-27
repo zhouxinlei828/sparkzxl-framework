@@ -27,6 +27,11 @@ public enum FilterOrderEnum {
      */
     RESPONSE_DATA_FILTER(NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER - 1),
 
+    /**
+     * load balancer client filter
+     */
+    LOAD_BALANCER_CLIENT_FILTER(10150),
+
     ;
 
     private final int order;

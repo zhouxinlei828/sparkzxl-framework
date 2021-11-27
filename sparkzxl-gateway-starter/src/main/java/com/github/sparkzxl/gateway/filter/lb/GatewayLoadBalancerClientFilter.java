@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.filter.lb;
 
+import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
@@ -27,7 +28,6 @@ import java.net.URI;
 @Slf4j
 public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientFilter {
 
-    private static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = 10150;
     private static final String LB = "lb";
 
     private final IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer;
@@ -88,7 +88,7 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
 
     @Override
     public int getOrder() {
-        return LOAD_BALANCER_CLIENT_FILTER_ORDER;
+        return FilterOrderEnum.LOAD_BALANCER_CLIENT_FILTER.getOrder();
     }
 
 }
