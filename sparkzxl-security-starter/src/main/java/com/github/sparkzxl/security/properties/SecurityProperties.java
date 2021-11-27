@@ -17,6 +17,6 @@ public class SecurityProperties {
 
     private List<String> ignore;
 
-    private boolean builtInPermissions;
+    private boolean allowUrlCtrl;
 
 }

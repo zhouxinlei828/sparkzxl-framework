@@ -5,12 +5,13 @@ import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.context.ResponseHelper;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
-import com.github.sparkzxl.entity.security.AuthUserDetail;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,9 +30,14 @@ import java.io.IOException;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private JwtTokenService jwtTokenService;
+    private UserDetailsService userDetailsService;
 
     public void setJwtTokenService(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
+    }
+
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -51,13 +57,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                AuthUserDetail authUserDetail = new AuthUserDetail(
-                        jwtUserInfo.getId(),
-                        jwtUserInfo.getUsername(),
-                        null,
-                        jwtUserInfo.getName(),
-                        jwtUserInfo.getAuthorities()
-                );
+                UserDetails authUserDetail = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
                         null, authUserDetail.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

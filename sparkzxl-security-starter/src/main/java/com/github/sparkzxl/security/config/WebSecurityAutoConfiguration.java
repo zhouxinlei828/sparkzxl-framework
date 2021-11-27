@@ -12,6 +12,7 @@ import com.github.sparkzxl.security.intercept.DynamicSecurityMetadataSource;
 import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.github.sparkzxl.security.service.DynamicSecurityService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,6 +26,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
@@ -48,6 +50,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     private final SecurityProperties securityProperties;
     private JwtTokenService jwtTokenService;
     private DynamicSecurityService dynamicSecurityService;
+    private UserDetailsService userDetailsService;
 
     public WebSecurityAutoConfiguration(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
@@ -61,6 +64,11 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired(required = false)
     public void setDynamicSecurityService(DynamicSecurityService dynamicSecurityService) {
         this.dynamicSecurityService = dynamicSecurityService;
+    }
+
+    @Autowired(required = false)
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -77,8 +85,10 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
         List<String> excludePatterns = securityProperties.getIgnore();
-        for (String url : excludePatterns) {
-            registry.antMatchers(url).permitAll();
+        if (CollectionUtils.isNotEmpty(excludePatterns)) {
+            for (String url : excludePatterns) {
+                registry.antMatchers(url).permitAll();
+            }
         }
         RestfulAccessDeniedHandler restfulAccessDeniedHandler = new RestfulAccessDeniedHandler();
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
@@ -101,7 +111,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
-        if (securityProperties.isBuiltInPermissions()) {
+        if (securityProperties.isAllowUrlCtrl()) {
             registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
         }
     }
@@ -126,24 +136,25 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter = new JwtAuthenticationTokenFilter();
         jwtAuthenticationTokenFilter.setJwtTokenService(jwtTokenService);
+        jwtAuthenticationTokenFilter.setUserDetailsService(userDetailsService);
         return jwtAuthenticationTokenFilter;
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"security.allow-url-ctrl"}, havingValue = "true")
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         log.info("DynamicAccessDecisionManager registered success! ");
         return new DynamicAccessDecisionManager();
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"security.allow-url-ctrl"}, havingValue = "true")
     public DynamicSecurityFilter dynamicSecurityFilter() {
         return new DynamicSecurityFilter(dynamicSecurityMetadataSource(), securityProperties);
     }
 
     @Bean
-    @ConditionalOnProperty(name = {"sparkzxl.security.built-in-permissions"}, havingValue = "true")
+    @ConditionalOnProperty(name = {"security.allow-url-ctrl"}, havingValue = "true")
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
         DynamicSecurityMetadataSource dynamicSecurityMetadataSource = new DynamicSecurityMetadataSource();
         dynamicSecurityMetadataSource.setDynamicSecurityService(dynamicSecurityService);
