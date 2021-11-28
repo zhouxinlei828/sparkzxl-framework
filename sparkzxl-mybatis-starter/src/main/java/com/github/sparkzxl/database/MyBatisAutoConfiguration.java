@@ -26,7 +26,7 @@ import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
 import com.github.sparkzxl.database.plugins.TenantLineHandlerInterceptor;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.DataProperties;
-import com.github.sparkzxl.database.support.DataSourceExceptionHandler;
+import com.github.sparkzxl.database.support.DataBaseExceptionHandler;
 import com.google.common.collect.Lists;
 import com.p6spy.engine.spy.P6DataSource;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties({CustomMybatisProperties.class, DataProperties.class})
-@Import(DataSourceExceptionHandler.class)
+@Import(DataBaseExceptionHandler.class)
 @MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
 @RequiredArgsConstructor

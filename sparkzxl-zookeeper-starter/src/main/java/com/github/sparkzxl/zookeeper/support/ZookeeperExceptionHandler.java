@@ -1,6 +1,5 @@
 package com.github.sparkzxl.zookeeper.support;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
@@ -25,8 +24,7 @@ public class ZookeeperExceptionHandler implements Ordered {
 
     @ExceptionHandler(KeeperException.class)
     public ResponseResult<?> handleKeeperException(KeeperException e) {
-        e.printStackTrace();
-        log.error(ExceptionUtil.getSimpleMessage(e));
+        log.error("KeeperException异常:", e);
         return ResponseResult.result(ResponseInfoStatus.FAILURE.getCode(), e.getMessage());
     }
 
