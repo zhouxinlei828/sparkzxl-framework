@@ -4,7 +4,6 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.Digester;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -57,15 +56,5 @@ public class FileDigestUtil {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @SneakyThrows
-    public static void main(String[] args) {
-        String path1 = "/Users/zhouxinlei/Documents/wangliao.json";
-        String path2 = "/Users/zhouxinlei/Documents/wangliao.json";
-        String checksum1 = FileDigestUtil.extractChecksum(path1, DigestAlgorithm.MD5);
-        System.out.println(checksum1);
-        String checksum2 = FileDigestUtil.extractChecksum(path2, DigestAlgorithm.MD5);
-        System.out.println(checksum2);
     }
 }
