@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.filter.context;
 
-import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
@@ -39,7 +38,7 @@ import java.util.Map;
 /**
  * description: Gateway Context Filter
  *
- * @author zhoux
+ * @author zhouxinlei
  */
 @Slf4j
 @AllArgsConstructor
@@ -70,14 +69,13 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
          * save gateway context into exchange
          */
         exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
-        MediaType contentType = headers.getContentType();
-        String contentTypeStr = OptionalBean.ofNullable(contentType).getBean(MediaType::toString).orElse("");
+        String contentType = headers.getFirst(HttpHeaders.CONTENT_TYPE);
         if (headers.getContentLength() > 0) {
-            if (StringUtils.startsWithIgnoreCase(contentTypeStr, MediaType.APPLICATION_JSON_VALUE)
-                    || StringUtils.startsWithIgnoreCase(contentTypeStr, MediaType.MULTIPART_FORM_DATA_VALUE)) {
+            if (StringUtils.startsWithIgnoreCase(contentType, MediaType.APPLICATION_JSON_VALUE)
+                    || StringUtils.startsWithIgnoreCase(contentType, MediaType.MULTIPART_FORM_DATA_VALUE)) {
                 return readBody(exchange, chain, gatewayContext);
             }
-            if (MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
+            if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(contentType)) {
                 return readFormData(exchange, chain, gatewayContext);
             }
         }

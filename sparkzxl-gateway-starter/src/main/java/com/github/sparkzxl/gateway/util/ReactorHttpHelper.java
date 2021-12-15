@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
 import com.github.sparkzxl.core.base.result.ResponseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -23,7 +24,7 @@ import java.util.List;
  *
  * @author zhouxinlei
  */
-public class WebFluxUtils {
+public class ReactorHttpHelper {
 
     public static String getHeader(String headerName, ServerHttpRequest request) {
         HttpHeaders headers = request.getHeaders();
@@ -61,6 +62,13 @@ public class WebFluxUtils {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         byte[] bytes = JSON.toJSONString(ResponseResult.result(code, message)).getBytes(StandardCharsets.UTF_8);
+        DataBuffer buffer = response.bufferFactory().wrap(bytes);
+        return response.writeWith(Flux.just(buffer));
+    }
+    public static Mono<Void> errorResponse(ServerHttpResponse response, ResponseInfoStatus responseInfoStatus) {
+        //指定编码，否则在浏览器中会中文乱码
+        response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        byte[] bytes = JSON.toJSONString(ResponseResult.result(responseInfoStatus.getCode(), responseInfoStatus.getMessage())).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }

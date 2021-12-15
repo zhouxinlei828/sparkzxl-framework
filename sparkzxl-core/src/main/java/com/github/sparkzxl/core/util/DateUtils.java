@@ -9,10 +9,7 @@ import com.github.sparkzxl.entity.core.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -224,5 +221,9 @@ public class DateUtils extends DateUtil {
         }
         ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
         return Date.from(zonedDateTime.toInstant());
+    }
+
+    public static long millisecond(LocalDateTime localDateTime) {
+        return localDateTime.toEpochSecond(ZoneOffset.of("+8"));
     }
 }

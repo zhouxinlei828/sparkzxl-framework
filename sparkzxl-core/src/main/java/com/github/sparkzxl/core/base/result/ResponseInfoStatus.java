@@ -180,6 +180,9 @@ public enum ResponseInfoStatus implements BusinessEnumSysAssert {
     REQUIRED_FILE_PARAM_EX(HttpStatus.HTTP_BAD_REQUEST, "请求中必须至少包含一个有效文件"),
     ILLEGAL_ARGUMENT_EX(HttpStatus.HTTP_BAD_REQUEST, "无效参数异常"),
     PARAM_EX(HttpStatus.HTTP_BAD_REQUEST, "参数类型解析异常"),
+    SIGNATURE_EX(HttpStatus.HTTP_BAD_REQUEST, "请求签名解析异常"),
+    REQUEST_TIMESTAMP_EX(HttpStatus.HTTP_BAD_REQUEST, "请求时间戳验签不通过"),
+    SIGNATURE_NOT_SUPPORTED_EX(HttpStatus.HTTP_BAD_REQUEST, "不支持的验签请求"),
     ;
 
     final int code;

@@ -6,7 +6,7 @@ import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.util.RequestIpUtil;
-import com.github.sparkzxl.gateway.util.WebFluxUtils;
+import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Subscriber;
@@ -75,7 +75,7 @@ public class LogBaseSubscriber extends BaseSubscriber {
         ServerHttpRequest request = exchange.getRequest();
         URI uri = request.getURI();
         HttpHeaders headers = request.getHeaders();
-        String username = HttpRequestUtils.urlDecode(WebFluxUtils.getHeader(BaseContextConstants.JWT_KEY_NAME, request));
+        String username = HttpRequestUtils.urlDecode(ReactorHttpHelper.getHeader(BaseContextConstants.JWT_KEY_NAME, request));
         logParam.setIp(RequestIpUtil.getIp(request))
                 .setUsername(username)
                 .setHttpMethod(request.getMethod())
