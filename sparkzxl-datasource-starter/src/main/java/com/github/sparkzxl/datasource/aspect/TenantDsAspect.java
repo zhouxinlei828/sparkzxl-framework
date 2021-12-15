@@ -17,7 +17,6 @@ import javax.sql.DataSource;
  * description: 租户数据源AOP拦截
  *
  * @author zhouxinlei
- * @date 2021-11-10 08:47
  */
 @Aspect
 @Slf4j

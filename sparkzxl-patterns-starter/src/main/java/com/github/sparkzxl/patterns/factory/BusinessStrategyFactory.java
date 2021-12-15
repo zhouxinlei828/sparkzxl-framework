@@ -6,7 +6,6 @@ import com.github.sparkzxl.patterns.strategy.BusinessHandler;
  * description: 业务处理工厂
  *
  * @author zhoux
- * @date 2021-10-23 12:42:23
  */
 public interface BusinessStrategyFactory {
 

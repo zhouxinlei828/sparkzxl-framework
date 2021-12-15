@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
  * description: 用户状态管理
  *
  * @author zhouxinlei
- * @date 2021-11-04 14:48:18
  */
 public interface UserStateManager {
 

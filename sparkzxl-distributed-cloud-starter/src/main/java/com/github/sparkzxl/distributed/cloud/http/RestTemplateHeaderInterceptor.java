@@ -23,7 +23,6 @@ import java.util.List;
  * description: 通过 RestTemplate 调用时，传递请求头和线程变量
  *
  * @author zhouxinlei
- * @date 2021-10-19 14:27:13
  */
 @AllArgsConstructor
 @Slf4j

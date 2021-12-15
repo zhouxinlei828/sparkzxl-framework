@@ -14,7 +14,6 @@ import java.util.Objects;
  * description: 责任链工厂实现类
  *
  * @author zhoux
- * @date 2021-10-23 13:02:34
  */
 public class DefaultHandlerInterceptorFactory implements HandlerInterceptorFactory {
 

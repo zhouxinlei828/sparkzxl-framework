@@ -8,7 +8,6 @@ import java.util.List;
  * description: 数据源负载均衡策略
  *
  * @author zhouxinlei
- * @date 2021-11-09 14:20
  */
 public interface DataSourceLoadBalancer {
 

@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  * 开发B访问时同上，请求的所有路由优先调用开发B本机启动的实例，如果没有则调用服务器上的实例
  *
  * @author zhouxinlei
- * @date 2021-10-21 14:52:49
  */
 @Slf4j
 public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {

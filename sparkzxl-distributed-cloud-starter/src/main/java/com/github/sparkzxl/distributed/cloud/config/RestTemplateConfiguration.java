@@ -31,7 +31,6 @@ import java.util.List;
  * description: RestTemplate 相关的配置
  *
  * @author zhouxinlei
- * @date 2021-10-19 14:28:10
  */
 @ConditionalOnClass(okhttp3.OkHttpClient.class)
 @AllArgsConstructor

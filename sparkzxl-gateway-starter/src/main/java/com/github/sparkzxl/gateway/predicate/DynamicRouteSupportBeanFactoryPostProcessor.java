@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * description: DynamicRoute BeanFactoryPostProcessor
  *
  * @author zhoux
- * @date 2021-10-23 17:30:42
  */
 @Configuration
 @Slf4j

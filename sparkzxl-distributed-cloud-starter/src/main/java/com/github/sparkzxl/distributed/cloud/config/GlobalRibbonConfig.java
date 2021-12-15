@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-10-29 09:57:35
  */
 @Configuration(proxyBeanMethods = false)
 public class GlobalRibbonConfig {

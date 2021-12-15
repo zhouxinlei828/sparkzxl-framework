@@ -19,7 +19,6 @@ import org.slf4j.Logger;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-10-19 14:24:57
  */
 public class InfoSlf4jFeignLogger extends feign.Logger {
     private final Logger logger;

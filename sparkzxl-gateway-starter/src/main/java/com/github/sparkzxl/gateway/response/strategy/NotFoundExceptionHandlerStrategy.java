@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
  * description: 服务器资源未找到异常处理
  *
  * @author zhoux
- * @date 2021-10-23 16:33:21
  */
 @Slf4j
 public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrategy {

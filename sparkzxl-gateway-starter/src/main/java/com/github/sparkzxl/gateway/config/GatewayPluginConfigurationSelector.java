@@ -18,7 +18,6 @@ import java.util.List;
  * description: 网关插件配置选择
  *
  * @author zhoux
- * @date 2021-10-23 17:28:03
  */
 @Slf4j
 public class GatewayPluginConfigurationSelector implements ImportSelector, EnvironmentAware {

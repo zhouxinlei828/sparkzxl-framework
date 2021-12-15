@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * description: 轮询负载均衡数据源选择算法
  *
  * @author zhouxinlei
- * @date 2021-11-09 14:24
  */
 public class PollingDataSourceLoadBalancer implements DataSourceLoadBalancer {
 

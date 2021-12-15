@@ -11,7 +11,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * description: 灰度配置属性
  *
  * @author zhoux
- * @date 2021-10-23 17:38:38
  */
 @Slf4j
 @ToString

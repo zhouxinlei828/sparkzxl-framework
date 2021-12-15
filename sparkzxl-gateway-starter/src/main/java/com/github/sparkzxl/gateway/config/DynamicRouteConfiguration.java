@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * description: 动态路由配置
  *
  * @author zhoux
- * @date 2021-10-23 16:47:00
  */
 @Configuration
 @Slf4j

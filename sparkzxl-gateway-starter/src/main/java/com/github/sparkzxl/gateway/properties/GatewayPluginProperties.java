@@ -10,7 +10,6 @@ import org.springframework.beans.factory.InitializingBean;
  * description: 网关插件属性配置
  *
  * @author zhoux
- * @date 2021-10-23 17:29:45
  */
 @Slf4j
 @Getter

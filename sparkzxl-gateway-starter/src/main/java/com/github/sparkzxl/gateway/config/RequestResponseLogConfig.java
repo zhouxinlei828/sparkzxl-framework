@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
  * description: 日志配置
  *
  * @author zhoux
- * @date 2021-10-23 17:27:30
  */
 @Slf4j
 @Configuration

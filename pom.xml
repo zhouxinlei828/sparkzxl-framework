@@ -60,6 +60,7 @@
         <module>sparkzxl-datasource-starter</module>
         <module>sparkzxl-uid</module>
         <module>sparkzxl-dependencies</module>
+        <module>sparkzxl-idempotent</module>
     </modules>
 
     <licenses>

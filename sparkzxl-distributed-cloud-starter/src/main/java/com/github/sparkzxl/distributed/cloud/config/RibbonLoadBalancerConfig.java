@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
  * description: Ribbon负载均衡配置
  *
  * @author zhouxinlei
- * @date 2021-10-29 09:57:04
  */
 @Configuration
 @ConditionalOnProperty(prefix = ConfigurationConstant.RIBBON_PREFIX, name = "enabled", havingValue = "true")

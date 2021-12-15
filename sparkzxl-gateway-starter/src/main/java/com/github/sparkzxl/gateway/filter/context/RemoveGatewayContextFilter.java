@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
  * description: remove gatewayContext Attribute
  *
  * @author zhoux
- * @date 2021-10-23 17:26:50
  */
 @Slf4j
 public class RemoveGatewayContextFilter implements GlobalFilter, Ordered {

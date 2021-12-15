@@ -15,7 +15,6 @@ import reactor.core.publisher.Mono;
  * description: 解决跨域问题
  *
  * @author charles.zhou
- * @date 2020-05-24 12:16:27
  */
 @Configuration
 public class CorsAutoConfig {

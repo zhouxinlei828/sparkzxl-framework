@@ -15,7 +15,6 @@ import java.net.URI;
  * description: 请求日志过滤器
  *
  * @author zhouxinlei
- * @date 2021-11-26 13:55
  */
 public class AccessLogFilter implements GlobalFilter, Ordered {
 

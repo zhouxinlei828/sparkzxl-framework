@@ -15,7 +15,6 @@ import java.net.URL;
  * description: 文件摘要处理工具类
  *
  * @author zhouxinlei
- * @date 2021-12-01 12:24
  */
 public class FileDigestUtil {
 

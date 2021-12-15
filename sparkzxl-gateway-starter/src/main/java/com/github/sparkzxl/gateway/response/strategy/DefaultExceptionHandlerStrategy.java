@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
  * description: 默认异常处理策略
  *
  * @author zhoux
- * @date 2021-10-23 17:21:12
  */
 @Slf4j
 public class DefaultExceptionHandlerStrategy implements ExceptionHandlerStrategy {

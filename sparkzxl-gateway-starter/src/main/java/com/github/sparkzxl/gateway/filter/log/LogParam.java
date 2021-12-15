@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
  * description: 日志参数实体类
  *
  * @author zhouxinlei
- * @date 2021-11-26 13:53
  */
 @Data
 @Accessors(chain = true)

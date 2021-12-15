@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
  * description: 服务器响应异常处理
  *
  * @author zhoux
- * @date 2021-10-23 16:34:14
  */
 @Slf4j
 public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerStrategy {

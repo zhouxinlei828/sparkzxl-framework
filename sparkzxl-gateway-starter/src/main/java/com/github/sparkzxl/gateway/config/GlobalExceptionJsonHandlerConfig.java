@@ -27,7 +27,6 @@ import java.util.List;
  * description: 全局异常配置
  *
  * @author zhoux
- * @date 2021-10-23 16:52:41
  */
 @Slf4j
 @Configuration

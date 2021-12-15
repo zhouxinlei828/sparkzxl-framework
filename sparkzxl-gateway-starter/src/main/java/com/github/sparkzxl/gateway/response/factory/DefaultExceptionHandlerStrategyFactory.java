@@ -12,7 +12,6 @@ import java.util.Map;
  * description: 异常处理工厂
  *
  * @author zhoux
- * @date 2021-10-23 17:22:18
  */
 @Slf4j
 public class DefaultExceptionHandlerStrategyFactory implements ExceptionHandlerStrategyFactory {

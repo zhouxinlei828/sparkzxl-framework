@@ -2,13 +2,12 @@ package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.util.StrUtil;
 
-
 /**
- * description: 缓存key前缀
+ * description: 生成key工具类
  *
  * @author zhouxinlei
  */
-public class BuildKeyUtil {
+public class KeyGeneratorUtil {
 
     /**
      * 构建key

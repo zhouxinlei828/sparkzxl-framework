@@ -14,7 +14,6 @@ import java.util.function.Function;
  * description: 数据库加载数据源实现类
  *
  * @author zhouxinlei
- * @date 2021-11-09 09:11
  */
 @RequiredArgsConstructor
 public class JdbcDataSourceProvider extends BaseDataSourceProvider {

@@ -16,7 +16,6 @@ import java.util.List;
  * description: 抽象数据源策略实现
  *
  * @author zhouxinlei
- * @date 2021-11-09 10:38
  */
 public abstract class BaseDataSourceProvider implements DataSourceProvider {
 

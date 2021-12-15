@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
  * description: Http请求工具
  *
  * @author zhouxinlei
- * @date 2021-11-27 12:11:18
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

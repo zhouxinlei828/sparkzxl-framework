@@ -20,9 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignLoggerFactory;
 
 /**
- * @author Venil Noronha
+ *
  * @author zhouxinlei
- * @date 2020/8/9 上午10:03
  * @see org.springframework.cloud.openfeign.DefaultFeignLoggerFactory
  */
 public class InfoFeignLoggerFactory implements FeignLoggerFactory {

@@ -22,7 +22,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * description: 缓存响应body过滤器
  *
  * @author zhouxinlei
- * @date 2021-11-26 13:57
  */
 @RequiredArgsConstructor
 public class ResponseLogCachedBodyStrFilter implements GlobalFilter, Ordered {

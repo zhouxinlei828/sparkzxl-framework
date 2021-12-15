@@ -29,7 +29,6 @@ import java.util.Objects;
  * description: Json Exception Handler{@link org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler}
  *
  * @author zhoux
- * @date 2021-10-23 21:31:43
  */
 @Slf4j
 public class JsonExceptionHandler implements ErrorWebExceptionHandler {

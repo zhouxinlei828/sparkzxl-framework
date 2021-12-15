@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
  * description: 网关插件配置
  *
  * @author zhoux
- * @date 2021-10-23 17:28:31
  */
 @Slf4j
 @Configuration

@@ -8,7 +8,6 @@ import java.util.List;
  * description: 责任链工厂
  *
  * @author zhoux
- * @date 2021-10-23 12:57:46
  */
 public interface HandlerInterceptorFactory {
 

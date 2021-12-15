@@ -27,7 +27,6 @@ import java.util.Optional;
  * description: 日志订阅
  *
  * @author zhouxinlei
- * @date 2021-11-26 15:45
  */
 @Slf4j
 public class LogBaseSubscriber extends BaseSubscriber {

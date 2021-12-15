@@ -26,7 +26,6 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.*
  * description: Support Dynamic Route Predicate
  *
  * @author zhoux
- * @date 2021-10-23 17:30:31
  */
 @Configuration
 public class DynamicRoutePredicateHandlerMapping extends RoutePredicateHandlerMapping {

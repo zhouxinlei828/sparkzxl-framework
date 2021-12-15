@@ -19,7 +19,6 @@ import java.util.function.Function;
  * description: 有JDBC缓存的数据源加载实现
  *
  * @author zhouxinlei
- * @date 2021-11-09 09:11
  */
 @RequiredArgsConstructor
 public class JdbcCacheDataSourceProvider extends BaseDataSourceProvider {

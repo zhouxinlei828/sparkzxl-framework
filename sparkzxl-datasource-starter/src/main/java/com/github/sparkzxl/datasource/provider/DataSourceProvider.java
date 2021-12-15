@@ -6,7 +6,6 @@ import javax.sql.DataSource;
  * description: 数据源加载源
  *
  * @author zhouxinlei
- * @date 2021-11-09 08:54:07
  */
 public interface DataSourceProvider {
 

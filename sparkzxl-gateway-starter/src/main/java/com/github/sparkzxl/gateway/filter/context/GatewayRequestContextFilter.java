@@ -40,7 +40,6 @@ import java.util.Map;
  * description: Gateway Context Filter
  *
  * @author zhoux
- * @date 2021-10-23 21:32:32
  */
 @Slf4j
 @AllArgsConstructor

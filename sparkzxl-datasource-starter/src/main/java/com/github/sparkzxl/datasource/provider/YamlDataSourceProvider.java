@@ -14,7 +14,6 @@ import javax.sql.DataSource;
  * description: YAML data source
  *
  * @author zhouxinlei
- * @date 2021-11-09 09:12
  */
 @RequiredArgsConstructor
 public class YamlDataSourceProvider extends BaseDataSourceProvider {

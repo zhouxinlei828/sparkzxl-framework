@@ -21,7 +21,6 @@ import java.lang.reflect.UndeclaredThrowableException;
  * description: 异常处理适配器
  *
  * @author zhoux
- * @date 2021-10-23 16:32:54
  */
 @Slf4j
 public class ExceptionHandlerStrategyAdapter implements ExceptionHandlerStrategy, ApplicationContextAware {

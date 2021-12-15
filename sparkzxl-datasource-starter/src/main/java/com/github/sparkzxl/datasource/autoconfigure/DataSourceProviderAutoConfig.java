@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-11-09 10:17
  */
 @Configuration
 @ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)

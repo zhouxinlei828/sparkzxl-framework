@@ -12,7 +12,6 @@ import java.util.Optional;
  * description: 动态路由默认处理
  *
  * @author zhoux
- * @date 2021-10-23 16:48:23
  */
 public class DefaultDynamicRouteProcessor implements DynamicRouteProcessor {
 
