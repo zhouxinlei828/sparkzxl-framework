@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * description: Json Exception Handler{@link org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler}
+ * description: Json Exception Handler {@link org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler}
  *
  * @author zhoux
  */
@@ -102,9 +102,11 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     private Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         ExceptionHandlerResult result = exceptionHandlerResult.get();
-        return ServerResponse.status(result.getHttpStatus())
+        Mono<ServerResponse> responseMono = ServerResponse.status(result.getHttpStatus())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(result.getResponseResult()));
+        exceptionHandlerResult.remove();
+        return responseMono;
     }
 
     private Mono<? extends Void> write(ServerWebExchange exchange,

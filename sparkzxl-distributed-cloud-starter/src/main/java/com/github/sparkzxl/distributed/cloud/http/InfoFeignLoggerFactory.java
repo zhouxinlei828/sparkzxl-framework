@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignLoggerFactory;
 
 /**
- *
  * @author zhouxinlei
  * @see org.springframework.cloud.openfeign.DefaultFeignLoggerFactory
  */

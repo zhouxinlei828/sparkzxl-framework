@@ -28,7 +28,6 @@ import java.util.Optional;
  * description: 系统级输入参数过滤器
  *
  * @author zhouxinlei
- * @date 2021-12-15 19:47
  */
 public class SystemRequestParamGatewayFilterFactory extends AbstractGatewayFilterFactory {
 

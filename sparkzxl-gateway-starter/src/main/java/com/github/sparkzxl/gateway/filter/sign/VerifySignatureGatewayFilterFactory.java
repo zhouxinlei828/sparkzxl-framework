@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
  * ?name=&age=12   将视 name对应的值为空串进行验签
  *
  * @author zhouxinlei
- * @date 2021-12-15 20:32
  */
 public class VerifySignatureGatewayFilterFactory extends AbstractGatewayFilterFactory<VerifySignatureGatewayFilterFactory.Config> {
 

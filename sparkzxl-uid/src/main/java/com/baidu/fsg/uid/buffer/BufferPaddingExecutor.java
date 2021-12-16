@@ -92,7 +92,7 @@ public class BufferPaddingExecutor {
      *
      * @param ringBuffer    {@link RingBuffer}
      * @param uidProvider   {@link BufferedUidProvider}
-     * @param usingSchedule
+     * @param usingSchedule 使用调度
      */
     @SuppressWarnings("AlibabaThreadPoolCreation")
     public BufferPaddingExecutor(final RingBuffer ringBuffer, final BufferedUidProvider uidProvider, final boolean usingSchedule) {
@@ -138,7 +138,7 @@ public class BufferPaddingExecutor {
     /**
      * Whether is padding
      *
-     * @return
+     * @return boolean
      */
     public boolean isRunning() {
         return running.get();

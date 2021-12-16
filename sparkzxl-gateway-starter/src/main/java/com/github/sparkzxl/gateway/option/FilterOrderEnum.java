@@ -14,9 +14,13 @@ public enum FilterOrderEnum {
      */
     GATEWAY_CONTEXT_FILTER(Integer.MIN_VALUE),
     /**
-     * Request Log Filter
+     * authorization Filter
      */
-    AUTHORIZATION_FILTER(Integer.MIN_VALUE + 2),
+    AUTHORIZATION_FILTER(Integer.MIN_VALUE + 1),
+    /**
+     * MDCLog Filter
+     */
+    MDC_LOG_FILTER(Integer.MIN_VALUE + 2),
     /**
      * Request Log Filter
      */

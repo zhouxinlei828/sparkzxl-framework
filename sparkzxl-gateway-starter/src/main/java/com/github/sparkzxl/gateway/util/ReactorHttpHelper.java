@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.util;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: WebFluxUtils工具类
@@ -58,6 +60,22 @@ public class ReactorHttpHelper {
         mutate.header(name, valueEncode);
     }
 
+    public static void addHeaders(ServerHttpRequest.Builder mutate, Map<String, Object> headerMap) {
+        if (MapUtil.isEmpty(headerMap)) {
+            return;
+        }
+        headerMap.forEach((key, value) -> {
+            String valueStr = value.toString();
+            String valueEncode = URLUtil.encode(valueStr);
+            mutate.header(key, valueEncode);
+        });
+    }
+
+    public static String formatHeader(Object str) {
+        String valueStr = str.toString();
+        return URLUtil.encode(valueStr);
+    }
+
     public static Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -65,6 +83,7 @@ public class ReactorHttpHelper {
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }
+
     public static Mono<Void> errorResponse(ServerHttpResponse response, ResponseInfoStatus responseInfoStatus) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -77,8 +96,7 @@ public class ReactorHttpHelper {
      * get Real Ip Address
      *
      * @param request ServerHttpRequest
-     * @return
-     * @author Evans
+     * @return String
      */
     public static String getIpAddress(ServerHttpRequest request) {
         HttpHeaders headers = request.getHeaders();

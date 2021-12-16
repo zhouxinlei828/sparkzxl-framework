@@ -22,6 +22,7 @@ public class GatewayContext {
     public static final String CACHE_GATEWAY_CONTEXT = "cacheGatewayContext";
 
     protected LocalDateTime requestDateTime = LocalDateTime.now();
+
     /**
      * whether read request data
      */

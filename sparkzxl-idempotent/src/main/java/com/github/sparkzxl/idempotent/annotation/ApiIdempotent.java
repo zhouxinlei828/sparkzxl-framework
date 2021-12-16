@@ -1,7 +1,6 @@
 package com.github.sparkzxl.idempotent.annotation;
 
 import java.lang.annotation.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: API幂等性注解

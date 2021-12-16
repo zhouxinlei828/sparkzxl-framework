@@ -3,8 +3,10 @@ package com.github.sparkzxl.gateway.config;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.event.ApplicationLogRunner;
 import com.github.sparkzxl.gateway.filter.authorization.AbstractAuthorizationFilter;
+import com.github.sparkzxl.gateway.filter.log.MDCLogFilter;
 import com.github.sparkzxl.gateway.properties.GatewayResourceProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
+import com.google.common.net.HttpHeaders;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -29,7 +31,7 @@ public class GatewayAutoConfig {
         return new AbstractAuthorizationFilter() {
             @Override
             public String getHeaderKey() {
-                return "";
+                return HttpHeaders.AUTHORIZATION;
             }
 
             @Override
@@ -37,6 +39,11 @@ public class GatewayAutoConfig {
                 return new JwtUserInfo();
             }
         };
+    }
+
+    @Bean
+    public MDCLogFilter mdcLogFilter() {
+        return new MDCLogFilter();
     }
 
     @Bean

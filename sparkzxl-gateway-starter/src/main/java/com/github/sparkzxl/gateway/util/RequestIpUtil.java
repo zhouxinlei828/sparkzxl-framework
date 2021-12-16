@@ -21,8 +21,8 @@ public class RequestIpUtil {
     /**
      * 获取请求的真实ip
      *
-     * @param exchange
-     * @return
+     * @param exchange exchange
+     * @return String
      */
     public static String getReallyIp(ServerWebExchange exchange) {
         ServerHttpRequest request = exchange.getRequest();

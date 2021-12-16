@@ -4,7 +4,6 @@ package com.github.sparkzxl.gateway.constant;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-12-15 19:57:19
  */
 public interface RequestHeaderConstant {
 

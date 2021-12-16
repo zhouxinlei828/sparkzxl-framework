@@ -8,7 +8,6 @@ import org.springframework.http.HttpMethod;
  * description: 请求签名实体对象
  *
  * @author zhouxinlei
- * @date 2021-12-15 20:28
  */
 @Data
 @Builder

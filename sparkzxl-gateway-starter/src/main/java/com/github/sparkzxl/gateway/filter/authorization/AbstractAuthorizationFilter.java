@@ -2,10 +2,10 @@ package com.github.sparkzxl.gateway.filter.authorization;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.StringHandlerUtil;
 import com.github.sparkzxl.core.util.SwaggerStaticResource;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
@@ -21,9 +21,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * description: JWT授权校验管理过滤器
+ * description: 通用鉴权抽象过滤器
  *
  * @author zhouxinlei
  */
@@ -35,12 +36,11 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
         ServerHttpRequest request = exchange.getRequest();
         String requestUrl = request.getPath().toString();
         String tenantId = ReactorHttpHelper.getHeader(BaseContextConstants.TENANT_ID, request);
+        String version = ReactorHttpHelper.getHeader(BaseContextConstants.VERSION, request);
         MDC.put(BaseContextConstants.TENANT_ID, String.valueOf(tenantId));
-        log.info("请求租户id：[{}]，请求接口：[{}]", tenantId, requestUrl);
-        RequestLocalContextHolder.setVersion(ReactorHttpHelper.getHeader(BaseContextConstants.VERSION, request));
+        log.info("请求租户id：[{}]，版本：[{}]，请求接口：[{}]", tenantId, version, requestUrl);
         // 请求放行后置操作
-        if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString())
-                || StringHandlerUtil.matchUrl(ignorePatterns(), request.getPath().toString())) {
+        if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString()) || StringHandlerUtil.matchUrl(ignorePatterns(), request.getPath().toString())) {
             // 放行请求清除token
             ignoreCheckAfterCompletion(exchange);
             return chain.filter(exchange);
@@ -64,10 +64,10 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
             }
             onAuthSuccess(exchange);
         } else {
-            // 校验失败，后置操作
-            afterAuthenticationCheck(exchange, chain);
+            // 鉴权失败，后置操作
+            onAuthFail(exchange, chain);
         }
-        return chain.filter(exchange.mutate().request(request.mutate().build()).build());
+        return chain.filter(exchange);
     }
 
     /**
@@ -76,9 +76,10 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
      * @param exchange exchange
      */
     protected void ignoreCheckAfterCompletion(ServerWebExchange exchange) {
-        ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate()
-                .header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
+        ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().headers(httpHeaders -> httpHeaders.remove(getHeaderKey())).build();
         exchange.mutate().request(serverHttpRequest).build();
+        Map<String, Object> attributeMap = exchange.getAttributes();
+        attributeMap.put(ExchangeAttributeConstant.IS_AUTHENTICATION, Boolean.FALSE);
     }
 
     protected void checkTokenAuthority(ServerWebExchange exchange, String token) throws GatewayException {
@@ -86,13 +87,15 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
             throw new GatewayException(ResponseInfoStatus.TOKEN_EXPIRED_ERROR);
         }
-        ServerHttpRequest.Builder mutate = exchange.getRequest().mutate();
-        ReactorHttpHelper.addHeader(mutate, BaseContextConstants.JWT_KEY_ACCOUNT, jwtUserInfo.getUsername());
-        ReactorHttpHelper.addHeader(mutate, BaseContextConstants.JWT_KEY_USER_ID, jwtUserInfo.getId());
-        ReactorHttpHelper.addHeader(mutate, BaseContextConstants.JWT_KEY_NAME, jwtUserInfo.getName());
-        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(jwtUserInfo.getId()));
-        ServerHttpRequest serverHttpRequest = mutate.build();
+        ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().headers(httpHeaders -> {
+            httpHeaders.add(BaseContextConstants.JWT_KEY_USER_ID, ReactorHttpHelper.formatHeader(jwtUserInfo.getId()));
+            httpHeaders.add(BaseContextConstants.JWT_KEY_ACCOUNT, ReactorHttpHelper.formatHeader(jwtUserInfo.getUsername()));
+            httpHeaders.add(BaseContextConstants.JWT_KEY_NAME, ReactorHttpHelper.formatHeader(jwtUserInfo.getName()));
+        }).build();
         exchange.mutate().request(serverHttpRequest).build();
+        Map<String, Object> attributeMap = exchange.getAttributes();
+        attributeMap.put(ExchangeAttributeConstant.USER_INFO, jwtUserInfo);
+        attributeMap.put(ExchangeAttributeConstant.IS_AUTHENTICATION, Boolean.TRUE);
     }
 
     /**
@@ -107,7 +110,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
         return !StringUtils.isEmpty(token);
     }
 
-    protected void afterAuthenticationCheck(ServerWebExchange exchange, GatewayFilterChain chain) {
+    protected void onAuthFail(ServerWebExchange exchange, GatewayFilterChain chain) {
         throw new GatewayException(ResponseInfoStatus.JWT_EMPTY_ERROR);
     }
 

@@ -37,7 +37,7 @@ public class BaseContextConstants {
     /**
      * 权限
      */
-    public static final String AUTHORITY_CLAIM_NAME = "authorities";
+    public static final String AUTHORITY_NAME = "authorities";
     /**
      * JWT中封装的 用户id
      */
