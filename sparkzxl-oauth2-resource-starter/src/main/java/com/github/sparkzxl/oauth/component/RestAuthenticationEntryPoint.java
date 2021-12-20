@@ -2,7 +2,7 @@ package com.github.sparkzxl.oauth.component;
 
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -37,7 +37,7 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
             code = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getCode();
             message = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getMessage();
         }
-        String body = JSONUtil.toJsonStr(ResponseResult.result(code, message));
+        String body = JSONUtil.toJsonStr(Response.fail(code, message));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

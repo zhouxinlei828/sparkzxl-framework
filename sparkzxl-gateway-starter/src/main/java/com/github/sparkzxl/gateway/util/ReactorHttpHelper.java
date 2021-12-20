@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -79,7 +79,7 @@ public class ReactorHttpHelper {
     public static Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        byte[] bytes = JSON.toJSONString(ResponseResult.result(code, message)).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(Response.fail(code, message)).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }
@@ -87,7 +87,7 @@ public class ReactorHttpHelper {
     public static Mono<Void> errorResponse(ServerHttpResponse response, ResponseInfoStatus responseInfoStatus) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        byte[] bytes = JSON.toJSONString(ResponseResult.result(responseInfoStatus.getCode(), responseInfoStatus.getMessage())).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(Response.fail(responseInfoStatus.getCode(), responseInfoStatus.getMessage())).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }
@@ -117,18 +117,6 @@ public class ReactorHttpHelper {
             ip = ip.substring(0, ip.indexOf(","));
         }
         return ip;
-    }
-
-    /**
-     * get offline cache key
-     *
-     * @return
-     */
-    public static String getOfflineCacheKey(String ip, int port) {
-        if (ip != null) {
-            return ip + ":" + port;
-        }
-        return null;
     }
 
 }

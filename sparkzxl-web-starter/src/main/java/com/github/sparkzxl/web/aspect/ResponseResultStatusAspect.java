@@ -2,9 +2,8 @@ package com.github.sparkzxl.web.aspect;
 
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
-import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -65,15 +64,15 @@ public class ResponseResultStatusAspect {
     @Around(value = "pointCut()", argNames = "proceedingJoinPoint")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object proceed = proceedingJoinPoint.proceed();
-        if (ObjectUtils.isNotEmpty(proceed) && proceed instanceof ResponseResult) {
+        if (ObjectUtils.isNotEmpty(proceed) && proceed instanceof Response) {
             HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
             HttpServletResponse response = RequestContextHolderUtils.getResponse();
-            Response responseResult =
-                    (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+            com.github.sparkzxl.annotation.response.Response responseResult =
+                    (com.github.sparkzxl.annotation.response.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             if (responseResult != null) {
                 servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             }
-            ResponseResult<?> apiResult = (ResponseResult<?>) proceed;
+            Response<?> apiResult = (Response<?>) proceed;
             ResponseResultStatus status = AnnotatedElementUtils.findMergedAnnotation(proceedingJoinPoint.getTarget().getClass(), ResponseResultStatus.class);
             int code = HttpStatus.BAD_REQUEST.value();
             if (ObjectUtils.isNotEmpty(status)) {

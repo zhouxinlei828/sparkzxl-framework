@@ -1,9 +1,8 @@
 package com.github.sparkzxl.core.util;
 
-import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -185,7 +184,7 @@ public class HttpRequestUtils {
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg)));
+            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -198,7 +197,7 @@ public class HttpRequestUtils {
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg, data)));
+            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg, data)));
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -211,7 +210,7 @@ public class HttpRequestUtils {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(code);
-            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg)));
+            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -224,7 +223,7 @@ public class HttpRequestUtils {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(ResponseInfoStatus.AUTHORIZED_DENIED.getCode());
-            response.getWriter().println(JsonUtil.toJson(ResponseResult.result(code, msg)));
+            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
             response.getWriter().flush();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -233,8 +232,8 @@ public class HttpRequestUtils {
 
     public static void clearResponseResult() {
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        Response response =
-                (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.annotation.response.Response response =
+                (com.github.sparkzxl.annotation.response.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         if (response != null) {
             servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         }

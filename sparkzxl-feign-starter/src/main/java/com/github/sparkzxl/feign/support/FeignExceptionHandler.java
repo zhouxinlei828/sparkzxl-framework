@@ -5,7 +5,7 @@ import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,24 +26,24 @@ import java.net.SocketTimeoutException;
 public class FeignExceptionHandler implements Ordered {
 
     @ExceptionHandler(SocketTimeoutException.class)
-    public ResponseResult<?> handleSocketTimeoutException(SocketTimeoutException e) {
+    public Response<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error("SocketTimeoutException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.TIME_OUT_ERROR.getCode(), e.getMessage());
+        return Response.fail(ResponseInfoStatus.TIME_OUT_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
-    public ResponseResult<?> handleRetryableException(FeignException e) {
+    public Response<?> handleRetryableException(FeignException e) {
         log.error("FeignException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
+        return Response.fail(ResponseInfoStatus.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(RemoteCallException.class)
-    public ResponseResult<?> handleRemoteCallException(RemoteCallException e) {
+    public Response<?> handleRemoteCallException(RemoteCallException e) {
         log.error("RemoteCallException异常:", e);
         String applicationName = OptionalBean.ofNullable(e.getApplicationName()).orElseGet(() -> "unKnownServer");
         String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getMessage());
         e.printStackTrace();
-        return ResponseResult.result(e.getCode(), message);
+        return Response.fail(e.getCode(), message);
     }
 
     @Override

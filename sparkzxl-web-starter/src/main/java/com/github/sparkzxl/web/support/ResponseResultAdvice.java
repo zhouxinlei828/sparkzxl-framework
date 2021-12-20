@@ -2,10 +2,9 @@ package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.response.IgnoreResponseWrap;
-import com.github.sparkzxl.annotation.response.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +34,12 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable().getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        Response response = (Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.annotation.response.Response response = (com.github.sparkzxl.annotation.response.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         Boolean supported = ObjectUtils.isNotEmpty(response) && declaredAnnotationsByType.length == 0;
         if (log.isDebugEnabled()) {
             log.debug("判断是否需要全局统一API响应：{}", supported ? "是" : "否");
         }
         return supported;
-        // return response != null;
     }
 
     @SneakyThrows
@@ -51,7 +49,7 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (body instanceof ResponseResult) {
+        if (body instanceof Response) {
             return body;
         }
         Object returnBody = body;
@@ -71,6 +69,6 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
             code = ResponseInfoStatus.FAILURE.getCode();
             message = ResponseInfoStatus.FAILURE.getMessage();
         }
-        return ResponseResult.result(code, message, returnBody);
+        return Response.success(code, message, returnBody);
     }
 }

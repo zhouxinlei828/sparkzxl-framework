@@ -3,7 +3,7 @@ package com.github.sparkzxl.zookeeper.support;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.KeeperException;
 import org.springframework.core.Ordered;
@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ZookeeperExceptionHandler implements Ordered {
 
     @ExceptionHandler(KeeperException.class)
-    public ResponseResult<?> handleKeeperException(KeeperException e) {
+    public Response<?> handleKeeperException(KeeperException e) {
         log.error("KeeperException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.FAILURE.getCode(), e.getMessage());
+        return Response.fail(ResponseInfoStatus.FAILURE.getCode(), e.getMessage());
     }
 
     @Override

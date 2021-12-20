@@ -9,7 +9,7 @@ import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.base.result.ResponseResult;
+import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,33 +28,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class SentinelExceptionHandler implements Ordered {
 
     @ExceptionHandler(value = FlowException.class)
-    public ResponseResult<?> handleFlowException(FlowException e) {
+    public Response<?> handleFlowException(FlowException e) {
         log.error("FlowException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.REQ_LIMIT, e.getMessage());
+        return Response.fail(ResponseInfoStatus.REQ_LIMIT.getCode(), ResponseInfoStatus.REQ_LIMIT.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
-    public ResponseResult<?> handleAuthorityException(AuthorityException e) {
+    public Response<?> handleAuthorityException(AuthorityException e) {
         log.error("AuthorityException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.REQ_BLACKLIST, e.getMessage());
+        return Response.fail(ResponseInfoStatus.REQ_BLACKLIST.getCode(), ResponseInfoStatus.REQ_BLACKLIST.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
-    public ResponseResult<?> handleSystemBlockException(SystemBlockException e) {
+    public Response<?> handleSystemBlockException(SystemBlockException e) {
         log.error("SystemBlockException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.SYSTEM_BLOCK, e.getMessage());
+        return Response.fail(ResponseInfoStatus.SYSTEM_BLOCK.getCode(), ResponseInfoStatus.SYSTEM_BLOCK.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
-    public ResponseResult<?> handleParamFlowException(ParamFlowException e) {
+    public Response<?> handleParamFlowException(ParamFlowException e) {
         log.error("ParamFlowException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.PARAM_FLOW, e.getMessage());
+        return Response.fail(ResponseInfoStatus.PARAM_FLOW.getCode(), ResponseInfoStatus.PARAM_FLOW.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
-    public ResponseResult<?> handleDegradeException(DegradeException e) {
+    public Response<?> handleDegradeException(DegradeException e) {
         log.error("DegradeException异常:", e);
-        return ResponseResult.result(ResponseInfoStatus.SERVICE_DEGRADATION);
+        return Response.fail(ResponseInfoStatus.SERVICE_DEGRADATION.getCode(),ResponseInfoStatus.SERVICE_DEGRADATION.getMessage());
     }
 
     @Override
