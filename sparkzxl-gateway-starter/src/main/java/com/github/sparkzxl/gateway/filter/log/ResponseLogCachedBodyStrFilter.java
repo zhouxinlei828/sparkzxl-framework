@@ -1,13 +1,11 @@
 package com.github.sparkzxl.gateway.filter.log;
 
-import com.github.sparkzxl.gateway.context.GatewayContext;
+import com.github.sparkzxl.gateway.context.CacheGatewayContext;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.event.EnableBodyCachingEvent;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.cloud.gateway.route.Route;
-import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.AbstractServerHttpResponse;
@@ -36,10 +34,10 @@ public class ResponseLogCachedBodyStrFilter implements GlobalFilter, Ordered {
         if (!(serverHttpResponse instanceof AbstractServerHttpResponse)) {
             return chain.filter(exchange);
         }
-
         AbstractServerHttpResponse response = (AbstractServerHttpResponse) serverHttpResponse;
-        if (needCacheBody(exchange, chain)) {
-            sendCacheRequestBodyEvent(exchange);
+        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
+        if (cacheGatewayContext.isOutputLog()) {
+            sendCacheRequestBodyEvent(cacheGatewayContext);
             return chain.filter(exchange.mutate()
                     .response(new CachedBodyResponse(response.getNativeResponse(),
                             response.bufferFactory(), exchange))
@@ -48,21 +46,8 @@ public class ResponseLogCachedBodyStrFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
-    /**
-     * 是否需要缓存 响应 body
-     *
-     * @param exchange
-     * @param chain
-     * @return
-     */
-    private boolean needCacheBody(ServerWebExchange exchange, GatewayFilterChain chain) {
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
-        return gatewayContext.isReadResponseData();
-    }
-
-    private void sendCacheRequestBodyEvent(ServerWebExchange exchange) {
-        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-        String routeId = route.getId();
+    private void sendCacheRequestBodyEvent(CacheGatewayContext cacheGatewayContext) {
+        String routeId = cacheGatewayContext.getRoutePath().getRouteId();
         if (!cacheRequestBodyRouter.contains(routeId)) {
             EnableBodyCachingEvent event = new EnableBodyCachingEvent(this, routeId);
             applicationContext.publishEvent(event);

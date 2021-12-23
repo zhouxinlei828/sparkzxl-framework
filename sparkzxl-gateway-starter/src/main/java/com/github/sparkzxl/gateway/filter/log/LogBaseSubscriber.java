@@ -4,7 +4,8 @@ import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
-import com.github.sparkzxl.gateway.context.GatewayContext;
+import com.github.sparkzxl.gateway.context.CacheGatewayContext;
+import com.github.sparkzxl.gateway.properties.LogProperties;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.util.RequestIpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,19 +41,18 @@ public class LogBaseSubscriber extends BaseSubscriber {
         this.exchange = exchange;
     }
 
-    static void recordLog(ServerWebExchange exchange) {
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
-        LogParam logParam = buildLogParam(exchange, gatewayContext);
-        if (gatewayContext.isLogRequest()) {
-            log.info("请求日志：IP:{},host:{},httpMethod:{},path:{},timeCost:{}",
-                    logParam.getIp(),
-                    logParam.getHost(),
-                    logParam.getHttpMethod(),
-                    logParam.getPath(),
-                    logParam.getTimeCost()
-            );
-        }
-        if (gatewayContext.isReadRequestData()) {
+    public void recordLog(ServerWebExchange exchange) {
+        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
+        LogParam logParam = buildLogParam(exchange, cacheGatewayContext);
+        log.info("请求日志：IP:{},host:{},httpMethod:{},path:{},timeCost:{}",
+                logParam.getIp(),
+                logParam.getHost(),
+                logParam.getHttpMethod(),
+                logParam.getPath(),
+                logParam.getTimeCost()
+        );
+        LogProperties logging = cacheGatewayContext.getLogging();
+        if (logging.isReadRequestData()) {
             if (StringUtils.isNotBlank(logParam.getQueryParams())) {
                 log.info("请求参数：queryParams:{}", logParam.getQueryParams());
             }
@@ -63,15 +63,15 @@ public class LogBaseSubscriber extends BaseSubscriber {
                 log.info("请求参数：requestBody:{}", logParam.getReqBody());
             }
         }
-        if (gatewayContext.isReadResponseData()) {
+        if (logging.isReadResponseData()) {
             log.info("请求结果：responseBody:{}", logParam.getRespBody());
         }
     }
 
-    static LogParam buildLogParam(ServerWebExchange exchange, GatewayContext gatewayContext) {
+    static LogParam buildLogParam(ServerWebExchange exchange, CacheGatewayContext cacheGatewayContext) {
         LogParam logParam = new LogParam();
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-        LocalDateTime requestDateTime = gatewayContext.getRequestDateTime();
+        LocalDateTime requestDateTime = cacheGatewayContext.getRequestDateTime();
         ServerHttpRequest request = exchange.getRequest();
         URI uri = request.getURI();
         HttpHeaders headers = request.getHeaders();
@@ -85,11 +85,11 @@ public class LogBaseSubscriber extends BaseSubscriber {
                 .setRouteId(route.getId())
                 .setRouterToUri(route.getUri().toString())
                 .setReqTime(requestDateTime)
-                .setReqBody(gatewayContext.getRequestBody())
-                .setQueryParams(JsonUtil.toJson(gatewayContext.getAllRequestData()))
-                .setReqFormData(JsonUtil.toJson(gatewayContext.getFormData()))
+                .setReqBody(cacheGatewayContext.getRequestBody())
+                .setQueryParams(JsonUtil.toJson(cacheGatewayContext.getAllRequestData()))
+                .setReqFormData(JsonUtil.toJson(cacheGatewayContext.getFormData()))
                 .setTimeCost(StrFormatter.format("{}ms", Duration.between(logParam.getReqTime(), LocalDateTime.now()).toMillis()))
-                .setRespBody(Optional.ofNullable(gatewayContext.getResponseBody()).orElse(StringUtils.EMPTY));
+                .setRespBody(Optional.ofNullable(cacheGatewayContext.getResponseBody()).orElse(StringUtils.EMPTY));
         return logParam;
     }
 

@@ -1,10 +1,13 @@
 package com.github.sparkzxl.gateway.properties;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import java.util.List;
 
 /**
  * description: 网关插件属性配置
@@ -15,17 +18,10 @@ import org.springframework.beans.factory.InitializingBean;
 @Getter
 @Setter
 @ToString
-public class GatewayPluginProperties implements InitializingBean {
+public class GatewayPluginProperties {
 
-    public static final String GATEWAY_PLUGIN_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin.config";
-    /**
-     * Enable Or Disable Read Request Data 。 If true, all request body will cached
-     */
-    private boolean readRequestData = false;
-    /**
-     * Enable Or Disable Read Response Data
-     */
-    private boolean readResponseData = false;
+    public static final String GATEWAY_PLUGIN_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin";
+
     /**
      * Enable Or Disable Log Request Detail
      */
@@ -34,12 +30,7 @@ public class GatewayPluginProperties implements InitializingBean {
      * Enable Or Disable Global Exception Json Handler
      */
     private boolean exceptionJsonHandler = false;
-    /**
-     * Enable Or Disable Dynamic Route
-     */
-    private boolean enableDynamicRoute = false;
 
-    @Override
-    public void afterPropertiesSet() {
-    }
+    @NestedConfigurationProperty
+    private LogProperties logging = new LogProperties();
 }

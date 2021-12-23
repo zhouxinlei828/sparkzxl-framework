@@ -1,14 +1,20 @@
 package com.github.sparkzxl.gateway.filter.context;
 
-import com.github.sparkzxl.gateway.context.GatewayContext;
+import com.github.sparkzxl.core.util.StrPool;
+import com.github.sparkzxl.gateway.context.CacheGatewayContext;
+import com.github.sparkzxl.gateway.entity.RoutePath;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
+import com.github.sparkzxl.gateway.properties.LogProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.factory.rewrite.CachedBodyOutputMessage;
+import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.BodyInserterContext;
+import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -41,6 +47,7 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Slf4j
+@RefreshScope
 @AllArgsConstructor
 public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
 
@@ -52,34 +59,43 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        Map<String, Object> attributeMap = exchange.getAttributes();
+        Route route = (Route) attributeMap.get(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         ServerHttpRequest request = exchange.getRequest();
-        GatewayContext gatewayContext = new GatewayContext();
-        gatewayContext.setLogRequest(gatewayPluginProperties.isLogRequest());
-        gatewayContext.setReadRequestData(shouldReadRequestData(exchange));
-        gatewayContext.setReadResponseData(gatewayPluginProperties.isReadResponseData());
+        String url = request.getPath().toString();
+        RoutePath routePath = new RoutePath();
+        routePath.setRouteId(route.getId());
+        routePath.setUrl(url);
+        routePath.setPath(url.replaceFirst(StrPool.SLASH.concat(route.getId()), ""));
+        LogProperties logging = gatewayPluginProperties.getLogging();
+        // 构建网关请求域信息
+        CacheGatewayContext cacheGatewayContext = new CacheGatewayContext();
+        cacheGatewayContext.setRoutePath(routePath);
+        cacheGatewayContext.setLogging(logging);
+        boolean readRequestData = shouldReadRequestData(logging);
         HttpHeaders headers = request.getHeaders();
-        gatewayContext.setRequestHeaders(headers);
-        if (!gatewayContext.isReadRequestData()) {
-            exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
+        cacheGatewayContext.setRequestHeaders(headers);
+        if (!readRequestData) {
+            exchange.getAttributes().put(CacheGatewayContext.CACHE_GATEWAY_CONTEXT, cacheGatewayContext);
             log.debug("[GatewayContext]Properties Set To Not Read Request Data");
             return chain.filter(exchange);
         }
-        gatewayContext.getAllRequestData().addAll(request.getQueryParams());
+        cacheGatewayContext.getAllRequestData().addAll(request.getQueryParams());
         /*
          * save gateway context into exchange
          */
-        exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
+        exchange.getAttributes().put(CacheGatewayContext.CACHE_GATEWAY_CONTEXT, cacheGatewayContext);
         String contentType = headers.getFirst(HttpHeaders.CONTENT_TYPE);
         if (headers.getContentLength() > 0) {
             if (StringUtils.startsWithIgnoreCase(contentType, MediaType.APPLICATION_JSON_VALUE)
                     || StringUtils.startsWithIgnoreCase(contentType, MediaType.MULTIPART_FORM_DATA_VALUE)) {
-                return readBody(exchange, chain, gatewayContext);
+                return readBody(exchange, chain, cacheGatewayContext);
             }
             if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(contentType)) {
-                return readFormData(exchange, chain, gatewayContext);
+                return readFormData(exchange, chain, cacheGatewayContext);
             }
         }
-        log.debug("[GatewayContext]ContentType:{},Gateway context is set with {}", contentType, gatewayContext);
+        log.debug("[GatewayContext]ContentType:{},Gateway context is set with {}", contentType, cacheGatewayContext);
         return chain.filter(exchange);
 
     }
@@ -95,8 +111,8 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
      *
      * @return boolean
      */
-    private boolean shouldReadRequestData(ServerWebExchange exchange) {
-        if (gatewayPluginProperties.isReadRequestData()) {
+    private boolean shouldReadRequestData(LogProperties logging) {
+        if (logging.isReadRequestData()) {
             log.debug("[GatewayContext]Properties Set Read All Request Data");
             return true;
         }
@@ -110,19 +126,19 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
      * @param chain
      * @return
      */
-    private Mono<Void> readFormData(ServerWebExchange exchange, GatewayFilterChain chain, GatewayContext gatewayContext) {
+    private Mono<Void> readFormData(ServerWebExchange exchange, GatewayFilterChain chain, CacheGatewayContext cacheGatewayContext) {
         HttpHeaders headers = exchange.getRequest().getHeaders();
         return exchange.getFormData()
                 .doOnNext(multiValueMap -> {
-                    gatewayContext.setFormData(multiValueMap);
-                    gatewayContext.getAllRequestData().addAll(multiValueMap);
+                    cacheGatewayContext.setFormData(multiValueMap);
+                    cacheGatewayContext.getAllRequestData().addAll(multiValueMap);
                     log.debug("[GatewayContext]Read FormData Success");
                 })
                 .then(Mono.defer(() -> {
                     Charset charset = headers.getContentType().getCharset();
                     charset = charset == null ? StandardCharsets.UTF_8 : charset;
                     String charsetName = charset.name();
-                    MultiValueMap<String, String> formData = gatewayContext.getFormData();
+                    MultiValueMap<String, String> formData = cacheGatewayContext.getFormData();
                     /*
                      * formData is empty just return
                      */
@@ -200,7 +216,7 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
      * @param chain
      * @return
      */
-    private Mono<Void> readBody(ServerWebExchange exchange, GatewayFilterChain chain, GatewayContext gatewayContext) {
+    private Mono<Void> readBody(ServerWebExchange exchange, GatewayFilterChain chain, CacheGatewayContext cacheGatewayContext) {
         return DataBufferUtils.join(exchange.getRequest().getBody())
                 .flatMap(dataBuffer -> {
                     /*
@@ -229,7 +245,7 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
                     return ServerRequest.create(mutatedExchange, MESSAGE_READERS)
                             .bodyToMono(String.class)
                             .doOnNext(objectValue -> {
-                                gatewayContext.setRequestBody(objectValue);
+                                cacheGatewayContext.setRequestBody(objectValue);
                                 log.debug("[GatewayContext]Read JsonBody Success");
                             }).then(chain.filter(mutatedExchange));
                 });

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.filter.log;
 
-import com.github.sparkzxl.gateway.context.GatewayContext;
+import com.github.sparkzxl.gateway.context.CacheGatewayContext;
 import io.netty.buffer.ByteBuf;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -42,8 +42,8 @@ public class CachedBodyResponse extends PubicReactorServerHttpResponse {
         byte[] content = new byte[dataBuffer.readableByteCount()];
         dataBuffer.read(content);
         String responseStr = new String(content);
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
-        gatewayContext.setResponseBody(responseStr);
+        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
+        cacheGatewayContext.setResponseBody(responseStr);
         dataBuffer.readPosition(0);
     }
 

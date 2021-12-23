@@ -1,15 +1,14 @@
 package com.github.sparkzxl.gateway.filter.log;
 
-import com.github.sparkzxl.gateway.context.GatewayContext;
+import com.github.sparkzxl.gateway.context.CacheGatewayContext;
+import com.github.sparkzxl.gateway.entity.RoutePath;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.properties.LogProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.net.URI;
 
 /**
  * description: 请求日志过滤器
@@ -18,23 +17,24 @@ import java.net.URI;
  */
 public class AccessLogFilter implements GlobalFilter, Ordered {
 
-    private static final String HTTP_SCHEME = "http";
-
-    private static final String HTTPS_SCHEME = "https";
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
-        if (gatewayContext.isReadRequestData()) {
-            ServerHttpRequest request = exchange.getRequest();
-            URI requestURI = request.getURI();
-            String scheme = requestURI.getScheme();
-            if ((!HTTP_SCHEME.equalsIgnoreCase(scheme) && !HTTPS_SCHEME.equals(scheme))) {
-                return chain.filter(exchange);
+        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
+        LogProperties logging = cacheGatewayContext.getLogging();
+        boolean outputLog = Boolean.FALSE;
+        if (logging.isEnabled()) {
+            if (logging.isAll()) {
+                outputLog = Boolean.TRUE;
+            } else {
+                RoutePath routePath = cacheGatewayContext.getRoutePath();
+                outputLog = logging.match(routePath.getRouteId(), routePath.getPath());
             }
+        }
+        cacheGatewayContext.setOutputLog(outputLog);
+        exchange.getAttributes().put(CacheGatewayContext.CACHE_GATEWAY_CONTEXT, cacheGatewayContext);
+        if (outputLog) {
             return chain.filter(exchange).transform(p ->
-                    actual ->
-                            p.subscribe(new LogBaseSubscriber(actual, exchange)));
+                    actual -> p.subscribe(new LogBaseSubscriber(actual, exchange)));
         }
         return chain.filter(exchange);
     }
