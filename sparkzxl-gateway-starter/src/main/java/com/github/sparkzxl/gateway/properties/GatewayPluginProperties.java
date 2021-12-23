@@ -23,10 +23,6 @@ public class GatewayPluginProperties {
     public static final String GATEWAY_PLUGIN_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin";
 
     /**
-     * Enable Or Disable Log Request Detail
-     */
-    private boolean logRequest = false;
-    /**
      * Enable Or Disable Global Exception Json Handler
      */
     private boolean exceptionJsonHandler = false;
