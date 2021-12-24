@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 @ApiModel(value = "LogParam", description = "日志参数实体类")
 public class LogParam implements Serializable {
 
-    private static final long serialVersionUID = -1015789970080558328L;
+    private static final long serialVersionUID = -3240153643271750465L;
+
+    private String tenantId;
 
     private String username;
 

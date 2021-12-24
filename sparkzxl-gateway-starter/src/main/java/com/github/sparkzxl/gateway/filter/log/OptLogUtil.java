@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.filter.log;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.jackson.JsonUtil;
@@ -8,7 +9,6 @@ import com.github.sparkzxl.gateway.context.CacheGatewayContext;
 import com.github.sparkzxl.gateway.entity.RoutePath;
 import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
-import com.github.sparkzxl.gateway.util.RequestIpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -64,8 +64,10 @@ public class OptLogUtil {
         URI uri = request.getURI();
         HttpHeaders headers = request.getHeaders();
         String username = HttpRequestUtils.urlDecode(ReactorHttpHelper.getHeader(BaseContextConstants.JWT_KEY_NAME, request));
-        logParam.setIp(RequestIpUtil.getIp(request))
+        String tenantId = HttpRequestUtils.urlDecode(ReactorHttpHelper.getHeader(BaseContextConstants.TENANT_ID, request));
+        logParam.setIp(ReactorHttpHelper.getIpAddress(request))
                 .setUsername(username)
+                .setTenantId(tenantId)
                 .setHttpMethod(request.getMethod())
                 .setHttpStatus(exchange.getResponse().getStatusCode().value())
                 .setPath(uri.getPath())
@@ -74,10 +76,15 @@ public class OptLogUtil {
                 .setRouterToUri(routePath.getUrl())
                 .setReqTime(requestDateTime)
                 .setReqBody(cacheGatewayContext.getRequestBody())
-                .setQueryParams(JsonUtil.toJson(cacheGatewayContext.getAllRequestData()))
-                .setReqFormData(JsonUtil.toJson(cacheGatewayContext.getFormData()))
                 .setTimeCost(StrFormatter.format("{}ms", Duration.between(logParam.getReqTime(), LocalDateTime.now()).toMillis()))
                 .setRespBody(Optional.ofNullable(cacheGatewayContext.getResponseBody()).orElse(StringUtils.EMPTY));
+
+        if (MapUtil.isNotEmpty(cacheGatewayContext.getAllRequestData())) {
+            logParam.setQueryParams(JsonUtil.toJson(cacheGatewayContext.getAllRequestData()));
+        }
+        if (MapUtil.isNotEmpty(cacheGatewayContext.getFormData())) {
+            logParam.setQueryParams(JsonUtil.toJson(cacheGatewayContext.getFormData()));
+        }
         return logParam;
     }
 
