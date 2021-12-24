@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.filter.log;
 import com.github.sparkzxl.gateway.context.CacheGatewayContext;
 import com.github.sparkzxl.gateway.entity.RoutePath;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
-import com.github.sparkzxl.gateway.properties.LogProperties;
+import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -20,7 +20,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
-        LogProperties logging = cacheGatewayContext.getLogging();
+        LogRequestProperties logging = cacheGatewayContext.getLogging();
         boolean outputLog = Boolean.FALSE;
         if (logging.isEnabled()) {
             if (logging.isAll()) {

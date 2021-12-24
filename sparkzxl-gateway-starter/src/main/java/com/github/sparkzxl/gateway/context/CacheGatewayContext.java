@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.context;
 
 import com.github.sparkzxl.gateway.entity.RoutePath;
-import com.github.sparkzxl.gateway.properties.LogProperties;
+import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -35,7 +35,7 @@ public class CacheGatewayContext {
      */
     private boolean outputLog;
 
-    private LogProperties logging;
+    private LogRequestProperties logging;
     /**
      * cache json body
      */

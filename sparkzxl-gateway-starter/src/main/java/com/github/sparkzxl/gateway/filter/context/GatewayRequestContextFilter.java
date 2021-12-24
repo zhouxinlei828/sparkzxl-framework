@@ -5,7 +5,7 @@ import com.github.sparkzxl.gateway.context.CacheGatewayContext;
 import com.github.sparkzxl.gateway.entity.RoutePath;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
-import com.github.sparkzxl.gateway.properties.LogProperties;
+import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -67,7 +67,7 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
         routePath.setRouteId(route.getId());
         routePath.setUrl(url);
         routePath.setPath(url.replaceFirst(StrPool.SLASH.concat(route.getId()), ""));
-        LogProperties logging = gatewayPluginProperties.getLogging();
+        LogRequestProperties logging = gatewayPluginProperties.getLogging();
         // 构建网关请求域信息
         CacheGatewayContext cacheGatewayContext = new CacheGatewayContext();
         cacheGatewayContext.setRoutePath(routePath);
@@ -111,7 +111,7 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
      *
      * @return boolean
      */
-    private boolean shouldReadRequestData(LogProperties logging) {
+    private boolean shouldReadRequestData(LogRequestProperties logging) {
         if (logging.isReadRequestData()) {
             log.debug("[GatewayContext]Properties Set Read All Request Data");
             return true;

@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.AbstractServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -21,8 +22,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
  *
  * @author zhouxinlei
  */
+@Component
 @RequiredArgsConstructor
-public class ResponseLogCachedBodyStrFilter implements GlobalFilter, Ordered {
+public class ResponseLogCachedBodyFilter implements GlobalFilter, Ordered {
 
     private final ApplicationContext applicationContext;
 
@@ -34,13 +36,12 @@ public class ResponseLogCachedBodyStrFilter implements GlobalFilter, Ordered {
         if (!(serverHttpResponse instanceof AbstractServerHttpResponse)) {
             return chain.filter(exchange);
         }
-        AbstractServerHttpResponse response = (AbstractServerHttpResponse) serverHttpResponse;
         CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
         if (cacheGatewayContext.isOutputLog()) {
             sendCacheRequestBodyEvent(cacheGatewayContext);
             return chain.filter(exchange.mutate()
-                    .response(new CachedBodyResponse(response.getNativeResponse(),
-                            response.bufferFactory(), exchange))
+                    .response(new HttpResponseBodyDecorator(exchange.getResponse(),
+                            exchange))
                     .build());
         }
         return chain.filter(exchange);

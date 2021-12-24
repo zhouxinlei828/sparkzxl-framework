@@ -11,7 +11,7 @@ import java.util.*;
  * @date 2021-12-23 09:53
  */
 @Data
-public class LogProperties {
+public class LogRequestProperties {
 
     public static final String GATEWAY_PLUGIN_LOG_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin.logging";
 
