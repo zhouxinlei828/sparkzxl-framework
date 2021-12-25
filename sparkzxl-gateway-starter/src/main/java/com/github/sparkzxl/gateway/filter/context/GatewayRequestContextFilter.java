@@ -219,14 +219,12 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
     private Mono<Void> readBody(ServerWebExchange exchange, GatewayFilterChain chain, CacheGatewayContext cacheGatewayContext) {
         return DataBufferUtils.join(exchange.getRequest().getBody())
                 .flatMap(dataBuffer -> {
-                    /*
-                     * read the body Flux<DataBuffer>, and release the buffer
-                     * //TODO when SpringCloudGateway Version Release To G.SR2,this can be update with the new version's feature
-                     * see PR https://github.com/spring-cloud/spring-cloud-gateway/pull/1095
-                     */
                     byte[] bytes = new byte[dataBuffer.readableByteCount()];
                     dataBuffer.read(bytes);
                     DataBufferUtils.release(dataBuffer);
+                    String requestData = new String(bytes, StandardCharsets.UTF_8);
+                    cacheGatewayContext.setRequestBody(requestData);
+                    log.debug("[GatewayContext]Read JsonBody Success");
                     Flux<DataBuffer> cachedFlux = Flux.defer(() -> {
                         DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
                         DataBufferUtils.retain(buffer);
@@ -241,13 +239,7 @@ public class GatewayRequestContextFilter implements GlobalFilter, Ordered {
                             return cachedFlux;
                         }
                     };
-                    ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
-                    return ServerRequest.create(mutatedExchange, MESSAGE_READERS)
-                            .bodyToMono(String.class)
-                            .doOnNext(objectValue -> {
-                                cacheGatewayContext.setRequestBody(objectValue);
-                                log.debug("[GatewayContext]Read JsonBody Success");
-                            }).then(chain.filter(mutatedExchange));
+                    return chain.filter(exchange.mutate().request(mutatedRequest).build());
                 });
     }
 
