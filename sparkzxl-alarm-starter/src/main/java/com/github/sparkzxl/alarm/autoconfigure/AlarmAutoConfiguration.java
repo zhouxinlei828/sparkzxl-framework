@@ -1,9 +1,12 @@
-package com.github.sparkzxl.autoconfigure;
+package com.github.sparkzxl.alarm.autoconfigure;
 
-import com.github.sparkzxl.AlarmFactoryExecute;
-import com.github.sparkzxl.service.dingtalk.DingTalkWarnService;
-import com.github.sparkzxl.service.mail.MailWarnService;
-import com.github.sparkzxl.service.wechat.WorkWeXinWarnService;
+import com.github.sparkzxl.alarm.AlarmFactoryExecute;
+import com.github.sparkzxl.alarm.aspect.AlarmAspect;
+import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
+import com.github.sparkzxl.alarm.provider.YamlAlarmTemplateProvider;
+import com.github.sparkzxl.alarm.service.dingtalk.DingTalkWarnService;
+import com.github.sparkzxl.alarm.service.mail.MailWarnService;
+import com.github.sparkzxl.alarm.service.wechat.WorkWeXinWarnService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 public class AlarmAutoConfiguration {
 
     @Configuration
-    @ConditionalOnProperty(name = "spring.alarm.mail.enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = MailConfig.PREFIX, name = "enabled", havingValue = "true")
     @EnableConfigurationProperties(MailConfig.class)
     static class MailWarnServiceMethod {
 
@@ -42,7 +45,7 @@ public class AlarmAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(value = "spring.alarm.wechat.enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = WorkWeXinConfig.PREFIX, name = "enabled", havingValue = "true")
     @EnableConfigurationProperties(WorkWeXinConfig.class)
     static class WorkWechatWarnServiceMethod {
 
@@ -59,7 +62,7 @@ public class AlarmAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(value = "spring.alarm.dingtalk.enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = DingTalkConfig.PREFIX, name = "enabled", havingValue = "true")
     @EnableConfigurationProperties(DingTalkConfig.class)
     static class DingTalkWarnServiceMethod {
 
@@ -73,5 +76,23 @@ public class AlarmAutoConfiguration {
         void setDataChangedListener(DingTalkWarnService dingTalkWarnService) {
             AlarmFactoryExecute.addAlarmLogWarnService(dingTalkWarnService);
         }
+    }
+
+    @Configuration
+    @ConditionalOnProperty(prefix = TemplateConfig.PREFIX, name = "enabled", havingValue = "true")
+    @EnableConfigurationProperties(TemplateConfig.class)
+    static class TemplateConfigServiceMethod {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AlarmTemplateProvider alarmTemplateProvider(TemplateConfig templateConfig) {
+            return new YamlAlarmTemplateProvider(templateConfig);
+        }
+
+        @Bean
+        public AlarmAspect alarmAspect(AlarmTemplateProvider alarmTemplateProvider) {
+            return new AlarmAspect(alarmTemplateProvider);
+        }
+
     }
 }

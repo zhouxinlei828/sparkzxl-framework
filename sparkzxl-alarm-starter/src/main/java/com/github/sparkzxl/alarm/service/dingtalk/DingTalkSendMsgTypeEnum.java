@@ -1,4 +1,4 @@
-package com.github.sparkzxl.service.dingtalk;
+package com.github.sparkzxl.alarm.service.dingtalk;
 
 import lombok.Getter;
 

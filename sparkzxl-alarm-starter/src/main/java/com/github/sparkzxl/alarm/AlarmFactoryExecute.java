@@ -1,7 +1,7 @@
-package com.github.sparkzxl;
+package com.github.sparkzxl.alarm;
 
-import com.github.sparkzxl.service.AlarmWarnService;
-import org.springframework.util.StringUtils;
+import com.github.sparkzxl.alarm.entity.NotifyMessage;
+import com.github.sparkzxl.alarm.service.AlarmWarnService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +27,9 @@ public class AlarmFactoryExecute {
         return serviceList;
     }
 
-    public static void execute(String message) {
-        if (!StringUtils.isEmpty(message)) {
-            for (AlarmWarnService alarmWarnService : getServiceList()) {
-                alarmWarnService.send(message);
-            }
+    public static void execute(NotifyMessage notifyMessage) {
+        for (AlarmWarnService alarmWarnService : getServiceList()) {
+            alarmWarnService.send(notifyMessage);
         }
     }
 }

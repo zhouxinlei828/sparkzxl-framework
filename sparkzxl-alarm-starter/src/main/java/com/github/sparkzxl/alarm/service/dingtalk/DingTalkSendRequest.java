@@ -1,4 +1,4 @@
-package com.github.sparkzxl.service.dingtalk;
+package com.github.sparkzxl.alarm.service.dingtalk;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,10 +13,21 @@ public class DingTalkSendRequest {
 
     private Text text;
 
+    private Markdown markdown;
+
     @Data
     @AllArgsConstructor
     public static class Text {
 
         private String content;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class Markdown {
+
+        private String title;
+        private String text;
+
     }
 }

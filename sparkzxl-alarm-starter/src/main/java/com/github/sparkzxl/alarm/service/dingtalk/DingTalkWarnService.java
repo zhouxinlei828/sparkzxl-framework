@@ -1,9 +1,9 @@
-package com.github.sparkzxl.service.dingtalk;
+package com.github.sparkzxl.alarm.service.dingtalk;
 
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.service.BaseWarnService;
+import com.github.sparkzxl.alarm.service.BaseWarnService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +33,8 @@ public class DingTalkWarnService extends BaseWarnService {
         this.secret = secret;
     }
 
-    public void sendRobotMessage(String message) throws Exception {
-        DingTalkSendRequest param = new DingTalkSendRequest();
-        param.setMsgtype(DingTalkSendMsgTypeEnum.TEXT.getType());
-        param.setText(new DingTalkSendRequest.Text(message));
-        String json = JSONUtil.toJsonStr(param);
+    public void sendRobotMessage(DingTalkSendRequest dingTalkSendRequest) throws Exception {
+        String json = JSONUtil.toJsonStr(dingTalkSendRequest);
         String sign = getSign();
         String body = HttpRequest.post(sign).contentType(ContentType.JSON.getValue()).body(json).execute().body();
         logger.info("钉钉机器人通知结果：{}", body);
@@ -58,7 +55,19 @@ public class DingTalkWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(String message) throws Exception {
-        sendRobotMessage(message);
+    protected void doSendText(String message) throws Exception {
+        DingTalkSendRequest param = new DingTalkSendRequest();
+        param.setMsgtype(DingTalkSendMsgTypeEnum.TEXT.getType());
+        param.setText(new DingTalkSendRequest.Text(message));
+        sendRobotMessage(param);
+    }
+
+    @Override
+    protected void doSendMarkdown(String title, String message) throws Exception {
+        DingTalkSendRequest param = new DingTalkSendRequest();
+        param.setMsgtype(DingTalkSendMsgTypeEnum.MARKDOWN.getType());
+        DingTalkSendRequest.Markdown markdown = new DingTalkSendRequest.Markdown(title, message);
+        param.setMarkdown(markdown);
+        sendRobotMessage(param);
     }
 }

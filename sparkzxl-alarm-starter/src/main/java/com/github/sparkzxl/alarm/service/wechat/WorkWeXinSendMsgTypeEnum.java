@@ -1,4 +1,4 @@
-package com.github.sparkzxl.service.wechat;
+package com.github.sparkzxl.alarm.service.wechat;
 
 /**
  * description:

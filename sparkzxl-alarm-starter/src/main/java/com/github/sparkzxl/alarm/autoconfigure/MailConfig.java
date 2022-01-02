@@ -1,4 +1,4 @@
-package com.github.sparkzxl.autoconfigure;
+package com.github.sparkzxl.alarm.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,8 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhoux
  */
 @Data
-@ConfigurationProperties(prefix = "spring.alarm.mail")
+@ConfigurationProperties(prefix = MailConfig.PREFIX)
 public class MailConfig {
+
+    public static final String PREFIX = "spring.alarm.mail";
 
     private boolean enabled;
 

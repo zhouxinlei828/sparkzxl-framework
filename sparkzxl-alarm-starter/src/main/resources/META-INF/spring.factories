@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.autoconfigure.AlarmAutoConfiguration
+    com.github.sparkzxl.alarm.autoconfigure.AlarmAutoConfiguration

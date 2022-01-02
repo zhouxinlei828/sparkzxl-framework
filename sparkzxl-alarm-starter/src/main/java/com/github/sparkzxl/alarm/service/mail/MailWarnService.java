@@ -1,8 +1,10 @@
-package com.github.sparkzxl.service.mail;
+package com.github.sparkzxl.alarm.service.mail;
 
 
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.service.BaseWarnService;
+import com.github.sparkzxl.alarm.constant.enums.MessageTye;
+import com.github.sparkzxl.alarm.service.BaseWarnService;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -17,6 +19,7 @@ import java.util.Properties;
  *
  * @author zhouxinlei
  */
+@Slf4j
 public class MailWarnService extends BaseWarnService {
 
     private final String smtpHost;
@@ -61,7 +64,7 @@ public class MailWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(String message) throws Exception {
+    protected void doSendText(String message) throws Exception {
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.transport.protocol", "smtp");
@@ -83,5 +86,10 @@ public class MailWarnService extends BaseWarnService {
         transport.connect(username, password);
         transport.sendMessage(msg, msg.getAllRecipients());
         transport.close();
+    }
+
+    @Override
+    protected void doSendMarkdown(String title, String message) throws Exception {
+        log.warn("暂不支持发送Markdown邮件");
     }
 }

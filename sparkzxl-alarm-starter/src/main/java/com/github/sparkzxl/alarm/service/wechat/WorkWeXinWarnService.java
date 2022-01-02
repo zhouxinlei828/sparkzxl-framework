@@ -1,15 +1,15 @@
-package com.github.sparkzxl.service.wechat;
+package com.github.sparkzxl.alarm.service.wechat;
 
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.cache.CaffeineCache;
-import com.github.sparkzxl.service.BaseWarnService;
+import com.github.sparkzxl.alarm.cache.CaffeineCache;
+import com.github.sparkzxl.alarm.constant.enums.MessageTye;
+import com.github.sparkzxl.alarm.service.BaseWarnService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -61,14 +61,18 @@ public class WorkWeXinWarnService extends BaseWarnService {
         return accessToken;
     }
 
-    private String createPostData(String touser, String msgtype, String contentValue) {
+    private String createPostData(String touser, MessageTye messageTye, String contentValue) {
         WorkWeXinSendRequest wcd = new WorkWeXinSendRequest();
         wcd.setTouser(touser);
         wcd.setAgentid(applicationId);
-        wcd.setMsgtype(msgtype);
-        Map<String, Object> content = new HashMap<>();
-        content.put("content", contentValue);
-        wcd.setText(content);
+        wcd.setMsgtype(messageTye.getValue());
+        if (messageTye.equals(MessageTye.TEXT)) {
+            WorkWeXinSendRequest.Text text = new WorkWeXinSendRequest.Text(contentValue);
+            wcd.setText(text);
+        } else if (messageTye.equals(MessageTye.MARKDOWN)) {
+            WorkWeXinSendRequest.Markdown text = new WorkWeXinSendRequest.Markdown(contentValue);
+            wcd.setMarkdown(text);
+        }
         return JSONUtil.toJsonStr(wcd);
     }
 
@@ -96,8 +100,16 @@ public class WorkWeXinWarnService extends BaseWarnService {
     }
 
     @Override
-    protected void doSend(String message) throws Exception {
-        String data = createPostData(toUser(to.split(",")), WorkWeXinSendMsgTypeEnum.TEXT.name(), message);
+    protected void doSendText(String message) throws Exception {
+        String data = createPostData(toUser(to.split(",")), MessageTye.TEXT, message);
+        String url = String.format(SEND_MESSAGE_URL, getToken());
+        String resp = HttpRequest.post(url).body(data).execute().body();
+        logger.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);
+    }
+
+    @Override
+    protected void doSendMarkdown(String title, String message) throws Exception {
+        String data = createPostData(toUser(to.split(",")), MessageTye.MARKDOWN, message);
         String url = String.format(SEND_MESSAGE_URL, getToken());
         String resp = HttpRequest.post(url).body(data).execute().body();
         logger.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);

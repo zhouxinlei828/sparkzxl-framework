@@ -1,4 +1,4 @@
-package com.github.sparkzxl.autoconfigure;
+package com.github.sparkzxl.alarm.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,8 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhoux
  */
 @Data
-@ConfigurationProperties(prefix = "spring.alarm.wechat")
+@ConfigurationProperties(prefix = WorkWeXinConfig.PREFIX)
 public class WorkWeXinConfig {
+
+    public static final String PREFIX = "spring.alarm.wechat";
 
     private boolean enabled;
 
