@@ -6,8 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.alarm.cache.CaffeineCache;
 import com.github.sparkzxl.alarm.constant.enums.MessageTye;
 import com.github.sparkzxl.alarm.service.BaseWarnService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -18,13 +17,13 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhoux
  */
+@Slf4j
 public class WorkWeXinWarnService extends BaseWarnService {
 
     private static final String GET_TOKEN_URL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s";
     private static final String SEND_MESSAGE_URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s";
     private static final String WECHAT_AUTH_TOKEN = "wechat_auth_token";
     private static final Long TOKEN_EXPIRES_IN = 7000000L;
-    private final Logger logger = LoggerFactory.getLogger(WorkWeXinWarnService.class);
     private final CaffeineCache caffeineCache = new CaffeineCache();
     private final Integer applicationId;
     private final String corpId;
@@ -44,7 +43,7 @@ public class WorkWeXinWarnService extends BaseWarnService {
      */
     private String toAuth(String getTokenUrl) {
         String resp = HttpRequest.get(getTokenUrl).execute().body();
-        logger.info("get work weixin token resp:{}", resp);
+        log.info("get work weixin token resp:{}", resp);
         return resp;
     }
 
@@ -104,7 +103,7 @@ public class WorkWeXinWarnService extends BaseWarnService {
         String data = createPostData(toUser(to.split(",")), MessageTye.TEXT, message);
         String url = String.format(SEND_MESSAGE_URL, getToken());
         String resp = HttpRequest.post(url).body(data).execute().body();
-        logger.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);
+        log.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);
     }
 
     @Override
@@ -112,6 +111,6 @@ public class WorkWeXinWarnService extends BaseWarnService {
         String data = createPostData(toUser(to.split(",")), MessageTye.MARKDOWN, message);
         String url = String.format(SEND_MESSAGE_URL, getToken());
         String resp = HttpRequest.post(url).body(data).execute().body();
-        logger.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);
+        log.info("send work weixin message call [{}], param:{}, resp:{}", url, data, resp);
     }
 }

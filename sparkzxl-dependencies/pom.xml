@@ -101,6 +101,8 @@
         <fel.version>0.8</fel.version>
         <weixin-sdk.version>4.1.9.B</weixin-sdk.version>
         <swagger-models.version>1.5.22</swagger-models.version>
+        <aliyun-dysmsapi-version>2.0.8</aliyun-dysmsapi-version>
+        <tencentcloud-sdk-java-version>4.0.11</tencentcloud-sdk-java-version>
     </properties>
 
     <licenses>
@@ -332,24 +334,6 @@
                 <groupId>org.eweb4j</groupId>
                 <artifactId>fel</artifactId>
                 <version>${fel.version}</version>
-            </dependency>
-            <!-- 微信小程序SDK -->
-            <dependency>
-                <groupId>com.github.binarywang</groupId>
-                <artifactId>weixin-java-miniapp</artifactId>
-                <version>${weixin-sdk.version}</version>
-            </dependency>
-            <!-- 微信开放平台SDK -->
-            <dependency>
-                <groupId>com.github.binarywang</groupId>
-                <artifactId>weixin-java-open</artifactId>
-                <version>${weixin-sdk.version}</version>
-            </dependency>
-            <!-- 微信公众号SDK -->
-            <dependency>
-                <groupId>com.github.binarywang</groupId>
-                <artifactId>weixin-java-mp</artifactId>
-                <version>${weixin-sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.seata</groupId>
@@ -844,6 +828,18 @@
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-zookeeper-starter</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <!--阿里云短信-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dysmsapi20170525</artifactId>
+                <version>${aliyun-dysmsapi-version}</version>
+            </dependency>
+            <!--阿里云短信-->
+            <dependency>
+                <groupId>com.tencentcloudapi</groupId>
+                <artifactId>tencentcloud-sdk-java</artifactId>
+                <version>${tencentcloud-sdk-java-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
