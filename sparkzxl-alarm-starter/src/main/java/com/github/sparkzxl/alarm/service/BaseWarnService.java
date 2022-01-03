@@ -25,7 +25,20 @@ public abstract class BaseWarnService implements AlarmWarnService {
         }
     }
 
+    /**
+     * 发送Markdown消息
+     *
+     * @param title   Markdown标题
+     * @param message Markdown消息
+     * @throws Exception 异常
+     */
     protected abstract void doSendMarkdown(String title, String message) throws Exception;
 
+    /**
+     * 发送文本消息
+     *
+     * @param message 文本消息
+     * @throws Exception 异常
+     */
     protected abstract void doSendText(String message) throws Exception;
 }
