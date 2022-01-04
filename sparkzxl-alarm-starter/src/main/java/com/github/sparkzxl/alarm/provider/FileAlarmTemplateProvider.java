@@ -37,8 +37,8 @@ public class FileAlarmTemplateProvider extends BaseAlarmTemplateProvider {
     private final TemplateConfig templateConfig;
 
     @Override
-    AlarmTemplate getAlarmTemplate(String templateCode) {
-        AlarmTemplate alarmTemplate = configTemplateMap.get(templateCode);
+    AlarmTemplate getAlarmTemplate(String templateId) {
+        AlarmTemplate alarmTemplate = configTemplateMap.get(templateId);
         if (ObjectUtils.isEmpty(alarmTemplate)) {
             String templatePath = templateConfig.getTemplatePath();
             String templatePathStr;
@@ -51,9 +51,9 @@ public class FileAlarmTemplateProvider extends BaseAlarmTemplateProvider {
                 templatePathStr = ResourceUtil.readUtf8Str(templatePath);
             }
             List<AlarmTemplate> alarmTemplateList = JSONArray.parseArray(templatePathStr, AlarmTemplate.class);
-            Map<String, AlarmTemplate> templateMap = alarmTemplateList.stream().collect(Collectors.toMap(AlarmTemplate::getTemplateCode, k -> k));
+            Map<String, AlarmTemplate> templateMap = alarmTemplateList.stream().collect(Collectors.toMap(AlarmTemplate::getTemplateId, k -> k));
             configTemplateMap.putAll(templateMap);
-            alarmTemplate = templateMap.get(templateCode);
+            alarmTemplate = templateMap.get(templateId);
             if (ObjectUtils.isEmpty(alarmTemplate)) {
                 throw new AlarmException(400, "未发现告警配置模板");
             }

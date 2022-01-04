@@ -1,7 +1,6 @@
 package com.github.sparkzxl.alarm.aspect;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.alarm.AlarmFactoryExecute;
 import com.github.sparkzxl.alarm.annotation.Alarm;
 import com.github.sparkzxl.alarm.constant.enums.MessageTye;
@@ -10,6 +9,7 @@ import com.github.sparkzxl.alarm.entity.NotifyMessage;
 import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -21,6 +21,7 @@ import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.util.Map;
+import java.util.function.Function;
 
 
 /**
@@ -35,7 +36,9 @@ public class AlarmAspect {
 
     private final AlarmTemplateProvider alarmTemplateProvider;
 
-    private final static String ERROR_TEMPLATE = "\n# <font face='STKaiti' color=\"#FF0000\">异常信息</font>\n" +
+    private final Function<String, String> function;
+
+    private final static String ERROR_TEMPLATE = "\n<font color=\"#F37335\">异常信息:</font>\n" +
             "```java\n" +
             "#{[exception]}\n" +
             "```\n";
@@ -43,8 +46,8 @@ public class AlarmAspect {
     private final static String TEXT_ERROR_TEMPLATE = "\n异常信息:\n" +
             "#{[exception]}";
 
-    private final static String MARKDOWN_TITLE_TEMPLATE = "# <font face='STKaiti' color='#e96900'>【#{[title]}】</font>\n" +
-            "# <font face='STKaiti' color=\"#e96900\">请求状态</font>：<font face='STKaiti' color=\"#FF0000\">#{[state]}</font>\n";
+    private final static String MARKDOWN_TITLE_TEMPLATE = "# 【#{[title]}】\n" +
+            "\n请求状态：<font color=\"#{[stateColor]}\">#{[state]}</font>\n";
 
     private final static String TEXT_TITLE_TEMPLATE = "【#{[title]}】\n" +
             "请求状态：#{[state]}\n";
@@ -57,8 +60,8 @@ public class AlarmAspect {
     @Around(value = "alarmPointcut(alarm)", argNames = "joinPoint,alarm")
     public Object around(ProceedingJoinPoint joinPoint, Alarm alarm) throws Throwable {
         Object result = joinPoint.proceed();
-        String templateCode = alarm.templateCode();
-        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateCode);
+        String templateId = alarm.templateId();
+        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
         String templateContent = "";
         MessageTye messageTye = alarm.messageType();
         if (messageTye.equals(MessageTye.TEXT)) {
@@ -66,8 +69,8 @@ public class AlarmAspect {
         } else if (messageTye.equals(MessageTye.MARKDOWN)) {
             templateContent = MARKDOWN_TITLE_TEMPLATE.concat(alarmTemplate.getTemplateContent());
         }
-        Map<String, Object> alarmParamMap = AlarmParamGenerator.generate(joinPoint);
-        alarmParamMap.put("title", alarm.name());
+        Map<String, Object> alarmParamMap = initAlarmParamMap(joinPoint, alarm);
+        alarmParamMap.put("stateColor", "#45B649");
         alarmParamMap.put("state", "成功");
         sendAlarm(alarm, templateContent, alarmParamMap);
         return result;
@@ -77,8 +80,8 @@ public class AlarmAspect {
     @AfterThrowing(pointcut = "alarmPointcut(alarm)", argNames = "joinPoint,alarm,e", throwing = "e")
     public void doAfterThrow(JoinPoint joinPoint, Alarm alarm, Exception e) {
         log.info("请求接口发生异常 : [{}]", e.getMessage());
-        String templateCode = alarm.templateCode();
-        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateCode);
+        String templateId = alarm.templateId();
+        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
         String templateContent = "";
         MessageTye messageTye = alarm.messageType();
         if (messageTye.equals(MessageTye.TEXT)) {
@@ -86,11 +89,25 @@ public class AlarmAspect {
         } else if (messageTye.equals(MessageTye.MARKDOWN)) {
             templateContent = MARKDOWN_TITLE_TEMPLATE.concat(alarmTemplate.getTemplateContent()).concat(ERROR_TEMPLATE);
         }
-        Map<String, Object> alarmParamMap = AlarmParamGenerator.generate(joinPoint);
-        alarmParamMap.put("title", alarm.name());
+
+        Map<String, Object> alarmParamMap = initAlarmParamMap(joinPoint, alarm);
+        alarmParamMap.put("stateColor", "#FF4B2B");
         alarmParamMap.put("state", "失败");
         alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(e));
         sendAlarm(alarm, templateContent, alarmParamMap);
+    }
+
+    private Map<String, Object> initAlarmParamMap(JoinPoint joinPoint, Alarm alarm) {
+        Map<String, Object> alarmParamMap = AlarmParamGenerator.generate(joinPoint);
+        String headers = alarm.headers();
+        if (StringUtils.isNotEmpty(headers)) {
+            String[] headerArray = StringUtils.split(headers, ",");
+            for (String header : headerArray) {
+                alarmParamMap.put(header, function.apply(header));
+            }
+        }
+        alarmParamMap.put("title", alarm.name());
+        return alarmParamMap;
     }
 
 

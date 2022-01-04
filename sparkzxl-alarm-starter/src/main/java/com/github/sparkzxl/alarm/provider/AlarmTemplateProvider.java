@@ -14,8 +14,8 @@ public interface AlarmTemplateProvider {
     /**
      * 加载告警模板
      *
-     * @param templateCode 模板code
+     * @param templateId 模板id
      * @return AlarmTemplate
      */
-    AlarmTemplate loadingAlarmTemplate(String templateCode);
+    AlarmTemplate loadingAlarmTemplate(String templateId);
 }

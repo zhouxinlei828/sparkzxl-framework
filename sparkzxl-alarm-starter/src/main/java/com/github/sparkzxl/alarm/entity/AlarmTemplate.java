@@ -15,9 +15,9 @@ public class AlarmTemplate implements Serializable {
 
     private static final long serialVersionUID = -3287747093418563016L;
     /**
-     * 模板code
+     * 模板id
      */
-    private String templateCode;
+    private String templateId;
 
     /**
      * 模板名称

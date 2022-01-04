@@ -20,9 +20,9 @@ public class YamlAlarmTemplateProvider extends BaseAlarmTemplateProvider {
     private final TemplateConfig templateConfig;
 
     @Override
-    AlarmTemplate getAlarmTemplate(String templateCode) {
+    AlarmTemplate getAlarmTemplate(String templateId) {
         Map<String, AlarmTemplate> configTemplates = templateConfig.getTemplates();
-        AlarmTemplate alarmTemplate = configTemplates.get(templateCode);
+        AlarmTemplate alarmTemplate = configTemplates.get(templateId);
         if (ObjectUtils.isEmpty(alarmTemplate)) {
             throw new AlarmException(400, "未发现告警配置模板");
         }

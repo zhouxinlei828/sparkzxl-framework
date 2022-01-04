@@ -13,18 +13,18 @@ import org.springframework.util.StringUtils;
 public abstract class BaseAlarmTemplateProvider implements AlarmTemplateProvider {
 
     @Override
-    public AlarmTemplate loadingAlarmTemplate(String templateCode) {
-        if (StringUtils.isEmpty(templateCode)) {
-            throw new AlarmException(400, "告警模板配置code不能为空");
+    public AlarmTemplate loadingAlarmTemplate(String templateId) {
+        if (StringUtils.isEmpty(templateId)) {
+            throw new AlarmException(400, "告警模板配置id不能为空");
         }
-        return getAlarmTemplate(templateCode);
+        return getAlarmTemplate(templateId);
     }
 
     /**
      * 查询告警模板
      *
-     * @param templateCode 模板code
+     * @param templateId 模板id
      * @return AlarmTemplate
      */
-    abstract AlarmTemplate getAlarmTemplate(String templateCode);
+    abstract AlarmTemplate getAlarmTemplate(String templateId);
 }

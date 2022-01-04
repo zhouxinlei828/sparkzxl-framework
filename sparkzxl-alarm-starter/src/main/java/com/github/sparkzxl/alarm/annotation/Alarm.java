@@ -25,8 +25,8 @@ public @interface Alarm {
 
     MessageTye messageType() default MessageTye.TEXT;
 
-    String templateCode() default "";
+    String templateId() default "";
 
-    String stateParam() default "state";
+    String headers() default "";
 
 }

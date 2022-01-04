@@ -19,8 +19,8 @@ public class JdbcAlarmTemplateProvider extends BaseAlarmTemplateProvider {
     private final Function<String, AlarmTemplate> function;
 
     @Override
-    AlarmTemplate getAlarmTemplate(String templateCode) {
-        AlarmTemplate alarmTemplate = function.apply(templateCode);
+    AlarmTemplate getAlarmTemplate(String templateId) {
+        AlarmTemplate alarmTemplate = function.apply(templateId);
         if (ObjectUtils.isEmpty(alarmTemplate)) {
             throw new AlarmException(400, "未发现告警配置模板");
         }

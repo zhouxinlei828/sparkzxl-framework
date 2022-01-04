@@ -90,8 +90,9 @@ public class AlarmAutoConfiguration {
         }
 
         @Bean
+        @ConditionalOnMissingBean
         public AlarmAspect alarmAspect(AlarmTemplateProvider alarmTemplateProvider) {
-            return new AlarmAspect(alarmTemplateProvider);
+            return new AlarmAspect(alarmTemplateProvider, (header) -> "");
         }
 
     }
