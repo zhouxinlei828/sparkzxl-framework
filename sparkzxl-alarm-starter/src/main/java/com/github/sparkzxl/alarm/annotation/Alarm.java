@@ -27,6 +27,14 @@ public @interface Alarm {
 
     String templateId() default "";
 
-    String headers() default "";
+    String extractParams() default "";
+
+    /**
+     * 表达式条件
+     *
+     * @return String
+     */
+    String expressionJson() default "";
+
 
 }

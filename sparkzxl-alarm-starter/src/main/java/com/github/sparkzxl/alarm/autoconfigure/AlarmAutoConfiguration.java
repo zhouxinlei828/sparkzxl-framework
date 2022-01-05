@@ -1,6 +1,8 @@
 package com.github.sparkzxl.alarm.autoconfigure;
 
+import com.github.sparkzxl.alarm.AlarmAttributeGetImpl;
 import com.github.sparkzxl.alarm.AlarmFactoryExecute;
+import com.github.sparkzxl.alarm.IAlarmAttributeGet;
 import com.github.sparkzxl.alarm.aspect.AlarmAspect;
 import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import com.github.sparkzxl.alarm.provider.YamlAlarmTemplateProvider;
@@ -91,8 +93,14 @@ public class AlarmAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        public AlarmAspect alarmAspect(AlarmTemplateProvider alarmTemplateProvider) {
-            return new AlarmAspect(alarmTemplateProvider, (header) -> "");
+        public IAlarmAttributeGet alarmAttributeGet() {
+            return new AlarmAttributeGetImpl((param) -> "");
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AlarmAspect alarmAspect(AlarmTemplateProvider alarmTemplateProvider, IAlarmAttributeGet alarmAttributeGet) {
+            return new AlarmAspect(alarmTemplateProvider, alarmAttributeGet);
         }
 
     }
