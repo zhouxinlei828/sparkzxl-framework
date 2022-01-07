@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ResponseInfo;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import lombok.Getter;
 
 /**
@@ -15,19 +15,19 @@ public class JwtExpireException extends BaseException {
     private static final long serialVersionUID = -2803534562798384761L;
 
     public JwtExpireException(String message) {
-        super(ResponseInfoStatus.FAILURE.getCode(), message);
+        super(ExceptionCode.FAILURE.getCode(), message);
     }
 
-    public JwtExpireException(ResponseInfo responseInfo) {
-        super(responseInfo);
+    public JwtExpireException(ICode ICode) {
+        super(ICode);
     }
 
-    public JwtExpireException(ResponseInfo responseInfo, Object[] args, String message) {
-        super(responseInfo, args, message);
+    public JwtExpireException(ICode ICode, Object[] args, String message) {
+        super(ICode, args, message);
     }
 
-    public JwtExpireException(ResponseInfo responseInfo, Object[] args, String message, Throwable cause) {
-        super(responseInfo, args, message, cause);
+    public JwtExpireException(ICode ICode, Object[] args, String message, Throwable cause) {
+        super(ICode, args, message, cause);
     }
 
     @Override

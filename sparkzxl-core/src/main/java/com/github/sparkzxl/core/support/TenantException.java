@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.support;
 
-import cn.hutool.http.HttpStatus;
-import com.github.sparkzxl.core.base.code.ResponseInfo;
+import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.core.base.result.ExceptionStatusConstant;
 import lombok.Getter;
 
 /**
@@ -14,24 +14,24 @@ public class TenantException extends BaseException {
 
     private static final long serialVersionUID = -2803534562798384761L;
 
-    public TenantException(ResponseInfo responseInfo) {
-        super(responseInfo);
+    public TenantException(ICode ICode) {
+        super(ICode);
     }
 
-    public TenantException(ResponseInfo responseInfo, Object[] args, String message) {
-        super(responseInfo, args, message);
+    public TenantException(ICode ICode, Object[] args, String message) {
+        super(ICode, args, message);
     }
 
-    public TenantException(int code, String message) {
+    public TenantException(String code, String message) {
         super(code, message);
     }
 
     public TenantException(String message) {
-        super(HttpStatus.HTTP_BAD_REQUEST, message);
+        super(ExceptionStatusConstant.HTTP_BAD_REQUEST, message);
     }
 
-    public TenantException(ResponseInfo responseInfo, Object[] args, String message, Throwable cause) {
-        super(responseInfo, args, message, cause);
+    public TenantException(ICode ICode, Object[] args, String message, Throwable cause) {
+        super(ICode, args, message, cause);
     }
 
     @Override

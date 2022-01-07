@@ -2,7 +2,7 @@ package com.github.sparkzxl.user.manager;
 
 import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
@@ -51,7 +51,7 @@ public class DefaultUserStateManager implements UserStateManager {
             authUserInfo = generalCacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
-            ExceptionAssert.failure(ResponseInfoStatus.NO_FOUND_USER);
+            ExceptionAssert.failure(ExceptionCode.NO_FOUND_USER);
         }
         return authUserInfo;
     }

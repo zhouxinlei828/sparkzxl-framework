@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ResponseInfo;
+import com.github.sparkzxl.core.base.code.ICode;
 import lombok.Getter;
 
 /**
@@ -13,34 +13,34 @@ public class BaseException extends RuntimeException {
 
     private static final long serialVersionUID = 5092096093495323869L;
 
-    private int code;
+    private String code;
 
     private Object[] args;
 
     private String message;
 
-    public BaseException(ResponseInfo responseInfo) {
-        this.code = responseInfo.getCode();
-        this.message = responseInfo.getMessage();
+    public BaseException(ICode ICode) {
+        this.code = ICode.getCode();
+        this.message = ICode.getMessage();
     }
 
     public BaseException(Throwable cause) {
         super(cause);
     }
 
-    public BaseException(int code, String message) {
+    public BaseException(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public BaseException(ResponseInfo responseInfo, Object[] args, String message) {
-        this.code = responseInfo.getCode();
+    public BaseException(ICode ICode, Object[] args, String message) {
+        this.code = ICode.getCode();
         this.args = args;
         this.message = message;
     }
 
-    public BaseException(ResponseInfo responseInfo, Object[] args, String message, Throwable cause) {
-        this.code = responseInfo.getCode();
+    public BaseException(ICode ICode, Object[] args, String message, Throwable cause) {
+        this.code = ICode.getCode();
         this.args = args;
         this.message = message;
     }

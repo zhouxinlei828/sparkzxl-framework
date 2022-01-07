@@ -3,7 +3,7 @@ package com.github.sparkzxl.web.support;
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.response.IgnoreResponseWrap;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import lombok.SneakyThrows;
@@ -53,21 +53,21 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
             return body;
         }
         Object returnBody = body;
-        int code = ResponseInfoStatus.SUCCESS.getCode();
-        String message = ResponseInfoStatus.SUCCESS.getMessage();
+        String code = ExceptionCode.SUCCESS.getCode();
+        String message = ExceptionCode.SUCCESS.getMessage();
         String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
         Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (fallback) {
-            code = ResponseInfoStatus.SERVICE_DEGRADATION.getCode();
-            message = ResponseInfoStatus.SERVICE_DEGRADATION.getMessage();
+            code = ExceptionCode.SERVICE_DEGRADATION.getCode();
+            message = ExceptionCode.SERVICE_DEGRADATION.getMessage();
             returnBody = null;
         } else if (ObjectUtils.isNotEmpty(attribute)) {
-            code = ResponseInfoStatus.FAILURE.getCode();
+            code = ExceptionCode.FAILURE.getCode();
             message = attribute;
             returnBody = null;
         } else if (returnBody instanceof Boolean && !(Boolean) returnBody) {
-            code = ResponseInfoStatus.FAILURE.getCode();
-            message = ResponseInfoStatus.FAILURE.getMessage();
+            code = ExceptionCode.FAILURE.getCode();
+            message = ExceptionCode.FAILURE.getMessage();
         }
         return Response.success(code, message, returnBody);
     }

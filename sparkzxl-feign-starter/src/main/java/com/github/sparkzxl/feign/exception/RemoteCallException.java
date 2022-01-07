@@ -19,23 +19,23 @@ import java.util.List;
 @ToString
 public class RemoteCallException extends RuntimeException {
 
-    private Integer code;
+    private String code;
 
     private String applicationName;
 
-    public RemoteCallException(int code, String message, String applicationName) {
+    public RemoteCallException(String code, String message, String applicationName) {
         super(message);
         this.code = code;
         this.applicationName = applicationName;
     }
 
-    public RemoteCallException(int code, String message, String applicationName, Throwable cause) {
+    public RemoteCallException(String code, String message, String applicationName, Throwable cause) {
         super(message, cause);
         this.code = code;
         this.applicationName = applicationName;
     }
 
-    public RemoteCallException(int code, String message, String applicationName, List<ExceptionChain> exceptionChains) {
+    public RemoteCallException(String code, String message, String applicationName, List<ExceptionChain> exceptionChains) {
         super(message);
         this.code = code;
         this.applicationName = applicationName;

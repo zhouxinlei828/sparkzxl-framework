@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * description: web接口响应结果
@@ -19,13 +20,21 @@ public class Response<T> implements Serializable {
 
     private static final long serialVersionUID = 6114350052238067773L;
 
+    private static final String SUCCESS_CODE = "200";
+
     @JsonProperty(index = 1)
-    private int code;
+    private String code;
+
     @JsonProperty(index = 2)
     private boolean success;
+
     @JsonProperty(index = 3)
     private String msg;
+
     @JsonProperty(index = 4)
+    private String requestId;
+
+    @JsonProperty(index = 5)
     private T data;
 
     /**
@@ -35,7 +44,7 @@ public class Response<T> implements Serializable {
      * @param msg  信息
      * @return ApiResult
      */
-    public static Response<?> fail(int code, String msg) {
+    public static Response<?> fail(String code, String msg) {
         return Response.builder().code(code).msg(msg).build();
     }
 
@@ -46,7 +55,7 @@ public class Response<T> implements Serializable {
      * @param msg  信息
      * @return ApiResult
      */
-    public static <T> Response<?> fail(int code, String msg, T data) {
+    public static <T> Response<?> fail(String code, String msg, T data) {
         return Response.builder().code(code).msg(msg).data(data).build();
     }
 
@@ -58,7 +67,7 @@ public class Response<T> implements Serializable {
      * @param data 数据
      * @return ApiResult
      */
-    public static <T> Response<?> success(int code, String msg, T data) {
+    public static <T> Response<?> success(String code, String msg, T data) {
         return Response.builder().code(code).msg(msg).data(data).build();
     }
 
@@ -69,7 +78,7 @@ public class Response<T> implements Serializable {
      * @return ApiResult
      */
     public static <T> Response<?> success(T data) {
-        return Response.builder().code(200).msg("成功").data(data).build();
+        return Response.builder().code(SUCCESS_CODE).msg("成功").data(data).build();
     }
 
 
@@ -79,15 +88,16 @@ public class Response<T> implements Serializable {
 
 
     public static class ResponseBuilder<T> {
-        private int code;
+        private String code;
         private String msg;
         private T data;
+        private String requestId;
 
         private ResponseBuilder() {
 
         }
 
-        public ResponseBuilder<T> code(int code) {
+        public ResponseBuilder<T> code(String code) {
             this.code = code;
             return this;
         }
@@ -102,12 +112,18 @@ public class Response<T> implements Serializable {
             return this;
         }
 
+        public ResponseBuilder<T> requestId(String requestId) {
+            this.requestId = requestId;
+            return this;
+        }
+
         public Response<T> build() {
             return new Response<T>()
                     .setCode(this.code)
-                    .setSuccess(this.code == 200)
+                    .setSuccess(Objects.equals(this.code, SUCCESS_CODE))
                     .setMsg(this.msg)
-                    .setData(this.data);
+                    .setData(this.data)
+                    .setRequestId(this.requestId);
         }
     }
 }

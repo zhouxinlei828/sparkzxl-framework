@@ -3,7 +3,7 @@ package com.github.sparkzxl.web.support;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
@@ -46,7 +46,7 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(BizException.class)
     public Response<?> businessException(BizException e) {
         log.error("业务异常:", e);
-        int code = e.getCode();
+        String code = e.getCode();
         String message = e.getMessage();
         return Response.fail(code, message);
     }
@@ -54,7 +54,7 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(NestedServletException.class)
     public Response<?> nestedServletException(NestedServletException e) {
         log.error("NestedServletException 异常:", e);
-        return Response.fail(ResponseInfoStatus.FAILURE.getCode(),ResponseInfoStatus.FAILURE.getMessage());
+        return Response.fail(ExceptionCode.FAILURE.getCode(), ExceptionCode.FAILURE.getMessage());
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
@@ -67,13 +67,13 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Response<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("方法参数无效异常:", e);
-        return Response.fail(ResponseInfoStatus.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
+        return Response.fail(ExceptionCode.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public Response<?> illegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException异常:", e);
-        return Response.fail(ResponseInfoStatus.ILLEGAL_ARGUMENT_EX.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), e.getMessage());
     }
 
     private String bindingResult(BindingResult bindingResult) {
@@ -82,7 +82,7 @@ public class DefaultExceptionHandler implements Ordered {
         if (CollectionUtils.isNotEmpty(allErrors)) {
             stringBuilder.append(allErrors.get(0).getDefaultMessage() == null ? "" : allErrors.get(0).getDefaultMessage());
         } else {
-            stringBuilder.append(ResponseInfoStatus.PARAM_BIND_ERROR.getMessage());
+            stringBuilder.append(ExceptionCode.PARAM_BIND_ERROR.getMessage());
         }
         return stringBuilder.toString();
     }
@@ -100,7 +100,7 @@ public class DefaultExceptionHandler implements Ordered {
         try {
             String msg = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
             if (StrUtil.isNotEmpty(msg)) {
-                return Response.fail(ResponseInfoStatus.PARAM_EX.getCode(), msg);
+                return Response.fail(ExceptionCode.PARAM_EX.getCode(), msg);
             }
         } catch (Exception ee) {
             log.debug("获取异常描述失败", ee);
@@ -112,25 +112,25 @@ public class DefaultExceptionHandler implements Ordered {
                         .append(".").append(oe.getField())
                         .append("]的传入值:[").append(oe.getRejectedValue()).append("]与预期的字段类型不匹配.")
         );
-        return Response.fail(ResponseInfoStatus.PARAM_EX.getCode(), msg.toString());
+        return Response.fail(ExceptionCode.PARAM_EX.getCode(), msg.toString());
     }
 
     @ExceptionHandler(PasswordException.class)
     public Response<?> handlePasswordException(PasswordException e) {
         log.error("密码异常:", e);
-        return Response.fail(ResponseInfoStatus.PASSWORD_EXCEPTION.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.PASSWORD_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler({AccountNotFoundException.class})
     public Response<?> handleAccountNotFoundException(AccountNotFoundException e) {
         log.error("账户找不到异常:", e);
-        return Response.fail(ResponseInfoStatus.ACCOUNT_NOT_FOUND_EXCEPTION.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.ACCOUNT_NOT_FOUND_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<?> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("请求方法不支持异常:", e);
-        return Response.fail(ResponseInfoStatus.METHOD_NOT_SUPPORTED.getCode(),ResponseInfoStatus.METHOD_NOT_SUPPORTED.getMessage());
+        return Response.fail(ExceptionCode.METHOD_NOT_SUPPORTED.getCode(), ExceptionCode.METHOD_NOT_SUPPORTED.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -141,13 +141,13 @@ public class DefaultExceptionHandler implements Ordered {
         if (StrUtil.containsAny(message, prefix)) {
             message = String.format("无法正确的解析json类型的参数：%s", StrUtil.subBetween(message, prefix, " at "));
         }
-        return Response.fail(ResponseInfoStatus.MSG_NOT_READABLE.getCode(), message);
+        return Response.fail(ExceptionCode.MSG_NOT_READABLE.getCode(), message);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public Response<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
         log.error("NoHandlerFoundException异常:", e);
-        return Response.fail(ResponseInfoStatus.NOT_FOUND.getCode(),ResponseInfoStatus.NOT_FOUND.getMessage());
+        return Response.fail(ExceptionCode.NOT_FOUND.getCode(), ExceptionCode.NOT_FOUND.getMessage());
     }
 
 
@@ -156,27 +156,27 @@ public class DefaultExceptionHandler implements Ordered {
         log.error("HttpMediaTypeNotSupportedException异常:", e);
         MediaType contentType = e.getContentType();
         if (contentType != null) {
-            return Response.fail(ResponseInfoStatus.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配");
+            return Response.fail(ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配");
         }
-        return Response.fail(ResponseInfoStatus.MEDIA_TYPE_NOT_SUPPORTED.getCode(),ResponseInfoStatus.MEDIA_TYPE_NOT_SUPPORTED.getMessage());
+        return Response.fail(ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getCode(), ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getMessage());
     }
 
     @ExceptionHandler(NullPointerException.class)
     public Response<?> handleNullPointerException(NullPointerException e) {
         log.error("NullPointerException异常:", e);
-        return Response.fail(ResponseInfoStatus.NULL_POINTER_EXCEPTION_ERROR.getCode(),ResponseInfoStatus.NULL_POINTER_EXCEPTION_ERROR.getMessage());
+        return Response.fail(ExceptionCode.NULL_POINTER_EXCEPTION_ERROR.getCode(), ExceptionCode.NULL_POINTER_EXCEPTION_ERROR.getMessage());
     }
 
     @ExceptionHandler(MultipartException.class)
     public Response<?> multipartException(MultipartException e) {
         log.error("MultipartException异常:", e);
-        return Response.fail(ResponseInfoStatus.REQUIRED_FILE_PARAM_EX.getCode(), ResponseInfoStatus.REQUIRED_FILE_PARAM_EX.getMessage());
+        return Response.fail(ExceptionCode.REQUIRED_FILE_PARAM_EX.getCode(), ExceptionCode.REQUIRED_FILE_PARAM_EX.getMessage());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response<?> missingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("MissingServletRequestParameterException异常:", e);
-        return Response.fail(ResponseInfoStatus.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + e.getParameterType() + "]类型的参数[" + e.getParameterName() + "]");
+        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + e.getParameterType() + "]类型的参数[" + e.getParameterName() + "]");
     }
 
 
