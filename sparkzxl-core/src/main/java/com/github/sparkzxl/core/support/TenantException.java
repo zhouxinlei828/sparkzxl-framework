@@ -27,7 +27,7 @@ public class TenantException extends BaseException {
     }
 
     public TenantException(String message) {
-        super(ExceptionStatusConstant.HTTP_BAD_REQUEST, message);
+        super(ExceptionStatusConstant.SYSTEM_ERROR, message);
     }
 
     public TenantException(ICode ICode, Object[] args, String message, Throwable cause) {
