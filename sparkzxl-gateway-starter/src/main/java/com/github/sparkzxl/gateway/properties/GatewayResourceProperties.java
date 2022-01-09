@@ -1,17 +1,14 @@
 package com.github.sparkzxl.gateway.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.core.util.SwaggerStaticResource;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * description:  网关resource属性
@@ -19,28 +16,27 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.GATEWAY_RESOURCE_PREFIX)
+@ConfigurationProperties(prefix = "spring.cloud.gateway.plugin.resource")
 public class GatewayResourceProperties implements InitializingBean {
 
     /**
      * 需要放行的资源路径
      */
-    private Map<String, List<String>> ignoring;
+    private List<String> ignoring;
 
     private List<String> staticIgnored;
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 
-    public boolean match(String routeId, String path) {
+    public boolean match(String path) {
         boolean match = match(staticIgnored, path);
         if (match) {
             return true;
         }
-        if (MapUtils.isEmpty(ignoring)) {
+        if (CollectionUtils.isEmpty(ignoring)) {
             return false;
         }
-        List<String> ignoreList = ignoring.get(routeId);
-        return match(ignoreList, path);
+        return match(ignoring, path);
     }
 
 

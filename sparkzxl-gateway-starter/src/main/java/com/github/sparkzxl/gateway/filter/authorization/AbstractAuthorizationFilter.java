@@ -4,8 +4,8 @@ import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
-import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
+import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.properties.GatewayResourceProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
@@ -40,9 +40,9 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
         assert gatewayContext != null;
         String tenantId = ReactorHttpHelper.getHeader(BaseContextConstants.TENANT_ID, request);
         MDC.put(BaseContextConstants.TENANT_ID, String.valueOf(tenantId));
-        log.info("请求租户id：{}，版本：{}，请求路由：{}，请求接口：{}", tenantId, gatewayContext.getVersion(), gatewayContext.getRouteId(), gatewayContext.getPath());
+        log.info("请求租户id：{}，版本：{}，请求路由：{}，请求接口：{}", tenantId, gatewayContext.getVersion(), gatewayContext.getRouteId(), gatewayContext.getUrl());
         // 请求放行后置操作
-        if (gatewayResourceProperties.match(gatewayContext.getRouteId(), gatewayContext.getPath())) {
+        if (gatewayResourceProperties.match(gatewayContext.getUrl())) {
             // 放行请求清除token
             ignoreCheckAfterCompletion(exchange);
             return chain.filter(exchange);
