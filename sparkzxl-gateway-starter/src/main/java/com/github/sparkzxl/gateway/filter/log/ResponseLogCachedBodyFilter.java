@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter.log;
 
 import com.github.sparkzxl.gateway.context.GatewayContext;
-import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.event.EnableBodyCachingEvent;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

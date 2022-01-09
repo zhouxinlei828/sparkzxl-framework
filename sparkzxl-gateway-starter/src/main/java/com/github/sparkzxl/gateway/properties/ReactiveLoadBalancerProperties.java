@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.properties;
 
+import com.github.sparkzxl.gateway.constant.enums.RuleEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,15 +15,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Slf4j
 @ToString
-@ConfigurationProperties(prefix = GrayProperties.GRAY_PROPERTIES_PREFIX)
-public class GrayProperties {
+@Getter
+@Setter
+@ConfigurationProperties(prefix = ReactiveLoadBalancerProperties.GRAY_PROPERTIES_PREFIX)
+public class ReactiveLoadBalancerProperties {
 
-    public static final String GRAY_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin.gray";
+    public static final String GRAY_PROPERTIES_PREFIX = "spring.cloud.gateway.plugin.loadbalancer";
 
     /**
      * Enable Grey Route
      */
-    @Getter
-    @Setter
     private Boolean enabled = false;
+
+    private String rule = RuleEnum.RANDOM.getName();
 }

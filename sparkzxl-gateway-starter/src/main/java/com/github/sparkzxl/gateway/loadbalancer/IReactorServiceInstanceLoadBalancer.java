@@ -1,7 +1,6 @@
-package com.github.sparkzxl.gateway.rule;
+package com.github.sparkzxl.gateway.loadbalancer;
 
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import reactor.core.publisher.Mono;
@@ -21,14 +20,4 @@ public interface IReactorServiceInstanceLoadBalancer {
      * @return ServiceInstance
      */
     Mono<Response<ServiceInstance>> choose(String serviceId, ServerHttpRequest request);
-
-    /**
-     * 默认选择服务实例
-     *
-     * @param request request
-     * @return Mono<Response < ServiceInstance>>
-     */
-    default Mono<Response<ServiceInstance>> choose(ServerHttpRequest request) {
-        return Mono.just(new EmptyResponse());
-    }
 }

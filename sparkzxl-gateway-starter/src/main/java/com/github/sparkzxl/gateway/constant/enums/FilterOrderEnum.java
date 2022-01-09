@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.option;
+package com.github.sparkzxl.gateway.constant.enums;
 
 import org.springframework.cloud.gateway.filter.NettyWriteResponseFilter;
 

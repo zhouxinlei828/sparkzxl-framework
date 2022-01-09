@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.filter.context;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.gateway.context.GatewayContext;
-import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import lombok.AllArgsConstructor;

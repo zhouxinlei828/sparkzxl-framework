@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter.log;
 
 import com.github.sparkzxl.gateway.context.GatewayContext;
-import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import lombok.RequiredArgsConstructor;

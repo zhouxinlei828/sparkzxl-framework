@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.filter.log;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
-import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.MDC;

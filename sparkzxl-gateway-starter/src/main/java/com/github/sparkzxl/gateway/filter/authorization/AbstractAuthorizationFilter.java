@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
 import com.github.sparkzxl.gateway.context.GatewayContext;
-import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
 import com.github.sparkzxl.gateway.properties.GatewayResourceProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;

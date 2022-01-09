@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter.lb;
 
-import com.github.sparkzxl.gateway.option.FilterOrderEnum;
-import com.github.sparkzxl.gateway.rule.IReactorServiceInstanceLoadBalancer;
+import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
+import com.github.sparkzxl.gateway.loadbalancer.IReactorServiceInstanceLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
