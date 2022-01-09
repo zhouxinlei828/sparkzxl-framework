@@ -12,23 +12,23 @@ public enum FilterOrderEnum {
     /**
      * Gateway Context Filter
      */
-    GATEWAY_CONTEXT_FILTER(10),
+    GATEWAY_CONTEXT_FILTER(Integer.MIN_VALUE),
     /**
      * authorization Filter
      */
-    AUTHORIZATION_FILTER(20),
+    AUTHORIZATION_FILTER(Integer.MIN_VALUE + 1),
     /**
      * MDCLog Filter
      */
-    MDC_LOG_FILTER(30),
+    MDC_LOG_FILTER(Integer.MIN_VALUE + 2),
     /**
      * Request Log Filter
      */
-    REQUEST_LOG_FILTER(40),
+    REQUEST_LOG_FILTER(Integer.MIN_VALUE + 3),
     /**
      * Cache Response Data Filter
      */
-    RESPONSE_DATA_FILTER(50),
+    RESPONSE_DATA_FILTER(NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER - 1),
 
     /**
      * load balancer client filter
