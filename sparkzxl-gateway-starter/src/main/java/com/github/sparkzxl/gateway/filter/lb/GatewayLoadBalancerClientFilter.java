@@ -74,7 +74,7 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
             URI requestUrl = LoadBalancerUriTools.reconstructURI(serviceInstance, uri);
 
             if (log.isTraceEnabled()) {
-                log.trace("GatewayLoadBalancerClientFilter url chosen: " + requestUrl);
+                log.trace("GatewayLoadBalancerClientFilter url choose: " + requestUrl);
             }
             exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, requestUrl);
         }).then(chain.filter(exchange));
