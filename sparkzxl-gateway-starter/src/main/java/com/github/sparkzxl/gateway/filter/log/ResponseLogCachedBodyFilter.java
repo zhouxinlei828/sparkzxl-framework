@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.filter.log;
 
-import com.github.sparkzxl.gateway.context.CacheGatewayContext;
+import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.event.EnableBodyCachingEvent;
@@ -36,9 +36,9 @@ public class ResponseLogCachedBodyFilter implements GlobalFilter, Ordered {
         if (!(serverHttpResponse instanceof AbstractServerHttpResponse)) {
             return chain.filter(exchange);
         }
-        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
-        if (cacheGatewayContext.isOutputLog()) {
-            sendCacheRequestBodyEvent(cacheGatewayContext);
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.GATEWAY_CONTEXT_CONSTANT);
+        if (gatewayContext.isOutputLog()) {
+            sendCacheRequestBodyEvent(gatewayContext);
             return chain.filter(exchange.mutate()
                     .response(new HttpResponseBodyDecorator(exchange.getResponse(),
                             exchange))
@@ -47,8 +47,8 @@ public class ResponseLogCachedBodyFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
-    private void sendCacheRequestBodyEvent(CacheGatewayContext cacheGatewayContext) {
-        String routeId = cacheGatewayContext.getRoutePath().getRouteId();
+    private void sendCacheRequestBodyEvent(GatewayContext gatewayContext) {
+        String routeId = gatewayContext.getRouteId();
         if (!cacheRequestBodyRouter.contains(routeId)) {
             EnableBodyCachingEvent event = new EnableBodyCachingEvent(this, routeId);
             applicationContext.publishEvent(event);

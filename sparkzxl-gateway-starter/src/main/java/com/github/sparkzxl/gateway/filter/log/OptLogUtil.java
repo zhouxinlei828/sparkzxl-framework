@@ -5,19 +5,21 @@ import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
-import com.github.sparkzxl.gateway.context.CacheGatewayContext;
-import com.github.sparkzxl.gateway.entity.RoutePath;
+import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.net.URI;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -29,9 +31,9 @@ import java.util.Optional;
 @Slf4j
 public class OptLogUtil {
 
-    public static void recordLog(ServerWebExchange exchange) {
-        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
-        LogParam logParam = buildLogParam(exchange, cacheGatewayContext);
+    public static void recordLog(ServerWebExchange exchange, LogRequestProperties logging) {
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.GATEWAY_CONTEXT_CONSTANT);
+        LogParam logParam = buildLogParam(exchange, gatewayContext);
         log.info("请求日志：IP:{},host:{},httpMethod:{},path:{},timeCost:{}",
                 logParam.getIp(),
                 logParam.getHost(),
@@ -39,7 +41,6 @@ public class OptLogUtil {
                 logParam.getPath(),
                 logParam.getTimeCost()
         );
-        LogRequestProperties logging = cacheGatewayContext.getLogging();
         if (logging.isReadRequestData()) {
             if (StringUtils.isNotBlank(logParam.getQueryParams())) {
                 log.info("请求参数：queryParams:{}", logParam.getQueryParams());
@@ -56,12 +57,10 @@ public class OptLogUtil {
         }
     }
 
-    static LogParam buildLogParam(ServerWebExchange exchange, CacheGatewayContext cacheGatewayContext) {
+    static LogParam buildLogParam(ServerWebExchange exchange, GatewayContext gatewayContext) {
         LogParam logParam = new LogParam();
-        RoutePath routePath = cacheGatewayContext.getRoutePath();
-        LocalDateTime requestDateTime = cacheGatewayContext.getRequestDateTime();
+        LocalDateTime requestDateTime = gatewayContext.getRequestDateTime();
         ServerHttpRequest request = exchange.getRequest();
-        URI uri = request.getURI();
         HttpHeaders headers = request.getHeaders();
         String username = HttpRequestUtils.urlDecode(ReactorHttpHelper.getHeader(BaseContextConstants.JWT_KEY_NAME, request));
         String tenantId = HttpRequestUtils.urlDecode(ReactorHttpHelper.getHeader(BaseContextConstants.TENANT_ID, request));
@@ -70,22 +69,29 @@ public class OptLogUtil {
                 .setTenantId(tenantId)
                 .setHttpMethod(request.getMethod())
                 .setHttpStatus(exchange.getResponse().getStatusCode().value())
-                .setPath(uri.getPath())
+                .setPath(gatewayContext.getPath())
                 .setHost(headers.getFirst(HttpHeaders.HOST))
-                .setRouteId(routePath.getRouteId())
-                .setRouterToUri(routePath.getUrl())
+                .setRouteId(gatewayContext.getRouteId())
                 .setReqTime(requestDateTime)
-                .setReqBody(cacheGatewayContext.getRequestBody())
+                .setReqBody(gatewayContext.getRequestBody())
                 .setTimeCost(StrFormatter.format("{}ms", Duration.between(logParam.getReqTime(), LocalDateTime.now()).toMillis()))
-                .setRespBody(Optional.ofNullable(cacheGatewayContext.getResponseBody()).orElse(StringUtils.EMPTY));
-
-        if (MapUtil.isNotEmpty(cacheGatewayContext.getAllRequestData())) {
-            logParam.setQueryParams(JsonUtil.toJson(cacheGatewayContext.getAllRequestData()));
-        }
-        if (MapUtil.isNotEmpty(cacheGatewayContext.getFormData())) {
-            logParam.setQueryParams(JsonUtil.toJson(cacheGatewayContext.getFormData()));
+                .setQueryParams(getQueryParams(exchange.getRequest()))
+                .setRespBody(Optional.ofNullable(gatewayContext.getResponseBody()).orElse(StringUtils.EMPTY));
+        if (MapUtil.isNotEmpty(gatewayContext.getFormData())) {
+            logParam.setReqFormData(JsonUtil.toJson(gatewayContext.getFormData()));
         }
         return logParam;
+    }
+
+    private static String getQueryParams(final ServerHttpRequest request) {
+        MultiValueMap<String, String> params = request.getQueryParams();
+        Map<String, String> queryParamMap = Maps.newHashMap();
+        if (!params.isEmpty()) {
+            params.forEach((key, value) -> {
+                queryParamMap.put(key, StringUtils.join(value, ","));
+            });
+        }
+        return JsonUtil.toJson(queryParamMap);
     }
 
 }
