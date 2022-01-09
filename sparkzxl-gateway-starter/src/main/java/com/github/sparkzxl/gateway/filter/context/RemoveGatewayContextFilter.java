@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter.context;
 
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
-import com.github.sparkzxl.gateway.context.CacheGatewayContext;
+import com.github.sparkzxl.gateway.context.GatewayContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -23,7 +23,7 @@ public class RemoveGatewayContextFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         return chain.filter(exchange).doFinally(s -> {
             Map<String, Object> exchangeAttributes = exchange.getAttributes();
-            exchangeAttributes.remove(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
+            exchangeAttributes.remove(GatewayContext.GATEWAY_CONTEXT_CONSTANT);
             exchangeAttributes.remove(ExchangeAttributeConstant.SYSTEM_REQUEST_PARAM);
             exchangeAttributes.remove(ExchangeAttributeConstant.USER_INFO);
         });

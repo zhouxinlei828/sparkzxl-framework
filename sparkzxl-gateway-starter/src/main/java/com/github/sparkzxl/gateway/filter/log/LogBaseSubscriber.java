@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.filter.log;
 
+import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -19,9 +20,12 @@ public class LogBaseSubscriber extends BaseSubscriber {
 
     private final ServerWebExchange exchange;
 
-    public LogBaseSubscriber(Subscriber actual, ServerWebExchange exchange) {
+    private final LogRequestProperties logging;
+
+    public LogBaseSubscriber(Subscriber actual, ServerWebExchange exchange, LogRequestProperties logging) {
         this.actual = actual;
         this.exchange = exchange;
+        this.logging = logging;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class LogBaseSubscriber extends BaseSubscriber {
     @Override
     protected void hookOnComplete() {
         try {
-            OptLogUtil.recordLog(exchange);
+            OptLogUtil.recordLog(exchange,logging);
         } finally {
             actual.onComplete();
         }
@@ -46,7 +50,7 @@ public class LogBaseSubscriber extends BaseSubscriber {
     @Override
     protected void hookOnError(Throwable t) {
         try {
-            OptLogUtil.recordLog(exchange);
+            OptLogUtil.recordLog(exchange,logging);
         } finally {
             actual.onError(t);
         }

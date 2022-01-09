@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.filter.log;
 
-import com.github.sparkzxl.gateway.context.CacheGatewayContext;
+import com.github.sparkzxl.gateway.context.GatewayContext;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -71,8 +71,8 @@ public class HttpResponseBodyDecorator extends ServerHttpResponseDecorator {
     }
 
     private void cacheResponseBody(String responseData) {
-        CacheGatewayContext cacheGatewayContext = exchange.getAttribute(CacheGatewayContext.CACHE_GATEWAY_CONTEXT);
-        cacheGatewayContext.setResponseBody(responseData);
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.GATEWAY_CONTEXT_CONSTANT);
+        gatewayContext.setResponseBody(responseData);
     }
 
     @Override

@@ -38,8 +38,6 @@ public class LogParam implements Serializable {
 
     private String routeId;
 
-    private String routerToUri;
-
     private LocalDateTime reqTime;
 
     private String reqBody;
