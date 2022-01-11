@@ -23,7 +23,9 @@ public enum ExceptionCode implements BusinessEnumSysAssert {
      */
     FAILURE(ExceptionStatusConstant.SYSTEM_ERROR, "哎呀，开了个小差，请稍后再试"),
 
-    JSON_PARSE_ERROR("-13", "JSON解析异常"),
+    JSON_PARSE_ERROR("A0427", "JSON解析异常"),
+
+    JSON_TRANSFORM_ERROR("A0428", "JSON转换异常"),
 
     NULL_POINTER_EXCEPTION_ERROR(ExceptionStatusConstant.SYSTEM_ERROR, "空指针异常"),
 
