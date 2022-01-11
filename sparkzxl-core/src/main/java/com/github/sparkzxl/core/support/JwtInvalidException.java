@@ -22,6 +22,10 @@ public class JwtInvalidException extends BaseException {
         super(ICode, args, message, cause);
     }
 
+    public JwtInvalidException(ICode ICode) {
+        super(ICode);
+    }
+
     public JwtInvalidException(String message) {
         super(ExceptionCode.FAILURE.getCode(), message);
     }
