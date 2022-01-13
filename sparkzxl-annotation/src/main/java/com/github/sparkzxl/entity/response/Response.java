@@ -32,17 +32,20 @@ public class Response<T> implements Serializable {
     private String msg;
 
     @JsonProperty(index = 4)
-    private String requestId;
+    private T data;
 
     @JsonProperty(index = 5)
-    private T data;
+    private String errorMsg;
+
+    @JsonProperty(index = 6)
+    private String requestId;
 
     /**
      * 返回结果
      *
      * @param code 状态码
      * @param msg  信息
-     * @return ApiResult
+     * @return Response
      */
     public static Response<?> fail(String code, String msg) {
         return Response.builder().code(code).msg(msg).build();
@@ -51,9 +54,22 @@ public class Response<T> implements Serializable {
     /**
      * 返回结果
      *
+     * @param code     状态码
+     * @param msg      信息
+     * @param errorMsg 异常信息
+     * @return Response
+     */
+    public static Response<?> fail(String code, String msg, String errorMsg) {
+        return Response.builder().code(code).msg(msg).errorMsg(errorMsg).build();
+    }
+
+
+    /**
+     * 返回结果
+     *
      * @param code 状态码
      * @param msg  信息
-     * @return ApiResult
+     * @return Response
      */
     public static <T> Response<?> fail(String code, String msg, T data) {
         return Response.builder().code(code).msg(msg).data(data).build();
@@ -65,7 +81,7 @@ public class Response<T> implements Serializable {
      * @param code 状态码
      * @param msg  信息
      * @param data 数据
-     * @return ApiResult
+     * @return Response
      */
     public static <T> Response<?> success(String code, String msg, T data) {
         return Response.builder().code(code).msg(msg).data(data).build();
@@ -75,7 +91,7 @@ public class Response<T> implements Serializable {
      * 返回结果
      *
      * @param data 数据
-     * @return ApiResult
+     * @return Response
      */
     public static <T> Response<?> success(T data) {
         return Response.builder().code(SUCCESS_CODE).msg("成功").data(data).build();
@@ -91,6 +107,7 @@ public class Response<T> implements Serializable {
         private String code;
         private String msg;
         private T data;
+        private String errorMsg;
         private String requestId;
 
         private ResponseBuilder() {
@@ -114,6 +131,11 @@ public class Response<T> implements Serializable {
 
         public ResponseBuilder<T> requestId(String requestId) {
             this.requestId = requestId;
+            return this;
+        }
+
+        public ResponseBuilder<T> errorMsg(String errorMsg) {
+            this.errorMsg = errorMsg;
             return this;
         }
 

@@ -184,6 +184,7 @@ public enum ExceptionCode implements BusinessEnumSysAssert {
     SIGNATURE_EX(ExceptionStatusConstant.SIGNATURE_EXCEPTION_STATUS, "签名异常"),
     REQUEST_TIMESTAMP_EX(ExceptionStatusConstant.SYSTEM_ERROR, "请求时间戳验签不通过"),
     SIGNATURE_NOT_SUPPORTED_EX(ExceptionStatusConstant.SYSTEM_ERROR, "不支持的验签请求"),
+    //系统相关 end
     ;
 
     final String code;

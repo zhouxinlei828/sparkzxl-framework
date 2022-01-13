@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -23,14 +24,21 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.security.auth.login.AccountNotFoundException;
+import javax.servlet.ServletException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * description: 全局异常处理
@@ -46,34 +54,61 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(BizException.class)
     public Response<?> businessException(BizException e) {
         log.error("业务异常:", e);
-        String code = e.getCode();
-        String message = e.getMessage();
-        return Response.fail(code, message);
+        return Response.fail(e.getCode(), e.getMessage(), e.getLocalizedMessage());
     }
 
     @ExceptionHandler(NestedServletException.class)
     public Response<?> nestedServletException(NestedServletException e) {
         log.error("NestedServletException 异常:", e);
-        return Response.fail(ExceptionCode.FAILURE.getCode(), ExceptionCode.FAILURE.getMessage());
+        return Response.fail(ExceptionCode.FAILURE.getCode(), ExceptionCode.FAILURE.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler(ServletException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response<?> servletException(ServletException e) {
+        log.warn("ServletException:", e);
+        String msg = "UT010016: Not a multi part request";
+        if (msg.equalsIgnoreCase(e.getMessage())) {
+            return Response.fail(ExceptionCode.REQUIRED_FILE_PARAM_EX.getCode(), ExceptionCode.REQUIRED_FILE_PARAM_EX.getMessage(), e.getMessage());
+        }
+        return Response.fail(ExceptionCode.FAILURE.getCode(), e.getMessage(), e.getMessage());
+    }
+
+    /**
+     * jsr 规范中的验证异常
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response<?> constraintViolationException(ConstraintViolationException ex) {
+        log.warn("ConstraintViolationException:", ex);
+        Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
+        String message = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
+        return Response.fail(ExceptionCode.PARAM_VALID_ERROR.getCode(), message, ex.getMessage());
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
     public Response<?> serviceDegradeException(ServiceDegradeException e) {
         log.error("服务降级:", e);
-        return Response.fail(e.getCode(), e.getMessage());
+        return Response.fail(e.getCode(), e.getMessage(), e.getMessage());
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Response<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("方法参数无效异常:", e);
-        return Response.fail(ExceptionCode.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()));
+        return Response.fail(ExceptionCode.PARAM_BIND_ERROR.getCode(), bindingResult(e.getBindingResult()), e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public Response<?> illegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException异常:", e);
-        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), ExceptionCode.ILLEGAL_ARGUMENT_EX.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public Response<?> illegalStateException(IllegalStateException e) {
+        log.error("IllegalStateException:", e);
+        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), ExceptionCode.ILLEGAL_ARGUMENT_EX.getMessage(), e.getMessage());
     }
 
     private String bindingResult(BindingResult bindingResult) {
@@ -112,25 +147,25 @@ public class DefaultExceptionHandler implements Ordered {
                         .append(".").append(oe.getField())
                         .append("]的传入值:[").append(oe.getRejectedValue()).append("]与预期的字段类型不匹配.")
         );
-        return Response.fail(ExceptionCode.PARAM_EX.getCode(), msg.toString());
+        return Response.fail(ExceptionCode.PARAM_EX.getCode(), msg.toString(), e.getMessage());
     }
 
     @ExceptionHandler(PasswordException.class)
     public Response<?> handlePasswordException(PasswordException e) {
         log.error("密码异常:", e);
-        return Response.fail(ExceptionCode.PASSWORD_EXCEPTION.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.PASSWORD_EXCEPTION.getCode(), e.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler({AccountNotFoundException.class})
     public Response<?> handleAccountNotFoundException(AccountNotFoundException e) {
         log.error("账户找不到异常:", e);
-        return Response.fail(ExceptionCode.ACCOUNT_NOT_FOUND_EXCEPTION.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.ACCOUNT_NOT_FOUND_EXCEPTION.getCode(), ExceptionCode.ACCOUNT_NOT_FOUND_EXCEPTION.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<?> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("请求方法不支持异常:", e);
-        return Response.fail(ExceptionCode.METHOD_NOT_SUPPORTED.getCode(), ExceptionCode.METHOD_NOT_SUPPORTED.getMessage());
+        return Response.fail(ExceptionCode.METHOD_NOT_SUPPORTED.getCode(), ExceptionCode.METHOD_NOT_SUPPORTED.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -141,13 +176,13 @@ public class DefaultExceptionHandler implements Ordered {
         if (StrUtil.containsAny(message, prefix)) {
             message = String.format("无法正确的解析json类型的参数：%s", StrUtil.subBetween(message, prefix, " at "));
         }
-        return Response.fail(ExceptionCode.MSG_NOT_READABLE.getCode(), message);
+        return Response.fail(ExceptionCode.MSG_NOT_READABLE.getCode(), message, e.getMessage());
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public Response<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
         log.error("NoHandlerFoundException异常:", e);
-        return Response.fail(ExceptionCode.NOT_FOUND.getCode(), ExceptionCode.NOT_FOUND.getMessage());
+        return Response.fail(ExceptionCode.NOT_FOUND.getCode(), ExceptionCode.NOT_FOUND.getMessage(), e.getMessage());
     }
 
 
@@ -156,27 +191,35 @@ public class DefaultExceptionHandler implements Ordered {
         log.error("HttpMediaTypeNotSupportedException异常:", e);
         MediaType contentType = e.getContentType();
         if (contentType != null) {
-            return Response.fail(ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配");
+            return Response.fail(ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getCode(), "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配", e.getMessage());
         }
-        return Response.fail(ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getCode(), ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getMessage());
+        return Response.fail(ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getCode(), ExceptionCode.MEDIA_TYPE_NOT_SUPPORTED.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public Response<?> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.error("MethodArgumentTypeMismatchException:", e);
+        String msg = "参数：[" + e.getName() + "]的传入值：[" + e.getValue() +
+                "]与预期的字段类型：[" + Objects.requireNonNull(e.getRequiredType()).getName() + "]不匹配";
+        return Response.fail(ExceptionCode.PARAM_EX.getCode(), msg, e.getMessage());
     }
 
     @ExceptionHandler(NullPointerException.class)
     public Response<?> handleNullPointerException(NullPointerException e) {
         log.error("NullPointerException异常:", e);
-        return Response.fail(ExceptionCode.NULL_POINTER_EXCEPTION_ERROR.getCode(), ExceptionCode.NULL_POINTER_EXCEPTION_ERROR.getMessage());
+        return Response.fail(ExceptionCode.NULL_POINTER_EXCEPTION_ERROR.getCode(), ExceptionCode.NULL_POINTER_EXCEPTION_ERROR.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(MultipartException.class)
     public Response<?> multipartException(MultipartException e) {
         log.error("MultipartException异常:", e);
-        return Response.fail(ExceptionCode.REQUIRED_FILE_PARAM_EX.getCode(), ExceptionCode.REQUIRED_FILE_PARAM_EX.getMessage());
+        return Response.fail(ExceptionCode.REQUIRED_FILE_PARAM_EX.getCode(), ExceptionCode.REQUIRED_FILE_PARAM_EX.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response<?> missingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("MissingServletRequestParameterException异常:", e);
-        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + e.getParameterType() + "]类型的参数[" + e.getParameterName() + "]");
+        return Response.fail(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), "缺少必须的[" + e.getParameterType() + "]类型的参数[" + e.getParameterName() + "]", e.getMessage());
     }
 
 
