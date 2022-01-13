@@ -145,6 +145,7 @@ public class Response<T> implements Serializable {
                     .setSuccess(Objects.equals(this.code, SUCCESS_CODE))
                     .setMsg(this.msg)
                     .setData(this.data)
+                    .setErrorMsg(this.errorMsg)
                     .setRequestId(this.requestId);
         }
     }

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.database.support;
 
+import cn.hutool.core.util.ReUtil;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionCode;
@@ -47,6 +48,16 @@ public class DataBaseExceptionHandler implements Ordered {
     @ExceptionHandler(BadSqlGrammarException.class)
     public Response<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
         log.error("SQL异常：", e);
+        String message = e.getSQLException().getMessage();
+        if (message.startsWith("Unknown database")) {
+            return Response.fail(ExceptionCode.UNKNOWN_DATABASE.getCode(), ExceptionCode.UNKNOWN_DATABASE.getMessage(), message);
+        }
+        if (ReUtil.isMatch("^Table.*doesn't exist$", message)) {
+            return Response.fail(ExceptionCode.UNKNOWN_TABLE.getCode(), ExceptionCode.UNKNOWN_TABLE.getMessage(), message);
+        }
+        if (message.startsWith("Unknown column")) {
+            return Response.fail(ExceptionCode.UNKNOWN_COLUMN.getCode(), ExceptionCode.UNKNOWN_COLUMN.getMessage(), message);
+        }
         return Response.fail(ExceptionCode.FAILURE.getCode(), e.getMessage());
     }
 
@@ -58,15 +69,6 @@ public class DataBaseExceptionHandler implements Ordered {
             return Response.fail(cause.getCode(), cause.getMessage());
         }
         return Response.fail(ExceptionCode.SQL_EX.getCode(), e.getMessage());
-    }
-
-    @ExceptionHandler(MyBatisSystemException.class)
-    public Response<?> myBatisSystemException(MyBatisSystemException e) {
-        log.error("Mybatis异常：", e);
-        if (e.getCause() instanceof PersistenceException) {
-            return this.persistenceException((PersistenceException) e.getCause());
-        }
-        return Response.fail(ExceptionCode.SQL_EX.getCode(), ExceptionCode.SQL_EX.getMessage());
     }
 
     @ExceptionHandler(SQLException.class)
@@ -101,7 +103,7 @@ public class DataBaseExceptionHandler implements Ordered {
             SQLException sqlException = (SQLException) cause;
             int errorCode = sqlException.getErrorCode();
             if (errorCode == 1364) {
-                return Response.fail(ExceptionCode.SQL_EX.getCode(), "数据操作异常,输入参数为空");
+                return Response.fail(ExceptionCode.SQL_EX.getCode(), "数据操作异常,输入参数为空", e.getMessage());
             }
         }
         return Response.fail(ExceptionCode.SQL_EX.getCode(), ExceptionCode.SQL_EX.getMessage());
@@ -110,5 +112,10 @@ public class DataBaseExceptionHandler implements Ordered {
     @Override
     public int getOrder() {
         return BeanOrderEnum.DATASOURCE_EXCEPTION_HANDLER_ORDER.getOrder();
+    }
+
+    public static void main(String[] args) {
+        String data = "Table 'sparkzxl_auth_hz.core_org' doesn't exist";
+        System.out.println(ReUtil.isMatch("^Table.*doesn't exist$", data));
     }
 }
