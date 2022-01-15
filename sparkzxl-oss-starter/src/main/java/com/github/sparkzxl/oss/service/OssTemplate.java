@@ -3,6 +3,7 @@ package com.github.sparkzxl.oss.service;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
@@ -85,7 +86,7 @@ public class OssTemplate implements AmazonS3Load {
      *
      * @param bucketName bucket名称
      */
-    @SneakyThrows
+    @SneakyThrows(Exception.class)
     public void createBucket(String bucketName) {
         AmazonS3 amazonS3 = amazonS3Instance();
         if (!amazonS3.doesBucketExistV2(bucketName)) {
@@ -115,7 +116,7 @@ public class OssTemplate implements AmazonS3Load {
      * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/ListBuckets">AWS
      * API Documentation</a>
      */
-    @SneakyThrows
+    @SneakyThrows(value = {AmazonServiceException.class})
     public List<Bucket> getAllBuckets() {
         return amazonS3Instance().listBuckets();
     }
@@ -193,8 +194,8 @@ public class OssTemplate implements AmazonS3Load {
      * @return url
      * @see AmazonS3#generatePresignedUrl(String bucketName, String key, Date expiration)
      */
-    @SneakyThrows
-    public String getObjectURL(String bucketName, String objectName, Integer expires) {
+    @SneakyThrows(value = SdkClientException.class)
+    public String getObjectUrl(String bucketName, String objectName, Integer expires) {
         Date date = new Date();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
@@ -218,11 +219,11 @@ public class OssTemplate implements AmazonS3Load {
     }
 
     @SneakyThrows
-    public String getObjectURL(String bucketName, String objectName) {
-        return getObjectUrl(bucketName, objectName);
+    public String getObjectUrl(String bucketName, String objectName) {
+        return generateObjectUrl(bucketName, objectName);
     }
 
-    public String getObjectUrl(String bucketName, String objectName) {
+    public String generateObjectUrl(String bucketName, String objectName) {
         return replaceHttpDomain(amazonS3Instance().getUrl(bucketName, objectName));
     }
 
