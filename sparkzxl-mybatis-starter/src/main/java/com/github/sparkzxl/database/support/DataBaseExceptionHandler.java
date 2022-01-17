@@ -10,7 +10,6 @@ import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.exceptions.TooManyResultsException;
-import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.core.Ordered;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -86,7 +85,7 @@ public class DataBaseExceptionHandler implements Ordered {
     @ExceptionHandler(DuplicateKeyException.class)
     public Response<?> handler(DuplicateKeyException e) {
         log.error("数据重复输入: ", e);
-        return Response.fail(ExceptionCode.SQL_EX.getCode(), "数据重复输入");
+        return Response.fail(ExceptionCode.SQL_EX.getCode(), "数据重复冲突异常");
     }
 
 
@@ -112,10 +111,5 @@ public class DataBaseExceptionHandler implements Ordered {
     @Override
     public int getOrder() {
         return BeanOrderEnum.DATASOURCE_EXCEPTION_HANDLER_ORDER.getOrder();
-    }
-
-    public static void main(String[] args) {
-        String data = "Table 'sparkzxl_auth_hz.core_org' doesn't exist";
-        System.out.println(ReUtil.isMatch("^Table.*doesn't exist$", data));
     }
 }
