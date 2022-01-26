@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author zhouxinlei
  */
-public interface JwtTokenService<ID extends Serializable> {
+public interface JwtTokenService {
 
     /**
      * 根据RSA算法生成token
@@ -18,16 +18,16 @@ public interface JwtTokenService<ID extends Serializable> {
      * @param jwtUserInfo 负载信息
      * @return String
      */
-    String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo);
+    String createTokenByRsa(JwtUserInfo jwtUserInfo);
 
     /**
      * 根据RSA校验token
      *
      * @param token token
-     * @return JwtUserInfo<ID>
+     * @return JwtUserInfo
      * @throws Exception 抛出异常
      */
-    JwtUserInfo<ID> verifyTokenByRsa(String token) throws Exception;
+    JwtUserInfo verifyTokenByRsa(String token) throws Exception;
 
     /**
      * 根据token获取信息
@@ -36,16 +36,16 @@ public interface JwtTokenService<ID extends Serializable> {
      * @return JwtUserInfo
      * @throws Exception 抛出异常
      */
-    JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception;
+    JwtUserInfo getJwtUserInfo(String token) throws Exception;
 
     /**
      * 获取jwt用户信息
      *
      * @param token token信息
-     * @return JwtUserInfo<ID>
+     * @return JwtUserInfo
      * @throws Exception 抛出异常
      */
-    JwtUserInfo<ID> getAuthJwtInfo(String token) throws Exception;
+    JwtUserInfo getAuthJwtInfo(String token) throws Exception;
 
     /**
      * 根据HMAC算法生成token
@@ -53,16 +53,16 @@ public interface JwtTokenService<ID extends Serializable> {
      * @param jwtUserInfo 负载信息
      * @return String
      */
-    String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo);
+    String createTokenByHmac(JwtUserInfo jwtUserInfo);
 
     /**
      * 根据HMAC校验token
      *
      * @param token token
-     * @return PayloadDto
+     * @return JwtUserInfo
      * @throws Exception 抛出异常
      */
-    JwtUserInfo<ID> verifyTokenByHmac(String token) throws Exception;
+    JwtUserInfo verifyTokenByHmac(String token) throws Exception;
 
     /**
      * 获取公钥

@@ -99,10 +99,15 @@ public class BaseContextConstants {
      * 登录账户 前缀
      * 完整key: authUser:{key} -> str
      */
-    public static String AUTH_USER = "login_user";
+    public static final String AUTH_USER = "login_user";
     /**
      * 登录账户token 前缀
      */
-    public static String AUTH_USER_TOKEN = "login_user_token";
+    public static final String AUTH_USER_TOKEN = "login_user_token";
+
+    /**
+     * 请求线程本地map
+     */
+    public static final String REQUEST_THREAD_LOCAL_MAP = "request-thread-local-map";
 
 }

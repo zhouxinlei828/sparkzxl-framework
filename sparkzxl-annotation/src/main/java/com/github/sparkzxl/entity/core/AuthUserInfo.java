@@ -12,14 +12,14 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Data
-public class AuthUserInfo<T> implements Serializable {
+public class AuthUserInfo<E> implements Serializable {
 
     private static final long serialVersionUID = 7289539823055340191L;
 
     /**
      * 用户id
      */
-    private T id;
+    private String id;
 
     /**
      * 账户
@@ -49,7 +49,7 @@ public class AuthUserInfo<T> implements Serializable {
     /**
      * 扩展数据
      */
-    private Map<String, Object> extraInfo;
+    private E detailInfo;
 
     /**
      * 租户标识

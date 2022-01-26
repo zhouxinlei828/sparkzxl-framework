@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package error ;
+option java_package = "com.github.sparkzxl.grpc.error";
+
+// 通用异常处理信息
+message ErrorInfo {
+
+  // 错误的业务编码
+  string errorCode = 1;
+
+  // 默认提示信息
+  string errorMsg = 2;
+}

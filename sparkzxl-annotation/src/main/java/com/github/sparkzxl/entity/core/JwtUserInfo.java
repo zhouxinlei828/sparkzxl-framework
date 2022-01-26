@@ -11,9 +11,9 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Data
-public class JwtUserInfo<T> {
+public class JwtUserInfo {
 
-    private T id;
+    private String id;
     /**
      * 用户名
      */

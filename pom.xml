@@ -62,6 +62,7 @@
         <module>sparkzxl-dependencies</module>
         <module>sparkzxl-idempotent</module>
         <module>sparkzxl-sms-starter</module>
+        <module>sparkzxl-rpc</module>
     </modules>
 
     <licenses>

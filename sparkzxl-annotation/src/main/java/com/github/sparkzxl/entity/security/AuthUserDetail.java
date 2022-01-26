@@ -15,9 +15,9 @@ import java.util.Collection;
  */
 @Getter
 @Setter
-public class AuthUserDetail<T> extends User {
+public class AuthUserDetail extends User {
 
-    private T id;
+    private String id;
 
     private String tenantId;
 
@@ -25,7 +25,7 @@ public class AuthUserDetail<T> extends User {
 
     private boolean tenantStatus;
 
-    public AuthUserDetail(T id, String username, String password, String name, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUserDetail(String id, String username, String password, String name, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.id = id;
         this.name = name;
