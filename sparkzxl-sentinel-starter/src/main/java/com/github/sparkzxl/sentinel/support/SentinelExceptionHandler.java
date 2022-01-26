@@ -30,31 +30,31 @@ public class SentinelExceptionHandler implements Ordered {
     @ExceptionHandler(value = FlowException.class)
     public Response<?> handleFlowException(FlowException e) {
         log.error("FlowException异常:", e);
-        return Response.fail(ExceptionCode.REQ_LIMIT.getCode(), ExceptionCode.REQ_LIMIT.getMessage());
+        return Response.fail(ExceptionCode.REQ_LIMIT.getCode(), ExceptionCode.REQ_LIMIT.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
     public Response<?> handleAuthorityException(AuthorityException e) {
         log.error("AuthorityException异常:", e);
-        return Response.fail(ExceptionCode.REQ_BLACKLIST.getCode(), ExceptionCode.REQ_BLACKLIST.getMessage());
+        return Response.fail(ExceptionCode.REQ_BLACKLIST.getCode(), ExceptionCode.REQ_BLACKLIST.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
     public Response<?> handleSystemBlockException(SystemBlockException e) {
         log.error("SystemBlockException异常:", e);
-        return Response.fail(ExceptionCode.SYSTEM_BLOCK.getCode(), ExceptionCode.SYSTEM_BLOCK.getMessage());
+        return Response.fail(ExceptionCode.SYSTEM_BLOCK.getCode(), ExceptionCode.SYSTEM_BLOCK.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
     public Response<?> handleParamFlowException(ParamFlowException e) {
         log.error("ParamFlowException异常:", e);
-        return Response.fail(ExceptionCode.PARAM_FLOW.getCode(), ExceptionCode.PARAM_FLOW.getMessage());
+        return Response.fail(ExceptionCode.PARAM_FLOW.getCode(), ExceptionCode.PARAM_FLOW.getMessage(), e.getMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
     public Response<?> handleDegradeException(DegradeException e) {
         log.error("DegradeException异常:", e);
-        return Response.fail(ExceptionCode.SERVICE_DEGRADATION.getCode(), ExceptionCode.SERVICE_DEGRADATION.getMessage());
+        return Response.fail(ExceptionCode.SERVICE_DEGRADATION.getCode(), ExceptionCode.SERVICE_DEGRADATION.getMessage(), e.getMessage());
     }
 
     @Override
