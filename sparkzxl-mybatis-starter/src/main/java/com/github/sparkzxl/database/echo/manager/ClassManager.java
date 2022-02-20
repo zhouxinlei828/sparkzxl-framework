@@ -18,6 +18,7 @@ import java.util.Map;
  * 类管理器
  *
  * @author zuihou
+ * @date 2021年03月22日15:53:22
  */
 @Slf4j
 public class ClassManager implements Serializable {
@@ -45,8 +46,8 @@ public class ClassManager implements Serializable {
             if (echoField == null) {
                 continue;
             }
-            if (StrUtil.hasEmpty(echoField.api(), echoField.method())) {
-                log.warn("类 {} 属性 [{}] api 或 method 为空。", clazz.getName(), field.getName());
+            if (StrUtil.hasEmpty(echoField.api())) {
+                log.warn("类 {} 属性 [{}] api 为空。", clazz.getName(), field.getName());
                 continue;
             }
             fieldList.add(field);

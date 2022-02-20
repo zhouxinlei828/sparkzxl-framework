@@ -34,7 +34,4 @@ public class CustomMybatisProperties {
      */
     private DbType dbType = DbType.MYSQL;
 
-    @NestedConfigurationProperty
-    private EchoProperties echo = new EchoProperties();
-
 }

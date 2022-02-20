@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * description: 封装字段上标记了 Echo 注解的字段
+ * description: 封装字段上标记了 EchoField 注解的字段
  *
  * @author zhouxinlei
+ * @since 2022-02-20 19:48:59
  */
 @Data
 @AllArgsConstructor

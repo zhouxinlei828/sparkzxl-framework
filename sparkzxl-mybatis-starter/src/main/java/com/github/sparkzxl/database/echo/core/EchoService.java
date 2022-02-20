@@ -1,6 +1,6 @@
 package com.github.sparkzxl.database.echo.core;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -9,12 +9,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.sparkzxl.annotation.echo.EchoField;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.StrPool;
+import com.github.sparkzxl.database.echo.manager.CacheLoadKeys;
 import com.github.sparkzxl.database.echo.manager.ClassManager;
 import com.github.sparkzxl.database.echo.manager.FieldParam;
 import com.github.sparkzxl.database.echo.manager.LoadKey;
 import com.github.sparkzxl.database.echo.properties.EchoProperties;
 import com.github.sparkzxl.entity.data.RemoteData;
 import com.github.sparkzxl.model.vo.EchoVO;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +25,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -46,13 +50,28 @@ public class EchoService {
     /**
      * 动态配置参数
      */
-    private final EchoProperties ips;
+    private final EchoProperties echoProperties;
+    /**
+     * 内存缓存
+     */
+    private LoadingCache<CacheLoadKeys, Map<Serializable, Object>> caches;
 
-    public EchoService(EchoProperties ips, Map<String, LoadService> strategyMap) {
-        this.ips = ips;
-        strategyMap.forEach(this.strategyMap::put);
+    public EchoService(EchoProperties echoProperties, Map<String, LoadService> strategyMap) {
+        this.strategyMap.putAll(strategyMap);
+        this.echoProperties = echoProperties;
+        EchoProperties.GuavaCache guavaCache = echoProperties.getGuavaCache();
+        if (guavaCache.getEnabled()) {
+            this.caches = CacheBuilder.newBuilder()
+                    .maximumSize(guavaCache.getMaximumSize())
+                    .refreshAfterWrite(guavaCache.getRefreshWriteTime(), TimeUnit.MINUTES)
+                    .build(new DefCacheLoader(guavaCache));
+        }
+
     }
 
+    public void action(Object obj, String... ignoreFields) {
+        this.action(obj, false, ignoreFields);
+    }
 
     /**
      * 回显数据的3个步骤：（出现回显失败时，认真debug该方法）
@@ -64,9 +83,10 @@ public class EchoService {
      * 注意：若对象中需要回显的字段之间出现循环引用，很可能发生异常，所以请保证不要出现循环引用！！！
      *
      * @param obj          需要回显的参数，支持 自定义对象(User)、集合(List<User>、Set<User>)、IPage
+     * @param isUseCache   是否使用内存缓存
      * @param ignoreFields 忽略字段
      */
-    public void action(Object obj, String... ignoreFields) {
+    public void action(Object obj, boolean isUseCache, String... ignoreFields) {
         try {
             /*
              LoadKey 为远程查询的类+方法
@@ -88,7 +108,7 @@ public class EchoService {
             }
 
             // 2. 依次查询待回显的数据
-            this.load(typeMap);
+            this.load(typeMap, isUseCache);
 
             long echoStart = System.currentTimeMillis();
 
@@ -117,8 +137,8 @@ public class EchoService {
         if (obj == null) {
             return;
         }
-        if (depth > ips.getMaxDepth()) {
-            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", ips.getMaxDepth(), depth);
+        if (depth > echoProperties.getMaxDepth()) {
+            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", echoProperties.getMaxDepth(), depth);
             return;
         }
 
@@ -172,7 +192,8 @@ public class EchoService {
      *
      * @param typeMap
      */
-    private void load(Map<LoadKey, Map<Serializable, Object>> typeMap) {
+    @SneakyThrows(value = Throwable.class)
+    private void load(Map<LoadKey, Map<Serializable, Object>> typeMap, boolean isUseCache) {
         for (Map.Entry<LoadKey, Map<Serializable, Object>> entries : typeMap.entrySet()) {
             LoadKey type = entries.getKey();
             Map<Serializable, Object> valueMap = entries.getValue();
@@ -180,15 +201,15 @@ public class EchoService {
 
             LoadService loadService = strategyMap.get(type.getApi());
             if (loadService == null) {
-                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api字段：[{}]。请确保你自定义的接口实现了 LoadService 中的 [{}] 方法", type.getApi(), type.getMethod());
+                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api：[{}]实例。" +
+                        "请确保你自定义的接口实现了 LoadService 中的 findByIds 方法。" +
+                        "若api指定的是ServiceImpl，请确保在同一个服务内。", type.getApi());
                 continue;
             }
-            Map<Serializable, Object> value;
-            if ("findByIds".equals(type.getMethod())) {
-                value = loadService.findByIds(keys);
-            } else {
-                value = loadService.findNameByIds(keys);
-            }
+
+            CacheLoadKeys lk = new CacheLoadKeys(type, loadService, keys);
+            Map<Serializable, Object> value = echoProperties.getGuavaCache().getEnabled() && isUseCache ? caches.get(lk) : lk.loadMap();
+
             typeMap.put(type, value);
         }
     }
@@ -201,13 +222,13 @@ public class EchoService {
      * @param depth        当前递归深度
      * @param ignoreFields 忽略回显的字段
      */
-    @SneakyThrows
+    @SneakyThrows(value = Throwable.class)
     private void write(Object obj, Map<LoadKey, Map<Serializable, Object>> typeMap, int depth, String... ignoreFields) {
         if (obj == null) {
             return;
         }
-        if (depth > ips.getMaxDepth()) {
-            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", ips.getMaxDepth(), depth);
+        if (depth > echoProperties.getMaxDepth()) {
+            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", echoProperties.getMaxDepth(), depth);
             return;
         }
 
@@ -234,14 +255,14 @@ public class EchoService {
             if (fieldParam == null) {
                 continue;
             }
-            EchoField inField = fieldParam.getEchoField();
+            EchoField echoField = fieldParam.getEchoField();
             Object actualValue = fieldParam.getActualValue();
             Object originalValue = fieldParam.getOriginalValue();
             String fieldName = fieldParam.getFieldName();
-            String ref = inField.ref();
+            String ref = echoField.ref();
             LoadKey loadKey = fieldParam.getLoadKey();
 
-            Object echoValue = getEchoValue(inField, actualValue, originalValue, loadKey, typeMap);
+            Object echoValue = getEchoValue(echoField, actualValue, originalValue, loadKey, typeMap);
             if (echoValue == null) {
                 continue;
             }
@@ -250,8 +271,8 @@ public class EchoService {
             }
 
             // feign 接口序列化 丢失类型
-            if (echoValue instanceof Map && !Object.class.equals(inField.beanClass())) {
-                echoValue = JsonUtil.parse(JsonUtil.toJson(echoValue), inField.beanClass());
+            if (echoValue instanceof Map && !Object.class.equals(echoField.beanClass())) {
+                echoValue = JsonUtil.parse(JsonUtil.toJson(echoValue), echoField.beanClass());
             }
 
             if (StrUtil.isNotEmpty(ref)) {
@@ -284,7 +305,7 @@ public class EchoService {
         }
         Map<Serializable, Object> valueMap = typeMap.get(loadKey);
 
-        if (CollUtil.isEmpty(valueMap)) {
+        if (MapUtil.isEmpty(valueMap)) {
             return null;
         }
 
@@ -297,12 +318,12 @@ public class EchoService {
         newVal = valueMap.get(actualValue.toString());
         // 可能由于是多key原因导致get失败
         if (ObjectUtil.isNull(newVal) && StrUtil.isNotEmpty(echoField.dictType())) {
-            List<String> codes = StrUtil.split(originalValue.toString(), ips.getDictItemSeparator());
+            List<String> codes = StrUtil.split(originalValue.toString(), echoProperties.getDictItemSeparator());
 
             newVal = codes.stream().map(item -> {
-                String val = valueMap.getOrDefault(echoField.dictType() + ips.getDictSeparator() + item, StrPool.EMPTY).toString();
+                String val = valueMap.getOrDefault(echoField.dictType() + echoProperties.getDictSeparator() + item, StrPool.EMPTY).toString();
                 return val == null ? StrPool.EMPTY : val;
-            }).collect(Collectors.joining(ips.getDictItemSeparator()));
+            }).collect(Collectors.joining(echoProperties.getDictItemSeparator()));
         }
         return newVal;
     }

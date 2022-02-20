@@ -32,7 +32,6 @@ import com.p6spy.engine.spy.P6DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,7 +51,6 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties({CustomMybatisProperties.class, DataProperties.class})
 @Import(DataBaseExceptionHandler.class)
-@MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
 @RequiredArgsConstructor
 public class MyBatisAutoConfiguration {

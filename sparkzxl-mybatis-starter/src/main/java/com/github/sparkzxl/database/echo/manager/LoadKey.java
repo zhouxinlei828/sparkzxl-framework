@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * description: 封装 Echo 注解中解析出来的参数
+ * 封装 Echo 注解中解析出来的参数
+ * <p>
+ * 必须重写该类的 equals() 和 hashCode() 便于Map操作
  *
- * @author zhouxinlei
+ * @author zuihou
+ * @date 2020年02月03日18:48:29
  */
 @Data
 @NoArgsConstructor
@@ -25,14 +28,8 @@ public class LoadKey {
      */
     private String api;
 
-    /**
-     * 调用方法
-     */
-    private String method;
-
-    public LoadKey(EchoField rf) {
-        this.api = rf.api();
-        this.method = rf.method();
+    public LoadKey(EchoField echoField) {
+        this.api = echoField.api();
     }
 
     @Override
@@ -44,11 +41,11 @@ public class LoadKey {
             return false;
         }
         LoadKey that = (LoadKey) o;
-        return Objects.equal(api, that.api) && Objects.equal(method, that.method);
+        return Objects.equal(api, that.api);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(api, method);
+        return Objects.hashCode(api);
     }
 }
