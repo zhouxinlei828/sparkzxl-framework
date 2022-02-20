@@ -2,7 +2,7 @@ package com.github.sparkzxl.database.base.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.database.base.mapper.SuperMapper;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface SuperService<T> extends IService<T> {
         if (entityList.isEmpty()) {
             return true;
         } else if (entityList.size() > size) {
-            ExceptionCode.TOO_MUCH_DATA_ERROR.newException(entityList);
+            ExceptionErrorCode.TOO_MUCH_DATA_ERROR.newException(entityList);
         } else {
             return SqlHelper.retBool(((SuperMapper<T>) this.getBaseMapper()).insertBatchSomeColumn(entityList));
         }

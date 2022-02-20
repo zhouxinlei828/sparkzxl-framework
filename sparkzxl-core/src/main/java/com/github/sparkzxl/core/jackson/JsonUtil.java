@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.StrPool;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class JsonUtil {
         try {
             return getInstance().writeValueAsString(value);
         } catch (Exception e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_TRANSFORM_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_TRANSFORM_ERROR);
             return null;
         }
     }
@@ -48,7 +48,7 @@ public class JsonUtil {
         try {
             return getInstance().writerWithDefaultPrettyPrinter().writeValueAsString(value);
         } catch (Exception e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_TRANSFORM_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_TRANSFORM_ERROR);
             return null;
         }
     }
@@ -60,7 +60,7 @@ public class JsonUtil {
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_TRANSFORM_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_TRANSFORM_ERROR);
             return null;
         }
     }
@@ -69,7 +69,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, valueType);
         } catch (Exception e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, typeReference);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -87,7 +87,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, valueType);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -96,7 +96,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, typeReference);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -105,7 +105,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, valueType);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -114,7 +114,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, typeReference);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -130,7 +130,7 @@ public class JsonUtil {
 
             return list.stream().map((map) -> toPojo(map, valueTypeRef)).collect(Collectors.toList());
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -139,7 +139,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, Map.class);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -149,7 +149,7 @@ public class JsonUtil {
             String jsonData = getInstance().writeValueAsString(val);
             return getInstance().readValue(jsonData, Map.class);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -162,7 +162,7 @@ public class JsonUtil {
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -175,7 +175,7 @@ public class JsonUtil {
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -188,7 +188,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(data, toValueType);
         } catch (JsonProcessingException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -201,7 +201,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonString);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -210,7 +210,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(in);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -219,7 +219,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(content);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -228,7 +228,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
-            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionErrorCode.JSON_PARSE_ERROR);
             return null;
         }
     }

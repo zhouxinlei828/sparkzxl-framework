@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import lombok.Getter;
 
 /**
@@ -13,11 +13,11 @@ public class BizException extends BaseException {
 
     private static final long serialVersionUID = -2803534562798384761L;
 
-    public BizException(ICode ICode) {
+    public BizException(IErrorCode ICode) {
         super(ICode);
     }
 
-    public BizException(ICode ICode, Object[] args, String message) {
+    public BizException(IErrorCode ICode, Object[] args, String message) {
         super(ICode, args, message);
     }
 
@@ -25,7 +25,7 @@ public class BizException extends BaseException {
         super(code, message);
     }
 
-    public BizException(ICode ICode, Object[] args, String message, Throwable cause) {
+    public BizException(IErrorCode ICode, Object[] args, String message, Throwable cause) {
         super(ICode, args, message, cause);
     }
 

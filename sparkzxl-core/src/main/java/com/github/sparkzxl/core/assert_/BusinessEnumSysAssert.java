@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.assert_;
 
-import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.BizException;
 
@@ -11,7 +11,7 @@ import java.text.MessageFormat;
  *
  * @author zhouxinlei
  */
-public interface BusinessEnumSysAssert extends ICode, BusinessAssert {
+public interface BusinessEnumSysAssert extends IErrorCode, BusinessAssert {
 
     /**
      * 创建异常

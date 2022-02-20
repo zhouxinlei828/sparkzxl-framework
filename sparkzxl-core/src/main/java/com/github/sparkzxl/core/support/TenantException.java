@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import com.github.sparkzxl.core.base.result.ExceptionStatusConstant;
 import lombok.Getter;
 
@@ -14,11 +14,11 @@ public class TenantException extends BaseException {
 
     private static final long serialVersionUID = -2803534562798384761L;
 
-    public TenantException(ICode ICode) {
+    public TenantException(IErrorCode ICode) {
         super(ICode);
     }
 
-    public TenantException(ICode ICode, Object[] args, String message) {
+    public TenantException(IErrorCode ICode, Object[] args, String message) {
         super(ICode, args, message);
     }
 
@@ -30,7 +30,7 @@ public class TenantException extends BaseException {
         super(ExceptionStatusConstant.SYSTEM_ERROR, message);
     }
 
-    public TenantException(ICode ICode, Object[] args, String message, Throwable cause) {
+    public TenantException(IErrorCode ICode, Object[] args, String message, Throwable cause) {
         super(ICode, args, message, cause);
     }
 

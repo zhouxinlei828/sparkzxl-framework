@@ -1,6 +1,6 @@
 package com.github.sparkzxl.zookeeper.aspect;
 
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.AspectUtil;
 import com.github.sparkzxl.zookeeper.annotation.ZkLock;
@@ -59,7 +59,7 @@ public class ZkLockAspect {
             }
         } else {
             log.info("线程[{}] -> 获取锁key[{}] 失败", threadId, key);
-            ExceptionAssert.failure(ExceptionCode.FAILURE);
+            ExceptionAssert.failure(ExceptionErrorCode.FAILURE);
         }
         return result;
     }

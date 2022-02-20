@@ -1,15 +1,15 @@
-package com.github.sparkzxl.core.base.code;
+package com.github.sparkzxl.entity.response;
 
 /**
- * description: 封装API响应状态码
+ * description: 封装异常状态码
  *
  * @author zhouxinlei
  */
-public interface ICode {
+public interface IErrorCode {
     /**
      * code
      *
-     * @return long
+     * @return String
      */
     String getCode();
 

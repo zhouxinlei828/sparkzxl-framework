@@ -9,7 +9,6 @@ import java.util.Map;
  * description: 获取告警变量参数
  *
  * @author zhouxinlei
- * @date 2022-01-05 12:21:58
  */
 public interface IAlarmAttributeGet {
 
@@ -19,7 +18,7 @@ public interface IAlarmAttributeGet {
      *
      * @param joinPoint 切入点
      * @param alarm     告警注解
-     * @return Map<String, String>
+     * @return Map<String, Object>
      */
     Map<String, Object> getAttributes(JoinPoint joinPoint, Alarm alarm);
 }

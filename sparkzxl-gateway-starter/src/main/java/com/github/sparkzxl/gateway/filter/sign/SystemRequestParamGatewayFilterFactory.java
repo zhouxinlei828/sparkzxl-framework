@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.filter.sign;
 
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
 import com.github.sparkzxl.gateway.constant.RequestHeaderConstant;
@@ -42,7 +42,7 @@ public class SystemRequestParamGatewayFilterFactory extends AbstractGatewayFilte
             HttpHeaders headers = request.getHeaders();
             String contentType = headers.getFirst(HttpHeaders.CONTENT_TYPE);
             if (!validateMediaType(contentType)) {
-                return ReactorHttpHelper.errorResponse(response, ExceptionCode.SIGNATURE_NOT_SUPPORTED_EX);
+                return ReactorHttpHelper.errorResponse(response, ExceptionErrorCode.SIGNATURE_NOT_SUPPORTED_EX);
             }
             String timestamp = headers.getFirst(RequestHeaderConstant.X_CA_TIMESTAMP);
             String nonce = headers.getFirst(RequestHeaderConstant.X_CA_NONCE);
@@ -51,11 +51,11 @@ public class SystemRequestParamGatewayFilterFactory extends AbstractGatewayFilte
             String accessToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
             if (StringUtils.isAnyBlank(timestamp, nonce, signType, signature) ||
                     !StringUtils.isNumeric(timestamp)) {
-                return ReactorHttpHelper.errorResponse(response, ExceptionCode.SIGNATURE_EX);
+                return ReactorHttpHelper.errorResponse(response, ExceptionErrorCode.SIGNATURE_EX);
             }
             long timestampL = Long.parseLong(timestamp);
             if (DateUtils.millisecond(LocalDateTime.now()) - timestampL > verifySignatureProperties.getTimestampIntervalSecond()) {
-                return ReactorHttpHelper.errorResponse(response, ExceptionCode.REQUEST_TIMESTAMP_EX);
+                return ReactorHttpHelper.errorResponse(response, ExceptionErrorCode.REQUEST_TIMESTAMP_EX);
             }
             LinkedHashSet<URI> uris = exchange
                     .getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.StringHandlerUtil;
 import lombok.NonNull;
 
@@ -16,14 +16,14 @@ public class ExceptionAssert {
 
 
     public static void failure(String message) {
-        throw new BizException(ExceptionCode.FAILURE.getCode(), message);
+        throw new BizException(ExceptionErrorCode.FAILURE.getCode(), message);
     }
 
     public static void failure(String code, String message) {
         throw new BizException(code, message);
     }
 
-    public static void failure(ICode ICode) {
+    public static void failure(IErrorCode ICode) {
         throw new BizException(ICode);
     }
 
@@ -31,7 +31,7 @@ public class ExceptionAssert {
      * 服务降级异常处理
      */
     public static void serviceDegrade() {
-        throw new ServiceDegradeException(ExceptionCode.SERVICE_DEGRADATION);
+        throw new ServiceDegradeException(ExceptionErrorCode.SERVICE_DEGRADATION);
     }
 
     /**

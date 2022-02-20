@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.filter.authorization;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
 import com.github.sparkzxl.gateway.constant.enums.FilterOrderEnum;
@@ -87,7 +87,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
     protected void checkTokenAuthority(ServerWebExchange exchange, String token) throws GatewayException {
         JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new GatewayException(ExceptionCode.TOKEN_EXPIRED_ERROR);
+            throw new GatewayException(ExceptionErrorCode.TOKEN_EXPIRED_ERROR);
         }
         ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().headers(httpHeaders -> {
             httpHeaders.add(BaseContextConstants.JWT_KEY_USER_ID, ReactorHttpHelper.formatHeader(jwtUserInfo.getId()));
@@ -113,7 +113,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
     }
 
     protected void onAuthFail(ServerWebExchange exchange, GatewayFilterChain chain) {
-        throw new GatewayException(ExceptionCode.JWT_EMPTY_ERROR);
+        throw new GatewayException(ExceptionErrorCode.JWT_EMPTY_ERROR);
     }
 
     /**

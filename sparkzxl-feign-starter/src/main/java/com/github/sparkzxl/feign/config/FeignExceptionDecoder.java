@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.config;
 
 import cn.hutool.core.bean.OptionalBean;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
@@ -27,10 +27,10 @@ public class FeignExceptionDecoder implements ErrorDecoder {
             Reader reader = response.body().asReader(StandardCharsets.UTF_8);
             String body = Util.toString(reader);
             Response<?> responseResult = JsonUtil.parse(body, Response.class);
-            return new RemoteCallException(responseResult.getCode(), responseResult.getMsg(), applicationName);
+            return new RemoteCallException(responseResult.getErrorCode(), responseResult.getErrorMsg(), applicationName);
         } catch (Exception e) {
             log.error("[{}] has an unknown exception.", methodKey, e);
-            return new RemoteCallException(ExceptionCode.FAILURE.getCode(), "unKnowException", applicationName, e);
+            return new RemoteCallException(ExceptionErrorCode.FAILURE.getCode(), "unKnowException", applicationName, e);
         }
 
     }

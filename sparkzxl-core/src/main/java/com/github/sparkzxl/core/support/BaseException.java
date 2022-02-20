@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import lombok.Getter;
 
 /**
@@ -19,7 +19,7 @@ public class BaseException extends RuntimeException {
 
     private String message;
 
-    public BaseException(ICode ICode) {
+    public BaseException(IErrorCode ICode) {
         this.code = ICode.getCode();
         this.message = ICode.getMessage();
     }
@@ -33,13 +33,13 @@ public class BaseException extends RuntimeException {
         this.message = message;
     }
 
-    public BaseException(ICode ICode, Object[] args, String message) {
+    public BaseException(IErrorCode ICode, Object[] args, String message) {
         this.code = ICode.getCode();
         this.args = args;
         this.message = message;
     }
 
-    public BaseException(ICode ICode, Object[] args, String message, Throwable cause) {
+    public BaseException(IErrorCode ICode, Object[] args, String message, Throwable cause) {
         this.code = ICode.getCode();
         this.args = args;
         this.message = message;

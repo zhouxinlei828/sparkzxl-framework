@@ -3,9 +3,10 @@ package com.github.sparkzxl.web.support;
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.response.IgnoreResponseWrap;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.entity.response.ResponseCode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -52,23 +53,19 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         if (body instanceof Response) {
             return body;
         }
-        Object returnBody = body;
-        String code = ExceptionCode.SUCCESS.getCode();
-        String message = ExceptionCode.SUCCESS.getMessage();
-        String attribute = (String) RequestContextHolderUtils.getAttribute(BaseContextConstants.EXCEPTION_ATTR_MSG);
         Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
+        int status = servletResponse.getStatus();
+        Response<?> result;
         if (fallback) {
-            code = ExceptionCode.SERVICE_DEGRADATION.getCode();
-            message = ExceptionCode.SERVICE_DEGRADATION.getMessage();
-            returnBody = null;
-        } else if (ObjectUtils.isNotEmpty(attribute)) {
-            code = ExceptionCode.FAILURE.getCode();
-            message = attribute;
-            returnBody = null;
-        } else if (returnBody instanceof Boolean && !(Boolean) returnBody) {
-            code = ExceptionCode.FAILURE.getCode();
-            message = ExceptionCode.FAILURE.getMessage();
+            result = Response.failDetail(ExceptionErrorCode.SERVICE_DEGRADATION.getCode(), ExceptionErrorCode.SERVICE_DEGRADATION.getMessage());
+        } else if (body instanceof Boolean && !(Boolean) body) {
+            result = Response.failDetail(ExceptionErrorCode.FAILURE.getCode(), ExceptionErrorCode.FAILURE.getMessage());
+        } else if (status == ResponseCode.FAILURE.getCode()) {
+            result = Response.failDetail(ExceptionErrorCode.INTERNAL_SERVER_ERROR.getCode(), ExceptionErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+            servletResponse.setStatus(ResponseCode.SUCCESS.getCode());
+        } else {
+            result = Response.success(body);
         }
-        return Response.success(code, message, returnBody);
+        return result;
     }
 }

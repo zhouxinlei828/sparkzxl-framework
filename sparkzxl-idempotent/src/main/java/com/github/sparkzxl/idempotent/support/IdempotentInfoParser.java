@@ -1,6 +1,6 @@
 package com.github.sparkzxl.idempotent.support;
 
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.generator.CacheKeyGenerator;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.idempotent.annotation.ApiIdempotent;
@@ -31,7 +31,7 @@ public class IdempotentInfoParser {
         //获取幂等注解
         ApiIdempotent apiIdempotent = method.getAnnotation(ApiIdempotent.class);
         if (StringUtils.isEmpty(apiIdempotent.keyPrefix())) {
-            ExceptionAssert.failure(ExceptionCode.PARAM_VALID_ERROR.getCode(), "lock keyPrefix don't null...");
+            ExceptionAssert.failure(ExceptionErrorCode.PARAM_VALID_ERROR.getCode(), "lock keyPrefix don't null...");
         }
         String message = apiIdempotent.message();
         CacheKeyGenerator cacheKeyGenerator = StringUtils.isNotBlank(apiIdempotent.generator()) ? keyGeneratorMap.get(apiIdempotent.generator())

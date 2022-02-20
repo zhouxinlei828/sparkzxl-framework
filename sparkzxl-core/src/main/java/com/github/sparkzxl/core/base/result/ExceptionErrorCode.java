@@ -11,17 +11,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ExceptionCode implements BusinessEnumSysAssert {
-
-    /**
-     * 成功
-     */
-    SUCCESS(ExceptionStatusConstant.OK, "成功"),
+public enum ExceptionErrorCode implements BusinessEnumSysAssert {
 
     /**
      * 业务异常
      */
-    FAILURE(ExceptionStatusConstant.SYSTEM_ERROR, "哎呀，开了个小差，请稍后再试"),
+    FAILURE(ExceptionStatusConstant.SYSTEM_ERROR, "操作失败"),
 
     JSON_PARSE_ERROR("A0427", "JSON解析异常"),
 
@@ -64,7 +59,7 @@ public enum ExceptionCode implements BusinessEnumSysAssert {
     /**
      * 消息不能读取
      */
-    MSG_NOT_READABLE(ExceptionStatusConstant.SYSTEM_ERROR, "消息不能读取"),
+    MSG_NOT_READABLE(ExceptionStatusConstant.HTTP_BAD_METHOD, "消息不能读取"),
 
     /**
      * 不支持当前请求方法
@@ -101,22 +96,9 @@ public enum ExceptionCode implements BusinessEnumSysAssert {
      */
     PARAM_VALID_ERROR(ExceptionStatusConstant.SYSTEM_ERROR, "参数校验失败"),
 
-    MUCH_KILL(ExceptionStatusConstant.HTTP_INTERNAL_ERROR, "哎呦喂，人也太多了，请稍后！"),
-
-    SUCCESS_KILL(ExceptionStatusConstant.OK, "秒杀成功"),
-
-    END_KILL(ExceptionStatusConstant.SYSTEM_ERROR, "秒杀结束"),
-
     TOO_MUCH_DATA_ERROR(ExceptionStatusConstant.HTTP_INTERNAL_ERROR, "批量新增数据过多"),
 
-    SERVICE_MAPPER_ERROR("-11", "Mapper类转换异常"),
-
     SERVICE_DEGRADATION(ExceptionStatusConstant.HTTP_UNAVAILABLE, "服务降级，请稍候再试"),
-
-    /**
-     * 数据库异常
-     */
-    SQL_EXCEPTION_ERROR("-14", "数据库异常"),
 
     /**
      * 请求被拒绝
