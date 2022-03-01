@@ -32,7 +32,6 @@
 
         <keycloak-dependencies.version>12.0.2</keycloak-dependencies.version>
         <spring-webmvc.version>5.2.13.RELEASE</spring-webmvc.version>
-        <spring-boot-admin.version>2.5.0</spring-boot-admin.version>
 
         <!-- datasource-->
         <mybatis.version>3.5.7</mybatis.version>
@@ -96,7 +95,6 @@
 
         <freemarker.version>2.3.28</freemarker.version>
         <apache.xmlgraphics.version>1.8</apache.xmlgraphics.version>
-        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <activiti.boot.version>6.0.0</activiti.boot.version>
         <fel.version>0.8</fel.version>
         <weixin-sdk.version>4.1.9.B</weixin-sdk.version>
@@ -210,23 +208,6 @@
                 <artifactId>mapstruct-jdk8</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-            <!-- spring-boot-admin -->
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-starter-server</artifactId>
-                <version>${spring-boot-admin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-server-ui</artifactId>
-                <version>${spring-boot-admin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-starter-client</artifactId>
-                <version>${spring-boot-admin.version}</version>
-            </dependency>
-
             <!-- mybatis-plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -259,14 +240,6 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
             </dependency>
-
-            <!-- 实现对 Sharding-JDBC 的自动化配置 -->
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-                <version>${sharding-jdbc.version}</version>
-            </dependency>
-            <!-- 数据源自动化配置 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
@@ -733,6 +706,11 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-feign-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-gateway-plugin-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
