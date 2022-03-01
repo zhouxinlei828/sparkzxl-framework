@@ -26,10 +26,6 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.jsqlparser</groupId>
-            <artifactId>jsqlparser</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-cache-starter</artifactId>
         </dependency>

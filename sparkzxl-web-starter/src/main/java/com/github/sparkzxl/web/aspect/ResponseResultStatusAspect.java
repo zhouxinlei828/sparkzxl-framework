@@ -29,14 +29,8 @@ public class ResponseResultStatusAspect {
 
     private boolean transferExceptionStatus = false;
 
-    private boolean enableTransferStatus = false;
-
     public void setTransferExceptionStatus(boolean transferExceptionStatus) {
         this.transferExceptionStatus = transferExceptionStatus;
-    }
-
-    public void setEnableTransferStatus(boolean enableTransferStatus) {
-        this.enableTransferStatus = enableTransferStatus;
     }
 
     @Pointcut("@within(com.github.sparkzxl.annotation.ResponseResultStatus)||@annotation(com.github.sparkzxl.annotation.ResponseResultStatus)")

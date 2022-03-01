@@ -22,6 +22,4 @@ public class WebProperties {
 
     private boolean transferException = false;
 
-    private boolean enableTransferStatus = false;
-
 }

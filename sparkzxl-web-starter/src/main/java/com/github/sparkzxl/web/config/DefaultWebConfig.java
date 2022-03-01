@@ -78,7 +78,6 @@ public class DefaultWebConfig implements WebMvcConfigurer {
     @Bean
     public ResponseResultStatusAspect responseResultStatusAspect() {
         ResponseResultStatusAspect responseResultStatusAspect = new ResponseResultStatusAspect();
-        responseResultStatusAspect.setEnableTransferStatus(webProperties.isEnableTransferStatus());
         responseResultStatusAspect.setTransferExceptionStatus(webProperties.isTransferException());
         return responseResultStatusAspect;
     }

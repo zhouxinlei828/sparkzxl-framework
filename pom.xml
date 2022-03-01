@@ -39,6 +39,7 @@
         <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
         <module>sparkzxl-feign-starter</module>
+        <module>sparkzxl-gateway-plugin</module>
         <module>sparkzxl-gateway-starter</module>
         <module>sparkzxl-job-executor-starter</module>
         <module>sparkzxl-jwt-starter</module>
