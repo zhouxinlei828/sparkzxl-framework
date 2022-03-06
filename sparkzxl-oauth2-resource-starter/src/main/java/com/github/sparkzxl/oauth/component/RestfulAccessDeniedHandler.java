@@ -6,7 +6,6 @@ import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -28,9 +27,8 @@ public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
         log.error("AccessDeniedException：[{}]", e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.FORBIDDEN);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body = JSONUtil.toJsonStr(Response.failDetail(ExceptionErrorCode.AUTHORIZED_DENIED.getCode(), ExceptionErrorCode.AUTHORIZED_DENIED.getMessage()));
+        String body = JSONUtil.toJsonStr(Response.failDetail(ExceptionErrorCode.AUTHORIZED_DENIED));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

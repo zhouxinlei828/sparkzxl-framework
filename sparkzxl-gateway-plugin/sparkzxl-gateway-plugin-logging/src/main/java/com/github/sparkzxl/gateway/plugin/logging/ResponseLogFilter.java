@@ -42,7 +42,8 @@ public class ResponseLogFilter extends AbstractGlobalFilter {
             return chain.filter(exchange);
         }
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
-        boolean enableLogging = Boolean.parseBoolean(ParameterDataFactory.builderData(ParameterDataConstant.ATTRIBUTE, GatewayConstant.ENABLE_LOGGING, exchange));
+        boolean enableLogging =
+                Boolean.parseBoolean(ParameterDataFactory.builderData(ParameterDataConstant.ATTRIBUTE, GatewayConstant.ENABLE_LOGGING, exchange));
         if (enableLogging) {
             sendCacheRequestBodyEvent(gatewayContext.getRouteId());
             return chain.filter(exchange.mutate().response(new LoggingResponseBodyDecorator(exchange.getResponse(), exchange, optLogService)).build());

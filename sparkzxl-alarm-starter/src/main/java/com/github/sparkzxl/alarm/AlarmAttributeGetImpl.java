@@ -36,6 +36,30 @@ public class AlarmAttributeGetImpl implements IAlarmAttributeGet {
         this.function = function;
     }
 
+    public static Method getTargetMethod(JoinPoint pjp) throws NoSuchMethodException {
+        Signature signature = pjp.getSignature();
+        MethodSignature methodSignature = (MethodSignature) signature;
+        Method agentMethod = methodSignature.getMethod();
+        return pjp.getTarget().getClass().getMethod(agentMethod.getName(), agentMethod.getParameterTypes());
+    }
+
+    /**
+     * 获取spel表达式结果
+     *
+     * @param joinPoint  切入点
+     * @param expression 表达式
+     * @return String
+     * @throws NoSuchMethodException 方法找不到异常
+     */
+    public static String parseExpression(JoinPoint joinPoint, String expression) throws NoSuchMethodException {
+        Method targetMethod = getTargetMethod(joinPoint);
+        ExpressionParser parser = new SpelExpressionParser();
+        EvaluationContext context = new MethodBasedEvaluationContext(new Object(), targetMethod, joinPoint.getArgs(),
+                new DefaultParameterNameDiscoverer());
+        Expression parseExpression = parser.parseExpression(expression);
+        return parseExpression.getValue(context, String.class);
+    }
+
     @Override
     public Map<String, Object> getAttributes(JoinPoint joinPoint, Alarm alarm) {
         Map<String, Object> attributeMapping = new HashMap<>(6);
@@ -65,29 +89,5 @@ public class AlarmAttributeGetImpl implements IAlarmAttributeGet {
             }
         }
         return attributeMapping;
-    }
-
-    public static Method getTargetMethod(JoinPoint pjp) throws NoSuchMethodException {
-        Signature signature = pjp.getSignature();
-        MethodSignature methodSignature = (MethodSignature) signature;
-        Method agentMethod = methodSignature.getMethod();
-        return pjp.getTarget().getClass().getMethod(agentMethod.getName(), agentMethod.getParameterTypes());
-    }
-
-    /**
-     * 获取spel表达式结果
-     *
-     * @param joinPoint  切入点
-     * @param expression 表达式
-     * @return String
-     * @throws NoSuchMethodException 方法找不到异常
-     */
-    public static String parseExpression(JoinPoint joinPoint, String expression) throws NoSuchMethodException {
-        Method targetMethod = getTargetMethod(joinPoint);
-        ExpressionParser parser = new SpelExpressionParser();
-        EvaluationContext context = new MethodBasedEvaluationContext(new Object(), targetMethod, joinPoint.getArgs(),
-                new DefaultParameterNameDiscoverer());
-        Expression parseExpression = parser.parseExpression(expression);
-        return parseExpression.getValue(context, String.class);
     }
 }

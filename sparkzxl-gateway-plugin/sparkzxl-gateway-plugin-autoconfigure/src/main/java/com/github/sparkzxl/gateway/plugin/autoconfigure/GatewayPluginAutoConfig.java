@@ -2,9 +2,9 @@ package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.gateway.plugin.autoconfigure.annotation.EnableExceptionJsonHandler;
+import com.github.sparkzxl.gateway.plugin.context.GatewayContextFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.JwtFilter;
 import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
-import com.github.sparkzxl.gateway.plugin.context.GatewayContextFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,6 +32,7 @@ public class GatewayPluginAutoConfig {
     public RemoteAddressResolver remoteAddressResolver() {
         return XForwardedRemoteAddressResolver.maxTrustedIndex(1);
     }
+
     @Bean
     @ConditionalOnMissingBean(GatewayContextFilter.class)
     public GlobalFilter gatewayContextFilter() {

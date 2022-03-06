@@ -245,6 +245,7 @@ public class JsonUtil {
         private final static ObjectMapper INSTANCE = new JacksonObjectMapper();
     }
 
+
     public static class JacksonObjectMapper extends ObjectMapper {
         private static final long serialVersionUID = 1L;
 

@@ -3,7 +3,6 @@ package com.github.sparkzxl.gateway.plugin.context;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
 import java.io.Serializable;
@@ -21,58 +20,11 @@ import java.time.LocalDateTime;
 public class GatewayContext implements Serializable {
 
     private static final long serialVersionUID = 573721603738759822L;
-
-    private String appKey;
-    private String sign;
-    private String timestamp;
-
-    /**
-     * tenantId.
-     */
-    private String tenantId;
-
-    /**
-     * version.
-     */
-    private String version;
-
-    /**
-     * httpMethod .
-     */
-    private String httpMethod;
-
     protected LocalDateTime startTime = LocalDateTime.now();
-
-    /**
-     * 路由id
-     */
-    private String routeId;
-
-    /**
-     * 请求host
-     */
-    private String host;
-
-    /**
-     * 请求ip
-     */
-    private String ip;
-
-    /**
-     * 请求路径
-     */
-    private String path;
-
-    /**
-     * 请求路径
-     */
-    private String url;
-
     /**
      * cache form data
      */
     protected MultiValueMap<String, String> formData;
-
     /**
      * cache json body
      */
@@ -81,5 +33,40 @@ public class GatewayContext implements Serializable {
      * cache Response Body
      */
     protected String responseBody;
+    private String appKey;
+    private String sign;
+    private String timestamp;
+    /**
+     * tenantId.
+     */
+    private String tenantId;
+    /**
+     * version.
+     */
+    private String version;
+    /**
+     * httpMethod .
+     */
+    private String httpMethod;
+    /**
+     * 路由id
+     */
+    private String routeId;
+    /**
+     * 请求host
+     */
+    private String host;
+    /**
+     * 请求ip
+     */
+    private String ip;
+    /**
+     * 请求路径
+     */
+    private String path;
+    /**
+     * 请求路径
+     */
+    private String url;
 
 }

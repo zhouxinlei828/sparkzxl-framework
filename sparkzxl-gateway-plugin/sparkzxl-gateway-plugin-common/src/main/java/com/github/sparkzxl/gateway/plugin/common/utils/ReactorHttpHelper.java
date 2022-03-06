@@ -58,10 +58,10 @@ public class ReactorHttpHelper {
         return response.writeWith(Flux.just(buffer));
     }
 
-    public static Mono<Void> error(ServerHttpResponse response, ExceptionErrorCode responseInfoStatus) {
+    public static Mono<Void> error(ServerHttpResponse response, ExceptionErrorCode exceptionErrorCode) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        byte[] bytes = JSON.toJSONString(Response.failDetail(responseInfoStatus.getCode(), responseInfoStatus.getMessage())).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(Response.failDetail(exceptionErrorCode)).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }

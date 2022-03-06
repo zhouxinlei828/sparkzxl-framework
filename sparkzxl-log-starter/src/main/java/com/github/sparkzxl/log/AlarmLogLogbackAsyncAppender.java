@@ -28,7 +28,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
 
-    private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2, 4, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(30), new DefaultThreadFactory("log-alarm"));
+    private final ThreadPoolExecutor threadPoolExecutor =
+            new ThreadPoolExecutor(2, 4, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(30), new DefaultThreadFactory("log-alarm"));
 
     @Override
     public void doAppend(ILoggingEvent eventObject) {
@@ -45,10 +46,13 @@ public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
                 Throwable throwable = throwableProxy.getThrowable();
                 if (AlarmLogContext.doWarnException(throwable)) {
                     StackTraceElement[] stackTraceElements = throwable.getStackTrace();
-                    AlarmLogInfo alarmLogInfo = AlarmLogInfo.builder().applicationName(applicationName).environment(environment).message(loggingEvent.getFormattedMessage()).throwableName(throwable.getClass().getName()).threadName(loggingEvent.getThreadName()).traceId(traceId).build();
+                    AlarmLogInfo alarmLogInfo =
+                            AlarmLogInfo.builder().applicationName(applicationName).environment(environment).message(loggingEvent.getFormattedMessage())
+                                    .throwableName(throwable.getClass().getName()).threadName(loggingEvent.getThreadName()).traceId(traceId).build();
                     if (ArrayUtils.isNotEmpty(stackTraceElements)) {
                         StackTraceElement stackTraceElement = stackTraceElements[0];
-                        alarmLogInfo.setClassName(stackTraceElement.getClassName()).setFileName(stackTraceElement.getFileName()).setMethodName(stackTraceElement.getMethodName()).setLineNumber(stackTraceElement.getLineNumber());
+                        alarmLogInfo.setClassName(stackTraceElement.getClassName()).setFileName(stackTraceElement.getFileName())
+                                .setMethodName(stackTraceElement.getMethodName()).setLineNumber(stackTraceElement.getLineNumber());
                     }
                     String message = ThrowableUtils.dingTalkContent(alarmLogInfo, throwable);
                     notifyMessage.setMessage(message);
@@ -57,7 +61,9 @@ public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
             } else if (level.equals(Level.ERROR)) {
                 String applicationName = SpringContextUtils.getApplicationName();
                 String environment = SpringContextUtils.getEnvironment();
-                AlarmLogInfo alarmLogInfo = AlarmLogInfo.builder().applicationName(applicationName).environment(environment).message(loggingEvent.getFormattedMessage()).threadName(loggingEvent.getThreadName()).traceId(traceId).build();
+                AlarmLogInfo alarmLogInfo =
+                        AlarmLogInfo.builder().applicationName(applicationName).environment(environment).message(loggingEvent.getFormattedMessage())
+                                .threadName(loggingEvent.getThreadName()).traceId(traceId).build();
                 String message = ThrowableUtils.dingTalkContent(alarmLogInfo, null);
                 notifyMessage.setMessage(message);
                 CompletableFuture.runAsync(() -> AlarmFactoryExecute.execute(notifyMessage), threadPoolExecutor);

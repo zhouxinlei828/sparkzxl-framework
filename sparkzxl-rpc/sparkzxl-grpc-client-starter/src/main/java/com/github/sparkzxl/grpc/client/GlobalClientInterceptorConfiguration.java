@@ -1,9 +1,8 @@
 package com.github.sparkzxl.grpc.client;
 
+import io.grpc.ClientInterceptor;
 import net.devh.boot.grpc.client.interceptor.GrpcGlobalClientInterceptor;
 import org.springframework.context.annotation.Configuration;
-
-import io.grpc.ClientInterceptor;
 
 /**
  * description: configuration class that adds a {@link ClientInterceptor} to the global interceptor list.

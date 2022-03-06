@@ -51,7 +51,8 @@ public class DefaultExceptionHandlerStrategyFactory implements ExceptionHandlerS
             log.debug("[DefaultExceptionHandlerStrategyFactory]Get Target Exception Handler Strategy Is Null,Use Default Strategy");
             strategy = defaultExceptionHandlerStrategy;
         }
-        log.debug("[DefaultExceptionHandlerStrategyFactory] Get Strategy,Exception Class Name:{},Strategy:{}", clazz.getSimpleName(), strategy.getClass().getSimpleName());
+        log.debug("[DefaultExceptionHandlerStrategyFactory] Get Strategy,Exception Class Name:{},Strategy:{}", clazz.getSimpleName(),
+                strategy.getClass().getSimpleName());
         return strategy;
     }
 

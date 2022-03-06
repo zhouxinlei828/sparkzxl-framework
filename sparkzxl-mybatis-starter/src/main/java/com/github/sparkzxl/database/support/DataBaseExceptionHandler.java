@@ -35,13 +35,14 @@ public class DataBaseExceptionHandler implements Ordered {
     @ExceptionHandler(SQLSyntaxErrorException.class)
     public Response<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
         log.error("SQL异常：", e);
-        return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), ExceptionErrorCode.SQL_EX.getMessage());
+        return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), ExceptionErrorCode.SQL_EX.getErrorMessage());
     }
 
     @ExceptionHandler(TooManyResultsException.class)
     public Response<?> handleTooManyResultsException(TooManyResultsException e) {
         log.error("查询异常：", e);
-        return Response.failDetail(ExceptionErrorCode.SQL_MANY_RESULT_EX.getCode(), ExceptionErrorCode.SQL_MANY_RESULT_EX.getMessage());
+        return Response.failDetail(
+                ExceptionErrorCode.SQL_MANY_RESULT_EX.getErrorCode(), ExceptionErrorCode.SQL_MANY_RESULT_EX.getErrorMessage());
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
@@ -49,15 +50,18 @@ public class DataBaseExceptionHandler implements Ordered {
         log.error("SQL异常：", e);
         String message = e.getSQLException().getMessage();
         if (message.startsWith("Unknown database")) {
-            return Response.failDetail(ExceptionErrorCode.UNKNOWN_DATABASE.getCode(), ExceptionErrorCode.UNKNOWN_DATABASE.getMessage());
+            return Response.failDetail(
+                    ExceptionErrorCode.UNKNOWN_DATABASE.getErrorCode(), ExceptionErrorCode.UNKNOWN_DATABASE.getErrorMessage());
         }
         if (ReUtil.isMatch("^Table.*doesn't exist$", message)) {
-            return Response.failDetail(ExceptionErrorCode.UNKNOWN_TABLE.getCode(), ExceptionErrorCode.UNKNOWN_TABLE.getMessage());
+            return Response.failDetail(
+                    ExceptionErrorCode.UNKNOWN_TABLE.getErrorCode(), ExceptionErrorCode.UNKNOWN_TABLE.getErrorMessage());
         }
         if (message.startsWith("Unknown column")) {
-            return Response.failDetail(ExceptionErrorCode.UNKNOWN_COLUMN.getCode(), ExceptionErrorCode.UNKNOWN_COLUMN.getMessage());
+            return Response.failDetail(
+                    ExceptionErrorCode.UNKNOWN_COLUMN.getErrorCode(), ExceptionErrorCode.UNKNOWN_COLUMN.getErrorMessage());
         }
-        return Response.failDetail(ExceptionErrorCode.FAILURE.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.FAILURE.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(PersistenceException.class)
@@ -65,27 +69,27 @@ public class DataBaseExceptionHandler implements Ordered {
         log.error("数据库异常：", e);
         if (e.getCause() instanceof BizException) {
             BizException cause = (BizException) e.getCause();
-            return Response.failDetail(cause.getCode(), cause.getMessage());
+            return Response.failDetail(cause.getErrorCode(), cause.getMessage());
         }
-        return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(SQLException.class)
     public Response<?> sqlException(SQLException e) {
         log.error("SQL异常：", e);
-        return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(TenantException.class)
     public Response<?> handleTenantException(TenantException e) {
         log.error("租户异常：", e);
-        return Response.failDetail(e.getCode(), e.getMessage());
+        return Response.failDetail(e.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public Response<?> handler(DuplicateKeyException e) {
         log.error("数据重复输入: ", e);
-        return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), "数据重复冲突异常");
+        return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), "数据重复冲突异常");
     }
 
 
@@ -95,17 +99,18 @@ public class DataBaseExceptionHandler implements Ordered {
         String message = e.getMessage();
         String prefix = "Data too long";
         if (message.contains(prefix)) {
-            return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), "输入数据字段过长");
+            return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), "输入数据字段过长");
         }
         Throwable cause = e.getCause();
         if (cause instanceof SQLException) {
             SQLException sqlException = (SQLException) cause;
             int errorCode = sqlException.getErrorCode();
             if (errorCode == 1364) {
-                return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), "数据操作异常,输入参数为空");
+                return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), "数据操作异常,输入参数为空");
             }
         }
-        return Response.failDetail(ExceptionErrorCode.SQL_EX.getCode(), ExceptionErrorCode.SQL_EX.getMessage());
+        return Response.failDetail(
+                ExceptionErrorCode.SQL_EX.getErrorCode(), ExceptionErrorCode.SQL_EX.getErrorMessage());
     }
 
     @Override

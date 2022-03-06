@@ -51,7 +51,8 @@ public class MongoDynamicAutoConfig {
     @Bean
     @ConditionalOnMissingBean
     public MongoTemplate mongoTemplate(MongoDatabaseFactoryContext mongoDatabaseFactoryContext) {
-        return new DynamicMongoTemplate(mongoDatabaseFactoryContext.determinePrimaryMongoDatabaseFactory(), mongoDatabaseFactoryContext, dynamicMongoProperties.isRemoveClass());
+        return new DynamicMongoTemplate(mongoDatabaseFactoryContext.determinePrimaryMongoDatabaseFactory(), mongoDatabaseFactoryContext,
+                dynamicMongoProperties.isRemoveClass());
     }
 
     @Bean

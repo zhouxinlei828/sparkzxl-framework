@@ -31,7 +31,7 @@ public class IdempotentInfoParser {
         //获取幂等注解
         ApiIdempotent apiIdempotent = method.getAnnotation(ApiIdempotent.class);
         if (StringUtils.isEmpty(apiIdempotent.keyPrefix())) {
-            ExceptionAssert.failure(ExceptionErrorCode.PARAM_VALID_ERROR.getCode(), "lock keyPrefix don't null...");
+            ExceptionAssert.failure(ExceptionErrorCode.PARAM_VALID_ERROR.getErrorCode(), "lock keyPrefix don't null...");
         }
         String message = apiIdempotent.message();
         CacheKeyGenerator cacheKeyGenerator = StringUtils.isNotBlank(apiIdempotent.generator()) ? keyGeneratorMap.get(apiIdempotent.generator())

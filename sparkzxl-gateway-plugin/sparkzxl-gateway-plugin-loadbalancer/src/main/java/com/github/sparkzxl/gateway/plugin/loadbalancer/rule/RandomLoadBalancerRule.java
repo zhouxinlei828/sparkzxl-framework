@@ -1,7 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.loadbalancer.rule;
 
 import com.github.sparkzxl.gateway.plugin.common.constant.enums.RuleEnum;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;

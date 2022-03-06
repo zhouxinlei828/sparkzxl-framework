@@ -2,7 +2,6 @@ package com.github.sparkzxl.alarm.service.mail;
 
 
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.alarm.constant.enums.MessageTye;
 import com.github.sparkzxl.alarm.service.BaseWarnService;
 import lombok.extern.slf4j.Slf4j;
 

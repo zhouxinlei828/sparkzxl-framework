@@ -10,6 +10,7 @@ import com.github.sparkzxl.alarm.entity.NotifyMessage;
 import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -21,6 +22,10 @@ import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * description: 接口幂等性校验切面
@@ -32,23 +37,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AlarmAspect {
 
-    private final AlarmTemplateProvider alarmTemplateProvider;
-
-    private final IAlarmAttributeGet alarmAttributeGet;
-
     private final static String ERROR_TEMPLATE = "\n\n<font color=\"#F37335\">异常信息:</font>\n" +
             "```java\n" +
             "#{[exception]}\n" +
             "```\n";
-
     private final static String TEXT_ERROR_TEMPLATE = "\n异常信息:\n" +
             "#{[exception]}";
-
     private final static String MARKDOWN_TITLE_TEMPLATE = "# 【#{[title]}】\n" +
             "\n请求状态：<font color=\"#{[stateColor]}\">#{[state]}</font>\n\n";
-
     private final static String TEXT_TITLE_TEMPLATE = "【#{[title]}】\n" +
             "请求状态：#{[state]}\n";
+    private final AlarmTemplateProvider alarmTemplateProvider;
+    private final IAlarmAttributeGet alarmAttributeGet;
+
+    private final ThreadPoolExecutor threadPoolExecutor =
+            new ThreadPoolExecutor(1, 2, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(10),
+                    new BasicThreadFactory.Builder().namingPattern("alarm").build());
 
     @Pointcut("@annotation(alarm)")
     public void alarmPointcut(Alarm alarm) {
@@ -92,7 +96,8 @@ public class AlarmAspect {
         alarmParamMap.put("stateColor", "#FF4B2B");
         alarmParamMap.put("state", "失败");
         alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(e));
-        sendAlarm(alarm, templateContent, alarmParamMap);
+        String finalTemplateContent = templateContent;
+        CompletableFuture.runAsync(() -> sendAlarm(alarm, finalTemplateContent, alarmParamMap), threadPoolExecutor);
     }
 
     private void sendAlarm(Alarm alarm, String templateContent, Map<String, Object> alarmParamMap) {

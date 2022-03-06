@@ -2,9 +2,9 @@ package com.github.sparkzxl.gateway.plugin.logging;
 
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.enums.FilterEnum;
-import com.github.sparkzxl.gateway.plugin.properties.LoggingProperties;
 import com.github.sparkzxl.gateway.plugin.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.plugin.properties.LoggingProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

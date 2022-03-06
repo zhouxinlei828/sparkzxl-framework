@@ -1,33 +1,39 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.entity.response.IErrorCode;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import lombok.Getter;
 
 /**
- * description: 业务异常类
+ * description: jwt过期异常类
  *
  * @author zhouxinlei
  */
 @Getter
-public class JwtExpireException extends BaseException {
+public class JwtExpireException extends BaseUncheckedException {
 
-    private static final long serialVersionUID = -2803534562798384761L;
+    private static final long serialVersionUID = -6710673514378835453L;
+
+    public JwtExpireException() {
+        super(ExceptionErrorCode.LOGIN_EXPIRE);
+    }
 
     public JwtExpireException(String message) {
-        super(ExceptionErrorCode.FAILURE.getCode(), message);
+        super(ExceptionErrorCode.LOGIN_EXPIRE.getErrorCode(), message);
     }
 
-    public JwtExpireException(IErrorCode ICode) {
-        super(ICode);
+    public JwtExpireException(IErrorCode errorCode) {
+        super(errorCode.getErrorCode(), errorCode.getErrorMessage());
     }
 
-    public JwtExpireException(IErrorCode ICode, Object[] args, String message) {
-        super(ICode, args, message);
+    public JwtExpireException(IErrorCode errorCode, String message) {
+        super(errorCode.getErrorCode(), message);
     }
 
-    public JwtExpireException(IErrorCode IErrorCode, Object[] args, String message, Throwable cause) {
-        super(IErrorCode, args, message, cause);
+    public JwtExpireException(IErrorCode errorCode,
+                              String message,
+                              Throwable cause) {
+        super(errorCode.getErrorCode(), message, cause);
     }
 
     @Override

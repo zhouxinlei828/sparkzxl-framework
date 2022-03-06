@@ -24,7 +24,7 @@ public class IdempotentExceptionHandler implements Ordered {
     @ExceptionHandler(IdempotentNoLockException.class)
     public Response<?> handleIdempotentNoLockException(IdempotentNoLockException e) {
         log.error("SQL异常：", e);
-        return Response.failDetail(ExceptionErrorCode.FAILURE.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.FAILURE.getErrorCode(), e.getMessage());
     }
 
     @Override

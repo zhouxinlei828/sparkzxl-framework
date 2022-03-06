@@ -180,9 +180,8 @@ public class RemoteData<K, D> implements Serializable, IValidatable {
 
 ```
 
-其中， key 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将@InjectionField
-注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， name> 即可。 若想要回显org的多个字段， org类型可以设置成RemoteData<Long, Org>，, 并将@InjectionField
-注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
+其中， key 用于存储 org_id的具体值， data用于注入需要回显的数据。 比如：本例需要回显org的name 字段， org类型就设置成RemoteData<Long, String>, 并将@InjectionField 注解上标注的 orgApi.findOrgByIds 方法返回 Map<id，
+name> 即可。 若想要回显org的多个字段， org类型可以设置成RemoteData<Long, Org>，, 并将@InjectionField 注解上标注的 orgApi.findOrgByIds 方法返回 Map<id， Org> 即可。
 
 1. 引入依赖
 
@@ -213,8 +212,7 @@ sparkzxl:
 private RemoteData<Long, CoreOrg> org;
 ```
 
-4.实现具体的查询方法 // 标记了该注解的字段 @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType =
-DictionaryType.AREA_LEVEL) 需要实现的 示例
+4.实现具体的查询方法 // 标记了该注解的字段 @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = DictionaryType.AREA_LEVEL) 需要实现的 示例
 
  ```java
 

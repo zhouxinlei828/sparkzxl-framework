@@ -3,10 +3,9 @@ package com.github.sparkzxl.datasource.provider;
 import cn.hutool.core.text.StrFormatter;
 import com.baomidou.dynamic.datasource.creator.DataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.TenantException;
+import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.datasource.loadbalancer.DataSourceLoadBalancer;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
@@ -33,9 +32,7 @@ public abstract class BaseDataSourceProvider implements DataSourceProvider {
     }
 
     public DataSource createDataSource(String tenantId, DataSourceProperty dataSourceProperty) {
-        if (ObjectUtils.isEmpty(dataSourceProperty)) {
-            ExceptionAssert.isEmpty(dataSourceProperty).withRuntimeException(new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
-        }
+        ArgumentAssert.isNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
         String poolName = dataSourceProperty.getPoolName();
         if (poolName == null || "".equals(poolName)) {
             poolName = tenantId;

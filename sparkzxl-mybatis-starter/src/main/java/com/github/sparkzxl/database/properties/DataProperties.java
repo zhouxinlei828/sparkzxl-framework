@@ -80,6 +80,7 @@ public class DataProperties {
     private DefaultId defaultId = new DefaultId();
     private HutoolId hutoolId = new HutoolId();
 
+
     @Data
     public static class HutoolId {
         /**
@@ -91,6 +92,7 @@ public class DataProperties {
          */
         private Long dataCenterId = 0L;
     }
+
 
     /**
      * 参数说明参考：https://github.com/baidu/uid-generator
@@ -129,6 +131,7 @@ public class DataProperties {
          */
         private Class<? extends RejectedTakeBufferHandler> rejectedTakeBufferHandlerClass;
     }
+
 
     @Data
     public static class DefaultId {

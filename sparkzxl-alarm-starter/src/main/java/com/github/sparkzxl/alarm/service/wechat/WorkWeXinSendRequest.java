@@ -19,6 +19,7 @@ public class WorkWeXinSendRequest {
 
     private Markdown markdown;
 
+
     @Data
     @AllArgsConstructor
     public static class Text {
@@ -26,6 +27,7 @@ public class WorkWeXinSendRequest {
         private String content;
 
     }
+
 
     @Data
     @AllArgsConstructor

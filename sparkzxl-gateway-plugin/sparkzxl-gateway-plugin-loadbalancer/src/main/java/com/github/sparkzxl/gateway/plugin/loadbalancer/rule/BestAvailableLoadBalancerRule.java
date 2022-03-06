@@ -11,7 +11,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
  * @date 2022-01-11 14:45:09
  */
 @Slf4j
-public class BestAvailableLoadBalancerRule implements ILoadBalancerRule{
+public class BestAvailableLoadBalancerRule implements ILoadBalancerRule {
 
 
     @Override

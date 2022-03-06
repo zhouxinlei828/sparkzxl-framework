@@ -1,8 +1,8 @@
 package com.github.sparkzxl.idempotent.support;
 
-import com.github.sparkzxl.annotation.ApiIdempotent;
-import com.github.sparkzxl.annotation.ApiIdempotentParam;
 import com.github.sparkzxl.core.generator.CacheKeyGenerator;
+import com.github.sparkzxl.idempotent.annotation.ApiIdempotent;
+import com.github.sparkzxl.idempotent.annotation.ApiIdempotentParam;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -51,6 +51,6 @@ public class LockKeyGenerator implements CacheKeyGenerator {
                 }
             }
         }
-        return apiIdempotent.prefix() + builder;
+        return apiIdempotent.keyPrefix() + builder;
     }
 }

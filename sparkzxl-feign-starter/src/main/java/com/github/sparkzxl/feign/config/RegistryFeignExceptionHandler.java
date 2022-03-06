@@ -27,7 +27,8 @@ public class RegistryFeignExceptionHandler implements ImportBeanDefinitionRegist
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
-        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableFeignExceptionHandler.class.getName()));
+        AnnotationAttributes annotationAttributes =
+                AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableFeignExceptionHandler.class.getName()));
         Class<? extends ErrorDecoder> decoderClass = annotationAttributes.getClass("decoderClass");
         ErrorDecoder errorDecoder = BeanUtils.instantiateClass(decoderClass);
 

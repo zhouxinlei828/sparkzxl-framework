@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.loadbalancer.service;
 
-import com.github.sparkzxl.gateway.plugin.properties.ReactiveLoadBalancerProperties;
 import com.github.sparkzxl.gateway.plugin.loadbalancer.rule.ILoadBalancerRule;
+import com.github.sparkzxl.gateway.plugin.properties.ReactiveLoadBalancerProperties;
 import com.github.sparkzxl.gateway.plugin.support.GatewayException;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReactorServiceInstanceLoadBalancer implements IReactorServiceInstanceLoadBalancer {
 
-    private Map<String, ILoadBalancerRule> loadBalancerRuleMap;
     private final ReactiveLoadBalancerProperties reactiveLoadBalancerProperties;
+    private Map<String, ILoadBalancerRule> loadBalancerRuleMap;
 
     public ReactorServiceInstanceLoadBalancer(List<ILoadBalancerRule> loadBalancerRuleList, ReactiveLoadBalancerProperties reactiveLoadBalancerProperties) {
         this.reactiveLoadBalancerProperties = reactiveLoadBalancerProperties;

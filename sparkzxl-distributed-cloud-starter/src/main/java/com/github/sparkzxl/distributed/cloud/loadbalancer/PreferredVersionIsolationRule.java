@@ -58,7 +58,8 @@ public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
             } else {
                 List<Instance> instancesToChoose = instances;
                 if (StringUtils.isNotBlank(clusterName)) {
-                    List<Instance> sameClusterInstances = instances.stream().filter((instance) -> Objects.equals(clusterName, instance.getClusterName())).collect(Collectors.toList());
+                    List<Instance> sameClusterInstances =
+                            instances.stream().filter((instance) -> Objects.equals(clusterName, instance.getClusterName())).collect(Collectors.toList());
                     if (!CollectionUtils.isEmpty(sameClusterInstances)) {
                         instancesToChoose = sameClusterInstances;
                     } else {
@@ -71,13 +72,15 @@ public class PreferredVersionIsolationRule extends AbstractLoadBalancerRule {
                     // 判断版本号是否存在
                     if (StringUtils.isNotBlank(version)) {
                         //取指定版本号的实例
-                        targetInstanceList = instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.VERSION)))
-                                .collect(Collectors.toList());
+                        targetInstanceList =
+                                instancesToChoose.stream().filter(instance -> version.equals(instance.getMetadata().get(BaseContextConstants.VERSION)))
+                                        .collect(Collectors.toList());
                     }
                     if (CollectionUtils.isEmpty(targetInstanceList)) {
                         //只取无版本号的实例
-                        targetInstanceList = instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.VERSION)))
-                                .collect(Collectors.toList());
+                        targetInstanceList =
+                                instancesToChoose.stream().filter(instance -> StringUtils.isEmpty(instance.getMetadata().get(BaseContextConstants.VERSION)))
+                                        .collect(Collectors.toList());
                     }
                 }
                 if (CollectionUtils.isEmpty(targetInstanceList)) {

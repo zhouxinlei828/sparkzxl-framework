@@ -2,7 +2,8 @@ package com.github.sparkzxl.gateway.plugin.properties;
 
 import lombok.Data;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * description: Logging Properties

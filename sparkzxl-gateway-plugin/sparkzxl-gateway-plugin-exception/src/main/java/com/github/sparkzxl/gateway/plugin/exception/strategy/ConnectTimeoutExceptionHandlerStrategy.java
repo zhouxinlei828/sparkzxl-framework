@@ -23,7 +23,7 @@ public class ConnectTimeoutExceptionHandlerStrategy implements ExceptionHandlerS
 
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
-        Response responseResult = Response.failDetail(ExceptionErrorCode.FAILURE.getCode(), throwable.getMessage());
+        Response<?> responseResult = Response.failDetail(ExceptionErrorCode.FAILURE.getErrorCode(), throwable.getMessage());
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(HttpStatus.INTERNAL_SERVER_ERROR, response);
         log.debug("Handle ConnectTimeoutException:{},Result:{}", throwable.getMessage(), result);

@@ -125,7 +125,8 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
      * @return String
      */
     private String buildMessage(ServerHttpRequest request, Throwable ex) {
-        return StrFormatter.format("Failed to handle request [{}] {} :[{}]", Objects.requireNonNull(request.getMethod()).name(), request.getPath(), ex.getMessage());
+        return StrFormatter.format("Failed to handle request [{}] {} :[{}]", Objects.requireNonNull(request.getMethod()).name(), request.getPath(),
+                ex.getMessage());
     }
 
     private class ResponseContext implements ServerResponse.Context {

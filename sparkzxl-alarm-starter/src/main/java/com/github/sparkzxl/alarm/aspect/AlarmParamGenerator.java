@@ -3,7 +3,6 @@ package com.github.sparkzxl.alarm.aspect;
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.alarm.annotation.AlarmParam;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.util.ReflectionUtils;
 

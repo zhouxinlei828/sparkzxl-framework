@@ -7,7 +7,6 @@ import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.ParameterDataConstant;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 

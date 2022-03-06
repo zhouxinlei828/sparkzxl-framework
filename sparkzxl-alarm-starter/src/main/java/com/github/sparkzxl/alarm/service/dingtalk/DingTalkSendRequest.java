@@ -15,12 +15,14 @@ public class DingTalkSendRequest {
 
     private Markdown markdown;
 
+
     @Data
     @AllArgsConstructor
     public static class Text {
 
         private String content;
     }
+
 
     @Data
     @AllArgsConstructor

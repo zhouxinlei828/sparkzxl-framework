@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.support;
 
-import com.github.sparkzxl.core.support.BaseException;
+import com.github.sparkzxl.core.support.BaseUncheckedException;
 import com.github.sparkzxl.entity.response.IErrorCode;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import lombok.Getter;
  * @author zhouxinlei
  */
 @Getter
-public class GatewayException extends BaseException {
+public class GatewayException extends BaseUncheckedException {
 
     private static final long serialVersionUID = 8151170674849761369L;
 
@@ -18,16 +18,12 @@ public class GatewayException extends BaseException {
         super(errorCode);
     }
 
-    public GatewayException(IErrorCode errorCode, Object[] args, String message) {
-        super(errorCode, args, message);
+    public GatewayException(IErrorCode errorCode, String errorMessage) {
+        super(errorCode.getErrorCode(), errorMessage);
     }
 
-    public GatewayException(String code, String message) {
-        super(code, message);
-    }
-
-    public GatewayException(IErrorCode errorCode, Object[] args, String message, Throwable cause) {
-        super(errorCode, args, message, cause);
+    public GatewayException(String errorCode, String errorMessage) {
+        super(errorCode, errorMessage);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.logging.service;
 
-import com.github.sparkzxl.gateway.plugin.properties.LoggingProperties;
 import org.springframework.web.server.ServerWebExchange;
 
 /**

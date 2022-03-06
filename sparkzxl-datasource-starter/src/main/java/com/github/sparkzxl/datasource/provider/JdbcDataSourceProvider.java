@@ -2,8 +2,8 @@ package com.github.sparkzxl.datasource.provider;
 
 import cn.hutool.core.text.StrFormatter;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.TenantException;
+import com.github.sparkzxl.core.util.ArgumentAssert;
 import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
@@ -24,7 +24,7 @@ public class JdbcDataSourceProvider extends BaseDataSourceProvider {
     public DataSource loadSelectedDataSource(String tenantId) {
         List<DataSourceProperty> dataSourceProperties = function.apply(tenantId);
         DataSourceProperty dataSourceProperty = loadBalancerDataSource(dataSourceProperties);
-        ExceptionAssert.isEmpty(dataSourceProperty).withRuntimeException(new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
+        ArgumentAssert.isNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
         return createDataSource(tenantId, dataSourceProperty);
     }
 }

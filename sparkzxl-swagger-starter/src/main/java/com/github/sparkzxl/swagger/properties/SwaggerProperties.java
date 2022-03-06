@@ -146,6 +146,7 @@ public class SwaggerProperties {
         private int order = 1;
     }
 
+
     @Data
     public static class DocketInfo {
         /**
@@ -217,6 +218,7 @@ public class SwaggerProperties {
         }
     }
 
+
     @Data
     @NoArgsConstructor
     public static class Authorization {
@@ -239,6 +241,7 @@ public class SwaggerProperties {
         private List<String> tokenUrlList = new ArrayList<>();
     }
 
+
     @Data
     @NoArgsConstructor
     public static class AuthorizationScope {
@@ -254,6 +257,7 @@ public class SwaggerProperties {
         private String description = "";
 
     }
+
 
     @Data
     @AllArgsConstructor
@@ -273,6 +277,7 @@ public class SwaggerProperties {
         private String email = "";
     }
 
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -281,6 +286,7 @@ public class SwaggerProperties {
         private String keyName;
         private String passAs = "header";
     }
+
 
     @Data
     @AllArgsConstructor

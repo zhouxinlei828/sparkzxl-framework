@@ -30,31 +30,35 @@ public class SentinelExceptionHandler implements Ordered {
     @ExceptionHandler(value = FlowException.class)
     public Response<?> handleFlowException(FlowException e) {
         log.error("FlowException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.REQ_LIMIT.getCode(), ExceptionErrorCode.REQ_LIMIT.getMessage());
+        return Response.failDetail(ExceptionErrorCode.REQ_LIMIT.getErrorCode(), ExceptionErrorCode.REQ_LIMIT.getErrorMessage());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
     public Response<?> handleAuthorityException(AuthorityException e) {
         log.error("AuthorityException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.REQ_BLACKLIST.getCode(), ExceptionErrorCode.REQ_BLACKLIST.getMessage());
+        return Response.failDetail(
+                ExceptionErrorCode.REQ_BLACKLIST.getErrorCode(), ExceptionErrorCode.REQ_BLACKLIST.getErrorMessage());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
     public Response<?> handleSystemBlockException(SystemBlockException e) {
         log.error("SystemBlockException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.SYSTEM_BLOCK.getCode(), ExceptionErrorCode.SYSTEM_BLOCK.getMessage());
+        return Response.failDetail(
+                ExceptionErrorCode.SYSTEM_BLOCK.getErrorCode(), ExceptionErrorCode.SYSTEM_BLOCK.getErrorMessage());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
     public Response<?> handleParamFlowException(ParamFlowException e) {
         log.error("ParamFlowException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.PARAM_FLOW.getCode(), ExceptionErrorCode.PARAM_FLOW.getMessage());
+        return Response.failDetail(
+                ExceptionErrorCode.PARAM_FLOW.getErrorCode(), ExceptionErrorCode.PARAM_FLOW.getErrorMessage());
     }
 
     @ExceptionHandler(value = DegradeException.class)
     public Response<?> handleDegradeException(DegradeException e) {
         log.error("DegradeException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.SERVICE_DEGRADATION.getCode(), ExceptionErrorCode.SERVICE_DEGRADATION.getMessage());
+        return Response.failDetail(
+                ExceptionErrorCode.SERVICE_DEGRADATION.getErrorCode(), ExceptionErrorCode.SERVICE_DEGRADATION.getErrorMessage());
     }
 
     @Override

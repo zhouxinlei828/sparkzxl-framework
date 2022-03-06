@@ -12,10 +12,10 @@ import com.github.sparkzxl.sms.constant.enums.SmsChannel;
 import com.github.sparkzxl.sms.request.QuerySendDetailsReq;
 import com.github.sparkzxl.sms.request.SendSmsReq;
 import com.github.sparkzxl.sms.response.SendSmsResult;
+import com.github.sparkzxl.sms.response.SmsSendDetail;
 import com.github.sparkzxl.sms.response.SmsSignDetail;
 import com.github.sparkzxl.sms.response.common.SmsListResp;
 import com.github.sparkzxl.sms.response.common.SmsResp;
-import com.github.sparkzxl.sms.response.SmsSendDetail;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.google.common.collect.Lists;
 import com.tencentcloudapi.common.Credential;
@@ -45,10 +45,9 @@ import java.util.Map;
 @Slf4j
 public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, InitializingBean {
 
+    private final static String CN_PREFIX = "+86";
     private final SmsProperties smsProperties;
     private SmsClient client;
-
-    private final static String CN_PREFIX = "+86";
 
     public TencentSmsHandlerStrategy(SmsProperties smsProperties) {
         this.smsProperties = smsProperties;
@@ -228,7 +227,8 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
         }
         SmsListResp<SmsSendDetail> smsSendDetailSmsListResp = new SmsListResp<>();
         try {
-            PullSmsSendStatusByPhoneNumberResponse pullSmsSendStatusByPhoneNumberResponse = client.PullSmsSendStatusByPhoneNumber(pullSmsSendStatusByPhoneNumber);
+            PullSmsSendStatusByPhoneNumberResponse pullSmsSendStatusByPhoneNumberResponse =
+                    client.PullSmsSendStatusByPhoneNumber(pullSmsSendStatusByPhoneNumber);
             PullSmsSendStatus[] pullSmsSendStatusSet = pullSmsSendStatusByPhoneNumberResponse.getPullSmsSendStatusSet();
             List<PullSmsSendStatus> smsSendStatusList = Lists.newArrayList(pullSmsSendStatusSet);
             List<SmsSendDetail> smsSendDetailList = Lists.newArrayList();

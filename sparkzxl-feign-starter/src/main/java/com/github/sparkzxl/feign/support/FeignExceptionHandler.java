@@ -28,13 +28,13 @@ public class FeignExceptionHandler implements Ordered {
     @ExceptionHandler(SocketTimeoutException.class)
     public Response<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error("SocketTimeoutException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.TIME_OUT_ERROR.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
     public Response<?> handleRetryableException(FeignException e) {
         log.error("FeignException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(RemoteCallException.class)

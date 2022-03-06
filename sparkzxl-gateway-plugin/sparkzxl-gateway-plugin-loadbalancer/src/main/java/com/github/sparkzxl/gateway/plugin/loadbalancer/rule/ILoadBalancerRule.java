@@ -22,6 +22,7 @@ public interface ILoadBalancerRule {
 
     /**
      * 规则名称
+     *
      * @return String
      */
     String name();

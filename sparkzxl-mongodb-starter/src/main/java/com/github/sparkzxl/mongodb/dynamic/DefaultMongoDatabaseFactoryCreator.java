@@ -24,7 +24,8 @@ public class DefaultMongoDatabaseFactoryCreator implements MongoDatabaseFactoryC
             String uriTemplate = "mongodb://{}:{}@{}:{}/{}";
             String uri = StrFormatter.format(uriTemplate, mongoDatabaseProperty.getUsername(),
                     mongoDatabaseProperty.getPassword(), mongoDatabaseProperty.getHost(),
-                    mongoDatabaseProperty.getPort(), StringUtils.isBlank(mongoDatabaseProperty.getDatabase()) ? mongoDatabaseProperty.getGridFsDatabase() : mongoDatabaseProperty.getDatabase());
+                    mongoDatabaseProperty.getPort(),
+                    StringUtils.isBlank(mongoDatabaseProperty.getDatabase()) ? mongoDatabaseProperty.getGridFsDatabase() : mongoDatabaseProperty.getDatabase());
             connectionString = new ConnectionString(uri);
         }
         return new SimpleMongoClientDatabaseFactory(connectionString);

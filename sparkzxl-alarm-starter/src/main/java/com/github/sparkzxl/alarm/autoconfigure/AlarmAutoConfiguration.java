@@ -34,7 +34,9 @@ public class AlarmAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean(MailWarnService.class)
         public MailWarnService mailWarnService(final MailConfig mailConfig) {
-            MailWarnService mailWarnService = new MailWarnService(mailConfig.getSmtpHost(), mailConfig.getSmtpPort(), mailConfig.getTo(), mailConfig.getFrom(), mailConfig.getUsername(), mailConfig.getPassword());
+            MailWarnService mailWarnService =
+                    new MailWarnService(mailConfig.getSmtpHost(), mailConfig.getSmtpPort(), mailConfig.getTo(), mailConfig.getFrom(), mailConfig.getUsername(),
+                            mailConfig.getPassword());
             mailWarnService.setSsl(mailConfig.getSsl());
             mailWarnService.setDebug(mailConfig.getDebug());
             return mailWarnService;
@@ -46,6 +48,7 @@ public class AlarmAutoConfiguration {
         }
     }
 
+
     @Configuration
     @ConditionalOnProperty(prefix = WorkWeXinConfig.PREFIX, name = "enabled", havingValue = "true")
     @EnableConfigurationProperties(WorkWeXinConfig.class)
@@ -54,7 +57,8 @@ public class AlarmAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean(MailWarnService.class)
         public WorkWeXinWarnService workWechatWarnService(final WorkWeXinConfig workWeXinConfig) {
-            return new WorkWeXinWarnService(workWeXinConfig.getTo(), workWeXinConfig.getApplicationId(), workWeXinConfig.getCorpId(), workWeXinConfig.getCorpSecret());
+            return new WorkWeXinWarnService(workWeXinConfig.getTo(), workWeXinConfig.getApplicationId(), workWeXinConfig.getCorpId(),
+                    workWeXinConfig.getCorpSecret());
         }
 
         @Autowired
@@ -62,6 +66,7 @@ public class AlarmAutoConfiguration {
             AlarmFactoryExecute.addAlarmLogWarnService(workWeXinWarnService);
         }
     }
+
 
     @Configuration
     @ConditionalOnProperty(prefix = DingTalkConfig.PREFIX, name = "enabled", havingValue = "true")
@@ -79,6 +84,7 @@ public class AlarmAutoConfiguration {
             AlarmFactoryExecute.addAlarmLogWarnService(dingTalkWarnService);
         }
     }
+
 
     @Configuration
     @ConditionalOnProperty(prefix = TemplateConfig.PREFIX, name = "enabled", havingValue = "true")

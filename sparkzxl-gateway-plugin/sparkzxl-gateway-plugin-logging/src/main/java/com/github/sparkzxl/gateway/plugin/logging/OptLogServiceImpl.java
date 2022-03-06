@@ -41,38 +41,12 @@ public class OptLogServiceImpl implements IOptLogService {
         this.logging = logging;
     }
 
-    @Override
-    public void recordLog(ServerWebExchange exchange) {
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
-        LogParam logParam = buildLogParam(exchange, gatewayContext);
-        log.info("请求日志：IP:{},host:{},httpMethod:{},path:{},timeCost:{}",
-                logParam.getIp(),
-                logParam.getHost(),
-                logParam.getHttpMethod(),
-                logParam.getPath(),
-                logParam.getTimeCost()
-        );
-        if (logging.isReadRequestData()) {
-            if (StringUtils.isNotBlank(logParam.getQueryParams())) {
-                log.info("请求参数：queryParams:{}", logParam.getQueryParams());
-            }
-            if (StringUtils.isNotBlank(logParam.getReqFormData())) {
-                log.info("请求参数：requestFormData:{}", logParam.getReqFormData());
-            }
-            if (StringUtils.isNotBlank(logParam.getReqBody())) {
-                log.info("请求参数：requestBody:{}", logParam.getReqBody());
-            }
-        }
-        if (logging.isReadResponseData()) {
-            log.info("请求结果：responseBody:{}", logParam.getRespBody());
-        }
-    }
-
     static LogParam buildLogParam(ServerWebExchange exchange, GatewayContext gatewayContext) {
         LogParam logParam = new LogParam();
         LocalDateTime startTime = gatewayContext.getStartTime();
         ServerHttpRequest request = exchange.getRequest();
-        String username = HttpRequestUtils.urlDecode(ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.JWT_KEY_NAME, exchange));
+        String username =
+                HttpRequestUtils.urlDecode(ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.JWT_KEY_NAME, exchange));
         String tenantId = HttpRequestUtils.urlDecode(ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.TENANT_ID, exchange));
         logParam.setIp(gatewayContext.getIp())
                 .setHost(gatewayContext.getHost())
@@ -107,14 +81,41 @@ public class OptLogServiceImpl implements IOptLogService {
     }
 
     private static String getHeaders(final HttpHeaders headers) {
-        Map<String,String> headerMap = Maps.newHashMap();
+        Map<String, String> headerMap = Maps.newHashMap();
         Set<Map.Entry<String, List<String>>> entrySet = headers.entrySet();
         entrySet.forEach(entry -> {
             String key = entry.getKey();
             List<String> value = entry.getValue();
-            headerMap.put(key,StringUtils.join(value, ","));
+            headerMap.put(key, StringUtils.join(value, ","));
         });
         return JsonUtil.toJson(headerMap);
+    }
+
+    @Override
+    public void recordLog(ServerWebExchange exchange) {
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
+        LogParam logParam = buildLogParam(exchange, gatewayContext);
+        log.info("请求日志：IP:{},host:{},httpMethod:{},path:{},timeCost:{}",
+                logParam.getIp(),
+                logParam.getHost(),
+                logParam.getHttpMethod(),
+                logParam.getPath(),
+                logParam.getTimeCost()
+        );
+        if (logging.isReadRequestData()) {
+            if (StringUtils.isNotBlank(logParam.getQueryParams())) {
+                log.info("请求参数：queryParams:{}", logParam.getQueryParams());
+            }
+            if (StringUtils.isNotBlank(logParam.getReqFormData())) {
+                log.info("请求参数：requestFormData:{}", logParam.getReqFormData());
+            }
+            if (StringUtils.isNotBlank(logParam.getReqBody())) {
+                log.info("请求参数：requestBody:{}", logParam.getReqBody());
+            }
+        }
+        if (logging.isReadResponseData()) {
+            log.info("请求结果：responseBody:{}", logParam.getRespBody());
+        }
     }
 
 }

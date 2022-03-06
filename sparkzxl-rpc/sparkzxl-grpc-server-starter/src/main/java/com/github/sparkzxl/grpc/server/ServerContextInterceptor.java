@@ -19,7 +19,9 @@ import java.util.Map;
 public class ServerContextInterceptor implements ServerInterceptor {
 
     @Override
-    public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall, Metadata metadata, ServerCallHandler<ReqT, RespT> serverCallHandler) {
+    public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall,
+                                                                 Metadata metadata,
+                                                                 ServerCallHandler<ReqT, RespT> serverCallHandler) {
         return new ServerListenerProxy<>(getThreadLocalMap(metadata), serverCallHandler.startCall(serverCall, metadata));
     }
 

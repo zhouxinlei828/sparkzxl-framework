@@ -1,9 +1,7 @@
 package com.github.sparkzxl.database.echo.manager;
 
-import ch.qos.logback.core.util.ContextUtil;
 import com.github.sparkzxl.annotation.echo.EchoField;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.database.echo.core.LoadService;
 import com.google.common.base.Objects;
 import lombok.Data;

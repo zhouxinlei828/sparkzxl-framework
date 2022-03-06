@@ -23,7 +23,7 @@ public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerS
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
         ResponseStatusException responseStatusException = (ResponseStatusException) throwable;
-        Response responseResult = Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getCode(), throwable.getMessage());
+        Response<?> responseResult = Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), throwable.getMessage());
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(responseStatusException.getStatus(), response);
         log.debug("[ResponseStatusExceptionHandlerStrategy]Handle Exception:{},Result:{}", throwable.getMessage(), result);

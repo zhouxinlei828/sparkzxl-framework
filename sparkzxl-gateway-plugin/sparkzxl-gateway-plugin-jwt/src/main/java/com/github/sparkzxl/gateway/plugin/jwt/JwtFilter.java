@@ -32,7 +32,6 @@ import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * description: jwt filter
@@ -52,9 +51,11 @@ public class JwtFilter extends AbstractGlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         FilterData filterData = loadFilterData();
         boolean needSkip = (boolean) exchange.getAttributes().get(GatewayConstant.NEED_SKIP);
-        String jsonConfig = OptionalBean.ofNullable(filterData).getBean(FilterData::getConfig).orElseGet(() -> "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}");
+        String jsonConfig =
+                OptionalBean.ofNullable(filterData).getBean(FilterData::getConfig).orElseGet(() -> "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}");
         JwtConfig jwtConfig = JsonUtil.toPojo(jsonConfig, JwtConfig.class);
-        String dataHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(() -> "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}");
+        String dataHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
+                () -> "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}");
         JwtRuleHandle ruleHandle = JsonUtil.toPojo(dataHandle, JwtRuleHandle.class);
         if (needSkip) {
             return removeAuthorization(exchange, chain, jwtConfig.getTokenKey());
@@ -67,7 +68,7 @@ public class JwtFilter extends AbstractGlobalFilter {
                 return chain.filter(converter(exchange, jwtBody, ruleHandle.getConverter()));
             }
         }
-        return ReactorHttpHelper.error(exchange.getResponse(), ExceptionErrorCode.JWT_EMPTY_ERROR);
+        return ReactorHttpHelper.error(exchange.getResponse(), ExceptionErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
     }
 
     @Override

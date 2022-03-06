@@ -1,11 +1,8 @@
 package com.github.sparkzxl.gateway.plugin.common.condition.data;
 
-import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.spi.Join;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.server.ServerWebExchange;
-
-import java.util.Objects;
 
 /**
  * description: 获取属性参数

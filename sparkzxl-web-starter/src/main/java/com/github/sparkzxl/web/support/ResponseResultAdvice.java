@@ -4,8 +4,8 @@ import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.response.IgnoreResponseWrap;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.entity.response.ResponseCode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,8 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable().getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
         HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        com.github.sparkzxl.annotation.response.Response response = (com.github.sparkzxl.annotation.response.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        com.github.sparkzxl.annotation.response.Response response =
+                (com.github.sparkzxl.annotation.response.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         Boolean supported = ObjectUtils.isNotEmpty(response) && declaredAnnotationsByType.length == 0;
         if (log.isDebugEnabled()) {
             log.debug("判断是否需要全局统一API响应：{}", supported ? "是" : "否");
@@ -57,11 +58,13 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         int status = servletResponse.getStatus();
         Response<?> result;
         if (fallback) {
-            result = Response.failDetail(ExceptionErrorCode.SERVICE_DEGRADATION.getCode(), ExceptionErrorCode.SERVICE_DEGRADATION.getMessage());
+            result = Response.failDetail(ExceptionErrorCode.SERVICE_DEGRADATION.getErrorCode(), ExceptionErrorCode.SERVICE_DEGRADATION.getErrorMessage());
         } else if (body instanceof Boolean && !(Boolean) body) {
-            result = Response.failDetail(ExceptionErrorCode.FAILURE.getCode(), ExceptionErrorCode.FAILURE.getMessage());
+            result = Response.failDetail(
+                    ExceptionErrorCode.FAILURE.getErrorCode(), ExceptionErrorCode.FAILURE.getErrorMessage());
         } else if (status == ResponseCode.FAILURE.getCode()) {
-            result = Response.failDetail(ExceptionErrorCode.INTERNAL_SERVER_ERROR.getCode(), ExceptionErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+            result = Response.failDetail(
+                    ExceptionErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ExceptionErrorCode.INTERNAL_SERVER_ERROR.getErrorMessage());
             servletResponse.setStatus(ResponseCode.SUCCESS.getCode());
         } else {
             result = Response.success(body);

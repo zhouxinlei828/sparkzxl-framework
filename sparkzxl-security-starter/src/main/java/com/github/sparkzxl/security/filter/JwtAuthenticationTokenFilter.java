@@ -52,7 +52,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
-                ExceptionAssert.failure(ExceptionErrorCode.TOKEN_EXPIRED_ERROR);
+                ExceptionAssert.failure(ExceptionErrorCode.LOGIN_EXPIRE);
             }
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);

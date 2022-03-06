@@ -16,7 +16,7 @@ public interface ParameterData {
      * Builder string.
      *
      * @param paramName the param name
-     * @param exchange the exchange
+     * @param exchange  the exchange
      * @return the string
      */
     default String builder(final String paramName, final ServerWebExchange exchange) {

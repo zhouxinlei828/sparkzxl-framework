@@ -299,7 +299,11 @@ public class EchoService {
      * @param typeMap     已查询后的集合
      * @return 已查询后的值
      */
-    private Object getEchoValue(EchoField echoField, Object actualValue, Object originalValue, LoadKey loadKey, Map<LoadKey, Map<Serializable, Object>> typeMap) {
+    private Object getEchoValue(EchoField echoField,
+                                Object actualValue,
+                                Object originalValue,
+                                LoadKey loadKey,
+                                Map<LoadKey, Map<Serializable, Object>> typeMap) {
         if (ObjectUtil.isEmpty(actualValue)) {
             return null;
         }

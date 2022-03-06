@@ -275,7 +275,9 @@ public final class ExtensionLoader<T> {
         if (Objects.isNull(oldClass)) {
             classes.put(name, subClass);
         } else if (!Objects.equals(oldClass, subClass)) {
-            throw new IllegalStateException("load extension resources error,Duplicate class " + clazz.getName() + " name " + name + " on " + oldClass.getName() + " or " + subClass.getName());
+            throw new IllegalStateException(
+                    "load extension resources error,Duplicate class " + clazz.getName() + " name " + name + " on " + oldClass.getName() + " or "
+                            + subClass.getName());
         }
     }
 

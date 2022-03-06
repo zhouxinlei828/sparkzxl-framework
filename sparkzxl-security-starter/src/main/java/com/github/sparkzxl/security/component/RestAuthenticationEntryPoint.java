@@ -23,11 +23,11 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException e) {
         log.error("AuthenticationException：[{}]", e.getMessage());
-        IErrorCode errorCode = ExceptionErrorCode.UN_AUTHORIZED;
+        IErrorCode errorCode = ExceptionErrorCode.LOGIN_EXPIRE;
         if (e instanceof AccountExpiredException) {
-            errorCode = ExceptionErrorCode.TOKEN_EXPIRED_ERROR;
+            errorCode = ExceptionErrorCode.LOGIN_EXPIRE;
         }
-        HttpRequestUtils.failResponse(response,errorCode);
+        HttpRequestUtils.failResponse(response, errorCode);
     }
 
 }

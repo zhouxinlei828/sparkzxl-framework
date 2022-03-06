@@ -105,10 +105,13 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                             new Contact(
                                     docketInfo.getContact().getName().isEmpty() ? swaggerProperties.getContact().getName() : docketInfo.getContact().getName(),
                                     docketInfo.getContact().getUrl().isEmpty() ? swaggerProperties.getContact().getUrl() : docketInfo.getContact().getUrl(),
-                                    docketInfo.getContact().getEmail().isEmpty() ? swaggerProperties.getContact().getEmail() : docketInfo.getContact().getEmail()
+                                    docketInfo.getContact().getEmail().isEmpty() ?
+                                            swaggerProperties.getContact().getEmail() :
+                                            docketInfo.getContact().getEmail()
                             )
                     )
-                    .termsOfServiceUrl(docketInfo.getTermsOfServiceUrl().isEmpty() ? swaggerProperties.getTermsOfServiceUrl() : docketInfo.getTermsOfServiceUrl())
+                    .termsOfServiceUrl(
+                            docketInfo.getTermsOfServiceUrl().isEmpty() ? swaggerProperties.getTermsOfServiceUrl() : docketInfo.getTermsOfServiceUrl())
                     .build();
 
             // base-path处理
@@ -138,7 +141,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .apis(basePackage(docketInfo.getBasePackage()))
                     .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(includePath)))
                     .build()
-                    .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(), swaggerProperties.getApiKeys(), docketInfo.getApiKeys()))
+                    .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(), swaggerProperties.getApiKeys(),
+                            docketInfo.getApiKeys()))
                     .securityContexts(securityContexts(swaggerProperties.getAuthorization(), docketInfo.getAuthorization()))
                     .globalResponseMessage(RequestMethod.GET, getResponseMessages())
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
@@ -231,7 +235,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
     private List<SecurityReference> defaultAuth(SwaggerProperties.Authorization authorization) {
         ArrayList<AuthorizationScope> authorizationScopeList = new ArrayList<>();
         authorization.getAuthorizationScopeList()
-                .forEach(authorizationScope -> authorizationScopeList.add(new AuthorizationScope(authorizationScope.getScope(), authorizationScope.getDescription())));
+                .forEach(authorizationScope -> authorizationScopeList.add(
+                        new AuthorizationScope(authorizationScope.getScope(), authorizationScope.getDescription())));
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[authorizationScopeList.size()];
         return Collections.singletonList(SecurityReference.builder()
                 .reference(authorization.getName())
@@ -291,7 +296,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     }
                 }
             }
-            List<ApiKey> apiKeyList = allApiKeys.stream().map(item -> new ApiKey(item.getName(), item.getKeyName(), item.getPassAs())).collect(Collectors.toList());
+            List<ApiKey> apiKeyList =
+                    allApiKeys.stream().map(item -> new ApiKey(item.getName(), item.getKeyName(), item.getPassAs())).collect(Collectors.toList());
             list.addAll(apiKeyList);
         }
         return list;

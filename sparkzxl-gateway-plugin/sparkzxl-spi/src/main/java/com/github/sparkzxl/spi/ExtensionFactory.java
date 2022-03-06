@@ -19,6 +19,7 @@ package com.github.sparkzxl.spi;
 
 /**
  * The interface Extension factory.
+ *
  * @author zhouxinlei
  */
 @SPI("spi")

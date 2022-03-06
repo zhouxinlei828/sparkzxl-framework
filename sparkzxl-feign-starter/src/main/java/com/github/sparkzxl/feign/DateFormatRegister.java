@@ -42,6 +42,7 @@ public class DateFormatRegister implements FeignFormatterRegistrar {
         }
     }
 
+
     private static class LocalDateTime2StringConverter implements Converter<LocalDateTime, String> {
         @Override
         public String convert(LocalDateTime source) {
@@ -52,6 +53,7 @@ public class DateFormatRegister implements FeignFormatterRegistrar {
         }
     }
 
+
     private static class LocalDate2StringConverter implements Converter<LocalDate, String> {
         @Override
         public String convert(LocalDate source) {
@@ -61,6 +63,7 @@ public class DateFormatRegister implements FeignFormatterRegistrar {
             return source.format(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN));
         }
     }
+
 
     private static class LocalTime2StringConverter implements Converter<LocalTime, String> {
         @Override

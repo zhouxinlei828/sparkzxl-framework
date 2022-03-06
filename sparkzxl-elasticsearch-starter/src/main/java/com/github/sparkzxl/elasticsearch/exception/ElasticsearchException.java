@@ -17,7 +17,7 @@ public class ElasticsearchException extends RuntimeException {
     private String message;
 
     public ElasticsearchException(ExceptionErrorCode exceptionCode) {
-        this(exceptionCode.getCode(), exceptionCode.getMessage());
+        this(exceptionCode.getErrorCode(), exceptionCode.getErrorMessage());
     }
 
     public ElasticsearchException(String message) {

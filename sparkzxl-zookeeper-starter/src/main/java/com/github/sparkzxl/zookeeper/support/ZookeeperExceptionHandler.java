@@ -25,7 +25,7 @@ public class ZookeeperExceptionHandler implements Ordered {
     @ExceptionHandler(KeeperException.class)
     public Response<?> handleKeeperException(KeeperException e) {
         log.error("KeeperException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.FAILURE.getCode(), e.getMessage());
+        return Response.failDetail(ExceptionErrorCode.FAILURE.getErrorCode(), e.getMessage());
     }
 
     @Override

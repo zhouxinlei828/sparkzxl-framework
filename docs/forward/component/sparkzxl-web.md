@@ -86,7 +86,7 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     /**
      * 请求未授权
      */
-    UN_AUTHORIZED(HttpStatus.HTTP_UNAUTHORIZED, "暂未登录或token已过期"),
+    LOGIN_EXPIRE(HttpStatus.HTTP_UNAUTHORIZED, "暂未登录或token已过期"),
 
     AUTHORIZED_FAIL(HttpStatus.HTTP_UNAUTHORIZED, "授权失败，请重新尝试"),
 
@@ -186,7 +186,7 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
     /**
      * token已过期
      */
-    TOKEN_EXPIRED_ERROR(HttpStatus.HTTP_BAD_REQUEST, "token已过期");
+    LOGIN_EXPIRE(HttpStatus.HTTP_BAD_REQUEST, "token已过期");
 
     final int code;
 

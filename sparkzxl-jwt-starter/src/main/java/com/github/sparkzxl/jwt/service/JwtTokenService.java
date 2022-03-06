@@ -3,8 +3,6 @@ package com.github.sparkzxl.jwt.service;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.nimbusds.jose.jwk.RSAKey;
 
-import java.io.Serializable;
-
 /**
  * description: jwtToken 服务类
  *

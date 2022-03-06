@@ -136,7 +136,8 @@ public class ExceptionHandlerStrategyMethodProcessor implements ApplicationConte
                         adaptClassSimpleName = adaptClass.getSimpleName();
                         beanFactory.registerBeanDefinition(adaptClassSimpleName + "HandlerStrategy", beanDefinitionBuilder.getBeanDefinition());
                         if (log.isDebugEnabled()) {
-                            log.debug("Register ExceptionHandlerStrategy Bean :{} For Class :{} ", adaptClassSimpleName + "HandlerStrategy", adaptClassSimpleName);
+                            log.debug("Register ExceptionHandlerStrategy Bean :{} For Class :{} ", adaptClassSimpleName + "HandlerStrategy",
+                                    adaptClassSimpleName);
                         }
                     }
                 }

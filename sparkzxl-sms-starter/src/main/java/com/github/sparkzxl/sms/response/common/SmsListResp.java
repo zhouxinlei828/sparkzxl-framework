@@ -1,6 +1,5 @@
 package com.github.sparkzxl.sms.response.common;
 
-import com.github.sparkzxl.sms.response.SendSmsResult;
 import lombok.Data;
 
 import java.io.Serializable;

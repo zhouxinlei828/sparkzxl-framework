@@ -85,6 +85,7 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
 
     @Override
     public String toString() {
-        return "TreeEntity(super=" + super.toString() + ", label=" + this.getLabel() + ", parentId=" + this.getParentId() + ", sortNumber=" + this.getSortNumber() + ", children=" + this.getChildren() + ")";
+        return "TreeEntity(super=" + super.toString() + ", label=" + this.getLabel() + ", parentId=" + this.getParentId() + ", sortNumber="
+                + this.getSortNumber() + ", children=" + this.getChildren() + ")";
     }
 }

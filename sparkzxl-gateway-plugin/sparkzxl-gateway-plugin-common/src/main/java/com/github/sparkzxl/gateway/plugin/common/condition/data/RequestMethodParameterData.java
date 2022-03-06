@@ -1,4 +1,3 @@
-
 package com.github.sparkzxl.gateway.plugin.common.condition.data;
 
 import com.github.sparkzxl.spi.Join;
@@ -12,7 +11,7 @@ import org.springframework.web.server.ServerWebExchange;
  */
 @Join
 public class RequestMethodParameterData implements ParameterData {
-    
+
     @Override
     public String builder(final String paramName, final ServerWebExchange exchange) {
         return exchange.getRequest().getMethodValue();

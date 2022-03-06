@@ -1,9 +1,9 @@
 package com.github.sparkzxl.core.util;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.entity.response.IErrorCode;
 import com.github.sparkzxl.entity.response.Response;
-import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.entity.response.ResponseCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -184,8 +184,8 @@ public class HttpRequestUtils {
                 ResponseCode.FAILURE.getCode(),
                 ResponseCode.FAILURE.getMessage(),
                 null,
-                errorCode.getCode(),
-                errorCode.getMessage());
+                errorCode.getErrorCode(),
+                errorCode.getErrorMessage());
     }
 
     public static void failResponse(HttpServletResponse response, String errorCode, String errorMsg) {

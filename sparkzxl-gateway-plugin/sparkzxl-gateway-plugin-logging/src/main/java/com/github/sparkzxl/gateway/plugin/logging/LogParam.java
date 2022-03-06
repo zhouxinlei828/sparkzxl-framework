@@ -3,7 +3,6 @@ package com.github.sparkzxl.gateway.plugin.logging;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.http.HttpMethod;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

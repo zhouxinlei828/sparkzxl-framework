@@ -1,10 +1,7 @@
 package com.github.sparkzxl.entity.response;
 
 import cn.hutool.http.HttpStatus;
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -62,7 +59,7 @@ public class Response<T> implements Serializable {
      * @return Response
      */
     public static Response<?> failDetail(IErrorCode errorCode) {
-        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode.getCode(), errorCode.getMessage());
+        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode.getErrorCode(), errorCode.getErrorMessage());
     }
 
     /**

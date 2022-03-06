@@ -42,7 +42,12 @@ public class ThrowableUtils {
             stringBuilder.append("错误信息:").append(context.getMessage()).append(separator);
             stringBuilder.append("线程信息:").append(context.getThreadName()).append(separator);
             stringBuilder.append("链路id:").append(context.getTraceId()).append(separator);
-            stringBuilder.append("位置信息:").append(context.getClassName()).append(".").append(context.getMethodName()).append(isNativeMethod(context.getLineNumber()) ? "(Native Method)" : context.getFileName() != null && context.getLineNumber() >= 0 ? "(" + context.getFileName() + ":" + context.getLineNumber() + ")" : context.getFileName() != null ? "(" + context.getFileName() + ")" : "(Unknown Source)");
+            stringBuilder.append("位置信息:").append(context.getClassName()).append(".").append(context.getMethodName())
+                    .append(isNativeMethod(context.getLineNumber()) ?
+                            "(Native Method)" :
+                            context.getFileName() != null && context.getLineNumber() >= 0 ?
+                                    "(" + context.getFileName() + ":" + context.getLineNumber() + ")" :
+                                    context.getFileName() != null ? "(" + context.getFileName() + ")" : "(Unknown Source)");
             stringBuilder.append(separator);
         } else {
             stringBuilder.append(context.getMessage()).append(separator);

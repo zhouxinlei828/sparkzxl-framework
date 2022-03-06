@@ -9,29 +9,25 @@ import lombok.Getter;
  * @author zhouxinlei
  */
 @Getter
-public class BizException extends BaseException {
+public class BizException extends BaseUncheckedException {
 
-    private static final long serialVersionUID = -2803534562798384761L;
+    private static final long serialVersionUID = -3238517855583910821L;
 
-    public BizException(IErrorCode ICode) {
-        super(ICode);
+
+    public BizException(IErrorCode errorCode) {
+        super(errorCode.getErrorCode(), errorCode.getErrorMessage());
     }
 
-    public BizException(IErrorCode ICode, Object[] args, String message) {
-        super(ICode, args, message);
+    public BizException(IErrorCode errorCode, String errorMessage) {
+        super(errorCode.getErrorCode(), errorMessage);
     }
 
     public BizException(String code, String message) {
         super(code, message);
     }
 
-    public BizException(IErrorCode ICode, Object[] args, String message, Throwable cause) {
-        super(ICode, args, message, cause);
-    }
-
     @Override
     public Throwable fillInStackTrace() {
         return this;
     }
-
 }

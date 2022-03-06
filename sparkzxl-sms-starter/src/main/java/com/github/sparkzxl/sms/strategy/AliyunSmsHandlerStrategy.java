@@ -12,10 +12,10 @@ import com.github.sparkzxl.sms.constant.enums.SmsChannel;
 import com.github.sparkzxl.sms.request.QuerySendDetailsReq;
 import com.github.sparkzxl.sms.request.SendSmsReq;
 import com.github.sparkzxl.sms.response.SendSmsResult;
+import com.github.sparkzxl.sms.response.SmsSendDetail;
 import com.github.sparkzxl.sms.response.SmsSignDetail;
 import com.github.sparkzxl.sms.response.common.SmsListResp;
 import com.github.sparkzxl.sms.response.common.SmsResp;
-import com.github.sparkzxl.sms.response.SmsSendDetail;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -131,7 +131,8 @@ public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, Initializin
         try {
             QuerySendDetailsResponse querySendDetailsResponse = client.querySendDetails(querySendDetailsRequest);
             QuerySendDetailsResponseBody querySendDetailsResponseBody = querySendDetailsResponse.getBody();
-            List<QuerySendDetailsResponseBody.QuerySendDetailsResponseBodySmsSendDetailDTOsSmsSendDetailDTO> smsSendDetailDTOS = querySendDetailsResponseBody.getSmsSendDetailDTOs().getSmsSendDetailDTO();
+            List<QuerySendDetailsResponseBody.QuerySendDetailsResponseBodySmsSendDetailDTOsSmsSendDetailDTO> smsSendDetailDTOS =
+                    querySendDetailsResponseBody.getSmsSendDetailDTOs().getSmsSendDetailDTO();
             List<SmsSendDetail> smsSendDetailList = Lists.newArrayList();
             for (QuerySendDetailsResponseBody.QuerySendDetailsResponseBodySmsSendDetailDTOsSmsSendDetailDTO smsSendDetailDTO : smsSendDetailDTOS) {
                 SmsSendDetail smsSendDetail = new SmsSendDetail()

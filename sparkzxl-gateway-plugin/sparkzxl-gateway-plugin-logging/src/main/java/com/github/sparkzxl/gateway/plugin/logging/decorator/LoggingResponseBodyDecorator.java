@@ -2,9 +2,7 @@ package com.github.sparkzxl.gateway.plugin.logging.decorator;
 
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.context.GatewayContext;
-import com.github.sparkzxl.gateway.plugin.logging.OptLogServiceImpl;
 import com.github.sparkzxl.gateway.plugin.logging.service.IOptLogService;
-import com.github.sparkzxl.gateway.plugin.properties.LoggingProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -36,7 +34,7 @@ public class LoggingResponseBodyDecorator extends ServerHttpResponseDecorator {
 
     private final IOptLogService optLogService;
 
-    public LoggingResponseBodyDecorator(ServerHttpResponse delegate, ServerWebExchange exchange,IOptLogService optLogService) {
+    public LoggingResponseBodyDecorator(ServerHttpResponse delegate, ServerWebExchange exchange, IOptLogService optLogService) {
         super(delegate);
         this.exchange = exchange;
         this.optLogService = optLogService;

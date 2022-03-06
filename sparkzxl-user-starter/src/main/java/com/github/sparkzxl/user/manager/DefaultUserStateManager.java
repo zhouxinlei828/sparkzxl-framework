@@ -51,7 +51,7 @@ public class DefaultUserStateManager implements UserStateManager {
             authUserInfo = generalCacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
-            ExceptionAssert.failure(ExceptionErrorCode.NO_FOUND_USER);
+            ExceptionAssert.failure(ExceptionErrorCode.USER_NOT_FOUND);
         }
         return authUserInfo;
     }

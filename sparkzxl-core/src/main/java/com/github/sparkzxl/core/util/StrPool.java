@@ -28,6 +28,7 @@ public interface StrPool {
     String HASH = "#";
     String HAT = "^";
     String LEFT_BRACE = "{";
+    String BRACE = "{}";
     String LEFT_BRACKET = "(";
     String LEFT_CHEV = "<";
     String NEWLINE = "\n";

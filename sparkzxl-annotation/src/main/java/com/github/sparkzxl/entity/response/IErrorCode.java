@@ -11,12 +11,12 @@ public interface IErrorCode {
      *
      * @return String
      */
-    String getCode();
+    String getErrorCode();
 
     /**
      * getMessage
      *
      * @return String
      */
-    String getMessage();
+    String getErrorMessage();
 }
