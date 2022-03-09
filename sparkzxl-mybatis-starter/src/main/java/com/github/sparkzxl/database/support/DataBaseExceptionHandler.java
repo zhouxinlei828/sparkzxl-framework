@@ -32,6 +32,11 @@ import java.sql.SQLSyntaxErrorException;
 @ResponseResultStatus
 public class DataBaseExceptionHandler implements Ordered {
 
+    private final static String DATABASE_PREFIX = "Unknown database";
+    private final static String TABLE_PREFIX = "^Table.*doesn't exist$";
+    private final static String COLUMN_PREFIX = "Unknown column";
+    private final static int DATABASE_ERROR_CODE = 1364;
+
     @ExceptionHandler(SQLSyntaxErrorException.class)
     public Response<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
         log.error("SQL异常：", e);
@@ -49,15 +54,15 @@ public class DataBaseExceptionHandler implements Ordered {
     public Response<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
         log.error("SQL异常：", e);
         String message = e.getSQLException().getMessage();
-        if (message.startsWith("Unknown database")) {
+        if (message.startsWith(DATABASE_PREFIX)) {
             return Response.failDetail(
                     ExceptionErrorCode.UNKNOWN_DATABASE.getErrorCode(), ExceptionErrorCode.UNKNOWN_DATABASE.getErrorMessage());
         }
-        if (ReUtil.isMatch("^Table.*doesn't exist$", message)) {
+        if (ReUtil.isMatch(TABLE_PREFIX, message)) {
             return Response.failDetail(
                     ExceptionErrorCode.UNKNOWN_TABLE.getErrorCode(), ExceptionErrorCode.UNKNOWN_TABLE.getErrorMessage());
         }
-        if (message.startsWith("Unknown column")) {
+        if (message.startsWith(COLUMN_PREFIX)) {
             return Response.failDetail(
                     ExceptionErrorCode.UNKNOWN_COLUMN.getErrorCode(), ExceptionErrorCode.UNKNOWN_COLUMN.getErrorMessage());
         }
@@ -105,7 +110,7 @@ public class DataBaseExceptionHandler implements Ordered {
         if (cause instanceof SQLException) {
             SQLException sqlException = (SQLException) cause;
             int errorCode = sqlException.getErrorCode();
-            if (errorCode == 1364) {
+            if (errorCode == DATABASE_ERROR_CODE) {
                 return Response.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), "数据操作异常,输入参数为空");
             }
         }
