@@ -8,6 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * description:
+ *
+ * @author zhouxinlei
+ * @since 2022-03-19 23:02:53
+ */
 @Configuration
 public class NacosConfig {
 

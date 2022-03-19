@@ -1,6 +1,9 @@
 package com.github.sparkzxl.boot;
 
+import com.github.sparkzxl.boot.undertow.UndertowServerFactoryCustomizer;
+import io.undertow.Undertow;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,12 @@ public class BootAutoConfiguration {
     @Bean
     public ApplicationLogRunner applicationRunner(ApplicationContext applicationContext) {
         return new ApplicationLogRunner(applicationContext);
+    }
+
+    @Bean
+    @ConditionalOnClass(Undertow.class)
+    public UndertowServerFactoryCustomizer getUndertowServerFactoryCustomizer() {
+        return new UndertowServerFactoryCustomizer();
     }
 
 }

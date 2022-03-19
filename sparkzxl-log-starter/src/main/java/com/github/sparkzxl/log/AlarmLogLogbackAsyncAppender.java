@@ -11,8 +11,8 @@ import com.github.sparkzxl.alarm.entity.NotifyMessage;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.entity.log.AlarmLogInfo;
 import com.github.sparkzxl.log.utils.ThrowableUtils;
-import io.netty.util.concurrent.DefaultThreadFactory;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 
 import java.util.Objects;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
 
     private final ThreadPoolExecutor threadPoolExecutor =
-            new ThreadPoolExecutor(2, 4, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(30), new DefaultThreadFactory("log-alarm"));
+            new ThreadPoolExecutor(2, 4, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(30), new BasicThreadFactory.Builder().namingPattern("log-alarm").build());
 
     @Override
     public void doAppend(ILoggingEvent eventObject) {

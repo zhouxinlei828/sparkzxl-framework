@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
 import org.springframework.cloud.client.loadbalancer.Response;
-import org.springframework.cloud.gateway.config.LoadBalancerProperties;
+import org.springframework.cloud.gateway.config.GatewayLoadBalancerProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter;
 import org.springframework.cloud.gateway.support.DelegatingServiceInstance;
@@ -28,11 +28,11 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
     private static final String LB = "lb";
 
     private final IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer;
-    private final LoadBalancerProperties properties;
+    private final GatewayLoadBalancerProperties properties;
 
 
-    public GatewayLoadBalancerClientFilter(IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer, LoadBalancerProperties properties) {
-        super(null, properties);
+    public GatewayLoadBalancerClientFilter(IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer, GatewayLoadBalancerProperties properties) {
+        super(null, properties, null);
         this.serviceInstanceLoadBalancer = serviceInstanceLoadBalancer;
         this.properties = properties;
     }

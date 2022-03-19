@@ -4,7 +4,6 @@ import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
 import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
 import com.github.sparkzxl.log.event.OptLogListener;
-import com.github.sparkzxl.log.netty.LogWebSocketHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.DefaultOperatorServiceImpl;
 import com.github.sparkzxl.log.store.IOperatorService;
@@ -55,16 +54,6 @@ public class LogAutoConfiguration {
     public HttpRequestLogListener httpRequestLogListener() {
         return new HttpRequestLogListener(log -> {
         });
-    }
-
-    @Bean
-    public LogWebSocketHandler logWebSocketHandler() {
-        Environment env = applicationContext.getEnvironment();
-        String applicationName = env.getProperty("spring.application.name");
-        String logPath = logProperties.getFile().getPath().concat("/") + applicationName + ".log";
-        LogWebSocketHandler logWebSocketHandler = new LogWebSocketHandler();
-        logWebSocketHandler.setLogPath(logPath);
-        return logWebSocketHandler;
     }
 
     @Bean
