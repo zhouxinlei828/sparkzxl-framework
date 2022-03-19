@@ -1,8 +1,5 @@
 package com.github.sparkzxl.database.dto;
 
-import cn.hutool.core.util.StrUtil;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.pagehelper.PageHelper;
 import com.github.sparkzxl.constant.EntityConstant;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModel;
@@ -29,21 +26,6 @@ public class PageParams<T> extends PageDTO {
     private String sort = EntityConstant.ID;
 
     @ApiModelProperty("扩展参数")
-    private Map<String, String> map = Maps.newHashMap();
-
-    /**
-     * 构建分页参数
-     */
-    @JsonIgnore
-    public void startPage() {
-        PageParams<T> params = this;
-        int pageNum = params.getPageNum() == null ? 1 : params.getPageNum();
-        int pageSize = params.getPageSize() == null ? 1 : params.getPageSize();
-        //没有排序参数
-        if (StrUtil.isEmpty(params.getSort())) {
-            PageHelper.startPage(pageNum, pageSize);
-        }
-        PageHelper.startPage(pageNum, pageSize, params.getSort());
-    }
+    private Map<String, String> extra = Maps.newHashMap();
 
 }

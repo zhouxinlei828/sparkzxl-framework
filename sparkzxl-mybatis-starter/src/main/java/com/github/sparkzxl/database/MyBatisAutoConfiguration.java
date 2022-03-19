@@ -59,7 +59,6 @@ public class MyBatisAutoConfiguration {
     private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
 
-
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT")
@@ -121,10 +120,7 @@ public class MyBatisAutoConfiguration {
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
         // 分页插件
-        if (customMybatisProperties.isEnablePage()) {
-            interceptor.addInnerInterceptor(new PaginationInnerInterceptor(customMybatisProperties.getDbType()));
-        }
-
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(customMybatisProperties.getDbType()));
         // sql性能规范插件
         if (dataProperties.getIsIllegalSql()) {
             interceptor.addInnerInterceptor(new IllegalSQLInnerInterceptor());

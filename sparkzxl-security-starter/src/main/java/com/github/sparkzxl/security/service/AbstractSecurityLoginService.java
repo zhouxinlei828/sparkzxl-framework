@@ -14,7 +14,6 @@ import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.bouncycastle.openssl.PasswordException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +40,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authRequest 登录认证
      * @return java.lang.String
      */
-    public UserToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
+    public UserToken login(AuthRequest authRequest) throws AccountNotFoundException {
         String username = authRequest.getUsername();
         AuthUserDetail authUserDetail = (AuthUserDetail) getUserDetailsService().loadUserByUsername(username);
         if (ObjectUtils.isEmpty(authUserDetail)) {
@@ -100,9 +99,8 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      *
      * @param authRequest    登录请求
      * @param authUserDetail 用户信息
-     * @throws PasswordException 密码校验异常
      */
-    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail) throws PasswordException;
+    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail);
 
 
     /**

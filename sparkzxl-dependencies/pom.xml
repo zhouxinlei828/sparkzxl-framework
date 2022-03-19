@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.sparkzxl</groupId>
@@ -21,53 +19,46 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-cloud-->
-        <spring-cloud-alibaba-dependencies.version>2.2.5.RELEASE</spring-cloud-alibaba-dependencies.version>
-        <spring-boot-dependencies.version>2.3.9.RELEASE</spring-boot-dependencies.version>
-        <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2.2.7.RELEASE</spring-cloud-alibaba-dependencies.version>
+        <spring-boot-dependencies.version>2.3.12.RELEASE</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>Hoxton.SR12</spring-cloud-dependencies.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
         <springfox.version>2.10.5</springfox.version>
         <swagger-models.version>1.5.22</swagger-models.version>
-        <log4j.version>2.16.0</log4j.version>
-
-        <keycloak-dependencies.version>12.0.2</keycloak-dependencies.version>
-        <spring-webmvc.version>5.2.13.RELEASE</spring-webmvc.version>
+        <log4j.version>2.17.2</log4j.version>
+        <spring-webmvc.version>5.2.15.RELEASE</spring-webmvc.version>
 
         <!-- datasource-->
         <mybatis.version>3.5.7</mybatis.version>
-        <mybatis-plus.version>3.4.2</mybatis-plus.version>
-        <pagehelper-spring-boot-starter.version>1.3.1</pagehelper-spring-boot-starter.version>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
-        <druid.version>1.2.6</druid.version>
-        <pagehelper-spring-boot-starter.version>1.3.1</pagehelper-spring-boot-starter.version>
+        <druid.version>1.2.8</druid.version>
         <p6spy.version>3.9.1</p6spy.version>
-        <logstash.version>6.6</logstash.version>
+        <logstash.version>7.0.1</logstash.version>
+        <netty.version>4.1.75.Final</netty.version>
 
 
         <!-- common组件-->
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
-        <spring-security-rsa.version>1.0.10.RELEASE</spring-security-rsa.version>
         <!-- jwt组件-->
         <jwt.version>9.12.1</jwt.version>
 
-        <aws.version>1.12.49</aws.version>
+        <aws.version>1.11.941</aws.version>
         <!-- google-->
-        <zxing.core.version>3.4.1</zxing.core.version>
         <guava.version>30.1.1-jre</guava.version>
-        <hutool.version>5.7.9</hutool.version>
+        <hutool.version>5.7.11</hutool.version>
         <!-- redisson -->
-        <redisson-spring-boot-starter.version>3.16.1</redisson-spring-boot-starter.version>
+        <redisson-spring-boot-starter.version>3.16.8</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
         <curator.version>5.1.0</curator.version>
 
-        <jasypt.version>3.0.3</jasypt.version>
         <elasticsearch.version>7.14.0</elasticsearch.version>
         <html2pdf.version>3.0.3</html2pdf.version>
         <pdfbox.version>2.0.24</pdfbox.version>
         <itext.version>7.1.14</itext.version>
-        <xstream.version>1.4.18</xstream.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
@@ -76,7 +67,7 @@
         <caffeine.version>2.8.8</caffeine.version>
         <fastjson.version>1.2.78</fastjson.version>
         <easy-excel.version>2.2.10</easy-excel.version>
-        <retrofit-spring-boot-starter.version>2.2.16</retrofit-spring-boot-starter.version>
+        <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
@@ -84,20 +75,13 @@
         <seata.version>1.4.2</seata.version>
         <janino.version>3.1.6</janino.version>
         <drools-version>7.47.0.Final</drools-version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
-        <vavr.version>1.0.0-alpha-3</vavr.version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
-        <jsqlparser.version>4.1</jsqlparser.version>
+        <jsqlparser.version>4.3</jsqlparser.version>
         <antisamy.version>1.6.4</antisamy.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
-        <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
 
         <freemarker.version>2.3.28</freemarker.version>
-        <apache.xmlgraphics.version>1.8</apache.xmlgraphics.version>
-        <activiti.boot.version>6.0.0</activiti.boot.version>
-        <fel.version>0.8</fel.version>
-        <weixin-sdk.version>4.1.9.B</weixin-sdk.version>
         <swagger-models.version>1.5.22</swagger-models.version>
         <aliyun-dysmsapi-version>2.0.8</aliyun-dysmsapi-version>
         <tencentcloud-sdk-java-version>4.0.11</tencentcloud-sdk-java-version>
@@ -149,6 +133,136 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-dns</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-haproxy</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http2</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-memcache</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-mqtt</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-redis</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-smtp</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-socks</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-stomp</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-xml</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler-proxy</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-resolver</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-resolver-dns</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-resolver-dns-native-macos</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-unix-common</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-rxtx</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-sctp</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-udt</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud-dependencies.version}</version>
@@ -174,23 +288,16 @@
                 <version>${lombok.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring-webmvc.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-dependencies</artifactId>
                 <version>${knife4j.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-adapter-bom</artifactId>
-                <version>${keycloak-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring-webmvc.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -230,17 +337,6 @@
                 <version>${freemarker.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper-spring-boot-starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
                 <version>${dynamic-datasource.version}</version>
@@ -259,55 +355,6 @@
                 <groupId>p6spy</groupId>
                 <artifactId>p6spy</artifactId>
                 <version>${p6spy.version}</version>
-            </dependency>
-
-            <!-- activiti -->
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring-boot-starter-basic</artifactId>
-                <version>${activiti.boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-json-converter</artifactId>
-                <version>${activiti.boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.activiti</groupId>
-                        <artifactId>activiti-bpmn-model</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-codec</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-css</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-svg-dom</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-svggen</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eweb4j</groupId>
-                <artifactId>fel</artifactId>
-                <version>${fel.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.seata</groupId>
@@ -381,12 +428,6 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
-            <!--Spring Security RSA工具类-->
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-rsa</artifactId>
-                <version>${spring-security-rsa.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
@@ -450,12 +491,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>com.github.ulisesbocchio</groupId>
-                <artifactId>jasypt-spring-boot-starter</artifactId>
-                <version>${jasypt.version}</version>
-            </dependency>
-
             <!-- elasticsearch -->
             <dependency>
                 <groupId>org.elasticsearch</groupId>
@@ -504,11 +539,6 @@
                 <artifactId>itext7-core</artifactId>
                 <version>${itext.version}</version>
                 <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>com.thoughtworks.xstream</groupId>
-                <artifactId>xstream</artifactId>
-                <version>${xstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>eu.bitwalker</groupId>
@@ -612,17 +642,6 @@
                 <groupId>org.drools</groupId>
                 <artifactId>drools-compiler</artifactId>
                 <version>${drools-version}</version>
-            </dependency>
-            <!-- 验证码生成工具 -->
-            <dependency>
-                <groupId>com.github.whvcse</groupId>
-                <artifactId>easy-captcha</artifactId>
-                <version>${easy-captcha.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.vavr</groupId>
-                <artifactId>vavr</artifactId>
-                <version>${vavr.version}</version>
             </dependency>
             <!-- logback-kafka-appender -->
             <dependency>

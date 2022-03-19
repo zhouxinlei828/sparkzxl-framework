@@ -23,11 +23,6 @@ public class CustomMybatisProperties {
     private String[] mapperScan;
 
     /**
-     * 使用分页
-     */
-    private boolean enablePage;
-
-    /**
      * 数据库类型
      */
     private DbType dbType = DbType.MYSQL;

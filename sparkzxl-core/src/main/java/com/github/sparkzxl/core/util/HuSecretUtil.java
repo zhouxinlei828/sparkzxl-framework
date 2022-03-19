@@ -9,8 +9,8 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.crypto.symmetric.DES;
+import com.github.sparkzxl.core.util.crypto.KeyStoreKeyFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.nio.charset.Charset;
 import java.security.KeyPair;

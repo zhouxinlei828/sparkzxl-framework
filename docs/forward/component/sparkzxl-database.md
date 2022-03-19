@@ -43,10 +43,6 @@
         <artifactId>p6spy</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.github.pagehelper</groupId>
-        <artifactId>pagehelper-spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-configuration-processor</artifactId>
         <optional>true</optional>

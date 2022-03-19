@@ -10,7 +10,6 @@ import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.bouncycastle.openssl.PasswordException;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -156,12 +155,6 @@ public class DefaultExceptionHandler implements Ordered {
                         .append("]的传入值:[").append(oe.getRejectedValue()).append("]与预期的字段类型不匹配.")
         );
         return Response.failDetail(ExceptionErrorCode.PARAM_EX.getErrorCode(), msg.toString());
-    }
-
-    @ExceptionHandler(PasswordException.class)
-    public Response<?> handlePasswordException(PasswordException e) {
-        log.error("密码异常:", e);
-        return Response.failDetail(ExceptionErrorCode.PASSWORD_EXCEPTION.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler({AccountNotFoundException.class})

@@ -42,10 +42,6 @@
         <version>1.4.7</version>
     </dependency>
     <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
-        <artifactId>xstream</artifactId>
-    </dependency>
-    <dependency>
         <groupId>org.mapstruct</groupId>
         <artifactId>mapstruct</artifactId>
     </dependency>

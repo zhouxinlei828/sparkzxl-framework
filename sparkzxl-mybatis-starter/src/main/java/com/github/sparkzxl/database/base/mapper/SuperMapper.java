@@ -18,42 +18,6 @@ import java.util.List;
 public interface SuperMapper<T> extends BaseMapper<T> {
 
     /**
-     * 查询链
-     *
-     * @return QueryChainWrapper<T>
-     */
-    default QueryChainWrapper<T> queryChain() {
-        return new QueryChainWrapper<>(this);
-    }
-
-    /**
-     * lambda查询链
-     *
-     * @return LambdaQueryChainWrapper<T>
-     */
-    default LambdaQueryChainWrapper<T> lambdaQueryChain() {
-        return new LambdaQueryChainWrapper<>(this);
-    }
-
-    /**
-     * 更新链
-     *
-     * @return UpdateChainWrapper<T>
-     */
-    default UpdateChainWrapper<T> updateChain() {
-        return new UpdateChainWrapper<>(this);
-    }
-
-    /**
-     * lambda更新链
-     *
-     * @return UpdateChainWrapper<T>
-     */
-    default LambdaUpdateChainWrapper<T> lambdaUpdateChain() {
-        return new LambdaUpdateChainWrapper<>(this);
-    }
-
-    /**
      * 批量新增
      *
      * @param entityList 实体列表

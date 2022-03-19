@@ -1,7 +1,6 @@
 package com.github.sparkzxl.jwt.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -20,7 +19,6 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.RSAKey;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -51,7 +49,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public String createTokenByRsa(JwtUserInfo jwtUserInfo) {
-        return Try.of(() -> {
+        try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .type(JOSEObjectType.JWT)
@@ -69,11 +67,11 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             JWSSigner jwsSigner = new RSASSASigner(getRsaKey());
             //签名
             jwsObject.sign(jwsSigner);
-            return jwsObject.serialize();
-        }).onFailure(throwable -> {
-            log.error("根据RSA算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            ExceptionAssert.failure("生成token发生异常：".concat(throwable.getMessage()));
-        }).getOrElseGet(throwable -> "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExceptionAssert.failure("生成token发生异常：".concat(e.getMessage()));
+        }
+        return "";
     }
 
     @Override
@@ -125,7 +123,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public String createTokenByHmac(JwtUserInfo jwtUserInfo) {
-        return Try.of(() -> {
+        try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
                     type(JOSEObjectType.JWT)
@@ -137,12 +135,11 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             JWSObject jwsObject = new JWSObject(jwsHeader, payload);
             JWSSigner jwsSigner = new MACSigner(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
             jwsObject.sign(jwsSigner);
-            return jwsObject.serialize();
-        }).onFailure(throwable -> {
-            log.error("根据HMAC算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            ExceptionAssert.failure("生成token发生异常：".concat(throwable.getMessage()));
-
-        }).getOrElseGet(throwable -> "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExceptionAssert.failure("生成token发生异常：".concat(e.getMessage()));
+        }
+        return "";
     }
 
     @Override

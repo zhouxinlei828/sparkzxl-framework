@@ -1,5 +1,6 @@
 package com.github.sparkzxl.database.echo.core;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -275,17 +276,15 @@ public class EchoService {
                 echoValue = JsonUtil.parse(JsonUtil.toJson(echoValue), echoField.beanClass());
             }
 
-            if (StrUtil.isNotEmpty(ref)) {
-                ReflectUtil.setFieldValue(obj, ref, echoValue);
-            }
-
             // 将新的值 反射 到指定字段
             if (obj instanceof EchoVO) {
-                EchoVO vo = (EchoVO) obj;
+                EchoVO vo = Convert.convert(EchoVO.class,obj);
                 vo.getEchoMap().put(fieldName, echoValue);
             } else if (originalValue instanceof RemoteData) {
-                RemoteData remoteData = (RemoteData) originalValue;
+                RemoteData remoteData = Convert.convert(RemoteData.class,originalValue);
                 remoteData.setData(echoValue);
+            } else if (StrUtil.isNotEmpty(ref)) {
+                ReflectUtil.setFieldValue(obj, ref, echoValue);
             } else {
                 ReflectUtil.setFieldValue(obj, field, echoValue);
             }
