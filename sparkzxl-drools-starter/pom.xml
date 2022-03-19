@@ -12,12 +12,18 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <xstream.version>1.4.19</xstream.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.kie</groupId>
             <artifactId>kie-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>${xstream.version}</version>
         </dependency>
         <dependency>
             <groupId>org.drools</groupId>

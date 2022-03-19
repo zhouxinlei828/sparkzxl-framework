@@ -58,7 +58,7 @@
         <elasticsearch.version>7.14.0</elasticsearch.version>
         <html2pdf.version>3.0.3</html2pdf.version>
         <pdfbox.version>2.0.24</pdfbox.version>
-        <itext.version>7.1.14</itext.version>
+        <itext.version>7.1.17</itext.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
@@ -66,7 +66,7 @@
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.8.8</caffeine.version>
         <fastjson.version>1.2.78</fastjson.version>
-        <easy-excel.version>2.2.10</easy-excel.version>
+        <easy-excel.version>3.0.5</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
@@ -635,6 +635,10 @@
                     <exclusion>
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.thoughtworks.xstream</groupId>
+                        <artifactId>xstream</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
