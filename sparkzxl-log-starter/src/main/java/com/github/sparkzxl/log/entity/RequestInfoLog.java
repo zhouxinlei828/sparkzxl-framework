@@ -46,6 +46,9 @@ public class RequestInfoLog implements Serializable {
     @ApiModelProperty(value = "请求类方法")
     private String classMethod;
 
+    @ApiModelProperty(value = "内容描述")
+    private String content;
+
     @ApiModelProperty(value = "请求报文")
     private String requestParams;
 

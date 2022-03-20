@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface RequestLogParam {
+public @interface LogParam {
 
     /**
      * 字段名称

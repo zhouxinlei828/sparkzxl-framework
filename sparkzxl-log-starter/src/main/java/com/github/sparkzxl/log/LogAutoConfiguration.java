@@ -1,9 +1,10 @@
 package com.github.sparkzxl.log;
 
+import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
-import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
+import com.github.sparkzxl.log.aspect.ILogAttribute;
+import com.github.sparkzxl.log.aspect.LogAttributeImpl;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
-import com.github.sparkzxl.log.event.OptLogListener;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.DefaultOperatorServiceImpl;
 import com.github.sparkzxl.log.store.IOperatorService;
@@ -11,10 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import java.util.Optional;
 
@@ -29,11 +28,6 @@ import java.util.Optional;
 public class LogAutoConfiguration {
 
     @Autowired
-    private LogProperties logProperties;
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     void setAlarmLogConfig(LogProperties logProperties) {
         LogProperties.AlarmProperties alarmProperties = logProperties.getAlarm();
         if (alarmProperties.isEnabled()) {
@@ -45,8 +39,14 @@ public class LogAutoConfiguration {
     }
 
     @Bean
-    public HttpRequestLogAspect webLogAspect() {
-        return new HttpRequestLogAspect();
+    @ConditionalOnMissingBean
+    public ILogAttribute logAttribute() {
+        return new LogAttributeImpl(RequestLocalContextHolder::get);
+    }
+
+    @Bean
+    public HttpRequestLogAspect httpRequestLogAspect() {
+        return new HttpRequestLogAspect(logAttribute());
     }
 
     @Bean
@@ -62,15 +62,4 @@ public class LogAutoConfiguration {
         return new DefaultOperatorServiceImpl();
     }
 
-    @Bean
-    public OptLogRecordAspect optLogRecordAspect(IOperatorService operatorService) {
-        return new OptLogRecordAspect(operatorService);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public OptLogListener optLogListener() {
-        return new OptLogListener(log -> {
-        });
-    }
 }

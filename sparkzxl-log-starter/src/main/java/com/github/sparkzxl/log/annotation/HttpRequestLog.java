@@ -28,14 +28,6 @@ public @interface HttpRequestLog {
     String value() default "";
 
     /**
-     * 分隔符（默认 :）
-     * 生成的Key：业务类型:500
-     *
-     * @return String
-     */
-    String delimiter() default ":";
-
-    /**
      * 是否记录方法的入参
      *
      * @return 是否记录方法的入参
@@ -43,18 +35,27 @@ public @interface HttpRequestLog {
     boolean request() default true;
 
     /**
-     * 若设置了 request = false、requestByError = true，则方法报错时，依然记录请求的入参
-     *
-     * @return 当 request = false时， 方法报错记录请求参数
-     */
-    boolean requestByError() default true;
-
-    /**
      * 是否记录返回值
      *
      * @return 是否记录返回值
      */
     boolean response() default true;
+
+    /**
+     * 消息模板 el表达式变量#{[tenantId]}
+     *
+     * @return String
+     */
+    String template() default "";
+
+    String extractParams() default "";
+
+    /**
+     * 表达式条件
+     *
+     * @return String
+     */
+    String expressionJson() default "";
 
 
 }

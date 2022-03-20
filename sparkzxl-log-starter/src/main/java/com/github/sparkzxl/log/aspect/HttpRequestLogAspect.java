@@ -15,11 +15,15 @@ import com.github.sparkzxl.log.utils.LogUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.common.TemplateParserContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -46,6 +50,12 @@ public class HttpRequestLogAspect {
      * 用于获取方法参数定义名字.
      */
     private final DefaultParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+
+    private final ILogAttribute logAttribute;
+
+    public HttpRequestLogAspect(ILogAttribute logAttribute) {
+        this.logAttribute = logAttribute;
+    }
 
     @Pointcut("@within(com.github.sparkzxl.log.annotation.HttpRequestLog)|| @annotation(com.github.sparkzxl.log.annotation.HttpRequestLog)")
     public void pointCut() {
@@ -80,6 +90,7 @@ public class HttpRequestLogAspect {
             if (httpRequestLog.response() && ObjectUtils.isNotEmpty(ret)) {
                 requestInfoLog.setResult(JsonUtil.toJson(ret));
             }
+            buildLogTemplate(joinPoint, httpRequestLog, requestInfoLog);
             publishEvent(requestInfoLog);
         });
     }
@@ -97,8 +108,19 @@ public class HttpRequestLogAspect {
             RequestInfoLog requestInfoLog = getRequestInfoLog();
             requestInfoLog.setErrorMsg(ExceptionUtil.stacktraceToString(e, MAX_LENGTH));
             requestInfoLog.setThrowExceptionClass(e.getClass().getTypeName());
+            buildLogTemplate(joinPoint, httpRequestLog, requestInfoLog);
             publishEvent(requestInfoLog);
         });
+    }
+
+    private void buildLogTemplate(JoinPoint joinPoint, HttpRequestLog httpRequestLog, RequestInfoLog requestInfoLog) {
+        if (StringUtils.isNotBlank(httpRequestLog.template())) {
+            Map<String, Object> alarmParamMap = logAttribute.getAttributes(joinPoint, httpRequestLog);
+            ExpressionParser parser = new SpelExpressionParser();
+            TemplateParserContext parserContext = new TemplateParserContext();
+            String message = parser.parseExpression(httpRequestLog.template(), parserContext).getValue(alarmParamMap, String.class);
+            requestInfoLog.setContent(message);
+        }
     }
 
     private void publishEvent(RequestInfoLog requestInfoLog) {
@@ -137,9 +159,8 @@ public class HttpRequestLogAspect {
         String userId = RequestLocalContextHolder.getUserId(String.class);
         String name = RequestLocalContextHolder.getName();
         Signature signature = joinPoint.getSignature();
-        String category = DescriptionGenerator.get(joinPoint);
         RequestInfoLog requestInfoLog = new RequestInfoLog()
-                .setCategory(category)
+                .setCategory(httpRequestLog.value())
                 .setUserId(userId)
                 .setUserName(name)
                 .setRequestIp(ServletUtil.getClientIP(request))
