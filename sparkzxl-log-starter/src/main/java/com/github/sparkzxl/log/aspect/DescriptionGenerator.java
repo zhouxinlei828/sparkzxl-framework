@@ -19,9 +19,9 @@ import java.util.List;
  *
  * @author zhouxinlei
  */
-public class LockKeyGenerator {
+public class DescriptionGenerator {
 
-    public static String getLockKey(JoinPoint joinPoint) {
+    public static String get(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         HttpRequestLog httpRequestLog = AnnotationUtils.getAnnotation(method, HttpRequestLog.class);

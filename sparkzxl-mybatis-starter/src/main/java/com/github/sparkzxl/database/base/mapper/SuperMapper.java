@@ -18,33 +18,20 @@ import java.util.List;
 public interface SuperMapper<T> extends BaseMapper<T> {
 
     /**
-     * 批量新增
+     * 全量修改所有字段
      *
-     * @param entityList 实体列表
-     * @return int
+     * @param entity 实体
+     * @return 修改数量
+     */
+    int updateAllById(@Param(Constants.ENTITY) T entity);
+
+    /**
+     * 批量插入所有字段
+     * <p>
+     * 只测试过MySQL！只测试过MySQL！只测试过MySQL！
+     *
+     * @param entityList 实体集合
+     * @return 插入数量
      */
     int insertBatchSomeColumn(List<T> entityList);
-
-    /**
-     * 更新公共字段
-     *
-     * @param entity 实体
-     * @return int
-     */
-    int alwaysUpdateSomeColumnById(@Param(Constants.ENTITY) T entity);
-
-    /**
-     * 根据主键删除
-     *
-     * @param entity 实体
-     * @return int
-     */
-    int deleteByIdWithFill(T entity);
-
-    /**
-     * 删除全部
-     *
-     * @return int
-     */
-    int deleteAll();
 }

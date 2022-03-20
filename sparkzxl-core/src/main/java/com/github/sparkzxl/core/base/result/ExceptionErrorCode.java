@@ -31,7 +31,7 @@ public enum ExceptionErrorCode implements IErrorCode {
     PARAM_TYPE_ERROR("A0421", "参数格式不匹配"),
     PARAM_VALID_ERROR("A0415", "参数校验失败"),
     PARAM_EX("A0416", "参数类型解析异常"),
-    TOO_MUCH_DATA_ERROR("A0426", "请求批量处理总个数超出限制"),
+    TOO_MUCH_DATA_ERROR("A0426", "批量新增数据过多"),
     REQ_BLACKLIST("A0323", "非法 IP 地址"),
     PARAM_FLOW("A0321", "热点参数访问频繁，请稍后再试"),
     USERNAME_EMPTY("A0110", "用户名不能为空"),
