@@ -41,21 +41,4 @@ public @interface HttpRequestLog {
      */
     boolean response() default true;
 
-    /**
-     * 消息模板 el表达式变量#{[tenantId]}
-     *
-     * @return String
-     */
-    String template() default "";
-
-    String extractParams() default "";
-
-    /**
-     * 表达式条件
-     *
-     * @return String
-     */
-    String expressionJson() default "";
-
-
 }

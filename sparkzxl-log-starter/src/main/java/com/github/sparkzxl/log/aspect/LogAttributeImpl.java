@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.sparkzxl.alarm.entity.ExpressionTemplate;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
+import com.github.sparkzxl.log.annotation.OptLogRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -61,20 +62,20 @@ public class LogAttributeImpl implements ILogAttribute {
     }
 
     @Override
-    public Map<String, Object> getAttributes(JoinPoint joinPoint, HttpRequestLog httpRequestLog) {
+    public Map<String, Object> getAttributes(JoinPoint joinPoint, OptLogRecord optLogRecord) {
         Map<String, Object> attributeMapping = new HashMap<>(6);
         Map<String, Object> alarmParamMap = LogParamGenerator.generate(joinPoint);
         if (MapUtil.isNotEmpty(alarmParamMap)) {
             attributeMapping.putAll(alarmParamMap);
         }
-        String extractParams = httpRequestLog.extractParams();
+        String extractParams = optLogRecord.extractParams();
         if (StringUtils.isNotEmpty(extractParams)) {
             String[] headerArray = StringUtils.split(extractParams, StrPool.COMMA);
             for (String header : headerArray) {
                 attributeMapping.put(header, function.apply(header));
             }
         }
-        String expressionJson = httpRequestLog.expressionJson();
+        String expressionJson = optLogRecord.expressionJson();
         if (StringUtils.isNotBlank(expressionJson)) {
             List<ExpressionTemplate> expressionTemplateList = JSONArray.parseArray(expressionJson, ExpressionTemplate.class);
             for (ExpressionTemplate expressionTemplate : expressionTemplateList) {

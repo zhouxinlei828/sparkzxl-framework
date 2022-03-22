@@ -9,14 +9,12 @@ import lombok.extern.slf4j.Slf4j;
  * @author zhouxinlei
  */
 @Slf4j
-public class DefaultOperatorServiceImpl implements IOperatorService {
+public class OperatorService {
 
-    @Override
     public String getUserId() {
         return RequestLocalContextHolder.getUserId(String.class);
     }
 
-    @Override
     public String getUserName() {
         return RequestLocalContextHolder.getName();
     }

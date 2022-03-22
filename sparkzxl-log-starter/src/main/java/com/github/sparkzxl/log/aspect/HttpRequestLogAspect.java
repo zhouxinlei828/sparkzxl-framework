@@ -90,7 +90,6 @@ public class HttpRequestLogAspect {
             if (httpRequestLog.response() && ObjectUtils.isNotEmpty(ret)) {
                 requestInfoLog.setResult(JsonUtil.toJson(ret));
             }
-            buildLogTemplate(joinPoint, httpRequestLog, requestInfoLog);
             publishEvent(requestInfoLog);
         });
     }
@@ -108,19 +107,8 @@ public class HttpRequestLogAspect {
             RequestInfoLog requestInfoLog = getRequestInfoLog();
             requestInfoLog.setErrorMsg(ExceptionUtil.stacktraceToString(e, MAX_LENGTH));
             requestInfoLog.setThrowExceptionClass(e.getClass().getTypeName());
-            buildLogTemplate(joinPoint, httpRequestLog, requestInfoLog);
             publishEvent(requestInfoLog);
         });
-    }
-
-    private void buildLogTemplate(JoinPoint joinPoint, HttpRequestLog httpRequestLog, RequestInfoLog requestInfoLog) {
-        if (StringUtils.isNotBlank(httpRequestLog.template())) {
-            Map<String, Object> alarmParamMap = logAttribute.getAttributes(joinPoint, httpRequestLog);
-            ExpressionParser parser = new SpelExpressionParser();
-            TemplateParserContext parserContext = new TemplateParserContext();
-            String message = parser.parseExpression(httpRequestLog.template(), parserContext).getValue(alarmParamMap, String.class);
-            requestInfoLog.setContent(message);
-        }
     }
 
     private void publishEvent(RequestInfoLog requestInfoLog) {

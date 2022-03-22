@@ -1,6 +1,6 @@
 package com.github.sparkzxl.log.aspect;
 
-import com.github.sparkzxl.log.annotation.HttpRequestLog;
+import com.github.sparkzxl.log.annotation.OptLogRecord;
 import org.aspectj.lang.JoinPoint;
 
 import java.util.Map;
@@ -17,8 +17,8 @@ public interface ILogAttribute {
      * 获取日志变量Map
      *
      * @param joinPoint      切入点
-     * @param httpRequestLog 日志注解
+     * @param optLogRecord 日志注解
      * @return Map<String, Object>
      */
-    Map<String, Object> getAttributes(JoinPoint joinPoint, HttpRequestLog httpRequestLog);
+    Map<String, Object> getAttributes(JoinPoint joinPoint, OptLogRecord optLogRecord);
 }
