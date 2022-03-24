@@ -51,12 +51,6 @@ public class HttpRequestLogAspect {
      */
     private final DefaultParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
-    private final ILogAttribute logAttribute;
-
-    public HttpRequestLogAspect(ILogAttribute logAttribute) {
-        this.logAttribute = logAttribute;
-    }
-
     @Pointcut("@within(com.github.sparkzxl.log.annotation.HttpRequestLog)|| @annotation(com.github.sparkzxl.log.annotation.HttpRequestLog)")
     public void pointCut() {
 

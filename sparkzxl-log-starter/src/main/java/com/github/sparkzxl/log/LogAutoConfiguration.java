@@ -7,7 +7,6 @@ import com.github.sparkzxl.log.aspect.LogAttributeImpl;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.OperatorService;
-import com.github.sparkzxl.log.store.IOperatorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -46,7 +45,7 @@ public class LogAutoConfiguration {
 
     @Bean
     public HttpRequestLogAspect httpRequestLogAspect() {
-        return new HttpRequestLogAspect(logAttribute());
+        return new HttpRequestLogAspect();
     }
 
     @Bean
@@ -57,8 +56,8 @@ public class LogAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IOperatorService.class)
-    public IOperatorService operatorService() {
+    @ConditionalOnMissingBean(OperatorService.class)
+    public OperatorService operatorService() {
         return new OperatorService();
     }
 
