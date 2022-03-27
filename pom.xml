@@ -34,6 +34,7 @@
         <module>sparkzxl-mybatis-starter</module>
         <module>sparkzxl-distributed-cloud-starter</module>
         <module>sparkzxl-distributed-dubbo-starter</module>
+        <module>sparkzxl-distributed-lock</module>
         <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
         <module>sparkzxl-feign-starter</module>
@@ -48,6 +49,7 @@
         <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-pdf-starter</module>
         <module>sparkzxl-redisson-starter</module>
+        <module>sparkzxl-rpc</module>
         <module>sparkzxl-security-starter</module>
         <module>sparkzxl-sentinel-starter</module>
         <module>sparkzxl-swagger-starter</module>
@@ -60,7 +62,6 @@
         <module>sparkzxl-dependencies</module>
         <module>sparkzxl-idempotent</module>
         <module>sparkzxl-sms-starter</module>
-        <module>sparkzxl-rpc</module>
     </modules>
 
     <licenses>
