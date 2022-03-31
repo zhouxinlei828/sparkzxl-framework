@@ -22,7 +22,7 @@
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-cloud-->
         <spring-cloud-alibaba-dependencies.version>2.2.5.RELEASE</spring-cloud-alibaba-dependencies.version>
-        <spring-boot-dependencies.version>2.3.9.RELEASE</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.5.12</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
