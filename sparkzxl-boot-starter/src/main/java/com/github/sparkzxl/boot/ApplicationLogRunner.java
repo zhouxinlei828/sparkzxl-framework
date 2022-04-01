@@ -1,6 +1,7 @@
 package com.github.sparkzxl.boot;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.system.SystemUtil;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
@@ -32,10 +33,9 @@ public class ApplicationLogRunner implements ApplicationRunner, Ordered {
     public void run(ApplicationArguments args) throws Exception {
         Environment env = applicationContext.getEnvironment();
         String applicationName = env.getProperty("spring.application.name");
-        String hostAddress = InetAddress.getLocalHost().getHostAddress();
         int port = Convert.toInt(env.getProperty("server.port"), -1);
         String url = UrlBuilder.create()
-                .setHost(hostAddress)
+                .setHost(NetUtil.getLocalhostStr())
                 .setPort(port).build();
         log.info("\n______________________________________________________________\n\t" +
                         "Java Version: {} \n\t" +

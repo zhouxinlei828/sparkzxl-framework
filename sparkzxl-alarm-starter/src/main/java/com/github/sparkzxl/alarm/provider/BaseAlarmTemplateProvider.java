@@ -2,7 +2,7 @@ package com.github.sparkzxl.alarm.provider;
 
 import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.support.AlarmException;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description:
