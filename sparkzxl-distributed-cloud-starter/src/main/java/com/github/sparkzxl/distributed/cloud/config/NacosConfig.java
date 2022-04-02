@@ -5,7 +5,6 @@ import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -21,7 +20,7 @@ public class NacosConfig {
     public NacosDiscoveryProperties nacosProperties() {
         NacosDiscoveryProperties nacosDiscoveryProperties = new NacosDiscoveryProperties();
         Map<String, String> metadata = nacosDiscoveryProperties.getMetadata();
-        metadata.put("startup.time", DateUtil.formatDateTime(new Date()));
+        metadata.put("startup.time", DateUtil.now());
         return nacosDiscoveryProperties;
     }
 
