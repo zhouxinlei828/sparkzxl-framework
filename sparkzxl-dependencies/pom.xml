@@ -24,6 +24,7 @@
         <gateway.version>3.0.7</gateway.version>
         <nacos.version>2.0.4</nacos.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
+        <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
@@ -161,6 +162,11 @@
                 <version>${spring-cloud-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot2</artifactId>
+                <version>${resilience4j-spring-boot2.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.nacos</groupId>
@@ -620,11 +626,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-gateway-plugin-autoconfigure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
