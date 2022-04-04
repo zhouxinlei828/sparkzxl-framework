@@ -30,7 +30,7 @@ public class ApplicationLogRunner implements ApplicationRunner, Ordered {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         Environment env = applicationContext.getEnvironment();
         String applicationName = env.getProperty("spring.application.name");
         int port = Convert.toInt(env.getProperty("server.port"), -1);
