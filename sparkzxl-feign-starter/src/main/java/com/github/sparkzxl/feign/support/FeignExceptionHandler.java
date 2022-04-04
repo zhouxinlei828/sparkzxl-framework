@@ -8,6 +8,7 @@ import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import feign.FeignException;
+import feign.RetryableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,10 +32,10 @@ public class FeignExceptionHandler implements Ordered {
         return Response.failDetail(ExceptionErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
     }
 
-    @ExceptionHandler(FeignException.class)
-    public Response<?> handleRetryableException(FeignException e) {
-        log.error("FeignException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), e.getMessage());
+    @ExceptionHandler(RetryableException.class)
+    public Response<?> handleRetryableException(RetryableException e) {
+        log.error("RetryableException异常:", e);
+        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION);
     }
 
     @ExceptionHandler(RemoteCallException.class)

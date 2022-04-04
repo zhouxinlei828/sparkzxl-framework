@@ -1,4 +1,4 @@
-package com.github.sparkzxl.feign.config;
+package com.github.sparkzxl.feign.decoder;
 
 import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;

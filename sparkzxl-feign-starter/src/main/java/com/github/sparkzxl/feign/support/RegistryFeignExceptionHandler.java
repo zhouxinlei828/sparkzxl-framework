@@ -1,4 +1,4 @@
-package com.github.sparkzxl.feign.config;
+package com.github.sparkzxl.feign.support;
 
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.feign.annoation.EnableFeignExceptionHandler;

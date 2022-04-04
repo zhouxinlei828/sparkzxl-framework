@@ -110,7 +110,7 @@ package com.github.sparkzxl.feign.default_;
 import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.ResponseResultUtils;
-import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
+import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
@@ -188,7 +188,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
 
 import cn.hutool.core.date.DatePattern;
 import com.github.sparkzxl.core.util.DateUtils;
-import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
+import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -373,7 +373,7 @@ public class FeignExceptionDecoder implements ErrorDecoder {
 
 ```Java
 
-package com.github.sparkzxl.feign.config;
+package com.github.sparkzxl.feign.decoder;
 
 import org.springframework.core.env.Environment;
 
@@ -411,7 +411,7 @@ public final class FeignExceptionHandlerContext {
 
 ```Java
 
-import com.github.sparkzxl.feign.config.RegistryFeignExceptionHandler;
+import com.github.sparkzxl.feign.support.RegistryFeignExceptionHandler;
 import com.github.sparkzxl.feign.default_.FeignExceptionDecoder;
 import com.github.sparkzxl.feign.default_.FeignExceptionHandler;
 import feign.codec.ErrorDecoder;
@@ -453,7 +453,7 @@ public @interface EnableFeignExceptionHandler {
 
 ```Java
 
-package com.github.sparkzxl.feign.config;
+package com.github.sparkzxl.feign.decoder;
 
 import com.github.sparkzxl.feign.annoation.EnableFeignExceptionHandler;
 import feign.codec.ErrorDecoder;

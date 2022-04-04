@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.annoation;
 
-import com.github.sparkzxl.feign.config.FeignExceptionDecoder;
-import com.github.sparkzxl.feign.config.RegistryFeignExceptionHandler;
+import com.github.sparkzxl.feign.decoder.FeignExceptionDecoder;
+import com.github.sparkzxl.feign.support.RegistryFeignExceptionHandler;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Import;
 
