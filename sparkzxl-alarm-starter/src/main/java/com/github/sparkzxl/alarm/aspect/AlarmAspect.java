@@ -1,5 +1,6 @@
 package com.github.sparkzxl.alarm.aspect;
 
+import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.alarm.AlarmFactoryExecute;
 import com.github.sparkzxl.alarm.IAlarmAttributeGet;
@@ -12,15 +13,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CompletableFuture;
@@ -59,9 +61,8 @@ public class AlarmAspect {
 
     }
 
-    @Around(value = "alarmPointcut(alarm)", argNames = "joinPoint,alarm")
-    public Object around(ProceedingJoinPoint joinPoint, Alarm alarm) throws Throwable {
-        Object result = joinPoint.proceed();
+    @AfterReturning(value = "alarmPointcut(alarm)", argNames = "joinPoint,alarm")
+    public void doAfterReturning(JoinPoint joinPoint, Alarm alarm) {
         String templateId = alarm.templateId();
         AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
         String templateContent = "";
@@ -75,7 +76,6 @@ public class AlarmAspect {
         alarmParamMap.put("stateColor", "#45B649");
         alarmParamMap.put("state", "成功");
         sendAlarm(alarm, templateContent, alarmParamMap);
-        return result;
     }
 
 
@@ -111,4 +111,24 @@ public class AlarmAspect {
         notifyMessage.setMessage(message);
         AlarmFactoryExecute.execute(notifyMessage);
     }
+
+    /**
+     * 优先从子类获取 @CheckResult：
+     * 1，若子类重写了该方法，有标记就记录日志，没标记就忽略日志
+     * 2，若子类没有重写该方法，就从父类获取，父类有标记就记录日志，没标记就忽略日志
+     */
+    public static Alarm getTargetAnnotation(JoinPoint point) {
+        try {
+            Alarm annotation = null;
+            if (point.getSignature() instanceof MethodSignature) {
+                Method method = ((MethodSignature) point.getSignature()).getMethod();
+                annotation = AnnotationUtil.getAnnotation(method, Alarm.class);
+            }
+            return annotation;
+        } catch (Exception e) {
+            log.warn("获取 {}.{} 的 @CheckResult 注解失败", point.getSignature().getDeclaringTypeName(), point.getSignature().getName(), e);
+            return null;
+        }
+    }
+
 }
