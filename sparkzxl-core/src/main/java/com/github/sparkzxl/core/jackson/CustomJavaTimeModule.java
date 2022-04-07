@@ -7,10 +7,10 @@ import com.fasterxml.jackson.datatype.jsr310.PackageVersion;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomDeSerializer;
-import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -36,7 +36,7 @@ public class CustomJavaTimeModule extends SimpleModule {
 
         // 反序列化
         this.addSerializer(Date.class, new DateSerializer(true, new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN)));
-        this.addSerializer(LocalDateTime.class, new LocalDateTimeCustomSerializer());
+        this.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
         this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)));
         this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)));
     }
