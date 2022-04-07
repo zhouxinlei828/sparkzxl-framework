@@ -46,7 +46,7 @@ public enum ExceptionErrorCode implements IErrorCode {
     NULL_POINTER_EXCEPTION_ERROR("B0001", "空指针异常"),
     INTERNAL_SERVER_ERROR("B0001", "系统执行出错"),
     TIME_OUT_ERROR("B0100", "服务请求超时"),
-    RETRY_ABLE_EXCEPTION("B0100", "服务请求超时重试异常"),
+    RETRY_ABLE_EXCEPTION("B0100", "【{}】服务请求超时重试异常"),
     OPEN_SERVICE_UNAVAILABLE("B0200", "【{}】服务不可用，请联系管理员！"),
     SYSTEM_BLOCK("B0310", "系统负载过高，请稍后再试"),
     SERVICE_DEGRADATION("B0220", "系统功能降级"),
@@ -67,6 +67,7 @@ public enum ExceptionErrorCode implements IErrorCode {
     TOO_MANY_CLUSTER_REDIRECTIONS_EXCEPTION("C0230", "Redis集群重定向过多异常"),
     CLUSTER_COMMAND_EXECUTION_FAILURE_EXCEPTION("C0230", "Redis集群命令执行失败异常"),
     REDIS_SUBSCRIBED_CONNECTION_EXCEPTION("C0230", "Redis订阅连接异常"),
+    DECODE_EXCEPTION("C0211", "Feign调用，解码异常"),
 
     ;
 

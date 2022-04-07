@@ -7,8 +7,8 @@ import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import feign.FeignException;
-import feign.RetryableException;
+import feign.*;
+import feign.codec.DecodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,15 +35,36 @@ public class FeignExceptionHandler implements Ordered {
     @ExceptionHandler(RetryableException.class)
     public Response<?> handleRetryableException(RetryableException e) {
         log.error("RetryableException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION);
+        String applicationName =
+                OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
+                        .orElseGet(() -> "unKnownServer");
+        String message = StrFormatter.format(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorMessage(), applicationName);
+        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
+    }
+
+    @ExceptionHandler(FeignException.ServiceUnavailable.class)
+    public Response<?> handleServiceUnavailableException(FeignException.ServiceUnavailable e) {
+        log.error("ServiceUnavailable异常:", e);
+        String applicationName =
+                OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
+                        .orElseGet(() -> "unKnownServer");
+        String message = StrFormatter.format(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMessage(), applicationName);
+        return Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+    }
+
+    @ExceptionHandler(DecodeException.class)
+    public Response<?> handleDecodeException(DecodeException e) {
+        log.error("DecodeException异常:", e);
+        return Response.failDetail(ExceptionErrorCode.DECODE_EXCEPTION.getErrorCode(), ExceptionErrorCode.DECODE_EXCEPTION.getErrorMessage());
     }
 
     @ExceptionHandler(RemoteCallException.class)
     public Response<?> handleRemoteCallException(RemoteCallException e) {
         log.error("RemoteCallException异常:", e);
-        String applicationName = OptionalBean.ofNullable(e.getApplicationName()).orElseGet(() -> "unKnownServer");
-        String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getMessage());
-        e.printStackTrace();
+        String applicationName =
+                OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
+                        .orElseGet(() -> "unKnownServer");
+        String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getErrorMessage());
         return Response.failDetail(e.getErrorCode(), message);
     }
 

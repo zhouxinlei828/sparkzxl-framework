@@ -1,5 +1,8 @@
 package com.github.sparkzxl.feign.exception;
 
+import com.github.sparkzxl.entity.response.ResponseCode;
+import feign.FeignException;
+import feign.Request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,21 +17,21 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @ToString
-public class RemoteCallException extends RuntimeException {
+public class RemoteCallException extends FeignException {
 
     private String errorCode;
 
-    private String applicationName;
+    private String errorMessage;
 
-    public RemoteCallException(String errorCode, String errorMessage, String applicationName) {
-        super(errorMessage);
+    public RemoteCallException(int status, String errorCode, String errorMessage, Request request) {
+        super(status, errorMessage, request);
         this.errorCode = errorCode;
-        this.applicationName = applicationName;
+        this.errorMessage = errorMessage;
     }
 
-    public RemoteCallException(String errorCode, String errorMessage, String applicationName, Throwable cause) {
-        super(errorMessage, cause);
+    public RemoteCallException(int status, String errorCode, String errorMessage, Throwable cause, Request request) {
+        super(status, errorMessage, request, cause);
         this.errorCode = errorCode;
-        this.applicationName = applicationName;
+        this.errorMessage = errorMessage;
     }
 }
