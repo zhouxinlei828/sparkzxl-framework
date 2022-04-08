@@ -18,13 +18,13 @@
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-        <!-- spring-cloud-->
-        <spring-boot-dependencies.version>2.5.10</spring-boot-dependencies.version>
+        <!-- spring-version-->
+        <spring-boot-dependencies.version>2.6.3</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>2020.0.4</spring-cloud-dependencies.version>
-        <gateway.version>3.0.7</gateway.version>
-        <nacos.version>2.0.4</nacos.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
+        <gateway.version>3.0.7</gateway.version>
+        <nacos.version>2.0.4</nacos.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
