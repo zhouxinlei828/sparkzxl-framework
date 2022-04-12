@@ -19,11 +19,10 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-version-->
-        <spring-boot-dependencies.version>2.6.3</spring-boot-dependencies.version>
-        <spring-cloud-dependencies.version>2020.0.4</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
+        <spring-boot-dependencies.version>2.6.6</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>2021.0.1</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
         <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
-        <gateway.version>3.0.7</gateway.version>
         <nacos.version>2.0.4</nacos.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
@@ -31,7 +30,7 @@
         <springfox.version>2.10.5</springfox.version>
         <swagger-models.version>1.5.22</swagger-models.version>
         <log4j.version>2.17.2</log4j.version>
-        <spring-webmvc.version>5.3.16</spring-webmvc.version>
+        <spring-webmvc.version>5.3.18</spring-webmvc.version>
 
         <!-- datasource-->
         <mybatis.version>3.5.7</mybatis.version>
@@ -66,8 +65,8 @@
         <userAgent.version>1.21</userAgent.version>
         <apm-toolkit-trace.version>8.7.0</apm-toolkit-trace.version>
         <ip2region.version>1.7.2</ip2region.version>
-        <caffeine.version>2.8.8</caffeine.version>
-        <fastjson.version>1.2.78</fastjson.version>
+        <caffeine.version>2.9.3</caffeine.version>
+        <fastjson.version>1.2.80</fastjson.version>
         <easy-excel.version>3.0.5</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
@@ -145,16 +144,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-autoconfigure</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-gateway</artifactId>
-                <version>${gateway.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-gateway-server</artifactId>
-                <version>${gateway.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
