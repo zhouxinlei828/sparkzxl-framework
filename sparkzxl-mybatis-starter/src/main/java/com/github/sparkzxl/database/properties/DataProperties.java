@@ -6,9 +6,14 @@ import com.baidu.fsg.uid.buffer.RingBuffer;
 import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
+import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
 
 /**
  * description: CustomMybatisProperties配置属性类
@@ -20,16 +25,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
         prefix = ConfigurationConstant.DATA_PREFIX
 )
 public class DataProperties {
-
-
-    private String driverClassName = "com.mysql.cj.jdbc.Driver";
-    private String ip = "127.0.0.1";
-    private int port = 3306;
-    private String username = "root";
-
-    private String password = "123456";
-
-    private String database = "sparkzxl_tenant";
 
     private long workerId = 0;
 
@@ -52,7 +47,7 @@ public class DataProperties {
     /**
      * 租户字段
      */
-    private String tenantIdColumn = "tenant_id";
+    private List<GlobalMetaData> globalColumn = Lists.newArrayList(new GlobalMetaData("tenant_id", "tenantId"));
 
     /**
      * 租户默认不填充数据表
@@ -78,11 +73,11 @@ public class DataProperties {
      */
     private CacheId cacheId = new CacheId();
     private DefaultId defaultId = new DefaultId();
-    private HutoolId hutoolId = new HutoolId();
+    private HuToolId hutoolId = new HuToolId();
 
 
     @Data
-    public static class HutoolId {
+    public static class HuToolId {
         /**
          * 终端ID (0-31)      单机配置0 即可。 集群部署，根据情况每个实例自增即可。
          */
@@ -163,6 +158,18 @@ public class DataProperties {
          * 可以改成你的项目开始开始的时间
          */
         private String epochStr = "2021-09-26";
+    }
+
+    /**
+     * 行级元数据
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GlobalMetaData {
+
+        private String column;
+        private String loadKey;
     }
 
 }

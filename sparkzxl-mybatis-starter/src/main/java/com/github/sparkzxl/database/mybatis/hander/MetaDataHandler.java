@@ -51,7 +51,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         log.debug("start update fill ....");
         Object targetObject = metaObject.getOriginalObject();
         // 主键
-        extractId(metaObject, targetObject, EntityConstant.ID);
+        extractId(metaObject, targetObject);
         // 创建人Id
         extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER);
         extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER_ID);
@@ -84,8 +84,6 @@ public class MetaDataHandler implements MetaObjectHandler {
         Object targetObject = metaObject.getOriginalObject();
         //更新人id
         extractUserId(metaObject, targetObject, EntityConstant.UPDATE_USER);
-        extractUserId(metaObject, targetObject, EntityConstant.UPDATE_USER_ID);
-        extractUserName(metaObject, targetObject, EntityConstant.UPDATE_USER_NAME);
         //更新时间
         extractDate(metaObject, targetObject, EntityConstant.UPDATE_TIME);
 
@@ -96,20 +94,19 @@ public class MetaDataHandler implements MetaObjectHandler {
      *
      * @param metaObject   元对象
      * @param targetObject 目标对象
-     * @param field        用户id属性
      */
-    private void extractId(MetaObject metaObject, Object targetObject, String field) {
-        boolean idExistClass = ReflectObjectUtil.existProperty(targetObject, field);
+    private void extractId(MetaObject metaObject, Object targetObject) {
+        boolean idExistClass = ReflectObjectUtil.existProperty(targetObject, EntityConstant.ID);
         if (idExistClass) {
             if (uidGenerator == null) {
                 // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
                 uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
             }
             Long id = uidGenerator.getUid();
-            Object idVal = ReflectObjectUtil.getValueByKey(targetObject, field);
+            Object idVal = ReflectObjectUtil.getValueByKey(targetObject, EntityConstant.ID);
             if (ObjectUtils.isEmpty(idVal)) {
-                idVal = String.class.getName().equals(metaObject.getGetterType(field).getTypeName()) ? String.valueOf(id) : id;
-                this.setFieldValByName(field, idVal, metaObject);
+                idVal = String.class.getName().equals(metaObject.getGetterType(EntityConstant.ID).getTypeName()) ? String.valueOf(id) : id;
+                this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
             }
         } else {
             if (uidGenerator == null) {

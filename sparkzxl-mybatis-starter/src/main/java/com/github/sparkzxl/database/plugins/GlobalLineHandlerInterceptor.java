@@ -8,23 +8,25 @@ import net.sf.jsqlparser.expression.StringValue;
 import java.util.List;
 
 /**
- * description: 多租户处理器
+ * description: 全局行级处理器
  *
  * @author zhouxinlei
  */
-public class TenantLineHandlerInterceptor implements TenantLineHandler {
+public class GlobalLineHandlerInterceptor implements TenantLineHandler {
 
     private final String tenantIdColumn;
     private final List<String> ignoreTableList;
+    private final String loadKey;
 
-    public TenantLineHandlerInterceptor(String tenantIdColumn, List<String> ignoreTableList) {
+    public GlobalLineHandlerInterceptor(String tenantIdColumn, String loadKey, List<String> ignoreTableList) {
         this.tenantIdColumn = tenantIdColumn;
+        this.loadKey = loadKey;
         this.ignoreTableList = ignoreTableList;
     }
 
     @Override
     public Expression getTenantId() {
-        return new StringValue(RequestLocalContextHolder.getTenant());
+        return new StringValue(RequestLocalContextHolder.get(loadKey));
     }
 
     @Override

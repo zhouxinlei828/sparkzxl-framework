@@ -16,12 +16,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 )
 public class CustomMybatisProperties {
 
-
-    /**
-     * mapper扫包路径
-     */
-    private String[] mapperScan;
-
     /**
      * 数据库类型
      */
