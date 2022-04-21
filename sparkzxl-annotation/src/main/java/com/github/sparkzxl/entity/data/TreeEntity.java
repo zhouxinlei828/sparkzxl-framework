@@ -11,29 +11,16 @@ import java.util.List;
  *
  * @author zhouxinlei
  */
-public class TreeEntity<E, T extends Serializable> extends Entity<T> {
+public class TreeEntity<E, T extends Serializable> {
 
-    /**
-     * 名称
-     */
-    @TableField(value = "label", condition = "%s LIKE CONCAT('%%',#{%s},'%%')")
+    protected T id;
+
     protected String label;
 
-    /**
-     * 父ID
-     */
-    @TableField("parent_id")
     protected T parentId;
 
-    /**
-     * 排序号
-     */
-    @TableField("sort_number")
     protected Integer sortNumber;
 
-    /**
-     * 子节点
-     */
     @TableField(exist = false)
     protected List<E> children;
 
@@ -45,6 +32,15 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
             this.setChildren(new ArrayList<>());
         }
 
+    }
+
+    public T getId() {
+        return this.id;
+    }
+
+    public TreeEntity<E, T> setId(T id) {
+        this.id = id;
+        return this;
     }
 
     public String getLabel() {

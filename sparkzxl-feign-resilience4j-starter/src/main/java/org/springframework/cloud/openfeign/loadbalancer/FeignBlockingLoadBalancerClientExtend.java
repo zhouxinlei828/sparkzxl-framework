@@ -6,9 +6,12 @@ import feign.Request;
 import feign.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.*;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -46,6 +49,10 @@ public class FeignBlockingLoadBalancerClientExtend implements Client {
 
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
+        FeignClient feignClient = AnnotationUtils.getAnnotation(request.requestTemplate().feignTarget().type(), FeignClient.class);
+        if (StringUtils.isNotEmpty(feignClient.url())) {
+            return delegate.execute(request, options);
+        }
         final URI originalUri = URI.create(request.url());
         String serviceId = originalUri.getHost();
         Assert.state(serviceId != null, "Request URI does not contain a valid hostname: " + originalUri);
