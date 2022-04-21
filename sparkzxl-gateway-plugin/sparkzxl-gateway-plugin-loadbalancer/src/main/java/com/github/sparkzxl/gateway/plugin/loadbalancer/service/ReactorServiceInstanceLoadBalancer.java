@@ -25,7 +25,7 @@ import java.util.Map;
 public class ReactorServiceInstanceLoadBalancer implements IReactorServiceInstanceLoadBalancer {
 
     private final ReactiveLoadBalancerProperties reactiveLoadBalancerProperties;
-    private Map<String, ILoadBalancerRule> loadBalancerRuleMap;
+    private final Map<String, ILoadBalancerRule> loadBalancerRuleMap;
 
     public ReactorServiceInstanceLoadBalancer(List<ILoadBalancerRule> loadBalancerRuleList, ReactiveLoadBalancerProperties reactiveLoadBalancerProperties) {
         this.reactiveLoadBalancerProperties = reactiveLoadBalancerProperties;
