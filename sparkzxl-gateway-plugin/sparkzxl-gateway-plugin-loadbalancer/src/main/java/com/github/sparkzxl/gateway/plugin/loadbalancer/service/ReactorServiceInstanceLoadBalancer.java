@@ -4,14 +4,12 @@ import com.github.sparkzxl.gateway.plugin.loadbalancer.rule.ILoadBalancerRule;
 import com.github.sparkzxl.gateway.plugin.properties.ReactiveLoadBalancerProperties;
 import com.github.sparkzxl.gateway.plugin.support.GatewayException;
 import com.google.common.collect.Maps;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -23,9 +21,7 @@ import java.util.Map;
  * @author zhoux
  * @date 2021-10-23 16:45:51
  */
-@Component
 @Slf4j
-@RequiredArgsConstructor
 public class ReactorServiceInstanceLoadBalancer implements IReactorServiceInstanceLoadBalancer {
 
     private final ReactiveLoadBalancerProperties reactiveLoadBalancerProperties;
