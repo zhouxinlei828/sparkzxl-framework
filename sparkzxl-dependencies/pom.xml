@@ -89,7 +89,7 @@
         <vavr.version>1.0.0-alpha-3</vavr.version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <jsqlparser.version>4.1</jsqlparser.version>
-        <antisamy.version>1.6.4</antisamy.version>
+        <antisamy.version>1.6.7</antisamy.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
         <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
