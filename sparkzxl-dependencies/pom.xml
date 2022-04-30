@@ -52,14 +52,14 @@
         <guava.version>30.1.1-jre</guava.version>
         <hutool.version>5.7.11</hutool.version>
         <!-- redisson -->
-        <redisson-spring-boot-starter.version>3.13.6</redisson-spring-boot-starter.version>
+        <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
         <curator.version>5.1.0</curator.version>
 
-        <elasticsearch.version>7.14.0</elasticsearch.version>
+        <elasticsearch.version>7.17.1</elasticsearch.version>
         <html2pdf.version>3.0.3</html2pdf.version>
         <pdfbox.version>2.0.24</pdfbox.version>
-        <itext.version>7.1.17</itext.version>
+        <itext.version>7.2.2</itext.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
@@ -74,6 +74,7 @@
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.2</seata.version>
+        <protobuf-java.version>3.20.1</protobuf-java.version>
         <janino.version>3.1.6</janino.version>
         <drools-version>7.47.0.Final</drools-version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
@@ -85,8 +86,11 @@
         <freemarker.version>2.3.28</freemarker.version>
         <swagger-models.version>1.5.22</swagger-models.version>
         <aliyun-dysmsapi-version>2.0.8</aliyun-dysmsapi-version>
+        <bcprov-jdk15on-version>1.70</bcprov-jdk15on-version>
         <tencentcloud-sdk-java-version>4.0.11</tencentcloud-sdk-java-version>
+        <okhttp.version>2.7.5</okhttp.version>
         <grpc-spring-boot-starter.version>2.13.1.RELEASE</grpc-spring-boot-starter.version>
+        <commons-compress.version>1.21</commons-compress.version>
     </properties>
 
     <licenses>
@@ -246,6 +250,11 @@
                 <groupId>io.seata</groupId>
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf-java.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
@@ -459,6 +468,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easy-excel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.lianjiatech</groupId>
@@ -718,11 +732,21 @@
                 <artifactId>dysmsapi20170525</artifactId>
                 <version>${aliyun-dysmsapi-version}</version>
             </dependency>
-            <!--阿里云短信-->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bcprov-jdk15on-version}</version>
+            </dependency>
+            <!--腾讯云短信-->
             <dependency>
                 <groupId>com.tencentcloudapi</groupId>
                 <artifactId>tencentcloud-sdk-java</artifactId>
                 <version>${tencentcloud-sdk-java-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.devh</groupId>
