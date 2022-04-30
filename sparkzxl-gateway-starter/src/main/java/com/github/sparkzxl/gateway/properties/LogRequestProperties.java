@@ -2,7 +2,10 @@ package com.github.sparkzxl.gateway.properties;
 
 import lombok.Data;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * description:

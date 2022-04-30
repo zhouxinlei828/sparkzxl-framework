@@ -5,13 +5,13 @@ package com.github.sparkzxl.core.base.code;
  *
  * @author zhouxinlei
  */
-public interface ResponseInfo {
+public interface ICode {
     /**
      * code
      *
      * @return long
      */
-    int getCode();
+    String getCode();
 
     /**
      * getMessage

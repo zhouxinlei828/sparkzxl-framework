@@ -2,7 +2,7 @@ package com.github.sparkzxl.idempotent.support;
 
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -24,7 +24,7 @@ public class IdempotentExceptionHandler implements Ordered {
     @ExceptionHandler(IdempotentNoLockException.class)
     public Response<?> handleIdempotentNoLockException(IdempotentNoLockException e) {
         log.error("SQL异常：", e);
-        return Response.fail(ResponseInfoStatus.FAILURE.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.FAILURE.getCode(), e.getMessage());
     }
 
     @Override

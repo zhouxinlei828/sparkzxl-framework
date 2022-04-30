@@ -1,13 +1,14 @@
 package com.github.sparkzxl.core.util;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestAttributes;
@@ -178,7 +179,7 @@ public class HttpRequestUtils {
         return StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
     }
 
-    public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg) {
+    public static void writeResponseOutMsg(HttpServletResponse response, String code, String msg) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
@@ -191,7 +192,7 @@ public class HttpRequestUtils {
         }
     }
 
-    public static void writeResponseOutMsg(HttpServletResponse response, int code, String msg, Object data) {
+    public static void writeResponseOutMsg(HttpServletResponse response, String code, String msg, Object data) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
@@ -206,10 +207,10 @@ public class HttpRequestUtils {
 
     public static void unauthorized(HttpServletResponse response, String msg) {
         try {
-            int code = ResponseInfoStatus.UN_AUTHORIZED.getCode();
+            String code = ExceptionCode.UN_AUTHORIZED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(code);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
             response.getWriter().flush();
         } catch (IOException e) {
@@ -219,10 +220,10 @@ public class HttpRequestUtils {
 
     public static void forbidden(HttpServletResponse response, String msg) {
         try {
-            int code = ResponseInfoStatus.AUTHORIZED_DENIED.getCode();
+            String code = ExceptionCode.AUTHORIZED_DENIED.getCode();
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(ResponseInfoStatus.AUTHORIZED_DENIED.getCode());
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
             response.getWriter().flush();
         } catch (Exception e) {

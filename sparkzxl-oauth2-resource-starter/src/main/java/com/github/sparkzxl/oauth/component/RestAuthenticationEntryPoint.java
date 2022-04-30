@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oauth.component;
 
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -31,11 +31,11 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        int code = ResponseInfoStatus.UN_AUTHORIZED.getCode();
-        String message = ResponseInfoStatus.UN_AUTHORIZED.getMessage();
+        String code = ExceptionCode.UN_AUTHORIZED.getCode();
+        String message = ExceptionCode.UN_AUTHORIZED.getMessage();
         if (e instanceof InvalidBearerTokenException) {
-            code = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getCode();
-            message = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getMessage();
+            code = ExceptionCode.TOKEN_EXPIRED_ERROR.getCode();
+            message = ExceptionCode.TOKEN_EXPIRED_ERROR.getMessage();
         }
         String body = JSONUtil.toJsonStr(Response.fail(code, message));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));

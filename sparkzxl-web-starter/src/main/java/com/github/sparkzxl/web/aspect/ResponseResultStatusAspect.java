@@ -72,15 +72,10 @@ public class ResponseResultStatusAspect {
             if (responseResult != null) {
                 servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
             }
-            Response<?> apiResult = (Response<?>) proceed;
             ResponseResultStatus status = AnnotatedElementUtils.findMergedAnnotation(proceedingJoinPoint.getTarget().getClass(), ResponseResultStatus.class);
             int code = HttpStatus.BAD_REQUEST.value();
             if (ObjectUtils.isNotEmpty(status)) {
                 code = status.value();
-            }
-            if (enableTransferStatus) {
-                code = apiResult.getCode();
-                response.setStatus(code);
             }
             // 判断是否是feign请求&& 是否需要异常传递
             Boolean feign = Convert.toBool(servletRequest.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);

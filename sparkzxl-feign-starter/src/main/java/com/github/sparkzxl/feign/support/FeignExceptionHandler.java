@@ -4,7 +4,7 @@ import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.feign.exception.RemoteCallException;
 import feign.FeignException;
@@ -28,13 +28,13 @@ public class FeignExceptionHandler implements Ordered {
     @ExceptionHandler(SocketTimeoutException.class)
     public Response<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error("SocketTimeoutException异常:", e);
-        return Response.fail(ResponseInfoStatus.TIME_OUT_ERROR.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.TIME_OUT_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
     public Response<?> handleRetryableException(FeignException e) {
         log.error("FeignException异常:", e);
-        return Response.fail(ResponseInfoStatus.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
+        return Response.fail(ExceptionCode.RETRY_ABLE_EXCEPTION.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(RemoteCallException.class)

@@ -1,15 +1,14 @@
 package com.github.sparkzxl.gateway.filter.authorization;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
-import com.github.sparkzxl.core.util.StringHandlerUtil;
-import com.github.sparkzxl.core.util.SwaggerStaticResource;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
 import com.github.sparkzxl.gateway.constant.ExchangeAttributeConstant;
+import com.github.sparkzxl.gateway.context.GatewayContext;
 import com.github.sparkzxl.gateway.option.FilterOrderEnum;
+import com.github.sparkzxl.gateway.properties.GatewayResourceProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.util.ReactorHttpHelper;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
@@ -20,7 +19,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -31,16 +30,19 @@ import java.util.Map;
 @Slf4j
 public abstract class AbstractAuthorizationFilter implements GlobalFilter, Ordered {
 
+    @Resource
+    private GatewayResourceProperties gatewayResourceProperties;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        String requestUrl = request.getPath().toString();
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.GATEWAY_CONTEXT_CONSTANT);
+        assert gatewayContext != null;
         String tenantId = ReactorHttpHelper.getHeader(BaseContextConstants.TENANT_ID, request);
-        String version = ReactorHttpHelper.getHeader(BaseContextConstants.VERSION, request);
         MDC.put(BaseContextConstants.TENANT_ID, String.valueOf(tenantId));
-        log.info("请求租户id：[{}]，版本：[{}]，请求接口：[{}]", tenantId, version, requestUrl);
+        log.info("请求租户id：{}，版本：{}，请求路由：{}，请求接口：{}", tenantId, gatewayContext.getVersion(), gatewayContext.getRouteId(), gatewayContext.getPath());
         // 请求放行后置操作
-        if (StringHandlerUtil.matchUrl(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS, request.getPath().toString()) || StringHandlerUtil.matchUrl(ignorePatterns(), request.getPath().toString())) {
+        if (gatewayResourceProperties.match(gatewayContext.getRouteId(), gatewayContext.getPath())) {
             // 放行请求清除token
             ignoreCheckAfterCompletion(exchange);
             return chain.filter(exchange);
@@ -85,7 +87,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
     protected void checkTokenAuthority(ServerWebExchange exchange, String token) throws GatewayException {
         JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new GatewayException(ResponseInfoStatus.TOKEN_EXPIRED_ERROR);
+            throw new GatewayException(ExceptionCode.TOKEN_EXPIRED_ERROR);
         }
         ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate().headers(httpHeaders -> {
             httpHeaders.add(BaseContextConstants.JWT_KEY_USER_ID, ReactorHttpHelper.formatHeader(jwtUserInfo.getId()));
@@ -111,7 +113,7 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
     }
 
     protected void onAuthFail(ServerWebExchange exchange, GatewayFilterChain chain) {
-        throw new GatewayException(ResponseInfoStatus.JWT_EMPTY_ERROR);
+        throw new GatewayException(ExceptionCode.JWT_EMPTY_ERROR);
     }
 
     /**
@@ -131,15 +133,6 @@ public abstract class AbstractAuthorizationFilter implements GlobalFilter, Order
      * @return 返回值
      */
     public abstract String getHeaderKey();
-
-    /**
-     * 放行地址集合
-     *
-     * @return List<String>
-     */
-    protected List<String> ignorePatterns() {
-        return Lists.newArrayList();
-    }
 
     /**
      * 获取token用户信息

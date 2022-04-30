@@ -5,7 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -14,14 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * description: WebFluxUtils工具类
@@ -78,7 +76,7 @@ public class ReactorHttpHelper {
         return URLUtil.encode(valueStr);
     }
 
-    public static Mono<Void> errorResponse(ServerHttpResponse response, int code, String message) {
+    public static Mono<Void> errorResponse(ServerHttpResponse response, String code, String message) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         byte[] bytes = JSON.toJSONString(Response.fail(code, message)).getBytes(StandardCharsets.UTF_8);
@@ -86,7 +84,7 @@ public class ReactorHttpHelper {
         return response.writeWith(Flux.just(buffer));
     }
 
-    public static Mono<Void> errorResponse(ServerHttpResponse response, ResponseInfoStatus responseInfoStatus) {
+    public static Mono<Void> errorResponse(ServerHttpResponse response, ExceptionCode responseInfoStatus) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         byte[] bytes = JSON.toJSONString(Response.fail(responseInfoStatus.getCode(), responseInfoStatus.getMessage())).getBytes(StandardCharsets.UTF_8);

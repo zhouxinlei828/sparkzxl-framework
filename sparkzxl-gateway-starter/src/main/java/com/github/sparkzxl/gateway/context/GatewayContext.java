@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.context;
 
-import com.github.sparkzxl.gateway.entity.RoutePath;
 import com.github.sparkzxl.gateway.properties.LogRequestProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,23 +18,47 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class CacheGatewayContext {
+public class GatewayContext {
 
-    public static final String CACHE_GATEWAY_CONTEXT = "cacheGatewayContext";
+    public static final String GATEWAY_CONTEXT_CONSTANT = "gatewayContext";
+
+    /**
+     * tenantId.
+     */
+    private String tenantId;
+
+    /**
+     * version.
+     */
+    private String version;
+
+    /**
+     * httpMethod .
+     */
+    private String httpMethod;
 
     protected LocalDateTime requestDateTime = LocalDateTime.now();
 
     /**
-     * 记录路由路径
+     * 路由id
      */
-    private RoutePath routePath;
+    private String routeId;
+
+    /**
+     * 请求路径
+     */
+    private String path;
+
+    /**
+     * 请求路径
+     */
+    private String url;
 
     /**
      * 是否输出日志
      */
     private boolean outputLog;
 
-    private LogRequestProperties logging;
     /**
      * cache json body
      */
@@ -52,9 +75,5 @@ public class CacheGatewayContext {
      * cache form data
      */
     protected MultiValueMap<String, String> formData;
-    /**
-     * cache all request data include:form data and query param
-     */
-    protected MultiValueMap<String, String> allRequestData = new LinkedMultiValueMap<>(0);
 
 }

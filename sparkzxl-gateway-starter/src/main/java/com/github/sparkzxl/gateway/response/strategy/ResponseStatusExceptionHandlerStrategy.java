@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.response.strategy;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.gateway.response.ExceptionHandlerResult;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerS
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
         ResponseStatusException responseStatusException = (ResponseStatusException) throwable;
-        Response responseResult = Response.fail(ResponseInfoStatus.OPEN_SERVICE_UNAVAILABLE.getCode(), throwable.getMessage());
+        Response responseResult = Response.fail(ExceptionCode.OPEN_SERVICE_UNAVAILABLE.getCode(), throwable.getMessage());
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(responseStatusException.getStatus(), response);
         log.debug("[ResponseStatusExceptionHandlerStrategy]Handle Exception:{},Result:{}", throwable.getMessage(), result);

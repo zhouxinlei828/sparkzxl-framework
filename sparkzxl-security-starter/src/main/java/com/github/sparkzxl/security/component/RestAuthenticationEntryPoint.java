@@ -1,6 +1,6 @@
 package com.github.sparkzxl.security.component;
 
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -22,11 +22,11 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException e) {
         log.error("AuthenticationException：[{}]", e.getMessage());
-        int code = ResponseInfoStatus.UN_AUTHORIZED.getCode();
-        String message = ResponseInfoStatus.UN_AUTHORIZED.getMessage();
+        String code = ExceptionCode.UN_AUTHORIZED.getCode();
+        String message = ExceptionCode.UN_AUTHORIZED.getMessage();
         if (e instanceof AccountExpiredException) {
-            code = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getCode();
-            message = ResponseInfoStatus.TOKEN_EXPIRED_ERROR.getMessage();
+            code = ExceptionCode.TOKEN_EXPIRED_ERROR.getCode();
+            message = ExceptionCode.TOKEN_EXPIRED_ERROR.getMessage();
         }
         HttpRequestUtils.writeResponseOutMsg(response,
                 code, message);

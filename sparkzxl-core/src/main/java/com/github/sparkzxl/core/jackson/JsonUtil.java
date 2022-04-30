@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.sparkzxl.core.base.result.ResponseInfoStatus;
+import com.github.sparkzxl.core.base.result.ExceptionCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.StrPool;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +60,7 @@ public class JsonUtil {
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(content, typeReference);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -87,7 +87,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, valueType);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -96,7 +96,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(bytes, typeReference);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -105,7 +105,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, valueType);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -114,7 +114,7 @@ public class JsonUtil {
         try {
             return getInstance().readValue(in, typeReference);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -196,7 +196,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonString);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -205,7 +205,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(in);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -214,7 +214,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(content);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
@@ -223,7 +223,7 @@ public class JsonUtil {
         try {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
-            ExceptionAssert.failure(ResponseInfoStatus.JSON_PARSE_ERROR);
+            ExceptionAssert.failure(ExceptionCode.JSON_PARSE_ERROR);
             return null;
         }
     }
