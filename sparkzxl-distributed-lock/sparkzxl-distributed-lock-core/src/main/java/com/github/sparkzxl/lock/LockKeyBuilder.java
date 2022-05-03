@@ -1,6 +1,6 @@
 package com.github.sparkzxl.lock;
 
-import org.aopalliance.intercept.MethodInvocation;
+import org.aspectj.lang.JoinPoint;
 
 /**
  * description: 锁key构建
@@ -13,10 +13,10 @@ public interface LockKeyBuilder {
     /**
      * 构建key
      *
-     * @param invocation     invocation
+     * @param joinPoint      切入点
      * @param definitionKeys 定义
      * @return key
      */
-    String buildKey(MethodInvocation invocation, String[] definitionKeys);
+    String buildKey(JoinPoint joinPoint, String[] definitionKeys);
 
 }

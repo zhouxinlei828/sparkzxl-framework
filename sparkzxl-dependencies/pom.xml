@@ -613,6 +613,21 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-distributed-lock-redis-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-distributed-lock-redisson-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-distributed-lock-zookeeper-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-drools-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>

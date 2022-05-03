@@ -108,7 +108,7 @@ public class ListUtils {
     public static String listToString(List<String> list) {
         String str = "";
         if (isNotEmpty(list)) {
-            str = StringUtils.joinWith(",", list);
+            str = StringUtils.join(list, ",");
         }
         return str;
     }
@@ -121,7 +121,7 @@ public class ListUtils {
      */
     public static List<String> stringToList(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            String[] str = data.split(",");
+            String[] str = StringUtils.split(data, ",");
             return Arrays.asList(str);
         } else {
             return emptyList();
@@ -130,7 +130,7 @@ public class ListUtils {
 
     public static List<Long> stringToLongList(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            String[] str = data.split(",");
+            String[] str = StringUtils.split(data, ",");
             Long[] strArrNum = Convert.toLongArray(str);
             return Arrays.asList(strArrNum);
         } else {
@@ -140,7 +140,7 @@ public class ListUtils {
 
     public static List<Integer> stringToIntegerList(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            String[] str = data.split(",");
+            String[] str = StringUtils.split(data, ",");
             Integer[] strArrNum = Convert.toIntArray(str);
             return Arrays.asList(strArrNum);
         } else {
@@ -150,7 +150,7 @@ public class ListUtils {
 
     public static String[] stringToArray(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            return data.split(",");
+            return StringUtils.split(data, ",");
         } else {
             return new String[0];
         }

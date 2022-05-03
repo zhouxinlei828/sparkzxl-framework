@@ -1,15 +1,13 @@
 package com.github.sparkzxl.lock.autoconfigure;
 
 import com.github.sparkzxl.lock.*;
-import com.github.sparkzxl.lock.aop.LockAnnotationAdvisor;
-import com.github.sparkzxl.lock.aop.LockInterceptor;
+import com.github.sparkzxl.lock.aop.DistributedLockAspect;
 import com.github.sparkzxl.lock.executor.LockExecutor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 
 import java.util.List;
 
@@ -49,16 +47,9 @@ public class LockAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public LockInterceptor lockInterceptor(LockTemplate lockTemplate, LockKeyBuilder lockKeyBuilder,
-                                           LockFailureStrategy lockFailureStrategy) {
-        return new LockInterceptor(lockTemplate, lockKeyBuilder, lockFailureStrategy, properties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public LockAnnotationAdvisor lockAnnotationAdvisor(LockInterceptor lockInterceptor) {
-        return new LockAnnotationAdvisor(lockInterceptor, Ordered.HIGHEST_PRECEDENCE);
+    public DistributedLockAspect distributedLockAspect(LockTemplate lockTemplate, LockKeyBuilder lockKeyBuilder,
+                                                       LockFailureStrategy lockFailureStrategy) {
+        return new DistributedLockAspect(lockTemplate, lockKeyBuilder, lockFailureStrategy, properties);
     }
 
 }

@@ -1,6 +1,9 @@
 package com.github.sparkzxl.lock;
 
-import org.aopalliance.intercept.MethodInvocation;
+import cn.hutool.core.text.StrPool;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.expression.MethodBasedEvaluationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -26,16 +29,29 @@ public class DefaultLockKeyBuilder implements LockKeyBuilder {
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
     @Override
-    public String buildKey(MethodInvocation invocation, String[] definitionKeys) {
-        Method method = invocation.getMethod();
+    public String buildKey(JoinPoint joinPoint, String[] definitionKeys) {
         if (definitionKeys.length > 1 || !"".equals(definitionKeys[0])) {
-            return getSpElDefinitionKey(definitionKeys, method, invocation.getArguments());
+            Method targetMethod;
+            try {
+                targetMethod = getTargetMethod(joinPoint);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+            return getSpElDefinitionKey(definitionKeys, targetMethod, joinPoint.getArgs());
         }
         return "";
     }
 
+    public static Method getTargetMethod(JoinPoint pjp) throws NoSuchMethodException {
+        Signature signature = pjp.getSignature();
+        MethodSignature methodSignature = (MethodSignature) signature;
+        Method agentMethod = methodSignature.getMethod();
+        return pjp.getTarget().getClass().getMethod(agentMethod.getName(), agentMethod.getParameterTypes());
+    }
+
     protected String getSpElDefinitionKey(String[] definitionKeys, Method method, Object[] parameterValues) {
-        EvaluationContext context = new MethodBasedEvaluationContext(null, method, parameterValues, NAME_DISCOVERER);
+        EvaluationContext context = new MethodBasedEvaluationContext(new Object(), method, parameterValues,
+                NAME_DISCOVERER);
         List<String> definitionKeyList = new ArrayList<>(definitionKeys.length);
         for (String definitionKey : definitionKeys) {
             if (definitionKey != null && !definitionKey.isEmpty()) {
@@ -43,7 +59,7 @@ public class DefaultLockKeyBuilder implements LockKeyBuilder {
                 definitionKeyList.add(key);
             }
         }
-        return StringUtils.collectionToDelimitedString(definitionKeyList, ".", "", "");
+        return StringUtils.collectionToDelimitedString(definitionKeyList, StrPool.COLON, "", "");
     }
 
 }

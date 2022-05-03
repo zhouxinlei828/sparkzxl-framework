@@ -8,23 +8,25 @@ import com.github.sparkzxl.lock.annotation.DistributedLock;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.aop.framework.AopProxyUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.util.StringUtils;
 
-import java.util.Objects;
-
+import java.lang.reflect.Method;
 
 /**
- * description: 分布式锁Aop处理器
+ * description: 分布式锁切面类
  *
  * @author zhouxinlei
- * @since 2022-05-01 22:00:08
+ * @since 2022-05-03 10:19:11
  */
-@Slf4j
+@Aspect
 @RequiredArgsConstructor
-public class LockInterceptor implements MethodInterceptor {
+@Slf4j
+public class DistributedLockAspect {
 
     private final LockTemplate lockTemplate;
 
@@ -34,27 +36,28 @@ public class LockInterceptor implements MethodInterceptor {
 
     private final DistributedLockProperties distributedLockProperties;
 
-    @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
-        //fix 使用其他aop组件时,aop切了两次.
-        Class<?> cls = AopProxyUtils.ultimateTargetClass(Objects.requireNonNull(invocation.getThis()));
-        if (!cls.equals(invocation.getThis().getClass())) {
-            return invocation.proceed();
-        }
-        DistributedLock distributedLock = invocation.getMethod().getAnnotation(DistributedLock.class);
+    @Pointcut("@annotation(distributedLock)")
+    public void distributedLockPointcut(DistributedLock distributedLock) {
+
+    }
+
+    @Around(value = "distributedLockPointcut(distributedLock)", argNames = "proceedingJoinPoint,distributedLock")
+    public Object around(ProceedingJoinPoint proceedingJoinPoint, DistributedLock distributedLock) throws Throwable {
         LockInfo lockInfo = null;
+        MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
+        Method method = methodSignature.getMethod();
         try {
             String prefix = distributedLockProperties.getLockKeyPrefix() + ":";
             prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name() :
-                    invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
-            String key = prefix + "#" + lockKeyBuilder.buildKey(invocation, distributedLock.keys());
+                    method.getDeclaringClass().getName() + method.getName();
+            String key = prefix + "#" + lockKeyBuilder.buildKey(proceedingJoinPoint, distributedLock.keys());
             lockInfo = lockTemplate.lock(key, distributedLock.expire(), distributedLock.acquireTimeout(), distributedLock.executor());
             if (null != lockInfo) {
                 log.info("Thread[{}] -> get lock key[{}] success", lockInfo.getThreadId(), key);
-                return invocation.proceed();
+                return proceedingJoinPoint.proceed();
             }
             // lock failure
-            lockFailureStrategy.onLockFailure(key, invocation.getMethod(), invocation.getArguments());
+            lockFailureStrategy.onLockFailure(key, method, method.getParameters());
             return null;
         } finally {
             if (null != lockInfo && distributedLock.autoRelease()) {
