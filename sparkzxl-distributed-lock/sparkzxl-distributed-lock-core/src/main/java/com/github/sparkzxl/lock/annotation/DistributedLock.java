@@ -1,6 +1,6 @@
 package com.github.sparkzxl.lock.annotation;
 
-import com.github.sparkzxl.lock.autoconfigure.LockProperties;
+import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
 import com.github.sparkzxl.lock.executor.LockExecutor;
 
 import java.lang.annotation.ElementType;
@@ -40,7 +40,7 @@ public @interface DistributedLock {
     /**
      * @return 过期时间 单位：毫秒
      * <pre>
-     *     过期时间一定是要长于业务的执行时间. 未设置则为默认时间30秒 默认值：{@link LockProperties#expire}
+     *     过期时间一定是要长于业务的执行时间. 未设置则为默认时间30秒 默认值：{@link DistributedLockProperties#expire}
      * </pre>
      */
     long expire() default -1;
@@ -54,7 +54,7 @@ public @interface DistributedLock {
     long acquireTimeout() default -1;
 
     /**
-     * 业务方法执行完后（方法内抛异常也算执行完）自动释放锁，如果为false，锁将不会自动释放直至到达过期时间才释放 {@link LockProperties#expire}
+     * 业务方法执行完后（方法内抛异常也算执行完）自动释放锁，如果为false，锁将不会自动释放直至到达过期时间才释放 {@link DistributedLockProperties#expire}
      *
      * @return 是否自动释放锁
      */

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.github.sparkzxl.lock.spring.boot.autoconfigure.RedissonLockAutoConfiguration

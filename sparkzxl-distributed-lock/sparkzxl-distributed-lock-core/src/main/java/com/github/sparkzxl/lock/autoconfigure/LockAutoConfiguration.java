@@ -20,11 +20,11 @@ import java.util.List;
  * @since 2022-05-01 22:02:36
  */
 @Configuration
-@EnableConfigurationProperties(LockProperties.class)
+@EnableConfigurationProperties(DistributedLockProperties.class)
 @RequiredArgsConstructor
 public class LockAutoConfiguration {
 
-    private final LockProperties properties;
+    private final DistributedLockProperties properties;
 
     @SuppressWarnings("rawtypes")
     @Bean

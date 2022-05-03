@@ -15,6 +15,10 @@ import lombok.Data;
 public class LockInfo {
 
     /**
+     * 线程id
+     */
+    private long threadId;
+    /**
      * 锁名称
      */
     private String lockKey;

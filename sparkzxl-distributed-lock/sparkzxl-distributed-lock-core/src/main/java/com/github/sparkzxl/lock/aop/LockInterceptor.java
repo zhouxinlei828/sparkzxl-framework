@@ -5,13 +5,15 @@ import com.github.sparkzxl.lock.LockInfo;
 import com.github.sparkzxl.lock.LockKeyBuilder;
 import com.github.sparkzxl.lock.LockTemplate;
 import com.github.sparkzxl.lock.annotation.DistributedLock;
-import com.github.sparkzxl.lock.autoconfigure.LockProperties;
+import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 
 /**
@@ -30,24 +32,25 @@ public class LockInterceptor implements MethodInterceptor {
 
     private final LockFailureStrategy lockFailureStrategy;
 
-    private final LockProperties lock4jProperties;
+    private final DistributedLockProperties distributedLockProperties;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         //fix 使用其他aop组件时,aop切了两次.
-        Class<?> cls = AopProxyUtils.ultimateTargetClass(invocation.getThis());
+        Class<?> cls = AopProxyUtils.ultimateTargetClass(Objects.requireNonNull(invocation.getThis()));
         if (!cls.equals(invocation.getThis().getClass())) {
             return invocation.proceed();
         }
         DistributedLock distributedLock = invocation.getMethod().getAnnotation(DistributedLock.class);
         LockInfo lockInfo = null;
         try {
-            String prefix = lock4jProperties.getLockKeyPrefix() + ":";
+            String prefix = distributedLockProperties.getLockKeyPrefix() + ":";
             prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name() :
                     invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
             String key = prefix + "#" + lockKeyBuilder.buildKey(invocation, distributedLock.keys());
             lockInfo = lockTemplate.lock(key, distributedLock.expire(), distributedLock.acquireTimeout(), distributedLock.executor());
             if (null != lockInfo) {
+                log.info("Thread[{}] -> get lock key[{}] success", lockInfo.getThreadId(), key);
                 return invocation.proceed();
             }
             // lock failure
@@ -55,6 +58,7 @@ public class LockInterceptor implements MethodInterceptor {
             return null;
         } finally {
             if (null != lockInfo && distributedLock.autoRelease()) {
+                log.info("Thread[{}] -> releaseLock key [{}]", lockInfo.getThreadId(), lockInfo.getLockKey());
                 final boolean releaseLock = lockTemplate.releaseLock(lockInfo);
                 if (!releaseLock) {
                     log.error("releaseLock fail,lockKey={},lockValue={}", lockInfo.getLockKey(),

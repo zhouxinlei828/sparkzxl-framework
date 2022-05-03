@@ -1,7 +1,7 @@
 package com.github.sparkzxl.lock;
 
 import cn.hutool.core.util.IdUtil;
-import com.github.sparkzxl.lock.autoconfigure.LockProperties;
+import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
 import com.github.sparkzxl.lock.exception.LockException;
 import com.github.sparkzxl.lock.executor.LockExecutor;
 import lombok.Setter;
@@ -25,7 +25,7 @@ public class LockTemplate implements InitializingBean {
 
     private final Map<Class<? extends LockExecutor>, LockExecutor> executorMap = new LinkedHashMap<>();
     @Setter
-    private LockProperties properties;
+    private DistributedLockProperties properties;
     @Setter
     private List<LockExecutor> executors;
 
@@ -62,10 +62,11 @@ public class LockTemplate implements InitializingBean {
         long start = System.currentTimeMillis();
         try {
             do {
+                long threadId = Thread.currentThread().getId();
                 acquireCount++;
                 Object lockInstance = lockExecutor.acquire(key, value, expire, acquireTimeout);
                 if (null != lockInstance) {
-                    return new LockInfo(key, value, expire, acquireTimeout, acquireCount, lockInstance,
+                    return new LockInfo(threadId, key, value, expire, acquireTimeout, acquireCount, lockInstance,
                             lockExecutor);
                 }
                 TimeUnit.MILLISECONDS.sleep(retryInterval);
