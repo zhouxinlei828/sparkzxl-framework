@@ -2,6 +2,7 @@ package com.github.sparkzxl.oss.executor;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.net.url.UrlBuilder;
+import cn.hutool.core.util.URLUtil;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
@@ -119,7 +120,7 @@ public class MinioExecutor implements OssExecutor {
 
     @Override
     public String getObjectUrl(String bucketName, String objectName) {
-        return getObjectPrefixUrl(bucketName).addPath(objectName).build();
+        return URLUtil.decode(getObjectPrefixUrl(bucketName).addPath(objectName).build());
     }
 
     @Override

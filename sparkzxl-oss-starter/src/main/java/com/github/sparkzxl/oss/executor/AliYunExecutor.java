@@ -3,6 +3,7 @@ package com.github.sparkzxl.oss.executor;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.net.url.UrlBuilder;
+import cn.hutool.core.util.URLUtil;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSSClient;
@@ -138,7 +139,7 @@ public class AliYunExecutor implements OssExecutor {
 
     @Override
     public String getObjectUrl(String bucketName, String objectName) {
-        return getObjectPrefixUrl(bucketName).addPath(objectName).build();
+        return URLUtil.decode(getObjectPrefixUrl(bucketName).addPath(objectName).build());
     }
 
     @Override
