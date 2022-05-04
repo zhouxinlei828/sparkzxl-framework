@@ -22,6 +22,7 @@ public enum OssErrorCode implements IErrorCode {
     MULTIPART_UPLOAD_ERROR("415", "分段上传oss文件失败"),
     DELETE_OBJECT_ERROR("415", "删除oss文件失败"),
     DOWNLOAD_OBJECT_ERROR("415", "下载oss文件失败"),
+    SET_BUCKET_POLICY_ERROR("415", "设置桶策略失败"),
     ;
 
     final String errorCode;

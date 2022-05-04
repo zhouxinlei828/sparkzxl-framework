@@ -27,4 +27,17 @@ public class OssUtils {
         }
         return URLUtil.decode(objectUrl);
     }
+
+    public static String replaceHttpDomain(String url, String accessDomain) {
+        UrlBuilder httpUrl = UrlBuilder.ofHttp(url);
+        if (StringUtils.isNotEmpty(accessDomain)) {
+            String buildUrl = UrlBuilder.create()
+                    .setScheme(httpUrl.getScheme())
+                    .setHost(httpUrl.getHost())
+                    .setPort(httpUrl.getPort()).build();
+            UrlBuilder urlBuilder = UrlBuilder.ofHttp(accessDomain, Charset.defaultCharset());
+            url = url.replace(buildUrl, urlBuilder.build());
+        }
+        return URLUtil.decode(url);
+    }
 }

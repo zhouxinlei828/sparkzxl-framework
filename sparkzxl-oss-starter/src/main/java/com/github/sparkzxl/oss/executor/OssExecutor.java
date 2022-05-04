@@ -1,9 +1,8 @@
 package com.github.sparkzxl.oss.executor;
 
-import com.amazonaws.auth.policy.Policy;
-import com.amazonaws.services.s3.model.PutObjectResult;
+import cn.hutool.core.net.url.UrlBuilder;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.transfer.model.UploadResult;
+import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,19 +24,13 @@ public interface OssExecutor {
     void createBucket(String bucketName);
 
     /**
-     * 创建bucket
-     *
-     * @param bucketName bucket名称
-     * @param policy     访问策略
-     */
-    void createBucket(String bucketName, Policy policy);
-
-    /**
      * 移除bucket
      *
      * @param bucketName bucket名称
      */
     void removeBucket(String bucketName);
+
+    void setBucketPolicy(String bucket, BucketPolicyEnum policy);
 
     /**
      * 获取文件外链
@@ -72,26 +65,20 @@ public interface OssExecutor {
     /**
      * 上传文件
      *
-     * @param bucketName  bucket名称
-     * @param objectName  文件名称
-     * @param inputStream 文件流
-     * @param size        大小
-     * @param contentType 类型
-     * @return PutObjectResult
-     * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/PutObject">AWS API Documentation</a>
+     * @param bucketName    bucket名称
+     * @param objectName    文件名称
+     * @param multipartFile 文件
      */
-    PutObjectResult putObject(String bucketName, String objectName, InputStream inputStream, long size,
-                              String contentType);
+    void putObject(String bucketName, String objectName, MultipartFile multipartFile);
 
     /**
-     * 分段上传
+     * 上传文件
      *
      * @param bucketName bucket名称
      * @param objectName 文件名称
-     * @param path       上传路径
-     * @return UploadResult
+     * @param filePath   文件路径
      */
-    UploadResult multipartUpload(String bucketName, String objectName, String path);
+    void putObject(String bucketName, String objectName, String filePath);
 
     /**
      * 分段上传
@@ -99,22 +86,8 @@ public interface OssExecutor {
      * @param bucketName    bucket名称
      * @param objectName    文件名称
      * @param multipartFile 上传文件
-     * @return UploadResult
      */
-    UploadResult multipartUpload(String bucketName, String objectName, MultipartFile multipartFile);
-
-
-    /**
-     * 分段上传
-     *
-     * @param bucketName  bucket名称
-     * @param objectName  文件名称
-     * @param inputStream 文件流
-     * @param contentType contentType
-     * @param fileLength  文件大小
-     * @return UploadResult
-     */
-    UploadResult multipartUpload(String bucketName, String objectName, InputStream inputStream, String contentType, long fileLength);
+    void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile);
 
     /**
      * 删除文件
@@ -127,18 +100,19 @@ public interface OssExecutor {
     /**
      * 下载文件
      *
-     * @param fileUrl  文件路径
-     * @param response 响应
+     * @param bucketName bucket名称
+     * @param objectName 文件名称
+     * @param fileName   文件名
+     * @param response   响应
      */
-    void downloadFile(String fileUrl, HttpServletResponse response);
+    void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response);
 
     /**
-     * 下载文件
+     * 文件url前半段
      *
-     * @param fileUrl  文件路径
-     * @param fileName 文件名
-     * @param response 响应
+     * @param bucket 桶
+     * @return UrlBuilder
      */
-    void downloadFile(String fileUrl, String fileName, HttpServletResponse response);
+    UrlBuilder getObjectPrefixUrl(String bucket);
 
 }

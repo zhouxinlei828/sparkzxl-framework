@@ -1,9 +1,6 @@
 package com.github.sparkzxl.oss;
 
-import com.amazonaws.auth.policy.Policy;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.transfer.model.UploadResult;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import lombok.Setter;
@@ -45,17 +42,6 @@ public class OssTemplate implements InitializingBean {
     public void createBucket(String bucketName) {
         OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
         ossExecutor.createBucket(bucketName);
-    }
-
-    /**
-     * 创建bucket
-     *
-     * @param bucketName bucket名称
-     * @param policy     访问策略
-     */
-    public void createBucket(String bucketName, Policy policy) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
-        ossExecutor.createBucket(bucketName, policy);
     }
 
     /**
@@ -109,18 +95,25 @@ public class OssTemplate implements InitializingBean {
     /**
      * 上传文件
      *
-     * @param bucketName  bucket名称
-     * @param objectName  文件名称
-     * @param inputStream 文件流
-     * @param size        大小
-     * @param contentType 类型
-     * @return PutObjectResult
-     * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/PutObject">AWS API Documentation</a>
+     * @param bucketName    bucket名称
+     * @param objectName    文件名称
+     * @param multipartFile 文件
      */
-    public PutObjectResult putObject(String bucketName, String objectName, InputStream inputStream, long size,
-                                     String contentType) {
+    public void putObject(String bucketName, String objectName, MultipartFile multipartFile) {
         OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
-        return ossExecutor.putObject(bucketName, objectName, inputStream, size, contentType);
+        ossExecutor.putObject(bucketName, objectName, multipartFile);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param bucketName bucket名称
+     * @param objectName 文件名称
+     * @param filePath   文件地址
+     */
+    public void putObject(String bucketName, String objectName, String filePath) {
+        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        ossExecutor.putObject(bucketName, objectName, filePath);
     }
 
     /**
@@ -129,26 +122,10 @@ public class OssTemplate implements InitializingBean {
      * @param bucketName    bucket名称
      * @param objectName    文件名称
      * @param multipartFile 上传文件
-     * @return CompleteMultipartUploadResult
      */
-    public UploadResult multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
+    public void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
         OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
-        return ossExecutor.multipartUpload(bucketName, objectName, multipartFile);
-    }
-
-
-    /**
-     * 分片上传
-     *
-     * @param bucketName  bucket名称
-     * @param objectName  文件名称
-     * @param inputStream 文件流
-     * @param size        文件大小
-     * @return CompleteMultipartUploadResult
-     */
-    public UploadResult multipartUpload(String bucketName, String objectName, InputStream inputStream, String contentType, long size) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
-        return ossExecutor.multipartUpload(bucketName, objectName, inputStream, contentType, size);
+        ossExecutor.multipartUpload(bucketName, objectName, multipartFile);
     }
 
     /**
@@ -162,21 +139,9 @@ public class OssTemplate implements InitializingBean {
         ossExecutor.removeObject(bucketName, objectName);
     }
 
-    /**
-     * 下载文件
-     *
-     * @param fileUrl  文件路径
-     * @param response 响应
-     */
-    public void downloadFile(String fileUrl, HttpServletResponse response) {
+    public void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response) {
         OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
-        ossExecutor.downloadFile(fileUrl, response);
-    }
-
-
-    public void downloadFile(String fileUrl, String fileName, HttpServletResponse response) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
-        ossExecutor.downloadFile(fileUrl, fileName, response);
+        ossExecutor.downloadFile(bucketName, objectName, fileName, response);
     }
 
     protected OssExecutor obtainExecutor(Class<? extends OssExecutor> clazz) {

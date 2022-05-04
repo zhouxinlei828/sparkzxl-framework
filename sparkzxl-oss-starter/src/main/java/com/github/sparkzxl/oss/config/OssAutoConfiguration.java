@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oss.config;
 
 import com.github.sparkzxl.oss.OssTemplate;
-import com.github.sparkzxl.oss.executor.AmazonS3Executor;
+import com.github.sparkzxl.oss.executor.MinioExecutor;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,9 +32,9 @@ public class OssAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AmazonS3Executor.class)
-    public AmazonS3Executor amazonS3Executor() {
-        return new AmazonS3Executor(() -> null);
+    @ConditionalOnMissingBean(MinioExecutor.class)
+    public MinioExecutor minioExecutor() {
+        return new MinioExecutor(() -> null);
     }
 
 }
