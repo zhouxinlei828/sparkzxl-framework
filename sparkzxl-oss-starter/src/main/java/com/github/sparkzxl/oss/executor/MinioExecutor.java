@@ -8,7 +8,7 @@ import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.oss.context.OssClientContextHolder;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.OssConfigInfo;
-import com.github.sparkzxl.oss.properties.OssConfigProvider;
+import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;

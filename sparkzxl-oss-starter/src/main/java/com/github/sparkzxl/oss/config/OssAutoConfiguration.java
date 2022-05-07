@@ -3,8 +3,14 @@ package com.github.sparkzxl.oss.config;
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.oss.OssTemplate;
 import com.github.sparkzxl.oss.enums.StoreMode;
-import com.github.sparkzxl.oss.executor.*;
-import com.github.sparkzxl.oss.properties.*;
+import com.github.sparkzxl.oss.executor.AliYunExecutor;
+import com.github.sparkzxl.oss.executor.MinioExecutor;
+import com.github.sparkzxl.oss.executor.OssExecutor;
+import com.github.sparkzxl.oss.properties.OssConfigInfo;
+import com.github.sparkzxl.oss.properties.OssProperties;
+import com.github.sparkzxl.oss.provider.JdbcOssConfigProvider;
+import com.github.sparkzxl.oss.provider.OssConfigProvider;
+import com.github.sparkzxl.oss.provider.YamlOssConfigProvider;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,7 +37,7 @@ public class OssAutoConfiguration {
     public OssAutoConfiguration(OssProperties ossProperties) {
         this.ossProperties = ossProperties;
         StoreMode store = ossProperties.getStore();
-        if (ObjectUtils.isEmpty(store)){
+        if (ObjectUtils.isEmpty(store)) {
             throw new RuntimeException("store cannot be empty.");
         }
         if (store.equals(StoreMode.YAML)) {
@@ -53,7 +59,7 @@ public class OssAutoConfiguration {
     @ConditionalOnMissingBean(JdbcOssConfigProvider.class)
     @ConditionalOnProperty(name = "oss.store", havingValue = "jdbc")
     public OssConfigProvider ossConfigProvider() {
-        return new JdbcOssConfigProvider(ossProperties,(configId)-> Lists.newArrayList());
+        return new JdbcOssConfigProvider((clientType) -> Lists.newArrayList());
     }
 
     @Bean

@@ -1,11 +1,11 @@
 package com.github.sparkzxl.oss.executor;
 
+import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.oss.properties.OssConfigInfo;
-import com.github.sparkzxl.oss.properties.OssConfigProvider;
+import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -35,10 +35,10 @@ public abstract class AbstractOssExecutor<T> implements OssExecutor, Initializin
      */
     protected T obtainClient(String clientId) {
         if (StringUtils.isEmpty(clientId)) {
-            Assert.notNull(clientId, String.format("can not get client of %s", clientId));
+            ArgumentAssert.notNull(clientId, String.format("can not get client of %s", clientId));
         }
         final T ossClient = clientMap.get(clientId);
-        Assert.notNull(ossClient, String.format("can not get client of %s", ossClient));
+        ArgumentAssert.notNull(ossClient, String.format("can not get client of %s", ossClient));
         return ossClient;
     }
 
@@ -50,10 +50,10 @@ public abstract class AbstractOssExecutor<T> implements OssExecutor, Initializin
      */
     protected OssConfigInfo obtainConfigInfo(String clientId) {
         if (StringUtils.isEmpty(clientId)) {
-            Assert.notNull(clientId, String.format("can not get client of %s", clientId));
+            ArgumentAssert.notNull(clientId, String.format("can not get client of %s", clientId));
         }
         final OssConfigInfo configInfo = configInfoMap.get(clientId);
-        Assert.notNull(configInfo, String.format("can not get configInfo of %s", configInfo));
+        ArgumentAssert.notNull(configInfo, String.format("can not get configInfo of %s", configInfo));
         return configInfo;
     }
 
