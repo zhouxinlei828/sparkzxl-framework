@@ -38,7 +38,7 @@ public class JdbcCacheDataSourceProvider extends BaseDataSourceProvider {
         if (ObjectUtils.isEmpty(dataSourceProperty)) {
             List<DataSourceProperty> dataSourceProperties = function.apply(tenantId);
             dataSourceProperty = loadBalancerDataSource(dataSourceProperties);
-            ArgumentAssert.isNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
+            ArgumentAssert.notNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
             valueOperations.set(tenantId, dataSourceProperty, 1, TimeUnit.DAYS);
         }
         return createDataSource(tenantId, dataSourceProperty);

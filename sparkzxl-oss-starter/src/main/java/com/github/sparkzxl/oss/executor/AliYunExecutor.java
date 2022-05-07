@@ -13,17 +13,17 @@ import com.aliyun.oss.model.*;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.StrPool;
+import com.github.sparkzxl.oss.context.OssClientContextHolder;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.OssConfigInfo;
+import com.github.sparkzxl.oss.properties.OssConfigProvider;
 import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
@@ -36,7 +36,6 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Supplier;
 
 /**
  * description: aliYun 执行器
@@ -45,36 +44,20 @@ import java.util.function.Supplier;
  * @since 2022-05-03 16:54:27
  */
 @Slf4j
-public class AliYunExecutor implements OssExecutor {
+public class AliYunExecutor extends AbstractOssExecutor<OSSClient> implements DisposableBean {
 
-    private final Supplier<OssConfigInfo> supplier;
-    private OSSClient ossClient;
-
-    @Setter
-    @Getter
-    private OssConfigInfo ossConfigInfo;
-
-    public AliYunExecutor(Supplier<OssConfigInfo> supplier) {
-        this.supplier = supplier;
+    public AliYunExecutor(OssConfigProvider ossConfigProvider) {
+        super(ossConfigProvider);
     }
 
-    public OSSClient ossClientInstance() {
-        OssConfigInfo ossConfigInfo = supplier.get();
-        if (ObjectUtils.isEmpty(ossConfigInfo)) {
-            throw new OssException(OssErrorCode.NO_CONFIG_ERROR);
-        }
-        this.ossConfigInfo = ossConfigInfo;
-        return Optional.ofNullable(this.ossClient).orElseGet(() -> {
-            DefaultCredentialProvider defaultCredentialProvider = new DefaultCredentialProvider(ossConfigInfo.getAccessKey(), ossConfigInfo.getSecretKey());
-            OSSClient ossClient = new OSSClient(ossConfigInfo.getEndpoint(), defaultCredentialProvider, null);
-            this.ossClient = ossClient;
-            return ossClient;
-        });
+    @Override
+    public String getClientType() {
+        return "aliyun";
     }
 
     @Override
     public void createBucket(String bucketName) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             if (!ossClient.doesBucketExist(bucketName)) {
                 ossClient.createBucket(bucketName);
@@ -91,16 +74,12 @@ public class AliYunExecutor implements OssExecutor {
                     e.getHostId());
             e.printStackTrace();
             throw new OssException(OssErrorCode.CREATE_BUCKET_ERROR);
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @Override
     public void removeBucket(String bucketName) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             ossClient.deleteBucket(bucketName);
         } catch (OSSException e) {
@@ -113,16 +92,13 @@ public class AliYunExecutor implements OssExecutor {
                     e.getHostId());
             e.printStackTrace();
             throw new OssException(OssErrorCode.DELETE_BUCKET_ERROR);
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @Override
     public String getObjectUrl(String bucketName, String objectName, Integer expire) {
-        OSSClient ossClient = ossClientInstance();
+        String clientId = OssClientContextHolder.peek();
+        OSSClient ossClient = obtainClient(clientId);
         String objectUrl;
         try {
             DateTime expireDateTime = DateUtils.offsetDay(new Date(), expire);
@@ -134,7 +110,8 @@ public class AliYunExecutor implements OssExecutor {
             e.printStackTrace();
             throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
         }
-        return OssUtils.replaceHttpDomain(objectUrl, ossConfigInfo.getDomain());
+        OssConfigInfo configInfo = obtainConfigInfo(clientId);
+        return OssUtils.replaceHttpDomain(objectUrl, configInfo.getDomain());
     }
 
     @Override
@@ -144,7 +121,7 @@ public class AliYunExecutor implements OssExecutor {
 
     @Override
     public S3Object getObjectInfo(String bucketName, String objectName) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             OSSObject object = ossClient.getObject(bucketName, objectName);
             S3Object s3Object = new S3Object();
@@ -162,16 +139,12 @@ public class AliYunExecutor implements OssExecutor {
                     e.getHostId());
             e.printStackTrace();
             throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, MultipartFile multipartFile) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(multipartFile.getSize());
@@ -191,16 +164,12 @@ public class AliYunExecutor implements OssExecutor {
             throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, String filePath) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             File tempFile;
             if (StringUtils.startsWith(StrPool.HTTP, filePath) || StringUtils.startsWith(StrPool.HTTPS, filePath)) {
@@ -229,16 +198,12 @@ public class AliYunExecutor implements OssExecutor {
         } catch (IOException e) {
             e.printStackTrace();
             throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @Override
     public void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             long fileLength = multipartFile.getSize();
             InputStream inputStream = multipartFile.getInputStream();
@@ -316,8 +281,6 @@ public class AliYunExecutor implements OssExecutor {
             // 如果指定了x-oss-complete-all:yes，则不允许继续指定body，否则报错。
             // headers.put("x-oss-complete-all","yes");
             // completeMultipartUploadRequest.setHeaders(headers);
-
-            // 完成分片上传。
             CompleteMultipartUploadResult completeMultipartUploadResult = ossClient.completeMultipartUpload(completeMultipartUploadRequest);
             System.out.println(completeMultipartUploadResult.getETag());
         } catch (OSSException oe) {
@@ -342,16 +305,12 @@ public class AliYunExecutor implements OssExecutor {
         } catch (IOException e) {
             e.printStackTrace();
             throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR);
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @Override
     public void removeObject(String bucketName, String objectName) {
-        OSSClient ossClient = ossClientInstance();
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         try {
             ossClient.deleteObject(bucketName, objectName);
         } catch (OSSException oe) {
@@ -373,18 +332,14 @@ public class AliYunExecutor implements OssExecutor {
                             + "Error Message:{}",
                     ce.getMessage());
             throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR);
-        } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
-            }
         }
     }
 
     @SneakyThrows(IOException.class)
     @Override
     public void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response) {
+        OSSClient ossClient = obtainClient(OssClientContextHolder.peek());
         ServletOutputStream outputStream = null;
-        OSSClient ossClient = ossClientInstance();
         InputStream inputStream = null;
         try {
             OSSObject ossObject = ossClient.getObject(bucketName, objectName);
@@ -417,11 +372,13 @@ public class AliYunExecutor implements OssExecutor {
 
     @Override
     public UrlBuilder getObjectPrefixUrl(String bucket) {
-        if (StringUtils.isNotBlank(ossConfigInfo.getDomain())) {
-            return UrlBuilder.ofHttp(ossConfigInfo.getDomain(), Charset.defaultCharset())
+        String configId = OssClientContextHolder.peek();
+        OssConfigInfo configInfo = obtainConfigInfo(configId);
+        if (StringUtils.isNotBlank(configInfo.getDomain())) {
+            return UrlBuilder.ofHttp(configInfo.getDomain(), Charset.defaultCharset())
                     .addPath(bucket);
         } else {
-            return UrlBuilder.ofHttp(ossConfigInfo.getEndpoint(), Charset.defaultCharset())
+            return UrlBuilder.ofHttp(configInfo.getEndpoint(), Charset.defaultCharset())
                     .addPath(bucket);
         }
     }
@@ -430,4 +387,27 @@ public class AliYunExecutor implements OssExecutor {
     public void setBucketPolicy(String bucket, BucketPolicyEnum policy) {
 
     }
+
+    @Override
+    protected OSSClient initClient(OssConfigInfo configInfo) {
+        DefaultCredentialProvider defaultCredentialProvider = new DefaultCredentialProvider(configInfo.getAccessKey(), configInfo.getSecretKey());
+        return new OSSClient(configInfo.getEndpoint(), defaultCredentialProvider, null);
+    }
+
+    @Override
+    public void destroy() {
+        log.info("ossClient start closing ....");
+        closeOssClient();
+        log.info("ossClient all closed success,bye");
+    }
+
+    private void closeOssClient() {
+        for (Map.Entry<String, OSSClient> clientEntry : clientMap.entrySet()) {
+            OSSClient ossClient = clientEntry.getValue();
+            ossClient.shutdown();
+        }
+        clientMap.clear();
+    }
+
+
 }

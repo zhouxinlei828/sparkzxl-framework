@@ -6,7 +6,6 @@ import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 
 /**
  * description: oss 执行器
@@ -15,6 +14,13 @@ import java.io.InputStream;
  * @since 2022-05-03 16:19:41
  */
 public interface OssExecutor {
+
+    /**
+     * 获取客户端类型
+     *
+     * @return String
+     */
+    String getClientType();
 
     /**
      * 创建bucket
@@ -30,6 +36,12 @@ public interface OssExecutor {
      */
     void removeBucket(String bucketName);
 
+    /**
+     * 设置bucket策略
+     *
+     * @param bucket bucket名称
+     * @param policy 桶策略
+     */
     void setBucketPolicy(String bucket, BucketPolicyEnum policy);
 
     /**

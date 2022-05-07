@@ -24,7 +24,7 @@ public class JdbcDataSourceProvider extends BaseDataSourceProvider {
     public DataSource loadSelectedDataSource(String tenantId) {
         List<DataSourceProperty> dataSourceProperties = function.apply(tenantId);
         DataSourceProperty dataSourceProperty = loadBalancerDataSource(dataSourceProperties);
-        ArgumentAssert.isNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
+        ArgumentAssert.notNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
         return createDataSource(tenantId, dataSourceProperty);
     }
 }

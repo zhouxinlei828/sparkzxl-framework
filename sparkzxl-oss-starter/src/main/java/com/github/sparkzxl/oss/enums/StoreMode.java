@@ -10,12 +10,12 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum FileOperateSource {
+public enum StoreMode {
     /**
      * JDBC
      */
     JDBC,
     FILE,
-    MEMORY
+    YAML
 
 }

@@ -3,13 +3,15 @@ package com.github.sparkzxl.oss;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.OssProperties;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,9 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-05-03 16:17:36
  */
-public class OssTemplate implements InitializingBean {
+@Slf4j
+@NoArgsConstructor
+public class OssTemplate implements InitializingBean, DisposableBean {
 
     @Setter
     private OssProperties ossProperties;
@@ -28,11 +32,6 @@ public class OssTemplate implements InitializingBean {
     private List<OssExecutor> executors;
     private final Map<Class<? extends OssExecutor>, OssExecutor> executorMap = new LinkedHashMap<>();
     private OssExecutor primaryExecutor;
-
-    public OssTemplate() {
-
-    }
-
 
     /**
      * 创建bucket
@@ -155,8 +154,7 @@ public class OssTemplate implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        Assert.isTrue(ossProperties.isEnabled(), "tryTimeout must least 0");
-        Assert.notNull(ossProperties.getStore(), "file operate store must be not null");
+        Assert.notNull(ossProperties.getStore(), "store mode must be not null");
         for (OssExecutor executor : executors) {
             executorMap.put(executor.getClass(), executor);
         }
@@ -168,5 +166,16 @@ public class OssTemplate implements InitializingBean {
             this.primaryExecutor = executorMap.get(primaryExecutor);
             Assert.notNull(this.primaryExecutor, "primaryExecutor must be not null");
         }
+    }
+
+    @Override
+    public void destroy() {
+        log.info("executor start closing ....");
+        shutdownExecutor();
+        log.info("executor all closed success,bye");
+    }
+
+    private void shutdownExecutor() {
+        executorMap.clear();
     }
 }

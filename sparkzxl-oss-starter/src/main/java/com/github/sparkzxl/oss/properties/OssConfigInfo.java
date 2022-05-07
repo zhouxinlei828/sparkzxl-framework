@@ -1,8 +1,9 @@
 package com.github.sparkzxl.oss.properties;
 
 import com.amazonaws.regions.Regions;
-import com.github.sparkzxl.oss.executor.OssExecutor;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * description: oss属性配置信息
@@ -10,7 +11,20 @@ import lombok.Data;
  * @author zhouxinlei
  */
 @Data
-public class OssConfigInfo {
+public class OssConfigInfo implements Serializable {
+
+
+    private static final long serialVersionUID = -6310199657139774329L;
+
+    /**
+     * Client Id
+     */
+    private String clientId;
+
+    /**
+     * Oss Client Type
+     */
+    private String clientType;
 
     /**
      * 对象存储服务的URL
@@ -27,11 +41,6 @@ public class OssConfigInfo {
      * supports virtual-hosted-style 阿里云等需要配置为 virtual-hosted-style模式
      */
     private Boolean pathStyleAccess = true;
-
-    /**
-     * 应用ID
-     */
-    private String appId;
 
     /**
      * 区域

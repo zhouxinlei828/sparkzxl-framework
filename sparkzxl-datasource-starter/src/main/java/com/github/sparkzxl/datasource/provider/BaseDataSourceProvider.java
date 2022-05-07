@@ -32,7 +32,7 @@ public abstract class BaseDataSourceProvider implements DataSourceProvider {
     }
 
     public DataSource createDataSource(String tenantId, DataSourceProperty dataSourceProperty) {
-        ArgumentAssert.isNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
+        ArgumentAssert.notNull(dataSourceProperty, () -> new TenantException(StrFormatter.format("无此租户[{}]", tenantId)));
         String poolName = dataSourceProperty.getPoolName();
         if (poolName == null || "".equals(poolName)) {
             poolName = tenantId;
