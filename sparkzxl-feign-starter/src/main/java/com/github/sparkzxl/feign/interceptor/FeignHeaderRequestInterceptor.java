@@ -10,6 +10,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestAttributes;
@@ -29,10 +30,12 @@ import java.util.List;
 public class FeignHeaderRequestInterceptor implements RequestInterceptor {
 
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            BaseContextConstants.TENANT_ID, BaseContextConstants.JWT_KEY_USER_ID,
-            BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME,
+            BaseContextConstants.TENANT_ID,
             BaseContextConstants.VERSION,
-            BaseContextConstants.TRACE_ID_HEADER, BaseContextConstants.JWT_TOKEN_HEADER, "X-Real-IP", HttpHeaders.X_FORWARDED_FOR
+            BaseContextConstants.TRACE_ID_HEADER,
+            BaseContextConstants.JWT_TOKEN_HEADER,
+            "X-Real-IP",
+            HttpHeaders.X_FORWARDED_FOR
     );
     private FeignProperties feignProperties;
 
@@ -47,8 +50,9 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         template.header(BaseContextConstants.REMOTE_CALL, StrPool.TRUE);
-        if (feignProperties.isEnable()) {
+        if (feignProperties.getSeata().isEnabled()) {
             String xid = RootContext.getXID();
+            log.info("当前XID：{}", xid);
             if (StrUtil.isNotEmpty(xid)) {
                 template.header(RootContext.KEY_XID, xid);
             }
@@ -68,5 +72,12 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
             String header = request.getHeader(headerName);
             template.header(headerName, StringUtils.isEmpty(header) ? RequestLocalContextHolder.get(headerName) : header);
         });
+        List<String> headerList = feignProperties.getInterceptor().getHeaderList();
+        if (CollectionUtils.isNotEmpty(headerList)) {
+            headerList.forEach((headerName) -> {
+                String header = request.getHeader(headerName);
+                template.header(headerName, StringUtils.isEmpty(header) ? RequestLocalContextHolder.get(headerName) : header);
+            });
+        }
     }
 }
