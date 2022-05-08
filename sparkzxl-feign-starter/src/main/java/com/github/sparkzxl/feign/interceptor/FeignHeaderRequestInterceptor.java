@@ -14,6 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +58,7 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
                 template.header(RootContext.KEY_XID, xid);
             }
         }
-        RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, RequestLocalContextHolder.get(headerName)));
             return;
