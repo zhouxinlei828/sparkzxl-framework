@@ -6,7 +6,7 @@ import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
-import com.github.sparkzxl.feign.exception.RemoteCallException;
+import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import feign.*;
 import feign.codec.DecodeException;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +58,8 @@ public class FeignExceptionHandler implements Ordered {
         return Response.failDetail(ExceptionErrorCode.DECODE_EXCEPTION.getErrorCode(), ExceptionErrorCode.DECODE_EXCEPTION.getErrorMessage());
     }
 
-    @ExceptionHandler(RemoteCallException.class)
-    public Response<?> handleRemoteCallException(RemoteCallException e) {
+    @ExceptionHandler(RemoteCallTransferException.class)
+    public Response<?> handleRemoteCallException(RemoteCallTransferException e) {
         log.error("RemoteCallException异常:", e);
         String applicationName =
                 OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)

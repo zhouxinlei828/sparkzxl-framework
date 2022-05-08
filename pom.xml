@@ -37,9 +37,6 @@
         <module>sparkzxl-distributed-lock</module>
         <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
-        <module>sparkzxl-feign-hystrix-starter</module>
-        <module>sparkzxl-feign-resilience4j-starter</module>
-        <module>sparkzxl-feign-starter</module>
         <module>sparkzxl-gateway-plugin</module>
         <module>sparkzxl-job-executor-starter</module>
         <module>sparkzxl-jwt-starter</module>
@@ -64,6 +61,7 @@
         <module>sparkzxl-dependencies</module>
         <module>sparkzxl-idempotent</module>
         <module>sparkzxl-sms-starter</module>
+        <module>sparkzxl-feign</module>
     </modules>
 
     <licenses>

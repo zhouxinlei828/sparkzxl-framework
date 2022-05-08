@@ -643,11 +643,6 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-feign-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-gateway-plugin-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>

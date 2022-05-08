@@ -111,7 +111,7 @@ import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.ResponseResultUtils;
 import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
-import com.github.sparkzxl.feign.exception.RemoteCallException;
+import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import lombok.extern.slf4j.Slf4j;
@@ -334,7 +334,7 @@ public class RemoteCallException extends RuntimeException {
 package com.github.sparkzxl.feign.default_;
 
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.feign.exception.RemoteCallException;
+import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import feign.Response;
 import feign.Util;

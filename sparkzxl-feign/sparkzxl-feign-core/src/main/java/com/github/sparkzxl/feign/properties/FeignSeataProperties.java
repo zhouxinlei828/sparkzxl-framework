@@ -1,6 +1,7 @@
 package com.github.sparkzxl.feign.properties;
 
 import lombok.Data;
+
 import java.util.List;
 
 /**

@@ -4,7 +4,7 @@ import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.feign.enums.FeignStatusEnum;
-import com.github.sparkzxl.feign.exception.RemoteCallException;
+import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import feign.Util;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,10 @@ public class FeignExceptionDecoder implements ErrorDecoder {
             Reader reader = response.body().asReader(StandardCharsets.UTF_8);
             String body = Util.toString(reader);
             Response<?> responseResult = JsonUtil.parse(body, Response.class);
-            return new RemoteCallException(FeignStatusEnum.TRANSFER_EXCEPTION.getCode(), responseResult.getErrorCode(), responseResult.getErrorMsg(), response.request());
+            return new RemoteCallTransferException(FeignStatusEnum.TRANSFER_EXCEPTION.getCode(), responseResult.getErrorCode(), responseResult.getErrorMsg(), response.request());
         } catch (Exception e) {
             log.error("[{}] has an unknown exception.", methodKey, e);
-            return new RemoteCallException(FeignStatusEnum.UNKNOWN_EXCEPTION.getCode(), ExceptionErrorCode.FAILURE.getErrorCode(), "unKnowException", e, response.request());
+            return new RemoteCallTransferException(FeignStatusEnum.UNKNOWN_EXCEPTION.getCode(), ExceptionErrorCode.FAILURE.getErrorCode(), "unKnowException", e, response.request());
         }
 
     }
