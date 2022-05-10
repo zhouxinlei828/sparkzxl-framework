@@ -1,6 +1,6 @@
 package com.github.sparkzxl.feign.annoation;
 
-import com.github.sparkzxl.feign.decoder.TransferExceptionDecoder;
+import com.github.sparkzxl.feign.decoder.TransferExceptionErrorDecoder;
 import com.github.sparkzxl.feign.support.RegistryFeignExceptionHandler;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Import;
@@ -23,5 +23,5 @@ public @interface EnableFeignExceptionHandler {
      *
      * @return Class<? extends ErrorDecoder>
      */
-    Class<? extends ErrorDecoder> decoderClass() default TransferExceptionDecoder.class;
+    Class<? extends ErrorDecoder> decoderClass() default TransferExceptionErrorDecoder.class;
 }

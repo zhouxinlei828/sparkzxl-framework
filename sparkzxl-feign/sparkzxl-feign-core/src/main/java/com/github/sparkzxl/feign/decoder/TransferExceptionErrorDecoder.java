@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
  * @author zhouxinlei
  */
 @Slf4j
-public class TransferExceptionDecoder implements ErrorDecoder {
+public class TransferExceptionErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, feign.Response response) {
