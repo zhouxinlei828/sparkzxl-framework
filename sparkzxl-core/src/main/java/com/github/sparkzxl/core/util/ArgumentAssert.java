@@ -6,8 +6,11 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.support.ArgumentException;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -238,6 +241,134 @@ public class ArgumentAssert {
      */
     public static <T> T notNull(T object) throws ArgumentException {
         return notNull(object,
+                "[Assertion failed] - this argument is required; it must not be null");
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- Check List empty
+
+    /**
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出指定类型异常
+     * 并使用指定的函数获取错误信息返回
+     * <pre class="code">
+     * Assert.notNull(clazz, ()-&gt;{
+     *      // to query relation message
+     *      return new ArgumentException("relation message to return");
+     *  });
+     * </pre>
+     *
+     * @param <T>           被检查对象泛型类型
+     * @param <X>           异常类型
+     * @param list          被检查对象集合
+     * @param errorSupplier 错误抛出异常附带的消息生产接口
+     * @return 被检查后的对象 t
+     * @throws X if the object is {@code null}
+     * @since 5.4.5
+     */
+    public static <T, X extends Throwable> List<T> notNull(List<T> list, Supplier<X> errorSupplier) throws X {
+        if (CollectionUtils.isEmpty(list)) {
+            throw errorSupplier.get();
+        }
+        return list;
+    }
+
+    /**
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
+     *
+     * <pre class="code">
+     * Assert.notNull(clazz, "The class must not be null");
+     * </pre>
+     *
+     * @param <T>              被检查对象泛型类型
+     * @param list             被检查对象集合
+     * @param errorMsgTemplate 错误消息模板，变量使用{}表示
+     * @param params           参数
+     * @return 被检查后的对象 t
+     * @throws ArgumentException if the object is {@code null}
+     */
+    public static <T> List<T> notNull(List<T> list, String errorMsgTemplate, Object... params)
+            throws ArgumentException {
+        return notNull(list,
+                () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
+    }
+
+    /**
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
+     *
+     * <pre class="code">
+     * Assert.notNull(clazz, "The class must not be null");
+     * </pre>
+     *
+     * @param <T>  被检查对象泛型类型
+     * @param list 被检查对象集合
+     * @return 被检查后的对象 t
+     * @throws ArgumentException if the object is {@code null}
+     */
+    public static <T> List<T> notNull(List<T> list)
+            throws ArgumentException {
+        return notNull(list,
+                "[Assertion failed] - this argument is required; it must not be null");
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- Check map empty
+
+    /**
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出指定类型异常
+     * 并使用指定的函数获取错误信息返回
+     * <pre class="code">
+     * Assert.notNull(clazz, ()-&gt;{
+     *      // to query relation message
+     *      return new ArgumentException("relation message to return");
+     *  });
+     * </pre>
+     *
+     * @param <X>           异常类型
+     * @param map           被检查map对象
+     * @param errorSupplier 错误抛出异常附带的消息生产接口
+     * @return 被检查后的对象 t
+     * @throws X if the object is {@code null}
+     * @since 5.4.5
+     */
+
+    public static <K, V, X extends Throwable> Map<K, V> notNull(Map<K, V> map, Supplier<X> errorSupplier) throws X {
+        if (MapUtils.isEmpty(map)) {
+            throw errorSupplier.get();
+        }
+        return map;
+    }
+
+    /**
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
+     *
+     * <pre class="code">
+     * Assert.notNull(clazz, "The class must not be null");
+     * </pre>
+     *
+     * @param map              被检查map对象
+     * @param errorMsgTemplate 错误消息模板，变量使用{}表示
+     * @param params           参数
+     * @return 被检查后的对象 t
+     * @throws ArgumentException if the object is {@code null}
+     */
+    public static <K, V> Map<K, V> notNull(Map<K, V> map, String errorMsgTemplate, Object... params)
+            throws ArgumentException {
+        return notNull(map,
+                () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
+    }
+
+    /**
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
+     *
+     * <pre class="code">
+     * Assert.notNull(clazz, "The class must not be null");
+     * </pre>
+     *
+     * @param map 被检查map对象
+     * @return 被检查后的对象 t
+     * @throws ArgumentException if the object is {@code null}
+     */
+    public static <K, V> Map<K, V> notNull(Map<K, V> map)
+            throws ArgumentException {
+        return notNull(map,
                 "[Assertion failed] - this argument is required; it must not be null");
     }
 
