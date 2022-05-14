@@ -10,8 +10,6 @@
     <artifactId>sparkzxl-drools-starter</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
         <xstream.version>1.4.19</xstream.version>
     </properties>
 

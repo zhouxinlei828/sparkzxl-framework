@@ -578,7 +578,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-annotation</artifactId>
+                <artifactId>sparkzxl-entity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

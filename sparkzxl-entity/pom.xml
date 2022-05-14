@@ -7,13 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sparkzxl-annotation</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
+    <artifactId>sparkzxl-entity</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>

@@ -55,7 +55,7 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-annotation</module>
+        <module>sparkzxl-entity</module>
         <module>sparkzxl-datasource-starter</module>
         <module>sparkzxl-uid</module>
         <module>sparkzxl-dependencies</module>
