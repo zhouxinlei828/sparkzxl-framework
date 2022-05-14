@@ -47,5 +47,4 @@
 - sparkzxl-swagger-starter
 - sparkzxl-user-starter
 - sparkzxl-web-starter
-- sparkzxl-zookeeper-starter
 - sparkzxl-hystrix-starter

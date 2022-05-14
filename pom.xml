@@ -45,16 +45,14 @@
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-oauth2-resource-starter</module>
         <module>sparkzxl-oss-starter</module>
-        <!--<module>sparkzxl-patterns-starter</module>-->
+        <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-pdf-starter</module>
-        <module>sparkzxl-redisson-starter</module>
         <module>sparkzxl-rpc</module>
         <module>sparkzxl-security-starter</module>
         <module>sparkzxl-sentinel-starter</module>
         <module>sparkzxl-swagger-starter</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
-        <module>sparkzxl-zookeeper-starter</module>
         <module>sparkzxl-entity</module>
         <module>sparkzxl-datasource-starter</module>
         <module>sparkzxl-uid</module>

@@ -698,11 +698,6 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-redisson-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-security-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -729,11 +724,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-web-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-zookeeper-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!--阿里云短信-->

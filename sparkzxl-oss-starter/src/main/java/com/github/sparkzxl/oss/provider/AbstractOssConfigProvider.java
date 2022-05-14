@@ -17,7 +17,6 @@ public abstract class AbstractOssConfigProvider implements OssConfigProvider {
     @Override
     public List<OssConfigInfo> loadOssConfigInfo(String clientType) {
         List<OssConfigInfo> configInfoList = get(clientType);
-        ArgumentAssert.notNull(configInfoList, "No Oss configuration information found for configType：".concat(clientType));
         for (OssConfigInfo configInfo : configInfoList) {
             validateOssConfigInfo(configInfo);
         }
