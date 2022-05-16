@@ -1,6 +1,9 @@
 package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.system.UserInfo;
+import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +12,8 @@ import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -187,4 +188,36 @@ public class ListUtils {
         return Lists.newArrayList(CollectionUtils.union(a, b));
     }
 
+
+    /**
+     * list集合正向排序
+     *
+     * @param list         集合
+     * @param keyExtractor 排序字典
+     * @param <T>          对象属性
+     * @param <U>          字段
+     * @return List
+     */
+    public static <T, U extends Comparable<? super U>> List<T> sort(List<T> list, Function<? super T, ? extends U> keyExtractor) {
+        if (CollectionUtils.isEmpty(list)) {
+            return list;
+        }
+        return list.stream().sorted(Comparator.comparing(keyExtractor)).collect(Collectors.toList());
+    }
+
+    /**
+     * list集合逆向排序
+     *
+     * @param list         集合
+     * @param keyExtractor 排序字典
+     * @param <T>          对象属性
+     * @param <U>          字段
+     * @return List
+     */
+    public static <T, U extends Comparable<? super U>> List<T> reverse(List<T> list, Function<? super T, ? extends U> keyExtractor) {
+        if (CollectionUtils.isEmpty(list)) {
+            return list;
+        }
+        return list.stream().sorted(Comparator.comparing(keyExtractor).reversed()).collect(Collectors.toList());
+    }
 }
