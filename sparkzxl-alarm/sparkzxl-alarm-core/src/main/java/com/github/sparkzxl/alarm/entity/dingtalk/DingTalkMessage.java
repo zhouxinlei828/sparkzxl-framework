@@ -1,5 +1,6 @@
-package com.github.sparkzxl.alarm.entity;
+package com.github.sparkzxl.alarm.entity.dingtalk;
 
+import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 
 /**

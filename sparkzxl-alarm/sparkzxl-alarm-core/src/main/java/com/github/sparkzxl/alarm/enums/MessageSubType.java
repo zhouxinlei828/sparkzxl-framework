@@ -1,13 +1,17 @@
 package com.github.sparkzxl.alarm.enums;
 
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
-import com.github.sparkzxl.alarm.entity.DingTalkText;
 import com.github.sparkzxl.alarm.entity.Message;
 import com.github.sparkzxl.alarm.entity.MsgType;
+import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkText;
+import com.github.sparkzxl.alarm.entity.wechat.WeText;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static com.github.sparkzxl.alarm.constant.AlarmConstant.WETALK_AT_ALL;
 
 /**
  * description: 消息体定义子类型
@@ -35,7 +39,14 @@ public enum MessageSubType {
                 }
                 return message;
             } else {
-                return null;
+                WeText.Text text = new WeText.Text(content);
+                WeText weText = new WeText(text);
+                if (atAll) {
+                    text.setMentioned_mobile_list(Collections.singletonList(WETALK_AT_ALL));
+                } else if (phones != null && !phones.isEmpty()) {
+                    text.setMentioned_mobile_list(phones);
+                }
+                return weText;
             }
         }
     };

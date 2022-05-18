@@ -107,7 +107,8 @@ public class AlarmAutoConfig {
 
 
     @Bean
-    public AlarmSender alarmRobot(AlarmProperties alarmProperties,
+    @ConditionalOnMissingBean(AlarmSender.class)
+    public AlarmSender alarmSender(AlarmProperties alarmProperties,
                                   AlarmManagerBuilder alarmManagerBuilder) {
         return new AlarmRobot(alarmProperties, alarmManagerBuilder);
     }

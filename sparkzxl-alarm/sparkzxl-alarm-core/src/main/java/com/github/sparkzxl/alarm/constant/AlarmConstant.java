@@ -38,4 +38,6 @@ public interface AlarmConstant {
 
     String DINGER_PROP_PREFIX = "spring.dinger";
     String DINGER_PROPERTIES_PREFIX = DINGER_PROP_PREFIX + SPOT_SEPERATOR;
+
+    public static final String WETALK_AT_ALL = "@all";
 }

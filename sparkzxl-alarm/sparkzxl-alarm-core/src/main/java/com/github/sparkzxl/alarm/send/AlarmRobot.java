@@ -55,7 +55,7 @@ public class AlarmRobot extends AbstractAlarmSender {
         AlarmType alarmType = message.getAlarmType();
         String alarmId = alarmManagerBuilder.getAlarmIdGenerator().nextAlarmId();
         Map<AlarmType, AlarmProperties.AlarmConfig> alarms = alarmProperties.getAlarms();
-        if (alarmProperties.isEnabled() && alarms.containsKey(alarmType)) {
+        if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
             return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
         }
         try {

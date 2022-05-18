@@ -18,6 +18,8 @@ import java.util.Map;
 @Data
 public class MsgType implements Serializable {
 
+    private static final long serialVersionUID = -5736754669734772997L;
+
     private volatile AlarmType alarmType;
 
     private String msgtype;

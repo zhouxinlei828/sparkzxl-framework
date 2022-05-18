@@ -98,7 +98,7 @@ public class AlarmProperties implements InitializingBean {
             if (StringUtils.isEmpty(value.robotUrl)) {
                 value.robotUrl = key.getRobotUrl();
             }
-            if (key == AlarmType.WECHAT) {
+            if (key == AlarmType.WETALK) {
                 value.secret = null;
             }
             if (primaryAlarm == null) {

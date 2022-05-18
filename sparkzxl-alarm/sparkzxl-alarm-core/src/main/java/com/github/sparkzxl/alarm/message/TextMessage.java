@@ -1,6 +1,5 @@
 package com.github.sparkzxl.alarm.message;
 
-import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 
 /**
@@ -14,6 +13,6 @@ public class TextMessage implements CustomMessage {
     @Override
     public String message(AlarmRequest request) {
         String content = request.getContent();
-        return StrFormatter.format("【Alarm通知】 {0}\n- 内容: {1}.", content);
+        return String.format("【Alarm通知】 %s\n- 内容: %s.", request.getTitle(), content);
     }
 }

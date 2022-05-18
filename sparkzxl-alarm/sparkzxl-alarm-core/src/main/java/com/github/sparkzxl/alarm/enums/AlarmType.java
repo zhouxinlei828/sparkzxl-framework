@@ -15,7 +15,7 @@ public enum AlarmType {
     /**
      * 企业微信
      */
-    WECHAT("wechat", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
+    WETALK("wetalk", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
     ;
 
     private final String type;
