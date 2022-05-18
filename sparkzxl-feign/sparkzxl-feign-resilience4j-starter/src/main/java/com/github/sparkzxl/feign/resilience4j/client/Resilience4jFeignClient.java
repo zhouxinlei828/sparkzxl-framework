@@ -49,7 +49,7 @@ public class Resilience4jFeignClient implements Client {
         FeignClient feignClient = AnnotationUtils.getAnnotation(request.requestTemplate().feignTarget().type(), FeignClient.class);
         ArgumentAssert.notNull(feignClient.contextId(), "@FeignClient未配置contextId");
         //和 Retry 保持一致，使用 contextId，而不是微服务名称
-        //contextId 会作为我们后面读取断路器以及线程隔离配置的 key
+        //contextId 会作为我们后面读取断路器以及线程隔离配置的key
         String contextId = feignClient.contextId();
 
         //获取实例唯一id
@@ -77,14 +77,16 @@ public class Resilience4jFeignClient implements Client {
         Supplier<CompletionStage<Response>> completionStageSupplier = ThreadPoolBulkhead.decorateSupplier(threadPoolBulkhead,
                 OpenfeignUtil.decorateSupplier(circuitBreaker, () -> {
                     try {
-                        log.info("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
-                                request.httpMethod(),
-                                request.url(),
-                                serviceInstanceId,
-                                JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
-                                serviceInstanceMethodId,
-                                JSON.toJSONString(finalCircuitBreaker.getMetrics())
-                        );
+                        if (log.isDebugEnabled()){
+                            log.info("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
+                                    request.httpMethod(),
+                                    request.url(),
+                                    serviceInstanceId,
+                                    JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
+                                    serviceInstanceMethodId,
+                                    JSON.toJSONString(finalCircuitBreaker.getMetrics())
+                            );
+                        }
                         Response execute = okHttpClient.execute(request, options);
                         log.info("response: {} - {}", execute.status(), execute.reason());
                         return execute;
