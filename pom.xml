@@ -60,6 +60,7 @@
         <module>sparkzxl-idempotent</module>
         <module>sparkzxl-sms-starter</module>
         <module>sparkzxl-feign</module>
+        <module>sparkzxl-alarm</module>
     </modules>
 
     <licenses>
