@@ -21,7 +21,7 @@ public class FeignProperties {
     private FeignInterceptorProperties interceptor = new FeignInterceptorProperties();
 
     @NestedConfigurationProperty
-    private FeignSeataProperties seata;
+    private FeignSeataProperties seata = new FeignSeataProperties();
 
     @Data
     public static class FeignSeataProperties {
