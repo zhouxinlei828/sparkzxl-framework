@@ -3,13 +3,16 @@ package com.github.sparkzxl.alarm.enums;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.Message;
 import com.github.sparkzxl.alarm.entity.MsgType;
+import com.github.sparkzxl.alarm.entity.dingtalk.DingFeedCard;
+import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkLink;
+import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkMarkDown;
 import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkText;
+import com.github.sparkzxl.alarm.entity.wechat.WeMarkdown;
+import com.github.sparkzxl.alarm.entity.wechat.WeNews;
 import com.github.sparkzxl.alarm.entity.wechat.WeText;
+import com.github.sparkzxl.alarm.exception.AlarmException;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.github.sparkzxl.alarm.constant.AlarmConstant.WETALK_AT_ALL;
 
@@ -30,7 +33,7 @@ public enum MessageSubType {
             String content = request.getContent();
             boolean atAll = request.isAtAll();
             List<String> phones = request.getPhones();
-            if (alarmType == AlarmType.DING_TALK) {
+            if (alarmType == AlarmType.DINGTALK) {
                 Message message = new DingTalkText(new DingTalkText.Text(content));
                 if (atAll) {
                     message.setAt(new Message.At(true));
@@ -47,6 +50,55 @@ public enum MessageSubType {
                     text.setMentioned_mobile_list(phones);
                 }
                 return weText;
+            }
+        }
+    },
+
+    /**
+     * Markdown类型
+     */
+    MARKDOWN(true) {
+        @Override
+        public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
+            String content = request.getContent();
+            String title = request.getTitle();
+            List<String> phones = request.getPhones();
+            if (alarmType == AlarmType.DINGTALK) {
+                Message message = new DingTalkMarkDown(new DingTalkMarkDown.MarkDown(title, content));
+                if (!phones.isEmpty()) {
+                    message.setAt(new Message.At(phones));
+                }
+                return message;
+            } else {
+                WeMarkdown.Markdown markdown = new WeMarkdown.Markdown(content);
+                return new WeMarkdown(markdown);
+            }
+        }
+    },
+
+    /**
+     * 图文类型
+     */
+    IMAGETEXT(false) {
+        @Override
+        public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
+            if (alarmType == AlarmType.DINGTALK) {
+                return new DingFeedCard(new ArrayList<>());
+            } else {
+                return new WeNews(new ArrayList<>());
+            }
+        }
+    },
+    /**
+     * link类型, 只支持 {@link AlarmType#DINGTALK}
+     */
+    LINK(false) {
+        @Override
+        public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
+            if (alarmType == AlarmType.DINGTALK) {
+                return new DingTalkLink();
+            } else {
+                throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.code(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.message());
             }
         }
     };
@@ -67,6 +119,6 @@ public enum MessageSubType {
     }
 
     public static boolean contains(String value) {
-        return Arrays.stream(MessageSubType.values()).filter(e -> Objects.equals(e.name(), value)).count() > 0;
+        return Arrays.stream(MessageSubType.values()).anyMatch(e -> Objects.equals(e.name(), value));
     }
 }

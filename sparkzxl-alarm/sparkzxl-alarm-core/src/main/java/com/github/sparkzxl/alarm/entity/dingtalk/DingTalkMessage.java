@@ -12,7 +12,7 @@ import com.github.sparkzxl.alarm.enums.AlarmType;
 public class DingTalkMessage extends MsgType {
 
     public DingTalkMessage() {
-        setAlarmType(AlarmType.DING_TALK);
+        setAlarmType(AlarmType.DINGTALK);
     }
 
 }

@@ -66,7 +66,7 @@ public class AlarmRobot extends AbstractAlarmSender {
                 log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmType.getType(), alarmConfig.getTokenId());
             }
             // 处理签名问题(只支持DingTalk)
-            if (alarmType == AlarmType.DING_TALK && StringUtils.isNotEmpty((alarmConfig.getSecret()))) {
+            if (alarmType == AlarmType.DINGTALK && StringUtils.isNotEmpty((alarmConfig.getSecret()))) {
                 BaseSign sign = alarmManagerBuilder.alarmSignAlgorithm.sign(alarmConfig.getSecret().trim());
                 webhook.append(sign.transfer());
             }

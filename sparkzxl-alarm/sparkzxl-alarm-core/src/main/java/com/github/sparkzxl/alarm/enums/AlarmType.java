@@ -11,7 +11,7 @@ public enum AlarmType {
     /**
      * 钉钉
      */
-    DING_TALK("dingtalk", "https://oapi.dingtalk.com/robot/send?access_token=", true),
+    DINGTALK("dingtalk", "https://oapi.dingtalk.com/robot/send?access_token=", true),
     /**
      * 企业微信
      */
