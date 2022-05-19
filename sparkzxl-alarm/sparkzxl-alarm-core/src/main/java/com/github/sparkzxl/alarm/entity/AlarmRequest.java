@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 告警请求对象
@@ -30,5 +31,10 @@ public class AlarmRequest {
      * 艾特成员
      */
     private boolean atAll = false;
+
+    /**
+     * 变量参数
+     */
+    private Map<String, Object> variables;
 
 }

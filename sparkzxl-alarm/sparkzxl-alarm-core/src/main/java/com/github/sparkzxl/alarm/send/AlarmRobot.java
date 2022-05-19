@@ -1,5 +1,6 @@
 package com.github.sparkzxl.alarm.send;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
@@ -48,15 +49,18 @@ public class AlarmRobot extends AbstractAlarmSender {
         String msgContent = customMessage.message(request);
         request.setContent(msgContent);
         MsgType msgType = messageSubType.msgType(alarmType, request);
-        return send(msgType);
+        return send(msgType, request.getVariables());
     }
 
-    protected <T extends MsgType> AlarmResponse send(T message) {
+    protected <T extends MsgType> AlarmResponse send(T message, Map<String, Object> variables) {
         AlarmType alarmType = message.getAlarmType();
         String alarmId = alarmManagerBuilder.getAlarmIdGenerator().nextAlarmId();
         Map<AlarmType, AlarmProperties.AlarmConfig> alarms = alarmProperties.getAlarms();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
             return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
+        }
+        if (MapUtil.isNotEmpty(variables)) {
+            message.transfer(variables);
         }
         try {
             AlarmProperties.AlarmConfig alarmConfig = alarms.get(alarmType);
