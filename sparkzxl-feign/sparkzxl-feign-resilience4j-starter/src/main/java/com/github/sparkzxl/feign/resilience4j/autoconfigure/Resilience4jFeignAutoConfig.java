@@ -1,5 +1,7 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
+import com.github.sparkzxl.feign.resilience4j.CircuitBreakerExtractor;
+import com.github.sparkzxl.feign.resilience4j.FeignRequestCircuitBreakerExtractor;
 import com.github.sparkzxl.feign.resilience4j.client.FeignBlockingLoadBalancerClientDelegate;
 import com.github.sparkzxl.feign.resilience4j.client.OkHttpClient;
 import com.github.sparkzxl.feign.resilience4j.client.Resilience4jFeignClient;
@@ -24,6 +26,11 @@ import org.springframework.context.annotation.Primary;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(value = "feign.resilience4j.enabled", matchIfMissing = true)
 public class Resilience4jFeignAutoConfig {
+
+    @Bean
+    public CircuitBreakerExtractor feignRequestCircuitBreakerExtractor() {
+        return new FeignRequestCircuitBreakerExtractor();
+    }
 
     @Bean
     public OkHttpClient okHttpClient(@Autowired(required = false) okhttp3.OkHttpClient httpClient) {

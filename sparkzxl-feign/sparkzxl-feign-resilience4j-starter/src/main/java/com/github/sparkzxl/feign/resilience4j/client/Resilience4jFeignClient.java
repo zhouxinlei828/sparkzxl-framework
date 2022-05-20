@@ -2,8 +2,8 @@ package com.github.sparkzxl.feign.resilience4j.client;
 
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import com.github.sparkzxl.core.util.KeyGeneratorUtil;
 import com.github.sparkzxl.feign.resilience4j.OpenfeignUtil;
+import com.github.sparkzxl.feign.resilience4j.Resilience4jUtil;
 import com.github.sparkzxl.feign.resilience4j.enums.Resilience4jHttpStatus;
 import feign.Client;
 import feign.Request;
@@ -18,6 +18,8 @@ import io.github.resilience4j.core.ConfigurationNotFoundException;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.DefaultServiceInstance;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
 
@@ -29,8 +31,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
 /**
- * description: 粘合断路器，线程隔离的核心代码
- * 同时也记录了负载均衡的实际调用数据
+ * description: 粘合断路器，线程隔离的核心代码,同时也记录了负载均衡的实际调用数据
  *
  * @author zhouxinlei
  * @since 2022-04-04 11:09:22
@@ -77,8 +78,8 @@ public class Resilience4jFeignClient implements Client {
         Supplier<CompletionStage<Response>> completionStageSupplier = ThreadPoolBulkhead.decorateSupplier(threadPoolBulkhead,
                 OpenfeignUtil.decorateSupplier(circuitBreaker, () -> {
                     try {
-                        if (log.isDebugEnabled()){
-                            log.info("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
+                        if (log.isDebugEnabled()) {
+                            log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
                                     request.httpMethod(),
                                     request.url(),
                                     serviceInstanceId,
@@ -140,13 +141,23 @@ public class Resilience4jFeignClient implements Client {
         }
     }
 
+    private ServiceInstance getServiceInstance(Request request) throws MalformedURLException {
+        URL url = new URL(request.url());
+        DefaultServiceInstance defaultServiceInstance = new DefaultServiceInstance();
+        defaultServiceInstance.setHost(url.getHost());
+        defaultServiceInstance.setPort(url.getPort());
+        return defaultServiceInstance;
+    }
+
     private String getServiceInstanceId(Request request) throws MalformedURLException {
         URL url = new URL(request.url());
-        return KeyGeneratorUtil.generateKey(url.getHost(), url.getPort());
+        return Resilience4jUtil.getServiceInstance(url);
     }
 
     private String getServiceInstanceMethodId(Request request) throws MalformedURLException {
         URL url = new URL(request.url());
-        return KeyGeneratorUtil.generateKey(url.getHost(), url.getPort(), request.requestTemplate().methodMetadata().method());
+        //通过微服务名称 + 实例 + 方法的方式，获取唯一id
+        return Resilience4jUtil.getServiceInstanceMethodId(url, request.requestTemplate().methodMetadata().method());
     }
+
 }
