@@ -13,6 +13,14 @@ public interface AlarmConstant {
      * 默认线程池中线程名称前缀
      */
     String DEFAULT_THREAD_NAME_PREFIX = "alarm-";
+    /**
+     * 告警配置属性前缀
+     */
+    String ALARM_CONFIG_PREFIX = "spring.alarm";
+    /**
+     * 告警线程池配置属性前缀
+     */
+    String ALARM_THREAD_CONFIG_PREFIX = "spring.alarm.executor-pool";
 
 
     /**
@@ -23,21 +31,11 @@ public interface AlarmConstant {
      * bean name
      */
     String MARKDOWN_MESSAGE = "markDownMessage";
-    /**
-     * bean name
-     */
-    String DINGER_EXECUTOR = "dingerExecutor";
-    /**
-     * 自定义restTemplate名称
-     */
-    String DINGER_REST_TEMPLATE = "dingerRestTemplate";
-    String DINGER_HTTP_CLIENT = "dingerHttpClient";
 
     String NEW_LINE = "\r\n";
     String SPOT_SEPERATOR = ".";
 
-    String DINGER_PROP_PREFIX = "spring.dinger";
-    String DINGER_PROPERTIES_PREFIX = DINGER_PROP_PREFIX + SPOT_SEPERATOR;
+    String WETALK_AT_ALL = "@all";
 
-    public static final String WETALK_AT_ALL = "@all";
+    String ALARM_THREAD_POOL_EXECUTOR = "alarmThreadPoolExecutor";
 }

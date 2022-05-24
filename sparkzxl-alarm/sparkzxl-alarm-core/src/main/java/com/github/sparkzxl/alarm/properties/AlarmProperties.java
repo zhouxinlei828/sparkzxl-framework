@@ -1,6 +1,7 @@
 package com.github.sparkzxl.alarm.properties;
 
 import cn.hutool.core.map.MapUtil;
+import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 @Data
 @Slf4j
-@ConfigurationProperties(prefix = "spring.alarm")
+@ConfigurationProperties(prefix = AlarmConstant.ALARM_CONFIG_PREFIX)
 public class AlarmProperties implements InitializingBean {
 
     private boolean enabled;

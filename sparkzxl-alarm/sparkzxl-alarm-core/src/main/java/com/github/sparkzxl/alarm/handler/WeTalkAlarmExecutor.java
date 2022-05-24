@@ -43,7 +43,7 @@ public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
                         exceptionCallback(alarmId, message, new AsyncCallException(e));
                     }
                     return AlarmResponse.success(alarmId, alarmId);
-                });
+                }, alarmThreadPoolExecutor);
                 return alarmResponseCompletableFuture.get();
             }
             String body = HttpRequest.post(webhook.toString())

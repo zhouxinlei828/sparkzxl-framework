@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * description:
@@ -38,6 +39,8 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
     protected AlarmAsyncCallback alarmAsyncCallback;
     protected AlarmSignAlgorithm alarmSignAlgorithm;
     protected AlarmLoadBalancer alarmLoadBalancer;
+    protected ThreadPoolExecutor alarmThreadPoolExecutor;
+
 
     @Autowired
     public void setAlarmIdGenerator(AlarmIdGenerator alarmIdGenerator) {
@@ -67,6 +70,11 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
     @Autowired
     public void setAlarmLoadBalancer(AlarmLoadBalancer alarmLoadBalancer) {
         this.alarmLoadBalancer = alarmLoadBalancer;
+    }
+
+    @Autowired
+    public void setAlarmThreadPoolExecutor(ThreadPoolExecutor alarmThreadPoolExecutor) {
+        this.alarmThreadPoolExecutor = alarmThreadPoolExecutor;
     }
 
     @Override
@@ -105,7 +113,7 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
             message.transfer(variables);
         }
         List<AlarmConfig> alarmConfigList = alarms.get(alarmType);
-        AlarmConfig alarmConfig = alarmLoadBalancer.groupChoose(robotId, alarmConfigList);
+        AlarmConfig alarmConfig = alarmLoadBalancer.chooseDesignatedRobot(robotId, alarmConfigList);
         if (ObjectUtils.isEmpty(alarmConfig)) {
             throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
         }
@@ -113,11 +121,6 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
             log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmType.getType(), alarmConfig.getTokenId());
         }
         return sendAlarm(alarmId, alarmConfig, message);
-    }
-
-    @Override
-    public String named() {
-        return null;
     }
 
     /**
