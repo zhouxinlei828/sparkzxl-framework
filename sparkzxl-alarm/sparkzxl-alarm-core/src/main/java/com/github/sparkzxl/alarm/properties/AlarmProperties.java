@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.CollectionUtils;
 
 import java.security.InvalidParameterException;
@@ -29,17 +28,49 @@ public class AlarmProperties implements InitializingBean {
 
     private boolean enabled;
 
-    @NestedConfigurationProperty
-    private final Map<AlarmType, List<AlarmConfig>> alarms = new LinkedHashMap<>();
+    private final Map<AlarmType, List<AlarmConfig>> channel = new LinkedHashMap<>();
 
     private AlarmType primaryAlarm;
 
+    /**
+     * description: 告警配置
+     *
+     * @author zhouxinlei
+     * @since 2022-05-24 09:50:42
+     */
+    @Data
+    public static class AlarmConfig {
+
+        /**
+         * 机器人id
+         */
+        protected String robotId = "default";
+        /**
+         * 请求地址前缀-选填
+         */
+        private String robotUrl;
+        /**
+         * 获取 access_token, 必填
+         * 填写机器人设置中 webhook access_token | key后面的值
+         */
+        private String tokenId;
+        /**
+         * 选填, 签名秘钥。 需要验签时必填(钉钉机器人提供)
+         */
+        private String secret;
+
+        /**
+         * 选填, 是否开启异步处理, 默认： false
+         */
+        private boolean async;
+    }
+
     @Override
     public void afterPropertiesSet() {
-        if (MapUtil.isEmpty(alarms)) {
+        if (MapUtil.isEmpty(channel)) {
             throw new InvalidParameterException("alarm Can not be empty");
         }
-        alarms.forEach((key, value) -> {
+        channel.forEach((key, value) -> {
             if (!key.isEnabled()) {
                 throw new InvalidParameterException(String.format("alarm=%s is disabled.", key.getType()));
             }

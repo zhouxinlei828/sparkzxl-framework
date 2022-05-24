@@ -1,8 +1,7 @@
-package com.github.sparkzxl.alarm.handler;
+package com.github.sparkzxl.alarm.executor;
 
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.properties.AlarmConfig;
 
 import java.util.Map;
 
@@ -27,7 +26,7 @@ public interface AlarmExecutor {
     /**
      * 指定机器人发送通知
      *
-     * @param robotId   告警机器人id {@link AlarmConfig#getRobotId()}
+     * @param robotId   告警机器人id {@link com.github.sparkzxl.alarm.properties.AlarmProperties.AlarmConfig#getRobotId()}
      * @param message   通知消息
      * @param variables 变量参数
      * @param <T>       泛型

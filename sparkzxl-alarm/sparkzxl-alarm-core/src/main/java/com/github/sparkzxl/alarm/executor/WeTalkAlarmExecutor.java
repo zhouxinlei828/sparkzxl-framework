@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.handler;
+package com.github.sparkzxl.alarm.executor;
 
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpException;
@@ -10,7 +10,7 @@ import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.exception.AsyncCallException;
-import com.github.sparkzxl.alarm.properties.AlarmConfig;
+import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
 public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
 
     @Override
-    protected <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmConfig alarmConfig, T message) {
+    protected <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmProperties.AlarmConfig alarmConfig, T message) {
         try {
             StringBuilder webhook = new StringBuilder();
             webhook.append(alarmConfig.getRobotUrl()).append(alarmConfig.getTokenId());

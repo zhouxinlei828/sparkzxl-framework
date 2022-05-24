@@ -1,6 +1,6 @@
 package com.github.sparkzxl.alarm.loadbalancer;
 
-import com.github.sparkzxl.alarm.properties.AlarmConfig;
+import com.github.sparkzxl.alarm.properties.AlarmProperties;
 
 import java.util.List;
 
@@ -19,15 +19,15 @@ public interface AlarmLoadBalancer {
      * @param alarmConfigList 告警配置列表
      * @return AlarmConfig
      */
-    AlarmConfig choose(List<AlarmConfig> alarmConfigList);
+    AlarmProperties.AlarmConfig choose(List<AlarmProperties.AlarmConfig> alarmConfigList);
 
 
     /**
      * 指定机器人选择配置
      *
-     * @param robotId         机器人id {@link AlarmConfig#getRobotId()}
+     * @param robotId         机器人id {@link com.github.sparkzxl.alarm.properties.AlarmProperties.AlarmConfig#getRobotId()}
      * @param alarmConfigList 告警配置列表
      * @return AlarmConfig
      */
-    AlarmConfig chooseDesignatedRobot(String robotId, List<AlarmConfig> alarmConfigList);
+    AlarmProperties.AlarmConfig chooseDesignatedRobot(String robotId, List<AlarmProperties.AlarmConfig> alarmConfigList);
 }

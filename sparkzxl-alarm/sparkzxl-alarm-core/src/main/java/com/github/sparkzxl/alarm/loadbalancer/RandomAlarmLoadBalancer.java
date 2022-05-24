@@ -1,6 +1,6 @@
 package com.github.sparkzxl.alarm.loadbalancer;
 
-import com.github.sparkzxl.alarm.properties.AlarmConfig;
+import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -19,7 +19,7 @@ public class RandomAlarmLoadBalancer implements AlarmLoadBalancer {
     private final AtomicInteger index = new AtomicInteger(0);
 
     @Override
-    public AlarmConfig choose(List<AlarmConfig> alarmConfigList) {
+    public AlarmProperties.AlarmConfig choose(List<AlarmProperties.AlarmConfig> alarmConfigList) {
         if (CollectionUtils.isEmpty(alarmConfigList)) {
             return null;
         }
@@ -27,11 +27,11 @@ public class RandomAlarmLoadBalancer implements AlarmLoadBalancer {
     }
 
     @Override
-    public AlarmConfig chooseDesignatedRobot(String robotId, List<AlarmConfig> alarmConfigList) {
+    public AlarmProperties.AlarmConfig chooseDesignatedRobot(String robotId, List<AlarmProperties.AlarmConfig> alarmConfigList) {
         if (CollectionUtils.isEmpty(alarmConfigList)) {
             return null;
         }
-        List<AlarmConfig> configList = alarmConfigList.stream().filter(x -> StringUtils.equals(x.getRobotId(), robotId))
+        List<AlarmProperties.AlarmConfig> configList = alarmConfigList.stream().filter(x -> StringUtils.equals(x.getRobotId(), robotId))
                 .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(configList)) {
             return null;

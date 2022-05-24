@@ -4,7 +4,6 @@ import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
-import com.github.sparkzxl.alarm.properties.AlarmConfig;
 
 /**
  * description: 告警发送
@@ -26,7 +25,7 @@ public interface AlarmSender {
     /**
      * 指定机器人发送
      *
-     * @param robotId        机器人id {@link AlarmConfig#getRobotId()}
+     * @param robotId        机器人id {@link com.github.sparkzxl.alarm.properties.AlarmProperties.AlarmConfig#getRobotId()}
      * @param messageSubType 消息类型{@link MessageSubType}
      * @param request        请求体 {@link AlarmRequest}
      * @return AlarmResponse 响应报文
@@ -46,7 +45,7 @@ public interface AlarmSender {
     /**
      * 指定机器人发送
      *
-     * @param robotId        机器人id {@link AlarmConfig#getRobotId()}
+     * @param robotId        机器人id {@link com.github.sparkzxl.alarm.properties.AlarmProperties.AlarmConfig#getRobotId()}
      * @param alarmType      告警类型 {@link AlarmType}
      * @param messageSubType 消息类型{@link MessageSubType}
      * @param request        请求体 {@link AlarmRequest}

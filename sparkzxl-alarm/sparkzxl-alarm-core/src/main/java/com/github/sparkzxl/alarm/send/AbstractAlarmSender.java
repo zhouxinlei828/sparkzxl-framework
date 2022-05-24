@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.send;
 
 import com.github.sparkzxl.alarm.enums.MessageSubType;
-import com.github.sparkzxl.alarm.handler.AlarmExecutor;
+import com.github.sparkzxl.alarm.executor.AlarmExecutor;
 import com.github.sparkzxl.alarm.message.CustomMessage;
 import com.github.sparkzxl.alarm.message.MarkDownMessage;
 import com.github.sparkzxl.alarm.message.TextMessage;

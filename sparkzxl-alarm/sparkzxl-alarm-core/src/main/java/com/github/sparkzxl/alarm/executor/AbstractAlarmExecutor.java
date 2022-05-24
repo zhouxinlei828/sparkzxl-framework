@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.handler;
+package com.github.sparkzxl.alarm.executor;
 
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.alarm.callback.AlarmAsyncCallback;
@@ -9,7 +9,6 @@ import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
-import com.github.sparkzxl.alarm.properties.AlarmConfig;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.send.AlarmCallback;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
@@ -82,15 +81,15 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
         AlarmType alarmType = message.getAlarmType();
         // 告警唯一id
         String alarmId = alarmIdGenerator.nextAlarmId();
-        Map<AlarmType, List<AlarmConfig>> alarms = alarmProperties.getAlarms();
+        Map<AlarmType, List<AlarmProperties.AlarmConfig>> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
             return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
         }
         if (MapUtil.isNotEmpty(variables)) {
             message.transfer(variables);
         }
-        List<AlarmConfig> alarmConfigList = alarms.get(alarmType);
-        AlarmConfig alarmConfig = alarmLoadBalancer.choose(alarmConfigList);
+        List<AlarmProperties.AlarmConfig> alarmConfigList = alarms.get(alarmType);
+        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.choose(alarmConfigList);
         if (ObjectUtils.isEmpty(alarmConfig)) {
             throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
         }
@@ -105,15 +104,15 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
         AlarmType alarmType = message.getAlarmType();
         // 告警唯一id
         String alarmId = alarmIdGenerator.nextAlarmId();
-        Map<AlarmType, List<AlarmConfig>> alarms = alarmProperties.getAlarms();
+        Map<AlarmType, List<AlarmProperties.AlarmConfig>> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
             return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
         }
         if (MapUtil.isNotEmpty(variables)) {
             message.transfer(variables);
         }
-        List<AlarmConfig> alarmConfigList = alarms.get(alarmType);
-        AlarmConfig alarmConfig = alarmLoadBalancer.chooseDesignatedRobot(robotId, alarmConfigList);
+        List<AlarmProperties.AlarmConfig> alarmConfigList = alarms.get(alarmType);
+        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.chooseDesignatedRobot(robotId, alarmConfigList);
         if (ObjectUtils.isEmpty(alarmConfig)) {
             throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
         }
@@ -145,5 +144,5 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
      * @param <T>         泛型
      * @return AlarmResponse
      */
-    protected abstract <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmConfig alarmConfig, T message);
+    protected abstract <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmProperties.AlarmConfig alarmConfig, T message);
 }
