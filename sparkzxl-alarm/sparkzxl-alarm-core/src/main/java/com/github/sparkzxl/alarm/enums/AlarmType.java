@@ -16,6 +16,10 @@ public enum AlarmType {
      * 企业微信
      */
     WETALK("wetalk", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
+    /**
+     * 邮件
+     */
+    MAIL("mail", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
     ;
 
     private final String type;

@@ -14,6 +14,8 @@ public enum AlarmResponseCodeEnum {
     MESSAGE_TYPE_UNSUPPORTED("D201", "无法支持的消息类型"),
     SEND_MESSAGE_FAILED("D202", "消息发送失败"),
     MESSAGE_PROCESSING_FAILED("D203", "消息处理异常"),
+    ALARM_TYPE_UNSUPPORTED("D204", "无法支持的告警方式"),
+    CONFIG_NOT_FIND("D205", "未配置告警属性"),
     FAILED("D999", "failed");
 
     private String code;

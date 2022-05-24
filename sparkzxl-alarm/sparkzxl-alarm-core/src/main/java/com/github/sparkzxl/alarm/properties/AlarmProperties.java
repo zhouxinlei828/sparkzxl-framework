@@ -7,9 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.util.CollectionUtils;
 
 import java.security.InvalidParameterException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,63 +28,10 @@ public class AlarmProperties implements InitializingBean {
 
     private boolean enabled;
 
-    private final Map<AlarmType, AlarmConfig> alarms = new LinkedHashMap<>();
+    @NestedConfigurationProperty
+    private final Map<AlarmType, List<AlarmConfig>> alarms = new LinkedHashMap<>();
 
     private AlarmType primaryAlarm;
-
-    public static class AlarmConfig {
-        /**
-         * 请求地址前缀-选填
-         */
-        private String robotUrl;
-        /**
-         * 获取 access_token, 必填
-         * 填写机器人设置中 webhook access_token | key后面的值
-         */
-        private String tokenId;
-        /**
-         * 选填, 签名秘钥。 需要验签时必填(钉钉机器人提供)
-         */
-        private String secret;
-
-        /**
-         * 选填, 是否开启异步处理, 默认： false
-         */
-        private boolean async = false;
-
-        public String getRobotUrl() {
-            return robotUrl;
-        }
-
-        public void setRobotUrl(String robotUrl) {
-            this.robotUrl = robotUrl;
-        }
-
-        public String getTokenId() {
-            return tokenId;
-        }
-
-        public void setTokenId(String tokenId) {
-            this.tokenId = tokenId;
-        }
-
-        public String getSecret() {
-            return secret;
-        }
-
-        public void setSecret(String secret) {
-            this.secret = secret;
-        }
-
-        public boolean isAsync() {
-            return async;
-        }
-
-        public void setAsync(boolean async) {
-            this.async = async;
-        }
-    }
-
 
     @Override
     public void afterPropertiesSet() {
@@ -92,15 +42,20 @@ public class AlarmProperties implements InitializingBean {
             if (!key.isEnabled()) {
                 throw new InvalidParameterException(String.format("alarm=%s is disabled.", key.getType()));
             }
-            if (StringUtils.isEmpty(value.tokenId)) {
-                throw new InvalidParameterException(String.format("alarm=%s tokenId is empty.", key.getType()));
+            if (CollectionUtils.isEmpty(value)) {
+                throw new InvalidParameterException(String.format("alarm=%s config is empty.", key.getType()));
             }
-            if (StringUtils.isEmpty(value.robotUrl)) {
-                value.robotUrl = key.getRobotUrl();
-            }
-            if (key == AlarmType.WETALK) {
-                value.secret = null;
-            }
+            value.forEach(config -> {
+                if (StringUtils.isEmpty(config.getTokenId())) {
+                    throw new InvalidParameterException(String.format("alarm=%s tokenId is empty.", key.getType()));
+                }
+                if (StringUtils.isEmpty(config.getRobotUrl())) {
+                    config.setRobotUrl(key.getRobotUrl());
+                }
+                if (key == AlarmType.WETALK) {
+                    config.setSecret(null);
+                }
+            });
             if (primaryAlarm == null) {
                 primaryAlarm = key;
                 if (log.isDebugEnabled()) {

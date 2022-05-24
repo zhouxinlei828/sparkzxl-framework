@@ -5,11 +5,16 @@ import com.github.sparkzxl.alarm.callback.AlarmExceptionCallback;
 import com.github.sparkzxl.alarm.callback.DefaultAlarmAsyncCallback;
 import com.github.sparkzxl.alarm.callback.DefaultAlarmExceptionCallback;
 import com.github.sparkzxl.alarm.constant.AlarmConstant;
+import com.github.sparkzxl.alarm.handler.AlarmExecutor;
+import com.github.sparkzxl.alarm.handler.DingTalkAlarmExecutor;
+import com.github.sparkzxl.alarm.handler.MailAlarmExecutor;
+import com.github.sparkzxl.alarm.handler.WeTalkAlarmExecutor;
+import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
+import com.github.sparkzxl.alarm.loadbalancer.RandomAlarmLoadBalancer;
 import com.github.sparkzxl.alarm.message.CustomMessage;
 import com.github.sparkzxl.alarm.message.MarkDownMessage;
 import com.github.sparkzxl.alarm.message.TextMessage;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
-import com.github.sparkzxl.alarm.send.AlarmManagerBuilder;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
 import com.github.sparkzxl.alarm.send.AlarmSender;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
@@ -21,6 +26,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 /**
  * description: 告警自动装配
@@ -77,39 +84,73 @@ public class AlarmAutoConfig {
         return new DingTalkAlarmSignAlgorithm();
     }
 
+    /**
+     * 异步执行回调接口
+     *
+     * @return AlarmAsyncCallback
+     */
     @Bean
     @ConditionalOnMissingBean(AlarmAsyncCallback.class)
     public AlarmAsyncCallback alarmAsyncCallback() {
         return new DefaultAlarmAsyncCallback();
     }
 
+    /**
+     * AlarmExceptionCallback
+     *
+     * @return 通知异常回调
+     */
     @Bean
     @ConditionalOnMissingBean(AlarmExceptionCallback.class)
     public AlarmExceptionCallback alarmExceptionCallback() {
         return new DefaultAlarmExceptionCallback();
     }
 
-
+    /**
+     * 钉钉告警执行器
+     *
+     * @return DingTalkAlarmExecutor
+     */
     @Bean
-    public AlarmManagerBuilder alarmManagerBuilder(AlarmIdGenerator alarmIdGenerator,
-                                                   AlarmExceptionCallback alarmExceptionCallback,
-                                                   CustomMessage textMessage,
-                                                   CustomMessage markDownMessage,
-                                                   AlarmSignAlgorithm alarmSignAlgorithm) {
-        AlarmManagerBuilder alarmManagerBuilder = new AlarmManagerBuilder();
-        alarmManagerBuilder.setAlarmExceptionCallback(alarmExceptionCallback);
-        alarmManagerBuilder.setTextMessage(textMessage);
-        alarmManagerBuilder.setMarkDownMessage(markDownMessage);
-        alarmManagerBuilder.setAlarmIdGenerator(alarmIdGenerator);
-        alarmManagerBuilder.setAlarmSignAlgorithm(alarmSignAlgorithm);
-        return alarmManagerBuilder;
+    @ConditionalOnMissingBean(DingTalkAlarmExecutor.class)
+    public DingTalkAlarmExecutor dingTalkAlarmExecutor() {
+        return new DingTalkAlarmExecutor();
     }
 
+    /**
+     * 企业微信告警执行器
+     *
+     * @return WeTalkAlarmExecutor
+     */
+    @Bean
+    @ConditionalOnMissingBean(WeTalkAlarmExecutor.class)
+    public WeTalkAlarmExecutor weTalkAlarmExecutor() {
+        return new WeTalkAlarmExecutor();
+    }
+
+    /**
+     * 邮件告警执行器
+     *
+     * @return MailAlarmExecutor
+     */
+    @Bean
+    @ConditionalOnMissingBean(MailAlarmExecutor.class)
+    public MailAlarmExecutor mailAlarmExecutor() {
+        return new MailAlarmExecutor();
+    }
 
     @Bean
     @ConditionalOnMissingBean(AlarmSender.class)
     public AlarmSender alarmSender(AlarmProperties alarmProperties,
-                                  AlarmManagerBuilder alarmManagerBuilder) {
-        return new AlarmRobot(alarmProperties, alarmManagerBuilder);
+                                   TextMessage textMessage,
+                                   MarkDownMessage markDownMessage,
+                                   List<AlarmExecutor> alarmExecutorList) {
+        return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AlarmLoadBalancer.class)
+    public AlarmLoadBalancer alarmLoadBalancer() {
+        return new RandomAlarmLoadBalancer();
     }
 }
