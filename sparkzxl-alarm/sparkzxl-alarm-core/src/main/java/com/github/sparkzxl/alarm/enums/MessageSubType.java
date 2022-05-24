@@ -3,10 +3,7 @@ package com.github.sparkzxl.alarm.enums;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.Message;
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.entity.dingtalk.DingFeedCard;
-import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkLink;
-import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkMarkDown;
-import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkText;
+import com.github.sparkzxl.alarm.entity.dingtalk.*;
 import com.github.sparkzxl.alarm.entity.wechat.WeMarkdown;
 import com.github.sparkzxl.alarm.entity.wechat.WeNews;
 import com.github.sparkzxl.alarm.entity.wechat.WeText;
@@ -79,7 +76,7 @@ public enum MessageSubType {
     /**
      * 图文类型
      */
-    IMAGETEXT(false) {
+    IMAGE_TEXT(true) {
         @Override
         public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
             if (alarmType == AlarmType.DINGTALK) {
@@ -92,11 +89,24 @@ public enum MessageSubType {
     /**
      * link类型, 只支持 {@link AlarmType#DINGTALK}
      */
-    LINK(false) {
+    LINK(true) {
         @Override
         public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
             if (alarmType == AlarmType.DINGTALK) {
                 return new DingTalkLink();
+            } else {
+                throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.code(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.message());
+            }
+        }
+    },
+    /**
+     * actionCard类型, 只支持 {@link AlarmType#DINGTALK}
+     */
+    ACTION_CARD(true) {
+        @Override
+        public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
+            if (alarmType == AlarmType.DINGTALK) {
+                return new DingTalkActionCard();
             } else {
                 throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.code(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.message());
             }

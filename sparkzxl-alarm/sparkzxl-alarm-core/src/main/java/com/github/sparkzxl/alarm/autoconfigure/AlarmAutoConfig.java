@@ -11,16 +11,17 @@ import com.github.sparkzxl.alarm.executor.MailAlarmExecutor;
 import com.github.sparkzxl.alarm.executor.WeTalkAlarmExecutor;
 import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.loadbalancer.RandomAlarmLoadBalancer;
-import com.github.sparkzxl.alarm.message.CustomMessage;
 import com.github.sparkzxl.alarm.message.MarkDownMessage;
 import com.github.sparkzxl.alarm.message.TextMessage;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
+import com.github.sparkzxl.alarm.properties.AlarmThreadPoolProperties;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
 import com.github.sparkzxl.alarm.send.AlarmSender;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.sign.DingTalkAlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import com.github.sparkzxl.alarm.support.DefaultAlarmIdGenerator;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,6 +29,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * description: 告警自动装配
@@ -36,9 +40,20 @@ import java.util.List;
  * @since 2022-05-18 15:24:13
  */
 @ConditionalOnProperty(name = "spring.alarm.enabled", havingValue = "true")
-@EnableConfigurationProperties(AlarmProperties.class)
+@EnableConfigurationProperties({AlarmProperties.class,AlarmThreadPoolProperties.class})
 @Configuration
 public class AlarmAutoConfig {
+
+    @ConditionalOnMissingBean(name = AlarmConstant.ALARM_THREAD_POOL_EXECUTOR)
+    @Bean(name = AlarmConstant.ALARM_THREAD_POOL_EXECUTOR)
+    public ThreadPoolExecutor alarmThreadPoolExecutor(AlarmThreadPoolProperties alarmThreadPoolProperties) {
+        return new ThreadPoolExecutor(alarmThreadPoolProperties.getCoreSize(),
+                alarmThreadPoolProperties.getMaxSize(),
+                alarmThreadPoolProperties.getKeepAliveSeconds(),
+                TimeUnit.SECONDS, new ArrayBlockingQueue<>(alarmThreadPoolProperties.getQueueCapacity()),
+                new BasicThreadFactory.Builder().namingPattern(alarmThreadPoolProperties.getThreadNamePrefix()).build(),
+                new ThreadPoolExecutor.AbortPolicy());
+    }
 
     /**
      * 默认Text消息格式配置
@@ -47,7 +62,7 @@ public class AlarmAutoConfig {
      */
     @ConditionalOnMissingBean(name = AlarmConstant.TEXT_MESSAGE)
     @Bean(AlarmConstant.TEXT_MESSAGE)
-    public CustomMessage textMessage() {
+    public TextMessage textMessage() {
         return new TextMessage();
     }
 
@@ -58,7 +73,7 @@ public class AlarmAutoConfig {
      */
     @ConditionalOnMissingBean(name = AlarmConstant.MARKDOWN_MESSAGE)
     @Bean(AlarmConstant.MARKDOWN_MESSAGE)
-    public CustomMessage markDownMessage() {
+    public MarkDownMessage markDownMessage() {
         return new MarkDownMessage();
     }
 
