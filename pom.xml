@@ -27,7 +27,6 @@
     </properties>
 
     <modules>
-        <module>sparkzxl-alarm-starter</module>
         <module>sparkzxl-boot-starter</module>
         <module>sparkzxl-cache-starter</module>
         <module>sparkzxl-core</module>

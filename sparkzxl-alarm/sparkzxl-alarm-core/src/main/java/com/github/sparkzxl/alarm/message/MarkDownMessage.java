@@ -26,7 +26,7 @@ public class MarkDownMessage implements CustomMessage {
             }
         }
         return MessageFormat.format(
-                "#### 【Alarm通知】 {0} \n- 内容: {1}",
+                "# 【{0}】 {0} \n> {1}",
                 text, content);
     }
 }

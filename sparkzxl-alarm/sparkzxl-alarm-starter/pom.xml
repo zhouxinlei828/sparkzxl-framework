@@ -9,13 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <packaging>jar</packaging>
-    <artifactId>sparkzxl-alarm-core</artifactId>
+    <artifactId>sparkzxl-alarm-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-core</artifactId>
+            <artifactId>sparkzxl-alarm-core</artifactId>
         </dependency>
         <!-- 自定义的元数据依赖 -->
         <dependency>

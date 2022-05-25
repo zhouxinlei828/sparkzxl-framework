@@ -25,6 +25,7 @@ import java.util.List;
  */
 @Slf4j
 public class AlarmRobot extends AbstractAlarmSender {
+
     public AlarmRobot(AlarmProperties alarmProperties,
                       TextMessage textMessage,
                       MarkDownMessage markDownMessage,

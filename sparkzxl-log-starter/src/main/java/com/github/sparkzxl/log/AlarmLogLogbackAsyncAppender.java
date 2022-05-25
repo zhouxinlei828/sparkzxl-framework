@@ -1,23 +1,10 @@
 package com.github.sparkzxl.log;
 
 import ch.qos.logback.classic.AsyncAppender;
-import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.classic.spi.ThrowableProxy;
-import com.github.sparkzxl.alarm.AlarmFactoryExecute;
-import com.github.sparkzxl.alarm.constant.enums.MessageTye;
-import com.github.sparkzxl.alarm.entity.NotifyMessage;
-import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.entity.log.AlarmLogInfo;
-import com.github.sparkzxl.log.utils.ThrowableUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 
-import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +20,7 @@ public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
 
     @Override
     public void doAppend(ILoggingEvent eventObject) {
-        if (eventObject instanceof LoggingEvent) {
+        /*if (eventObject instanceof LoggingEvent) {
             LoggingEvent loggingEvent = (LoggingEvent) eventObject;
             Level level = loggingEvent.getLevel();
             ThrowableProxy throwableProxy = (ThrowableProxy) loggingEvent.getThrowableProxy();
@@ -68,6 +55,6 @@ public class AlarmLogLogbackAsyncAppender extends AsyncAppender {
                 notifyMessage.setMessage(message);
                 CompletableFuture.runAsync(() -> AlarmFactoryExecute.execute(notifyMessage), threadPoolExecutor);
             }
-        }
+        }*/
     }
 }

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.alarm.exception;
 
-import com.github.sparkzxl.alarm.enums.ExceptionEnum;
+import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
 
 /**
  * description: 异步调用异常
@@ -10,10 +10,10 @@ import com.github.sparkzxl.alarm.enums.ExceptionEnum;
  */
 public class AsyncCallException extends AlarmException {
     public AsyncCallException(String msg) {
-        super(ExceptionEnum.ASYNC_CALL.getCode(), msg);
+        super(AlarmResponseCodeEnum.ASYNC_CALL.getErrorCode(), msg);
     }
 
     public AsyncCallException(Throwable cause) {
-        super(cause, ExceptionEnum.ASYNC_CALL.getCode(), ExceptionEnum.ASYNC_CALL.getMessage());
+        super(cause, AlarmResponseCodeEnum.ASYNC_CALL.getErrorCode(), AlarmResponseCodeEnum.ASYNC_CALL.getErrorMessage());
     }
 }

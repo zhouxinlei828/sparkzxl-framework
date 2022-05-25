@@ -14,6 +14,6 @@ public class TextMessage implements CustomMessage {
 
     @Override
     public String message(AlarmRequest request) {
-        return MessageFormat.format("【Alarm通知】 {0}\n- 内容: {1}.", request.getTitle(), request.getContent());
+        return MessageFormat.format("{0}\n {1}.", request.getTitle(), request.getContent());
     }
 }

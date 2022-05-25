@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>sparkzxl-alarm-core</module>
+        <module>sparkzxl-alarm-starter</module>
     </modules>
     <artifactId>sparkzxl-alarm</artifactId>
 

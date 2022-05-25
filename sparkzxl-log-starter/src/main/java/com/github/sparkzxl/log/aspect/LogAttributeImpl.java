@@ -1,10 +1,7 @@
 package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.map.MapUtil;
-import com.alibaba.fastjson.JSONArray;
-import com.github.sparkzxl.alarm.entity.ExpressionTemplate;
 import com.github.sparkzxl.core.util.StrPool;
-import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -19,7 +16,6 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -73,19 +69,6 @@ public class LogAttributeImpl implements ILogAttribute {
             String[] headerArray = StringUtils.split(extractParams, StrPool.COMMA);
             for (String header : headerArray) {
                 attributeMapping.put(header, function.apply(header));
-            }
-        }
-        String expressionJson = optLogRecord.expressionJson();
-        if (StringUtils.isNotBlank(expressionJson)) {
-            List<ExpressionTemplate> expressionTemplateList = JSONArray.parseArray(expressionJson, ExpressionTemplate.class);
-            for (ExpressionTemplate expressionTemplate : expressionTemplateList) {
-                try {
-                    String value = parseExpression(joinPoint, expressionTemplate.getExpression());
-                    System.out.println(value);
-                    attributeMapping.put(expressionTemplate.getKey(), value);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return attributeMapping;

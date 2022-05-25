@@ -16,6 +16,7 @@
 package com.github.sparkzxl.alarm.exception;
 
 import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,15 +45,15 @@ public class AlarmException extends RuntimeException {
         this.errorMessage = errorMessage;
     }
 
-    public AlarmException(AlarmResponseCodeEnum alarmResponseCodeEnum) {
-        super(alarmResponseCodeEnum.message());
-        this.errorCode = alarmResponseCodeEnum.code();
-        this.errorMessage = alarmResponseCodeEnum.message();
+    public AlarmException(IErrorCode errorCode) {
+        super(errorCode.getErrorMessage());
+        this.errorCode = errorCode.getErrorCode();
+        this.errorMessage = errorCode.getErrorMessage();
     }
 
     public AlarmException(Throwable cause) {
         super(cause);
-        this.errorCode = AlarmResponseCodeEnum.FAILED.code();
+        this.errorCode = AlarmResponseCodeEnum.FAILED.getErrorCode();
         this.errorMessage = cause.getMessage();
     }
 

@@ -1,6 +1,7 @@
 package com.github.sparkzxl.alarm.entity;
 
 import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
+import com.github.sparkzxl.entity.response.IErrorCode;
 
 /**
  * description: 告警响应体
@@ -27,9 +28,9 @@ public class AlarmResponse {
     private String data;
 
 
-    private AlarmResponse(AlarmResponseCodeEnum resultCode) {
-        this.code = resultCode.code();
-        this.message = resultCode.message();
+    private AlarmResponse(IErrorCode resultCode) {
+        this.code = resultCode.getErrorCode();
+        this.message = resultCode.getErrorMessage();
     }
 
     private AlarmResponse(String logId, AlarmResponseCodeEnum resultCode) {
