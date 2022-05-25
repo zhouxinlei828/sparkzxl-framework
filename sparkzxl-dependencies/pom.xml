@@ -19,7 +19,7 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-version-->
-        <spring-boot-dependencies.version>2.6.6</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.6.7</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>2021.0.1</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
         <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
@@ -79,7 +79,6 @@
         <drools-version>7.47.0.Final</drools-version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <jsqlparser.version>4.3</jsqlparser.version>
-        <antisamy.version>1.6.4</antisamy.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
 
@@ -553,11 +552,6 @@
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.owasp.antisamy</groupId>
-                <artifactId>antisamy</artifactId>
-                <version>${antisamy.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.houbb</groupId>

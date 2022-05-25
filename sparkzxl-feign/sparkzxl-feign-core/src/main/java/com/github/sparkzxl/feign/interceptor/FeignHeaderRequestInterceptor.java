@@ -1,6 +1,8 @@
 package com.github.sparkzxl.feign.interceptor;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.StrPool;
@@ -20,6 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: feign client 拦截器，
@@ -60,7 +63,8 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
         }
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, RequestLocalContextHolder.get(headerName)));
+            Map<String, Object> localMap = RequestLocalContextHolder.getLocalMap();
+            localMap.forEach((key, value) -> template.header(key, URLUtil.encode(Convert.toStr(value))));
             return;
         }
 
@@ -77,7 +81,7 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
         if (CollectionUtils.isNotEmpty(headerList)) {
             headerList.forEach((headerName) -> {
                 String header = request.getHeader(headerName);
-                template.header(headerName, StringUtils.isEmpty(header) ? RequestLocalContextHolder.get(headerName) : header);
+                template.header(headerName, StringUtils.isEmpty(header) ? URLUtil.encode(RequestLocalContextHolder.get(headerName)) : header);
             });
         }
     }

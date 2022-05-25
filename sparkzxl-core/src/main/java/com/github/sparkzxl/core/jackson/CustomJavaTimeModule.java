@@ -27,7 +27,6 @@ import java.util.Date;
 public class CustomJavaTimeModule extends SimpleModule {
 
     public CustomJavaTimeModule() {
-        super(PackageVersion.VERSION);
         // 序列化
         this.addDeserializer(LocalDateTime.class, LocalDateTimeCustomDeSerializer.INSTANCE);
         this.addDeserializer(Date.class, new CustomDateDeserializer());
