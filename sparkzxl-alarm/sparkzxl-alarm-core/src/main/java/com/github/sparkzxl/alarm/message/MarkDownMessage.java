@@ -26,7 +26,7 @@ public class MarkDownMessage implements CustomMessage {
             }
         }
         return MessageFormat.format(
-                "# 【{0}】 {0} \n> {1}",
+                "# 【{0}】\n> {1}",
                 text, content);
     }
 }
