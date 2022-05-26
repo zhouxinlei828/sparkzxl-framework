@@ -1,9 +1,11 @@
 package com.github.sparkzxl.alarm.entity;
 
 import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkMessage;
+import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * description: 消息实体
@@ -42,16 +44,16 @@ public class Message extends DingTalkMessage implements Serializable {
         public At() {
         }
 
-        public At(List<String> atMobiles) {
-            this.atMobiles = atMobiles;
+        public At(Set<String> atMobiles) {
+            this.atMobiles = Lists.newArrayList(atMobiles);
         }
 
         public At(Boolean isAtAll) {
             this.isAtAll = isAtAll;
         }
 
-        public At(List<String> atMobiles, Boolean isAtAll) {
-            this.atMobiles = atMobiles;
+        public At(Set<String> atMobiles, Boolean isAtAll) {
+            this.atMobiles = Lists.newArrayList(atMobiles);
             this.isAtAll = isAtAll;
         }
 

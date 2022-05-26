@@ -8,6 +8,7 @@ import com.github.sparkzxl.alarm.entity.wechat.WeMarkdown;
 import com.github.sparkzxl.alarm.entity.wechat.WeNews;
 import com.github.sparkzxl.alarm.entity.wechat.WeText;
 import com.github.sparkzxl.alarm.exception.AlarmException;
+import com.google.common.collect.Sets;
 
 import java.util.*;
 
@@ -29,7 +30,7 @@ public enum MessageSubType {
         public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
             String content = request.getContent();
             boolean atAll = request.isAtAll();
-            List<String> phones = request.getPhones();
+            Set<String> phones = request.getPhones();
             if (alarmType == AlarmType.DINGTALK) {
                 Message message = new DingTalkText(new DingTalkText.Text(content));
                 if (atAll) {
@@ -42,7 +43,7 @@ public enum MessageSubType {
                 WeText.Text text = new WeText.Text(content);
                 WeText weText = new WeText(text);
                 if (atAll) {
-                    text.setMentioned_mobile_list(Collections.singletonList(WETALK_AT_ALL));
+                    text.setMentioned_mobile_list(Sets.newHashSet(WETALK_AT_ALL));
                 } else if (phones != null && !phones.isEmpty()) {
                     text.setMentioned_mobile_list(phones);
                 }
@@ -59,7 +60,7 @@ public enum MessageSubType {
         public MsgType msgType(AlarmType alarmType, AlarmRequest request) {
             String content = request.getContent();
             String title = request.getTitle();
-            List<String> phones = request.getPhones();
+            Set<String> phones = request.getPhones();
             if (alarmType == AlarmType.DINGTALK) {
                 Message message = new DingTalkMarkDown(new DingTalkMarkDown.MarkDown(title, content));
                 if (!phones.isEmpty()) {

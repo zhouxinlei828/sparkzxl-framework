@@ -1,8 +1,11 @@
 package com.github.sparkzxl.alarm.entity.wechat;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * description: 企业微信-消息类型-文本类型
@@ -69,8 +72,8 @@ public class WeText extends WeTalkMessage {
             return mentioned_mobile_list;
         }
 
-        public void setMentioned_mobile_list(List<String> mentioned_mobile_list) {
-            this.mentioned_mobile_list = mentioned_mobile_list;
+        public void setMentioned_mobile_list(Set<String> mentionedMobileList) {
+            this.mentioned_mobile_list = Lists.newArrayList(mentionedMobileList);
         }
 
         public Text() {

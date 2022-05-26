@@ -1,10 +1,10 @@
 package com.github.sparkzxl.alarm.entity;
 
+import com.google.common.collect.Sets;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * description: 告警请求对象
@@ -26,7 +26,7 @@ public class AlarmRequest {
     /**
      * 艾特成员信息
      */
-    private List<String> phones = new ArrayList<>();
+    private Set<String> phones = Sets.newHashSet();
     /**
      * 艾特成员
      */
