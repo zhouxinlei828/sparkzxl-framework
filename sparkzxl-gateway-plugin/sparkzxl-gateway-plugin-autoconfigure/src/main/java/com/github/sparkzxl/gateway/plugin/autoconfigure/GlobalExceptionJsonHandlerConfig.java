@@ -28,7 +28,7 @@ import java.util.List;
  * description: 网关全局异常配置
  *
  * @author zhouxinlei
- * @date 2022-01-10 15:13:55
+ * @since 2022-01-10 15:13:55
  */
 @Slf4j
 @Configuration

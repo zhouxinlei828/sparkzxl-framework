@@ -8,7 +8,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
  * description:
  *
  * @author zhouxinlei
- * @date 2022-01-11 14:45:09
+ * @since 2022-01-11 14:45:09
  */
 @Slf4j
 public class BestAvailableLoadBalancerRule implements ILoadBalancerRule {

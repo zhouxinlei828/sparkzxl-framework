@@ -8,7 +8,7 @@ import java.io.Serializable;
  * description: 告警模板实体类
  *
  * @author zhouxinlei
- * @date 2021-12-28 11:06
+ * @since 2021-12-28 11:06
  */
 @Data
 public class AlarmTemplate implements Serializable {

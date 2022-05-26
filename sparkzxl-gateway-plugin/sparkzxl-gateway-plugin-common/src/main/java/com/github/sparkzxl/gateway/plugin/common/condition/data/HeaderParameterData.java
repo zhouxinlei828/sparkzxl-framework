@@ -10,7 +10,7 @@ import java.util.List;
  * description:  Header Parameter Data
  *
  * @author zhouxinlei
- * @date 2022-01-10 10:26:32
+ * @since 2022-01-10 10:26:32
  */
 @Join
 public class HeaderParameterData implements ParameterData {

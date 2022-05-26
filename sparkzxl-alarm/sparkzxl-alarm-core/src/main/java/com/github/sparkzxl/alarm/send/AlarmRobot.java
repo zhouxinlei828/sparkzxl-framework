@@ -15,6 +15,7 @@ import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -49,7 +50,10 @@ public class AlarmRobot extends AbstractAlarmSender {
         MsgType msgType = messageSubType.msgType(alarmType, request);
         AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
         if (ObjectUtils.isEmpty(alarmExecutor)) {
-            throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED);
+            String errorMessage = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMessage(),
+                    msgType.getAlarmType().getType(),
+                    msgType.getAlarmType().getType());
+            throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMessage);
         }
         return alarmExecutor.send(msgType, request.getVariables());
     }
@@ -70,7 +74,10 @@ public class AlarmRobot extends AbstractAlarmSender {
         MsgType msgType = messageSubType.msgType(alarmType, request);
         AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
         if (ObjectUtils.isEmpty(alarmExecutor)) {
-            throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED);
+            String errorMessage = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMessage(),
+                    msgType.getAlarmType().getType(),
+                    msgType.getAlarmType().getType());
+            throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMessage);
         }
         return alarmExecutor.designatedRobotSend(robotId, msgType, request.getVariables());
     }

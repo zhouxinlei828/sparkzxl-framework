@@ -9,7 +9,7 @@ import java.io.Serializable;
  * description: filter data
  *
  * @author zhouxinlei
- * @date 2022-01-10 09:51:35
+ * @since 2022-01-10 09:51:35
  */
 @Data
 public class FilterData implements Serializable {

@@ -7,7 +7,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
  * description: 负载均衡规则
  *
  * @author zhouxinlei
- * @date 2022-01-09 18:45:27
+ * @since 2022-01-09 18:45:27
  */
 public interface ILoadBalancerRule {
 

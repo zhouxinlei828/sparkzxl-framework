@@ -8,7 +8,7 @@ import org.springframework.web.server.ServerWebExchange;
  * description: 获取属性参数
  *
  * @author zhouxinlei
- * @date 2022-01-10 11:13:28
+ * @since 2022-01-10 11:13:28
  */
 @Join
 public class AttributeParameterData implements ParameterData {

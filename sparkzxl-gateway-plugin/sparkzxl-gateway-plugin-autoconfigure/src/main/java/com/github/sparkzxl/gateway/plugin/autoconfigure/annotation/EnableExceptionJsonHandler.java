@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * description: Enable Gateway Plugin
  *
  * @author zhouxinlei
- * @date 2022-01-11 12:52:12
+ * @since 2022-01-11 12:52:12
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

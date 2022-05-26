@@ -4,7 +4,7 @@ package com.github.sparkzxl.gateway.plugin.common.constant.enums;
  * description: 规则枚举类
  *
  * @author zhouxinlei
- * @date 2022-01-09 19:23:47
+ * @since 2022-01-09 19:23:47
  */
 public enum RuleEnum {
 

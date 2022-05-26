@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Import;
  * description: gateway plugin configuration
  *
  * @author zhouxinlei
- * @date 2022-01-08 21:18:48
+ * @since 2022-01-08 21:18:48
  */
 @Configuration
 @EnableConfigurationProperties(GatewayPluginProperties.class)

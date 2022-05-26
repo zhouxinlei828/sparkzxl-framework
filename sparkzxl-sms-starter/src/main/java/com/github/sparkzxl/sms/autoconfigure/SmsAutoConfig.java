@@ -20,7 +20,7 @@ import java.util.List;
  * description:
  *
  * @author zhouxinlei
- * @date 2022-01-03 13:57:49
+ * @since 2022-01-03 13:57:49
  */
 @Configuration
 @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "enabled", havingValue = "true")

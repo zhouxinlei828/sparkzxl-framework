@@ -7,7 +7,7 @@ import org.springframework.web.server.ServerWebExchange;
  * description: request method parameter data
  *
  * @author zhouxinlei
- * @date 2022-01-10 11:17:00
+ * @since 2022-01-10 11:17:00
  */
 @Join
 public class RequestMethodParameterData implements ParameterData {

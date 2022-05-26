@@ -19,8 +19,9 @@ public enum AlarmResponseCodeEnum implements IErrorCode {
     MESSAGE_TYPE_UNSUPPORTED("D201", "无法支持的消息类型"),
     SEND_MESSAGE_FAILED("D202", "消息发送失败"),
     MESSAGE_PROCESSING_FAILED("D203", "消息处理异常"),
-    ALARM_TYPE_UNSUPPORTED("D204", "无法支持的告警方式"),
-    CONFIG_NOT_FIND("D205", "未配置告警属性"),/**
+    ALARM_TYPE_UNSUPPORTED("D204", "不支持的[{0}]告警方式，请确认是否已加载[{1}]执行器"),
+    CONFIG_NOT_FIND("D205", "未配置告警属性"),
+    /**
      * 异步调用异常
      */
     ASYNC_CALL("Y101", "异步调用异常"),

@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * description: 日志记录自动配置
  *
  * @author zhouxinlei
- * @date 2022-01-10 16:03:00
+ * @since 2022-01-10 16:03:00
  */
 @Configuration
 @ConditionalOnProperty(prefix = LoggingProperties.PREFIX, value = "enabled", havingValue = "true")

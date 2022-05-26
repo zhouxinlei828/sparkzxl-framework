@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * description: 异常策略配置
  *
  * @author zhouxinlei
- * @date 2022-01-10 15:14:16
+ * @since 2022-01-10 15:14:16
  */
 @Configuration
 @ConditionalOnProperty(prefix = GatewayPluginProperties.PREFIX, value = "exception-json-handler", havingValue = "true")

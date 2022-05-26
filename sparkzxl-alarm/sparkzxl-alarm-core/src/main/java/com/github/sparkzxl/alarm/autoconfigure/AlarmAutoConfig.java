@@ -6,9 +6,6 @@ import com.github.sparkzxl.alarm.callback.DefaultAlarmAsyncCallback;
 import com.github.sparkzxl.alarm.callback.DefaultAlarmExceptionCallback;
 import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.executor.AlarmExecutor;
-import com.github.sparkzxl.alarm.executor.DingTalkAlarmExecutor;
-import com.github.sparkzxl.alarm.executor.MailAlarmExecutor;
-import com.github.sparkzxl.alarm.executor.WeTalkAlarmExecutor;
 import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.loadbalancer.RandomAlarmLoadBalancer;
 import com.github.sparkzxl.alarm.message.MarkDownMessage;
@@ -19,6 +16,7 @@ import com.github.sparkzxl.alarm.send.AlarmRobot;
 import com.github.sparkzxl.alarm.send.AlarmSender;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.sign.DingTalkAlarmSignAlgorithm;
+import com.github.sparkzxl.alarm.support.AlarmExceptionHandler;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import com.github.sparkzxl.alarm.support.DefaultAlarmIdGenerator;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -27,6 +25,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -40,7 +39,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2022-05-18 15:24:13
  */
 @ConditionalOnProperty(name = "spring.alarm.enabled", havingValue = "true")
-@EnableConfigurationProperties({AlarmProperties.class,AlarmThreadPoolProperties.class})
+@EnableConfigurationProperties({AlarmProperties.class, AlarmThreadPoolProperties.class})
+@Import(AlarmExceptionHandler.class)
 @Configuration
 public class AlarmAutoConfig {
 
@@ -119,39 +119,6 @@ public class AlarmAutoConfig {
     @ConditionalOnMissingBean(AlarmExceptionCallback.class)
     public AlarmExceptionCallback alarmExceptionCallback() {
         return new DefaultAlarmExceptionCallback();
-    }
-
-    /**
-     * 钉钉告警执行器
-     *
-     * @return DingTalkAlarmExecutor
-     */
-    @Bean
-    @ConditionalOnMissingBean(DingTalkAlarmExecutor.class)
-    public DingTalkAlarmExecutor dingTalkAlarmExecutor() {
-        return new DingTalkAlarmExecutor();
-    }
-
-    /**
-     * 企业微信告警执行器
-     *
-     * @return WeTalkAlarmExecutor
-     */
-    @Bean
-    @ConditionalOnMissingBean(WeTalkAlarmExecutor.class)
-    public WeTalkAlarmExecutor weTalkAlarmExecutor() {
-        return new WeTalkAlarmExecutor();
-    }
-
-    /**
-     * 邮件告警执行器
-     *
-     * @return MailAlarmExecutor
-     */
-    @Bean
-    @ConditionalOnMissingBean(MailAlarmExecutor.class)
-    public MailAlarmExecutor mailAlarmExecutor() {
-        return new MailAlarmExecutor();
     }
 
     @Bean

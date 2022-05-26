@@ -81,15 +81,15 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
         AlarmType alarmType = message.getAlarmType();
         // 告警唯一id
         String alarmId = alarmIdGenerator.nextAlarmId();
-        Map<AlarmType, List<AlarmProperties.AlarmConfig>> alarms = alarmProperties.getChannel();
+        Map<AlarmType, AlarmProperties.AlarmTypeConfig> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
             return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
         }
         if (MapUtil.isNotEmpty(variables)) {
             message.transfer(variables);
         }
-        List<AlarmProperties.AlarmConfig> alarmConfigList = alarms.get(alarmType);
-        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.choose(alarmConfigList);
+        AlarmProperties.AlarmTypeConfig alarmTypeConfig = alarms.get(alarmType);
+        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.choose(alarmTypeConfig.getConfigs());
         if (ObjectUtils.isEmpty(alarmConfig)) {
             throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
         }
@@ -104,15 +104,15 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
         AlarmType alarmType = message.getAlarmType();
         // 告警唯一id
         String alarmId = alarmIdGenerator.nextAlarmId();
-        Map<AlarmType, List<AlarmProperties.AlarmConfig>> alarms = alarmProperties.getChannel();
+        Map<AlarmType, AlarmProperties.AlarmTypeConfig> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
             return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
         }
         if (MapUtil.isNotEmpty(variables)) {
             message.transfer(variables);
         }
-        List<AlarmProperties.AlarmConfig> alarmConfigList = alarms.get(alarmType);
-        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.chooseDesignatedRobot(robotId, alarmConfigList);
+        AlarmProperties.AlarmTypeConfig alarmTypeConfig = alarms.get(alarmType);
+        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.chooseDesignatedRobot(robotId, alarmTypeConfig.getConfigs());
         if (ObjectUtils.isEmpty(alarmConfig)) {
             throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
         }

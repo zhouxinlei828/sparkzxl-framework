@@ -11,7 +11,7 @@ import java.util.Map;
  * description:
  *
  * @author zhouxinlei
- * @date 2021-12-28 11:01
+ * @since 2021-12-28 11:01
  */
 @Data
 @ConfigurationProperties(prefix = TemplateConfig.PREFIX)

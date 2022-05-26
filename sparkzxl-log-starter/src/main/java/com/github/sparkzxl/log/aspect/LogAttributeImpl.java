@@ -23,7 +23,7 @@ import java.util.function.Function;
  * description: 获取日志变量参数实现类
  *
  * @author zhouxinlei
- * @date 2022-01-05 12:32:01
+ * @since 2022-01-05 12:32:01
  */
 public class LogAttributeImpl implements ILogAttribute {
 

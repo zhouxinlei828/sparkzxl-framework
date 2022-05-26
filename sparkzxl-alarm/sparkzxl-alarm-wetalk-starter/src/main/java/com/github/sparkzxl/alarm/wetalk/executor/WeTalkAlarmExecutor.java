@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.executor;
+package com.github.sparkzxl.alarm.wetalk.executor;
 
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpException;
@@ -10,6 +10,7 @@ import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.exception.AsyncCallException;
+import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +24,9 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
+    public WeTalkAlarmExecutor() {
+        log.debug("WeTalk Alarm Executor has been loaded, className:{}", this.getClass().getName());
+    }
 
     @Override
     protected <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmProperties.AlarmConfig alarmConfig, T message) {

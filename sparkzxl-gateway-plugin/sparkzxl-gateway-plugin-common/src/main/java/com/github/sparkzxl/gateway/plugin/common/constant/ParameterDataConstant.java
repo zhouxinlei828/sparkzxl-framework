@@ -4,7 +4,7 @@ package com.github.sparkzxl.gateway.plugin.common.constant;
  * description: 参数常量获取
  *
  * @author zhouxinlei
- * @date 2022-01-10 15:47:15
+ * @since 2022-01-10 15:47:15
  */
 public class ParameterDataConstant {
 

@@ -19,7 +19,11 @@ public enum AlarmType {
     /**
      * 邮件
      */
-    MAIL("mail", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
+    MAIL("mail", "", true),
+    /**
+     * 邮件
+     */
+    SMS("sms", "", true),
     ;
 
     private final String type;

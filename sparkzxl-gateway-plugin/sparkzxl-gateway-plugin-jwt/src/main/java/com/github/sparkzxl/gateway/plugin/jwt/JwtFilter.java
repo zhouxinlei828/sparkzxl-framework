@@ -37,7 +37,7 @@ import java.util.List;
  * description: jwt filter
  *
  * @author zhouxinlei
- * @date 2022-01-08 23:35:22
+ * @since 2022-01-08 23:35:22
  */
 @Slf4j
 public class JwtFilter extends AbstractGlobalFilter {

@@ -8,7 +8,7 @@ import static org.springframework.cloud.gateway.filter.NettyWriteResponseFilter.
  * description: FilterEnum
  *
  * @author zhouxinlei
- * @date 2022-01-07 12:47:53
+ * @since 2022-01-07 12:47:53
  */
 public enum FilterEnum {
 

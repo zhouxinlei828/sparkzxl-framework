@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * description: 查询发送详情入参
  *
  * @author zhouxinlei
- * @date 2022-01-03 16:37:56
+ * @since 2022-01-03 16:37:56
  */
 @Data
 @Accessors(chain = true)

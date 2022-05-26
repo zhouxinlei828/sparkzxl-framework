@@ -7,7 +7,7 @@ import org.springframework.web.server.ServerWebExchange;
  * description: the interface for parameter data.
  *
  * @author zhouxinlei
- * @date 2022-01-10 10:25:48
+ * @since 2022-01-10 10:25:48
  */
 @SPI
 public interface ParameterData {

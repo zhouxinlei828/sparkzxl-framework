@@ -10,7 +10,7 @@ import java.util.Map;
  * description: sms处理工厂
  *
  * @author zhouxinlei
- * @date 2022-01-03 14:45:43
+ * @since  2022-01-03 14:45:43
  */
 public class DefaultSmsHandlerFactory implements SmsHandlerFactory {
 
@@ -22,7 +22,7 @@ public class DefaultSmsHandlerFactory implements SmsHandlerFactory {
 
     @Override
     public SmsHandlerStrategy getStrategy(SmsChannel smsChannel) {
-        return strategyContainer.get(smsChannel.getValue());
+        return strategyContainer.get(smsChannel.getName());
     }
 
     public void addStrategy(SmsHandlerStrategy smsHandlerStrategy) {

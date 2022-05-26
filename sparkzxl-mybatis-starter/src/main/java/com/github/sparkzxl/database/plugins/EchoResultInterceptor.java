@@ -14,7 +14,7 @@ import java.sql.Statement;
  * description: mybatis数据回显插件
  *
  * @author zhouxinlei
- * @date 2022-02-20 18:52:58
+ * @since 2022-02-20 18:52:58
  */
 @Intercepts({@Signature(
         type = ResultSetHandler.class,

@@ -28,9 +28,23 @@ public class AlarmProperties implements InitializingBean {
 
     private boolean enabled;
 
-    private final Map<AlarmType, List<AlarmConfig>> channel = new LinkedHashMap<>();
+    private final Map<AlarmType, AlarmTypeConfig> channel = new LinkedHashMap<>();
 
     private AlarmType primaryAlarm;
+
+    /**
+     * description: 告警配置
+     *
+     * @author zhouxinlei
+     * @since 2022-05-24 09:50:42
+     */
+    @Data
+    public static class AlarmTypeConfig {
+
+        private boolean enabled;
+
+        private List<AlarmConfig> configs;
+    }
 
     /**
      * description: 告警配置
@@ -74,10 +88,14 @@ public class AlarmProperties implements InitializingBean {
             if (!key.isEnabled()) {
                 throw new InvalidParameterException(String.format("alarm=%s is disabled.", key.getType()));
             }
-            if (CollectionUtils.isEmpty(value)) {
+            if (!value.isEnabled()) {
+                throw new InvalidParameterException(String.format("Alarm Type Config =%s is disabled.", key.getType()));
+            }
+            List<AlarmConfig> alarmConfigs = value.getConfigs();
+            if (CollectionUtils.isEmpty(alarmConfigs)) {
                 throw new InvalidParameterException(String.format("alarm=%s config is empty.", key.getType()));
             }
-            value.forEach(config -> {
+            alarmConfigs.forEach(config -> {
                 if (StringUtils.isEmpty(config.getTokenId())) {
                     throw new InvalidParameterException(String.format("alarm=%s tokenId is empty.", key.getType()));
                 }

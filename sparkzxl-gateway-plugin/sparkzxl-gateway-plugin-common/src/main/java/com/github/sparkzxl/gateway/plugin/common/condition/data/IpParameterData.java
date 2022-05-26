@@ -8,7 +8,7 @@ import org.springframework.web.server.ServerWebExchange;
  * description: ip parameter data
  *
  * @author zhouxinlei
- * @date 2022-01-10 11:17:46
+ * @since 2022-01-10 11:17:46
  */
 @Join
 public class IpParameterData implements ParameterData {

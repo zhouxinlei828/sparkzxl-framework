@@ -26,7 +26,7 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.O
  * description: Http响应体装饰器
  *
  * @author zhouxinlei
- * @date 2021-12-24 08:47
+ * @since 2021-12-24 08:47
  */
 public class LoggingResponseBodyDecorator extends ServerHttpResponseDecorator {
 

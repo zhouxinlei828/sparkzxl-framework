@@ -17,7 +17,7 @@ import java.util.Map;
  * description: gateway plugin properties
  *
  * @author zhouxinlei
- * @date 2022-01-10 09:50:45
+ * @since 2022-01-10 09:50:45
  */
 @Data
 @ConfigurationProperties(prefix = GatewayPluginProperties.PREFIX)

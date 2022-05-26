@@ -7,7 +7,7 @@ import org.springframework.web.server.ServerWebExchange;
  * description: 获取查询参数数据
  *
  * @author zhouxinlei
- * @date 2022-01-10 11:11:55
+ * @since 2022-01-10 11:11:55
  */
 @Join
 public class QueryParameterData implements ParameterData {

@@ -4,7 +4,7 @@ package com.github.sparkzxl.gateway.plugin.common.constant;
  * description: gateway constant
  *
  * @author zhouxinlei
- * @date 2022-01-07 12:28:23
+ * @since 2022-01-07 12:28:23
  */
 public class GatewayConstant {
 

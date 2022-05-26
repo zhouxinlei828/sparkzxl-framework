@@ -86,7 +86,7 @@
         <swagger-models.version>1.5.22</swagger-models.version>
         <aliyun-dysmsapi-version>2.0.8</aliyun-dysmsapi-version>
         <bcprov-jdk15on-version>1.70</bcprov-jdk15on-version>
-        <tencentcloud-sdk-java-version>4.0.11</tencentcloud-sdk-java-version>
+        <tencentcloud-sdk-java-version>3.1.515</tencentcloud-sdk-java-version>
         <okhttp.version>2.7.5</okhttp.version>
         <grpc-spring-boot-starter.version>2.13.1.RELEASE</grpc-spring-boot-starter.version>
         <commons-compress.version>1.21</commons-compress.version>
@@ -567,12 +567,22 @@
             <!-- sparkzxl-framework 组件库-->
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-alarm-starter</artifactId>
+                <artifactId>sparkzxl-alarm-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-alarm-core</artifactId>
+                <artifactId>sparkzxl-alarm-dingtalk-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-alarm-wetalk-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-alarm-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

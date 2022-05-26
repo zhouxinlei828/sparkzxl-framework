@@ -9,7 +9,7 @@ import java.util.Optional;
  * description: Logging Properties
  *
  * @author zhouxinlei
- * @date 2021-12-23 09:53
+ * @since 2021-12-23 09:53
  */
 @Data
 public class LoggingProperties {

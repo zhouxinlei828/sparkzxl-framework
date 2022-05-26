@@ -11,7 +11,7 @@ import java.util.List;
  * description: cookie parameter data
  *
  * @author zhouxinlei
- * @date 2022-01-10 11:18:32
+ * @since 2022-01-10 11:18:32
  */
 @Join
 public class CookieParameterData implements ParameterData {

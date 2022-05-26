@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * description: Response log 过滤器
  *
  * @author zhouxinlei
- * @date 2022-01-10 15:41:53
+ * @since 2022-01-10 15:41:53
  */
 @RequiredArgsConstructor
 public class ResponseLogFilter extends AbstractGlobalFilter {

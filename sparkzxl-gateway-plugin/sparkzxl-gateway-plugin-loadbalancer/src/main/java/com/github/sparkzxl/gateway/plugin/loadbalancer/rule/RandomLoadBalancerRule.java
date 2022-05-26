@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * description: 随机负载均衡规则
  *
  * @author zhouxinlei
- * @date 2022-01-09 18:47:26
+ * @since 2022-01-09 18:47:26
  */
 @RequiredArgsConstructor
 public class RandomLoadBalancerRule implements ILoadBalancerRule {

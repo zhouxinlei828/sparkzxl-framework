@@ -1,4 +1,4 @@
-package com.github.sparkzxl.sms.response;
+package com.github.sparkzxl.sms.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * description: 模板签名信息
  *
  * @author zhouxinlei
- * @date 2022-01-03 18:58:41
+ * @since 2022-01-03 18:58:41
  */
 @Data
 @Accessors(chain = true)

@@ -6,7 +6,7 @@ import com.github.sparkzxl.core.jackson.JsonUtil;
  * description: the RuleHandle interface
  *
  * @author zhouxinlei
- * @date 2022-01-10 13:44:48
+ * @since 2022-01-10 13:44:48
  */
 public interface RuleHandle {
 

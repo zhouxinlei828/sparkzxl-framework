@@ -7,7 +7,7 @@ import lombok.Getter;
  * description: 短信异常
  *
  * @author zhouxinlei
- * @date 2022-01-03 15:41:54
+ * @since 2022-01-03 15:41:54
  */
 @Getter
 public class SmsException extends RuntimeException {
@@ -18,6 +18,11 @@ public class SmsException extends RuntimeException {
 
     private String message;
 
+    private String errorCode;
+
+    private String errorMessage;
+
+
     public SmsException(Throwable cause) {
         super(cause);
     }
@@ -27,8 +32,9 @@ public class SmsException extends RuntimeException {
         this.message = message;
     }
 
-    @Override
-    public Throwable fillInStackTrace() {
-        return this;
+    public SmsException(SmsExceptionCodeEnum smsExceptionCodeEnum) {
+        this.errorCode = smsExceptionCodeEnum.getErrorCode();
+        this.errorMessage = smsExceptionCodeEnum.getErrorMessage();
     }
+
 }

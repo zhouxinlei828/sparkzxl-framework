@@ -3,7 +3,6 @@ package com.github.sparkzxl.alarm.aspect;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.alarm.annotation.Alarm;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
-import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.handler.IAlarmVariablesHandler;
 import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
@@ -53,7 +52,7 @@ public class AlarmNoticeAspect {
     @AfterReturning(value = "alarmPointcut(alarm)", argNames = "joinPoint,alarm")
     public void doAfterReturning(JoinPoint joinPoint, Alarm alarm) {
         String templateId = alarm.templateId();
-        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
+        com.github.sparkzxl.alarm.entity.AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
         MessageSubType messageSubType = alarm.messageType();
         AlarmRequest alarmRequest = new AlarmRequest();
         alarmRequest.setTitle(alarm.name());
@@ -63,7 +62,7 @@ public class AlarmNoticeAspect {
         alarmParamMap.put("stateColor", "#45B649");
         alarmParamMap.put("state", "成功");
         alarmRequest.setVariables(alarmParamMap);
-        alarmSender.send(messageSubType, alarmRequest);
+        this.alarmSender.send(messageSubType, alarmRequest);
     }
 
 
@@ -71,7 +70,7 @@ public class AlarmNoticeAspect {
     public void doAfterThrow(JoinPoint joinPoint, Alarm alarm, Exception e) {
         log.info("请求接口发生异常 : [{}]", e.getMessage());
         String templateId = alarm.templateId();
-        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
+        com.github.sparkzxl.alarm.entity.AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
         String templateContent = "";
         MessageSubType messageSubType = alarm.messageType();
         AlarmRequest alarmRequest = new AlarmRequest();
@@ -88,6 +87,6 @@ public class AlarmNoticeAspect {
         alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(e));
         alarmRequest.setVariables(alarmParamMap);
         alarmRequest.setContent(templateContent);
-        alarmSender.send(messageSubType, alarmRequest);
+        this.alarmSender.send(messageSubType, alarmRequest);
     }
 }

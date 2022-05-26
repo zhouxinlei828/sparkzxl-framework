@@ -1,270 +1,115 @@
 package com.github.sparkzxl.sms.strategy;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
-import com.github.sparkzxl.sms.constant.enums.SendStatusEnum;
 import com.github.sparkzxl.sms.constant.enums.SmsChannel;
-import com.github.sparkzxl.sms.request.QuerySendDetailsReq;
+import com.github.sparkzxl.sms.constant.enums.SmsStatus;
+import com.github.sparkzxl.sms.entity.SmsSendRecord;
+import com.github.sparkzxl.sms.entity.SmsSignDetail;
+import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
 import com.github.sparkzxl.sms.request.SendSmsReq;
-import com.github.sparkzxl.sms.response.SendSmsResult;
-import com.github.sparkzxl.sms.response.SmsSendDetail;
-import com.github.sparkzxl.sms.response.SmsSignDetail;
-import com.github.sparkzxl.sms.response.common.SmsListResp;
-import com.github.sparkzxl.sms.response.common.SmsResp;
 import com.github.sparkzxl.sms.support.SmsException;
+import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
 import com.google.common.collect.Lists;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
-import com.tencentcloudapi.sms.v20190711.SmsClient;
-import com.tencentcloudapi.sms.v20190711.models.*;
+import com.tencentcloudapi.sms.v20210111.SmsClient;
+import com.tencentcloudapi.sms.v20210111.models.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.CollectionUtils;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * description: 腾讯云短信发送策略
  *
  * @author zhouxinlei
- * @date 2022-01-03 12:45:45
+ * @since 2022-01-03 12:45:45
  */
 @Slf4j
 public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, InitializingBean {
 
-    private final static String CN_PREFIX = "+86";
     private final SmsProperties smsProperties;
     private SmsClient client;
+    private static final Integer PHONE_NUM = 11;
 
     public TencentSmsHandlerStrategy(SmsProperties smsProperties) {
         this.smsProperties = smsProperties;
     }
 
     @Override
-    public SmsResp<SendSmsResult> sendSms(SendSmsReq sendSmsReq) {
-        SmsResp<SendSmsResult> sendSmsResultSmsResp = new SmsResp<>();
+    public List<SmsSendRecord> send(SendSmsReq sendSmsReq) {
+        Set<String> phones = sendSmsReq.getPhones();
+        if (CollectionUtils.isEmpty(phones)) {
+            throw new SmsException(SmsExceptionCodeEnum.PHONE_IS_EMPTY);
+        }
         try {
-            /* 实例化一个请求对象，根据调用的接口和实际情况，可以进一步设置请求参数
-             * 你可以直接查询SDK源码确定接口有哪些属性可以设置
-             * 属性可能是基本类型，也可能引用了另一个数据结构
-             * 推荐使用IDE进行开发，可以方便的跳转查阅各个接口和数据结构的文档说明 */
             SendSmsRequest req = new SendSmsRequest();
-
-            /* 填充请求参数,这里request对象的成员变量即对应接口的入参
-             * 你可以通过官网接口文档或跳转到request对象的定义处查看请求参数的定义
-             * 基本类型的设置:
-             * 帮助链接：
-             * 短信控制台: https://console.cloud.tencent.com/smsv2
-             * sms helper: https://cloud.tencent.com/document/product/382/3773 */
-
-            /* 短信应用ID: 短信SdkAppId在 [短信控制台] 添加应用后生成的实际SdkAppId，示例如1400006666 */
-            req.setSmsSdkAppid(smsProperties.getSdkAppId());
-            /* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名，签名信息可登录 [短信控制台] 查看 */
-            req.setSign(sendSmsReq.getSign());
-
-            /* 国际/港澳台短信 SenderId: 国内短信填空，默认未开通，如需开通请联系 [sms helper] */
-            String senderid = "";
-            req.setSenderId(senderid);
-
-            /* 短信号码扩展号: 默认未开通，如需开通请联系 [sms helper] */
-            String extendCode = "";
-            req.setExtendCode(extendCode);
-
-            /* 模板 ID: 必须填写已审核通过的模板 ID。模板ID可登录 [短信控制台] 查看 */
-            req.setTemplateID(sendSmsReq.getTemplateId());
-
-            /* 下发手机号码，采用 E.164 标准，+[国家或地区码][手机号]
-             * 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号 */
-            String phoneNumber = CN_PREFIX.concat(sendSmsReq.getPhoneNumber());
-            String[] phoneNumberSet = {phoneNumber};
+            req.setSmsSdkAppId(smsProperties.getSdkAppId());
+            req.setSignName(sendSmsReq.getSign());
+            req.setTemplateId(sendSmsReq.getTemplateId());
+            String[] phoneNumberSet = phones.stream().map(String::valueOf).toArray(String[]::new);
             req.setPhoneNumberSet(phoneNumberSet);
             /* 模板参数: 若无模板参数，则设置为空 */
-            Map<String, String> templateParamMap = sendSmsReq.getTemplateParams();
+            Map<String, Object> templateParamMap = sendSmsReq.getTemplateParams();
+            String content = sendSmsReq.getTemplateContent();
             if (MapUtil.isNotEmpty(templateParamMap)) {
-                String[] templateParamSet = ArrayUtil.toArray(templateParamMap.values(), String.class);
+                String[] templateParamSet = templateParamMap.values().stream().map(String::valueOf).toArray(String[]::new);
                 req.setTemplateParamSet(templateParamSet);
+                content = MessageFormat.format(content, templateParamMap.values().toArray());
             }
-
-            /* 通过 client 对象调用 SendSms 方法发起请求。注意请求方法名与请求对象是对应的
-             * 返回的 res 是一个 SendSmsResponse 类的实例，与请求对象对应 */
-            SendSmsResponse sendSmsResponse = client.SendSms(req);
-
+            req.setSessionContext(IdUtil.fastSimpleUUID());
+            SendSmsResponse response = client.SendSms(req);
+            String sendSmsResponseStr = SendSmsResponse.toJsonString(response);
             // 输出json格式的字符串回包
-            log.info("腾讯云短信发送结果：【{}】", SendSmsResponse.toJsonString(sendSmsResponse));
-            // 也可以取出单个值，你可以通过官网接口文档或跳转到response对象的定义处查看返回字段的定义
-            SendStatus[] sendStatusSet = sendSmsResponse.getSendStatusSet();
-            SendStatus sendStatus = sendStatusSet[0];
-            System.out.println(sendSmsResponse.getRequestId());
-            sendSmsResultSmsResp.setCode(sendStatus.getCode());
-            sendSmsResultSmsResp.setMessage(sendStatus.getMessage());
-            sendSmsResultSmsResp.setRequestId(sendSmsResponse.getRequestId());
-
-            SendSmsResult sendSmsResult = new SendSmsResult();
-            sendSmsResult.setBizId(sendStatus.getSerialNo());
-            sendSmsResult.setPhoneNumber(sendStatus.getPhoneNumber());
-            sendSmsResultSmsResp.setData(sendSmsResult);
-            return sendSmsResultSmsResp;
+            log.info("腾讯云短信发送结果：【{}】", sendSmsResponseStr);
+            LocalDateTime sendDateTime = LocalDateTime.now();
+            List<SmsSendRecord> sendRecordList = Lists.newArrayList();
+            for (SendStatus sendStatus : response.getSendStatusSet()) {
+                // 腾讯返回的电话号有前缀，这里取巧直接翻转获取手机号
+                String phone = new StringBuilder(new StringBuilder(sendStatus.getPhoneNumber())
+                        .reverse().substring(0, PHONE_NUM)).reverse().toString();
+                SmsSendRecord smsSendRecord = new SmsSendRecord()
+                        .setId(IdUtil.getSnowflake().nextId())
+                        .setPhone(phone)
+                        .setSmsReqId(sendStatus.getSessionContext())
+                        .setTemplateId(sendSmsReq.getTemplateId())
+                        .setSupplierId(SmsChannel.TENCENT.getId())
+                        .setSupplierName(SmsChannel.TENCENT.getName())
+                        .setMsgContent(content)
+                        .setBizId(sendStatus.getSerialNo())
+                        .setStatus(SmsStatus.SEND_SUCCESS.getCode())
+                        .setStatusName(SmsStatus.SEND_SUCCESS.getDescription())
+                        .setReportContent(sendStatus.getCode())
+                        .setSendDateTime(sendDateTime);
+                sendRecordList.add(smsSendRecord);
+            }
+            return sendRecordList;
         } catch (TencentCloudSDKException e) {
             log.error("腾讯云短信发送异常：", e);
-            sendSmsResultSmsResp.setCode("ERROR");
-            sendSmsResultSmsResp.setMessage(e.getMessage());
-            return sendSmsResultSmsResp;
+            return null;
         }
     }
 
     @Override
-    public SmsListResp<SendSmsResult> sendBatchSms(SendSmsReq sendSmsReq) {
-        SmsListResp<SendSmsResult> smsResultSmsListResp = new SmsListResp<>();
-        try {
-            /* 实例化一个请求对象，根据调用的接口和实际情况，可以进一步设置请求参数
-             * 你可以直接查询SDK源码确定接口有哪些属性可以设置
-             * 属性可能是基本类型，也可能引用了另一个数据结构
-             * 推荐使用IDE进行开发，可以方便的跳转查阅各个接口和数据结构的文档说明 */
-            SendSmsRequest req = new SendSmsRequest();
-
-            /* 填充请求参数,这里request对象的成员变量即对应接口的入参
-             * 你可以通过官网接口文档或跳转到request对象的定义处查看请求参数的定义
-             * 基本类型的设置:
-             * 帮助链接：
-             * 短信控制台: https://console.cloud.tencent.com/smsv2
-             * sms helper: https://cloud.tencent.com/document/product/382/3773 */
-
-            /* 短信应用ID: 短信SdkAppId在 [短信控制台] 添加应用后生成的实际SdkAppId，示例如1400006666 */
-            req.setSmsSdkAppid(smsProperties.getSdkAppId());
-            /* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名，签名信息可登录 [短信控制台] 查看 */
-            req.setSign(sendSmsReq.getSign());
-
-            /* 国际/港澳台短信 SenderId: 国内短信填空，默认未开通，如需开通请联系 [sms helper] */
-            String senderid = "";
-            req.setSenderId(senderid);
-
-            /* 短信号码扩展号: 默认未开通，如需开通请联系 [sms helper] */
-            String extendCode = "";
-            req.setExtendCode(extendCode);
-
-            /* 模板 ID: 必须填写已审核通过的模板 ID。模板ID可登录 [短信控制台] 查看 */
-            req.setTemplateID(sendSmsReq.getTemplateId());
-
-            /* 下发手机号码，采用 E.164 标准，+[国家或地区码][手机号]
-             * 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号 */
-            List<String> phoneNumberList = sendSmsReq.getPhoneNumberList();
-            if (CollectionUtil.isEmpty(phoneNumberList)) {
-                throw new SmsException(500, "手机号不能为空");
-            }
-            List<String> phoneList = Lists.newArrayList();
-            for (String phone : phoneNumberList) {
-                phoneList.add(CN_PREFIX.concat(phone));
-            }
-            String[] phoneNumberSet = ArrayUtil.toArray(phoneList, String.class);
-            req.setPhoneNumberSet(phoneNumberSet);
-
-            /* 模板参数: 若无模板参数，则设置为空 */
-            Map<String, String> templateParamMap = sendSmsReq.getTemplateParams();
-            if (MapUtil.isNotEmpty(templateParamMap)) {
-                String[] templateParamSet = ArrayUtil.toArray(templateParamMap.values(), String.class);
-                req.setTemplateParamSet(templateParamSet);
-            }
-
-            /* 通过 client 对象调用 SendSms 方法发起请求。注意请求方法名与请求对象是对应的
-             * 返回的 res 是一个 SendSmsResponse 类的实例，与请求对象对应 */
-            SendSmsResponse sendSmsResponse = client.SendSms(req);
-
-            // 输出json格式的字符串回包
-            log.info("腾讯云短信发送结果：【{}】", SendSmsResponse.toJsonString(sendSmsResponse));
-            // 也可以取出单个值，你可以通过官网接口文档或跳转到response对象的定义处查看返回字段的定义
-            SendStatus[] sendStatusSet = sendSmsResponse.getSendStatusSet();
-            List<SendSmsResult> sendSmsResultList = Lists.newArrayList();
-            for (SendStatus sendStatus : sendStatusSet) {
-                SendSmsResult sendSmsResult = new SendSmsResult();
-                sendSmsResult.setCode(sendStatus.getCode());
-                sendSmsResult.setMessage(sendStatus.getMessage());
-                sendSmsResult.setBizId(sendStatus.getSerialNo());
-                sendSmsResult.setPhoneNumber(sendStatus.getPhoneNumber());
-                sendSmsResultList.add(sendSmsResult);
-            }
-            smsResultSmsListResp.setCode("OK");
-            smsResultSmsListResp.setMessage("成功");
-            smsResultSmsListResp.setRequestId(sendSmsResponse.getRequestId());
-            smsResultSmsListResp.setDataList(sendSmsResultList);
-            return smsResultSmsListResp;
-        } catch (TencentCloudSDKException e) {
-            log.error("腾讯云短信发送异常：", e);
-            smsResultSmsListResp.setCode("ERROR");
-            smsResultSmsListResp.setMessage(e.getMessage());
-            return smsResultSmsListResp;
-        }
-    }
-
-    @Override
-    public SmsListResp<SmsSendDetail> querySendDetails(QuerySendDetailsReq querySendDetailsReq) {
-        PullSmsSendStatusByPhoneNumberRequest pullSmsSendStatusByPhoneNumber = new PullSmsSendStatusByPhoneNumberRequest();
-        pullSmsSendStatusByPhoneNumber.setOffset(ObjectUtils.isEmpty(querySendDetailsReq.getPageNum()) ? 1L : querySendDetailsReq.getPageNum());
-        pullSmsSendStatusByPhoneNumber.setLimit(ObjectUtils.isEmpty(querySendDetailsReq.getPageSize()) ? 10L : querySendDetailsReq.getPageSize());
-        if (StringUtils.isNotBlank(querySendDetailsReq.getPhoneNumber())) {
-            pullSmsSendStatusByPhoneNumber.setPhoneNumber(CN_PREFIX.concat(querySendDetailsReq.getPhoneNumber()));
-        }
-        if (ObjectUtils.isNotEmpty(querySendDetailsReq.getSendDate())) {
-            ZoneId zoneId = ZoneId.systemDefault();
-            ZonedDateTime zdt = querySendDetailsReq.getSendDate().atZone(zoneId);
-            Date date = Date.from(zdt.toInstant());
-            DateTime startTime = DateUtil.beginOfDay(date);
-            pullSmsSendStatusByPhoneNumber.setSendDateTime(startTime.getTime());
-            DateTime endTime = DateUtil.endOfDay(date);
-            pullSmsSendStatusByPhoneNumber.setEndDateTime(endTime.getTime());
-        }
-        SmsListResp<SmsSendDetail> smsSendDetailSmsListResp = new SmsListResp<>();
-        try {
-            PullSmsSendStatusByPhoneNumberResponse pullSmsSendStatusByPhoneNumberResponse =
-                    client.PullSmsSendStatusByPhoneNumber(pullSmsSendStatusByPhoneNumber);
-            PullSmsSendStatus[] pullSmsSendStatusSet = pullSmsSendStatusByPhoneNumberResponse.getPullSmsSendStatusSet();
-            List<PullSmsSendStatus> smsSendStatusList = Lists.newArrayList(pullSmsSendStatusSet);
-            List<SmsSendDetail> smsSendDetailList = Lists.newArrayList();
-            for (PullSmsSendStatus pullSmsSendStatus : smsSendStatusList) {
-                SendStatusEnum sendStatusEnum = SendStatusEnum.get(pullSmsSendStatus.getReportStatus());
-                SmsSendDetail smsSendDetail = new SmsSendDetail()
-                        .setSendStatus(ObjectUtils.isEmpty(sendStatusEnum) ? null : sendStatusEnum.getCode())
-                        .setPhoneNumber(pullSmsSendStatus.getPurePhoneNumber())
-                        .setTemplateId(pullSmsSendStatus.getSerialNo())
-                        .setReceiveDate(pullSmsSendStatus.getUserReceiveTime())
-                        .setDescription(pullSmsSendStatus.getDescription());
-                smsSendDetailList.add(smsSendDetail);
-            }
-            smsSendDetailSmsListResp.setCode("OK");
-            smsSendDetailSmsListResp.setMessage("成功");
-            smsSendDetailSmsListResp.setRequestId(pullSmsSendStatusByPhoneNumberResponse.getRequestId());
-            smsSendDetailSmsListResp.setDataList(smsSendDetailList);
-        } catch (TencentCloudSDKException e) {
-            log.error("腾讯云查询短信发送记录异常：", e);
-            smsSendDetailSmsListResp.setCode("ERROR");
-            smsSendDetailSmsListResp.setMessage(e.getMessage());
-        }
-        return smsSendDetailSmsListResp;
-    }
-
-    @Override
-    public SmsResp<SmsSignDetail> querySmsSign(String sign) {
-        SmsResp<SmsSignDetail> smsSignDetailSmsResp = new SmsResp<>();
+    public SmsSignDetail findSmsSign(String sign) {
         try {
             DescribeSmsSignListRequest describeSmsSignListRequest = new DescribeSmsSignListRequest();
             Long[] signIdSet = {Long.valueOf(sign)};
             describeSmsSignListRequest.setSignIdSet(signIdSet);
             DescribeSmsSignListResponse describeSmsSignListResponse = client.DescribeSmsSignList(describeSmsSignListRequest);
-            smsSignDetailSmsResp.setCode("OK");
-            smsSignDetailSmsResp.setMessage("成功");
-            smsSignDetailSmsResp.setRequestId(describeSmsSignListResponse.getRequestId());
             DescribeSignListStatus[] describeSignListStatusSet = describeSmsSignListResponse.getDescribeSignListStatusSet();
             if (ArrayUtils.isNotEmpty(describeSignListStatusSet)) {
                 DescribeSignListStatus describeSignListStatus = describeSignListStatusSet[0];
@@ -275,14 +120,37 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
                 smsSignDetail.setReason(describeSignListStatus.getReviewReply());
                 smsSignDetail.setCreateDate(DateUtil.format(DateUtil.date(describeSignListStatus.getCreateTime()),
                         DatePattern.NORM_DATETIME_PATTERN));
-                smsSignDetailSmsResp.setData(smsSignDetail);
+                return smsSignDetail;
             }
         } catch (TencentCloudSDKException e) {
             log.error("腾讯云查询短信签名异常：", e);
-            smsSignDetailSmsResp.setCode("ERROR");
-            smsSignDetailSmsResp.setMessage("失败");
         }
-        return smsSignDetailSmsResp;
+        return null;
+    }
+
+    @Override
+    public SmsTemplateDetail findSmsTemplate(String templateId) {
+        try {
+            DescribeSmsTemplateListRequest req = new DescribeSmsTemplateListRequest();
+            req.setInternational(0L);
+            req.setTemplateIdSet(new Long[]{Long.valueOf(templateId)});
+            DescribeSmsTemplateListResponse templateListResponse = client.DescribeSmsTemplateList(req);
+            DescribeTemplateListStatus[] describeTemplateStatusSet = templateListResponse.getDescribeTemplateStatusSet();
+            if (ArrayUtils.isNotEmpty(describeTemplateStatusSet)) {
+                DescribeTemplateListStatus describeTemplateListStatus = describeTemplateStatusSet[0];
+                SmsTemplateDetail smsTemplateDetail = new SmsTemplateDetail();
+                smsTemplateDetail.setTemplateId(String.valueOf(describeTemplateListStatus.getTemplateId()));
+                smsTemplateDetail.setTemplateName(describeTemplateListStatus.getTemplateName());
+                smsTemplateDetail.setTemplateStatus(Math.toIntExact(describeTemplateListStatus.getStatusCode()));
+                smsTemplateDetail.setReason(describeTemplateListStatus.getReviewReply());
+                smsTemplateDetail.setCreateDate(DateUtil.format(DateUtil.date(describeTemplateListStatus.getCreateTime()),
+                        DatePattern.NORM_DATETIME_PATTERN));
+                return smsTemplateDetail;
+            }
+        } catch (TencentCloudSDKException e) {
+            log.error("腾讯云查询短信模板异常：", e);
+        }
+        return null;
     }
 
     @Override
@@ -319,6 +187,6 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
 
     @Override
     public String support() {
-        return SmsChannel.TENCENT.getValue();
+        return SmsChannel.TENCENT.getName();
     }
 }

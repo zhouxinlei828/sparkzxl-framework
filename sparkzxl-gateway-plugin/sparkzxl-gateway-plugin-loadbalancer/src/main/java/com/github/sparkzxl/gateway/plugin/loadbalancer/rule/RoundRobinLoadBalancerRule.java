@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * description: 轮询方式轮询选择服务实例
  *
  * @author zhouxinlei
- * @date 2022-01-11 13:56:27
+ * @since 2022-01-11 13:56:27
  */
 @Slf4j
 public class RoundRobinLoadBalancerRule implements ILoadBalancerRule {

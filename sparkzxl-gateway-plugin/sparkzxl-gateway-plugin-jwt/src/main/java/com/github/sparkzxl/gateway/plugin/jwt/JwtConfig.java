@@ -8,7 +8,7 @@ import java.io.Serializable;
  * description: jwt配置
  *
  * @author zhouxinlei
- * @date 2022-01-08 22:32:17
+ * @since 2022-01-08 22:32:17
  */
 @Data
 public class JwtConfig implements Serializable {

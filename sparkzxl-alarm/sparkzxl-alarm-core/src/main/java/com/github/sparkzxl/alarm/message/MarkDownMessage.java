@@ -4,6 +4,7 @@ import com.github.sparkzxl.alarm.entity.AlarmRequest;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Set;
 
 /**
  * description: 默认markdown消息格式
@@ -17,7 +18,7 @@ public class MarkDownMessage implements CustomMessage {
     public String message(AlarmRequest request) {
         String content = request.getContent();
         String title = request.getTitle();
-        List<String> phones = request.getPhones();
+        Set<String> phones = request.getPhones();
         // markdown在text内容里需要有@手机号
         StringBuilder text = new StringBuilder(title);
         if (phones != null && !phones.isEmpty()) {

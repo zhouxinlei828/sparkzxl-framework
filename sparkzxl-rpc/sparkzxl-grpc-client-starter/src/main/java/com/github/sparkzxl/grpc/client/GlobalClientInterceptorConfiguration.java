@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * description: configuration class that adds a {@link ClientInterceptor} to the global interceptor list.
  *
  * @author zhouxinlei
- * @date 2022-01-25 19:12:04
+ * @since 2022-01-25 19:12:04
  */
 @Configuration(proxyBeanMethods = false)
 public class GlobalClientInterceptorConfiguration {

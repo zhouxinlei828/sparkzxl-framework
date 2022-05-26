@@ -8,7 +8,7 @@ import java.util.List;
  * description: jwt RuleHandle
  *
  * @author zhouxinlei
- * @date 2022-01-08 17:37:47
+ * @since 2022-01-08 17:37:47
  */
 public class JwtRuleHandle implements RuleHandle {
 

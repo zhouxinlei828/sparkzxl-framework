@@ -8,7 +8,7 @@ import org.springframework.web.server.ServerWebExchange;
  * description: The type Host parameter data.
  *
  * @author zhouxinlei
- * @date 2022-01-10 11:16:15
+ * @since 2022-01-10 11:16:15
  */
 @Join
 public class HostParameterData implements ParameterData {
