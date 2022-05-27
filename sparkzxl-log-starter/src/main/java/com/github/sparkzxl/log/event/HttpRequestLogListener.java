@@ -34,9 +34,9 @@ public class HttpRequestLogListener {
         }
         Optional.ofNullable(requestInfoLog.getTenantId()).ifPresent(RequestLocalContextHolder::setTenant);
         if (log.isDebugEnabled()) {
-            log.debug("租户:【{}】 用户名:【{}】 请求接口:【{}】 请求耗时:【{}】用户行为接口:【{}】 ",
+            log.debug("租户:【{}】 用户名:【{}】 请求接口:【{}】 请求耗时:【{}】",
                     requestInfoLog.getTenantId(), requestInfoLog.getUserName(),
-                    requestInfoLog.getRequestUrl(), requestInfoLog.getConsumingTime(), requestInfoLog.getContent());
+                    requestInfoLog.getRequestUrl(), requestInfoLog.getConsumingTime());
         }
         consumer.accept(requestInfoLog);
     }

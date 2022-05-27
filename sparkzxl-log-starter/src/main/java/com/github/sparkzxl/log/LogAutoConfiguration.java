@@ -3,10 +3,11 @@ package com.github.sparkzxl.log;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import com.github.sparkzxl.log.aop.OptLogRecordAnnotationAdvisor;
 import com.github.sparkzxl.log.aop.OptLogRecordInterceptor;
-import com.github.sparkzxl.log.handler.DefaultOptOptLogVariablesHandler;
 import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
-import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
+import com.github.sparkzxl.log.event.OptLogListener;
+import com.github.sparkzxl.log.handler.DefaultOptOptLogVariablesHandler;
+import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.OperatorService;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +73,13 @@ public class LogAutoConfiguration {
     @Bean
     public OptLogRecordAnnotationAdvisor optLogRecordAnnotationAdvisor(OptLogRecordInterceptor optLogRecordInterceptor) {
         return new OptLogRecordAnnotationAdvisor(optLogRecordInterceptor, OptLogRecord.class, Ordered.HIGHEST_PRECEDENCE);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public OptLogListener optLogListener() {
+        return new OptLogListener(log -> {
+        });
     }
 
 }

@@ -31,9 +31,6 @@ public class RequestInfoLog implements Serializable {
     @ApiModelProperty(value = "用户姓名")
     private String userName;
 
-    @ApiModelProperty(value = "操作描述")
-    private String description;
-
     @ApiModelProperty(value = "请求IP")
     private String requestIp;
 
@@ -45,9 +42,6 @@ public class RequestInfoLog implements Serializable {
 
     @ApiModelProperty(value = "请求类方法")
     private String classMethod;
-
-    @ApiModelProperty(value = "内容描述")
-    private String content;
 
     @ApiModelProperty(value = "请求报文")
     private String requestParams;
@@ -69,7 +63,6 @@ public class RequestInfoLog implements Serializable {
 
     @ApiModelProperty(value = "consumingTime")
     private Long consumingTime;
-
 
     @ApiModelProperty(value = "tenantId")
     private String tenantId;
