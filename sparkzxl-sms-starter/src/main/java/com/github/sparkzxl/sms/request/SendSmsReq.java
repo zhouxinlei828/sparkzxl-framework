@@ -16,6 +16,7 @@ import java.util.TreeMap;
 @Data
 public class SendSmsReq implements Serializable {
 
+    private static final long serialVersionUID = -8200484562245141033L;
     /**
      * 手机号列表
      */
