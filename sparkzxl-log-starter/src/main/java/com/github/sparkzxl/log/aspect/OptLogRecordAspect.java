@@ -2,7 +2,7 @@ package com.github.sparkzxl.log.aspect;
 
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.util.AspectUtil;
+import com.github.sparkzxl.core.util.AopUtil;
 import com.github.sparkzxl.core.util.NetworkUtil;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
@@ -56,7 +56,7 @@ public class OptLogRecordAspect {
         HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
         String bizNo = "";
         if (StringUtils.isNotBlank(optLogRecord.bizNo())) {
-            bizNo = AspectUtil.parseExpression(joinPoint, optLogRecord.bizNo());
+            bizNo = AopUtil.parseExpression(joinPoint, optLogRecord.bizNo());
         }
         OptLogRecordDetail optLogRecordDetail = new OptLogRecordDetail()
                 .setIp(NetworkUtil.getIpAddress(httpServletRequest))

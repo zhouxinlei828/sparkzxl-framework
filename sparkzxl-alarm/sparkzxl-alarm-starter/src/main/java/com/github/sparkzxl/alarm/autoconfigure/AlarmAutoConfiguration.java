@@ -1,6 +1,8 @@
 package com.github.sparkzxl.alarm.autoconfigure;
 
-import com.github.sparkzxl.alarm.aspect.AlarmNoticeAspect;
+import com.github.sparkzxl.alarm.annotation.Alarm;
+import com.github.sparkzxl.alarm.aop.AlarmAnnotationAdvisor;
+import com.github.sparkzxl.alarm.aop.AlarmAnnotationInterceptor;
 import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.handler.DefaultAlarmVariablesHandler;
 import com.github.sparkzxl.alarm.handler.IAlarmVariablesHandler;
@@ -14,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 /**
  * description: 日志告警自动装配
@@ -39,8 +42,12 @@ public class AlarmAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public AlarmNoticeAspect alarmAspect(AlarmTemplateProvider alarmTemplateProvider, AlarmSender alarmSender) {
-        return new AlarmNoticeAspect(alarmTemplateProvider, alarmSender);
+    public AlarmAnnotationInterceptor alarmAnnotationInterceptor(AlarmTemplateProvider alarmTemplateProvider, AlarmSender alarmSender) {
+        return new AlarmAnnotationInterceptor(alarmTemplateProvider, alarmSender);
+    }
+
+    @Bean
+    public AlarmAnnotationAdvisor alarmAnnotationAdvisor(AlarmAnnotationInterceptor alarmAnnotationInterceptor) {
+        return new AlarmAnnotationAdvisor(alarmAnnotationInterceptor, Alarm.class, Ordered.HIGHEST_PRECEDENCE);
     }
 }

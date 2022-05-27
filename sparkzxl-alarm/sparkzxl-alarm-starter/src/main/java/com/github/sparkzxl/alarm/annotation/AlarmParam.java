@@ -17,5 +17,5 @@ public @interface AlarmParam {
      *
      * @return String
      */
-    String name() default "";
+    String value() default "";
 }
