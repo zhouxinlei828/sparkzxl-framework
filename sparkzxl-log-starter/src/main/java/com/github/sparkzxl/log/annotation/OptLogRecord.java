@@ -44,4 +44,11 @@ public @interface OptLogRecord {
      */
     String expressionJson() default "";
 
+    /**
+     * 参数处理类beanName
+     *
+     * @return Class
+     */
+    String variablesBeanName() default "defaultOptOptLogVariablesHandler";
+
 }

@@ -1,9 +1,11 @@
 package com.github.sparkzxl.log;
 
-import com.github.sparkzxl.core.context.RequestLocalContextHolder;
+import com.github.sparkzxl.log.annotation.OptLogRecord;
+import com.github.sparkzxl.log.aop.OptLogRecordAnnotationAdvisor;
+import com.github.sparkzxl.log.aop.OptLogRecordInterceptor;
+import com.github.sparkzxl.log.handler.DefaultOptOptLogVariablesHandler;
 import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
-import com.github.sparkzxl.log.aspect.ILogAttribute;
-import com.github.sparkzxl.log.aspect.LogAttributeImpl;
+import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.OperatorService;
@@ -13,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 import java.util.Optional;
 
@@ -37,10 +40,10 @@ public class LogAutoConfiguration {
         }
     }
 
-    @Bean
+    @Bean(name = "defaultOptOptLogVariablesHandler")
     @ConditionalOnMissingBean
-    public ILogAttribute logAttribute() {
-        return new LogAttributeImpl(RequestLocalContextHolder::get);
+    public IOptLogVariablesHandler defaultOptOptLogVariablesHandler() {
+        return new DefaultOptOptLogVariablesHandler();
     }
 
     @Bean
@@ -59,6 +62,16 @@ public class LogAutoConfiguration {
     @ConditionalOnMissingBean(OperatorService.class)
     public OperatorService operatorService() {
         return new OperatorService();
+    }
+
+    @Bean
+    public OptLogRecordInterceptor optLogRecordInterceptor(OperatorService operatorService) {
+        return new OptLogRecordInterceptor(operatorService);
+    }
+
+    @Bean
+    public OptLogRecordAnnotationAdvisor optLogRecordAnnotationAdvisor(OptLogRecordInterceptor optLogRecordInterceptor) {
+        return new OptLogRecordAnnotationAdvisor(optLogRecordInterceptor, OptLogRecord.class, Ordered.HIGHEST_PRECEDENCE);
     }
 
 }

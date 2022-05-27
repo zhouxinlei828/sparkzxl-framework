@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class LockInterceptor implements MethodInterceptor {
     private final DistributedLockProperties distributedLockProperties;
 
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    public Object invoke(@NonNull MethodInvocation invocation) throws Throwable {
         //fix 使用其他aop组件时,aop切了两次.
         Class<?> cls = AopProxyUtils.ultimateTargetClass(Objects.requireNonNull(invocation.getThis()));
         if (!cls.equals(invocation.getThis().getClass())) {

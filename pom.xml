@@ -56,7 +56,6 @@
         <module>sparkzxl-datasource-starter</module>
         <module>sparkzxl-uid</module>
         <module>sparkzxl-dependencies</module>
-        <module>sparkzxl-idempotent</module>
         <module>sparkzxl-sms-starter</module>
         <module>sparkzxl-feign</module>
         <module>sparkzxl-alarm</module>

@@ -1,9 +1,10 @@
-package com.github.sparkzxl.idempotent.annotation;
+package com.github.sparkzxl.log.annotation;
+
 
 import java.lang.annotation.*;
 
 /**
- * description: API幂等性注解参数
+ * description: 请求日志注解参数
  *
  * @author zhouxinlei
  */
@@ -11,12 +12,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface ApiIdempotentParam {
+public @interface OptLogParam {
 
     /**
      * 字段名称
      *
      * @return String
      */
-    String name() default "";
+    String value() default "";
+
 }

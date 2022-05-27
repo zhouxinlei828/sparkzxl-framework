@@ -11,7 +11,6 @@ import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import com.github.sparkzxl.alarm.send.AlarmSender;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import com.github.sparkzxl.core.util.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -86,10 +85,6 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
         IAlarmVariablesHandler alarmVariablesHandler = SpringContextUtils.getBean(variablesBeanName);
         ArgumentAssert.notNull(alarmVariablesHandler, "告警未指定变量处理器，请联系管理员");
         return alarmVariablesHandler;
-    }
-
-    public static void main(String[] args) {
-        System.out.println("张三".concat(StrPool.CRLF).concat("李四"));
     }
 
 }
