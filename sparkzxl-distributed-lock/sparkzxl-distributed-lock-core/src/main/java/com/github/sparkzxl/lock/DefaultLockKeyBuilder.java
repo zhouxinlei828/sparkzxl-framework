@@ -1,6 +1,7 @@
 package com.github.sparkzxl.lock;
 
 import cn.hutool.core.text.StrPool;
+import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -29,24 +30,13 @@ public class DefaultLockKeyBuilder implements LockKeyBuilder {
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
     @Override
-    public String buildKey(JoinPoint joinPoint, String[] definitionKeys) {
+    public String buildKey(MethodInvocation invocation, String[] definitionKeys) {
+        Method method = invocation.getMethod();
         if (definitionKeys.length > 1 || !"".equals(definitionKeys[0])) {
-            Method targetMethod;
-            try {
-                targetMethod = getTargetMethod(joinPoint);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-            return getSpElDefinitionKey(definitionKeys, targetMethod, joinPoint.getArgs());
+            return getSpElDefinitionKey(definitionKeys, method, invocation.getArguments());
+
         }
         return "";
-    }
-
-    public static Method getTargetMethod(JoinPoint pjp) throws NoSuchMethodException {
-        Signature signature = pjp.getSignature();
-        MethodSignature methodSignature = (MethodSignature) signature;
-        Method agentMethod = methodSignature.getMethod();
-        return pjp.getTarget().getClass().getMethod(agentMethod.getName(), agentMethod.getParameterTypes());
     }
 
     protected String getSpElDefinitionKey(String[] definitionKeys, Method method, Object[] parameterValues) {

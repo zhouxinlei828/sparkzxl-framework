@@ -1,6 +1,5 @@
 package com.github.sparkzxl.alarm.aop;
 
-import com.github.sparkzxl.alarm.annotation.Alarm;
 import lombok.NonNull;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -37,7 +36,8 @@ public class AlarmAnnotationAdvisor extends AbstractPointcutAdvisor implements B
     private final Class<? extends Annotation> annotation;
 
     public AlarmAnnotationAdvisor(@NonNull MethodInterceptor advice,
-                                  @NonNull Class<? extends Annotation> annotation,int order) {
+                                  @NonNull Class<? extends Annotation> annotation,
+                                  int order) {
         this.advice = advice;
         this.annotation = annotation;
         this.pointcut = buildPointcut();
