@@ -78,7 +78,7 @@ public class LockInterceptor implements MethodInterceptor {
                 log.info("Thread[{}] -> releaseLock key [{}]", lockInfo.getThreadId(), lockInfo.getLockKey());
                 final boolean releaseLock = lockTemplate.releaseLock(lockInfo);
                 if (!releaseLock) {
-                    log.error("releaseLock fail,lockKey={},lockValue={}", lockInfo.getLockKey(),
+                    log.error("releaseLock fail,lock Key={},lock Value={}", lockInfo.getLockKey(),
                             lockInfo.getLockValue());
                 }
             }
