@@ -9,6 +9,7 @@ import com.github.sparkzxl.alarm.autoconfigure.TemplateConfig;
 import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.support.AlarmErrorCodeEnum;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -26,15 +27,18 @@ import java.util.stream.Collectors;
  *
  * @author zhouxinlei
  */
-@RequiredArgsConstructor
 public class FileAlarmTemplateProvider extends BaseAlarmTemplateProvider {
 
     private final static String HTTP = "http";
     private final static String HTTPS = "https";
 
-    private final Map<String, AlarmTemplate> configTemplateMap = new HashMap<>();
-
     private final TemplateConfig templateConfig;
+    private final Map<String, AlarmTemplate> configTemplateMap;
+
+    public FileAlarmTemplateProvider(TemplateConfig templateConfig) {
+        this.templateConfig = templateConfig;
+        this.configTemplateMap = Maps.newHashMap();
+    }
 
     @Override
     AlarmTemplate getAlarmTemplate(String templateId) {

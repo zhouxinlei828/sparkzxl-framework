@@ -14,6 +14,6 @@ import lombok.RequiredArgsConstructor;
 public enum TemplateChannel {
     JDBC,
     FILE,
-    MEMORY
+    YAML
 
 }

@@ -7,6 +7,8 @@ import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.handler.DefaultAlarmVariablesHandler;
 import com.github.sparkzxl.alarm.handler.IAlarmVariablesHandler;
 import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
+import com.github.sparkzxl.alarm.provider.FileAlarmTemplateProvider;
+import com.github.sparkzxl.alarm.provider.JdbcAlarmTemplateProvider;
 import com.github.sparkzxl.alarm.provider.YamlAlarmTemplateProvider;
 import com.github.sparkzxl.alarm.send.AlarmSender;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
@@ -30,9 +32,24 @@ import org.springframework.core.Ordered;
 public class AlarmAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
-    public AlarmTemplateProvider alarmTemplateProvider(TemplateConfig templateConfig) {
+    @ConditionalOnProperty(prefix = TemplateConfig.PREFIX, name = "channel", havingValue = "yaml")
+    @ConditionalOnMissingBean(YamlAlarmTemplateProvider.class)
+    public AlarmTemplateProvider yamlAlarmTemplateProvider(TemplateConfig templateConfig) {
         return new YamlAlarmTemplateProvider(templateConfig);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = TemplateConfig.PREFIX, name = "channel", havingValue = "file")
+    @ConditionalOnMissingBean(FileAlarmTemplateProvider.class)
+    public AlarmTemplateProvider fileAlarmTemplateProvider(TemplateConfig templateConfig) {
+        return new FileAlarmTemplateProvider(templateConfig);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = TemplateConfig.PREFIX, name = "channel", havingValue = "jdbc")
+    @ConditionalOnMissingBean(JdbcAlarmTemplateProvider.class)
+    public AlarmTemplateProvider jdbcAlarmTemplateProvider() {
+        return new JdbcAlarmTemplateProvider((templateId) -> null);
     }
 
     @Bean(value = AlarmConstant.DEFAULT_ALARM_VARIABLES_HANDLER_BEAN_NAME)
