@@ -7,8 +7,10 @@ import com.github.sparkzxl.feign.exception.ExceptionDefinitionLocatorImpl;
 import com.github.sparkzxl.feign.exception.ExceptionPredicateFactory;
 import com.github.sparkzxl.feign.exception.NormalRespExceptionPredicateFactory;
 import com.github.sparkzxl.feign.interceptor.FeignHeaderRequestInterceptor;
+import com.github.sparkzxl.feign.logger.InfoFeignLoggerFactory;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.github.sparkzxl.feign.support.FeignExceptionHandler;
+import feign.Logger;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
@@ -17,10 +19,12 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.openfeign.FeignLoggerFactory;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,6 +39,24 @@ import java.util.List;
 @Import(FeignExceptionHandler.class)
 @EnableConfigurationProperties(FeignProperties.class)
 public class FeignAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean(FeignLoggerFactory.class)
+    public FeignLoggerFactory getInfoFeignLoggerFactory() {
+        return new InfoFeignLoggerFactory();
+    }
+
+    @Bean
+    @Profile({"dev", "test"})
+    Logger.Level devFeignLoggerLevel() {
+        return Logger.Level.FULL;
+    }
+
+    @Bean
+    @Profile({"uat", "pre", "prod"})
+    Logger.Level prodFeignLoggerLevel() {
+        return Logger.Level.BASIC;
+    }
 
     @Bean
     public DateFormatRegister dateFormatRegister() {
