@@ -1,7 +1,6 @@
 package com.github.sparkzxl.database.support;
 
 import cn.hutool.core.util.ReUtil;
-import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.support.BizException;
@@ -29,7 +28,6 @@ import java.sql.SQLSyntaxErrorException;
 @RestControllerAdvice
 @RestController
 @Slf4j
-@ResponseResultStatus
 public class DataBaseExceptionHandler implements Ordered {
 
     private final static String DATABASE_PREFIX = "Unknown database";

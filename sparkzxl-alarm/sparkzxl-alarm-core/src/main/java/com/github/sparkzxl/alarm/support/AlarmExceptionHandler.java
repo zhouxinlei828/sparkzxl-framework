@@ -2,7 +2,6 @@ package com.github.sparkzxl.alarm.support;
 
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.exception.AsyncCallException;
-import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author zhouxinlei
  */
 @Slf4j
-@ResponseResultStatus
 @RestControllerAdvice
 public class AlarmExceptionHandler implements Ordered {
 

@@ -1,8 +1,14 @@
 package com.github.sparkzxl.feign;
 
+import com.github.sparkzxl.feign.decoder.FeignRequestDecoder;
+import com.github.sparkzxl.feign.exception.ExceptionDefinitionLocator;
+import com.github.sparkzxl.feign.exception.ExceptionDefinitionLocatorImpl;
+import com.github.sparkzxl.feign.exception.ExceptionPredicateFactory;
+import com.github.sparkzxl.feign.exception.NormalRespExceptionPredicateFactory;
 import com.github.sparkzxl.feign.interceptor.FeignHeaderRequestInterceptor;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.github.sparkzxl.feign.support.FeignExceptionHandler;
+import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
@@ -41,8 +47,33 @@ public class FeignAutoConfiguration {
     @Bean
     public Encoder feignFormEncoder() {
         List<HttpMessageConverter<?>> converters = new RestTemplate().getMessageConverters();
+        return new SpringFormEncoder(new SpringEncoder(() -> new HttpMessageConverters(converters)));
+    }
+
+    @Bean
+    public NormalRespExceptionPredicateFactory normalRespExceptionPredicateFactory() {
+        return new NormalRespExceptionPredicateFactory();
+    }
+
+    @Bean
+    public ExceptionDefinitionLocator exceptionDefinitionLocator(FeignProperties feignProperties,
+                                                                 List<ExceptionPredicateFactory> predicateFactories) {
+        return new ExceptionDefinitionLocatorImpl(feignProperties.getError(), predicateFactories);
+    }
+
+    /**
+     * Feign解码器
+     *
+     * @param exceptionDefinitionLocator 异常定义定位器
+     * @return Decoder
+     */
+    @Bean
+    public Decoder feignDecoder(ExceptionDefinitionLocator exceptionDefinitionLocator) {
+        List<HttpMessageConverter<?>> converters = new RestTemplate().getMessageConverters();
         ObjectFactory<HttpMessageConverters> factory = () -> new HttpMessageConverters(converters);
-        return new SpringFormEncoder(new SpringEncoder(factory));
+        FeignRequestDecoder feignRequestDecoder = new FeignRequestDecoder(factory);
+        feignRequestDecoder.setExceptionDefinitionLocator(exceptionDefinitionLocator);
+        return feignRequestDecoder;
     }
 
     /**

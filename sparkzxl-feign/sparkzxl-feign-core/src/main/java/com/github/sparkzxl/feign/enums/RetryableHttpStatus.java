@@ -1,12 +1,12 @@
-package com.github.sparkzxl.feign.resilience4j.enums;
+package com.github.sparkzxl.feign.enums;
 
 /**
- * description: resilience4j http status
+ * description: Retryable http status
  *
  * @author zhouxinlei
  * @since 2022-04-04 11:06:58
  */
-public enum Resilience4jHttpStatus {
+public enum RetryableHttpStatus {
 
     /**
      * 断路器打开
@@ -27,7 +27,7 @@ public enum Resilience4jHttpStatus {
     ;
     private final int value;
 
-    Resilience4jHttpStatus(int value) {
+    RetryableHttpStatus(int value) {
         this.value = value;
     }
 

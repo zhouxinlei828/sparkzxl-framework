@@ -1,4 +1,4 @@
-package com.github.sparkzxl.feign.resilience4j.annotation;
+package com.github.sparkzxl.feign.annoation;
 
 import java.lang.annotation.*;
 

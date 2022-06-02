@@ -1,7 +1,6 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.support.ArgumentException;
@@ -48,10 +47,10 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @RestController
 @Slf4j
-@ResponseResultStatus
 public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(BizException.class)
+    @ResponseStatus
     public Response<?> businessException(BizException e) {
         log.error("BizException异常:", e);
         return Response.failDetail(e.getErrorCode(), e.getMessage());

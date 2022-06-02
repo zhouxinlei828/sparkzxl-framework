@@ -1,6 +1,5 @@
 package com.github.sparkzxl.cache.support;
 
-import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
@@ -20,7 +19,6 @@ import redis.clients.jedis.exceptions.JedisException;
  * @author zhouxinlei
  */
 @ControllerAdvice
-@ResponseResultStatus
 @RestController
 @Slf4j
 public class CacheExceptionHandler implements Ordered {

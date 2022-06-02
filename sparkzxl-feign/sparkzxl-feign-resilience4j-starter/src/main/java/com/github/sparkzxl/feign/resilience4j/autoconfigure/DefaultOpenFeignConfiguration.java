@@ -1,8 +1,11 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
+import com.github.sparkzxl.feign.decoder.DefaultErrorDecoder;
 import com.github.sparkzxl.feign.resilience4j.FeignDecoratorBuilderInterceptor;
-import com.github.sparkzxl.feign.resilience4j.decoder.DefaultErrorDecoder;
 import feign.Feign;
+import feign.RequestInterceptor;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
 import io.github.resilience4j.core.ConfigurationNotFoundException;
 import io.github.resilience4j.feign.FeignDecorators;
@@ -10,10 +13,11 @@ import io.github.resilience4j.feign.Resilience4jFeign;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
 import java.util.List;
 
 /**
@@ -22,6 +26,7 @@ import java.util.List;
  * @author zhouxinlei
  * @since 2022-04-04 12:21:42
  */
+@Slf4j
 @Configuration(proxyBeanMethods = false)
 public class DefaultOpenFeignConfiguration {
 
@@ -49,10 +54,15 @@ public class DefaultOpenFeignConfiguration {
     @Bean
     public Feign.Builder resilience4jFeignBuilder(
             List<FeignDecoratorBuilderInterceptor> feignDecoratorBuilderInterceptors,
-            FeignDecorators.Builder builder
+            FeignDecorators.Builder builder,
+            @Autowired Decoder feignDecoder,
+            @Autowired Encoder feignFormEncoder,
+            @Autowired List<RequestInterceptor> requestInterceptorList
     ) {
         feignDecoratorBuilderInterceptors.forEach(feignDecoratorBuilderInterceptor -> feignDecoratorBuilderInterceptor.intercept(builder));
-        return Resilience4jFeign.builder(builder.build());
+        return Resilience4jFeign.builder(builder.build()).encoder(feignFormEncoder)
+                .decoder(feignDecoder)
+                .requestInterceptors(requestInterceptorList);
     }
 
 }

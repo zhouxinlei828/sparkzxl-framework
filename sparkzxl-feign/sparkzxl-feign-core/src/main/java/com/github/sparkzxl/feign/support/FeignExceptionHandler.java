@@ -2,7 +2,6 @@ package com.github.sparkzxl.feign.support;
 
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.text.StrFormatter;
-import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
@@ -22,7 +21,6 @@ import java.net.SocketTimeoutException;
  * @author zhouxinlei
  */
 @Slf4j
-@ResponseResultStatus
 @RestControllerAdvice
 public class FeignExceptionHandler implements Ordered {
 
@@ -64,7 +62,7 @@ public class FeignExceptionHandler implements Ordered {
         String applicationName =
                 OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
                         .orElseGet(() -> "unKnownServer");
-        String message = StrFormatter.format("【{}】发生异常,{}", applicationName, e.getErrorMessage());
+        String message = StrFormatter.format("【{}】异常,{}", applicationName, e.getErrorMessage());
         return Response.failDetail(e.getErrorCode(), message);
     }
 

@@ -23,15 +23,23 @@ public class FeignProperties {
     @NestedConfigurationProperty
     private FeignSeataProperties seata = new FeignSeataProperties();
 
+    private FeignExceptionProperties error = new FeignExceptionProperties();
+
     @Data
     public static class FeignSeataProperties {
-
         private boolean enabled;
     }
 
     @Data
     public static class FeignInterceptorProperties {
         private List<String> headerList = Lists.newArrayList();
+    }
+
+    @Data
+    public static class FeignExceptionProperties {
+
+        @NestedConfigurationProperty
+        private PredicateDefinition predicate;
     }
 
 }

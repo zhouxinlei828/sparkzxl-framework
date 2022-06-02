@@ -2,19 +2,15 @@ package com.github.sparkzxl.distributed.cloud.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.sparkzxl.distributed.cloud.http.InfoFeignLoggerFactory;
 import com.github.sparkzxl.distributed.cloud.http.RestTemplateHeaderInterceptor;
-import feign.Logger;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.commons.httpclient.OkHttpClientConnectionPoolFactory;
 import org.springframework.cloud.commons.httpclient.OkHttpClientFactory;
-import org.springframework.cloud.openfeign.FeignLoggerFactory;
 import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -37,24 +33,6 @@ import java.util.List;
 public class RestTemplateConfiguration {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private final ObjectMapper objectMapper;
-
-    @Bean
-    @ConditionalOnMissingBean(FeignLoggerFactory.class)
-    public FeignLoggerFactory getInfoFeignLoggerFactory() {
-        return new InfoFeignLoggerFactory();
-    }
-
-    @Bean
-    @Profile({"dev", "test"})
-    Logger.Level devFeignLoggerLevel() {
-        return Logger.Level.FULL;
-    }
-
-    @Bean
-    @Profile({"uat", "pre", "prod"})
-    Logger.Level prodFeignLoggerLevel() {
-        return Logger.Level.BASIC;
-    }
 
     /**
      * 配置OkHttpClient

@@ -6,7 +6,6 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
-import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.entity.response.Response;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author zhouxinlei
  */
 @ControllerAdvice
-@ResponseResultStatus
 @RestController
 @Slf4j
 public class SentinelExceptionHandler implements Ordered {
