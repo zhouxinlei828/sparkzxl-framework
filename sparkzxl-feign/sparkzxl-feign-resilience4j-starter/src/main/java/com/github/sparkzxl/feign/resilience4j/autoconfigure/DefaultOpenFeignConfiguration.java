@@ -1,12 +1,10 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
-import com.github.sparkzxl.feign.decoder.DefaultErrorDecoder;
 import com.github.sparkzxl.feign.resilience4j.FeignDecoratorBuilderInterceptor;
 import feign.Feign;
 import feign.RequestInterceptor;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
-import feign.codec.ErrorDecoder;
 import io.github.resilience4j.core.ConfigurationNotFoundException;
 import io.github.resilience4j.feign.FeignDecorators;
 import io.github.resilience4j.feign.Resilience4jFeign;
@@ -18,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+
 import java.util.List;
 
 /**
@@ -31,11 +30,6 @@ import java.util.List;
 public class DefaultOpenFeignConfiguration {
 
     @Bean
-    public ErrorDecoder errorDecoder() {
-        return new DefaultErrorDecoder();
-    }
-
-    @Bean
     public FeignDecorators.Builder defaultBuilder(Environment environment, RetryRegistry retryRegistry) {
         String name = environment.getProperty("feign.client.name");
         Retry retry;
@@ -46,9 +40,7 @@ public class DefaultOpenFeignConfiguration {
         }
         //覆盖其中的异常判断，只针对 feign.RetryableException 进行重试，所有需要重试的异常我们都在 DefaultErrorDecoder 以及 Resilience4jFeignClient 中封装成了 RetryableException
         retry = Retry.of(name, RetryConfig.from(retry.getRetryConfig()).retryOnException(throwable -> throwable instanceof feign.RetryableException).build());
-        return FeignDecorators.builder().withRetry(
-                retry
-        );
+        return FeignDecorators.builder().withRetry(retry);
     }
 
     @Bean
@@ -60,7 +52,8 @@ public class DefaultOpenFeignConfiguration {
             @Autowired List<RequestInterceptor> requestInterceptorList
     ) {
         feignDecoratorBuilderInterceptors.forEach(feignDecoratorBuilderInterceptor -> feignDecoratorBuilderInterceptor.intercept(builder));
-        return Resilience4jFeign.builder(builder.build()).encoder(feignFormEncoder)
+        return Resilience4jFeign.builder(builder.build())
+                .encoder(feignFormEncoder)
                 .decoder(feignDecoder)
                 .requestInterceptors(requestInterceptorList);
     }

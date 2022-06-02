@@ -1,5 +1,6 @@
 package com.github.sparkzxl.feign;
 
+import com.github.sparkzxl.feign.decoder.DefaultErrorDecoder;
 import com.github.sparkzxl.feign.decoder.FeignRequestDecoder;
 import com.github.sparkzxl.feign.exception.ExceptionDefinitionLocator;
 import com.github.sparkzxl.feign.exception.ExceptionDefinitionLocatorImpl;
@@ -10,6 +11,7 @@ import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.github.sparkzxl.feign.support.FeignExceptionHandler;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
+import feign.codec.ErrorDecoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -74,6 +76,12 @@ public class FeignAutoConfiguration {
         FeignRequestDecoder feignRequestDecoder = new FeignRequestDecoder(factory);
         feignRequestDecoder.setExceptionDefinitionLocator(exceptionDefinitionLocator);
         return feignRequestDecoder;
+    }
+
+
+    @Bean
+    public ErrorDecoder errorDecoder() {
+        return new DefaultErrorDecoder();
     }
 
     /**

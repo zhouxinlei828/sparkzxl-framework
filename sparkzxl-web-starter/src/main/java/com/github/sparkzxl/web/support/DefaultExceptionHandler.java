@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
 public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(BizException.class)
-    @ResponseStatus
     public Response<?> businessException(BizException e) {
         log.error("BizException异常:", e);
         return Response.failDetail(e.getErrorCode(), e.getMessage());
