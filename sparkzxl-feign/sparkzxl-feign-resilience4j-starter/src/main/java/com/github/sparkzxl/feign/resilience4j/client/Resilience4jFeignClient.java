@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.resilience4j.client;
 
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import com.github.sparkzxl.feign.enums.RetryableHttpStatus;
+import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import com.github.sparkzxl.feign.resilience4j.Resilience4jUtil;
 import feign.Client;
 import feign.Request;

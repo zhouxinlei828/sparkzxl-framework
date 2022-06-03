@@ -1,10 +1,10 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
+import com.github.sparkzxl.feign.resilience4j.decoder.DefaultErrorDecoder;
 import com.github.sparkzxl.feign.resilience4j.FeignDecoratorBuilderInterceptor;
 import feign.Feign;
 import feign.RequestInterceptor;
-import feign.codec.Decoder;
-import feign.codec.Encoder;
+import feign.codec.ErrorDecoder;
 import io.github.resilience4j.core.ConfigurationNotFoundException;
 import io.github.resilience4j.feign.FeignDecorators;
 import io.github.resilience4j.feign.Resilience4jFeign;
@@ -30,6 +30,11 @@ import java.util.List;
 public class DefaultOpenFeignConfiguration {
 
     @Bean
+    public ErrorDecoder errorDecoder() {
+        return new DefaultErrorDecoder();
+    }
+
+    @Bean
     public FeignDecorators.Builder defaultBuilder(Environment environment, RetryRegistry retryRegistry) {
         String name = environment.getProperty("feign.client.name");
         Retry retry;
@@ -47,15 +52,10 @@ public class DefaultOpenFeignConfiguration {
     public Feign.Builder resilience4jFeignBuilder(
             List<FeignDecoratorBuilderInterceptor> feignDecoratorBuilderInterceptors,
             FeignDecorators.Builder builder,
-            @Autowired Decoder feignDecoder,
-            @Autowired Encoder feignFormEncoder,
             @Autowired List<RequestInterceptor> requestInterceptorList
     ) {
         feignDecoratorBuilderInterceptors.forEach(feignDecoratorBuilderInterceptor -> feignDecoratorBuilderInterceptor.intercept(builder));
-        return Resilience4jFeign.builder(builder.build())
-                .encoder(feignFormEncoder)
-                .decoder(feignDecoder)
-                .requestInterceptors(requestInterceptorList);
+        return Resilience4jFeign.builder(builder.build()).requestInterceptors(requestInterceptorList);
     }
 
 }

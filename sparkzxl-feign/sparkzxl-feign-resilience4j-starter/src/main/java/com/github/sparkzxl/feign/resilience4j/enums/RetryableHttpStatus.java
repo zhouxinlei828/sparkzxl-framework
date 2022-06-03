@@ -1,4 +1,4 @@
-package com.github.sparkzxl.feign.enums;
+package com.github.sparkzxl.feign.resilience4j.enums;
 
 /**
  * description: Retryable http status
