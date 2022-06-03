@@ -8,7 +8,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * description: feign远程调用异常
+ * description: feign远程调用传递异常
  *
  * @author zhouxinlei
  */

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.feign.resilience4j;
 
+import com.github.sparkzxl.feign.exception.RemoteCallException;
 import feign.Response;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.function.Supplier;
-
-import static feign.FeignException.errorStatus;
 
 /**
  * description: Resilience4j工具类
@@ -43,7 +42,7 @@ public class Resilience4jUtil {
      * 针对 OpenFeign 的 circuitBreaker 封装，根据响应进行断路
      *
      * @param circuitBreaker 断路器
-     * @param supplier
+     * @param supplier supplier
      * @return Supplier<Response>
      */
     public static Supplier<Response> decorateSupplier(CircuitBreaker circuitBreaker, Supplier<Response> supplier) {
@@ -60,7 +59,7 @@ public class Resilience4jUtil {
                 if (httpStatus.is2xxSuccessful()) {
                     circuitBreaker.onResult(duration, circuitBreaker.getTimestampUnit(), result);
                 } else {
-                    circuitBreaker.onError(duration, circuitBreaker.getTimestampUnit(), errorStatus("not useful", result));
+                    circuitBreaker.onError(duration, circuitBreaker.getTimestampUnit(), new RemoteCallException(httpStatus.value(), result.reason(), result));
                 }
                 return result;
             } catch (Exception var7) {

@@ -10,7 +10,6 @@ import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
@@ -56,7 +54,7 @@ public class DefaultExceptionHandler implements Ordered {
     }
 
     @ExceptionHandler(ArgumentException.class)
-    public Response<?> businessException(ArgumentException e) {
+    public Response<?> handleArgumentException(ArgumentException e) {
         log.error("ArgumentException异常:", e);
         return Response.failDetail(e.getErrorCode(), e.getErrorMessage());
     }
@@ -68,7 +66,6 @@ public class DefaultExceptionHandler implements Ordered {
     }
 
     @ExceptionHandler(ServletException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response<?> servletException(ServletException e) {
         log.warn("ServletException:", e);
         String msg = "UT010016: Not a multi part request";
@@ -82,7 +79,6 @@ public class DefaultExceptionHandler implements Ordered {
      * jsr 规范中的验证异常
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response<?> constraintViolationException(ConstraintViolationException ex) {
         log.warn("ConstraintViolationException:", ex);
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();

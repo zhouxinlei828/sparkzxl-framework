@@ -52,12 +52,13 @@ public class Resilience4jFeignAutoConfig {
             //为何使用这个不直接用 FeignBlockingLoadBalancerClient 请参考 FeignBlockingLoadBalancerClientDelegate 的注释
             @Autowired(required = false) LoadBalancerClientFactory loadBalancerClientFactory
     ) {
+        Resilience4jFeignClient resilience4jFeignClient = new Resilience4jFeignClient(
+                okHttpClient,
+                threadPoolBulkheadRegistry,
+                circuitBreakerRegistry
+        );
         return new FeignBlockingLoadBalancerClientDelegate(
-                new Resilience4jFeignClient(
-                        okHttpClient,
-                        threadPoolBulkheadRegistry,
-                        circuitBreakerRegistry
-                ),
+                resilience4jFeignClient,
                 loadBalancerClientProvider,
                 loadBalancerProperties,
                 loadBalancerClientFactory

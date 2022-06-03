@@ -11,6 +11,7 @@ import feign.RetryableException;
 import feign.Util;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +20,7 @@ import java.nio.charset.StandardCharsets;
  * description: 默认异常解码器
  *
  * @author zhouxinlei
- * @since 2022-04-04 12:19:53
+ * @since 2022-06-03 14:08:56
  */
 @Slf4j
 public class DefaultErrorDecoder implements ErrorDecoder {
@@ -40,12 +41,15 @@ public class DefaultErrorDecoder implements ErrorDecoder {
             try {
                 Reader reader = response.body().asReader(StandardCharsets.UTF_8);
                 String body = Util.toString(reader);
-                com.github.sparkzxl.entity.response.Response<?> responseResult = JsonUtil.parse(body, com.github.sparkzxl.entity.response.Response.class);
-                return new RemoteCallTransferException(FeignStatusEnum.TRANSFER_EXCEPTION.getCode(),
-                        responseResult.getErrorCode(),
-                        responseResult.getErrorMsg(),
-                        responseResult,
-                        response.request());
+                if (StringUtils.isNotEmpty(body)) {
+                    com.github.sparkzxl.entity.response.Response<?> responseResult = JsonUtil.parse(body, com.github.sparkzxl.entity.response.Response.class);
+                    return new RemoteCallTransferException(FeignStatusEnum.TRANSFER_EXCEPTION.getCode(),
+                            responseResult.getErrorCode(),
+                            responseResult.getErrorMsg(),
+                            responseResult,
+                            response.request());
+                }
+                return new RemoteCallTransferException(FeignStatusEnum.UNKNOWN_EXCEPTION.getCode(), ExceptionErrorCode.FAILURE.getErrorCode(), "unKnowException", null, response.request());
             } catch (Exception e) {
                 log.error("[{}] has an unknown exception.", methodKey, e);
                 return new RemoteCallTransferException(FeignStatusEnum.UNKNOWN_EXCEPTION.getCode(), ExceptionErrorCode.FAILURE.getErrorCode(), "unKnowException", e, null, response.request());
