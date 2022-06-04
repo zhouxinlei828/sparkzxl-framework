@@ -1,0 +1,2 @@
+com.github.sparkzxl.mongodb.config.MongoAutoConfig
+com.github.sparkzxl.mongodb.dynamic.MongoDynamicAutoConfig

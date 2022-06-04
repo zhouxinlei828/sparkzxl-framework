@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.github.sparkzxl.gateway.plugin.autoconfigure.GatewayPluginAutoConfig,\
-    com.github.sparkzxl.gateway.plugin.autoconfigure.LoggingAutoConfig,\
-    com.github.sparkzxl.gateway.plugin.autoconfigure.ReactiveLoadBalancerAutoConfig
