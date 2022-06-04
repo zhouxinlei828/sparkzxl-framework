@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
-import com.github.sparkzxl.feign.resilience4j.decoder.DefaultErrorDecoder;
 import com.github.sparkzxl.feign.resilience4j.FeignDecoratorBuilderInterceptor;
+import com.github.sparkzxl.feign.resilience4j.decoder.DefaultErrorDecoder;
 import feign.Feign;
 import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
@@ -13,21 +13,24 @@ import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 
 import java.util.List;
 
 /**
- * description: 默认feign配置
+ * description: 默认feign client 配置
  *
  * @author zhouxinlei
+ * @see @EnableFeignClients(defaultConfiguration = {DefaultFeignClientConfiguration.class})
  * @since 2022-04-04 12:21:42
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class DefaultOpenFeignConfiguration {
+public class DefaultFeignClientConfiguration {
 
     @Bean
     public ErrorDecoder errorDecoder() {
@@ -39,6 +42,7 @@ public class DefaultOpenFeignConfiguration {
         String name = environment.getProperty("feign.client.name");
         Retry retry;
         try {
+            assert name != null;
             retry = retryRegistry.retry(name, name);
         } catch (ConfigurationNotFoundException e) {
             retry = retryRegistry.retry(name);
@@ -49,13 +53,16 @@ public class DefaultOpenFeignConfiguration {
     }
 
     @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Feign.Builder resilience4jFeignBuilder(
             List<FeignDecoratorBuilderInterceptor> feignDecoratorBuilderInterceptors,
             FeignDecorators.Builder builder,
             @Autowired List<RequestInterceptor> requestInterceptorList
     ) {
         feignDecoratorBuilderInterceptors.forEach(feignDecoratorBuilderInterceptor -> feignDecoratorBuilderInterceptor.intercept(builder));
-        return Resilience4jFeign.builder(builder.build()).requestInterceptors(requestInterceptorList);
+        return Resilience4jFeign.builder(builder.build())
+                .requestInterceptors(requestInterceptorList)
+                .decode404();
     }
 
 }
