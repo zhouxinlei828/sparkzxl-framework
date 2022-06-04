@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.resilience4j.decoder;
 
+import com.github.sparkzxl.feign.resilience4j.Resilience4jUtil;
 import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
-import com.github.sparkzxl.feign.util.OpenfeignUtil;
 import feign.Response;
 import feign.RetryableException;
 import feign.codec.ErrorDecoder;
@@ -20,7 +20,7 @@ public class DefaultErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
-        boolean queryRequest = OpenfeignUtil.isRetryableRequest(response.request());
+        boolean queryRequest = Resilience4jUtil.isRetryableRequest(response.request());
         boolean shouldThrowRetryable = queryRequest
                 || response.status() == RetryableHttpStatus.CIRCUIT_BREAKER_ON.getValue()
                 || response.status() == RetryableHttpStatus.BULKHEAD_FULL.getValue()
