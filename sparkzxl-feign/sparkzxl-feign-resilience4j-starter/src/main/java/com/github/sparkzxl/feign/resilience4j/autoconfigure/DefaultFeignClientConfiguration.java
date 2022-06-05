@@ -25,7 +25,6 @@ import java.util.List;
  * description: 默认feign client 配置
  *
  * @author zhouxinlei
- * @see @EnableFeignClients(defaultConfiguration = {DefaultFeignClientConfiguration.class})
  * @since 2022-04-04 12:21:42
  */
 @Slf4j
