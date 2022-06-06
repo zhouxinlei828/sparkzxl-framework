@@ -2,8 +2,8 @@ package com.github.sparkzxl.feign.resilience4j.client;
 
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import com.github.sparkzxl.feign.resilience4j.Resilience4jUtil;
+import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import feign.Client;
 import feign.Request;
 import feign.Response;
@@ -76,7 +76,7 @@ public class Resilience4jFeignClient implements Client {
 
         ThreadPoolBulkhead finalThreadPoolBulkhead = threadPoolBulkhead;
         CircuitBreaker finalCircuitBreaker = circuitBreaker;
-        Supplier<CompletionStage<Response>> completionStageSupplier = ThreadPoolBulkhead.decorateSupplier(threadPoolBulkhead,
+        Supplier<CompletionStage<Response>> completionStageSupplier = threadPoolBulkhead.decorateSupplier(
                 Resilience4jUtil.decorateSupplier(circuitBreaker, () -> {
                     try {
                         if (log.isDebugEnabled()) {
@@ -95,8 +95,7 @@ public class Resilience4jFeignClient implements Client {
                     } catch (IOException e) {
                         throw new CompletionException(e);
                     }
-                })
-        );
+                }));
         try {
             return Try.ofSupplier(completionStageSupplier).get().toCompletableFuture().join();
         } catch (BulkheadFullException e) {
