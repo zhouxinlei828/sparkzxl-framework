@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.manager;
 
-import com.github.sparkzxl.cache.service.GeneralCacheService;
+import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,24 +23,24 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class DefaultUserStateManager implements UserStateManager {
 
-    private GeneralCacheService generalCacheService;
+    private CacheService cacheService;
 
     @Autowired
-    public void setGeneralCacheService(GeneralCacheService generalCacheService) {
-        this.generalCacheService = generalCacheService;
+    public void setGeneralCacheService(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
     @Override
-    public void addUser(String token, AuthUserInfo authUserInfo, int expiresIn, TimeUnit timeUnit) {
-        if (ObjectUtils.isNotEmpty(generalCacheService)) {
-            generalCacheService.set(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token), authUserInfo, (long) expiresIn, timeUnit);
+    public void addUser(String token, AuthUserInfo authUserInfo, Duration timeOut) {
+        if (ObjectUtils.isNotEmpty(cacheService)) {
+            cacheService.set(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token), authUserInfo, timeOut);
         }
     }
 
     @Override
     public void removeUser(String token) {
-        if (ObjectUtils.isNotEmpty(generalCacheService)) {
-            generalCacheService.remove(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
+        if (ObjectUtils.isNotEmpty(cacheService)) {
+            cacheService.remove(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
     }
 
@@ -47,8 +48,8 @@ public class DefaultUserStateManager implements UserStateManager {
     public AuthUserInfo getUser(String token) {
         log.info("user token : [{}]", token);
         AuthUserInfo authUserInfo = null;
-        if (ObjectUtils.isNotEmpty(generalCacheService)) {
-            authUserInfo = generalCacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
+        if (ObjectUtils.isNotEmpty(cacheService)) {
+            authUserInfo = cacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
             ExceptionAssert.failure(ExceptionErrorCode.USER_NOT_FOUND);
@@ -64,6 +65,6 @@ public class DefaultUserStateManager implements UserStateManager {
 
     @Override
     public AuthUserInfo getUserCache(String key) {
-        return generalCacheService.get(key);
+        return cacheService.get(key);
     }
 }

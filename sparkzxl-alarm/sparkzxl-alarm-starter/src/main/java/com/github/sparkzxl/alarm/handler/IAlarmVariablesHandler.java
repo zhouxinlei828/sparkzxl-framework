@@ -13,17 +13,6 @@ import java.util.Map;
  */
 public interface IAlarmVariablesHandler {
 
-
-    /**
-     * 获取告警变量Map
-     *
-     * @param joinPoint 切入点
-     * @param alarm     告警注解
-     * @return Map<String, Object>
-     */
-    Map<String, Object> getVariables(JoinPoint joinPoint, Alarm alarm);
-
-
     /**
      * 获取告警变量Map
      *

@@ -60,7 +60,7 @@
         AuthUserInfo<Long> authUserInfo=authUserService.getAuthUserInfo(username);
         log.info("AuthUserInfo json is {}",JSONUtil.toJsonPrettyStr(authUserInfo));
         String buildKey=KeyUtils.generateKey(BaseContextConstant.AUTH_USER,oAuth2AccessToken.getValue());
-        generalCacheService.set(buildKey,authUserInfo,(long)oAuth2AccessToken.getExpiresIn());
+        cacheService.set(buildKey,authUserInfo,(long)oAuth2AccessToken.getExpiresIn());
         }
 ```
 

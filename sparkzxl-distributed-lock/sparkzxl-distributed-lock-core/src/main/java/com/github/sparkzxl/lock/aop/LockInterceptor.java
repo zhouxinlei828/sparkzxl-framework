@@ -22,6 +22,7 @@ import com.github.sparkzxl.lock.LockKeyBuilder;
 import com.github.sparkzxl.lock.LockTemplate;
 import com.github.sparkzxl.lock.annotation.DistributedLock;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -31,6 +32,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
@@ -59,30 +61,31 @@ public class LockInterceptor implements MethodInterceptor {
             return invocation.proceed();
         }
         DistributedLock distributedLock = invocation.getMethod().getAnnotation(DistributedLock.class);
-        LockInfo lockInfo = null;
-        try {
+        AtomicReference<LockInfo> lockInfo = new AtomicReference<>();
+        return Try.of(() -> {
             String prefix = distributedLockProperties.getLockKeyPrefix() + ":";
             prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name() :
                     invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
             String key = prefix + "#" + lockKeyBuilder.buildKey(invocation, distributedLock.keys());
-            lockInfo = lockTemplate.lock(key, distributedLock.expire(), distributedLock.acquireTimeout(), distributedLock.executor());
-            if (null != lockInfo) {
-                log.info("Thread[{}] -> get lock key[{}] success", lockInfo.getThreadId(), key);
+            LockInfo info = lockTemplate.lock(key, distributedLock.expire(), distributedLock.acquireTimeout(), distributedLock.executor());
+            lockInfo.set(info);
+            if (null != lockInfo.get()) {
+                log.info("Thread[{}] -> get lock key[{}] success", lockInfo.get().getThreadId(), key);
                 return invocation.proceed();
             }
             // lock failure
             lockFailureStrategy.onLockFailure(key, invocation.getMethod(), invocation.getArguments());
             return null;
-        } finally {
-            if (null != lockInfo && distributedLock.autoRelease()) {
-                log.info("Thread[{}] -> releaseLock key [{}]", lockInfo.getThreadId(), lockInfo.getLockKey());
-                final boolean releaseLock = lockTemplate.releaseLock(lockInfo);
+        }).andFinally(() -> {
+            if (null != lockInfo.get() && distributedLock.autoRelease()) {
+                log.info("Thread[{}] -> releaseLock key [{}]", lockInfo.get().getThreadId(), lockInfo.get().getLockKey());
+                final boolean releaseLock = lockTemplate.releaseLock(lockInfo.get());
                 if (!releaseLock) {
-                    log.error("releaseLock fail,lock Key={},lock Value={}", lockInfo.getLockKey(),
-                            lockInfo.getLockValue());
+                    log.error("releaseLock fail,lock Key={},lock Value={}", lockInfo.get().getLockKey(),
+                            lockInfo.get().getLockValue());
                 }
             }
-        }
+        });
     }
 
 }

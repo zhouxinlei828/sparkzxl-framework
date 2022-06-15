@@ -2,7 +2,7 @@ package com.github.sparkzxl.cache;
 
 import com.github.sparkzxl.cache.redis.RedisOps;
 import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
-import com.github.sparkzxl.cache.service.GeneralCacheService;
+import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.cache.service.RedisCacheImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -56,14 +56,6 @@ public class RedisConfiguration {
         return template;
     }
 
-    @Bean("redisCacheTemplate")
-    @ConditionalOnBean(RedisTemplate.class)
-    @Primary
-    public GeneralCacheService redisCacheTemplate(RedisTemplate<String, Object> redisTemplate) {
-        log.info("Autowired redisCacheTemplate success!");
-        return new RedisCacheImpl(redisTemplate);
-    }
-
     @Bean
     @ConditionalOnMissingBean
     public RedisOps redisOps(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
@@ -77,6 +69,14 @@ public class RedisConfiguration {
         RedisMessageListenerContainer messageListenerContainer = new RedisMessageListenerContainer();
         messageListenerContainer.setConnectionFactory(redisConnectionFactory);
         return messageListenerContainer;
+    }
+
+    @Bean("redisCacheTemplate")
+    @ConditionalOnBean(RedisTemplate.class)
+    @Primary
+    public CacheService redisCacheTemplate(RedisTemplate<String, Object> redisTemplate, RedisOps redisOps) {
+        log.info("Autowired redisCacheTemplate success!");
+        return new RedisCacheImpl(redisTemplate, redisOps);
     }
 
 }

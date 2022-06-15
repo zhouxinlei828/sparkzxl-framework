@@ -12,6 +12,10 @@
     <artifactId>sparkzxl-distributed-lock-core</artifactId>
     <dependencies>
         <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
