@@ -73,7 +73,7 @@ public class LockTemplate implements InitializingBean {
             } while (System.currentTimeMillis() - start < acquireTimeout);
         } catch (InterruptedException e) {
             log.error("lock error", e);
-            throw new LockException();
+            throw new LockException(e.getMessage());
         }
         return null;
     }

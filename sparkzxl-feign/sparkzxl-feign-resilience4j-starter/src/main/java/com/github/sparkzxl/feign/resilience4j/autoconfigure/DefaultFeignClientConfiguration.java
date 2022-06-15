@@ -5,12 +5,12 @@ import com.github.sparkzxl.feign.resilience4j.decoder.DefaultErrorDecoder;
 import feign.Feign;
 import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
-import io.github.resilience4j.core.ConfigurationNotFoundException;
 import io.github.resilience4j.feign.FeignDecorators;
 import io.github.resilience4j.feign.Resilience4jFeign;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -39,13 +39,12 @@ public class DefaultFeignClientConfiguration {
     @Bean
     public FeignDecorators.Builder defaultBuilder(Environment environment, RetryRegistry retryRegistry) {
         String name = environment.getProperty("feign.client.name");
-        Retry retry;
-        try {
-            assert name != null;
-            retry = retryRegistry.retry(name, name);
-        } catch (ConfigurationNotFoundException e) {
-            retry = retryRegistry.retry(name);
-        }
+        assert name != null;
+        Retry retry = Try.of(() -> retryRegistry.retry(name, name))
+                .getOrElseGet(throwable -> {
+                    log.error("ConfigurationNotFoundException：", throwable);
+                    return retryRegistry.retry(name);
+                });
         //覆盖其中的异常判断，只针对 feign.RetryableException 进行重试，所有需要重试的异常我们都在 DefaultErrorDecoder 以及 Resilience4jFeignClient 中封装成了 RetryableException
         retry = Retry.of(name, RetryConfig.from(retry.getRetryConfig()).retryOnException(throwable -> throwable instanceof feign.RetryableException).build());
         return FeignDecorators.builder().withRetry(retry);

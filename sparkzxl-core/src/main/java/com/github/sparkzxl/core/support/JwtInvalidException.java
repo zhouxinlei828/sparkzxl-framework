@@ -22,6 +22,10 @@ public class JwtInvalidException extends BaseUncheckedException {
         super(ExceptionErrorCode.TOKEN_VALID_ERROR.getErrorCode(), message);
     }
 
+    public JwtInvalidException(Throwable cause) {
+        super(cause);
+    }
+
     @Override
     public Throwable fillInStackTrace() {
         return this;

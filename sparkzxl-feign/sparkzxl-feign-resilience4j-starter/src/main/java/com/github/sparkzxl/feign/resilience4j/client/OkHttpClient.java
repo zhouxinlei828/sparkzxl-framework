@@ -47,6 +47,7 @@ public class OkHttpClient implements Client {
                 if (field.equalsIgnoreCase(HttpHeaders.CONTENT_TYPE)) {
                     mediaType = MediaType.parse(value);
                     if (input.charset() != null) {
+                        assert mediaType != null;
                         mediaType.charset(input.charset());
                     }
                 }

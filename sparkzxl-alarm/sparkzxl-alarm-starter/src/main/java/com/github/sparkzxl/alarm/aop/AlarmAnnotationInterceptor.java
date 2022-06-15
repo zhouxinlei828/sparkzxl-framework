@@ -42,46 +42,43 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
     @Nullable
     @Override
     public Object invoke(@Nonnull MethodInvocation invocation) throws Throwable {
+        //fix 使用其他aop组件时,aop切了两次.
+        Class<?> cls = AopProxyUtils.ultimateTargetClass(Objects.requireNonNull(invocation.getThis()));
+        if (!cls.equals(invocation.getThis().getClass())) {
+            return invocation.proceed();
+        }
+        Alarm annotation = invocation.getMethod().getAnnotation(Alarm.class);
+        String templateId = annotation.templateId();
+        AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
+        StringBuilder templateContentBuilder = new StringBuilder(alarmTemplate.getTemplateContent());
+        MessageSubType messageSubType = annotation.messageType();
+        AlarmRequest alarmRequest = new AlarmRequest();
+        alarmRequest.setTitle(annotation.name());
+        alarmRequest.setContent(alarmTemplate.getTemplateContent());
+        IAlarmVariablesHandler alarmVariablesHandler = getVariablesHandler(annotation.variablesBeanName());
+        Map<String, Object> alarmParamMap = alarmVariablesHandler.getVariables(invocation, annotation);
+        if (messageSubType.equals(MessageSubType.TEXT)) {
+            templateContentBuilder.append(AlarmConstant.TEXT_HTTP_STATUS_TEMPLATE);
+        } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
+            templateContentBuilder.append(AlarmConstant.MARKDOWN_HTTP_STATUS_TEMPLATE);
+        }
         return Try.of(() -> {
-            //fix 使用其他aop组件时,aop切了两次.
-            Class<?> cls = AopProxyUtils.ultimateTargetClass(Objects.requireNonNull(invocation.getThis()));
-            if (!cls.equals(invocation.getThis().getClass())) {
-                return invocation.proceed();
-            }
-            Object proceed = null;
-            Alarm annotation = invocation.getMethod().getAnnotation(Alarm.class);
-            String templateId = annotation.templateId();
-            AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
-            StringBuilder templateContentBuilder = new StringBuilder(alarmTemplate.getTemplateContent());
-            MessageSubType messageSubType = annotation.messageType();
-            AlarmRequest alarmRequest = new AlarmRequest();
-            alarmRequest.setTitle(annotation.name());
-            alarmRequest.setContent(alarmTemplate.getTemplateContent());
-            IAlarmVariablesHandler alarmVariablesHandler = getVariablesHandler(annotation.variablesBeanName());
-            Map<String, Object> alarmParamMap = alarmVariablesHandler.getVariables(invocation, annotation);
+            alarmParamMap.put("state", "✅");
+            return invocation.proceed();
+        }).onFailure(Throwable.class, throwable -> {
+            log.info("请求接口发生异常 : [{}]", throwable.getMessage());
             if (messageSubType.equals(MessageSubType.TEXT)) {
-                templateContentBuilder.append(AlarmConstant.TEXT_HTTP_STATUS_TEMPLATE);
+                templateContentBuilder.append(AlarmConstant.TEXT_ERROR_TEMPLATE);
             } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
-                templateContentBuilder.append(AlarmConstant.MARKDOWN_HTTP_STATUS_TEMPLATE);
+                templateContentBuilder.append(AlarmConstant.MARKDOWN_ERROR_TEMPLATE);
             }
-            try {
-                proceed = invocation.proceed();
-                alarmParamMap.put("state", "✅");
-            } catch (Throwable e) {
-                log.info("请求接口发生异常 : [{}]", e.getMessage());
-                if (messageSubType.equals(MessageSubType.TEXT)) {
-                    templateContentBuilder.append(AlarmConstant.TEXT_ERROR_TEMPLATE);
-                } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
-                    templateContentBuilder.append(AlarmConstant.MARKDOWN_ERROR_TEMPLATE);
-                }
-                alarmParamMap.put("state", "❌");
-                alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(e));
-            }
+            alarmParamMap.put("state", "❌");
+            alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(throwable));
+        }).andFinally(() -> {
             alarmRequest.setContent(templateContentBuilder.toString());
             alarmRequest.setVariables(alarmParamMap);
-            this.alarmSender.send(messageSubType, alarmRequest);
-            return proceed;
-        }).getOrElseThrow(throwable -> throwable);
+            alarmSender.send(messageSubType, alarmRequest);
+        }).get();
 
     }
 

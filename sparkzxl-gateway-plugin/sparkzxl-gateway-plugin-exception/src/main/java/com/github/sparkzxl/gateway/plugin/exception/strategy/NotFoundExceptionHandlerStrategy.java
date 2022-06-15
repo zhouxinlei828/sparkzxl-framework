@@ -36,8 +36,7 @@ public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrateg
             String applicationName = OptionalBean.ofNullable(serviceName).orElseGet(() -> "unKnownServer");
             message = StrFormatter.format(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMessage(), applicationName);
         }
-        Response<?> responseResult =
-                Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        Response<?> responseResult = Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(HttpStatus.NOT_FOUND, response);
         log.debug("Handle NotFoundException:{},Result:{}", throwable.getMessage(), result);

@@ -104,10 +104,9 @@ public class ExceptionHandlerStrategyAdapter implements ExceptionHandlerStrategy
     }
 
     private String getDetailedErrorMessage(Object bean, String message) {
-        StringBuilder sb = new StringBuilder(message).append("\n");
-        sb.append("HandlerMethod details: \n");
-        sb.append("Bean [").append(bean.getClass().getName()).append("]\n");
-        sb.append("Method [").append(this.method.toGenericString()).append("]\n");
-        return sb.toString();
+        return message + "\n" +
+                "HandlerMethod details: \n" +
+                "Bean [" + bean.getClass().getName() + "]\n" +
+                "Method [" + this.method.toGenericString() + "]\n";
     }
 }

@@ -77,25 +77,21 @@ public class Resilience4jFeignClient implements Client {
         ThreadPoolBulkhead finalThreadPoolBulkhead = threadPoolBulkhead;
         CircuitBreaker finalCircuitBreaker = circuitBreaker;
         Supplier<CompletionStage<Response>> completionStageSupplier = threadPoolBulkhead.decorateSupplier(
-                Resilience4jUtil.decorateSupplier(circuitBreaker, () -> {
-                    try {
-                        if (log.isDebugEnabled()) {
-                            log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
-                                    request.httpMethod(),
-                                    request.url(),
-                                    serviceInstanceId,
-                                    JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
-                                    serviceInstanceMethodId,
-                                    JSON.toJSONString(finalCircuitBreaker.getMetrics())
-                            );
-                        }
-                        Response execute = okHttpClient.execute(request, options);
-                        log.info("response: {} - {}", execute.status(), execute.reason());
-                        return execute;
-                    } catch (IOException e) {
-                        throw new CompletionException(e);
+                Resilience4jUtil.decorateSupplier(circuitBreaker, () -> Try.of(() -> {
+                    if (log.isDebugEnabled()) {
+                        log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
+                                request.httpMethod(),
+                                request.url(),
+                                serviceInstanceId,
+                                JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
+                                serviceInstanceMethodId,
+                                JSON.toJSONString(finalCircuitBreaker.getMetrics())
+                        );
                     }
-                }));
+                    Response execute = okHttpClient.execute(request, options);
+                    log.info("response: {} - {}", execute.status(), execute.reason());
+                    return execute;
+                }).getOrElseThrow(throwable -> new CompletionException(throwable))));
         try {
             return Try.ofSupplier(completionStageSupplier).get().toCompletableFuture().join();
         } catch (BulkheadFullException e) {

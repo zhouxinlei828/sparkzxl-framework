@@ -26,7 +26,9 @@ public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerS
         Response<?> responseResult = Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), throwable.getMessage());
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(responseStatusException.getStatus(), response);
-        log.debug("[ResponseStatusExceptionHandlerStrategy]Handle Exception:{},Result:{}", throwable.getMessage(), result);
+        if (log.isDebugEnabled()) {
+            log.debug("Handle Exception:{},Result:{}", throwable.getMessage(), result);
+        }
         return result;
     }
 }

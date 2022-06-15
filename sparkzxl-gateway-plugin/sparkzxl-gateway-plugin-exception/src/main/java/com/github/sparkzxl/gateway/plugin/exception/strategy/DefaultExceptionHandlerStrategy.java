@@ -28,7 +28,7 @@ public class DefaultExceptionHandlerStrategy implements ExceptionHandlerStrategy
         if (log.isDebugEnabled()) {
             log.debug("Handle Throwable:{}", ExceptionUtils.getStackTrace(throwable));
         }
-        log.error("Handle Throwable Message:{}", ExceptionUtils.getRootCause(throwable));
+        log.error("Handle Throwable Message:{}", ExceptionUtils.getStackTrace(throwable));
         return result;
     }
 }
