@@ -3,8 +3,8 @@ package com.github.sparkzxl.feign.support;
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.base.result.Response;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import feign.*;
 import feign.codec.DecodeException;
@@ -27,7 +27,7 @@ public class FeignExceptionHandler implements Ordered {
     @ExceptionHandler(SocketTimeoutException.class)
     public Response<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error("SocketTimeoutException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
+        return Response.fail(ResultErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(RetryableException.class)
@@ -36,8 +36,8 @@ public class FeignExceptionHandler implements Ordered {
         String applicationName =
                 OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
                         .orElseGet(() -> "unKnownServer");
-        String message = StrFormatter.format(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorMessage(), applicationName);
-        return Response.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
+        String message = StrFormatter.format(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorMsg(), applicationName);
+        return Response.fail(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
     }
 
     @ExceptionHandler(FeignException.ServiceUnavailable.class)
@@ -46,14 +46,14 @@ public class FeignExceptionHandler implements Ordered {
         String applicationName =
                 OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
                         .orElseGet(() -> "unKnownServer");
-        String message = StrFormatter.format(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMessage(), applicationName);
-        return Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        String message = StrFormatter.format(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
+        return Response.fail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
     }
 
     @ExceptionHandler(DecodeException.class)
     public Response<?> handleDecodeException(DecodeException e) {
         log.error("DecodeException异常:", e);
-        return Response.failDetail(ExceptionErrorCode.DECODE_EXCEPTION.getErrorCode(), ExceptionErrorCode.DECODE_EXCEPTION.getErrorMessage());
+        return Response.fail(ResultErrorCode.DECODE_EXCEPTION.getErrorCode(), ResultErrorCode.DECODE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RemoteCallTransferException.class)
@@ -62,8 +62,8 @@ public class FeignExceptionHandler implements Ordered {
         String applicationName =
                 OptionalBean.ofNullable(e.request()).getBean(Request::requestTemplate).getBean(RequestTemplate::feignTarget).getBean(Target::name)
                         .orElseGet(() -> "unKnownServer");
-        String message = StrFormatter.format("【{}】异常,{}", applicationName, e.getErrorMessage());
-        return Response.failDetail(e.getErrorCode(), message);
+        String message = StrFormatter.format("【{}】异常,{}", applicationName, e.getErrorMsg());
+        return Response.fail(e.getErrorCode(), message);
     }
 
     @Override

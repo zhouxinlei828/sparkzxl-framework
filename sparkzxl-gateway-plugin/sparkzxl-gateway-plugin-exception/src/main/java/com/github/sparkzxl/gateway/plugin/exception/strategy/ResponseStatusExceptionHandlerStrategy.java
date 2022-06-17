@@ -1,8 +1,8 @@
 package com.github.sparkzxl.gateway.plugin.exception.strategy;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.base.result.Response;
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,7 +23,7 @@ public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerS
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
         ResponseStatusException responseStatusException = (ResponseStatusException) throwable;
-        Response<?> responseResult = Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), throwable.getMessage());
+        Response<?> responseResult = Response.fail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), throwable.getMessage());
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(responseStatusException.getStatus(), response);
         if (log.isDebugEnabled()) {

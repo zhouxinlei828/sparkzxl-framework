@@ -18,7 +18,7 @@ public class DefaultAlarmExceptionCallback implements AlarmExceptionCallback {
         AlarmException exception = alarmCallback.getException();
         log.error("异常静默处理:{}-{}.",
                 exception.getErrorCode(),
-                exception.getErrorMessage()
+                exception.getErrorMsg()
         );
     }
 }

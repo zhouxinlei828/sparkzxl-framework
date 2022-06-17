@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 
 /**
  * description: 参数异常
@@ -14,16 +14,16 @@ public class ArgumentException extends BaseUncheckedException {
         super(cause);
     }
 
-    public ArgumentException(String errorMessage) {
-        super(ExceptionErrorCode.PARAM_VALID_ERROR.getErrorCode(), errorMessage);
+    public ArgumentException(String errorMsg) {
+        super(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), errorMsg);
     }
 
-    public ArgumentException(String errorMessage, Throwable cause) {
-        super(ExceptionErrorCode.PARAM_VALID_ERROR.getErrorCode(), errorMessage, cause);
+    public ArgumentException(String errorMsg, Throwable cause) {
+        super(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), errorMsg, cause);
     }
 
     public ArgumentException(final String format, Object... args) {
-        super(ExceptionErrorCode.PARAM_VALID_ERROR.getErrorCode(), format, args);
+        super(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), format, args);
     }
 
     @Override

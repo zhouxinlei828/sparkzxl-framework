@@ -1,6 +1,6 @@
 package com.github.sparkzxl.database.echo.manager;
 
-import com.github.sparkzxl.annotation.echo.EchoField;
+import com.github.sparkzxl.database.echo.annotation.EchoField;
 import com.google.common.base.Objects;
 import lombok.Data;
 import lombok.NoArgsConstructor;

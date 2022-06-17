@@ -3,8 +3,8 @@ package com.github.sparkzxl.gateway.plugin.common.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.base.result.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -53,15 +53,15 @@ public class ReactorHttpHelper {
     public static Mono<Void> error(ServerHttpResponse response, String code, String message) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        byte[] bytes = JSON.toJSONString(Response.failDetail(code, message)).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(Response.fail(code, message)).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }
 
-    public static Mono<Void> error(ServerHttpResponse response, ExceptionErrorCode exceptionErrorCode) {
+    public static Mono<Void> error(ServerHttpResponse response, ResultErrorCode resultErrorCode) {
         //指定编码，否则在浏览器中会中文乱码
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        byte[] bytes = JSON.toJSONString(Response.failDetail(exceptionErrorCode)).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(Response.fail(resultErrorCode)).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }

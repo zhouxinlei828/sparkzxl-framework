@@ -8,19 +8,11 @@ package com.github.sparkzxl.constant;
  */
 public class ConfigurationConstant {
 
-    public static final String DATA_PREFIX = "sparkzxl.data";
-    public static final String DATA_SOURCE_PREFIX = "sparkzxl.datasource";
-    public static final String DATA_SOURCE_DYNAMIC_PREFIX = "spring.datasource.dynamic";
-
-    public static final String MYBATIS_CUSTOM_PREFIX = "mybatis-plus.custom";
+    public static final String DATA_PREFIX = "mybatis-plus.data";
 
     public static final String DATA_ECHO_PREFIX = "echo";
 
-    public static final String DROOLS_PREFIX = "drools";
-
     public static final String ELASTICSEARCH_PREFIX = "elasticsearch";
-
-    public static final String FEIGN_SEATA_PREFIX = "feign.seata";
 
     public static final String XXL_JOB_PREFIX = "xxl-job";
 
@@ -30,24 +22,14 @@ public class ConfigurationConstant {
 
     public static final String RESOURCE_PREFIX = "sparkzxl.oauth2.resource";
 
-    public static final String GATEWAY_RESOURCE_PREFIX = "gateway.resource";
-
     public static final String OSS_PREFIX = "oss";
 
     public static final String SECURITY_PREFIX = "security";
 
-    public static final String KNIFE4J_PREFIX = "knife4j";
-
     public static final String WEB_PREFIX = "web";
-
-    public static final String ZOOKEEPER_PREFIX = "zookeeper";
-
-    public static final String BLACK_PREFIX = "gateway.black";
 
     public static final String DYNAMIC_MONGO_PREFIX = "spring.dynamic.mongodb";
 
     public static final String MONGO_PREFIX = "spring.data.mongodb";
-
-    public static final String RIBBON_PREFIX = "feign.ribbon.gray";
 
 }

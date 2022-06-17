@@ -1,10 +1,9 @@
 package com.github.sparkzxl.core.util;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.result.Response;
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.entity.response.IErrorCode;
-import com.github.sparkzxl.entity.response.Response;
-import com.github.sparkzxl.entity.response.ResponseCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +78,7 @@ public class HttpRequestUtils {
     }
 
     public static String readFromRequestWrapper(ContentCachingRequestWrapper requestWrapper) {
-        String charEncoding = requestWrapper.getCharacterEncoding() != null ? requestWrapper.getCharacterEncoding() : StrPool.UTF8;
+        String charEncoding = requestWrapper.getCharacterEncoding();
         try {
             return new String(requestWrapper.getContentAsByteArray(), charEncoding);
         } catch (UnsupportedEncodingException e) {
@@ -89,10 +88,8 @@ public class HttpRequestUtils {
 
     public static String parameterMapToString(Map<String, String[]> parameterMap) {
         return parameterMap.entrySet().stream()
-                .map(e ->
-                        e.getKey() + StrPool.EQUALS +
-                                Arrays.stream(e.getValue())
-                                        .collect(Collectors.joining(StrPool.COMMA, StringUtils.EMPTY, StringUtils.EMPTY)))
+                .map(e -> e.getKey() + StrPool.EQUALS +
+                        Arrays.stream(e.getValue()).collect(Collectors.joining(StrPool.COMMA, StringUtils.EMPTY, StringUtils.EMPTY)))
                 .collect(Collectors.joining(StrPool.AMPERSAND, StringUtils.EMPTY, StringUtils.EMPTY));
     }
 
@@ -181,51 +178,47 @@ public class HttpRequestUtils {
 
     public static void failResponse(HttpServletResponse response, IErrorCode errorCode) {
         writeResponseOutMsg(response,
-                ResponseCode.FAILURE.getCode(),
-                ResponseCode.FAILURE.getMessage(),
+                false,
+                null,
                 null,
                 errorCode.getErrorCode(),
-                errorCode.getErrorMessage());
+                errorCode.getErrorMsg());
     }
 
     public static void failResponse(HttpServletResponse response, String errorCode, String errorMsg) {
         writeResponseOutMsg(response,
-                ResponseCode.FAILURE.getCode(),
-                ResponseCode.FAILURE.getMessage(),
+                false,
+                null,
                 null,
                 errorCode,
                 errorMsg);
     }
 
     public static void successResponse(HttpServletResponse response, String message) {
-        writeResponseOutMsg(response, ResponseCode.SUCCESS.getCode(), message, null, null, null);
+        writeResponseOutMsg(response, true, message, null, null, null);
     }
 
 
     public static <T> void successResponse(HttpServletResponse response, String message, T data) {
-        writeResponseOutMsg(response, ResponseCode.SUCCESS.getCode(), message, data, null, null);
+        writeResponseOutMsg(response, true, message, data, null, null);
     }
 
-    public static <T> void writeResponseOutMsg(HttpServletResponse response, int code, String message, T data, String errorCode, String errorMsg) {
+    public static <T> void writeResponseOutMsg(HttpServletResponse response, boolean success, String message, T data, String errorCode, String errorMsg) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JsonUtil.toJson(Response.response(code, message, data, errorCode, errorMsg)));
+            Response<?> result;
+            if (success) {
+                result = Response.success(message, data);
+            } else {
+                result = Response.fail(errorCode, errorMsg);
+            }
+            response.getWriter().println(JsonUtil.toJson(result));
             response.getWriter().flush();
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
-
-    public static void clearResponseResult() {
-        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
-        com.github.sparkzxl.annotation.response.Response response =
-                (com.github.sparkzxl.annotation.response.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        if (response != null) {
-            servletRequest.removeAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        }
-    }
-
 }

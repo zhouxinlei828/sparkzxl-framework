@@ -20,21 +20,21 @@ public class RemoteCallTransferException extends FeignException {
 
     private String errorCode;
 
-    private String errorMessage;
+    private String errorMsg;
 
     private Object object;
 
-    public RemoteCallTransferException(int status, String errorCode, String errorMessage, Object object, Request request) {
-        super(status, errorMessage, request);
+    public RemoteCallTransferException(int status, String errorCode, String errorMsg, Object object, Request request) {
+        super(status, errorMsg, request);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
         this.object = object;
     }
 
-    public RemoteCallTransferException(int status, String errorCode, String errorMessage, Throwable cause, Object object, Request request) {
-        super(status, errorMessage, request, cause);
+    public RemoteCallTransferException(int status, String errorCode, String errorMsg, Throwable cause, Object object, Request request) {
+        super(status, errorMsg, request, cause);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
         this.object = object;
     }
 }

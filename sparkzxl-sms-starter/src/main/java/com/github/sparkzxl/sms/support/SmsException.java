@@ -20,7 +20,7 @@ public class SmsException extends RuntimeException {
 
     private String errorCode;
 
-    private String errorMessage;
+    private String errorMsg;
 
 
     public SmsException(Throwable cause) {
@@ -34,7 +34,7 @@ public class SmsException extends RuntimeException {
 
     public SmsException(SmsExceptionCodeEnum smsExceptionCodeEnum) {
         this.errorCode = smsExceptionCodeEnum.getErrorCode();
-        this.errorMessage = smsExceptionCodeEnum.getErrorMessage();
+        this.errorMsg = smsExceptionCodeEnum.getErrorMsg();
     }
 
 }

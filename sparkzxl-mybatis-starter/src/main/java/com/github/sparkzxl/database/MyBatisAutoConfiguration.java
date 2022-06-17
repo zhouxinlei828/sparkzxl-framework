@@ -1,8 +1,6 @@
 package com.github.sparkzxl.database;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.baidu.fsg.uid.UidGenerator;
 import com.baidu.fsg.uid.buffer.RejectedPutBufferHandler;
@@ -13,19 +11,17 @@ import com.baidu.fsg.uid.impl.HuToolUidGenerator;
 import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.*;
 import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
 import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
+import com.github.sparkzxl.database.plugins.GlobalLineHandlerInterceptor;
 import com.github.sparkzxl.database.plugins.SchemaInterceptor;
 import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
-import com.github.sparkzxl.database.plugins.GlobalLineHandlerInterceptor;
-import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.DataProperties;
+import com.github.sparkzxl.database.send.DefaultSendNoticeService;
+import com.github.sparkzxl.database.send.ISendNoticeService;
 import com.github.sparkzxl.database.support.DataBaseExceptionHandler;
 import com.google.common.collect.Lists;
 import com.p6spy.engine.spy.P6DataSource;
@@ -49,14 +45,13 @@ import java.util.List;
  * @author zhouxinlei7
  */
 @Configuration
-@EnableConfigurationProperties({CustomMybatisProperties.class, DataProperties.class})
+@EnableConfigurationProperties({DataProperties.class})
 @Import(DataBaseExceptionHandler.class)
 @Slf4j
 @RequiredArgsConstructor
 public class MyBatisAutoConfiguration {
 
     public static final String DATABASE_PREFIX = "default";
-    private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
 
     @Bean
@@ -121,12 +116,24 @@ public class MyBatisAutoConfiguration {
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
         // 分页插件
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(customMybatisProperties.getDbType()));
+        PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
+        // 单页分页条数限制
+        paginationInterceptor.setMaxLimit(dataProperties.getMaxLimit());
+        // 数据库类型
+        paginationInterceptor.setDbType(dataProperties.getDbType());
+        // 溢出总页数后是否进行处理
+        paginationInterceptor.setOverflow(dataProperties.getOverflow());
+        // 生成 countSql 优化掉 join 现在只支持 left join
+        paginationInterceptor.setOptimizeJoin(dataProperties.getOptimizeJoin());
+        interceptor.addInnerInterceptor(paginationInterceptor);
+        //防止全表更新与删除插件
+        if (dataProperties.getIsBlockAttack()) {
+            interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
+        }
         // sql性能规范插件
         if (dataProperties.getIsIllegalSql()) {
             interceptor.addInnerInterceptor(new IllegalSQLInnerInterceptor());
         }
-
         return interceptor;
     }
 
@@ -154,12 +161,6 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
-    public Snowflake snowflake() {
-        return IdUtil.getSnowflake(dataProperties.getWorkerId(),
-                dataProperties.getDataCenterId());
-    }
-
-    @Bean
     @ConditionalOnMissingBean
     public MetaObjectHandler metaDataHandler() {
         return new MetaDataHandler();
@@ -168,6 +169,12 @@ public class MyBatisAutoConfiguration {
     @Bean
     public BaseSqlInjector sqlInjector() {
         return new BaseSqlInjector();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ISendNoticeService.class)
+    public ISendNoticeService sendNoticeService() {
+        return new DefaultSendNoticeService();
     }
 
     @Bean

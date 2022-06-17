@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.Getter;
 
 /**
@@ -19,16 +19,10 @@ public class JwtInvalidException extends BaseUncheckedException {
     }
 
     public JwtInvalidException(String message) {
-        super(ExceptionErrorCode.TOKEN_VALID_ERROR.getErrorCode(), message);
+        super(ResultErrorCode.TOKEN_VALID_ERROR.getErrorCode(), message);
     }
 
     public JwtInvalidException(Throwable cause) {
         super(cause);
     }
-
-    @Override
-    public Throwable fillInStackTrace() {
-        return this;
-    }
-
 }

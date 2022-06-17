@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.resilience4j;
 
 import com.github.sparkzxl.feign.exception.RemoteCallException;
-import com.github.sparkzxl.feign.resilience4j.annoation.RetryableMethod;
+import com.github.sparkzxl.feign.annotation.RetryableMethod;
 import feign.Request;
 import feign.Response;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;

@@ -2,7 +2,7 @@ package com.github.sparkzxl.user.manager;
 
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: 用户状态管理实现
@@ -52,7 +51,7 @@ public class DefaultUserStateManager implements UserStateManager {
             authUserInfo = cacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
         if (ObjectUtils.isEmpty(authUserInfo)) {
-            ExceptionAssert.failure(ExceptionErrorCode.USER_NOT_FOUND);
+            ExceptionAssert.failure(ResultErrorCode.USER_NOT_FOUND);
         }
         return authUserInfo;
     }

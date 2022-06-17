@@ -52,10 +52,10 @@ public class AlarmRobot extends AbstractAlarmSender {
             MsgType msgType = messageSubType.msgType(alarmType, request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
-                String errorMessage = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMessage(),
+                String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
                         msgType.getAlarmType().getType(),
                         msgType.getAlarmType().getType());
-                throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMessage);
+                throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMsg);
             }
             return alarmExecutor.send(msgType, request.getVariables());
         }).get();
@@ -78,10 +78,10 @@ public class AlarmRobot extends AbstractAlarmSender {
             MsgType msgType = messageSubType.msgType(alarmType, request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
-                String errorMessage = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMessage(),
+                String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
                         msgType.getAlarmType().getType(),
                         msgType.getAlarmType().getType());
-                throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMessage);
+                throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMsg);
             }
             return alarmExecutor.designatedRobotSend(robotId, msgType, request.getVariables());
         }).get();

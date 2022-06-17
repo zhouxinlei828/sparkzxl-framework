@@ -10,6 +10,11 @@
     <artifactId>sparkzxl-entity</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-annotations</artifactId>
+            <version>2.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-annotations</artifactId>
         </dependency>

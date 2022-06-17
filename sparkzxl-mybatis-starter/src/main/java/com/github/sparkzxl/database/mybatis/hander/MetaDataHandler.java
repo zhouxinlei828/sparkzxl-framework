@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.github.sparkzxl.constant.EntityConstant;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.util.ReflectObjectUtil;
+import com.github.sparkzxl.core.util.ReflectionUtil;
 import com.github.sparkzxl.core.util.StrPool;
 import lombok.Getter;
 import lombok.Setter;
@@ -96,14 +96,14 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param targetObject 目标对象
      */
     private void extractId(MetaObject metaObject, Object targetObject) {
-        boolean idExistClass = ReflectObjectUtil.existProperty(targetObject, EntityConstant.ID);
+        boolean idExistClass = ReflectionUtil.existProperty(targetObject, EntityConstant.ID);
         if (idExistClass) {
             if (uidGenerator == null) {
                 // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
                 uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
             }
             Long id = uidGenerator.getUid();
-            Object idVal = ReflectObjectUtil.getValueByKey(targetObject, EntityConstant.ID);
+            Object idVal = ReflectionUtil.getValueByKey(targetObject, EntityConstant.ID);
             if (ObjectUtils.isEmpty(idVal)) {
                 idVal = String.class.getName().equals(metaObject.getGetterType(EntityConstant.ID).getTypeName()) ? String.valueOf(id) : id;
                 this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
@@ -151,9 +151,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param field        字段属性
      */
     private void extractUserId(MetaObject metaObject, Object targetObject, String field) {
-        boolean userIdExistClass = ReflectObjectUtil.existProperty(targetObject, field);
+        boolean userIdExistClass = ReflectionUtil.existProperty(targetObject, field);
         if (userIdExistClass) {
-            Object userIdVal = ReflectObjectUtil.getValueByKey(targetObject, field);
+            Object userIdVal = ReflectionUtil.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(userIdVal) || userIdVal.equals(0)) {
                 Class<?> userIdClass = metaObject.getGetterType(field);
                 userIdVal = RequestLocalContextHolder.getUserId(userIdClass);
@@ -170,9 +170,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param field        字段属性
      */
     private void extractUserName(MetaObject metaObject, Object targetObject, String field) {
-        boolean userNameExistClass = ReflectObjectUtil.existProperty(targetObject, field);
+        boolean userNameExistClass = ReflectionUtil.existProperty(targetObject, field);
         if (userNameExistClass) {
-            Object userNameVal = ReflectObjectUtil.getValueByKey(targetObject, field);
+            Object userNameVal = ReflectionUtil.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(userNameVal)) {
                 userNameVal = RequestLocalContextHolder.getName();
                 this.setFieldValByName(field, userNameVal, metaObject);
@@ -188,9 +188,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param field        字段属性
      */
     private void extractDate(MetaObject metaObject, Object targetObject, String field) {
-        boolean dateExistClass = ReflectObjectUtil.existProperty(targetObject, field);
+        boolean dateExistClass = ReflectionUtil.existProperty(targetObject, field);
         if (dateExistClass) {
-            Object dateVal = ReflectObjectUtil.getValueByKey(targetObject, field);
+            Object dateVal = ReflectionUtil.getValueByKey(targetObject, field);
             if (ObjectUtils.isEmpty(dateVal)) {
                 Class<?> dateClass = metaObject.getGetterType(field);
                 dateVal = Date.class.equals(dateClass) ? new Date() : LocalDateTime.now();

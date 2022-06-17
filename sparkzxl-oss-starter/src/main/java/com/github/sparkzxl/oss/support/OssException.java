@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oss.support;
 
 import com.github.sparkzxl.core.support.BaseException;
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 
 /**
  * description: oss异常
@@ -14,7 +14,7 @@ public class OssException extends RuntimeException implements BaseException {
     /**
      * 异常信息
      */
-    private final String errorMessage;
+    private final String errorMsg;
 
     /**
      * 具体异常码
@@ -22,22 +22,22 @@ public class OssException extends RuntimeException implements BaseException {
     private final String errorCode;
 
 
-    public OssException(String errorMessage, String errorCode) {
-        super(errorMessage);
-        this.errorMessage = errorMessage;
+    public OssException(String errorCode, String errorMsg) {
+        super(errorMsg);
+        this.errorMsg = errorMsg;
         this.errorCode = errorCode;
     }
 
     public OssException(IErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getErrorMsg());
         this.errorCode = errorCode.getErrorCode();
-        this.errorMessage = errorCode.getErrorMessage();
+        this.errorMsg = errorCode.getErrorMsg();
     }
 
 
     @Override
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
     @Override

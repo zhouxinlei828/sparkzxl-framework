@@ -4,7 +4,7 @@ import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
@@ -17,7 +17,6 @@ import com.github.sparkzxl.gateway.plugin.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.handle.JwtRuleHandle;
 import com.github.sparkzxl.gateway.plugin.rule.RuleData;
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -68,7 +67,7 @@ public class JwtFilter extends AbstractGlobalFilter {
                 return chain.filter(converter(exchange, jwtBody, ruleHandle.getConverter()));
             }
         }
-        return ReactorHttpHelper.error(exchange.getResponse(), ExceptionErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
+        return ReactorHttpHelper.error(exchange.getResponse(), ResultErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
     }
 
     @Override

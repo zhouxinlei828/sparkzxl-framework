@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.exception;
 
 import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,29 +22,29 @@ public class AlarmException extends RuntimeException {
     /**
      * 异常信息
      */
-    private String errorMessage;
+    private String errorMsg;
 
-    public AlarmException(String errorCode, String errorMessage) {
-        super(errorMessage);
+    public AlarmException(String errorCode, String errorMsg) {
+        super(errorMsg);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
     }
 
     public AlarmException(IErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getErrorMsg());
         this.errorCode = errorCode.getErrorCode();
-        this.errorMessage = errorCode.getErrorMessage();
+        this.errorMsg = errorCode.getErrorMsg();
     }
 
     public AlarmException(Throwable cause) {
         super(cause);
         this.errorCode = AlarmResponseCodeEnum.FAILED.getErrorCode();
-        this.errorMessage = cause.getMessage();
+        this.errorMsg = cause.getMessage();
     }
 
-    public AlarmException(Throwable cause,String errorCode, String errorMessage) {
+    public AlarmException(Throwable cause, String errorCode, String errorMsg) {
         super(cause);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
     }
 }

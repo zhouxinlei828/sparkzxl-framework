@@ -13,7 +13,7 @@ public interface BaseException {
      *
      * @return String
      */
-    String getErrorMessage();
+    String getErrorMsg();
 
     /**
      * 返回异常编码

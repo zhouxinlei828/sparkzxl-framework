@@ -1,6 +1,6 @@
 package com.github.sparkzxl.distributed.dubbo.filter;
 
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.support.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.common.constants.CommonConstants;
@@ -65,7 +65,7 @@ public class DubboExceptionFilter extends ListenableFilter {
                 detailMessage.append(constraintViolation.getMessage());
             }
             // 返回异常
-            return new BizException(ExceptionErrorCode.PARAM_VALID_ERROR, detailMessage.toString());
+            return new BizException(ResultErrorCode.PARAM_VALID_ERROR, detailMessage.toString());
         }
 
     }

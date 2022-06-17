@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.support.BizException;
+import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.util.StrPool;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class JsonUtil {
             return null;
         }
         return Try.of(() -> getInstance().writeValueAsString(value)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), e.getMessage()));
+                new BizException(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), e.getMessage()));
     }
 
     public static <T> String toJsonPretty(Object value) {
@@ -43,7 +44,7 @@ public class JsonUtil {
             return null;
         }
         return Try.of(() -> getInstance().writerWithDefaultPrettyPrinter().writeValueAsString(value)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), e.getMessage()));
+                new BizException(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), e.getMessage()));
     }
 
     public static byte[] toJsonAsBytes(Object object) {
@@ -51,7 +52,7 @@ public class JsonUtil {
             return null;
         }
         return Try.of(() -> getInstance().writeValueAsBytes(object)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), e.getMessage()));
+                new BizException(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), e.getMessage()));
     }
 
     public static <T> T parse(String content, Class<T> valueType) {
@@ -59,7 +60,7 @@ public class JsonUtil {
             return null;
         }
         return Try.of(() -> getInstance().readValue(content, valueType)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T parse(String content, TypeReference<T> typeReference) {
@@ -67,27 +68,27 @@ public class JsonUtil {
             return null;
         }
         return Try.of(() -> getInstance().readValue(content, typeReference)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T parse(byte[] bytes, Class<T> valueType) {
         return Try.of(() -> getInstance().readValue(bytes, valueType)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T parse(byte[] bytes, TypeReference<T> typeReference) {
         return Try.of(() -> getInstance().readValue(bytes, typeReference)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T parse(InputStream in, Class<T> valueType) {
         return Try.of(() -> getInstance().readValue(in, valueType)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T parse(InputStream in, TypeReference<T> typeReference) {
         return Try.of(() -> getInstance().readValue(in, typeReference)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> List<T> parseArray(final String content, Class<T> valueTypeRef) {
@@ -99,18 +100,18 @@ public class JsonUtil {
             List<Map<String, Object>> list = getInstance().readValue(jsonStr, new TypeReference<List<Map<String, Object>>>() {});
             return list.stream().map((map) -> toPojo(map, valueTypeRef)).collect(Collectors.toList());
         }).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static Map toMap(String content) {
         return Try.of(() -> getInstance().readValue(content, Map.class)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> Map toMap(T val) {
         ObjectMapper instance = getInstance();
         return Try.of(() -> instance.readValue(instance.writeValueAsString(val), Map.class)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> Map<String, T> toMap(String content, Class<T> valueTypeRef) {
@@ -121,7 +122,7 @@ public class JsonUtil {
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
         }).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T, E> Map<String, T> toMap(E data, Class<T> valueTypeRef) {
@@ -131,37 +132,37 @@ public class JsonUtil {
             Map<String, T> result = new HashMap<>(map.size());
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
-        }).getOrElseThrow(e -> new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+        }).getOrElseThrow(e -> new JwtParseException(e.getMessage()));
     }
 
     public static <T> T toPojo(Map fromValue, Class<T> toValueType) {
         return Try.of(() -> getInstance().convertValue(fromValue, toValueType)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T toPojo(String data, Class<T> toValueType) {
         return Try.of(() -> getInstance().readValue(data, toValueType)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T toPojo(JsonNode resultNode, Class<T> toValueType) {
         return Try.of(() -> getInstance().convertValue(resultNode, toValueType)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static JsonNode readTree(String data) {
         return Try.of(() -> getInstance().readTree(data)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static JsonNode readTree(InputStream in) {
         return Try.of(() -> getInstance().readTree(in)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static JsonNode readTree(byte[] data) {
         return Try.of(() -> getInstance().readTree(data)).getOrElseThrow(e ->
-                new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage()));
+                new JwtParseException(e.getMessage()));
     }
 
     public static JsonNode readTree(JsonParser jsonParser) {
@@ -169,7 +170,7 @@ public class JsonUtil {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
             log.error("json readTree IOException：{}", e.getMessage());
-            throw new BizException(ExceptionErrorCode.JSON_PARSE_ERROR.getErrorCode(), e.getMessage());
+            throw new JwtParseException(e.getMessage());
         }
     }
 
@@ -213,5 +214,4 @@ public class JsonUtil {
             return super.copy();
         }
     }
-
 }

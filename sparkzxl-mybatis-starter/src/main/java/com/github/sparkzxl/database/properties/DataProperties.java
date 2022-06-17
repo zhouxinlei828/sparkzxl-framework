@@ -3,6 +3,7 @@ package com.github.sparkzxl.database.properties;
 import com.baidu.fsg.uid.buffer.RejectedPutBufferHandler;
 import com.baidu.fsg.uid.buffer.RejectedTakeBufferHandler;
 import com.baidu.fsg.uid.buffer.RingBuffer;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
@@ -55,14 +56,33 @@ public class DataProperties {
     private String[] ignoreTable;
 
     /**
-     * 是否启用  sql性能规范插件
-     */
-    private Boolean isIllegalSql = false;
-
-    /**
      * 是否启用控制台sql记录
      */
     private Boolean p6spy = false;
+    /**
+     * 溢出总页数后是否进行处理
+     */
+    protected Boolean overflow = true;
+    /**
+     * 生成 countSql 优化掉 join 现在只支持 left join
+     */
+    protected Boolean optimizeJoin = true;
+    /**
+     * 数据库类型
+     */
+    private DbType dbType = DbType.MYSQL;
+    /**
+     * 分页大小限制
+     */
+    private long maxLimit = -1;
+    /**
+     * 是否启用  sql性能规范插件
+     */
+    private Boolean isIllegalSql = false;
+    /**
+     * 是否启用 防止全表更新与删除插件
+     */
+    private Boolean isBlockAttack = false;
 
     /**
      * id 类型

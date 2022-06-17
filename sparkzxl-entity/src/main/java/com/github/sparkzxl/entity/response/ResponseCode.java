@@ -16,12 +16,12 @@ public enum ResponseCode implements ICode {
     /**
      * 成功
      */
-    SUCCESS(HttpStatus.HTTP_OK, "请求处理成功"),
+    SUCCESS(HttpStatus.HTTP_OK, "请求成功"),
 
     /**
      * 业务异常
      */
-    FAILURE(HttpStatus.HTTP_INTERNAL_ERROR, "请求处理失败"),
+    FAILURE(HttpStatus.HTTP_INTERNAL_ERROR, "请求失败"),
 
     ;
 

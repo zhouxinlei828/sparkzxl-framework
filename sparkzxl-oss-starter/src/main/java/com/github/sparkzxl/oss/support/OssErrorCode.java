@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oss.support;
 
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -33,5 +33,5 @@ public enum OssErrorCode implements IErrorCode {
 
     final String errorCode;
 
-    final String errorMessage;
+    final String errorMsg;
 }

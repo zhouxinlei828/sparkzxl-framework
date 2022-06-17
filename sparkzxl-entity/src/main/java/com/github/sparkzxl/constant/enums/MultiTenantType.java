@@ -32,7 +32,7 @@ public enum MultiTenantType {
      */
     DATASOURCE("独立数据源模式"),
     ;
-    private String describe;
+    private final String describe;
 
 
     MultiTenantType(String describe) {

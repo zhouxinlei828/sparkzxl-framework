@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.support;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.util.StrPool;
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 
 /**
  * 非运行期异常基类，所有自定义非运行时异常继承该类
@@ -17,7 +17,7 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
     /**
      * 异常信息
      */
-    private String errorMessage;
+    private String errorMsg;
 
     /**
      * 具体异常码
@@ -26,7 +26,7 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
 
     public BaseUncheckedException(IErrorCode errorCode) {
         this.errorCode = errorCode.getErrorCode();
-        this.errorMessage = errorCode.getErrorMessage();
+        this.errorMsg = errorCode.getErrorMsg();
     }
 
     public BaseUncheckedException(Throwable cause) {
@@ -39,18 +39,18 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
     }
 
 
-    public BaseUncheckedException(final String errorCode, final String errorMessage) {
-        super(errorMessage);
+    public BaseUncheckedException(final String errorCode, final String errorMsg) {
+        super(errorMsg);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
     }
 
     public BaseUncheckedException(final String errorCode,
-                                  final String errorMessage,
+                                  final String errorMsg,
                                   Throwable cause) {
         super(cause);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
     }
 
     public BaseUncheckedException(final String errorCode, final String format, Object... args) {
@@ -58,14 +58,14 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
                 StrUtil.format(format, args) :
                 String.format(format, args));
         this.errorCode = errorCode;
-        this.errorMessage = StrUtil.contains(format, StrPool.BRACE) ?
+        this.errorMsg = StrUtil.contains(format, StrPool.BRACE) ?
                 StrUtil.format(format, args) :
                 String.format(format, args);
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
     @Override

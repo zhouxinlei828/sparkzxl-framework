@@ -3,8 +3,8 @@ package com.github.sparkzxl.gateway.plugin.exception.strategy;
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.text.StrFormatter;
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.base.result.Response;
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.support.NotFoundException;
@@ -34,9 +34,9 @@ public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrateg
             int indexOf = message.lastIndexOf("for ") + 4;
             String serviceName = message.substring(indexOf);
             String applicationName = OptionalBean.ofNullable(serviceName).orElseGet(() -> "unKnownServer");
-            message = StrFormatter.format(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMessage(), applicationName);
+            message = StrFormatter.format(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
         }
-        Response<?> responseResult = Response.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        Response<?> responseResult = Response.fail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(HttpStatus.NOT_FOUND, response);
         log.debug("Handle NotFoundException:{},Result:{}", throwable.getMessage(), result);
