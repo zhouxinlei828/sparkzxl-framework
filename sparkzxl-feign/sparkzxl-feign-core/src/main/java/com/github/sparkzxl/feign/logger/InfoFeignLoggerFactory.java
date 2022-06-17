@@ -1,6 +1,5 @@
 package com.github.sparkzxl.feign.logger;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignLoggerFactory;
 
 /**

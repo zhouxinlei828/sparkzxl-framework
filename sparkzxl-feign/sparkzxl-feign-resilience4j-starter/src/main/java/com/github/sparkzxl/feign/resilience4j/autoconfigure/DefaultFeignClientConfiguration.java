@@ -40,11 +40,7 @@ public class DefaultFeignClientConfiguration {
     public FeignDecorators.Builder defaultBuilder(Environment environment, RetryRegistry retryRegistry) {
         String name = environment.getProperty("feign.client.name");
         assert name != null;
-        Retry retry = Try.of(() -> retryRegistry.retry(name, name))
-                .getOrElseGet(throwable -> {
-                    log.error("ConfigurationNotFoundException：", throwable);
-                    return retryRegistry.retry(name);
-                });
+        Retry retry = Try.of(() -> retryRegistry.retry(name, name)).getOrElseGet(throwable -> retryRegistry.retry(name));
         //覆盖其中的异常判断，只针对 feign.RetryableException 进行重试，所有需要重试的异常我们都在 DefaultErrorDecoder 以及 Resilience4jFeignClient 中封装成了 RetryableException
         retry = Retry.of(name, RetryConfig.from(retry.getRetryConfig()).retryOnException(throwable -> throwable instanceof feign.RetryableException).build());
         return FeignDecorators.builder().withRetry(retry);
