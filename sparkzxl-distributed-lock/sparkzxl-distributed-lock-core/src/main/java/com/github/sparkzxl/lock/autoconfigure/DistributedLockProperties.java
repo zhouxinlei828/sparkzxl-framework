@@ -37,5 +37,5 @@ public class DistributedLockProperties {
     /**
      * 锁key前缀
      */
-    private String lockKeyPrefix = "distributed-lock";
+    private String lockKeyPrefix = "lock";
 }
