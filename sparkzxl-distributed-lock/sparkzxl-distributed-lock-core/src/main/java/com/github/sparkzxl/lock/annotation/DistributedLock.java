@@ -1,5 +1,7 @@
 package com.github.sparkzxl.lock.annotation;
 
+import com.github.sparkzxl.lock.DefaultLockFailureStrategy;
+import com.github.sparkzxl.lock.LockFailureStrategy;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
 import com.github.sparkzxl.lock.executor.LockExecutor;
 
@@ -59,5 +61,12 @@ public @interface DistributedLock {
      * @return 是否自动释放锁
      */
     boolean autoRelease() default true;
+
+    /**
+     * 加锁失败策略
+     *
+     * @return LockFailureStrategy
+     */
+    Class<? extends LockFailureStrategy> failureStrategy() default DefaultLockFailureStrategy.class;
 
 }
