@@ -52,11 +52,10 @@ Feign 会自动通过轮询的方式去进行负载均衡，且开启Feign的Hys
 1. 通过网上一些资料的查询，看到很多文章会`HystrixBadRequestException`不会触发 hystrix 的熔断 –> 但是并没有介绍该异常的实践方案
 2. 感觉要解决项目的痛点，切入点应该就在`HystrixBadRequestException` 了。于是先看源码，一方面对 Hystrix 加深理解，尝试理解作者设计的初衷与想法，另一方面看看是否能找到其他方案达到较高的实践标准
 
-- Fallback fallback 是 Hystrix 命令执行失败时使用的后备方法，用来实现服务的降级处理逻辑。在 HystrixCommand 中可以通过重载 getFallback() 方法来实现服务降级逻辑，Hystrix 会在
-  run() 执行过程中出现错误、超时、线程池拒绝、短路熔断等情况时，执行 getFallback() 方法内的逻辑。 通常，当 HystrixCommand 的主方法（run()） 中抛出异常时，便会触发 getFallback()
-  。除了一个例外 —— HystrixBadRequestException。当抛出 HystrixBadRequestException，不论当前 Command 是否定义了 getFallback()，都不会触发，而是向上抛出异常。
-  如果实现业务时有一些异常希望能够向上抛出，而不是触发 Fallback 策略，便可以封装到 HystrixBadRequestException 中。 getFallback() 的执行时间并不受 HystrixCommand
-  的超时时间的控制。
+- Fallback fallback 是 Hystrix 命令执行失败时使用的后备方法，用来实现服务的降级处理逻辑。在 HystrixCommand 中可以通过重载 getFallback() 方法来实现服务降级逻辑，Hystrix 会在 run() 执行过程中出现错误、超时、线程池拒绝、短路熔断等情况时，执行
+  getFallback() 方法内的逻辑。 通常，当 HystrixCommand 的主方法（run()） 中抛出异常时，便会触发 getFallback()
+  。除了一个例外 —— HystrixBadRequestException。当抛出 HystrixBadRequestException，不论当前 Command 是否定义了 getFallback()，都不会触发，而是向上抛出异常。 如果实现业务时有一些异常希望能够向上抛出，而不是触发 Fallback
+  策略，便可以封装到 HystrixBadRequestException 中。 getFallback() 的执行时间并不受 HystrixCommand 的超时时间的控制。
 
 - Feign对异常的封装 通过实现FallbackFactory,可以在create方法中获取到服务抛出的异常。但是请注意，这里的异常是被Feign封装过的异常，不能直接在异常信息中看出原始方法抛出的异常。
 
@@ -111,8 +110,8 @@ package com.github.sparkzxl.feign.default_;
 import com.github.sparkzxl.constant.ExceptionConstant;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.ResponseResultUtils;
-import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
-import com.github.sparkzxl.feign.exception.RemoteCallException;
+import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
+import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import lombok.extern.slf4j.Slf4j;
@@ -189,7 +188,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
 
 import cn.hutool.core.date.DatePattern;
 import com.github.sparkzxl.core.util.DateUtils;
-import com.github.sparkzxl.feign.config.FeignExceptionHandlerContext;
+import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
 import com.github.sparkzxl.model.exception.ExceptionChain;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -335,7 +334,7 @@ public class RemoteCallException extends RuntimeException {
 package com.github.sparkzxl.feign.default_;
 
 import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.feign.exception.RemoteCallException;
+import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import feign.Response;
 import feign.Util;
@@ -374,7 +373,7 @@ public class FeignExceptionDecoder implements ErrorDecoder {
 
 ```Java
 
-package com.github.sparkzxl.feign.config;
+package com.github.sparkzxl.feign.decoder;
 
 import org.springframework.core.env.Environment;
 
@@ -412,7 +411,7 @@ public final class FeignExceptionHandlerContext {
 
 ```Java
 
-import com.github.sparkzxl.feign.config.RegistryFeignExceptionHandler;
+import com.github.sparkzxl.feign.support.RegistryFeignExceptionHandler;
 import com.github.sparkzxl.feign.default_.FeignExceptionDecoder;
 import com.github.sparkzxl.feign.default_.FeignExceptionHandler;
 import feign.codec.ErrorDecoder;
@@ -454,7 +453,7 @@ public @interface EnableFeignExceptionHandler {
 
 ```Java
 
-package com.github.sparkzxl.feign.config;
+package com.github.sparkzxl.feign.decoder;
 
 import com.github.sparkzxl.feign.annoation.EnableFeignExceptionHandler;
 import feign.codec.ErrorDecoder;

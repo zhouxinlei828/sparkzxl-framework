@@ -112,8 +112,7 @@ cat /usr/local/docker/jenkins/jenkins_home/secrets/initialAdminPassword
 
 ![image.png](https://oss.sparksys.top/halo/image_1585185218843.png)
 
-- SSH Server管理(如下图)：若需要多台，点新增再添加即可。需要注意的是，如果没有配置免密登录的话，需要点击高级，勾选Use password authentication, or use a different key
-  ，并在Passphrase/Password这一栏中输入虚拟机远程登录密码
+- SSH Server管理(如下图)：若需要多台，点新增再添加即可。需要注意的是，如果没有配置免密登录的话，需要点击高级，勾选Use password authentication, or use a different key ，并在Passphrase/Password这一栏中输入虚拟机远程登录密码
 
 ![image.png](https://oss.sparksys.top/halo/image_1585185954095.png)
 

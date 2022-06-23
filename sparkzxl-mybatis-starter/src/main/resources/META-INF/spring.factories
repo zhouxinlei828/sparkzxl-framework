@@ -1,4 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.github.sparkzxl.database.MyBatisAutoConfiguration, \
-    com.github.sparkzxl.database.IdempotentAutoConfig, \
     com.github.sparkzxl.database.EchoAutoConfiguration

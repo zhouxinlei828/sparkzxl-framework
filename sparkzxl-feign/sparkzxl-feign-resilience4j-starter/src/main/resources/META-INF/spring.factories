@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.github.sparkzxl.feign.resilience4j.autoconfigure.Resilience4jAutoConfig,\
+    com.github.sparkzxl.feign.resilience4j.autoconfigure.Resilience4jFeignAutoConfig

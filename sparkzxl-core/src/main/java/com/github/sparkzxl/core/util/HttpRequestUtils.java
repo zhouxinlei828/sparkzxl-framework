@@ -1,14 +1,14 @@
 package com.github.sparkzxl.core.util;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
-import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.entity.response.Response;
+import com.github.sparkzxl.entity.response.ResponseCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestAttributes;
@@ -179,54 +179,42 @@ public class HttpRequestUtils {
         return StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
     }
 
-    public static void writeResponseOutMsg(HttpServletResponse response, String code, String msg) {
+    public static void failResponse(HttpServletResponse response, IErrorCode errorCode) {
+        writeResponseOutMsg(response,
+                ResponseCode.FAILURE.getCode(),
+                ResponseCode.FAILURE.getMessage(),
+                null,
+                errorCode.getErrorCode(),
+                errorCode.getErrorMessage());
+    }
+
+    public static void failResponse(HttpServletResponse response, String errorCode, String errorMsg) {
+        writeResponseOutMsg(response,
+                ResponseCode.FAILURE.getCode(),
+                ResponseCode.FAILURE.getMessage(),
+                null,
+                errorCode,
+                errorMsg);
+    }
+
+    public static void successResponse(HttpServletResponse response, String message) {
+        writeResponseOutMsg(response, ResponseCode.SUCCESS.getCode(), message, null, null, null);
+    }
+
+
+    public static <T> void successResponse(HttpServletResponse response, String message, T data) {
+        writeResponseOutMsg(response, ResponseCode.SUCCESS.getCode(), message, data, null, null);
+    }
+
+    public static <T> void writeResponseOutMsg(HttpServletResponse response, int code, String message, T data, String errorCode, String errorMsg) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
+            response.getWriter().println(JsonUtil.toJson(Response.response(code, message, data, errorCode, errorMsg)));
             response.getWriter().flush();
         } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    public static void writeResponseOutMsg(HttpServletResponse response, String code, String msg, Object data) {
-        try {
-            response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg, data)));
-            response.getWriter().flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    public static void unauthorized(HttpServletResponse response, String msg) {
-        try {
-            String code = ExceptionCode.UN_AUTHORIZED.getCode();
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
-            response.getWriter().flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    public static void forbidden(HttpServletResponse response, String msg) {
-        try {
-            String code = ExceptionCode.AUTHORIZED_DENIED.getCode();
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().println(JsonUtil.toJson(Response.fail(code, msg)));
-            response.getWriter().flush();
-        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }

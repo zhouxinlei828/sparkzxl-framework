@@ -17,7 +17,6 @@ import java.math.BigInteger;
 public class CustomJacksonModule extends SimpleModule {
 
     public CustomJacksonModule() {
-        super(PackageVersion.VERSION);
         // 序列化基础类型
         this.addSerializer(Long.class, ToStringSerializer.instance);
         this.addSerializer(Long.TYPE, ToStringSerializer.instance);

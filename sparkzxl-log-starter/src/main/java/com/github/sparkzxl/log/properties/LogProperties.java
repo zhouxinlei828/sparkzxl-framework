@@ -35,6 +35,7 @@ public class LogProperties {
     @NestedConfigurationProperty
     private AlarmProperties alarm = new AlarmProperties();
 
+
     /**
      * description: 日志文件配置类
      *

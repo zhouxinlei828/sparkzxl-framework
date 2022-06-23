@@ -3,8 +3,8 @@ package com.github.sparkzxl.web.aspect;
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.annotation.ResponseResultStatus;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.entity.response.Response;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,14 +29,8 @@ public class ResponseResultStatusAspect {
 
     private boolean transferExceptionStatus = false;
 
-    private boolean enableTransferStatus = false;
-
     public void setTransferExceptionStatus(boolean transferExceptionStatus) {
         this.transferExceptionStatus = transferExceptionStatus;
-    }
-
-    public void setEnableTransferStatus(boolean enableTransferStatus) {
-        this.enableTransferStatus = enableTransferStatus;
     }
 
     @Pointcut("@within(com.github.sparkzxl.annotation.ResponseResultStatus)||@annotation(com.github.sparkzxl.annotation.ResponseResultStatus)")

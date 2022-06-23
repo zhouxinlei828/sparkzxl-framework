@@ -1,7 +1,6 @@
 package com.github.sparkzxl.datasource.autoconfigure;
 
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
-import com.github.sparkzxl.datasource.aspect.TenantDsAspect;
 import com.github.sparkzxl.datasource.interceptor.DynamicDataSourceInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
@@ -54,11 +53,5 @@ public class DynamicDataSourceAutoConfig implements WebMvcConfigurer {
                 log.info("已加载拦截器：[{}]", ClassUtils.getName(interceptor));
             });
         }
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public TenantDsAspect tenantDsAspect() {
-        return new TenantDsAspect();
     }
 }

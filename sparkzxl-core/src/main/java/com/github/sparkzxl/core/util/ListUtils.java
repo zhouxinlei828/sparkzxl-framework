@@ -1,6 +1,9 @@
 package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.system.UserInfo;
+import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +12,8 @@ import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -108,7 +109,7 @@ public class ListUtils {
     public static String listToString(List<String> list) {
         String str = "";
         if (isNotEmpty(list)) {
-            str = StringUtils.joinWith(",", list);
+            str = StringUtils.join(list, ",");
         }
         return str;
     }
@@ -121,7 +122,7 @@ public class ListUtils {
      */
     public static List<String> stringToList(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            String[] str = data.split(",");
+            String[] str = StringUtils.split(data, ",");
             return Arrays.asList(str);
         } else {
             return emptyList();
@@ -130,7 +131,7 @@ public class ListUtils {
 
     public static List<Long> stringToLongList(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            String[] str = data.split(",");
+            String[] str = StringUtils.split(data, ",");
             Long[] strArrNum = Convert.toLongArray(str);
             return Arrays.asList(strArrNum);
         } else {
@@ -140,7 +141,7 @@ public class ListUtils {
 
     public static List<Integer> stringToIntegerList(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            String[] str = data.split(",");
+            String[] str = StringUtils.split(data, ",");
             Integer[] strArrNum = Convert.toIntArray(str);
             return Arrays.asList(strArrNum);
         } else {
@@ -150,7 +151,7 @@ public class ListUtils {
 
     public static String[] stringToArray(String data) {
         if (StringUtils.isNotEmpty(data)) {
-            return data.split(",");
+            return StringUtils.split(data, ",");
         } else {
             return new String[0];
         }
@@ -187,4 +188,36 @@ public class ListUtils {
         return Lists.newArrayList(CollectionUtils.union(a, b));
     }
 
+
+    /**
+     * list集合正向排序
+     *
+     * @param list         集合
+     * @param keyExtractor 排序字典
+     * @param <T>          对象属性
+     * @param <U>          字段
+     * @return List
+     */
+    public static <T, U extends Comparable<? super U>> List<T> sort(List<T> list, Function<? super T, ? extends U> keyExtractor) {
+        if (CollectionUtils.isEmpty(list)) {
+            return list;
+        }
+        return list.stream().sorted(Comparator.comparing(keyExtractor)).collect(Collectors.toList());
+    }
+
+    /**
+     * list集合逆向排序
+     *
+     * @param list         集合
+     * @param keyExtractor 排序字典
+     * @param <T>          对象属性
+     * @param <U>          字段
+     * @return List
+     */
+    public static <T, U extends Comparable<? super U>> List<T> reverse(List<T> list, Function<? super T, ? extends U> keyExtractor) {
+        if (CollectionUtils.isEmpty(list)) {
+            return list;
+        }
+        return list.stream().sorted(Comparator.comparing(keyExtractor).reversed()).collect(Collectors.toList());
+    }
 }

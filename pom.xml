@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.sparkzxl</groupId>
@@ -29,17 +27,16 @@
     </properties>
 
     <modules>
-        <module>sparkzxl-alarm-starter</module>
         <module>sparkzxl-boot-starter</module>
         <module>sparkzxl-cache-starter</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-mybatis-starter</module>
         <module>sparkzxl-distributed-cloud-starter</module>
         <module>sparkzxl-distributed-dubbo-starter</module>
+        <module>sparkzxl-distributed-lock</module>
         <module>sparkzxl-drools-starter</module>
         <module>sparkzxl-elasticsearch-starter</module>
-        <module>sparkzxl-feign-starter</module>
-        <module>sparkzxl-gateway-starter</module>
+        <module>sparkzxl-gateway-plugin</module>
         <module>sparkzxl-job-executor-starter</module>
         <module>sparkzxl-jwt-starter</module>
         <module>sparkzxl-log-starter</module>
@@ -49,19 +46,19 @@
         <module>sparkzxl-oss-starter</module>
         <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-pdf-starter</module>
-        <module>sparkzxl-redisson-starter</module>
+        <module>sparkzxl-rpc</module>
         <module>sparkzxl-security-starter</module>
         <module>sparkzxl-sentinel-starter</module>
         <module>sparkzxl-swagger-starter</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
-        <module>sparkzxl-zookeeper-starter</module>
-        <module>sparkzxl-annotation</module>
+        <module>sparkzxl-entity</module>
         <module>sparkzxl-datasource-starter</module>
         <module>sparkzxl-uid</module>
         <module>sparkzxl-dependencies</module>
-        <module>sparkzxl-idempotent</module>
         <module>sparkzxl-sms-starter</module>
+        <module>sparkzxl-feign</module>
+        <module>sparkzxl-alarm</module>
     </modules>
 
     <licenses>
@@ -219,7 +216,7 @@
                     </configuration>
                 </plugin>
                 <!-- gpg插件 -->
-                <plugin>
+                <!--<plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>${maven-gpg-plugin.version}</version>
@@ -233,7 +230,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- sonatype自动release插件 -->
+                &lt;!&ndash; sonatype自动release插件 &ndash;&gt;
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -244,7 +241,7 @@
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
-                </plugin>
+                </plugin>-->
             </plugins>
         </pluginManagement>
         <plugins>
@@ -303,14 +300,14 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
-                    <plugin>
+                    <!--<plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                     </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                    </plugin>
+                    </plugin>-->
                 </plugins>
             </build>
             <activation>

@@ -4,7 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.springframework.util.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -64,43 +64,97 @@ public class CaffeineCacheImpl implements GeneralCacheService {
 
     @Override
     public Long increment(String key) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        Cache<String, Object> cacheMap = this.cacheMap.getIfPresent(key);
+        Long obj = 0L;
+        if (ObjectUtils.isNotEmpty(cacheMap)) {
+            obj = Convert.convert(new TypeReference<Long>() {
+            }, cacheMap.getIfPresent(key));
+        }
         Function<Long, Long> function = x -> {
             LongAdder longAdder = new LongAdder();
+            if (ObjectUtils.isNotEmpty(x)) {
+                longAdder.add(x);
+            }
             longAdder.increment();
             return longAdder.longValue();
         };
-        return get(key, function, 0L, null, null);
+        Long result = function.apply(obj);
+        set(key, result, null, null);
+        return result;
     }
 
 
     @Override
     public Long increment(String key, long delta) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        Cache<String, Object> cacheMap = this.cacheMap.getIfPresent(key);
+        Long obj = 0L;
+        if (ObjectUtils.isNotEmpty(cacheMap)) {
+            obj = Convert.convert(new TypeReference<Long>() {
+            }, cacheMap.getIfPresent(key));
+        }
         Function<Long, Long> function = x -> {
             LongAdder longAdder = new LongAdder();
+            if (ObjectUtils.isNotEmpty(x)) {
+                longAdder.add(x);
+            }
             longAdder.add(delta);
+            longAdder.increment();
             return longAdder.longValue();
         };
-        return get(key, function, delta, null, null);
+        Long result = function.apply(obj);
+        set(key, result, null, null);
+        return result;
     }
 
     @Override
     public Long decrement(String key) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        Cache<String, Object> cacheMap = this.cacheMap.getIfPresent(key);
+        Long obj = 0L;
+        if (ObjectUtils.isNotEmpty(cacheMap)) {
+            obj = Convert.convert(new TypeReference<Long>() {
+            }, cacheMap.getIfPresent(key));
+        }
         Function<Long, Long> function = x -> {
             LongAdder longAdder = new LongAdder();
+            if (ObjectUtils.isNotEmpty(x)) {
+                longAdder.add(x);
+            }
             longAdder.decrement();
             return longAdder.longValue();
         };
-        return get(key, function, 0L, null, null);
+        Long result = function.apply(obj);
+        set(key, result, null, null);
+        return result;
     }
 
     @Override
     public Long decrement(String key, long delta) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        Cache<String, Object> cacheMap = this.cacheMap.getIfPresent(key);
+        Long obj = 0L;
+        if (ObjectUtils.isNotEmpty(cacheMap)) {
+            obj = Convert.convert(new TypeReference<Long>() {
+            }, cacheMap.getIfPresent(key));
+        }
         Function<Long, Long> function = x -> {
             LongAdder longAdder = new LongAdder();
-            longAdder.add(-delta);
+            longAdder.add(x - delta);
             return longAdder.longValue();
         };
-        return get(key, function, delta, null, null);
+        Long result = function.apply(obj);
+        set(key, result, null, null);
+        return result;
     }
 
     @Override
@@ -165,5 +219,4 @@ public class CaffeineCacheImpl implements GeneralCacheService {
             return cache.estimatedSize() > 0L;
         }
     }
-
 }

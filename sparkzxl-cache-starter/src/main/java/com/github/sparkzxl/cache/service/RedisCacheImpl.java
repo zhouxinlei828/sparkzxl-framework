@@ -60,19 +60,14 @@ public class RedisCacheImpl implements GeneralCacheService {
 
     @Override
     public <T, M> T get(String key, Function<M, T> function, M funcParam, Long expireTime, TimeUnit timeUnit) {
-        T obj = null;
         if (StringUtils.isEmpty(key)) {
             return null;
         }
-        try {
-            obj = Convert.convert(new TypeReference<T>() {
-            }, valueOperations.get(key));
-            if (obj == null && function != null) {
-                obj = function.apply(funcParam);
-                Optional.ofNullable(obj).ifPresent(value -> set(key, value, expireTime, timeUnit));
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
+        T obj = Convert.convert(new TypeReference<T>() {
+        }, valueOperations.get(key));
+        if (obj == null && function != null) {
+            obj = function.apply(funcParam);
+            Optional.ofNullable(obj).ifPresent(value -> set(key, value, expireTime, timeUnit));
         }
         return obj;
     }

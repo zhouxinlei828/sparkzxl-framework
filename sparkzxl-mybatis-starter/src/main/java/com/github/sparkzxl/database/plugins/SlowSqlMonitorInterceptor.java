@@ -190,7 +190,8 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
      */
     private void sendSqlExceptionMsg(String sqlId, String sql, String exceptionMsg, long checkTime) {
 
-        String sqlMsg = String.format("异常sql, 检测耗时：[%d]ms\nSQLId: \n\t %s\n\nSQL语句: \n\t %s \n\n异常信息: \n\t %s \n\n方法调用信息:", checkTime, sqlId, sql, exceptionMsg);
+        String sqlMsg =
+                String.format("异常sql, 检测耗时：[%d]ms\nSQLId: \n\t %s\n\nSQL语句: \n\t %s \n\n异常信息: \n\t %s \n\n方法调用信息:", checkTime, sqlId, sql, exceptionMsg);
 
         sendMsg(sqlMsg);
     }
@@ -206,7 +207,8 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
 
         if (executeTime >= longQueryTime) {
             try {
-                String sqlMsg = String.format("慢sql, 执行耗时: [%d]ms，检测耗时：[%d]ms\nSQLId: \n\t %s\n\nSQL语句: \n\t %s \n\n方法调用信息:", executeTime, checkTime, sqlId, sql);
+                String sqlMsg =
+                        String.format("慢sql, 执行耗时: [%d]ms，检测耗时：[%d]ms\nSQLId: \n\t %s\n\nSQL语句: \n\t %s \n\n方法调用信息:", executeTime, checkTime, sqlId, sql);
                 sendMsg(sqlMsg);
             } catch (Exception e) {
                 log.error("发送钉钉消息失败", e);

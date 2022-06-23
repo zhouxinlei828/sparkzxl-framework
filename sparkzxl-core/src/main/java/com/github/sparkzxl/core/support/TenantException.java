@@ -1,37 +1,20 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
-import com.github.sparkzxl.core.base.result.ExceptionStatusConstant;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import lombok.Getter;
 
 /**
- * description: 业务异常类
+ * description: 租户异常类
  *
  * @author zhouxinlei
  */
 @Getter
-public class TenantException extends BaseException {
+public class TenantException extends BaseUncheckedException {
 
     private static final long serialVersionUID = -2803534562798384761L;
 
-    public TenantException(ICode ICode) {
-        super(ICode);
-    }
-
-    public TenantException(ICode ICode, Object[] args, String message) {
-        super(ICode, args, message);
-    }
-
-    public TenantException(String code, String message) {
-        super(code, message);
-    }
-
     public TenantException(String message) {
-        super(ExceptionStatusConstant.SYSTEM_ERROR, message);
-    }
-
-    public TenantException(ICode ICode, Object[] args, String message, Throwable cause) {
-        super(ICode, args, message, cause);
+        super(ExceptionErrorCode.PARAM_VALID_ERROR.getErrorCode(), message);
     }
 
     @Override

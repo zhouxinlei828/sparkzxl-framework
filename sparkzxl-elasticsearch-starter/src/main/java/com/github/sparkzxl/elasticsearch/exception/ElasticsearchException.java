@@ -1,6 +1,6 @@
 package com.github.sparkzxl.elasticsearch.exception;
 
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import lombok.Getter;
 
 /**
@@ -16,8 +16,8 @@ public class ElasticsearchException extends RuntimeException {
     @Getter
     private String message;
 
-    public ElasticsearchException(ExceptionCode exceptionCode) {
-        this(exceptionCode.getCode(), exceptionCode.getMessage());
+    public ElasticsearchException(ExceptionErrorCode exceptionCode) {
+        this(exceptionCode.getErrorCode(), exceptionCode.getErrorMessage());
     }
 
     public ElasticsearchException(String message) {

@@ -1,29 +1,25 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 import lombok.Getter;
 
 /**
- * description: 业务异常类
+ * description: jwt校验异常
  *
  * @author zhouxinlei
  */
 @Getter
-public class JwtInvalidException extends BaseException {
+public class JwtInvalidException extends BaseUncheckedException {
 
     private static final long serialVersionUID = -2803534562798384761L;
 
-    public JwtInvalidException(ICode ICode, Object[] args, String message) {
-        super(ICode, args, message);
-    }
-
-    public JwtInvalidException(ICode ICode, Object[] args, String message, Throwable cause) {
-        super(ICode, args, message, cause);
+    public JwtInvalidException(IErrorCode errorCode) {
+        super(errorCode);
     }
 
     public JwtInvalidException(String message) {
-        super(ExceptionCode.FAILURE.getCode(), message);
+        super(ExceptionErrorCode.TOKEN_VALID_ERROR.getErrorCode(), message);
     }
 
     @Override

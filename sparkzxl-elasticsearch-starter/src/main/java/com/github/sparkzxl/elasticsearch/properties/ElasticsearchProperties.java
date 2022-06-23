@@ -66,6 +66,7 @@ public class ElasticsearchProperties {
      */
     private Account account = new Account();
 
+
     /**
      * 索引配置信息
      */
@@ -83,6 +84,7 @@ public class ElasticsearchProperties {
         private Integer numberOfReplicas = 2;
 
     }
+
 
     /**
      * 认证账户

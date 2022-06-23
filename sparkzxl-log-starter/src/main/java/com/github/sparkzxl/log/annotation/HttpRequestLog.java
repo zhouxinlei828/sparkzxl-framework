@@ -15,16 +15,30 @@ import java.lang.annotation.Target;
 public @interface HttpRequestLog {
 
     /**
+     * 是否启用 操作日志
+     * 禁用控制优先级：lamp.log.enabled = false > 控制器类上@SysLog(enabled = false) > 控制器方法上@SysLog(enabled = false)
+     *
+     * @return 是否启用
+     */
+    boolean enabled() default true;
+
+    /**
      * 业务类型
      */
     String value() default "";
 
     /**
-     * 分隔符（默认 :）
-     * 生成的Key：业务类型:500
+     * 是否记录方法的入参
      *
-     * @return String
+     * @return 是否记录方法的入参
      */
-    String delimiter() default ":";
+    boolean request() default true;
+
+    /**
+     * 是否记录返回值
+     *
+     * @return 是否记录返回值
+     */
+    boolean response() default true;
 
 }

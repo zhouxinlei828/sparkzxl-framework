@@ -14,7 +14,6 @@ import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.bouncycastle.openssl.PasswordException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,9 +40,9 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authRequest 登录认证
      * @return java.lang.String
      */
-    public UserToken login(AuthRequest authRequest) throws AccountNotFoundException, PasswordException {
+    public UserToken login(AuthRequest authRequest) throws AccountNotFoundException {
         String username = authRequest.getUsername();
-        AuthUserDetail<ID> authUserDetail = (AuthUserDetail<ID>) getUserDetailsService().loadUserByUsername(username);
+        AuthUserDetail authUserDetail = (AuthUserDetail) getUserDetailsService().loadUserByUsername(username);
         if (ObjectUtils.isEmpty(authUserDetail)) {
             throw new AccountNotFoundException("账户不存在");
         }
@@ -59,7 +58,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param authUserDetail 授权用户
      * @return AuthToken
      */
-    public UserToken authorization(AuthUserDetail<ID> authUserDetail) {
+    public UserToken authorization(AuthUserDetail authUserDetail) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUserDetail,
                 null, authUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -77,10 +76,10 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
     }
 
 
-    public String createJwtToken(AuthUserDetail<ID> authUserDetail) {
+    public String createJwtToken(AuthUserDetail authUserDetail) {
         long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         Date expire = DateUtil.offsetSecond(new Date(), (int) seconds);
-        JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
+        JwtUserInfo jwtUserInfo = new JwtUserInfo();
         jwtUserInfo.setId(authUserDetail.getId());
         jwtUserInfo.setName(authUserDetail.getName());
         jwtUserInfo.setUsername(authUserDetail.getUsername());
@@ -100,9 +99,8 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      *
      * @param authRequest    登录请求
      * @param authUserDetail 用户信息
-     * @throws PasswordException 密码校验异常
      */
-    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail<ID> authUserDetail) throws PasswordException;
+    public abstract void checkPasswordError(AuthRequest authRequest, AuthUserDetail authUserDetail);
 
 
     /**
@@ -154,7 +152,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      *
      * @return JwtTokenService
      */
-    public abstract JwtTokenService<ID> getJwtTokenService();
+    public abstract JwtTokenService getJwtTokenService();
 
     /**
      * 获取用户信息接口

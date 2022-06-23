@@ -12,6 +12,7 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Nonnull;
 import java.net.URI;
 import java.util.List;
 
@@ -28,8 +29,9 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
         this.resourceProperties = resourceProperties;
     }
 
+    @Nonnull
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, @Nonnull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String header = WebFluxUtils.getHeader(BaseContextConstants.JWT_TOKEN_HEADER, request);
         if (StringUtils.isNotEmpty(header)) {

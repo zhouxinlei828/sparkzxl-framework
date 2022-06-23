@@ -1,6 +1,6 @@
 package com.github.sparkzxl.distributed.dubbo.filter;
 
-import com.github.sparkzxl.core.base.result.ExceptionCode;
+import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
 import com.github.sparkzxl.core.support.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.common.constants.CommonConstants;
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 /**
  * description: 实现对 ExceptionFilter 增强的过滤器
  *
- * @author zhouxinlei9
+ * @author zhouxinlei
  */
 @Activate(group = CommonConstants.PROVIDER)
 public class DubboExceptionFilter extends ListenableFilter {
@@ -65,10 +65,11 @@ public class DubboExceptionFilter extends ListenableFilter {
                 detailMessage.append(constraintViolation.getMessage());
             }
             // 返回异常
-            return new BizException(ExceptionCode.PARAM_VALID_ERROR, null, detailMessage.toString());
+            return new BizException(ExceptionErrorCode.PARAM_VALID_ERROR, detailMessage.toString());
         }
 
     }
+
 
     @Slf4j
     static class ExceptionListener implements Listener {
@@ -97,7 +98,9 @@ public class DubboExceptionFilter extends ListenableFilter {
                     }
 
                     // for the exception not found in method's signature, print ERROR message in server's log.
-                    log.error("Got unchecked and undeclared exception which called by " + RpcContext.getContext().getRemoteHost() + ". service: " + invoker.getInterface().getName() + ", method: " + invocation.getMethodName() + ", exception: " + exception.getClass().getName() + ": " + exception.getMessage(), exception);
+                    log.error("Got unchecked and undeclared exception which called by " + RpcContext.getContext().getRemoteHost() + ". service: "
+                            + invoker.getInterface().getName() + ", method: " + invocation.getMethodName() + ", exception: " + exception.getClass().getName()
+                            + ": " + exception.getMessage(), exception);
 
                     // directly throw if exception class and interface class are in the same jar file.
                     String serviceFile = ReflectUtils.getCodeBase(invoker.getInterface());
@@ -120,14 +123,17 @@ public class DubboExceptionFilter extends ListenableFilter {
                     // otherwise, wrap with RuntimeException and throw back to the client
                     appResponse.setException(new RuntimeException(StringUtils.toString(exception)));
                 } catch (Throwable e) {
-                    log.warn("Fail to ExceptionFilter when called by " + RpcContext.getContext().getRemoteHost() + ". service: " + invoker.getInterface().getName() + ", method: " + invocation.getMethodName() + ", exception: " + e.getClass().getName() + ": " + e.getMessage(), e);
+                    log.warn("Fail to ExceptionFilter when called by " + RpcContext.getContext().getRemoteHost() + ". service: " + invoker.getInterface()
+                            .getName() + ", method: " + invocation.getMethodName() + ", exception: " + e.getClass().getName() + ": " + e.getMessage(), e);
                 }
             }
         }
 
         @Override
         public void onError(Throwable e, Invoker<?> invoker, Invocation invocation) {
-            log.error("Got unchecked and undeclared exception which called by " + RpcContext.getContext().getRemoteHost() + ". service: " + invoker.getInterface().getName() + ", method: " + invocation.getMethodName() + ", exception: " + e.getClass().getName() + ": " + e.getMessage(), e);
+            log.error(
+                    "Got unchecked and undeclared exception which called by " + RpcContext.getContext().getRemoteHost() + ". service: " + invoker.getInterface()
+                            .getName() + ", method: " + invocation.getMethodName() + ", exception: " + e.getClass().getName() + ": " + e.getMessage(), e);
         }
     }
 }

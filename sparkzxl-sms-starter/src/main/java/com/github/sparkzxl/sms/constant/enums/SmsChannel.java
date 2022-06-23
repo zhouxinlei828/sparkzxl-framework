@@ -7,13 +7,17 @@ import lombok.RequiredArgsConstructor;
  * description: 短信渠道枚举
  *
  * @author zhouxinlei
- * @date 2021-12-28 10:18:10
+ * @since 2021-12-28 10:18:10
  */
 @Getter
 @RequiredArgsConstructor
 public enum SmsChannel {
-    ALIYUN("aliyun"),
-    TENCENT("tencent");
-    private final String value;
+    /**
+     * 渠道商
+     */
+    ALIYUN(1, "aliyun"),
+    TENCENT(2, "tencent");
+    private final Integer id;
+    private final String name;
 
 }

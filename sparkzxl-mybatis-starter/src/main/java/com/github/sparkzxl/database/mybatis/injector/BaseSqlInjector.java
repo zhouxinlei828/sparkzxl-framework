@@ -1,12 +1,14 @@
 package com.github.sparkzxl.database.mybatis.injector;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.injector.methods.AlwaysUpdateSomeColumnById;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
-import com.baomidou.mybatisplus.extension.injector.methods.LogicDeleteByIdWithFill;
-import com.github.sparkzxl.database.mybatis.methods.DeleteAll;
+import com.github.sparkzxl.constant.EntityConstant;
+import com.github.sparkzxl.database.mybatis.method.UpdateAllById;
 
 import java.util.List;
 
@@ -18,10 +20,8 @@ import java.util.List;
 public class BaseSqlInjector extends DefaultSqlInjector {
 
     @Override
-    public List<AbstractMethod> getMethodList(Class<?> mapperClass) {
-        List<AbstractMethod> methodList = super.getMethodList(mapperClass);
-        //增加自定义方法
-        methodList.add(new DeleteAll());
+    public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
+        List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
         /*
           以下 3 个为内置选装件
           头 2 个支持字段筛选函数
@@ -29,7 +29,10 @@ public class BaseSqlInjector extends DefaultSqlInjector {
         // 例: 不要指定了 update 填充的字段
         methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));
         methodList.add(new AlwaysUpdateSomeColumnById());
-        methodList.add(new LogicDeleteByIdWithFill());
+        methodList.add(new UpdateAllById(field -> !ArrayUtil.containsAny(new String[] {
+                EntityConstant.COLUMN_CREATE_TIME, EntityConstant.COLUMN_CREATE_USER,
+                EntityConstant.COLUMN_CREATE_USER_ID, EntityConstant.COLUMN_CREATE_USER_NAME
+        }, field.getColumn())));
         return methodList;
     }
 }

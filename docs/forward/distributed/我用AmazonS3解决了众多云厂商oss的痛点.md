@@ -2,8 +2,8 @@
 
 ## 1. 背景
 
-在互联网发展的今天，近乎所有的云厂商都提供「对象存储服务」。一种海量、安全、低成本、高可靠的云存储服务，适合存放任意类型的文件。容量和处理能力弹性扩展，多种存储类型供选择，全面优化存储成本。
-当我们在使用对应云厂商产品的时候，只需要引入对应尝试提供的 SDK ，根据其开发文档实现即可。但是当我们接入的云厂商较多（或者能够保证接口水平迁移时），我们要根据目标厂商接口「破坏性修改」。 如下提供了几家厂商接口 SDK 上传实例：
+在互联网发展的今天，近乎所有的云厂商都提供「对象存储服务」。一种海量、安全、低成本、高可靠的云存储服务，适合存放任意类型的文件。容量和处理能力弹性扩展，多种存储类型供选择，全面优化存储成本。 当我们在使用对应云厂商产品的时候，只需要引入对应尝试提供的 SDK
+，根据其开发文档实现即可。但是当我们接入的云厂商较多（或者能够保证接口水平迁移时），我们要根据目标厂商接口「破坏性修改」。 如下提供了几家厂商接口 SDK 上传实例：
 
 ### 1.1 阿里云
 
@@ -184,7 +184,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import com.github.sparkzxl.oss.properties.OssProperties;
+import com.github.sparkzxl.oss.properties.OssConfigInfo;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -204,7 +204,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OssTemplate implements InitializingBean {
 
-    private final OssProperties ossProperties;
+    private final OssProperties ossConfigInfo;
 
     private AmazonS3 amazonS3;
 
@@ -316,7 +316,7 @@ public class OssTemplate implements InitializingBean {
 
     private String replaceHttpDomain(URL url) {
         String objectUrl = url.toString();
-        String customDomain = ossProperties.getCustomDomain();
+        String customDomain = ossConfigInfo.getCustomDomain();
         if (StringUtils.isNotEmpty(customDomain)) {
             String host = URLUtil.getHost(url).toString();
             if (!StringUtils.startsWithAny(customDomain, "http", "https")) {
@@ -547,13 +547,13 @@ public class OssTemplate implements InitializingBean {
     public void afterPropertiesSet() {
         ClientConfiguration clientConfiguration = new ClientConfiguration();
         AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(
-                ossProperties.getEndpoint(), ossProperties.getRegion());
-        AWSCredentials awsCredentials = new BasicAWSCredentials(ossProperties.getAccessKey(),
-                ossProperties.getSecretKey());
+                ossConfigInfo.getEndpoint(), ossConfigInfo.getRegion());
+        AWSCredentials awsCredentials = new BasicAWSCredentials(ossConfigInfo.getAccessKey(),
+                ossConfigInfo.getSecretKey());
         AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
         this.amazonS3 = AmazonS3Client.builder().withEndpointConfiguration(endpointConfiguration)
                 .withClientConfiguration(clientConfiguration).withCredentials(awsCredentialsProvider)
-                .disableChunkedEncoding().withPathStyleAccessEnabled(ossProperties.getPathStyleAccess()).build();
+                .disableChunkedEncoding().withPathStyleAccessEnabled(ossConfigInfo.getPathStyleAccess()).build();
     }
 
 }
@@ -567,7 +567,7 @@ public class OssTemplate implements InitializingBean {
 package com.github.sparkzxl.oss.config;
 
 import com.github.sparkzxl.oss.http.OssEndpoint;
-import com.github.sparkzxl.oss.properties.OssProperties;
+import com.github.sparkzxl.oss.properties.OssConfigInfo;
 import com.github.sparkzxl.oss.service.OssTemplate;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -587,13 +587,13 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(OssProperties.class)
 public class OssAutoConfiguration {
 
-    private final OssProperties ossProperties;
+    private final OssProperties ossConfigInfo;
 
     @Bean
     @ConditionalOnMissingBean(OssTemplate.class)
     @ConditionalOnProperty(name = "sparkzxl.oss.enable", havingValue = "true", matchIfMissing = true)
     public OssTemplate ossTemplate() {
-        return new OssTemplate(ossProperties);
+        return new OssTemplate(ossConfigInfo);
     }
 
     @Bean

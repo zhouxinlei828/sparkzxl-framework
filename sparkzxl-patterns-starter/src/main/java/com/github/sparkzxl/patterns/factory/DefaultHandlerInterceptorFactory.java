@@ -30,7 +30,8 @@ public class DefaultHandlerInterceptorFactory implements HandlerInterceptorFacto
 
     public DefaultHandlerInterceptorFactory addInterceptor(com.github.sparkzxl.patterns.pipeline.HandlerInterceptor handlerInterceptor) {
         String type = Objects.requireNonNull(AnnotationUtils.findAnnotation(handlerInterceptor.getClass(), HandlerChain.class)).type();
-        List<com.github.sparkzxl.patterns.pipeline.HandlerInterceptor> handlerInterceptors = OptionalBean.ofNullable(interceptorContainer.get(type)).orElseGet(Lists::newArrayList);
+        List<com.github.sparkzxl.patterns.pipeline.HandlerInterceptor> handlerInterceptors =
+                OptionalBean.ofNullable(interceptorContainer.get(type)).orElseGet(Lists::newArrayList);
         interceptorContainer.put(type, handlerInterceptors);
         return this;
     }

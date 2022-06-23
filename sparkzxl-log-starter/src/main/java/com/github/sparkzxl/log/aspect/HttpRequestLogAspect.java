@@ -1,23 +1,29 @@
 package com.github.sparkzxl.log.aspect;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.util.NetworkUtil;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
-import com.google.common.base.Stopwatch;
+import com.github.sparkzxl.log.utils.LogUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.common.TemplateParserContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -25,8 +31,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * description: web请求日志切面
@@ -37,7 +44,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class HttpRequestLogAspect {
 
-    private final ThreadLocal<Stopwatch> stopwatchThreadLocal = new ThreadLocal<>();
+    public static final int MAX_LENGTH = 65535;
+    private static final ThreadLocal<RequestInfoLog> THREAD_LOCAL = new ThreadLocal<>();
+    /**
+     * 用于获取方法参数定义名字.
+     */
+    private final DefaultParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
     @Pointcut("@within(com.github.sparkzxl.log.annotation.HttpRequestLog)|| @annotation(com.github.sparkzxl.log.annotation.HttpRequestLog)")
     public void pointCut() {
@@ -48,40 +60,32 @@ public class HttpRequestLogAspect {
      * 对Controller下面的方法执行前进行切入，初始化开始时间
      */
     @Before("pointCut()")
-    public void beforeMethod() {
-        Stopwatch stopwatch = get();
-        if (stopwatch.isRunning()) {
-            stopwatch.reset().start();
-        } else {
-            stopwatch.start();
-        }
-    }
-
-    /**
-     * 环绕操作
-     *
-     * @param proceedingJoinPoint 切入点
-     * @return 原方法返回值
-     * @throws Throwable 异常信息
-     */
-    @Around("pointCut()")
-    public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        Object result = proceedingJoinPoint.proceed();
-        RequestInfoLog requestResultInfo = buildRequestResultInfo(httpServletRequest, proceedingJoinPoint, result);
-        SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestResultInfo));
-        return result;
+    public void beforeMethod(JoinPoint joinPoint) {
+        tryCatch((x) -> {
+            HttpRequestLog httpRequestLog = LogUtils.getTargetAnnotation(joinPoint);
+            HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
+            assert httpRequestLog != null;
+            RequestInfoLog requestResultInfo = buildRequestInfoLog(httpServletRequest, joinPoint, httpRequestLog);
+            THREAD_LOCAL.set(requestResultInfo);
+        });
     }
 
     /**
      * 后置通知
      */
-    @AfterReturning("pointCut()")
-    public void afterReturning(JoinPoint joinPoint) {
-        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        String timeCost = String.valueOf(get().elapsed(TimeUnit.MILLISECONDS)).concat("毫秒");
-        log.info("请求接口：[{}],总计耗时: [{}]", httpServletRequest.getRequestURL().toString(), timeCost);
-        remove();
+    @AfterReturning(returning = "ret", pointcut = "pointCut()")
+    public void doAfterReturning(JoinPoint joinPoint, Object ret) {
+        tryCatch((x) -> {
+            HttpRequestLog httpRequestLog = LogUtils.getTargetAnnotation(joinPoint);
+            if (check(joinPoint, httpRequestLog)) {
+                return;
+            }
+            RequestInfoLog requestInfoLog = getRequestInfoLog();
+            if (httpRequestLog.response() && ObjectUtils.isNotEmpty(ret)) {
+                requestInfoLog.setResult(JsonUtil.toJson(ret));
+            }
+            publishEvent(requestInfoLog);
+        });
     }
 
     /**
@@ -89,75 +93,75 @@ public class HttpRequestLogAspect {
      */
     @AfterThrowing(pointcut = "pointCut()", throwing = "e")
     public void doAfterThrow(JoinPoint joinPoint, Exception e) {
-        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
-        RequestInfoLog requestInfoLog = buildRequestErrorInfo(httpServletRequest, joinPoint, e);
-        log.info("请求接口发生异常 : [{}]", requestInfoLog.getErrorMsg());
+        tryCatch((x) -> {
+            HttpRequestLog httpRequestLog = LogUtils.getTargetAnnotation(joinPoint);
+            if (check(joinPoint, httpRequestLog)) {
+                return;
+            }
+            RequestInfoLog requestInfoLog = getRequestInfoLog();
+            requestInfoLog.setErrorMsg(ExceptionUtil.stacktraceToString(e, MAX_LENGTH));
+            requestInfoLog.setThrowExceptionClass(e.getClass().getTypeName());
+            publishEvent(requestInfoLog);
+        });
+    }
+
+    private void publishEvent(RequestInfoLog requestInfoLog) {
+        requestInfoLog.setFinishTime(LocalDateTime.now());
+        requestInfoLog.setConsumingTime(requestInfoLog.getStartTime().until(requestInfoLog.getFinishTime(), ChronoUnit.MILLIS));
         SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
         remove();
     }
 
     /**
-     * 构建基本请求日志
+     * 监测是否需要记录日志
      *
-     * @param httpServletRequest httpServletRequest
-     * @param joinPoint          joinPoint
-     * @return RequestInfoLog
+     * @param joinPoint      端点
+     * @param httpRequestLog 请求操作日志
+     * @return true 表示不需要记录日志
      */
-    private RequestInfoLog buildBaseRequestInfo(HttpServletRequest httpServletRequest, JoinPoint joinPoint) {
-        String userId = RequestLocalContextHolder.getUserId(String.class);
-        String name = RequestLocalContextHolder.getName();
-        Signature signature = joinPoint.getSignature();
-        String category = LockKeyGenerator.getLockKey(joinPoint);
-        Map<String, Object> requestParameterJson = getRequestParameterJson(signature, joinPoint.getArgs());
-        String parameterJson = JsonUtil.toJson(requestParameterJson);
-        return new RequestInfoLog()
-                .setCategory(category)
-                .setUserId(userId)
-                .setUserName(name)
-                .setIp(NetworkUtil.getIpAddress(httpServletRequest))
-                .setRequestUrl(httpServletRequest.getRequestURL().toString())
-                .setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
-                        signature.getName()))
-                .setRequestParams(parameterJson)
-                .setCreateTime(LocalDateTime.now())
-                .setTenantId(RequestLocalContextHolder.getTenant());
+    private boolean check(JoinPoint joinPoint, HttpRequestLog httpRequestLog) {
+        if (httpRequestLog == null || !httpRequestLog.enabled()) {
+            return true;
+        }
+        // 读取目标类上的注解
+        HttpRequestLog targetClass = joinPoint.getTarget().getClass().getAnnotation(HttpRequestLog.class);
+        // 加上 httpRequestLog == null 会导致父类上的方法永远需要记录日志
+        return targetClass != null && !targetClass.enabled();
     }
 
     /**
      * 构建请求结果日志
      *
-     * @param httpServletRequest  httpServletRequest
-     * @param proceedingJoinPoint proceedingJoinPoint
-     * @param result              返回结果
+     * @param request        request
+     * @param joinPoint      joinPoint
+     * @param httpRequestLog httpRequestLog
      * @return RequestInfo
      */
-    private RequestInfoLog buildRequestResultInfo(HttpServletRequest httpServletRequest, ProceedingJoinPoint proceedingJoinPoint, Object result) {
-        RequestInfoLog requestInfoLog = buildBaseRequestInfo(httpServletRequest, proceedingJoinPoint);
-        if (ObjectUtils.isNotEmpty(result)) {
-            requestInfoLog.setResponseResult(JsonUtil.toJson(result));
+    private RequestInfoLog buildRequestInfoLog(HttpServletRequest request, JoinPoint joinPoint, HttpRequestLog httpRequestLog) {
+        String userId = RequestLocalContextHolder.getUserId(String.class);
+        String name = RequestLocalContextHolder.getName();
+        Signature signature = joinPoint.getSignature();
+        RequestInfoLog requestInfoLog = new RequestInfoLog()
+                .setCategory(httpRequestLog.value())
+                .setUserId(userId)
+                .setUserName(name)
+                .setRequestIp(ServletUtil.getClientIP(request))
+                .setRequestUrl(URLUtil.getPath(request.getRequestURI()))
+                .setHttpMethod(request.getMethod())
+                .setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
+                        signature.getName()))
+                .setStartTime(LocalDateTime.now())
+                .setTenantId(RequestLocalContextHolder.getTenant());
+        if (httpRequestLog.request()) {
+            String requestParameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs());
+            requestInfoLog.setRequestParams(requestParameterJson);
         }
         return requestInfoLog;
     }
 
-    /**
-     * 构建请求异常日志
-     *
-     * @param httpServletRequest httpServletRequest
-     * @param joinPoint          signature
-     * @param e                  异常
-     * @return RequestInfoLog
-     */
-    private RequestInfoLog buildRequestErrorInfo(HttpServletRequest httpServletRequest, JoinPoint joinPoint, Exception e) {
-        RequestInfoLog requestInfoLog = buildBaseRequestInfo(httpServletRequest, joinPoint);
-        requestInfoLog.setErrorMsg(e.getMessage());
-        requestInfoLog.setThrowExceptionClass(e.getClass().getTypeName());
-        return requestInfoLog;
-    }
-
-    public Map<String, Object> getRequestParameterJson(Signature signature, Object[] args) {
+    public String getRequestParameterJson(Signature signature, Object[] args) {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-        LocalVariableTableParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
         String[] paramNames = parameterNameDiscoverer.getParameterNames(method);
         Map<String, Object> parameterMap = Maps.newHashMap();
         if (args != null && paramNames != null) {
@@ -178,24 +182,33 @@ public class HttpRequestLogAspect {
                 parameterMap.put(paramNames[i], value);
             }
         }
-        return parameterMap;
-    }
-
-
-    public Stopwatch get() {
-        Stopwatch stopwatch = stopwatchThreadLocal.get();
-        if (ObjectUtils.isEmpty(stopwatch)) {
-            stopwatch = Stopwatch.createStarted();
-            set(stopwatch);
-        }
-        return stopwatch;
-    }
-
-    public void set(Stopwatch stopwatch) {
-        stopwatchThreadLocal.set(stopwatch);
+        return JsonUtil.toJson(parameterMap);
     }
 
     public void remove() {
-        stopwatchThreadLocal.remove();
+        THREAD_LOCAL.remove();
     }
+
+    public RequestInfoLog getRequestInfoLog() {
+        RequestInfoLog requestInfoLog = THREAD_LOCAL.get();
+        if (ObjectUtils.isEmpty(requestInfoLog)) {
+            requestInfoLog = new RequestInfoLog();
+            set(requestInfoLog);
+        }
+        return requestInfoLog;
+    }
+
+    public void set(RequestInfoLog requestInfoLog) {
+        THREAD_LOCAL.set(requestInfoLog);
+    }
+
+    private void tryCatch(Consumer<String> consumer) {
+        try {
+            consumer.accept("");
+        } catch (Exception e) {
+            log.warn("记录日志异常", e);
+            THREAD_LOCAL.remove();
+        }
+    }
+
 }

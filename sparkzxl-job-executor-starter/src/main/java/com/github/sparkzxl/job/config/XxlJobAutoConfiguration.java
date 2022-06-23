@@ -28,7 +28,7 @@ public class XxlJobAutoConfiguration {
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor(XxlExecutorProperties xxlExecutorProperties, Environment environment) {
         log.info("xxl-job config init XxlJobProperties：[{}]", JSONUtil.toJsonPrettyStr(xxlExecutorProperties));
-// 应用名默认为服务名
+        // 应用名默认为服务名
         String appName = xxlExecutorProperties.getAppName();
         if (!StringUtils.hasText(appName)) {
             appName = environment.getProperty("spring.application.name");

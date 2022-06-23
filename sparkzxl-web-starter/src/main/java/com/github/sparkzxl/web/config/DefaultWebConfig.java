@@ -1,7 +1,7 @@
 package com.github.sparkzxl.web.config;
 
-import com.github.sparkzxl.web.aspect.ResponseResultStatusAspect;
 import com.github.sparkzxl.web.interceptor.HeaderThreadLocalInterceptor;
+import com.github.sparkzxl.web.properties.InterceptorProperties;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
 import com.github.sparkzxl.web.support.ResponseResultAdvice;
@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -65,21 +64,15 @@ public class DefaultWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<Class<? extends HandlerInterceptor>> interceptorList = webProperties.getInterceptor();
+        List<InterceptorProperties> interceptorList = webProperties.getInterceptorList();
         AtomicInteger atomicInteger = new AtomicInteger(-99);
         interceptorList.forEach(interceptor -> {
             int increment = atomicInteger.getAndIncrement();
-            registry.addInterceptor((HandlerInterceptor) applicationContext.getBean(interceptor))
-                    .addPathPatterns("/**").order(increment);
-            log.info("已加载拦截器：[{}]", ClassUtils.getName(interceptor));
+            registry.addInterceptor(applicationContext.getBean(interceptor.getInterceptor()))
+                    .addPathPatterns(interceptor.getIncludePatterns())
+                    .excludePathPatterns(interceptor.getExcludePatterns())
+                    .order(increment);
+            log.info("Interceptor loaded：[{}]", ClassUtils.getName(interceptor.getInterceptor()));
         });
-    }
-
-    @Bean
-    public ResponseResultStatusAspect responseResultStatusAspect() {
-        ResponseResultStatusAspect responseResultStatusAspect = new ResponseResultStatusAspect();
-        responseResultStatusAspect.setEnableTransferStatus(webProperties.isEnableTransferStatus());
-        responseResultStatusAspect.setTransferExceptionStatus(webProperties.isTransferException());
-        return responseResultStatusAspect;
     }
 }

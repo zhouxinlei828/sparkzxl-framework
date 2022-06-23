@@ -64,7 +64,9 @@ public class AlarmLogContext {
     }
 
     public static boolean doWarnException(Throwable warnExceptionClass) {
-        return AlarmLogContext.warnExceptionExtend ? ThrowableUtils.doWarnExceptionExtend(warnExceptionClass, AlarmLogContext.DO_EXTEND_WARN_EXCEPTION_LIST) : ThrowableUtils.doWarnExceptionName(warnExceptionClass, AlarmLogContext.doWarnExceptionList);
+        return AlarmLogContext.warnExceptionExtend ?
+                ThrowableUtils.doWarnExceptionExtend(warnExceptionClass, AlarmLogContext.DO_EXTEND_WARN_EXCEPTION_LIST) :
+                ThrowableUtils.doWarnExceptionName(warnExceptionClass, AlarmLogContext.doWarnExceptionList);
     }
 
     private static void genExtendWarnExceptionList() {

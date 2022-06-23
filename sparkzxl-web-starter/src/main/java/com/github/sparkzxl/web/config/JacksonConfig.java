@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.constant.enums.Enumerator;
 import com.github.sparkzxl.core.jackson.CustomJacksonModule;
@@ -55,7 +56,7 @@ public class JacksonConfig {
                 .put(BigInteger.class, ToStringSerializer.instance)
                 .put(BigDecimal.class, ToStringSerializer.instance)
                 .put(Date.class, new DateSerializer(true, new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN)))
-                .put(LocalDateTime.class, new LocalDateTimeCustomSerializer())
+                .put(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)))
                 .put(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)))
                 .put(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)))
                 .put(Enumerator.class, new EnumeratorSerializer())

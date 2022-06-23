@@ -1,25 +1,24 @@
 package com.github.sparkzxl.database.base.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.database.base.listener.ImportDataListener;
 import com.github.sparkzxl.database.dto.DeleteDTO;
 import com.github.sparkzxl.database.dto.PageParams;
-import com.github.sparkzxl.database.util.PageInfoUtils;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -136,10 +135,10 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
     /**
      * 自定义处理返回结果
      *
-     * @param pageInfo 数据返回list
+     * @param page page
      * @return List<?>
      */
-    default PageInfo<?> handlerResult(PageInfo<Entity> pageInfo) {
+    default Page<?> handlerResult(Page<Entity> page) {
         // 调用注入方法
         return null;
     }
@@ -186,7 +185,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      */
     @ApiOperation(value = "分页列表查询")
     @PostMapping(value = "/page")
-    default PageInfo<?> page(@RequestBody @Validated PageParams<QueryDTO> params) {
+    default Page<?> page(@RequestBody @Validated PageParams<QueryDTO> params) {
         return query(params);
     }
 
@@ -197,19 +196,17 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      * @param params 分页参数
      * @return 分页结果
      */
-    default PageInfo<?> query(PageParams<QueryDTO> params) {
+    default Page<?> query(PageParams<QueryDTO> params) {
         handlerQueryParams(params);
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
         QueryWrapper<Entity> wrapper = handlerWrapper(model, params);
-        params.startPage();
-        List<Entity> entityList = getBaseService().list(wrapper);
-        PageInfo<Entity> pageInfo = PageInfoUtils.pageInfo(entityList);
+        Page<Entity> page = getBaseService().page(new Page<>(params.getPageNum(), params.getPageSize()),wrapper);
         // 处理结果
-        PageInfo<?> pageInfoDto = handlerResult(pageInfo);
-        if (ObjectUtils.isNotEmpty(pageInfoDto)) {
-            return pageInfoDto;
+        Page<?> pageDto = handlerResult(page);
+        if (ObjectUtils.isNotEmpty(pageDto)) {
+            return pageDto;
         } else {
-            return pageInfo;
+            return page;
         }
     }
 
@@ -238,8 +235,8 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
      */
     default QueryWrapper<Entity> handlerWrapper(Entity model, PageParams<QueryDTO> params) {
         QueryWrapper<Entity> wrapper = model == null ? new QueryWrapper<>() : new QueryWrapper<>(model);
-        if (CollUtil.isNotEmpty(params.getMap())) {
-            Map<String, String> map = params.getMap();
+        if (MapUtils.isNotEmpty(params.getExtra())) {
+            Map<String, String> map = params.getExtra();
             //拼装区间
             for (Map.Entry<String, String> field : map.entrySet()) {
                 String key = field.getKey();

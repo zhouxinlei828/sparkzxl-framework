@@ -23,7 +23,7 @@ import com.github.sparkzxl.database.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.database.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.database.plugins.SchemaInterceptor;
 import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
-import com.github.sparkzxl.database.plugins.TenantLineHandlerInterceptor;
+import com.github.sparkzxl.database.plugins.GlobalLineHandlerInterceptor;
 import com.github.sparkzxl.database.properties.CustomMybatisProperties;
 import com.github.sparkzxl.database.properties.DataProperties;
 import com.github.sparkzxl.database.support.DataBaseExceptionHandler;
@@ -32,7 +32,6 @@ import com.p6spy.engine.spy.P6DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,7 +51,6 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties({CustomMybatisProperties.class, DataProperties.class})
 @Import(DataBaseExceptionHandler.class)
-@MapperScan(basePackages = "${mybatis-plus.custom.mapper-scan}")
 @Slf4j
 @RequiredArgsConstructor
 public class MyBatisAutoConfiguration {
@@ -60,7 +58,6 @@ public class MyBatisAutoConfiguration {
     public static final String DATABASE_PREFIX = "default";
     private final CustomMybatisProperties customMybatisProperties;
     private final DataProperties dataProperties;
-
 
     @Bean
     @ConditionalOnMissingBean
@@ -95,7 +92,7 @@ public class MyBatisAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL", matchIfMissing = true)
     public UidGenerator getHuToolUidGenerator() {
-        DataProperties.HutoolId id = dataProperties.getHutoolId();
+        DataProperties.HuToolId id = dataProperties.getHutoolId();
         return new HuToolUidGenerator(id.getWorkerId(), id.getDataCenterId());
     }
 
@@ -114,8 +111,9 @@ public class MyBatisAutoConfiguration {
             if (dataProperties.isEnableTenant()) {
                 List<String> ignoreTableList = ArrayUtils.isEmpty(dataProperties.getIgnoreTable()) ? Lists.newArrayList() :
                         Arrays.asList(dataProperties.getIgnoreTable());
-                interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandlerInterceptor(dataProperties.getTenantIdColumn(),
-                        ignoreTableList)));
+                dataProperties.getGlobalColumn().forEach(tenant -> interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new GlobalLineHandlerInterceptor(tenant.getColumn(),
+                        tenant.getLoadKey(),
+                        ignoreTableList))));
             }
         } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
             // 多租户插件
@@ -123,10 +121,7 @@ public class MyBatisAutoConfiguration {
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
         // 分页插件
-        if (customMybatisProperties.isEnablePage()) {
-            interceptor.addInnerInterceptor(new PaginationInnerInterceptor(customMybatisProperties.getDbType()));
-        }
-
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(customMybatisProperties.getDbType()));
         // sql性能规范插件
         if (dataProperties.getIsIllegalSql()) {
             interceptor.addInnerInterceptor(new IllegalSQLInnerInterceptor());
@@ -149,7 +144,7 @@ public class MyBatisAutoConfiguration {
     @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
     @DependsOn("dataSource")
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_SOURCE_DYNAMIC_PREFIX, name = "enabled", havingValue = "false")
+    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "p6spy", havingValue = "true")
     public DataSource dataSource(DataSource dataSource) {
         if (dataProperties.getP6spy()) {
             return new P6DataSource(dataSource);

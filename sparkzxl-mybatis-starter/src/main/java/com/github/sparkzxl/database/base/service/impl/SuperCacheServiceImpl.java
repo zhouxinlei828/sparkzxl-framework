@@ -51,7 +51,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public boolean removeByIds(Collection<? extends Serializable> idList) {
+    public boolean removeByIds(Collection<?> idList) {
         if (CollUtil.isEmpty(idList)) {
             return true;
         } else {

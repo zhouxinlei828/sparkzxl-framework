@@ -2,26 +2,24 @@ package com.github.sparkzxl.sms.constant.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.ObjectUtils;
 
 /**
  * description: 短信发送状态枚举
  *
  * @author zhouxinlei
- * @date 2021-12-28 10:18:10
+ * @since 2021-12-28 10:18:10
  */
 @Getter
 @RequiredArgsConstructor
 public enum SendStatusEnum {
 
-    WAITING(1L, "WAITING"),
-    FAILURE(2L, "FAIL"),
-    SUCCESS(3L, "SUCCESS");
-    private final Long code;
+    WAITING(1, "WAITING"),
+    FAILURE(2, "FAIL"),
+    SUCCESS(3, "SUCCESS");
+    private final Integer code;
     private final String desc;
 
-    public static SendStatusEnum get(Long code) {
+    public static SendStatusEnum get(Integer code) {
         for (SendStatusEnum sendStatusEnum : SendStatusEnum.values()) {
             if (sendStatusEnum.getCode() == code) {
                 return sendStatusEnum;

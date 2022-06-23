@@ -2,6 +2,7 @@ package com.github.sparkzxl.pdf;
 
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.colors.DeviceCmyk;
@@ -134,7 +135,7 @@ public class ITextClient {
             pdfDocument.setTagged();
             pdfDocument.getCatalog().setLang(new PdfString("zh-cn"));
             pdfDocument.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(false));
-            font = PdfFontFactory.createFont(fontPath, "Identity-H", false);
+            font = PdfFontFactory.createFont(fontPath, PdfEncodings.IDENTITY_H);
             documentInfo = pdfDocument.getDocumentInfo();
             addNewPage();
         } catch (IOException e) {

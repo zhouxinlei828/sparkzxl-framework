@@ -5,10 +5,9 @@ import com.github.sparkzxl.cache.serializer.RedisObjectSerializer;
 import com.github.sparkzxl.cache.service.GeneralCacheService;
 import com.github.sparkzxl.cache.service.RedisCacheImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,7 +25,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @Configuration
 @Slf4j
-@AutoConfigureAfter(RedisAutoConfiguration.class)
+@ConditionalOnClass(RedisConnectionFactory.class)
 public class RedisConfiguration {
 
     /**
@@ -36,7 +35,6 @@ public class RedisConfiguration {
      * @return RedisTemplate<String, Object>
      */
     @Bean
-    @ConditionalOnBean(RedisConnectionFactory.class)
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);

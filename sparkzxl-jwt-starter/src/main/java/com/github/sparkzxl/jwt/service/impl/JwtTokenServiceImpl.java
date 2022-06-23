@@ -1,7 +1,6 @@
 package com.github.sparkzxl.jwt.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -20,11 +19,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.RSAKey;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -38,7 +35,7 @@ import java.util.Map;
  * @author zhouxinlei
  */
 @Slf4j
-public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenService<ID> {
+public class JwtTokenServiceImpl implements JwtTokenService {
 
     private final JwtProperties jwtProperties;
     private final KeyStoreProperties KeyStoreProperties;
@@ -51,8 +48,8 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     @Override
-    public String createTokenByRsa(JwtUserInfo<ID> jwtUserInfo) {
-        return Try.of(() -> {
+    public String createTokenByRsa(JwtUserInfo jwtUserInfo) {
+        try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .type(JOSEObjectType.JWT)
@@ -70,16 +67,16 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             JWSSigner jwsSigner = new RSASSASigner(getRsaKey());
             //签名
             jwsObject.sign(jwsSigner);
-            return jwsObject.serialize();
-        }).onFailure(throwable -> {
-            log.error("根据RSA算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            ExceptionAssert.failure("生成token发生异常：".concat(throwable.getMessage()));
-        }).getOrElseGet(throwable -> "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExceptionAssert.failure("生成token发生异常：".concat(e.getMessage()));
+        }
+        return "";
     }
 
     @Override
-    public JwtUserInfo<ID> verifyTokenByRsa(String token) throws Exception {
-        JwtUserInfo<ID> jwtUserInfo = getJwtUserInfo(token);
+    public JwtUserInfo verifyTokenByRsa(String token) throws Exception {
+        JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         assert jwtUserInfo != null;
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
             throw new JwtExpireException("token已过期");
@@ -88,20 +85,19 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     @Override
-    public JwtUserInfo<ID> getJwtUserInfo(String token) throws Exception {
+    public JwtUserInfo getJwtUserInfo(String token) throws Exception {
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
         return JSONObject.parseObject(payload, JwtUserInfo.class);
     }
 
     @Override
-    public JwtUserInfo<ID> getAuthJwtInfo(String token) throws Exception {
-        JwtUserInfo<ID> jwtUserInfo = new JwtUserInfo<>();
+    public JwtUserInfo getAuthJwtInfo(String token) throws Exception {
+        JwtUserInfo jwtUserInfo = new JwtUserInfo();
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
         JSONObject jsonObject = JSONObject.parseObject(payload);
-        ID id = (ID) jsonObject.get("id");
-        jwtUserInfo.setId(id);
+        jwtUserInfo.setId(jsonObject.getString("id"));
         String username = jsonObject.getString("user_name");
         jwtUserInfo.setUsername(username);
         String name = jsonObject.getString("name");
@@ -126,8 +122,8 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
     }
 
     @Override
-    public String createTokenByHmac(JwtUserInfo<ID> jwtUserInfo) {
-        return Try.of(() -> {
+    public String createTokenByHmac(JwtUserInfo jwtUserInfo) {
+        try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
                     type(JOSEObjectType.JWT)
@@ -139,17 +135,16 @@ public class JwtTokenServiceImpl<ID extends Serializable> implements JwtTokenSer
             JWSObject jwsObject = new JWSObject(jwsHeader, payload);
             JWSSigner jwsSigner = new MACSigner(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
             jwsObject.sign(jwsSigner);
-            return jwsObject.serialize();
-        }).onFailure(throwable -> {
-            log.error("根据HMAC算法生成token发生异常：[{}]", ExceptionUtil.getSimpleMessage(throwable));
-            ExceptionAssert.failure("生成token发生异常：".concat(throwable.getMessage()));
-
-        }).getOrElseGet(throwable -> "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExceptionAssert.failure("生成token发生异常：".concat(e.getMessage()));
+        }
+        return "";
     }
 
     @Override
-    public JwtUserInfo<ID> verifyTokenByHmac(String token) throws Exception {
-        JwtUserInfo<ID> jwtUserInfo;
+    public JwtUserInfo verifyTokenByHmac(String token) throws Exception {
+        JwtUserInfo jwtUserInfo;
         //从token中解析JWS对象
         JWSObject jwsObject = JWSObject.parse(token);
         //创建HMAC验证器

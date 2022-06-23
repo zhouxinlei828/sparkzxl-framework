@@ -10,7 +10,7 @@ import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,10 +22,13 @@ import java.lang.reflect.Method;
  * @author zhouxinlei
  */
 @Slf4j
-public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
+public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
 
         //设置当前请求线程全局信息
         RequestLocalContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT_ID));
@@ -58,6 +61,5 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         RequestLocalContextHolder.remove();
-        super.afterCompletion(request, response, handler, ex);
     }
 }

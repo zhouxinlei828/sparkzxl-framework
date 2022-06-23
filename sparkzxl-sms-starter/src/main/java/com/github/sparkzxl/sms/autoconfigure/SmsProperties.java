@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * description: 短信配置信息
  *
  * @author zhouxinlei
- * @date 2022-01-03 13:57:04
+ * @since 2022-01-03 13:57:04
  */
 @Data
 @ConfigurationProperties(prefix = SmsProperties.PREFIX)

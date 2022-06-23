@@ -1,19 +1,19 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.base.code.ICode;
+import com.github.sparkzxl.entity.response.IErrorCode;
 
 /**
  * description: 服务降级异常
  *
  * @author zhouxinlei
+ * @since 2022-03-05 11:44:17
  */
+public class ServiceDegradeException extends BaseUncheckedException {
 
-public class ServiceDegradeException extends BaseException {
+    private static final long serialVersionUID = -7216954836495541312L;
 
-    private static final long serialVersionUID = -2803534562798384761L;
-
-    public ServiceDegradeException(ICode ICode) {
-        super(ICode);
+    public ServiceDegradeException(IErrorCode errorCode) {
+        super(errorCode.getErrorCode(), errorCode.getErrorMessage());
     }
 
     @Override

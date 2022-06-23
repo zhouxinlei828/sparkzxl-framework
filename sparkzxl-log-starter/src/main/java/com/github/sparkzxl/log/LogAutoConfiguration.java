@@ -1,21 +1,22 @@
 package com.github.sparkzxl.log;
 
+import com.github.sparkzxl.log.annotation.OptLogRecord;
+import com.github.sparkzxl.log.aop.OptLogRecordAnnotationAdvisor;
+import com.github.sparkzxl.log.aop.OptLogRecordInterceptor;
 import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
-import com.github.sparkzxl.log.aspect.OptLogRecordAspect;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
 import com.github.sparkzxl.log.event.OptLogListener;
-import com.github.sparkzxl.log.netty.LogWebSocketHandler;
+import com.github.sparkzxl.log.handler.DefaultOptOptLogVariablesHandler;
+import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
-import com.github.sparkzxl.log.store.DefaultOperatorServiceImpl;
-import com.github.sparkzxl.log.store.IOperatorService;
+import com.github.sparkzxl.log.store.OperatorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.core.Ordered;
 
 import java.util.Optional;
 
@@ -30,11 +31,6 @@ import java.util.Optional;
 public class LogAutoConfiguration {
 
     @Autowired
-    private LogProperties logProperties;
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     void setAlarmLogConfig(LogProperties logProperties) {
         LogProperties.AlarmProperties alarmProperties = logProperties.getAlarm();
         if (alarmProperties.isEnabled()) {
@@ -45,8 +41,14 @@ public class LogAutoConfiguration {
         }
     }
 
+    @Bean(name = "defaultOptOptLogVariablesHandler")
+    @ConditionalOnMissingBean
+    public IOptLogVariablesHandler defaultOptOptLogVariablesHandler() {
+        return new DefaultOptOptLogVariablesHandler();
+    }
+
     @Bean
-    public HttpRequestLogAspect webLogAspect() {
+    public HttpRequestLogAspect httpRequestLogAspect() {
         return new HttpRequestLogAspect();
     }
 
@@ -58,24 +60,19 @@ public class LogAutoConfiguration {
     }
 
     @Bean
-    public LogWebSocketHandler logWebSocketHandler() {
-        Environment env = applicationContext.getEnvironment();
-        String applicationName = env.getProperty("spring.application.name");
-        String logPath = logProperties.getFile().getPath().concat("/") + applicationName + ".log";
-        LogWebSocketHandler logWebSocketHandler = new LogWebSocketHandler();
-        logWebSocketHandler.setLogPath(logPath);
-        return logWebSocketHandler;
+    @ConditionalOnMissingBean(OperatorService.class)
+    public OperatorService operatorService() {
+        return new OperatorService();
     }
 
     @Bean
-    @ConditionalOnMissingBean(IOperatorService.class)
-    public IOperatorService operatorService() {
-        return new DefaultOperatorServiceImpl();
+    public OptLogRecordInterceptor optLogRecordInterceptor(OperatorService operatorService) {
+        return new OptLogRecordInterceptor(operatorService);
     }
 
     @Bean
-    public OptLogRecordAspect optLogRecordAspect(IOperatorService operatorService) {
-        return new OptLogRecordAspect(operatorService);
+    public OptLogRecordAnnotationAdvisor optLogRecordAnnotationAdvisor(OptLogRecordInterceptor optLogRecordInterceptor) {
+        return new OptLogRecordAnnotationAdvisor(optLogRecordInterceptor, OptLogRecord.class, Ordered.HIGHEST_PRECEDENCE);
     }
 
     @Bean
@@ -84,4 +81,5 @@ public class LogAutoConfiguration {
         return new OptLogListener(log -> {
         });
     }
+
 }

@@ -15,13 +15,6 @@ import java.lang.annotation.Target;
 public @interface OptLogRecord {
 
     /**
-     * 操作人
-     *
-     * @return String
-     */
-    String operator() default "";
-
-    /**
      * 业务对象标识
      *
      * @return String
@@ -36,16 +29,26 @@ public @interface OptLogRecord {
     String category() default "";
 
     /**
-     * 扩展参数，记录操作日志的修改详情
+     * 消息模板 el表达式变量#{[tenantId]}
      *
      * @return String
      */
-    String detail() default "";
+    String template() default "";
+
+    String extractParams() default "";
 
     /**
-     * 记录日志的条件
+     * 表达式条件
      *
      * @return String
      */
-    String condition() default "";
+    String expressionJson() default "";
+
+    /**
+     * 参数处理类beanName
+     *
+     * @return Class
+     */
+    String variablesBeanName() default "defaultOptOptLogVariablesHandler";
+
 }

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.sparkzxl</groupId>
@@ -20,89 +18,78 @@
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-        <!-- spring-cloud-->
-        <spring-cloud-alibaba-dependencies.version>2.2.5.RELEASE</spring-cloud-alibaba-dependencies.version>
-        <spring-boot-dependencies.version>2.3.9.RELEASE</spring-boot-dependencies.version>
-        <spring-cloud-dependencies.version>Hoxton.SR10</spring-cloud-dependencies.version>
+        <!-- spring-version-->
+        <spring-boot-dependencies.version>2.6.7</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>2021.0.1</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
+        <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
+        <nacos.version>2.0.4</nacos.version>
+
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
         <springfox.version>2.10.5</springfox.version>
         <swagger-models.version>1.5.22</swagger-models.version>
-        <log4j.version>2.16.0</log4j.version>
-
-        <keycloak-dependencies.version>12.0.2</keycloak-dependencies.version>
-        <spring-webmvc.version>5.2.13.RELEASE</spring-webmvc.version>
-        <spring-boot-admin.version>2.5.0</spring-boot-admin.version>
+        <log4j.version>2.17.2</log4j.version>
+        <spring-webmvc.version>5.3.18</spring-webmvc.version>
 
         <!-- datasource-->
         <mybatis.version>3.5.7</mybatis.version>
-        <mybatis-plus.version>3.4.2</mybatis-plus.version>
-        <pagehelper-spring-boot-starter.version>1.3.1</pagehelper-spring-boot-starter.version>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
-        <druid.version>1.2.6</druid.version>
-        <pagehelper-spring-boot-starter.version>1.3.1</pagehelper-spring-boot-starter.version>
+        <druid.version>1.2.8</druid.version>
         <p6spy.version>3.9.1</p6spy.version>
-        <logstash.version>6.6</logstash.version>
-
+        <logstash.version>7.0.1</logstash.version>
 
         <!-- common组件-->
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
-        <spring-security-rsa.version>1.0.10.RELEASE</spring-security-rsa.version>
         <!-- jwt组件-->
         <jwt.version>9.12.1</jwt.version>
 
-        <aws.version>1.12.49</aws.version>
+        <aws.version>1.11.941</aws.version>
         <!-- google-->
-        <zxing.core.version>3.4.1</zxing.core.version>
         <guava.version>30.1.1-jre</guava.version>
-        <hutool.version>5.7.9</hutool.version>
+        <hutool.version>5.7.11</hutool.version>
         <!-- redisson -->
-        <redisson-spring-boot-starter.version>3.16.1</redisson-spring-boot-starter.version>
+        <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
         <curator.version>5.1.0</curator.version>
 
-        <jasypt.version>3.0.3</jasypt.version>
-        <elasticsearch.version>7.14.0</elasticsearch.version>
+        <elasticsearch.version>7.17.1</elasticsearch.version>
         <html2pdf.version>3.0.3</html2pdf.version>
         <pdfbox.version>2.0.24</pdfbox.version>
-        <itext.version>7.1.14</itext.version>
-        <xstream.version>1.4.18</xstream.version>
+        <itext.version>7.2.2</itext.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
         <apm-toolkit-trace.version>8.7.0</apm-toolkit-trace.version>
         <ip2region.version>1.7.2</ip2region.version>
-        <caffeine.version>2.8.8</caffeine.version>
-        <fastjson.version>1.2.78</fastjson.version>
-        <easy-excel.version>2.2.10</easy-excel.version>
-        <retrofit-spring-boot-starter.version>2.2.16</retrofit-spring-boot-starter.version>
+        <caffeine.version>2.9.3</caffeine.version>
+        <fastjson.version>1.2.80</fastjson.version>
+        <easy-excel.version>3.0.5</easy-excel.version>
+        <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
         <javax.el.version>3.0.1-b11</javax.el.version>
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.2</seata.version>
+        <protobuf-java.version>3.20.1</protobuf-java.version>
         <janino.version>3.1.6</janino.version>
         <drools-version>7.47.0.Final</drools-version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
-        <vavr.version>1.0.0-alpha-3</vavr.version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
-        <jsqlparser.version>4.1</jsqlparser.version>
-        <antisamy.version>1.6.4</antisamy.version>
+        <jsqlparser.version>4.3</jsqlparser.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
-        <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
 
         <freemarker.version>2.3.28</freemarker.version>
-        <apache.xmlgraphics.version>1.8</apache.xmlgraphics.version>
-        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
-        <activiti.boot.version>6.0.0</activiti.boot.version>
-        <fel.version>0.8</fel.version>
-        <weixin-sdk.version>4.1.9.B</weixin-sdk.version>
         <swagger-models.version>1.5.22</swagger-models.version>
         <aliyun-dysmsapi-version>2.0.8</aliyun-dysmsapi-version>
-        <tencentcloud-sdk-java-version>4.0.11</tencentcloud-sdk-java-version>
+        <bcprov-jdk15on-version>1.70</bcprov-jdk15on-version>
+        <tencentcloud-sdk-java-version>3.1.515</tencentcloud-sdk-java-version>
+        <okhttp.version>2.7.5</okhttp.version>
+        <grpc-spring-boot-starter.version>2.13.1.RELEASE</grpc-spring-boot-starter.version>
+        <commons-compress.version>1.21</commons-compress.version>
     </properties>
 
     <licenses>
@@ -150,13 +137,6 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring-cloud-alibaba-dependencies.version}</version>
@@ -169,10 +149,32 @@
                 <version>${spring-boot-dependencies.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot2</artifactId>
+                <version>${resilience4j-spring-boot2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <scope>provided</scope>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring-webmvc.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -180,18 +182,6 @@
                 <version>${knife4j.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-adapter-bom</artifactId>
-                <version>${keycloak-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring-webmvc.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -209,23 +199,6 @@
                 <artifactId>mapstruct-jdk8</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-            <!-- spring-boot-admin -->
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-starter-server</artifactId>
-                <version>${spring-boot-admin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-server-ui</artifactId>
-                <version>${spring-boot-admin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-starter-client</artifactId>
-                <version>${spring-boot-admin.version}</version>
-            </dependency>
-
             <!-- mybatis-plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -240,32 +213,13 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
-                <version>3.4.1</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper-spring-boot-starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis-spring-boot-starter.version}</version>
-            </dependency>
-
-            <!-- 实现对 Sharding-JDBC 的自动化配置 -->
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-                <version>${sharding-jdbc.version}</version>
-            </dependency>
-            <!-- 数据源自动化配置 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
@@ -286,55 +240,6 @@
                 <artifactId>p6spy</artifactId>
                 <version>${p6spy.version}</version>
             </dependency>
-
-            <!-- activiti -->
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring-boot-starter-basic</artifactId>
-                <version>${activiti.boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-json-converter</artifactId>
-                <version>${activiti.boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.activiti</groupId>
-                        <artifactId>activiti-bpmn-model</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-codec</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-css</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-svg-dom</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-svggen</artifactId>
-                <version>${apache.xmlgraphics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eweb4j</groupId>
-                <artifactId>fel</artifactId>
-                <version>${fel.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.seata</groupId>
                 <artifactId>seata-spring-boot-starter</artifactId>
@@ -344,6 +249,11 @@
                 <groupId>io.seata</groupId>
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf-java.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
@@ -406,12 +316,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
-            </dependency>
-            <!--Spring Security RSA工具类-->
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-rsa</artifactId>
-                <version>${spring-security-rsa.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
@@ -476,12 +380,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>com.github.ulisesbocchio</groupId>
-                <artifactId>jasypt-spring-boot-starter</artifactId>
-                <version>${jasypt.version}</version>
-            </dependency>
-
             <!-- elasticsearch -->
             <dependency>
                 <groupId>org.elasticsearch</groupId>
@@ -532,11 +430,6 @@
                 <type>pom</type>
             </dependency>
             <dependency>
-                <groupId>com.thoughtworks.xstream</groupId>
-                <artifactId>xstream</artifactId>
-                <version>${xstream.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
                 <version>${userAgent.version}</version>
@@ -574,6 +467,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easy-excel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.lianjiatech</groupId>
@@ -632,23 +530,16 @@
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-context</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.thoughtworks.xstream</groupId>
+                        <artifactId>xstream</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.drools</groupId>
                 <artifactId>drools-compiler</artifactId>
                 <version>${drools-version}</version>
-            </dependency>
-            <!-- 验证码生成工具 -->
-            <dependency>
-                <groupId>com.github.whvcse</groupId>
-                <artifactId>easy-captcha</artifactId>
-                <version>${easy-captcha.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.vavr</groupId>
-                <artifactId>vavr</artifactId>
-                <version>${vavr.version}</version>
             </dependency>
             <!-- logback-kafka-appender -->
             <dependency>
@@ -661,11 +552,6 @@
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.owasp.antisamy</groupId>
-                <artifactId>antisamy</artifactId>
-                <version>${antisamy.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.houbb</groupId>
@@ -681,12 +567,27 @@
             <!-- sparkzxl-framework 组件库-->
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-alarm-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-alarm-dingtalk-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-alarm-wetalk-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-alarm-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-annotation</artifactId>
+                <artifactId>sparkzxl-entity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -721,6 +622,21 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-distributed-lock-redis-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-distributed-lock-redisson-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-distributed-lock-zookeeper-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-drools-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -731,12 +647,12 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-feign-starter</artifactId>
+                <artifactId>sparkzxl-feign-resilience4j-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-starter</artifactId>
+                <artifactId>sparkzxl-gateway-plugin-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -791,11 +707,6 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-redisson-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-security-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -824,22 +735,52 @@
                 <artifactId>sparkzxl-web-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-zookeeper-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <!--阿里云短信-->
             <dependency>
                 <groupId>com.aliyun</groupId>
                 <artifactId>dysmsapi20170525</artifactId>
                 <version>${aliyun-dysmsapi-version}</version>
             </dependency>
-            <!--阿里云短信-->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bcprov-jdk15on-version}</version>
+            </dependency>
+            <!--腾讯云短信-->
             <dependency>
                 <groupId>com.tencentcloudapi</groupId>
                 <artifactId>tencentcloud-sdk-java</artifactId>
                 <version>${tencentcloud-sdk-java-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.devh</groupId>
+                <artifactId>grpc-server-spring-boot-starter</artifactId>
+                <version>${grpc-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.devh</groupId>
+                <artifactId>grpc-client-spring-boot-starter</artifactId>
+                <version>${grpc-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-grpc-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-grpc-client-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-grpc-server-starter</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -862,7 +803,7 @@
                     </executions>
                 </plugin>
                 <!-- gpg插件 -->
-                <plugin>
+                <!--<plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>${maven-gpg-plugin.version}</version>
@@ -876,7 +817,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- sonatype自动release插件 -->
+                &lt;!&ndash; sonatype自动release插件 &ndash;&gt;
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -887,7 +828,7 @@
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
-                </plugin>
+                </plugin>-->
             </plugins>
         </pluginManagement>
         <plugins>
@@ -923,14 +864,14 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
-                    <plugin>
+                    <!--<plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                     </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                    </plugin>
+                    </plugin>-->
                 </plugins>
             </build>
             <activation>
