@@ -68,7 +68,7 @@
         <apm-toolkit-trace.version>8.7.0</apm-toolkit-trace.version>
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.9.3</caffeine.version>
-        <fastjson.version>1.2.80</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <easy-excel.version>3.0.5</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
