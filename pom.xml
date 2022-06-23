@@ -219,7 +219,7 @@
                     </configuration>
                 </plugin>
                 <!-- gpg插件 -->
-                <!--<plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>${maven-gpg-plugin.version}</version>
@@ -233,7 +233,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                &lt;!&ndash; sonatype自动release插件 &ndash;&gt;
+                <!-- sonatype自动release插件 -->
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -244,7 +244,7 @@
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
-                </plugin>-->
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
