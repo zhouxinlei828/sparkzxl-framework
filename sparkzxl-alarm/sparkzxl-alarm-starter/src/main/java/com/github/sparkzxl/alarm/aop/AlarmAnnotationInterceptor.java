@@ -11,6 +11,7 @@ import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import com.github.sparkzxl.alarm.send.AlarmSender;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.ArgumentAssert;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -46,7 +47,6 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
         if (!cls.equals(invocation.getThis().getClass())) {
             return invocation.proceed();
         }
-        Object proceed = null;
         Alarm annotation = invocation.getMethod().getAnnotation(Alarm.class);
         String templateId = annotation.templateId();
         AlarmTemplate alarmTemplate = alarmTemplateProvider.loadingAlarmTemplate(templateId);
@@ -62,23 +62,24 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
         } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
             templateContentBuilder.append(AlarmConstant.MARKDOWN_HTTP_STATUS_TEMPLATE);
         }
-        try {
-            proceed = invocation.proceed();
+        return Try.of(() -> {
             alarmParamMap.put("state", "✅");
-        } catch (Throwable e) {
-            log.info("请求接口发生异常 : [{}]", e.getMessage());
+            return invocation.proceed();
+        }).onFailure(Throwable.class, throwable -> {
+            log.info("请求接口发生异常 : [{}]", throwable.getMessage());
             if (messageSubType.equals(MessageSubType.TEXT)) {
                 templateContentBuilder.append(AlarmConstant.TEXT_ERROR_TEMPLATE);
             } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
                 templateContentBuilder.append(AlarmConstant.MARKDOWN_ERROR_TEMPLATE);
             }
             alarmParamMap.put("state", "❌");
-            alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(e));
-        }
-        alarmRequest.setContent(templateContentBuilder.toString());
-        alarmRequest.setVariables(alarmParamMap);
-        this.alarmSender.send(messageSubType, alarmRequest);
-        return proceed;
+            alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(throwable));
+        }).andFinally(() -> {
+            alarmRequest.setContent(templateContentBuilder.toString());
+            alarmRequest.setVariables(alarmParamMap);
+            alarmSender.send(messageSubType, alarmRequest);
+        }).get();
+
     }
 
     private IAlarmVariablesHandler getVariablesHandler(String variablesBeanName) {

@@ -13,6 +13,7 @@ import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.send.AlarmCallback;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Function;
 
 /**
  * description:
@@ -78,48 +80,49 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
 
     @Override
     public <T extends MsgType> AlarmResponse send(T message, Map<String, Object> variables) {
-        AlarmType alarmType = message.getAlarmType();
-        // 告警唯一id
-        String alarmId = alarmIdGenerator.nextAlarmId();
-        Map<AlarmType, AlarmProperties.AlarmTypeConfig> alarms = alarmProperties.getChannel();
-        if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
-            return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
-        }
-        if (MapUtil.isNotEmpty(variables)) {
-            message.transfer(variables);
-        }
-        AlarmProperties.AlarmTypeConfig alarmTypeConfig = alarms.get(alarmType);
-        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.choose(alarmTypeConfig.getConfigs());
-        if (ObjectUtils.isEmpty(alarmConfig)) {
-            throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmType.getType(), alarmConfig.getTokenId());
-        }
-        return sendAlarm(alarmId, alarmConfig, message);
+        return Try.of(() -> {
+            // 告警唯一id
+            String alarmId = alarmIdGenerator.nextAlarmId();
+            AlarmType alarmType = message.getAlarmType();
+            if (MapUtil.isNotEmpty(variables)) {
+                message.transfer(variables);
+            }
+            AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmType, (configs) -> alarmLoadBalancer.choose(configs));
+            if (log.isDebugEnabled()) {
+                log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmType.getType(), alarmConfig.getTokenId());
+            }
+            return sendAlarm(alarmId, alarmConfig, message);
+        }).get();
     }
 
     @Override
     public <T extends MsgType> AlarmResponse designatedRobotSend(String robotId, T message, Map<String, Object> variables) {
-        AlarmType alarmType = message.getAlarmType();
-        // 告警唯一id
-        String alarmId = alarmIdGenerator.nextAlarmId();
+        return Try.of(() -> {
+            // 告警唯一id
+            String alarmId = alarmIdGenerator.nextAlarmId();
+            AlarmType alarmType = message.getAlarmType();
+            if (MapUtil.isNotEmpty(variables)) {
+                message.transfer(variables);
+            }
+            AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmType, (configs) -> alarmLoadBalancer.chooseDesignatedRobot(robotId, configs));
+            if (log.isDebugEnabled()) {
+                log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmType.getType(), alarmConfig.getTokenId());
+            }
+            return sendAlarm(alarmId, alarmConfig, message);
+        }).get();
+    }
+
+    public AlarmProperties.AlarmConfig getAlarmConfig(AlarmType alarmType, Function<List<AlarmProperties.AlarmConfig>, AlarmProperties.AlarmConfig> function) {
         Map<AlarmType, AlarmProperties.AlarmTypeConfig> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmType)) {
-            return AlarmResponse.failed(alarmId, AlarmResponseCodeEnum.ALARM_DISABLED);
-        }
-        if (MapUtil.isNotEmpty(variables)) {
-            message.transfer(variables);
+            throw new AlarmException(AlarmResponseCodeEnum.ALARM_DISABLED);
         }
         AlarmProperties.AlarmTypeConfig alarmTypeConfig = alarms.get(alarmType);
-        AlarmProperties.AlarmConfig alarmConfig = alarmLoadBalancer.chooseDesignatedRobot(robotId, alarmTypeConfig.getConfigs());
+        AlarmProperties.AlarmConfig alarmConfig = function.apply(alarmTypeConfig.getConfigs());
         if (ObjectUtils.isEmpty(alarmConfig)) {
             throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
         }
-        if (log.isDebugEnabled()) {
-            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmType.getType(), alarmConfig.getTokenId());
-        }
-        return sendAlarm(alarmId, alarmConfig, message);
+        return alarmConfig;
     }
 
     /**

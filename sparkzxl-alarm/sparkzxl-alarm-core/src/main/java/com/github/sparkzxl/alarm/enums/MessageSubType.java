@@ -96,7 +96,7 @@ public enum MessageSubType {
             if (alarmType == AlarmType.DINGTALK) {
                 return new DingTalkLink();
             } else {
-                throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMessage());
+                throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg());
             }
         }
     },
@@ -109,7 +109,7 @@ public enum MessageSubType {
             if (alarmType == AlarmType.DINGTALK) {
                 return new DingTalkActionCard();
             } else {
-                throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMessage());
+                throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg());
             }
         }
     };

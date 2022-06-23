@@ -15,8 +15,8 @@ public enum BeanOrderEnum {
     ZOOKEEPER_EXCEPTION_ORDER(Integer.MIN_VALUE + 4),
     FEIGN_EXCEPTION_ORDER(Integer.MIN_VALUE + 5),
     ALARM_EXCEPTION_ORDER(Integer.MIN_VALUE + 6),
-    BASE_EXCEPTION_ORDER(Integer.MAX_VALUE),
     APPLICATION_LOG_ORDER(Integer.MIN_VALUE + 7),
+    BASE_EXCEPTION_ORDER(Integer.MAX_VALUE),
     ;
 
     private final int order;

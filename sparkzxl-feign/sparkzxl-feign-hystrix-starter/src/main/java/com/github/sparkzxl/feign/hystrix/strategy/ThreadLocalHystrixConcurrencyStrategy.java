@@ -13,9 +13,11 @@ import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
 import io.seata.core.context.RootContext;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -137,20 +139,20 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
 
         @Override
         public T call() throws Exception {
-            try {
-                org.springframework.web.context.request.RequestContextHolder.setRequestAttributes(this.requestAttributes);
+            return Try.of(() -> {
+                RequestContextHolder.setRequestAttributes(this.requestAttributes);
                 RequestLocalContextHolder.setLocalMap(this.threadLocalMap);
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.bind(this.xid);
                 }
                 return this.target.call();
-            } finally {
-                org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes();
+            }).andFinally(() -> {
+                RequestContextHolder.resetRequestAttributes();
                 if (StringUtils.isNotEmpty(this.xid)) {
                     RootContext.unbind();
                 }
                 RequestLocalContextHolder.remove();
-            }
+            }).get();
         }
     }
 }

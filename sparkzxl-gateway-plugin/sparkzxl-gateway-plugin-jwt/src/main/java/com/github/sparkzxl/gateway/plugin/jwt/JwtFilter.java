@@ -4,7 +4,7 @@ import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
@@ -17,10 +17,10 @@ import com.github.sparkzxl.gateway.plugin.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.handle.JwtRuleHandle;
 import com.github.sparkzxl.gateway.plugin.rule.RuleData;
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +30,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -68,7 +67,7 @@ public class JwtFilter extends AbstractGlobalFilter {
                 return chain.filter(converter(exchange, jwtBody, ruleHandle.getConverter()));
             }
         }
-        return ReactorHttpHelper.error(exchange.getResponse(), ExceptionErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
+        return ReactorHttpHelper.error(exchange.getResponse(), ResultErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class JwtFilter extends AbstractGlobalFilter {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        try {
+        return Try.of(() -> {
             JWSObject jwsObject = JWSObject.parse(token);
             if (StringUtils.isNotEmpty(secretKey)) {
                 JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtil.encryptMd5(secretKey));
@@ -103,10 +102,10 @@ public class JwtFilter extends AbstractGlobalFilter {
                 throw new JwtExpireException("token已过期");
             }
             return jsonNode;
-        } catch (JOSEException | ParseException e) {
-            log.error("JSON转换异常：", e);
-            throw new JwtInvalidException(ExceptionErrorCode.JSON_TRANSFORM_ERROR);
-        }
+        }).getOrElseThrow(throwable -> {
+            log.error("JSON转换异常：", throwable);
+            throw new JwtInvalidException(throwable);
+        });
     }
 
     /**

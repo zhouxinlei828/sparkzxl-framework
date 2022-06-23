@@ -50,5 +50,9 @@
             <artifactId>sparkzxl-swagger-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-alarm-dingtalk-starter</artifactId>
+        </dependency>
     </dependencies>
 </project>

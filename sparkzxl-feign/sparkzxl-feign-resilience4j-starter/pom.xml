@@ -18,13 +18,10 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-okhttp</artifactId>
         </dependency>
+        <!--resilience4j 作为重试，断路，限并发，限流的组件基础-->
         <dependency>
             <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-spring-boot2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+            <artifactId>resilience4j-spring-cloud2</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.resilience4j</groupId>

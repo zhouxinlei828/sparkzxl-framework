@@ -8,7 +8,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * description: feign远程调用异常
+ * description: feign远程调用传递异常
  *
  * @author zhouxinlei
  */
@@ -20,17 +20,21 @@ public class RemoteCallTransferException extends FeignException {
 
     private String errorCode;
 
-    private String errorMessage;
+    private String errorMsg;
 
-    public RemoteCallTransferException(int status, String errorCode, String errorMessage, Request request) {
-        super(status, errorMessage, request);
+    private Object object;
+
+    public RemoteCallTransferException(int status, String errorCode, String errorMsg, Object object, Request request) {
+        super(status, errorMsg, request);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
+        this.object = object;
     }
 
-    public RemoteCallTransferException(int status, String errorCode, String errorMessage, Throwable cause, Request request) {
-        super(status, errorMessage, request, cause);
+    public RemoteCallTransferException(int status, String errorCode, String errorMsg, Throwable cause, Object object, Request request) {
+        super(status, errorMsg, request, cause);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMsg = errorMsg;
+        this.object = object;
     }
 }

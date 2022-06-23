@@ -10,9 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 /**
- * Redisson锁自动配置器
+ * description: Redisson锁自动配置
  *
- * @author zengzhihong
+ * @author zhouxinlei
+ * @since 2022-06-21 15:50:50
  */
 @Configuration
 @AutoConfigureAfter(RedissonAutoConfiguration.class)

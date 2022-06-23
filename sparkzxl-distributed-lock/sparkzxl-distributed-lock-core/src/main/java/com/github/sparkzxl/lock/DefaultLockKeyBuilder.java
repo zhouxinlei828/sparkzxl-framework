@@ -34,7 +34,6 @@ public class DefaultLockKeyBuilder implements LockKeyBuilder {
         Method method = invocation.getMethod();
         if (definitionKeys.length > 1 || !"".equals(definitionKeys[0])) {
             return getSpElDefinitionKey(definitionKeys, method, invocation.getArguments());
-
         }
         return "";
     }

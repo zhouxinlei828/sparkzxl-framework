@@ -31,36 +31,6 @@ public class DefaultAlarmVariablesHandler implements IAlarmVariablesHandler {
     }
 
     @Override
-    public Map<String, Object> getVariables(JoinPoint joinPoint, Alarm alarm) {
-        Map<String, Object> attributeMapping = new HashMap<>(6);
-        attributeMapping.put("title", alarm.name());
-        Map<String, Object> alarmParamMap = AopUtil.generateMap(joinPoint, AlarmParam.class, "value");
-        if (MapUtil.isNotEmpty(alarmParamMap)) {
-            attributeMapping.putAll(alarmParamMap);
-        }
-        String extractParams = alarm.extractParams();
-        if (StringUtils.isNotEmpty(extractParams)) {
-            String[] headerArray = StringUtils.split(extractParams, ",");
-            for (String header : headerArray) {
-                attributeMapping.put(header, function.apply(header));
-            }
-        }
-        String expressionJson = alarm.expressionJson();
-        if (StringUtils.isNotBlank(expressionJson)) {
-            List<ExpressionTemplate> expressionTemplateList = JSONArray.parseArray(expressionJson, ExpressionTemplate.class);
-            for (ExpressionTemplate expressionTemplate : expressionTemplateList) {
-                try {
-                    String value = AopUtil.parseExpression(joinPoint, expressionTemplate.getExpression());
-                    attributeMapping.put(expressionTemplate.getKey(), value);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return attributeMapping;
-    }
-
-    @Override
     public Map<String, Object> getVariables(MethodInvocation invocation, Alarm alarm) {
         Map<String, Object> attributeMapping = Maps.newHashMap();
         attributeMapping.put("title", alarm.name());

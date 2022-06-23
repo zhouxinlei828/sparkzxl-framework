@@ -1,7 +1,7 @@
 package com.github.sparkzxl.database.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.sparkzxl.cache.service.GeneralCacheService;
+import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
 import com.github.sparkzxl.database.base.mapper.SuperMapper;
 import com.github.sparkzxl.database.base.service.SuperCacheService;
@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: 缓存接口父类实现类
@@ -20,11 +19,11 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
-    protected GeneralCacheService generalCacheService;
+    protected CacheService cacheService;
 
     @Autowired
-    public void setGeneralCacheService(GeneralCacheService generalCacheService) {
-        this.generalCacheService = generalCacheService;
+    public void setGeneralCacheService(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
 
@@ -37,15 +36,14 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
 
     @Override
     public T getByIdCache(Serializable id) {
-        long expireTime = 1;
-        return this.generalCacheService.get(KeyGeneratorUtil.generateKey(this.getRegion(), id), (x) -> super.getById(id), expireTime, TimeUnit.DAYS);
+        return cacheService.get(KeyGeneratorUtil.generateKey(this.getRegion(), id), (x) -> super.getById(id));
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public boolean removeById(Serializable id) {
         boolean bool = super.removeById(id);
-        this.generalCacheService.remove(KeyGeneratorUtil.generateKey(this.getRegion(), id));
+        cacheService.remove(KeyGeneratorUtil.generateKey(this.getRegion(), id));
         return bool;
     }
 
@@ -56,7 +54,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
             return true;
         } else {
             boolean flag = super.removeByIds(idList);
-            idList.forEach(id -> this.generalCacheService.remove(KeyGeneratorUtil.generateKey(this.getRegion(), id)));
+            idList.forEach(id -> this.cacheService.remove(KeyGeneratorUtil.generateKey(this.getRegion(), id)));
             return flag;
         }
     }
@@ -66,7 +64,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     public boolean save(T model) {
         boolean result = super.save(model);
         if (model instanceof SuperEntity) {
-            this.generalCacheService.set(KeyGeneratorUtil.generateKey(this.getRegion(), ((SuperEntity) model).getId()), model);
+            this.cacheService.set(KeyGeneratorUtil.generateKey(this.getRegion(), ((SuperEntity) model).getId()), model);
         }
         return result;
     }
@@ -76,7 +74,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     public boolean updateById(T model) {
         boolean updateBool = super.updateById(model);
         if (model instanceof SuperEntity) {
-            this.generalCacheService.remove(KeyGeneratorUtil.generateKey(this.getRegion(), ((SuperEntity) model).getId()));
+            this.cacheService.remove(KeyGeneratorUtil.generateKey(this.getRegion(), ((SuperEntity) model).getId()));
         }
         return updateBool;
     }

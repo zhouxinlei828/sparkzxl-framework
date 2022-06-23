@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.Getter;
 
 /**
@@ -15,19 +15,14 @@ public class BizException extends BaseUncheckedException {
 
 
     public BizException(IErrorCode errorCode) {
-        super(errorCode.getErrorCode(), errorCode.getErrorMessage());
+        super(errorCode.getErrorCode(), errorCode.getErrorMsg());
     }
 
-    public BizException(IErrorCode errorCode, String errorMessage) {
-        super(errorCode.getErrorCode(), errorMessage);
+    public BizException(IErrorCode errorCode, String errorMsg) {
+        super(errorCode.getErrorCode(), errorMsg);
     }
 
     public BizException(String code, String message) {
         super(code, message);
-    }
-
-    @Override
-    public Throwable fillInStackTrace() {
-        return this;
     }
 }

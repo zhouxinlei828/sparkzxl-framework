@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2022-05-01 22:32:45
  */
 @Data
-@ConfigurationProperties(prefix = "distributedlock")
+@ConfigurationProperties(prefix = "distributed-lock")
 public class DistributedLockProperties {
 
     /**
@@ -37,5 +37,5 @@ public class DistributedLockProperties {
     /**
      * 锁key前缀
      */
-    private String lockKeyPrefix = "distributed-lock";
+    private String lockKeyPrefix = "lock";
 }

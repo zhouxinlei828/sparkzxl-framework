@@ -1,6 +1,6 @@
 package com.github.sparkzxl.alarm.support;
 
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,6 +18,6 @@ public enum AlarmErrorCodeEnum implements IErrorCode {
     ;
 
     private final String errorCode;
-    private final String errorMessage;
+    private final String errorMsg;
 
 }

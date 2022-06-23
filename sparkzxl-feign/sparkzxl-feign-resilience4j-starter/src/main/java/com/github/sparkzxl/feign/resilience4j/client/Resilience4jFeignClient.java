@@ -2,12 +2,12 @@ package com.github.sparkzxl.feign.resilience4j.client;
 
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import com.github.sparkzxl.feign.resilience4j.OpenfeignUtil;
 import com.github.sparkzxl.feign.resilience4j.Resilience4jUtil;
-import com.github.sparkzxl.feign.resilience4j.enums.Resilience4jHttpStatus;
+import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import feign.Client;
 import feign.Request;
 import feign.Response;
+import feign.okhttp.OkHttpClient;
 import io.github.resilience4j.bulkhead.BulkheadFullException;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkhead;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
@@ -48,6 +48,7 @@ public class Resilience4jFeignClient implements Client {
     public Response execute(Request request, Request.Options options) throws IOException {
         // 获取定义 FeignClient 的接口的 FeignClient 注解
         FeignClient feignClient = AnnotationUtils.getAnnotation(request.requestTemplate().feignTarget().type(), FeignClient.class);
+        assert feignClient != null;
         ArgumentAssert.notNull(feignClient.contextId(), "@FeignClient未配置contextId");
         //和 Retry 保持一致，使用 contextId，而不是微服务名称
         //contextId 会作为我们后面读取断路器以及线程隔离配置的key
@@ -75,34 +76,29 @@ public class Resilience4jFeignClient implements Client {
 
         ThreadPoolBulkhead finalThreadPoolBulkhead = threadPoolBulkhead;
         CircuitBreaker finalCircuitBreaker = circuitBreaker;
-        Supplier<CompletionStage<Response>> completionStageSupplier = ThreadPoolBulkhead.decorateSupplier(threadPoolBulkhead,
-                OpenfeignUtil.decorateSupplier(circuitBreaker, () -> {
-                    try {
-                        if (log.isDebugEnabled()) {
-                            log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
-                                    request.httpMethod(),
-                                    request.url(),
-                                    serviceInstanceId,
-                                    JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
-                                    serviceInstanceMethodId,
-                                    JSON.toJSONString(finalCircuitBreaker.getMetrics())
-                            );
-                        }
-                        Response execute = okHttpClient.execute(request, options);
-                        log.info("response: {} - {}", execute.status(), execute.reason());
-                        return execute;
-                    } catch (IOException e) {
-                        throw new CompletionException(e);
+        Supplier<CompletionStage<Response>> completionStageSupplier = threadPoolBulkhead.decorateSupplier(
+                Resilience4jUtil.decorateSupplier(circuitBreaker, () -> Try.of(() -> {
+                    if (log.isDebugEnabled()) {
+                        log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
+                                request.httpMethod(),
+                                request.url(),
+                                serviceInstanceId,
+                                JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
+                                serviceInstanceMethodId,
+                                JSON.toJSONString(finalCircuitBreaker.getMetrics())
+                        );
                     }
-                })
-        );
+                    Response execute = okHttpClient.execute(request, options);
+                    log.info("response: {} - {}", execute.status(), execute.reason());
+                    return execute;
+                }).getOrElseThrow(throwable -> new CompletionException(throwable))));
         try {
             return Try.ofSupplier(completionStageSupplier).get().toCompletableFuture().join();
         } catch (BulkheadFullException e) {
             //线程池限流异常
             return Response.builder()
                     .request(request)
-                    .status(Resilience4jHttpStatus.BULKHEAD_FULL.getValue())
+                    .status(RetryableHttpStatus.BULKHEAD_FULL.getValue())
                     .reason(e.getLocalizedMessage())
                     .requestTemplate(request.requestTemplate()).build();
         } catch (CompletionException e) {
@@ -112,7 +108,7 @@ public class Resilience4jFeignClient implements Client {
             if (cause instanceof CallNotPermittedException) {
                 return Response.builder()
                         .request(request)
-                        .status(Resilience4jHttpStatus.CIRCUIT_BREAKER_ON.getValue())
+                        .status(RetryableHttpStatus.CIRCUIT_BREAKER_ON.getValue())
                         .reason(cause.getLocalizedMessage())
                         .requestTemplate(request.requestTemplate()).build();
             }
@@ -126,13 +122,13 @@ public class Resilience4jFeignClient implements Client {
                     //如果是 read 异常，则代表请求已经发了出去，则不能重试（除非是 GET 请求或者有 RetryableMethod 注解，这个在 DefaultErrorDecoder 判断）
                     return Response.builder()
                             .request(request)
-                            .status(Resilience4jHttpStatus.NOT_RETRYABLE_IO_EXCEPTION.getValue())
+                            .status(RetryableHttpStatus.NOT_RETRYABLE_IO_EXCEPTION.getValue())
                             .reason(cause.getLocalizedMessage())
                             .requestTemplate(request.requestTemplate()).build();
                 } else {
                     return Response.builder()
                             .request(request)
-                            .status(Resilience4jHttpStatus.RETRYABLE_IO_EXCEPTION.getValue())
+                            .status(RetryableHttpStatus.RETRYABLE_IO_EXCEPTION.getValue())
                             .reason(cause.getLocalizedMessage())
                             .requestTemplate(request.requestTemplate()).build();
                 }

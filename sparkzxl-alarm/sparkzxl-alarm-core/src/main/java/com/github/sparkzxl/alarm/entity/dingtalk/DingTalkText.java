@@ -20,6 +20,7 @@ public class DingTalkText extends Message {
 
     public DingTalkText(Text text) {
         this.text = text;
+        setMsgtype(DingTalkMsgType.TEXT.type());
     }
 
     public Text getText() {

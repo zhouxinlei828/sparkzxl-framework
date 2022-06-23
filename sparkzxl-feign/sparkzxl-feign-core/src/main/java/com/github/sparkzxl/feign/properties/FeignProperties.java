@@ -25,7 +25,6 @@ public class FeignProperties {
 
     @Data
     public static class FeignSeataProperties {
-
         private boolean enabled;
     }
 

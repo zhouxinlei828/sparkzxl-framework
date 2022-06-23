@@ -1,8 +1,8 @@
 package com.github.sparkzxl.gateway.plugin.exception.strategy;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
-import com.github.sparkzxl.entity.response.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.base.result.Response;
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import io.netty.channel.ConnectTimeoutException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class ConnectTimeoutExceptionHandlerStrategy implements ExceptionHandlerS
 
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
-        Response<?> responseResult = Response.failDetail(ExceptionErrorCode.FAILURE.getErrorCode(), throwable.getMessage());
+        Response<?> responseResult = Response.fail(ResultErrorCode.FAILURE.getErrorCode(), throwable.getMessage());
         String response = JSON.toJSONString(responseResult);
         ExceptionHandlerResult result = new ExceptionHandlerResult(HttpStatus.INTERNAL_SERVER_ERROR, response);
         log.debug("Handle ConnectTimeoutException:{},Result:{}", throwable.getMessage(), result);

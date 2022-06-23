@@ -80,8 +80,9 @@ public class FeignBlockingLoadBalancerClientExtend implements Client {
         }
         String reconstructedUrl = loadBalancerClient.reconstructURI(instance, originalUri).toString();
         Request newRequest = buildRequest(request, reconstructedUrl);
+        LoadBalancerProperties loadBalancerProperties = loadBalancerClientFactory.getProperties(serviceId);
         return executeWithLoadBalancerLifecycleProcessing(delegate, options, newRequest, lbRequest, lbResponse,
-                supportedLifecycleProcessors);
+                supportedLifecycleProcessors, loadBalancerProperties.isUseRawStatusCodeInResponseData());
     }
 
     /**

@@ -14,6 +14,6 @@ public class AsyncCallException extends AlarmException {
     }
 
     public AsyncCallException(Throwable cause) {
-        super(cause, AlarmResponseCodeEnum.ASYNC_CALL.getErrorCode(), AlarmResponseCodeEnum.ASYNC_CALL.getErrorMessage());
+        super(cause, AlarmResponseCodeEnum.ASYNC_CALL.getErrorCode(), AlarmResponseCodeEnum.ASYNC_CALL.getErrorMsg());
     }
 }

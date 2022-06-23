@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.support;
 
 import com.github.sparkzxl.core.support.BaseUncheckedException;
-import com.github.sparkzxl.entity.response.IErrorCode;
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.Getter;
 
 /**
@@ -18,17 +18,11 @@ public class GatewayException extends BaseUncheckedException {
         super(errorCode);
     }
 
-    public GatewayException(IErrorCode errorCode, String errorMessage) {
-        super(errorCode.getErrorCode(), errorMessage);
+    public GatewayException(IErrorCode errorCode, String errorMsg) {
+        super(errorCode.getErrorCode(), errorMsg);
     }
 
-    public GatewayException(String errorCode, String errorMessage) {
-        super(errorCode, errorMessage);
+    public GatewayException(String errorCode, String errorMsg) {
+        super(errorCode, errorMsg);
     }
-
-    @Override
-    public Throwable fillInStackTrace() {
-        return this;
-    }
-
 }

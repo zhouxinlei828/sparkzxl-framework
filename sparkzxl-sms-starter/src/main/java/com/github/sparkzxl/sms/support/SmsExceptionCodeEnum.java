@@ -18,5 +18,5 @@ public enum SmsExceptionCodeEnum {
     ;
 
     private final String errorCode;
-    private final String errorMessage;
+    private final String errorMsg;
 }

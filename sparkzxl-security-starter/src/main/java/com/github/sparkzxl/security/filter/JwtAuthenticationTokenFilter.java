@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.base.result.ExceptionErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.entity.core.JwtUserInfo;
@@ -52,7 +52,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
-                ExceptionAssert.failure(ExceptionErrorCode.LOGIN_EXPIRE);
+                ExceptionAssert.failure(ResultErrorCode.LOGIN_EXPIRE);
             }
             String username = jwtUserInfo.getUsername();
             log.info("checking username:[{}]", username);

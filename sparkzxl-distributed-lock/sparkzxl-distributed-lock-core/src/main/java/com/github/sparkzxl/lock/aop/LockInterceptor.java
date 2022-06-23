@@ -1,27 +1,13 @@
-/*
- *  Copyright (c) 2018-2022, baomidou (63976799@qq.com).
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package com.github.sparkzxl.lock.aop;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.github.sparkzxl.lock.LockFailureStrategy;
 import com.github.sparkzxl.lock.LockInfo;
 import com.github.sparkzxl.lock.LockKeyBuilder;
 import com.github.sparkzxl.lock.LockTemplate;
 import com.github.sparkzxl.lock.annotation.DistributedLock;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
+import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -30,6 +16,8 @@ import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -47,9 +35,18 @@ public class LockInterceptor implements MethodInterceptor {
 
     private final LockKeyBuilder lockKeyBuilder;
 
-    private final LockFailureStrategy lockFailureStrategy;
+    private final Map<Class<? extends LockFailureStrategy>, LockFailureStrategy> lockFailureStrategyMap;
 
     private final DistributedLockProperties distributedLockProperties;
+
+    public LockInterceptor(LockTemplate lockTemplate,
+                           LockKeyBuilder lockKeyBuilder,
+                           DistributedLockProperties distributedLockProperties) {
+        this.lockTemplate = lockTemplate;
+        this.lockKeyBuilder = lockKeyBuilder;
+        this.distributedLockProperties = distributedLockProperties;
+        this.lockFailureStrategyMap = new HashMap<>();
+    }
 
     @Override
     public Object invoke(@NonNull MethodInvocation invocation) throws Throwable {
@@ -62,8 +59,7 @@ public class LockInterceptor implements MethodInterceptor {
         LockInfo lockInfo = null;
         try {
             String prefix = distributedLockProperties.getLockKeyPrefix() + ":";
-            prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name() :
-                    invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
+            prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name() : invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
             String key = prefix + "#" + lockKeyBuilder.buildKey(invocation, distributedLock.keys());
             lockInfo = lockTemplate.lock(key, distributedLock.expire(), distributedLock.acquireTimeout(), distributedLock.executor());
             if (null != lockInfo) {
@@ -71,6 +67,7 @@ public class LockInterceptor implements MethodInterceptor {
                 return invocation.proceed();
             }
             // lock failure
+            LockFailureStrategy lockFailureStrategy = getLockFailureStrategy(distributedLock.failureStrategy());
             lockFailureStrategy.onLockFailure(key, invocation.getMethod(), invocation.getArguments());
             return null;
         } finally {
@@ -78,11 +75,18 @@ public class LockInterceptor implements MethodInterceptor {
                 log.info("Thread[{}] -> releaseLock key [{}]", lockInfo.getThreadId(), lockInfo.getLockKey());
                 final boolean releaseLock = lockTemplate.releaseLock(lockInfo);
                 if (!releaseLock) {
-                    log.error("releaseLock fail,lock Key={},lock Value={}", lockInfo.getLockKey(),
-                            lockInfo.getLockValue());
+                    log.error("releaseLock fail,lock Key={},lock Value={}", lockInfo.getLockKey(), lockInfo.getLockValue());
                 }
             }
         }
+    }
+
+    public LockFailureStrategy getLockFailureStrategy(Class<? extends LockFailureStrategy> failureStrategyClass) {
+        return Option.of(lockFailureStrategyMap.get(failureStrategyClass)).getOrElse(() -> {
+            LockFailureStrategy lockFailureStrategy = ReflectUtil.newInstance(failureStrategyClass);
+            lockFailureStrategyMap.putIfAbsent(failureStrategyClass, lockFailureStrategy);
+            return lockFailureStrategy;
+        });
     }
 
 }
