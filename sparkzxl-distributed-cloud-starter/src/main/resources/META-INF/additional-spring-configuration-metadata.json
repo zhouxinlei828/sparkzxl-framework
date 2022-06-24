@@ -1,0 +1,10 @@
+{
+	"properties": [
+		{
+			"defaultValue": true,
+			"name": "spring.cloud.loadbalancer.grayscale.enabled",
+			"type": "java.lang.Boolean",
+			"description": "Spring Cloud LoadBalancer grayscale."
+		}
+	]
+}

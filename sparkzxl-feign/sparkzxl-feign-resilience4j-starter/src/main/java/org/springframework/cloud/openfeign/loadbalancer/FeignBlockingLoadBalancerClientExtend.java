@@ -50,6 +50,7 @@ public class FeignBlockingLoadBalancerClientExtend implements Client {
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
         FeignClient feignClient = AnnotationUtils.getAnnotation(request.requestTemplate().feignTarget().type(), FeignClient.class);
+        assert feignClient != null;
         if (StringUtils.isNotEmpty(feignClient.url())) {
             return delegate.execute(request, options);
         }
@@ -76,6 +77,7 @@ public class FeignBlockingLoadBalancerClientExtend implements Client {
                     .onComplete(new CompletionContext<ResponseData, ServiceInstance, RequestDataContext>(
                             CompletionContext.Status.DISCARD, lbRequest, lbResponse)));
             return Response.builder().request(request).status(HttpStatus.SERVICE_UNAVAILABLE.value())
+                    .reason(message)
                     .body(message, StandardCharsets.UTF_8).build();
         }
         String reconstructedUrl = loadBalancerClient.reconstructURI(instance, originalUri).toString();
