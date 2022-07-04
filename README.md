@@ -73,6 +73,8 @@
 - [4.Spring Cloud openfeign 服务调用](docs/forward/222)
 - [Spring Cloud Openfeign 异常信息传递](docs/forward/distributed/SpringCloudOpenfeign异常信息传递.md)
 - [5.Spring Cloud Ribbon 服务负载均衡](docs/forward/222)
+- [Spring Cloud Circuitbreaker源码解析](docs/forward/distributed/Spring-Cloud-Circuitbreaker源码解析.md)
+- [Spring Cloud Resilience4j熔断降级](docs/forward/distributed/SpringCloudResilience4j熔断降级.md)
 - [6.Spring Cloud hystrix 服务容错保护](docs/forward/222)
 - [7.Spring Cloud Gateway API网关服务](docs/forward/222)
 - [8.Spring Boot Admin 微服务应用监控](docs/forward/222)
