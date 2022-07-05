@@ -8,9 +8,8 @@ import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.executor.AlarmExecutor;
-import com.github.sparkzxl.alarm.message.CustomMessage;
-import com.github.sparkzxl.alarm.message.MarkDownMessage;
-import com.github.sparkzxl.alarm.message.TextMessage;
+import com.github.sparkzxl.alarm.message.MarkDownMessageTemplate;
+import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,8 @@ import java.util.List;
 public class AlarmRobot extends AbstractAlarmSender {
 
     public AlarmRobot(AlarmProperties alarmProperties,
-                      TextMessage textMessage,
-                      MarkDownMessage markDownMessage,
+                      TextMessageTemplate textMessage,
+                      MarkDownMessageTemplate markDownMessage,
                       List<AlarmExecutor> alarmExecutorList) {
         super(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
     }
@@ -46,9 +45,7 @@ public class AlarmRobot extends AbstractAlarmSender {
             if (!messageSubType.isSupport()) {
                 return AlarmResponse.failed(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
             }
-            CustomMessage customMessage = customMessage(messageSubType);
-            String msgContent = customMessage.message(request);
-            request.setContent(msgContent);
+            convertMessage(messageSubType, request);
             MsgType msgType = messageSubType.msgType(alarmType, request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
@@ -72,9 +69,7 @@ public class AlarmRobot extends AbstractAlarmSender {
             if (!messageSubType.isSupport()) {
                 return AlarmResponse.failed(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
             }
-            CustomMessage customMessage = customMessage(messageSubType);
-            String msgContent = customMessage.message(request);
-            request.setContent(msgContent);
+            convertMessage(messageSubType, request);
             MsgType msgType = messageSubType.msgType(alarmType, request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {

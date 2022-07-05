@@ -3,7 +3,6 @@ package com.github.sparkzxl.alarm.message;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,7 +11,7 @@ import java.util.Set;
  * @author zhouxinlei
  * @since 2022-05-18 11:32:17
  */
-public class MarkDownMessage implements CustomMessage {
+public class MarkDownMessageTemplate implements MessageTemplate {
 
     @Override
     public String message(AlarmRequest request) {

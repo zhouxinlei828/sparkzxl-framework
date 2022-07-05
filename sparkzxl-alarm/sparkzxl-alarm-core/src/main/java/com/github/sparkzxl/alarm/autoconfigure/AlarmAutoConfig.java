@@ -8,8 +8,8 @@ import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.executor.AlarmExecutor;
 import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.loadbalancer.RandomAlarmLoadBalancer;
-import com.github.sparkzxl.alarm.message.MarkDownMessage;
-import com.github.sparkzxl.alarm.message.TextMessage;
+import com.github.sparkzxl.alarm.message.MarkDownMessageTemplate;
+import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.properties.AlarmThreadPoolProperties;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
@@ -62,8 +62,8 @@ public class AlarmAutoConfig {
      */
     @ConditionalOnMissingBean(name = AlarmConstant.TEXT_MESSAGE)
     @Bean(AlarmConstant.TEXT_MESSAGE)
-    public TextMessage textMessage() {
-        return new TextMessage();
+    public TextMessageTemplate textMessage() {
+        return new TextMessageTemplate();
     }
 
     /**
@@ -73,8 +73,8 @@ public class AlarmAutoConfig {
      */
     @ConditionalOnMissingBean(name = AlarmConstant.MARKDOWN_MESSAGE)
     @Bean(AlarmConstant.MARKDOWN_MESSAGE)
-    public MarkDownMessage markDownMessage() {
-        return new MarkDownMessage();
+    public MarkDownMessageTemplate markDownMessage() {
+        return new MarkDownMessageTemplate();
     }
 
     /**
@@ -124,8 +124,8 @@ public class AlarmAutoConfig {
     @Bean
     @ConditionalOnMissingBean(AlarmSender.class)
     public AlarmSender alarmSender(AlarmProperties alarmProperties,
-                                   TextMessage textMessage,
-                                   MarkDownMessage markDownMessage,
+                                   TextMessageTemplate textMessage,
+                                   MarkDownMessageTemplate markDownMessage,
                                    List<AlarmExecutor> alarmExecutorList) {
         return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
     }

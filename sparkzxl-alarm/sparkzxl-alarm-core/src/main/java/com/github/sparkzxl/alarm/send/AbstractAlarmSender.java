@@ -1,10 +1,11 @@
 package com.github.sparkzxl.alarm.send;
 
+import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.executor.AlarmExecutor;
-import com.github.sparkzxl.alarm.message.CustomMessage;
-import com.github.sparkzxl.alarm.message.MarkDownMessage;
-import com.github.sparkzxl.alarm.message.TextMessage;
+import com.github.sparkzxl.alarm.message.MarkDownMessageTemplate;
+import com.github.sparkzxl.alarm.message.MessageTemplate;
+import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import org.springframework.util.CollectionUtils;
 
@@ -20,14 +21,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractAlarmSender implements AlarmSender {
 
-    protected TextMessage textMessage;
-    protected MarkDownMessage markDownMessage;
+    protected TextMessageTemplate textMessage;
+    protected MarkDownMessageTemplate markDownMessage;
     protected final AlarmProperties alarmProperties;
     protected final Map<String, AlarmExecutor> executorMap;
 
     public AbstractAlarmSender(AlarmProperties alarmProperties,
-                               TextMessage textMessage,
-                               MarkDownMessage markDownMessage,
+                               TextMessageTemplate textMessage,
+                               MarkDownMessageTemplate markDownMessage,
                                List<AlarmExecutor> alarmExecutorList) {
         this.alarmProperties = alarmProperties;
         this.textMessage = textMessage;
@@ -41,13 +42,14 @@ public abstract class AbstractAlarmSender implements AlarmSender {
     }
 
     /**
-     * 消息类型校验
+     * 消息模板转换
      *
      * @param messageSubType 消息类型
-     * @return 消息生成器
      */
-    protected CustomMessage customMessage(MessageSubType messageSubType) {
-        return messageSubType == MessageSubType.TEXT ? textMessage : markDownMessage;
+    protected void convertMessage(MessageSubType messageSubType, AlarmRequest request) {
+        MessageTemplate messageTemplate = messageSubType == MessageSubType.TEXT ? textMessage : markDownMessage;
+        String message = messageTemplate.message(request);
+        request.setContent(message);
     }
 
 }

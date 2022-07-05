@@ -8,7 +8,7 @@ import com.github.sparkzxl.alarm.entity.AlarmRequest;
  * @author zhouxinlei
  * @since 2022-05-18 11:28:40
  */
-public interface CustomMessage {
+public interface MessageTemplate {
 
     /**
      * 自定义消息

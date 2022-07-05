@@ -10,7 +10,7 @@ import java.text.MessageFormat;
  * @author zhouxinlei
  * @since 2022-05-18 11:31:12
  */
-public class TextMessage implements CustomMessage {
+public class TextMessageTemplate implements MessageTemplate {
 
     @Override
     public String message(AlarmRequest request) {
