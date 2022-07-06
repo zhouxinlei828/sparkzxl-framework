@@ -17,13 +17,9 @@ public enum AlarmType {
      */
     WETALK("wetalk", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
     /**
-     * 邮件
+     * 飞书
      */
-    MAIL("mail", "", true),
-    /**
-     * 邮件
-     */
-    SMS("sms", "", true),
+    FEISHU("feishu", "https://open.feishu.cn/open-apis/bot/v2/hook/", true),
     ;
 
     private final String type;

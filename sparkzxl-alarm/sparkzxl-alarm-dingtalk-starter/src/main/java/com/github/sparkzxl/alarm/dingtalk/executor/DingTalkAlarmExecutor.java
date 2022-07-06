@@ -3,6 +3,7 @@ package com.github.sparkzxl.alarm.dingtalk.executor;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
+import com.github.sparkzxl.alarm.dingtalk.sign.DingTalkAlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmType;
@@ -26,7 +27,10 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class DingTalkAlarmExecutor extends AbstractAlarmExecutor {
 
-    public DingTalkAlarmExecutor() {
+    private final DingTalkAlarmSignAlgorithm alarmSignAlgorithm;
+
+    public DingTalkAlarmExecutor(DingTalkAlarmSignAlgorithm alarmSignAlgorithm) {
+        this.alarmSignAlgorithm = alarmSignAlgorithm;
         log.debug("DingTalk Alarm Executor has been loaded, className:{}", this.getClass().getName());
     }
 
@@ -35,7 +39,7 @@ public class DingTalkAlarmExecutor extends AbstractAlarmExecutor {
         return Try.of(() -> {
             StringBuilder webhook = new StringBuilder();
             webhook.append(alarmConfig.getRobotUrl()).append(alarmConfig.getTokenId());
-            // 处理签名问题(只支持DingTalk)
+            // 处理签名问题
             if (StringUtils.isNotEmpty((alarmConfig.getSecret()))) {
                 BaseSign sign = alarmSignAlgorithm.sign(alarmConfig.getSecret().trim());
                 webhook.append(sign.transfer());

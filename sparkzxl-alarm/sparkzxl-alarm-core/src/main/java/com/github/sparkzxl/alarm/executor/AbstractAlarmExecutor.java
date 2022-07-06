@@ -12,9 +12,9 @@ import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.send.AlarmCallback;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
+import com.github.sparkzxl.alarm.sign.SignResult;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import io.vavr.control.Try;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +31,17 @@ import java.util.function.Function;
  * @since 2022-05-24 09:08:24
  */
 @Slf4j
-@RequiredArgsConstructor
 public abstract class AbstractAlarmExecutor implements AlarmExecutor {
 
     protected AlarmIdGenerator alarmIdGenerator;
     protected AlarmProperties alarmProperties;
     protected AlarmExceptionCallback alarmExceptionCallback;
     protected AlarmAsyncCallback alarmAsyncCallback;
-    protected AlarmSignAlgorithm alarmSignAlgorithm;
     protected AlarmLoadBalancer alarmLoadBalancer;
     protected ThreadPoolExecutor alarmThreadPoolExecutor;
 
+    public AbstractAlarmExecutor() {
+    }
 
     @Autowired
     public void setAlarmIdGenerator(AlarmIdGenerator alarmIdGenerator) {
@@ -61,11 +61,6 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
     @Autowired
     public void setAlarmAsyncCallback(AlarmAsyncCallback alarmAsyncCallback) {
         this.alarmAsyncCallback = alarmAsyncCallback;
-    }
-
-    @Autowired
-    public void setAlarmSignAlgorithm(AlarmSignAlgorithm alarmSignAlgorithm) {
-        this.alarmSignAlgorithm = alarmSignAlgorithm;
     }
 
     @Autowired
@@ -148,4 +143,5 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
      * @return AlarmResponse
      */
     protected abstract <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmProperties.AlarmConfig alarmConfig, T message);
+
 }

@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "defaultValue": true,
+      "name": "spring.alarm.channel.dingtalk.enabled",
+      "type": "java.lang.Boolean",
+      "description": "enabled dingtalk."
+    }
+  ]
+}

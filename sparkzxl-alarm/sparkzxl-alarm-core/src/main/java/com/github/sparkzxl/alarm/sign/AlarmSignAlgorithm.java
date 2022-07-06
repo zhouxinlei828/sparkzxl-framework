@@ -45,6 +45,12 @@ public interface AlarmSignAlgorithm<T extends BaseSign> {
                     Base64.getEncoder().encodeToString(signData),
                     StandardCharsets.UTF_8.name());
         }).getOrElseThrow((throwable) -> new Exception(throwable));
-
     }
+
+    /**
+     * 唯一算法标识id
+     *
+     * @return String
+     */
+    String unionId();
 }
