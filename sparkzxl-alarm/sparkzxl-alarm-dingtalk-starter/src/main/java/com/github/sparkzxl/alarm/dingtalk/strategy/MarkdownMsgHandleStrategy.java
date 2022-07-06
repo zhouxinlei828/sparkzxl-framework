@@ -23,9 +23,12 @@ public class MarkdownMsgHandleStrategy implements MsgHandleStrategy {
     public MsgType getMessage(AlarmRequest request) {
         String content = request.getContent();
         String title = request.getTitle();
+        boolean atAll = request.isAtAll();
         Set<String> phones = request.getPhones();
         Message message = new DingTalkMarkDown(new DingTalkMarkDown.MarkDown(title, content));
-        if (!phones.isEmpty()) {
+        if (atAll) {
+            message.setAt(new Message.At(true));
+        } else if (phones != null && !phones.isEmpty()) {
             message.setAt(new Message.At(phones));
         }
         return message;
