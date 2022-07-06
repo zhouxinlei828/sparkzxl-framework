@@ -14,8 +14,6 @@ import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.properties.AlarmThreadPoolProperties;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
 import com.github.sparkzxl.alarm.send.AlarmSender;
-import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
-import com.github.sparkzxl.alarm.sign.DingTalkAlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.support.AlarmExceptionHandler;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import com.github.sparkzxl.alarm.support.DefaultAlarmIdGenerator;
@@ -86,17 +84,6 @@ public class AlarmAutoConfig {
     @ConditionalOnMissingBean(AlarmIdGenerator.class)
     public AlarmIdGenerator alarmIdGenerator() {
         return new DefaultAlarmIdGenerator();
-    }
-
-    /**
-     * 默认的DingTalk签名算法
-     *
-     * @return AlarmSignAlgorithm
-     */
-    @Bean
-    @ConditionalOnMissingBean(AlarmSignAlgorithm.class)
-    public AlarmSignAlgorithm alarmSignAlgorithm() {
-        return new DingTalkAlarmSignAlgorithm();
     }
 
     /**

@@ -6,7 +6,7 @@ package com.github.sparkzxl.alarm.entity;
  * @author zhouxinlei
  * @since 2022-05-19 10:38:05
  */
-public class AlarmLink {
+public class BaseLink {
     /**
      * 消息标题
      */
@@ -24,15 +24,15 @@ public class AlarmLink {
      */
     private String picUrl;
 
-    private AlarmLink(String title, String text, String messageUrl, String picUrl) {
+    private BaseLink(String title, String text, String messageUrl, String picUrl) {
         this.title = title;
         this.text = text;
         this.messageUrl = messageUrl;
         this.picUrl = picUrl;
     }
 
-    public static AlarmLink instance(String title, String text, String messageUrl, String picUrl) {
-        return new AlarmLink(title, text, messageUrl, picUrl);
+    public static BaseLink instance(String title, String text, String messageUrl, String picUrl) {
+        return new BaseLink(title, text, messageUrl, picUrl);
     }
 
     public String getTitle() {

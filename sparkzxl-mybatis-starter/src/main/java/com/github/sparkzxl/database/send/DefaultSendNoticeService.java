@@ -1,7 +1,5 @@
 package com.github.sparkzxl.database.send;
 
-import com.github.sparkzxl.database.plugins.SqlMonitorMessage;
-
 /**
  * description: 默认消息通知
  *

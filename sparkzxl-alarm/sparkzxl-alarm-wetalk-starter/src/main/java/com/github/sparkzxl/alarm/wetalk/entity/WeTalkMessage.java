@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.entity.wechat;
+package com.github.sparkzxl.alarm.wetalk.entity;
 
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmType;

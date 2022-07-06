@@ -1,6 +1,6 @@
-package com.github.sparkzxl.alarm.entity.dingtalk;
+package com.github.sparkzxl.alarm.dingtalk.entity;
 
-import com.github.sparkzxl.alarm.entity.AlarmLink;
+import com.github.sparkzxl.alarm.entity.BaseLink;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -99,8 +99,8 @@ public class DingTalkLink extends DingTalkMessage {
     public void transfer(Map<String, Object> params) {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
-            if (value instanceof AlarmLink) {
-                AlarmLink link = (AlarmLink) value;
+            if (value instanceof BaseLink) {
+                BaseLink link = (BaseLink) value;
                 this.link = new Link(link.getTitle(), link.getText(), link.getMessageUrl(), link.getPicUrl());
                 break;
             }

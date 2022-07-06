@@ -1,6 +1,4 @@
-package com.github.sparkzxl.alarm.entity.dingtalk;
-
-import com.github.sparkzxl.alarm.entity.Message;
+package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import java.io.Serializable;
 import java.util.Map;

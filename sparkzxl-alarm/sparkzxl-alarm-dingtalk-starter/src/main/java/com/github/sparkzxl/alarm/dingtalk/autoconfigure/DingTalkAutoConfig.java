@@ -1,6 +1,8 @@
 package com.github.sparkzxl.alarm.dingtalk.autoconfigure;
 
 import com.github.sparkzxl.alarm.dingtalk.executor.DingTalkAlarmExecutor;
+import com.github.sparkzxl.alarm.dingtalk.sign.DingTalkAlarmSignAlgorithm;
+import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,17 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "spring.alarm.channel.dingtalk.enabled", havingValue = "true")
 @Configuration
 public class DingTalkAutoConfig {
+
+    /**
+     * 默认的DingTalk签名算法
+     *
+     * @return AlarmSignAlgorithm
+     */
+    @Bean
+    @ConditionalOnMissingBean(AlarmSignAlgorithm.class)
+    public AlarmSignAlgorithm alarmSignAlgorithm() {
+        return new DingTalkAlarmSignAlgorithm();
+    }
 
     /**
      * 钉钉告警执行器

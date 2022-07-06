@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.sparkzxl.alarm.entity.wechat;
+package com.github.sparkzxl.alarm.wetalk.entity;
 
 import java.io.Serializable;
 import java.util.Map;

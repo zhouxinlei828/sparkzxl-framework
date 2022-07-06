@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.sparkzxl.alarm.entity.dingtalk;
+package com.github.sparkzxl.alarm.dingtalk.entity;
 
 /**
  * DingTalk支持的消息类型
@@ -49,7 +49,7 @@ public enum DingTalkMsgType {
 
     ;
 
-    private String type;
+    private final String type;
 
     DingTalkMsgType(String type) {
         this.type = type;

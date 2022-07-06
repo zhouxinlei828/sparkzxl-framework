@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.entity.dingtalk;
+package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import cn.hutool.core.convert.Convert;
 import lombok.Getter;

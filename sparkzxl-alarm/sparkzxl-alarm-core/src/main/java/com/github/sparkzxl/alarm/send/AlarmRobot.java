@@ -11,6 +11,8 @@ import com.github.sparkzxl.alarm.executor.AlarmExecutor;
 import com.github.sparkzxl.alarm.message.MarkDownMessageTemplate;
 import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
+import com.github.sparkzxl.alarm.strategy.AlarmMessageFactory;
+import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -46,7 +48,8 @@ public class AlarmRobot extends AbstractAlarmSender {
                 return AlarmResponse.failed(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
             }
             convertMessage(messageSubType, request);
-            MsgType msgType = messageSubType.msgType(alarmType, request);
+            MsgHandleStrategy msgHandleStrategy = AlarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
+            MsgType msgType = msgHandleStrategy.getMessage(request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
                 String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
@@ -70,7 +73,8 @@ public class AlarmRobot extends AbstractAlarmSender {
                 return AlarmResponse.failed(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
             }
             convertMessage(messageSubType, request);
-            MsgType msgType = messageSubType.msgType(alarmType, request);
+            MsgHandleStrategy msgHandleStrategy = AlarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
+            MsgType msgType = msgHandleStrategy.getMessage(request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
                 String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),

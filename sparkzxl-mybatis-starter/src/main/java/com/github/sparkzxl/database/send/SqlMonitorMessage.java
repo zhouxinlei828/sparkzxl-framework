@@ -1,5 +1,6 @@
-package com.github.sparkzxl.database.plugins;
+package com.github.sparkzxl.database.send;
 
+import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
 import lombok.Data;
 
 /**

@@ -1,5 +1,8 @@
-package com.github.sparkzxl.alarm.sign;
+package com.github.sparkzxl.alarm.dingtalk.sign;
 
+
+import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
+import com.github.sparkzxl.alarm.sign.SignResult;
 
 /**
  * description: DingTalk签名接口

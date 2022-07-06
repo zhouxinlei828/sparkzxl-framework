@@ -1,6 +1,5 @@
-package com.github.sparkzxl.alarm.entity;
+package com.github.sparkzxl.alarm.dingtalk.entity;
 
-import com.github.sparkzxl.alarm.entity.dingtalk.DingTalkMessage;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;

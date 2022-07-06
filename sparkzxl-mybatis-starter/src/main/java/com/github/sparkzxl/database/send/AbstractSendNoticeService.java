@@ -1,7 +1,6 @@
 package com.github.sparkzxl.database.send;
 
 import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
-import com.github.sparkzxl.database.plugins.SqlMonitorMessage;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -11,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2022-06-16 17:37:21
  */
 @Slf4j
-public abstract class AbstractSendNoticeService implements ISendNoticeService {
+public abstract class AbstractSendNoticeService implements SendNoticeService {
 
     @Override
     public void send(SqlMonitorMessage sqlMonitorMessage) {

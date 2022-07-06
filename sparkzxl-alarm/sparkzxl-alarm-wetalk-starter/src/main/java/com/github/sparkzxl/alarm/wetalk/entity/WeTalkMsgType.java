@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.entity.wechat;
+package com.github.sparkzxl.alarm.wetalk.entity;
 
 /**
  * description: WeTalk支持的消息类型
@@ -32,7 +32,7 @@ public enum WeTalkMsgType {
      */
     FILE("file");
 
-    private String type;
+    private final String type;
 
     WeTalkMsgType(String type) {
         this.type = type;

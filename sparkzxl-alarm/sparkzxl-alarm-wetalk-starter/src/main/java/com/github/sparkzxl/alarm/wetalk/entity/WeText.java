@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.entity.wechat;
+package com.github.sparkzxl.alarm.wetalk.entity;
 
 import com.google.common.collect.Lists;
 

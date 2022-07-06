@@ -1,8 +1,8 @@
-package com.github.sparkzxl.alarm.entity.dingtalk;
+package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
-import com.github.sparkzxl.alarm.entity.ImageText;
+import com.github.sparkzxl.alarm.entity.BaseImageText;
 
 import java.io.Serializable;
 import java.util.List;
@@ -113,10 +113,10 @@ public class DingFeedCard extends DingTalkMessage {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<ImageText> imageTexts = Convert.convert(new TypeReference<List<ImageText>>() {
+                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
                 }, value);
-                for (ImageText imageText : imageTexts) {
-                    this.feedCard.links.add(new FeedCard.Link(imageText.getTitle(), imageText.getUrl(), imageText.getPicUrl()));
+                for (BaseImageText baseImageText : baseImageTexts) {
+                    this.feedCard.links.add(new FeedCard.Link(baseImageText.getTitle(), baseImageText.getUrl(), baseImageText.getPicUrl()));
                 }
                 break;
             }
