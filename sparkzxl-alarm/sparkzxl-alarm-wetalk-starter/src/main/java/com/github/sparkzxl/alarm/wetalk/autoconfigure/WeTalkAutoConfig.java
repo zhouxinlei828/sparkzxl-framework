@@ -1,10 +1,12 @@
 package com.github.sparkzxl.alarm.wetalk.autoconfigure;
 
 import com.github.sparkzxl.alarm.wetalk.executor.WeTalkAlarmExecutor;
+import com.github.sparkzxl.alarm.wetalk.strategy.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * description: 企业微信告警自动装配
@@ -27,4 +29,46 @@ public class WeTalkAutoConfig {
         return new WeTalkAlarmExecutor();
     }
 
+
+    @Configuration
+    static class MessageAutoConfig {
+
+        private final String MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME = "wetalk";
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "ActionCardMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(ActionCardMsgHandleStrategy.class)
+        public ActionCardMsgHandleStrategy actionCardMsgHandleStrategy() {
+            return new ActionCardMsgHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "ImageTextMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(ImageTextMsgHandleStrategy.class)
+        public ImageTextMsgHandleStrategy imageTextMsgHandleStrategy() {
+            return new ImageTextMsgHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "MarkdownMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(MarkdownMsgHandleStrategy.class)
+        public MarkdownMsgHandleStrategy markdownMsgHandleStrategy() {
+            return new MarkdownMsgHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "MsgLinkHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(MsgLinkHandleStrategy.class)
+        public MsgLinkHandleStrategy msgLinkHandleStrategy() {
+            return new MsgLinkHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "TextMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(TextMsgHandleStrategy.class)
+        public TextMsgHandleStrategy textMsgHandleStrategy() {
+            return new TextMsgHandleStrategy();
+        }
+
+    }
 }

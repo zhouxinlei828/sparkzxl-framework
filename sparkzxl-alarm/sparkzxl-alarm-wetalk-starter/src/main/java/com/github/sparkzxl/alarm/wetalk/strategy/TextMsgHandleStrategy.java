@@ -22,7 +22,7 @@ import static com.github.sparkzxl.alarm.constant.AlarmConstant.WETALK_AT_ALL;
 public class TextMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
+    public MsgType newInstance(AlarmRequest request) {
         String content = request.getContent();
         boolean atAll = request.isAtAll();
         Set<String> phones = request.getPhones();
@@ -39,7 +39,7 @@ public class TextMsgHandleStrategy implements MsgHandleStrategy {
     @Override
     public String unionId() {
         MessageSource messageSource = new MessageSource();
-        messageSource.setMessageType(MessageSubType.TEXT.name());
+        messageSource.setMessageType(MessageSubType.TEXT.getCode());
         messageSource.setAlarmType(AlarmType.WETALK.getType());
         return messageSource.convert();
     }

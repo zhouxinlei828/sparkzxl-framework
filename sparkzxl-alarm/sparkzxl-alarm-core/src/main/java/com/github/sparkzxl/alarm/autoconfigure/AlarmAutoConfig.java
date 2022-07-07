@@ -14,6 +14,8 @@ import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.properties.AlarmThreadPoolProperties;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
 import com.github.sparkzxl.alarm.send.AlarmSender;
+import com.github.sparkzxl.alarm.strategy.AlarmMessageFactory;
+import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.support.AlarmExceptionHandler;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import com.github.sparkzxl.alarm.support.DefaultAlarmIdGenerator;
@@ -51,6 +53,11 @@ public class AlarmAutoConfig {
                 TimeUnit.SECONDS, new ArrayBlockingQueue<>(alarmThreadPoolProperties.getQueueCapacity()),
                 new BasicThreadFactory.Builder().namingPattern(alarmThreadPoolProperties.getThreadNamePrefix()).build(),
                 new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    @Bean
+    public AlarmMessageFactory alarmMessageFactory(List<MsgHandleStrategy> msgHandleStrategyList) {
+        return new AlarmMessageFactory(msgHandleStrategyList);
     }
 
     /**
@@ -113,8 +120,9 @@ public class AlarmAutoConfig {
     public AlarmSender alarmSender(AlarmProperties alarmProperties,
                                    TextMessageTemplate textMessage,
                                    MarkDownMessageTemplate markDownMessage,
-                                   List<AlarmExecutor> alarmExecutorList) {
-        return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
+                                   List<AlarmExecutor> alarmExecutorList,
+                                   AlarmMessageFactory alarmMessageFactory) {
+        return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList, alarmMessageFactory);
     }
 
     @Bean

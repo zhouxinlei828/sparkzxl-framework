@@ -17,7 +17,7 @@ public interface MsgHandleStrategy {
      * @param request 告警请求对象
      * @return MsgType
      */
-    MsgType getMessage(AlarmRequest request);
+    MsgType newInstance(AlarmRequest request);
 
     /**
      * 消息unionId

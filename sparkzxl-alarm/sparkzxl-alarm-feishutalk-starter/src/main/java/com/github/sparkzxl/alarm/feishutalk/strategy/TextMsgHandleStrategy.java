@@ -21,7 +21,7 @@ import java.util.List;
 public class TextMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
+    public MsgType newInstance(AlarmRequest request) {
         boolean atAll = request.isAtAll();
         FeiShuTalkText.Content content = new FeiShuTalkText.Content(request.getContent());
         FeiShuTalkText feiShuTalkText = new FeiShuTalkText(content);

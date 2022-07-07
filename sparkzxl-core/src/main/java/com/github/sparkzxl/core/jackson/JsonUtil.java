@@ -8,9 +8,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.JwtParseException;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.StrPool;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
@@ -170,6 +171,15 @@ public class JsonUtil {
             return getInstance().readTree(jsonParser);
         } catch (IOException e) {
             log.error("json readTree IOException：{}", e.getMessage());
+            throw new JwtParseException(e.getMessage());
+        }
+    }
+
+    public static <T> ObjectNode readTree(T val) {
+        try {
+            return getInstance().valueToTree(val);
+        } catch (IllegalArgumentException e) {
+            log.error("json readTree IllegalArgumentException：{}", e.getMessage());
             throw new JwtParseException(e.getMessage());
         }
     }

@@ -5,6 +5,11 @@ import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.sign.SignResult;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 /**
  * description: FeiShuTalk签名接口
  *
@@ -15,9 +20,21 @@ public class FeiShuTalkAlarmSignAlgorithm implements AlarmSignAlgorithm<SignResu
 
     @Override
     public SignResult sign(String secret) throws Exception {
-        Long timestamp = System.currentTimeMillis();
+        // 注意这里是秒级时间戳
+        Long timestamp = System.currentTimeMillis() / 1000;
         String sign = algorithm(timestamp, secret);
         return new SignResult(sign, timestamp);
+    }
+
+    @Override
+    public String algorithm(Long timestamp, String secret) throws Exception {
+        // 把timestamp+"\n"+密钥当做签名字符串
+        String stringToSign = timestamp + "\n" + secret;
+        // 使用HmacSHA256算法计算签名
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(new SecretKeySpec(stringToSign.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+        byte[] signData = mac.doFinal(new byte[]{});
+        return new String(Base64.getEncoder().encode(signData));
     }
 
     @Override

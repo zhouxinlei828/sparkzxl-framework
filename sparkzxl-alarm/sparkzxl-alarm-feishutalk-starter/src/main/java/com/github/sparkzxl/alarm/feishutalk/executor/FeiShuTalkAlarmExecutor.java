@@ -12,12 +12,10 @@ import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.feishutalk.sign.FeiShuTalkAlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.sign.SignResult;
-import com.github.sparkzxl.core.jackson.JsonUtil;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -41,14 +39,12 @@ public class FeiShuTalkAlarmExecutor extends AbstractAlarmExecutor {
         return Try.of(() -> {
             StringBuilder webhook = new StringBuilder();
             webhook.append(alarmConfig.getRobotUrl()).append(alarmConfig.getTokenId());
-            Map<String, Object> messageMap = message.toMap();
             // 处理签名问题
             if (StringUtils.isNotEmpty((alarmConfig.getSecret()))) {
                 SignResult signResult = alarmSignAlgorithm.sign(alarmConfig.getSecret().trim());
-                messageMap.put("sign", signResult.getSign());
-                messageMap.put("timestamp", signResult.getTimestamp());
+                message.signAttributes(signResult);
             }
-            String json = JsonUtil.toJson(messageMap);
+            String json = message.toJson();
             if (alarmConfig.isAsync()) {
                 CompletableFuture<AlarmResponse> alarmResponseCompletableFuture = CompletableFuture.supplyAsync(() -> {
                     try {

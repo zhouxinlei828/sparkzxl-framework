@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class ImageTextMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
+    public MsgType newInstance(AlarmRequest request) {
         return new DingFeedCard(new ArrayList<>());
     }
 

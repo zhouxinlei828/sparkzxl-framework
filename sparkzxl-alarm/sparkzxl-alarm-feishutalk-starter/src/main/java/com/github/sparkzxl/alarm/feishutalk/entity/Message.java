@@ -1,6 +1,8 @@
 package com.github.sparkzxl.alarm.feishutalk.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.sparkzxl.alarm.sign.BaseSign;
+import com.github.sparkzxl.alarm.sign.SignResult;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -18,6 +20,15 @@ import java.util.List;
  * @since 2022-05-18 13:49:46
  */
 public class Message extends FeiShuTalkMessage implements Serializable {
+
+    /**
+     * 签名-时间戳
+     */
+    private String timestamp;
+    /**
+     * 签名-秘钥
+     */
+    private String sign;
 
     @JsonIgnore
     private List<FeiShuAt> atList;
@@ -87,5 +98,29 @@ public class Message extends FeiShuTalkMessage implements Serializable {
         }
     }
 
+    public String getTimestamp() {
+        return timestamp;
+    }
 
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    @Override
+    public void signAttributes(BaseSign sign) {
+        if (!(sign instanceof SignResult)) {
+            return;
+        }
+        SignResult signResult = (SignResult) sign;
+        this.timestamp = String.valueOf(signResult.getTimestamp());
+        this.sign = signResult.getSign();
+    }
 }

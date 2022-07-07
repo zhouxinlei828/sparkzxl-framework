@@ -17,7 +17,7 @@ import com.github.sparkzxl.alarm.strategy.MessageSource;
 public class MarkdownMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
+    public MsgType newInstance(AlarmRequest request) {
         String content = request.getContent();
         WeMarkdown.Markdown markdown = new WeMarkdown.Markdown(content);
         return new WeMarkdown(markdown);
@@ -26,7 +26,7 @@ public class MarkdownMsgHandleStrategy implements MsgHandleStrategy {
     @Override
     public String unionId() {
         MessageSource messageSource = new MessageSource();
-        messageSource.setMessageType(MessageSubType.MARKDOWN.name());
+        messageSource.setMessageType(MessageSubType.MARKDOWN.getCode());
         messageSource.setAlarmType(AlarmType.WETALK.getType());
         return messageSource.convert();
     }

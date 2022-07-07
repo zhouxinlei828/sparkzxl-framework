@@ -6,8 +6,10 @@ import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
 import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
-import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
+import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
+
+import java.text.MessageFormat;
 
 /**
  * description: 企业微信卡片类型消息
@@ -18,8 +20,11 @@ import com.github.sparkzxl.alarm.strategy.MessageSource;
 public class ActionCardMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
-        throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(), AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg());
+    public MsgType newInstance(AlarmRequest request) {
+        throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(),
+                MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
+                        AlarmType.WETALK.getType(),
+                        MessageSubType.ACTION_CARD.getCode()));
     }
 
     @Override

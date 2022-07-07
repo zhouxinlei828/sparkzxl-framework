@@ -2,10 +2,12 @@ package com.github.sparkzxl.alarm.dingtalk.autoconfigure;
 
 import com.github.sparkzxl.alarm.dingtalk.executor.DingTalkAlarmExecutor;
 import com.github.sparkzxl.alarm.dingtalk.sign.DingTalkAlarmSignAlgorithm;
+import com.github.sparkzxl.alarm.dingtalk.strategy.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * description: 钉钉告警自动装配
@@ -36,6 +38,48 @@ public class DingTalkAutoConfig {
     @ConditionalOnMissingBean(DingTalkAlarmExecutor.class)
     public DingTalkAlarmExecutor dingTalkAlarmExecutor(DingTalkAlarmSignAlgorithm dingTalkAlarmSignAlgorithm) {
         return new DingTalkAlarmExecutor(dingTalkAlarmSignAlgorithm);
+    }
+
+    @Configuration
+    static class MessageAutoConfig {
+
+        private final String MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME = "dingtalk";
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "ActionCardMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(ActionCardMsgHandleStrategy.class)
+        public ActionCardMsgHandleStrategy actionCardMsgHandleStrategy() {
+            return new ActionCardMsgHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "ImageTextMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(ImageTextMsgHandleStrategy.class)
+        public ImageTextMsgHandleStrategy imageTextMsgHandleStrategy() {
+            return new ImageTextMsgHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "MarkdownMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(MarkdownMsgHandleStrategy.class)
+        public MarkdownMsgHandleStrategy markdownMsgHandleStrategy() {
+            return new MarkdownMsgHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "MsgLinkHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(MsgLinkHandleStrategy.class)
+        public MsgLinkHandleStrategy msgLinkHandleStrategy() {
+            return new MsgLinkHandleStrategy();
+        }
+
+        @Bean(name = MSG_HANDLE_STRATEGY_PREFIX_BEAN_NAME + "TextMsgHandleStrategy")
+        @Lazy
+        @ConditionalOnMissingBean(TextMsgHandleStrategy.class)
+        public TextMsgHandleStrategy textMsgHandleStrategy() {
+            return new TextMsgHandleStrategy();
+        }
+
     }
 
 }

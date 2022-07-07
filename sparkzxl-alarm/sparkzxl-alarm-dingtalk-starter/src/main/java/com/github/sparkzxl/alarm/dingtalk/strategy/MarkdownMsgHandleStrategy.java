@@ -20,7 +20,7 @@ import java.util.Set;
 public class MarkdownMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
+    public MsgType newInstance(AlarmRequest request) {
         String content = request.getContent();
         String title = request.getTitle();
         boolean atAll = request.isAtAll();

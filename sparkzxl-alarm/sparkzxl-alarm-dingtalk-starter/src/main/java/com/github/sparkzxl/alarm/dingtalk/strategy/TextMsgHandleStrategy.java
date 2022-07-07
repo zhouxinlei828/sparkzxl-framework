@@ -20,7 +20,7 @@ import java.util.Set;
 public class TextMsgHandleStrategy implements MsgHandleStrategy {
 
     @Override
-    public MsgType getMessage(AlarmRequest request) {
+    public MsgType newInstance(AlarmRequest request) {
         String content = request.getContent();
         boolean atAll = request.isAtAll();
         Set<String> phones = request.getPhones();

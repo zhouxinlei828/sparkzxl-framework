@@ -40,7 +40,7 @@ public enum FeiShuTalkMsgType {
     /**
      * ActionCard类型
      */
-    ACTION_CARD("actionCard"),
+    ACTION_CARD("interactive"),
 
     /**
      * FeedCard类型

@@ -29,11 +29,14 @@ import java.util.List;
 @Slf4j
 public class AlarmRobot extends AbstractAlarmSender {
 
+    private final AlarmMessageFactory alarmMessageFactory;
+
     public AlarmRobot(AlarmProperties alarmProperties,
                       TextMessageTemplate textMessage,
                       MarkDownMessageTemplate markDownMessage,
-                      List<AlarmExecutor> alarmExecutorList) {
+                      List<AlarmExecutor> alarmExecutorList, AlarmMessageFactory alarmMessageFactory) {
         super(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
+        this.alarmMessageFactory = alarmMessageFactory;
     }
 
     @Override
@@ -45,11 +48,13 @@ public class AlarmRobot extends AbstractAlarmSender {
     public AlarmResponse send(AlarmType alarmType, MessageSubType messageSubType, AlarmRequest request) {
         return Try.of(() -> {
             if (!messageSubType.isSupport()) {
-                return AlarmResponse.failed(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
+                return AlarmResponse.failed(MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
+                        alarmType.getType(),
+                        messageSubType.getCode()));
             }
             convertMessage(messageSubType, request);
-            MsgHandleStrategy msgHandleStrategy = AlarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
-            MsgType msgType = msgHandleStrategy.getMessage(request);
+            MsgHandleStrategy msgHandleStrategy = alarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
+            MsgType msgType = msgHandleStrategy.newInstance(request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
                 String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
@@ -70,11 +75,13 @@ public class AlarmRobot extends AbstractAlarmSender {
     public AlarmResponse designatedRobotSend(String robotId, AlarmType alarmType, MessageSubType messageSubType, AlarmRequest request) {
         return Try.of(() -> {
             if (!messageSubType.isSupport()) {
-                return AlarmResponse.failed(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
+                return AlarmResponse.failed(MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
+                        alarmType.getType(),
+                        messageSubType.getCode()));
             }
             convertMessage(messageSubType, request);
-            MsgHandleStrategy msgHandleStrategy = AlarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
-            MsgType msgType = msgHandleStrategy.getMessage(request);
+            MsgHandleStrategy msgHandleStrategy = alarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
+            MsgType msgType = msgHandleStrategy.newInstance(request);
             AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
                 String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
