@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.dingtalk.sign;
 
 
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.sign.SignResult;
 
@@ -22,6 +22,6 @@ public class DingTalkAlarmSignAlgorithm implements AlarmSignAlgorithm<SignResult
 
     @Override
     public String unionId() {
-        return AlarmType.DINGTALK.getType();
+        return AlarmChannel.DINGTALK.getType();
     }
 }

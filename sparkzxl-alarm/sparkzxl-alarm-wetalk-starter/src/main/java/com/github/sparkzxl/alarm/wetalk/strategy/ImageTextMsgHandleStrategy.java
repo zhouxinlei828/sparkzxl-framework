@@ -3,7 +3,7 @@ package com.github.sparkzxl.alarm.wetalk.strategy;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.wetalk.entity.WeNews;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
@@ -26,7 +26,7 @@ public class ImageTextMsgHandleStrategy implements MsgHandleStrategy {
     public String unionId() {
         MessageSource messageSource = new MessageSource();
         messageSource.setMessageType(MessageSubType.IMAGE_TEXT.getCode());
-        messageSource.setAlarmType(AlarmType.WETALK.getType());
+        messageSource.setAlarmType(AlarmChannel.WETALK.getType());
         return messageSource.convert();
     }
 }

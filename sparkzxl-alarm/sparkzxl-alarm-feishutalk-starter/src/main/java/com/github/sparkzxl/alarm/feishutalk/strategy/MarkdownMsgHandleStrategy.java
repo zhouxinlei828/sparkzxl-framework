@@ -2,7 +2,7 @@ package com.github.sparkzxl.alarm.feishutalk.strategy;
 
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.feishutalk.entity.FeiShuTalkMarkdown;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
@@ -42,7 +42,7 @@ public class MarkdownMsgHandleStrategy implements MsgHandleStrategy {
     public String unionId() {
         MessageSource messageSource = new MessageSource();
         messageSource.setMessageType(MessageSubType.MARKDOWN.getCode());
-        messageSource.setAlarmType(AlarmType.FEISHU.getType());
+        messageSource.setAlarmType(AlarmChannel.FEISHU.getType());
         return messageSource.convert();
     }
 }

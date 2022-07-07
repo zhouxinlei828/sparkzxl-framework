@@ -6,7 +6,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.exception.AsyncCallException;
 import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
@@ -59,6 +59,6 @@ public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
 
     @Override
     public String named() {
-        return AlarmType.WETALK.getType();
+        return AlarmChannel.WETALK.getType();
     }
 }

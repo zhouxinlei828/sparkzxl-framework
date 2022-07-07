@@ -1,12 +1,12 @@
 package com.github.sparkzxl.alarm.enums;
 
 /**
- * description: 告警类型
+ * description: 告警渠道
  *
  * @author zhouxinlei
  * @since 2022-05-18 10:01:59
  */
-public enum AlarmType {
+public enum AlarmChannel {
 
     /**
      * 钉钉
@@ -29,7 +29,7 @@ public enum AlarmType {
      */
     private final boolean enabled;
 
-    AlarmType(String type, String robotUrl, boolean enabled) {
+    AlarmChannel(String type, String robotUrl, boolean enabled) {
         this.type = type;
         this.robotUrl = robotUrl;
         this.enabled = enabled;

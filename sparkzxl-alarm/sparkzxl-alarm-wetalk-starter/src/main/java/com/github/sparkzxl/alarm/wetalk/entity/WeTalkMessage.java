@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.wetalk.entity;
 
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 
 /**
  * description: WeTalk请求体
@@ -11,6 +11,6 @@ import com.github.sparkzxl.alarm.enums.AlarmType;
  */
 public class WeTalkMessage extends MsgType {
     public WeTalkMessage() {
-        setAlarmType(AlarmType.WETALK);
+        setAlarmChannel(AlarmChannel.WETALK);
     }
 }

@@ -4,7 +4,7 @@ import com.github.sparkzxl.alarm.dingtalk.entity.DingTalkMarkDown;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.dingtalk.entity.Message;
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
@@ -38,7 +38,7 @@ public class MarkdownMsgHandleStrategy implements MsgHandleStrategy {
     public String unionId() {
         MessageSource messageSource = new MessageSource();
         messageSource.setMessageType(MessageSubType.MARKDOWN.getCode());
-        messageSource.setAlarmType(AlarmType.DINGTALK.getType());
+        messageSource.setAlarmType(AlarmChannel.DINGTALK.getType());
         return messageSource.convert();
     }
 }

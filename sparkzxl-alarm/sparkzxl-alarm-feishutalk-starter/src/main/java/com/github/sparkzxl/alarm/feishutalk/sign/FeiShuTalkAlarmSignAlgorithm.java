@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.feishutalk.sign;
 
 
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.sign.SignResult;
 
@@ -39,6 +39,6 @@ public class FeiShuTalkAlarmSignAlgorithm implements AlarmSignAlgorithm<SignResu
 
     @Override
     public String unionId() {
-        return AlarmType.FEISHU.getType();
+        return AlarmChannel.FEISHU.getType();
     }
 }

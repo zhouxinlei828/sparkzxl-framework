@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.sign.BaseSign;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class MsgType implements Serializable {
     private static final long serialVersionUID = -5736754669734772997L;
 
     @JsonIgnore
-    private volatile AlarmType alarmType;
+    private volatile AlarmChannel alarmChannel;
 
     private String msgtype;
 

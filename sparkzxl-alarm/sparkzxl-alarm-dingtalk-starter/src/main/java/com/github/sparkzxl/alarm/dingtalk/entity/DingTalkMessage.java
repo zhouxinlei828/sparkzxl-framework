@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 
 /**
  * description: DingTalk请求体
@@ -12,7 +12,7 @@ import com.github.sparkzxl.alarm.enums.AlarmType;
 public class DingTalkMessage extends MsgType {
 
     public DingTalkMessage() {
-        setAlarmType(AlarmType.DINGTALK);
+        setAlarmChannel(AlarmChannel.DINGTALK);
     }
 
 }

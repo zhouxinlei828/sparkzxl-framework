@@ -4,7 +4,7 @@ import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.executor.AlarmExecutor;
@@ -45,21 +45,21 @@ public class AlarmRobot extends AbstractAlarmClient {
     }
 
     @Override
-    public AlarmResponse send(AlarmType alarmType, MessageSubType messageSubType, AlarmRequest request) {
+    public AlarmResponse send(AlarmChannel alarmChannel, MessageSubType messageSubType, AlarmRequest request) {
         return Try.of(() -> {
             if (!messageSubType.isSupport()) {
                 return AlarmResponse.failed(MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
-                        alarmType.getType(),
+                        alarmChannel.getType(),
                         messageSubType.getCode()));
             }
             convertMessage(messageSubType, request);
-            MsgHandleStrategy msgHandleStrategy = alarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
+            MsgHandleStrategy msgHandleStrategy = alarmMessageFactory.create(alarmChannel.getType(), messageSubType.getCode());
             MsgType msgType = msgHandleStrategy.newInstance(request);
-            AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
+            AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmChannel().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
                 String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
-                        msgType.getAlarmType().getType(),
-                        msgType.getAlarmType().getType());
+                        msgType.getAlarmChannel().getType(),
+                        msgType.getAlarmChannel().getType());
                 throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMsg);
             }
             return alarmExecutor.send(msgType, request.getVariables());
@@ -72,21 +72,21 @@ public class AlarmRobot extends AbstractAlarmClient {
     }
 
     @Override
-    public AlarmResponse designatedRobotSend(String robotId, AlarmType alarmType, MessageSubType messageSubType, AlarmRequest request) {
+    public AlarmResponse designatedRobotSend(String robotId, AlarmChannel alarmChannel, MessageSubType messageSubType, AlarmRequest request) {
         return Try.of(() -> {
             if (!messageSubType.isSupport()) {
                 return AlarmResponse.failed(MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
-                        alarmType.getType(),
+                        alarmChannel.getType(),
                         messageSubType.getCode()));
             }
             convertMessage(messageSubType, request);
-            MsgHandleStrategy msgHandleStrategy = alarmMessageFactory.create(alarmType.getType(), messageSubType.getCode());
+            MsgHandleStrategy msgHandleStrategy = alarmMessageFactory.create(alarmChannel.getType(), messageSubType.getCode());
             MsgType msgType = msgHandleStrategy.newInstance(request);
-            AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmType().getType());
+            AlarmExecutor alarmExecutor = executorMap.get(msgType.getAlarmChannel().getType());
             if (ObjectUtils.isEmpty(alarmExecutor)) {
                 String errorMsg = MessageFormat.format(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorMsg(),
-                        msgType.getAlarmType().getType(),
-                        msgType.getAlarmType().getType());
+                        msgType.getAlarmChannel().getType(),
+                        msgType.getAlarmChannel().getType());
                 throw new AlarmException(AlarmResponseCodeEnum.ALARM_TYPE_UNSUPPORTED.getErrorCode(), errorMsg);
             }
             return alarmExecutor.designatedRobotSend(robotId, msgType, request.getVariables());

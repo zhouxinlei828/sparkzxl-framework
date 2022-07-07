@@ -26,11 +26,11 @@ public enum MessageSubType {
      */
     IMAGE_TEXT(true, "image_text"),
     /**
-     * link类型, 只支持 {@link AlarmType#DINGTALK}
+     * link类型, 只支持 {@link AlarmChannel#DINGTALK}
      */
     LINK(true, "link"),
     /**
-     * actionCard类型, 只支持 {@link AlarmType#DINGTALK}
+     * actionCard类型, 只支持 {@link AlarmChannel#DINGTALK}
      */
     ACTION_CARD(true, "action_card");
 
