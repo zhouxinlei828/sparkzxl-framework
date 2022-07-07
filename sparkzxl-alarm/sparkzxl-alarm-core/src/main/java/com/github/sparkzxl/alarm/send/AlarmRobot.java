@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2022-05-18 11:34:28
  */
 @Slf4j
-public class AlarmRobot extends AbstractAlarmSender {
+public class AlarmRobot extends AbstractAlarmClient {
 
     private final AlarmMessageFactory alarmMessageFactory;
 

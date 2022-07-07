@@ -19,14 +19,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhouxinlei
  * @since 2022-05-18 10:54:30
  */
-public abstract class AbstractAlarmSender implements AlarmSender {
+public abstract class AbstractAlarmClient implements AlarmClient {
 
     protected TextMessageTemplate textMessage;
     protected MarkDownMessageTemplate markDownMessage;
     protected final AlarmProperties alarmProperties;
     protected final Map<String, AlarmExecutor> executorMap;
 
-    public AbstractAlarmSender(AlarmProperties alarmProperties,
+    public AbstractAlarmClient(AlarmProperties alarmProperties,
                                TextMessageTemplate textMessage,
                                MarkDownMessageTemplate markDownMessage,
                                List<AlarmExecutor> alarmExecutorList) {

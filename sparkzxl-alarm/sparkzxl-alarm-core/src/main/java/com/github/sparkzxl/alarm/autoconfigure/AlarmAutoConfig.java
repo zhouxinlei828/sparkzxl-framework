@@ -13,7 +13,7 @@ import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.properties.AlarmThreadPoolProperties;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
-import com.github.sparkzxl.alarm.send.AlarmSender;
+import com.github.sparkzxl.alarm.send.AlarmClient;
 import com.github.sparkzxl.alarm.strategy.AlarmMessageFactory;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.support.AlarmExceptionHandler;
@@ -116,8 +116,8 @@ public class AlarmAutoConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AlarmSender.class)
-    public AlarmSender alarmSender(AlarmProperties alarmProperties,
+    @ConditionalOnMissingBean(AlarmClient.class)
+    public AlarmClient alarmSender(AlarmProperties alarmProperties,
                                    TextMessageTemplate textMessage,
                                    MarkDownMessageTemplate markDownMessage,
                                    List<AlarmExecutor> alarmExecutorList,

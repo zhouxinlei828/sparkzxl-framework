@@ -6,12 +6,12 @@ import com.github.sparkzxl.alarm.enums.AlarmType;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 
 /**
- * description: 告警发送
+ * description: 告警发送client
  *
  * @author zhouxinlei
  * @since 2022-05-18 10:53:02
  */
-public interface AlarmSender {
+public interface AlarmClient {
 
     /**
      * 发送消息到指定群

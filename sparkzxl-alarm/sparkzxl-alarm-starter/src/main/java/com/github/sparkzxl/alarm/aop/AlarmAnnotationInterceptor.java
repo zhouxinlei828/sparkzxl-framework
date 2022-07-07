@@ -8,7 +8,7 @@ import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.handler.IAlarmVariablesHandler;
 import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
-import com.github.sparkzxl.alarm.send.AlarmSender;
+import com.github.sparkzxl.alarm.send.AlarmClient;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import io.vavr.control.Try;
@@ -32,11 +32,11 @@ import java.util.Objects;
 public class AlarmAnnotationInterceptor implements MethodInterceptor {
 
     private final AlarmTemplateProvider alarmTemplateProvider;
-    private final AlarmSender alarmSender;
+    private final AlarmClient alarmClient;
 
-    public AlarmAnnotationInterceptor(AlarmTemplateProvider alarmTemplateProvider, AlarmSender alarmSender) {
+    public AlarmAnnotationInterceptor(AlarmTemplateProvider alarmTemplateProvider, AlarmClient alarmClient) {
         this.alarmTemplateProvider = alarmTemplateProvider;
-        this.alarmSender = alarmSender;
+        this.alarmClient = alarmClient;
     }
 
     @Nullable
@@ -77,7 +77,7 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
         }).andFinally(() -> {
             alarmRequest.setContent(templateContentBuilder.toString());
             alarmRequest.setVariables(alarmParamMap);
-            alarmSender.send(messageSubType, alarmRequest);
+            alarmClient.send(messageSubType, alarmRequest);
         }).get();
 
     }
