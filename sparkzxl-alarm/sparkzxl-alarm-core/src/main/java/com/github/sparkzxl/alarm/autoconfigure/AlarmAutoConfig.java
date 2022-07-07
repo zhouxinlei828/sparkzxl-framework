@@ -117,7 +117,7 @@ public class AlarmAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean(AlarmClient.class)
-    public AlarmClient alarmSender(AlarmProperties alarmProperties,
+    public AlarmClient alarmClient(AlarmProperties alarmProperties,
                                    TextMessageTemplate textMessage,
                                    MarkDownMessageTemplate markDownMessage,
                                    List<AlarmExecutor> alarmExecutorList,
