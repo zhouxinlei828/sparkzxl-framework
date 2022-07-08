@@ -91,7 +91,7 @@ public class AlarmProperties implements InitializingBean {
          */
         private String tokenId;
         /**
-         * 选填, 签名秘钥。 需要验签时必填(钉钉机器人提供)
+         * 选填, 签名秘钥。 需要验签时必填(机器人提供)
          */
         private String secret;
 
