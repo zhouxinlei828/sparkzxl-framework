@@ -1,7 +1,5 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
-import com.github.sparkzxl.feign.resilience4j.CircuitBreakerExtractor;
-import com.github.sparkzxl.feign.resilience4j.FeignRequestCircuitBreakerExtractor;
 import com.github.sparkzxl.feign.resilience4j.client.FeignBlockingLoadBalancerClientDelegate;
 import com.github.sparkzxl.feign.resilience4j.client.Resilience4jFeignClient;
 import feign.okhttp.OkHttpClient;
@@ -28,11 +26,6 @@ import org.springframework.context.annotation.Primary;
 public class Resilience4jFeignAutoConfig {
 
     @Bean
-    public CircuitBreakerExtractor feignRequestCircuitBreakerExtractor() {
-        return new FeignRequestCircuitBreakerExtractor();
-    }
-
-    @Bean
     public OkHttpClient okHttpClient(@Autowired(required = false) okhttp3.OkHttpClient httpClient) {
         return new OkHttpClient(httpClient);
     }
@@ -50,13 +43,11 @@ public class Resilience4jFeignAutoConfig {
             //负载均衡属性
             @Autowired(required = false) LoadBalancerProperties loadBalancerProperties,
             //为何使用这个不直接用 FeignBlockingLoadBalancerClient 请参考 FeignBlockingLoadBalancerClientDelegate 的注释
-            @Autowired(required = false) LoadBalancerClientFactory loadBalancerClientFactory
-    ) {
+            @Autowired(required = false) LoadBalancerClientFactory loadBalancerClientFactory) {
         Resilience4jFeignClient resilience4jFeignClient = new Resilience4jFeignClient(
                 okHttpClient,
                 threadPoolBulkheadRegistry,
-                circuitBreakerRegistry
-        );
+                circuitBreakerRegistry);
         return new FeignBlockingLoadBalancerClientDelegate(
                 resilience4jFeignClient,
                 loadBalancerClientProvider,
