@@ -10,24 +10,25 @@ import feign.Response;
 import feign.okhttp.OkHttpClient;
 import io.github.resilience4j.bulkhead.BulkheadFullException;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkhead;
+import io.github.resilience4j.bulkhead.ThreadPoolBulkheadConfig;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.core.ConfigurationNotFoundException;
 import io.vavr.control.Try;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.client.DefaultServiceInstance;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -37,12 +38,25 @@ import java.util.function.Supplier;
  * @since 2022-04-04 11:09:22
  */
 @Slf4j
-@RequiredArgsConstructor
 public class Resilience4jFeignClient implements Client {
 
     private final OkHttpClient okHttpClient;
     private final ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry;
+    private final ConcurrentHashMap<String, ThreadPoolBulkheadConfig> threadPoolBulkheadConfigs = new ConcurrentHashMap<>();
+    private final Function<String, ThreadPoolBulkheadConfig> defaultThreadPoolBulkheadConfig;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
+    private final ConcurrentHashMap<String, CircuitBreakerConfig> circuitBreakerConfigConfigs = new ConcurrentHashMap<>();
+    private final Function<String, CircuitBreakerConfig> defaultCircuitBreakerConfig;
+
+    public Resilience4jFeignClient(OkHttpClient okHttpClient,
+                                   ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry,
+                                   CircuitBreakerRegistry circuitBreakerRegistry) {
+        this.okHttpClient = okHttpClient;
+        this.threadPoolBulkheadRegistry = threadPoolBulkheadRegistry;
+        this.defaultThreadPoolBulkheadConfig = id -> threadPoolBulkheadRegistry.getDefaultConfig();
+        this.circuitBreakerRegistry = circuitBreakerRegistry;
+        this.defaultCircuitBreakerConfig = id -> circuitBreakerRegistry.getDefaultConfig();
+    }
 
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
@@ -59,32 +73,23 @@ public class Resilience4jFeignClient implements Client {
         //获取实例+方法唯一id
         String serviceInstanceMethodId = getServiceInstanceMethodId(request);
 
-        ThreadPoolBulkhead threadPoolBulkhead;
-        CircuitBreaker circuitBreaker;
-        try {
-            //每个实例一个线程池
-            threadPoolBulkhead = threadPoolBulkheadRegistry.bulkhead(contextId + ":" + serviceInstanceId, contextId);
-        } catch (ConfigurationNotFoundException e) {
-            threadPoolBulkhead = threadPoolBulkheadRegistry.bulkhead(contextId + ":" + serviceInstanceId);
-        }
-        try {
-            //每个服务实例具体方法一个resilience4j熔断记录器，在服务实例具体方法维度做熔断，所有这个服务的实例具体方法共享这个服务的resilience4j熔断配置
-            circuitBreaker = circuitBreakerRegistry.circuitBreaker(serviceInstanceMethodId, contextId);
-        } catch (ConfigurationNotFoundException e) {
-            circuitBreaker = circuitBreakerRegistry.circuitBreaker(serviceInstanceMethodId);
-        }
-
-        ThreadPoolBulkhead finalThreadPoolBulkhead = threadPoolBulkhead;
-        CircuitBreaker finalCircuitBreaker = circuitBreaker;
+        String bulkheadName = MessageFormat.format("{0}:{1}", contextId, serviceInstanceId);
+        ThreadPoolBulkheadConfig threadPoolBulkheadConfig = threadPoolBulkheadConfigs.computeIfAbsent(contextId, defaultThreadPoolBulkheadConfig);
+        //每个实例一个线程池
+        ThreadPoolBulkhead threadPoolBulkhead = threadPoolBulkheadRegistry.bulkhead(bulkheadName, threadPoolBulkheadConfig);
+        String circuitBreakerName = getServiceInstanceMethodId(request);
+        CircuitBreakerConfig circuitBreakerConfig = circuitBreakerConfigConfigs.computeIfAbsent(contextId, defaultCircuitBreakerConfig);
+        //每个服务实例具体方法一个resilience4j熔断记录器，在服务实例具体方法维度做熔断，所有这个服务的实例具体方法共享这个服务的resilience4j熔断配置
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName, circuitBreakerConfig);
         Supplier<Response> responseCopier = () -> Try.of(() -> {
             if (log.isDebugEnabled()) {
                 log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
                         request.httpMethod(),
                         request.url(),
                         serviceInstanceId,
-                        JSON.toJSONString(finalThreadPoolBulkhead.getMetrics()),
+                        JSON.toJSONString(threadPoolBulkhead.getMetrics()),
                         serviceInstanceMethodId,
-                        JSON.toJSONString(finalCircuitBreaker.getMetrics()));
+                        JSON.toJSONString(circuitBreaker.getMetrics()));
             }
             Response execute = okHttpClient.execute(request, options);
             log.info("response: {} - {}", execute.status(), execute.reason());
@@ -121,14 +126,6 @@ public class Resilience4jFeignClient implements Client {
         }
     }
 
-    private ServiceInstance getServiceInstance(Request request) throws MalformedURLException {
-        URL url = new URL(request.url());
-        DefaultServiceInstance defaultServiceInstance = new DefaultServiceInstance();
-        defaultServiceInstance.setHost(url.getHost());
-        defaultServiceInstance.setPort(url.getPort());
-        return defaultServiceInstance;
-    }
-
     private String getServiceInstanceId(Request request) throws MalformedURLException {
         URL url = new URL(request.url());
         return Resilience4jUtil.getServiceInstance(url);
@@ -139,5 +136,4 @@ public class Resilience4jFeignClient implements Client {
         //通过微服务名称 + 实例 + 方法的方式，获取唯一id
         return Resilience4jUtil.getServiceInstanceMethodId(url, request.requestTemplate().methodMetadata().method());
     }
-
 }
