@@ -2,7 +2,6 @@ package com.github.sparkzxl.feign.resilience4j.client;
 
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import com.github.sparkzxl.feign.resilience4j.Resilience4jUtil;
 import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import feign.Client;
 import feign.Request;
@@ -22,6 +21,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -58,6 +58,16 @@ public class Resilience4jFeignClient implements Client {
         this.defaultCircuitBreakerConfig = id -> circuitBreakerRegistry.getDefaultConfig();
     }
 
+    public static String getServiceInstance(String host, int port) {
+        return MessageFormat.format("{0}:{1}", host, String.valueOf(port));
+    }
+
+    public static String getServiceInstanceMethodId(String host, int port, Method method) {
+        return getServiceInstance(host, port) + ":" + MessageFormat.format("{0}:{1}",
+                method.getDeclaringClass().getName(),
+                method.getName());
+    }
+
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
         // 获取定义 FeignClient 的接口的 FeignClient 注解
@@ -73,14 +83,12 @@ public class Resilience4jFeignClient implements Client {
         //获取实例+方法唯一id
         String serviceInstanceMethodId = getServiceInstanceMethodId(request);
 
-        String bulkheadName = MessageFormat.format("{0}:{1}", contextId, serviceInstanceId);
         ThreadPoolBulkheadConfig threadPoolBulkheadConfig = threadPoolBulkheadConfigs.computeIfAbsent(contextId, defaultThreadPoolBulkheadConfig);
         //每个实例一个线程池
-        ThreadPoolBulkhead threadPoolBulkhead = threadPoolBulkheadRegistry.bulkhead(bulkheadName, threadPoolBulkheadConfig);
-        String circuitBreakerName = getServiceInstanceMethodId(request);
+        ThreadPoolBulkhead threadPoolBulkhead = threadPoolBulkheadRegistry.bulkhead(serviceInstanceId, threadPoolBulkheadConfig);
         CircuitBreakerConfig circuitBreakerConfig = circuitBreakerConfigConfigs.computeIfAbsent(contextId, defaultCircuitBreakerConfig);
         //每个服务实例具体方法一个resilience4j熔断记录器，在服务实例具体方法维度做熔断，所有这个服务的实例具体方法共享这个服务的resilience4j熔断配置
-        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName, circuitBreakerConfig);
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(serviceInstanceMethodId, circuitBreakerConfig);
         Supplier<Response> responseCopier = () -> Try.of(() -> {
             if (log.isDebugEnabled()) {
                 log.debug("call url: {} -> {}, ThreadPoolStats({}): {}, CircuitBreakStats({}): {}",
@@ -128,12 +136,13 @@ public class Resilience4jFeignClient implements Client {
 
     private String getServiceInstanceId(Request request) throws MalformedURLException {
         URL url = new URL(request.url());
-        return Resilience4jUtil.getServiceInstance(url);
+        return getServiceInstance(url.getHost(), url.getPort());
     }
 
     private String getServiceInstanceMethodId(Request request) throws MalformedURLException {
         URL url = new URL(request.url());
         //通过微服务名称 + 实例 + 方法的方式，获取唯一id
-        return Resilience4jUtil.getServiceInstanceMethodId(url, request.requestTemplate().methodMetadata().method());
+        return getServiceInstanceMethodId(url.getHost(), url.getPort(), request.requestTemplate().methodMetadata().method());
     }
+
 }
