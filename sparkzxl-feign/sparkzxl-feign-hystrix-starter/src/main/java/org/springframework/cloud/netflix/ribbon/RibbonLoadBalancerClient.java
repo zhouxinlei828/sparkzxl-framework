@@ -20,7 +20,7 @@ import static org.springframework.cloud.netflix.ribbon.RibbonUtils.updateToSecur
 
 /**
  * description: RibbonLoadBalancerClient 重写
- * 兼容spring cloud 2020 新版本
+ * 兼容spring cloud 2020 新版本接口依赖
  *
  * @author zhouxinlei
  * @since 2022-07-11 14:07:44
@@ -37,9 +37,7 @@ public class RibbonLoadBalancerClient implements LoadBalancerClient {
     public URI reconstructURI(ServiceInstance instance, URI original) {
         Assert.notNull(instance, "instance can not be null");
         String serviceId = instance.getServiceId();
-        RibbonLoadBalancerContext context = this.clientFactory
-                .getLoadBalancerContext(serviceId);
-
+        RibbonLoadBalancerContext context = this.clientFactory.getLoadBalancerContext(serviceId);
         URI uri;
         Server server;
         if (instance instanceof RibbonServer) {

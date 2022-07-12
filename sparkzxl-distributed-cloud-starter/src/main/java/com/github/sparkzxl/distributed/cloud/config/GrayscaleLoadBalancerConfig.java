@@ -19,6 +19,12 @@ import org.springframework.core.env.Environment;
 
 import java.util.Objects;
 
+/**
+ * description: 灰度负载均衡配置
+ *
+ * @author zhouxinlei
+ * @since 2022-07-12 18:50:58
+ */
 @Configuration(proxyBeanMethods = false)
 public class GrayscaleLoadBalancerConfig {
 
