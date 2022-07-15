@@ -5,6 +5,7 @@ import com.github.sparkzxl.distributed.cloud.loadbalancer.GrayscaleVersionServic
 import com.github.sparkzxl.distributed.cloud.loadbalancer.LoadBalancerVersionConfig;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
@@ -80,6 +81,7 @@ public class GrayscaleLoadBalancerConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(LoadBalancerVersionConfig.class)
     public LoadBalancerVersionConfig loadBalancerVersionConfig() {
         return new LoadBalancerVersionConfig(RequestLocalContextHolder::getVersion);
     }
