@@ -58,16 +58,6 @@ public class Resilience4jFeignClient implements Client {
         this.defaultCircuitBreakerConfig = id -> circuitBreakerRegistry.getDefaultConfig();
     }
 
-    public static String getServiceInstance(String host, int port) {
-        return MessageFormat.format("{0}:{1}", host, String.valueOf(port));
-    }
-
-    public static String getServiceInstanceMethodId(String host, int port, Method method) {
-        return getServiceInstance(host, port) + ":" + MessageFormat.format("{0}:{1}",
-                method.getDeclaringClass().getName(),
-                method.getName());
-    }
-
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
         // 获取定义 FeignClient 的接口的 FeignClient 注解
@@ -134,6 +124,10 @@ public class Resilience4jFeignClient implements Client {
         }
     }
 
+    public static String getServiceInstance(String host, int port) {
+        return MessageFormat.format("{0}:{1}", host, String.valueOf(port));
+    }
+
     private String getServiceInstanceId(Request request) throws MalformedURLException {
         URL url = new URL(request.url());
         return getServiceInstance(url.getHost(), url.getPort());
@@ -143,6 +137,12 @@ public class Resilience4jFeignClient implements Client {
         URL url = new URL(request.url());
         //通过微服务名称 + 实例 + 方法的方式，获取唯一id
         return getServiceInstanceMethodId(url.getHost(), url.getPort(), request.requestTemplate().methodMetadata().method());
+    }
+
+    public static String getServiceInstanceMethodId(String host, int port, Method method) {
+        return getServiceInstance(host, port) + ":" + MessageFormat.format("{0}:{1}",
+                method.getDeclaringClass().getName(),
+                method.getName());
     }
 
 }
