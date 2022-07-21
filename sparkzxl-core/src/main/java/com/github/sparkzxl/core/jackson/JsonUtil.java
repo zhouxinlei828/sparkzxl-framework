@@ -215,7 +215,7 @@ public class JsonUtil {
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                     .getDeserializationConfig()
                     .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-            super.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
+            super.registerModules(new BasicJacksonModule(), new CustomJavaTimeModule());
             super.findAndRegisterModules();
         }
 

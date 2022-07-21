@@ -2,7 +2,6 @@ package com.github.sparkzxl.core.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.PackageVersion;
 import com.github.sparkzxl.constant.enums.Enumerator;
 import com.github.sparkzxl.core.serializer.EnumSerializer;
 
@@ -14,9 +13,9 @@ import java.math.BigInteger;
  *
  * @author zhouxinlei
  */
-public class CustomJacksonModule extends SimpleModule {
+public class BasicJacksonModule extends SimpleModule {
 
-    public CustomJacksonModule() {
+    public BasicJacksonModule() {
         // 序列化基础类型
         this.addSerializer(Long.class, ToStringSerializer.instance);
         this.addSerializer(Long.TYPE, ToStringSerializer.instance);
