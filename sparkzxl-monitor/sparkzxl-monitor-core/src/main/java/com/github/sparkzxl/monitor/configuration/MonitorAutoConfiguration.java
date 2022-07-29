@@ -4,7 +4,7 @@ import com.github.sparkzxl.monitor.DefaultStrategyLogger;
 import com.github.sparkzxl.monitor.StrategyLogger;
 import com.github.sparkzxl.monitor.StrategyMonitorContext;
 import com.github.sparkzxl.monitor.TracerContextListener;
-import com.github.sparkzxl.monitor.aop.FeignMonitorInterceptor;
+import com.github.sparkzxl.monitor.aop.FeignMonitorRpcInterceptor;
 import com.github.sparkzxl.monitor.constant.StrategyConstant;
 import feign.Feign;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -47,8 +47,8 @@ public class MonitorAutoConfiguration {
 
         @Bean
         @ConditionalOnProperty(value = StrategyConstant.SPRING_MONITOR_REST_INTERCEPT_ENABLED, matchIfMissing = true)
-        public FeignMonitorInterceptor feignMonitorInterceptor() {
-            return new FeignMonitorInterceptor("", "");
+        public FeignMonitorRpcInterceptor feignMonitorInterceptor() {
+            return new FeignMonitorRpcInterceptor("", "");
         }
     }
 

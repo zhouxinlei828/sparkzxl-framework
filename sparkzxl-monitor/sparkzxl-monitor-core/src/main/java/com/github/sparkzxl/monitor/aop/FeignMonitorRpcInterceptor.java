@@ -14,9 +14,9 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-07-25 15:40:08
  */
-public class FeignMonitorInterceptor extends AbstractInterceptor implements RequestInterceptor {
+public class FeignMonitorRpcInterceptor extends AbstractRpcInterceptor implements RequestInterceptor {
 
-    public FeignMonitorInterceptor(String contextRequestHeaders, String businessRequestHeaders) {
+    public FeignMonitorRpcInterceptor(String contextRequestHeaders, String businessRequestHeaders) {
         super(contextRequestHeaders, businessRequestHeaders);
     }
 

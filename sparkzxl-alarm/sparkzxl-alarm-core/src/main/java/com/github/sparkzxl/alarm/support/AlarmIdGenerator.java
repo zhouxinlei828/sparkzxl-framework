@@ -9,6 +9,7 @@ package com.github.sparkzxl.alarm.support;
 public interface AlarmIdGenerator {
 
     /**
+     * 告警id
      *
      * @return String
      */
