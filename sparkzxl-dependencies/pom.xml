@@ -49,14 +49,14 @@
         <!-- jwt组件-->
         <jwt.version>9.12.1</jwt.version>
 
-        <aws.version>1.11.941</aws.version>
+        <aws.version>1.12.2</aws.version>
         <!-- google-->
         <guava.version>30.1.1-jre</guava.version>
         <hutool.version>5.7.11</hutool.version>
         <!-- redisson -->
         <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
-        <curator.version>5.1.0</curator.version>
+        <curator.version>5.2.0</curator.version>
 
         <elasticsearch.version>7.17.1</elasticsearch.version>
         <html2pdf.version>3.0.3</html2pdf.version>
@@ -72,13 +72,13 @@
         <easy-excel.version>3.0.5</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
-        <javax.el.version>3.0.1-b11</javax.el.version>
+        <javax.el.version>3.0-b01</javax.el.version>
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.2</seata.version>
         <protobuf-java.version>3.20.1</protobuf-java.version>
         <janino.version>3.1.6</janino.version>
-        <drools-version>7.47.0.Final</drools-version>
+        <drools-version>7.60.0.Final</drools-version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <jsqlparser.version>4.3</jsqlparser.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
