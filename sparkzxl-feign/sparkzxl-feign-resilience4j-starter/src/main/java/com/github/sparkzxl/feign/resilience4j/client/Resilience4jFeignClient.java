@@ -94,8 +94,7 @@ public class Resilience4jFeignClient implements Client {
             return execute;
         }).getOrElseThrow(throwable -> new CompletionException(throwable));
         try {
-            Supplier<CompletionStage<Response>> completionStageSupplier = threadPoolBulkhead.decorateSupplier(responseCopier);
-            Supplier<CompletionStage<Response>> decorateCompletionStage = circuitBreaker.decorateCompletionStage(completionStageSupplier);
+            Supplier<CompletionStage<Response>> decorateCompletionStage = circuitBreaker.decorateCompletionStage(threadPoolBulkhead.decorateSupplier(responseCopier));
             return Try.ofSupplier(decorateCompletionStage).get().toCompletableFuture().join();
         } catch (BulkheadFullException e) {
             //线程池限流异常
