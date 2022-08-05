@@ -34,7 +34,7 @@
               value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(environment): %yellow(${environment}) %blue(application): %yellow(${applicationName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} [%X{tid}] %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <property name="FILE_LOG_PATTERN"
-              value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %blue(environment): %yellow(${environment}) application: ${applicationName} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%X{tid}] [%-40.40logger{15}] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} environment: ${environment} application: ${applicationName} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%X{tid}] [%-40.40logger{15}] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <!-- 控制台 Appender -->
     <appender name="ConsoleOutput" class="ch.qos.logback.core.ConsoleAppender">
