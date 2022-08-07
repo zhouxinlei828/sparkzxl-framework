@@ -1,1 +1,3 @@
-dubboExceptionFilter=com.github.sparkzxl.distributed.dubbo.filter
+validationException=com.github.sparkzxl.distributed.dubbo.filter.ValidationExceptionFilter
+requestLocalContext=com.github.sparkzxl.distributed.dubbo.filter.RequestLocalContextFilter
+requestLog=com.github.sparkzxl.distributed.dubbo.filter.RequestLogFilter

@@ -1,6 +1,8 @@
 package com.github.sparkzxl.distributed.dubbo.config;
 
-import com.github.sparkzxl.distributed.dubbo.filter.DubboExceptionFilter;
+import com.github.sparkzxl.distributed.dubbo.filter.ValidationExceptionFilter;
+import com.github.sparkzxl.distributed.dubbo.properties.DubboCustomProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,10 +12,11 @@ import org.springframework.context.annotation.Configuration;
  * @author zhouxinlei
  */
 @Configuration
+@EnableConfigurationProperties(DubboCustomProperties.class)
 public class DubboAutoConfig {
 
     @Bean
-    public DubboExceptionFilter dubboExceptionFilter() {
-        return new DubboExceptionFilter();
+    public ValidationExceptionFilter dubboExceptionFilter() {
+        return new ValidationExceptionFilter();
     }
 }

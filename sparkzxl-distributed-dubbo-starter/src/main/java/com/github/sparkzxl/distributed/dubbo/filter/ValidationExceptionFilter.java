@@ -20,9 +20,9 @@ import java.lang.reflect.Method;
  * @author zhouxinlei
  */
 @Activate(group = CommonConstants.PROVIDER)
-public class DubboExceptionFilter extends ListenableFilter {
+public class ValidationExceptionFilter extends ListenableFilter {
 
-    public DubboExceptionFilter() {
+    public ValidationExceptionFilter() {
         super.listener = new ExceptionListenerX();
     }
 
