@@ -21,9 +21,9 @@
         <!-- spring-version-->
         <spring-boot-dependencies.version>2.7.0</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
-        <nacos.version>2.0.4</nacos.version>
+        <nacos.version>2.1.0</nacos.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
@@ -59,10 +59,6 @@
         <curator.version>5.2.0</curator.version>
 
         <elasticsearch.version>7.17.1</elasticsearch.version>
-        <html2pdf.version>3.0.3</html2pdf.version>
-        <pdfbox.version>2.0.24</pdfbox.version>
-        <itext.version>7.2.2</itext.version>
-        <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
         <apm-toolkit-trace.version>8.11.0</apm-toolkit-trace.version>
@@ -188,17 +184,6 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
-            </dependency>
-            <!-- use mapstruct-jdk8 for Java 8 or higher -->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>
-                <version>${mapstruct.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>
@@ -415,25 +400,6 @@
                         <artifactId>elasticsearch</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <!-- pdfHTML -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>html2pdf</artifactId>
-                <version>${html2pdf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.pdfbox</groupId>
-                <artifactId>pdfbox</artifactId>
-                <version>${pdfbox.version}</version>
-            </dependency>
-            <!-- iText 7 -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>itext7-core</artifactId>
-                <version>${itext.version}</version>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>eu.bitwalker</groupId>
@@ -716,11 +682,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-patterns-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-pdf-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

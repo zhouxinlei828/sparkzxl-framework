@@ -2,7 +2,7 @@
 
 > 职能：
 > 项目开发过程中所涉及的工具类，包含hutools（糊涂一点也不糊涂的工具类），集合，guava包，
-> mapstruct 实体转换工具类，excel工具类
+> excel工具类
 
 ## POM依赖
 
@@ -40,14 +40,6 @@
         <groupId>javax.mail</groupId>
         <artifactId>mail</artifactId>
         <version>1.4.7</version>
-    </dependency>
-    <dependency>
-        <groupId>org.mapstruct</groupId>
-        <artifactId>mapstruct</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.mapstruct</groupId>
-        <artifactId>mapstruct-jdk8</artifactId>
     </dependency>
     <dependency>
         <groupId>org.lionsoul</groupId>
@@ -108,10 +100,6 @@
 ## hutools工具类
 
 > 使用方法：[hutool参考文档](https://hutool.cn/docs/)
-
-## mapstruct 实体转换工具
-
-> 使用方法：[Spring Boot 对象转换 MapStruct 入门](http://www.iocoder.cn/Spring-Boot/MapStruct/?self)
 
 ## 更多
 

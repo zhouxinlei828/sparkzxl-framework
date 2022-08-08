@@ -2,12 +2,12 @@ package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.support.JwtParseException;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.base.result.Response;
 import com.github.sparkzxl.core.support.ArgumentException;
 import com.github.sparkzxl.core.support.BizException;
+import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.support.ServiceDegradeException;
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.core.Ordered;
@@ -33,6 +33,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.ServletException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -91,6 +92,16 @@ public class DefaultExceptionHandler implements Ordered {
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
         String message = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
         return Response.fail(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), message);
+    }
+
+    /**
+     * jsr 规范中的验证异常
+     */
+    @ExceptionHandler(ValidationException.class)
+    public Response<?> handleValidationException(ValidationException ex) {
+        log.warn("ValidationException:", ex);
+        System.out.println(ex.getCause().getMessage());
+        return Response.fail(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), ex.getMessage());
     }
 
     @ExceptionHandler(ServiceDegradeException.class)
