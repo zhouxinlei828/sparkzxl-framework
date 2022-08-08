@@ -1,0 +1,58 @@
+{
+  "properties": [
+    {
+      "name": "spring.monitor.logger.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Whether monitor logger is enabled."
+    },
+    {
+      "name": "spring.monitor.logger.debug.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Whether monitor logger debug is enabled."
+    },
+    {
+      "name": "spring.monitor.logger.mdc.key.shown",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Whether monitor logger mdc shown is enabled."
+    },
+    {
+      "name": "spring.monitor.tracer.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Whether monitor tracer is enabled."
+    },
+    {
+      "name": "spring.monitor.tracer.separate.span.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": "false",
+      "description": "Whether monitor tracer separate span is enabled."
+    },
+    {
+      "name": "spring.monitor.tracer.span.value",
+      "type": "java.lang.String",
+      "defaultValue": "SPARKZXL",
+      "description": "tracer span value."
+    },
+    {
+      "name": "spring.monitor.tracer.exception.detail.output.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Whether tracer exception detail output is enabled."
+    },
+    {
+      "name": "spring.monitor.rest.intercept.debug.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Whether strategy rest intercept debug is enabled."
+    },
+    {
+      "name": "spring.monitor.rest.intercept.enabled",
+      "type": "java.lang.String",
+      "defaultValue": true,
+      "description": "Whether strategy rest intercept is enabled."
+    }
+  ]
+}

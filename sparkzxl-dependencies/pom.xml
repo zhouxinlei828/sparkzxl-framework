@@ -21,9 +21,9 @@
         <!-- spring-version-->
         <spring-boot-dependencies.version>2.7.0</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
-        <nacos.version>2.0.4</nacos.version>
+        <nacos.version>2.1.0</nacos.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
@@ -49,36 +49,32 @@
         <!-- jwt组件-->
         <jwt.version>9.12.1</jwt.version>
 
-        <aws.version>1.11.941</aws.version>
+        <aws.version>1.12.2</aws.version>
         <!-- google-->
         <guava.version>30.1.1-jre</guava.version>
         <hutool.version>5.7.11</hutool.version>
         <!-- redisson -->
         <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
-        <curator.version>5.1.0</curator.version>
+        <curator.version>5.2.0</curator.version>
 
         <elasticsearch.version>7.17.1</elasticsearch.version>
-        <html2pdf.version>3.0.3</html2pdf.version>
-        <pdfbox.version>2.0.24</pdfbox.version>
-        <itext.version>7.2.2</itext.version>
-        <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
-        <apm-toolkit-trace.version>8.7.0</apm-toolkit-trace.version>
+        <apm-toolkit-trace.version>8.11.0</apm-toolkit-trace.version>
         <ip2region.version>1.7.2</ip2region.version>
         <caffeine.version>2.9.3</caffeine.version>
         <fastjson.version>1.2.83</fastjson.version>
         <easy-excel.version>3.0.5</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
-        <javax.el.version>3.0.1-b11</javax.el.version>
+        <javax.el.version>3.0-b01</javax.el.version>
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.2</seata.version>
         <protobuf-java.version>3.20.1</protobuf-java.version>
         <janino.version>3.1.6</janino.version>
-        <drools-version>7.47.0.Final</drools-version>
+        <drools-version>7.60.0.Final</drools-version>
         <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
         <jsqlparser.version>4.3</jsqlparser.version>
         <sensitive-word.version>0.0.15</sensitive-word.version>
@@ -188,17 +184,6 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
-            </dependency>
-            <!-- use mapstruct-jdk8 for Java 8 or higher -->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>
-                <version>${mapstruct.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>
@@ -416,25 +401,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-            <!-- pdfHTML -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>html2pdf</artifactId>
-                <version>${html2pdf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.pdfbox</groupId>
-                <artifactId>pdfbox</artifactId>
-                <version>${pdfbox.version}</version>
-            </dependency>
-            <!-- iText 7 -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>itext7-core</artifactId>
-                <version>${itext.version}</version>
-                <type>pom</type>
-            </dependency>
             <dependency>
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
@@ -590,6 +556,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-alarm-feishutalk-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-alarm-wetalk-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -711,11 +682,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-patterns-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-pdf-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

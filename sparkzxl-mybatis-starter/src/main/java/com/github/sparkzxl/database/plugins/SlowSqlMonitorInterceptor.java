@@ -1,10 +1,10 @@
 package com.github.sparkzxl.database.plugins;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.alibaba.ttl.threadpool.TtlExecutors;
 import com.github.sparkzxl.constant.enums.EnvironmentEnum;
-import com.github.sparkzxl.database.send.ISendNoticeService;
+import com.github.sparkzxl.database.send.SendNoticeService;
+import com.github.sparkzxl.database.send.SqlMonitorMessage;
 import com.google.common.base.Stopwatch;
 import com.google.common.base.Strings;
 import io.vavr.control.Try;
@@ -53,7 +53,7 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
                     new ArrayBlockingQueue<>(1000), new ThreadPoolExecutor.DiscardPolicy()));
 
     private static final ThreadLocal<String> CONTEXT = new TransmittableThreadLocal<>();
-    private ISendNoticeService sendNoticeService;
+    private SendNoticeService sendNoticeService;
 
     /**
      * 单次sql查询的检测时间阀值
@@ -119,7 +119,7 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     public void init() {
         String environment = StringUtils.isEmpty(applicationContext.getEnvironment().getProperty("spring.profiles.active")) ?
                 "dev" : applicationContext.getEnvironment().getProperty("spring.profiles.active");
-        sendNoticeService = applicationContext.getBean(ISendNoticeService.class);
+        sendNoticeService = applicationContext.getBean(SendNoticeService.class);
         if (StringUtils.equals(environment, StringUtils.toRootLowerCase(EnvironmentEnum.GRAY.name()))
                 || StringUtils.equals(environment, StringUtils.toRootLowerCase(EnvironmentEnum.PROD.name()))) {
             return;
@@ -357,9 +357,14 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     }
 
     public enum Type {
+        /**
+         * 慢sql
+         */
         SLOW_SQL,
+        /**
+         * SQL异常
+         */
         SQL_EXCEPTION
     }
-
 
 }

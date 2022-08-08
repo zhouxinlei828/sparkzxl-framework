@@ -35,7 +35,6 @@
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <spring-boot-maven.version>2.3.9.RELEASE</spring-boot-maven.version>
-        <mapstruct.version>1.4.0.CR1</mapstruct.version>
         <sparkzxl-dependencies.version>1.0.1.RELEASE</sparkzxl-dependencies.version>
         <lombok.version>1.18.8</lombok.version>
         <mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
@@ -81,33 +80,6 @@
 
         <pluginManagement>
             <plugins>
-                <!-- 提供给 mapstruct 使用 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.mapstruct</groupId>
-                                <artifactId>mapstruct-processor</artifactId>
-                                <version>${mapstruct.version}</version>
-                            </path>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${lombok.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
-                        <compilerArgs>
-                            <arg>
-                                -Amapstruct.verbose=true
-                            </arg>
-                        </compilerArgs>
-                    </configuration>
-                </plugin>
                 <!-- resources资源插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

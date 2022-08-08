@@ -12,12 +12,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.constant.enums.Enumerator;
-import com.github.sparkzxl.core.jackson.CustomJacksonModule;
+import com.github.sparkzxl.core.jackson.BasicJacksonModule;
 import com.github.sparkzxl.core.jackson.CustomJavaTimeModule;
 import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
 import com.github.sparkzxl.core.serializer.EnumeratorSerializer;
 import com.github.sparkzxl.core.serializer.LocalDateTimeCustomDeSerializer;
-import com.github.sparkzxl.core.serializer.LocalDateTimeCustomSerializer;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -63,7 +62,7 @@ public class JacksonConfig {
                 .build();
         Map<Class<?>, JsonDeserializer<?>> jsonDeserializerMap = ImmutableMap.<Class<?>, JsonDeserializer<?>>builder()
                 .put(LocalDateTime.class, LocalDateTimeCustomDeSerializer.INSTANCE)
-                .put(Date.class, new CustomDateDeserializer())
+                .put(Date.class, new CustomDateDeserializer(DatePattern.NORM_DATETIME_PATTERN))
                 .put(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)))
                 .put(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)))
                 .build();
@@ -127,7 +126,7 @@ public class JacksonConfig {
                 .getDeserializationConfig()
                 .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        objectMapper.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
+        objectMapper.registerModules(new BasicJacksonModule(), new CustomJavaTimeModule());
         objectMapper.findAndRegisterModules();
         return objectMapper;
     }

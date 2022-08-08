@@ -15,6 +15,7 @@
         <module>sparkzxl-alarm-starter</module>
         <module>sparkzxl-alarm-dingtalk-starter</module>
         <module>sparkzxl-alarm-wetalk-starter</module>
+        <module>sparkzxl-alarm-feishutalk-starter</module>
     </modules>
     <artifactId>sparkzxl-alarm</artifactId>
 

@@ -8,9 +8,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.JwtParseException;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.StrPool;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
@@ -174,6 +175,15 @@ public class JsonUtil {
         }
     }
 
+    public static <T> ObjectNode readTree(T val) {
+        try {
+            return getInstance().valueToTree(val);
+        } catch (IllegalArgumentException e) {
+            log.error("json readTree IllegalArgumentException：{}", e.getMessage());
+            throw new JwtParseException(e.getMessage());
+        }
+    }
+
     public static ObjectMapper getInstance() {
         return JacksonHolder.INSTANCE;
     }
@@ -205,7 +215,7 @@ public class JsonUtil {
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                     .getDeserializationConfig()
                     .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-            super.registerModules(new CustomJacksonModule(), new CustomJavaTimeModule());
+            super.registerModules(new BasicJacksonModule(), new CustomJavaTimeModule());
             super.findAndRegisterModules();
         }
 

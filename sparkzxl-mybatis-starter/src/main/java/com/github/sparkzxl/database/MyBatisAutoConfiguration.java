@@ -21,7 +21,7 @@ import com.github.sparkzxl.database.plugins.SchemaInterceptor;
 import com.github.sparkzxl.database.plugins.SlowSqlMonitorInterceptor;
 import com.github.sparkzxl.database.properties.DataProperties;
 import com.github.sparkzxl.database.send.DefaultSendNoticeService;
-import com.github.sparkzxl.database.send.ISendNoticeService;
+import com.github.sparkzxl.database.send.SendNoticeService;
 import com.github.sparkzxl.database.support.DataBaseExceptionHandler;
 import com.google.common.collect.Lists;
 import com.p6spy.engine.spy.P6DataSource;
@@ -172,8 +172,8 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ISendNoticeService.class)
-    public ISendNoticeService sendNoticeService() {
+    @ConditionalOnMissingBean(SendNoticeService.class)
+    public SendNoticeService sendNoticeService() {
         return new DefaultSendNoticeService();
     }
 

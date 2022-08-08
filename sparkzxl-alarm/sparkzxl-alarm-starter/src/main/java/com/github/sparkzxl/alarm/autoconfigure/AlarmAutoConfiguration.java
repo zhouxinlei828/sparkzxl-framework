@@ -10,7 +10,7 @@ import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import com.github.sparkzxl.alarm.provider.FileAlarmTemplateProvider;
 import com.github.sparkzxl.alarm.provider.JdbcAlarmTemplateProvider;
 import com.github.sparkzxl.alarm.provider.YamlAlarmTemplateProvider;
-import com.github.sparkzxl.alarm.send.AlarmSender;
+import com.github.sparkzxl.alarm.send.AlarmClient;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -59,8 +59,8 @@ public class AlarmAutoConfiguration {
     }
 
     @Bean
-    public AlarmAnnotationInterceptor alarmAnnotationInterceptor(AlarmTemplateProvider alarmTemplateProvider, AlarmSender alarmSender) {
-        return new AlarmAnnotationInterceptor(alarmTemplateProvider, alarmSender);
+    public AlarmAnnotationInterceptor alarmAnnotationInterceptor(AlarmTemplateProvider alarmTemplateProvider, AlarmClient alarmClient) {
+        return new AlarmAnnotationInterceptor(alarmTemplateProvider, alarmClient);
     }
 
     @Bean

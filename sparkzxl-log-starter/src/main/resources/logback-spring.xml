@@ -3,8 +3,9 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!-- 应用名称 -->
-    <springProperty name="springAppName" scope="context" source="spring.application.name" defaultValue="application"/>
-
+    <springProperty name="applicationName" scope="context" source="spring.application.name" defaultValue="application"/>
+    <!-- 应用名称 -->
+    <springProperty name="environment" scope="context" source="spring.profiles.active" defaultValue="dev"/>
     <!-- 日志文件保存路径 -->
     <springProperty name="logHome" scope="context" source="logging.file.path" defaultValue="${user.home}/logs"/>
 
@@ -22,15 +23,18 @@
     <springProperty name="enableKafka" scope="context" source="logging.kafka.enable" defaultValue="false"/>
     <springProperty name="kafka.servers" scope="context" source="logging.kafka.servers"/>
     <springProperty name="kafka.topic" scope="context" source="logging.kafka.topic"/>
+    <springProperty name="kafka.linger" scope="context" source="logging.kafka.linger" defaultValue="1000"/>
+    <springProperty name="kafka.acks" scope="context" source="logging.kafka.acks" defaultValue="0"/>
+    <springProperty name="kafka.maxBlock" scope="context" source="logging.kafka.maxBlock" defaultValue="0"/>
 
     <springProperty scope="context" name="log.level.console" source="logging.level.console" defaultValue="INFO"/>
 
     <!-- 控制台 日志格式化 -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(application): %yellow(${springAppName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} [%X{tid}] %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(environment): %yellow(${environment}) %blue(application): %yellow(${applicationName}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} [%X{tid}] %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <property name="FILE_LOG_PATTERN"
-              value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} application: ${springAppName} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%X{tid}] [%-40.40logger{15}] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} environment: ${environment} application: ${applicationName} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%X{tid}] [%-40.40logger{15}] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <!-- 控制台 Appender -->
     <appender name="ConsoleOutput" class="ch.qos.logback.core.ConsoleAppender">
@@ -46,10 +50,10 @@
 
     <!--每天记录日志到文件appender-->
     <appender name="FileOutput" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logHome}/${springAppName}.log</file>
+        <file>${logHome}/${applicationName}.log</file>
         <immediateFlush>false</immediateFlush>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${logHome}/${springAppName}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>${logHome}/${applicationName}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
             <maxFileSize>${maxFileSize}</maxFileSize>
             <totalSizeCap>${totalSizeCap}</totalSizeCap>
@@ -62,7 +66,8 @@
                             <pattern>
                                 {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
                                 "level": "%level",
-                                "application": "${springAppName}",
+                                "environment": "${environment}",
+                                "application": "${applicationName}",
                                 "tid": "%X{tid}",
                                 "pid": "${PID:-}",
                                 "thread": "%thread",
@@ -70,7 +75,6 @@
                                 "message": "%message"}
                             </pattern>
                         </pattern>
-                        <charset>utf8</charset>
                     </providers>
                 </encoder>
             </then>
@@ -90,7 +94,8 @@
             <pattern>
                 {"date": "%d{yyyy-MM-dd HH:mm:ss.SSS}",
                 "level": "%level",
-                "application": "${springAppName:-}",
+                "environment": "${environment}",
+                "application": "${applicationName}",
                 "tid": "%X{tid}",
                 "pid": "${PID:-}",
                 "thread": "%thread",
@@ -105,6 +110,14 @@
         <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
         <!-- kafka 地址 -->
         <producerConfig>bootstrap.servers=${kafka.servers}</producerConfig>
+        <!-- ack确认机制  -->
+        <producerConfig>acks=${kafka.acks}</producerConfig>
+        <!-- 等待最多1000 毫秒并收集日志消息，然后将它们作为批处理发送 -->
+        <producerConfig>linger.ms=${kafka.linger}</producerConfig>
+        <!-- 即使生产者缓冲区已满，也不要阻塞应用程序而是开始丢弃消息 -->
+        <producerConfig>max.block.ms=${kafka.max.block}</producerConfig>
+        <!-- 定义一个客户端 ID，用于在 kafka broker 中识别自己 -->
+        <producerConfig>client.id=${HOSTNAME}-${CONTEXT_NAME}-logback-relaxed</producerConfig>
     </appender>
 
     <!-- skywalking grpc日志传输-->
@@ -135,8 +148,9 @@
     <!-- 异步传递策略，建议选择异步，不然连接kafka失败，会阻挡服务启动 -->
     <appender name="AsyncKafka" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
-        <queueSize>100</queueSize>
+        <queueSize>4096</queueSize>
         <neverBlock>true</neverBlock>
+        <includeCallerData>true</includeCallerData>
         <appender-ref ref="kafkaAppender"/>
     </appender>
 

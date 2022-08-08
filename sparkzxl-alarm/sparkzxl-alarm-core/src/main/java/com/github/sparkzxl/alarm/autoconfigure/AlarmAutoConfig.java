@@ -8,14 +8,14 @@ import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.executor.AlarmExecutor;
 import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.loadbalancer.RandomAlarmLoadBalancer;
-import com.github.sparkzxl.alarm.message.MarkDownMessage;
-import com.github.sparkzxl.alarm.message.TextMessage;
+import com.github.sparkzxl.alarm.message.MarkDownMessageTemplate;
+import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.properties.AlarmThreadPoolProperties;
 import com.github.sparkzxl.alarm.send.AlarmRobot;
-import com.github.sparkzxl.alarm.send.AlarmSender;
-import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
-import com.github.sparkzxl.alarm.sign.DingTalkAlarmSignAlgorithm;
+import com.github.sparkzxl.alarm.send.AlarmClient;
+import com.github.sparkzxl.alarm.strategy.AlarmMessageFactory;
+import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.support.AlarmExceptionHandler;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import com.github.sparkzxl.alarm.support.DefaultAlarmIdGenerator;
@@ -55,6 +55,11 @@ public class AlarmAutoConfig {
                 new ThreadPoolExecutor.AbortPolicy());
     }
 
+    @Bean
+    public AlarmMessageFactory alarmMessageFactory(List<MsgHandleStrategy> msgHandleStrategyList) {
+        return new AlarmMessageFactory(msgHandleStrategyList);
+    }
+
     /**
      * 默认Text消息格式配置
      *
@@ -62,8 +67,8 @@ public class AlarmAutoConfig {
      */
     @ConditionalOnMissingBean(name = AlarmConstant.TEXT_MESSAGE)
     @Bean(AlarmConstant.TEXT_MESSAGE)
-    public TextMessage textMessage() {
-        return new TextMessage();
+    public TextMessageTemplate textMessage() {
+        return new TextMessageTemplate();
     }
 
     /**
@@ -73,8 +78,8 @@ public class AlarmAutoConfig {
      */
     @ConditionalOnMissingBean(name = AlarmConstant.MARKDOWN_MESSAGE)
     @Bean(AlarmConstant.MARKDOWN_MESSAGE)
-    public MarkDownMessage markDownMessage() {
-        return new MarkDownMessage();
+    public MarkDownMessageTemplate markDownMessage() {
+        return new MarkDownMessageTemplate();
     }
 
     /**
@@ -86,17 +91,6 @@ public class AlarmAutoConfig {
     @ConditionalOnMissingBean(AlarmIdGenerator.class)
     public AlarmIdGenerator alarmIdGenerator() {
         return new DefaultAlarmIdGenerator();
-    }
-
-    /**
-     * 默认的DingTalk签名算法
-     *
-     * @return AlarmSignAlgorithm
-     */
-    @Bean
-    @ConditionalOnMissingBean(AlarmSignAlgorithm.class)
-    public AlarmSignAlgorithm alarmSignAlgorithm() {
-        return new DingTalkAlarmSignAlgorithm();
     }
 
     /**
@@ -122,12 +116,13 @@ public class AlarmAutoConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AlarmSender.class)
-    public AlarmSender alarmSender(AlarmProperties alarmProperties,
-                                   TextMessage textMessage,
-                                   MarkDownMessage markDownMessage,
-                                   List<AlarmExecutor> alarmExecutorList) {
-        return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
+    @ConditionalOnMissingBean(AlarmClient.class)
+    public AlarmClient alarmClient(AlarmProperties alarmProperties,
+                                   TextMessageTemplate textMessage,
+                                   MarkDownMessageTemplate markDownMessage,
+                                   List<AlarmExecutor> alarmExecutorList,
+                                   AlarmMessageFactory alarmMessageFactory) {
+        return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList, alarmMessageFactory);
     }
 
     @Bean

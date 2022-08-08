@@ -2,7 +2,7 @@ package com.github.sparkzxl.alarm.properties;
 
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.alarm.constant.AlarmConstant;
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,22 +28,44 @@ public class AlarmProperties implements InitializingBean {
 
     private boolean enabled;
 
-    private final Map<AlarmType, AlarmTypeConfig> channel = new LinkedHashMap<>();
+    private final Map<AlarmChannel, AlarmChannelConfig> channel = new LinkedHashMap<>();
 
-    private AlarmType primaryAlarm;
+    private AlarmChannel primaryAlarm;
 
-    /**
-     * description: 告警配置
-     *
-     * @author zhouxinlei
-     * @since 2022-05-24 09:50:42
-     */
-    @Data
-    public static class AlarmTypeConfig {
-
-        private boolean enabled;
-
-        private List<AlarmConfig> configs;
+    @Override
+    public void afterPropertiesSet() {
+        if (MapUtil.isEmpty(channel)) {
+            throw new InvalidParameterException("alarm Can not be empty");
+        }
+        channel.forEach((key, value) -> {
+            if (!key.isEnabled()) {
+                throw new InvalidParameterException(String.format("alarm=%s is disabled.", key.getType()));
+            }
+            if (!value.isEnabled()) {
+                throw new InvalidParameterException(String.format("Alarm Channel Config =%s is disabled.", key.getType()));
+            }
+            List<AlarmConfig> alarmConfigs = value.getConfigs();
+            if (CollectionUtils.isEmpty(alarmConfigs)) {
+                throw new InvalidParameterException(String.format("alarm=%s config is empty.", key.getType()));
+            }
+            alarmConfigs.forEach(config -> {
+                if (StringUtils.isEmpty(config.getTokenId())) {
+                    throw new InvalidParameterException(String.format("alarm=%s tokenId is empty.", key.getType()));
+                }
+                if (StringUtils.isEmpty(config.getRobotUrl())) {
+                    config.setRobotUrl(key.getRobotUrl());
+                }
+                if (key == AlarmChannel.WETALK) {
+                    config.setSecret(null);
+                }
+            });
+            if (primaryAlarm == null) {
+                primaryAlarm = key;
+                if (log.isDebugEnabled()) {
+                    log.debug("primaryAlarm undeclared and use first Alarms alarmType, primaryAlarm={}.", primaryAlarm);
+                }
+            }
+        });
     }
 
     /**
@@ -69,7 +91,7 @@ public class AlarmProperties implements InitializingBean {
          */
         private String tokenId;
         /**
-         * 选填, 签名秘钥。 需要验签时必填(钉钉机器人提供)
+         * 选填, 签名秘钥。 需要验签时必填(机器人提供)
          */
         private String secret;
 
@@ -79,39 +101,17 @@ public class AlarmProperties implements InitializingBean {
         private boolean async;
     }
 
-    @Override
-    public void afterPropertiesSet() {
-        if (MapUtil.isEmpty(channel)) {
-            throw new InvalidParameterException("alarm Can not be empty");
-        }
-        channel.forEach((key, value) -> {
-            if (!key.isEnabled()) {
-                throw new InvalidParameterException(String.format("alarm=%s is disabled.", key.getType()));
-            }
-            if (!value.isEnabled()) {
-                throw new InvalidParameterException(String.format("Alarm Type Config =%s is disabled.", key.getType()));
-            }
-            List<AlarmConfig> alarmConfigs = value.getConfigs();
-            if (CollectionUtils.isEmpty(alarmConfigs)) {
-                throw new InvalidParameterException(String.format("alarm=%s config is empty.", key.getType()));
-            }
-            alarmConfigs.forEach(config -> {
-                if (StringUtils.isEmpty(config.getTokenId())) {
-                    throw new InvalidParameterException(String.format("alarm=%s tokenId is empty.", key.getType()));
-                }
-                if (StringUtils.isEmpty(config.getRobotUrl())) {
-                    config.setRobotUrl(key.getRobotUrl());
-                }
-                if (key == AlarmType.WETALK) {
-                    config.setSecret(null);
-                }
-            });
-            if (primaryAlarm == null) {
-                primaryAlarm = key;
-                if (log.isDebugEnabled()) {
-                    log.debug("primaryAlarm undeclared and use first Alarms alarmType, primaryAlarm={}.", primaryAlarm);
-                }
-            }
-        });
+    /**
+     * description: 告警配置
+     *
+     * @author zhouxinlei
+     * @since 2022-05-24 09:50:42
+     */
+    @Data
+    public static class AlarmChannelConfig {
+
+        private boolean enabled;
+
+        private List<AlarmConfig> configs;
     }
 }

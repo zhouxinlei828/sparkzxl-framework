@@ -1,6 +1,9 @@
 package com.github.sparkzxl.alarm.entity;
 
-import com.github.sparkzxl.alarm.enums.AlarmType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.sparkzxl.alarm.enums.AlarmChannel;
+import com.github.sparkzxl.alarm.sign.BaseSign;
+import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.Data;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
@@ -20,7 +23,8 @@ public class MsgType implements Serializable {
 
     private static final long serialVersionUID = -5736754669734772997L;
 
-    private volatile AlarmType alarmType;
+    @JsonIgnore
+    private volatile AlarmChannel alarmChannel;
 
     private String msgtype;
 
@@ -28,9 +32,16 @@ public class MsgType implements Serializable {
 
     }
 
+    public void signAttributes(BaseSign sign) {
+    }
+
     protected String replaceContent(String content, Map<String, Object> params) {
         ExpressionParser parser = new SpelExpressionParser();
         TemplateParserContext parserContext = new TemplateParserContext();
         return parser.parseExpression(content, parserContext).getValue(params, String.class);
+    }
+
+    public String toJson() {
+        return JsonUtil.toJson(this);
     }
 }

@@ -29,12 +29,12 @@ import java.util.stream.Collectors;
 /**
  * description: The type Extension loader.
  * This is done by loading the properties file.
- * 参考shenyu SPI机制
+ * 参考dubbo SPI机制
  *
  * @author zhouxinlei
+ * @see <a href="https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/extension/ExtensionLoader.java">ExtensionLoader</a>
  * @since 2022-01-10 10:40:11@param
  * <T> the type parameter
- * @see <a href="https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/extension/ExtensionLoader.java">ExtensionLoader</a>
  */
 @SuppressWarnings("all")
 @Slf4j

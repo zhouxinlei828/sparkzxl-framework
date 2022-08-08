@@ -22,7 +22,7 @@ public class RandomLoadBalancerRule implements ILoadBalancerRule {
 
     @Override
     public ServiceInstance chooseInstance(String serviceId, ServerHttpRequest request) {
-        ServiceInstance serviceInstance = null;
+        ServiceInstance serviceInstance;
         List<ServiceInstance> serviceInstanceList = discoveryClient.getInstances(serviceId);
         int serviceInstanceCount = serviceInstanceList.size();
         if (serviceInstanceCount == 0) {
