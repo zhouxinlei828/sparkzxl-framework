@@ -59,6 +59,7 @@
         <curator.version>5.2.0</curator.version>
 
         <elasticsearch.version>7.17.1</elasticsearch.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
         <apm-toolkit-trace.version>8.11.0</apm-toolkit-trace.version>
@@ -184,6 +185,17 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
+            </dependency>
+            <!-- use mapstruct-jdk8 for Java 8 or higher -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-jdk8</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>
