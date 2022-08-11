@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
  *
  * @author zhouxinlei
  */
-@Activate(group = CommonConstants.PROVIDER, order = -3)
+@Activate(group = {CommonConstants.PROVIDER, CommonConstants.CONSUMER}, order = -3)
 public class ValidationExceptionFilter implements Filter, Filter.Listener {
 
     private final Logger logger = LoggerFactory.getLogger(ExceptionFilter.class);
