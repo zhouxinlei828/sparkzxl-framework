@@ -3,10 +3,10 @@ package com.github.sparkzxl.gateway.plugin.dubbo.message;
 import org.springframework.web.server.ServerWebExchange;
 
 /**
- * 无操作消息转换器
+ * description: 无操作消息转换器
  *
- * @author LIQIU
- * @date 2021/8/13 15:43
+ * @author zhouxinlei
+ * @since 2022-08-15 13:51:07
  */
 public class NoOpsDubboMessageConverter implements DubboMessageConverter {
 

@@ -1,5 +1,11 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.constant;
 
+/**
+ * description: dubbo 常量
+ *
+ * @author zhouxinlei
+ * @since 2022-08-15 13:51:50
+ */
 public class DubboConstant {
 
     /**

@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * description:
+ * description: Jackson 消息写入
  *
  * @author zhouxinlei
  * @since 2022-08-15 08:45:43

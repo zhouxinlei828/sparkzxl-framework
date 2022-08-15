@@ -3,10 +3,10 @@ package com.github.sparkzxl.gateway.plugin.dubbo.message;
 import org.springframework.web.server.ServerWebExchange;
 
 /**
- * Dubbo 结果转换器
+ * description: Dubbo 结果转换器
  *
- * @author LIQIU
- * @date 2021/7/1 10:36
+ * @author zhouxinlei
+ * @since 2022-08-15 13:50:36
  */
 public interface DubboMessageConverter {
 

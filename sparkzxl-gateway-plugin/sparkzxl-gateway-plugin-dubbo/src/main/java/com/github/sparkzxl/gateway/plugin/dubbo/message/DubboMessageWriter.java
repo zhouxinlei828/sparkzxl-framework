@@ -4,10 +4,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Dubbo 消息写组件
+ * description: Dubbo 消息写组件
  *
- * @author LIQIU
- * @date 2021/7/1 12:03
+ * @author zhouxinlei
+ * @since 2022-08-15 13:50:45
  */
 public interface DubboMessageWriter {
 
