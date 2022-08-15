@@ -1,8 +1,10 @@
-package com.github.sparkzxl.gateway.plugin.context;
+package com.github.sparkzxl.gateway.plugin.filter;
 
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.enums.FilterEnum;
-import com.github.sparkzxl.gateway.plugin.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.plugin.context.DefaultGatewayContextBuilder;
+import com.github.sparkzxl.gateway.plugin.context.GatewayContext;
+import com.github.sparkzxl.gateway.plugin.context.GatewayContextBuilder;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;

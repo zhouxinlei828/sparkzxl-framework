@@ -18,6 +18,10 @@ public class GatewayException extends BaseUncheckedException {
         super(errorCode);
     }
 
+    public GatewayException(Throwable cause) {
+        super("500", cause.getMessage());
+    }
+
     public GatewayException(IErrorCode errorCode, String errorMsg) {
         super(errorCode.getErrorCode(), errorMsg);
     }

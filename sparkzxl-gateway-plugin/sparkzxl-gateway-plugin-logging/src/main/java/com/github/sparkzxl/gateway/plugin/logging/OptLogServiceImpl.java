@@ -41,7 +41,9 @@ public class OptLogServiceImpl implements IOptLogService {
         this.logging = logging;
     }
 
-    static LogParam buildLogParam(ServerWebExchange exchange, GatewayContext gatewayContext) {
+    static LogParam buildLogParam(ServerWebExchange exchange) {
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
+        LogContext logContext = exchange.getAttribute(GatewayConstant.GATEWAY_LOG_CONTEXT_CONSTANT);
         LogParam logParam = new LogParam();
         LocalDateTime startTime = gatewayContext.getStartTime();
         ServerHttpRequest request = exchange.getRequest();
@@ -58,13 +60,13 @@ public class OptLogServiceImpl implements IOptLogService {
                 .setHttpStatus(exchange.getResponse().getStatusCode().value())
                 .setReqTime(startTime)
                 .setHeaders(getHeaders(request.getHeaders()))
-                .setReqBody(gatewayContext.getRequestBody())
-                .setHeaders(gatewayContext.getRequestBody())
+                .setReqBody(logContext.getRequestBody())
+                .setHeaders(logContext.getRequestBody())
                 .setTimeCost(StrFormatter.format("{}ms", Duration.between(logParam.getReqTime(), LocalDateTime.now()).toMillis()))
                 .setQueryParams(getQueryParams(exchange.getRequest()))
-                .setRespBody(Optional.ofNullable(gatewayContext.getResponseBody()).orElse(StringUtils.EMPTY));
-        if (MapUtil.isNotEmpty(gatewayContext.getFormData())) {
-            logParam.setReqFormData(JsonUtil.toJson(gatewayContext.getFormData()));
+                .setRespBody(Optional.ofNullable(logContext.getResponseBody()).orElse(StringUtils.EMPTY));
+        if (MapUtil.isNotEmpty(logContext.getFormData())) {
+            logParam.setReqFormData(JsonUtil.toJson(logContext.getFormData()));
         }
         return logParam;
     }
@@ -93,8 +95,7 @@ public class OptLogServiceImpl implements IOptLogService {
 
     @Override
     public void recordLog(ServerWebExchange exchange) {
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
-        LogParam logParam = buildLogParam(exchange, gatewayContext);
+        LogParam logParam = buildLogParam(exchange);
         log.info("请求日志：IP:{},host:{},httpMethod:{},path:{},timeCost:{}",
                 logParam.getIp(),
                 logParam.getHost(),

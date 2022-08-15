@@ -12,7 +12,6 @@
 
     <modules>
         <module>sparkzxl-gateway-plugin-common</module>
-        <module>sparkzxl-gateway-plugin-context</module>
         <module>sparkzxl-gateway-plugin-logging</module>
         <module>sparkzxl-gateway-plugin-jwt</module>
         <module>sparkzxl-gateway-plugin-autoconfigure</module>
@@ -20,6 +19,7 @@
         <module>sparkzxl-gateway-plugin-exception</module>
         <module>sparkzxl-spi</module>
         <module>sparkzxl-gateway-plugin-sign</module>
+        <module>sparkzxl-gateway-plugin-dubbo</module>
     </modules>
 
     <dependencyManagement>

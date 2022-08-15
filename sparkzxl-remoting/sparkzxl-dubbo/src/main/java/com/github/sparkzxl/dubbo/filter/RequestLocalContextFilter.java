@@ -27,13 +27,15 @@ public class RequestLocalContextFilter implements Filter, Filter.Listener {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         RpcServiceContext context = RpcContext.getServiceContext();
         if (context.isProviderSide()) {
+            Map<String, Object> attachmentMap = context.getObjectAttachments();
             Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {
                 @Override
                 public Type getType() {
                     return super.getType();
                 }
             }, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
-            RequestLocalContextHolder.setLocalMap(threadLocalMap);
+            attachmentMap.putAll(threadLocalMap);
+            RequestLocalContextHolder.setLocalMap(attachmentMap);
         } else if (RpcContext.getServiceContext().isConsumerSide()) {
             Map<String, Object> threadLocalMap = RequestLocalContextHolder.getLocalMap();
             context.setObjectAttachment(REQUEST_LOCAL_CONTEXT, threadLocalMap);

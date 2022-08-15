@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.gateway.plugin.annotation.EnableExceptionJsonHandler;
-import com.github.sparkzxl.gateway.plugin.context.GatewayContextFilter;
+import com.github.sparkzxl.gateway.plugin.filter.GatewayContextFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.JwtFilter;
 import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

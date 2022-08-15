@@ -3,7 +3,6 @@ package com.github.sparkzxl.gateway.plugin.context;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.util.MultiValueMap;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,20 +18,9 @@ import java.time.LocalDateTime;
 @ToString
 public class GatewayContext implements Serializable {
 
-    private static final long serialVersionUID = 573721603738759822L;
+    private static final long serialVersionUID = -1685592780015769516L;
+
     protected LocalDateTime startTime = LocalDateTime.now();
-    /**
-     * cache form data
-     */
-    protected MultiValueMap<String, String> formData;
-    /**
-     * cache json body
-     */
-    protected String requestBody;
-    /**
-     * cache Response Body
-     */
-    protected String responseBody;
     private String appKey;
     private String sign;
     private String timestamp;
@@ -44,6 +32,15 @@ public class GatewayContext implements Serializable {
      * version.
      */
     private String version;
+    /**
+     * is rpcType data. now we only support "http","dubbo","sofa".
+     */
+    private String rpcType;
+
+    /**
+     * is method name .
+     */
+    private String method;
     /**
      * httpMethod .
      */

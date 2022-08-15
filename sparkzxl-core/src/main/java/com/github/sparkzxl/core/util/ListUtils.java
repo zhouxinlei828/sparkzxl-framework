@@ -1,9 +1,6 @@
 package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.system.UserInfo;
-import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -109,6 +106,20 @@ public class ListUtils {
     public static String listToString(List<String> list) {
         String str = "";
         if (isNotEmpty(list)) {
+            str = StringUtils.join(list, ",");
+        }
+        return str;
+    }
+
+    /**
+     * list转String
+     *
+     * @param list list
+     * @return List<T>
+     */
+    public static String arrayToString(String[] list) {
+        String str = "";
+        if (ArrayUtils.isNotEmpty(list)) {
             str = StringUtils.join(list, ",");
         }
         return str;
