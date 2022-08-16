@@ -64,6 +64,11 @@
                 <artifactId>sparkzxl-gateway-plugin-sign</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

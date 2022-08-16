@@ -92,7 +92,7 @@ public class RpcParamTransformFilter extends AbstractGlobalFilter {
 
 
     @Override
-    protected String named() {
+    public String named() {
         return FilterEnum.RPC_PARAM_TRANSFORM.getName();
     }
 

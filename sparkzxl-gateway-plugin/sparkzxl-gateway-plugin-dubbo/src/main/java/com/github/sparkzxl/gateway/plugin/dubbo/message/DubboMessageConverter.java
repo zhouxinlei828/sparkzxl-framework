@@ -11,7 +11,7 @@ import org.springframework.web.server.ServerWebExchange;
 public interface DubboMessageConverter {
 
     /**
-     * 转换Dubbo结果
+     * 转换Dubbo请求结果
      *
      * @param exchange Exchange
      * @param source   原数据

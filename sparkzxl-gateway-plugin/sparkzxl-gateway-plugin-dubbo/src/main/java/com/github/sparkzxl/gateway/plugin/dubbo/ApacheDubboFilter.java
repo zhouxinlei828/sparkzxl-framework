@@ -5,6 +5,7 @@ import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.enums.FilterEnum;
+import com.github.sparkzxl.gateway.plugin.common.entity.FilterData;
 import com.github.sparkzxl.gateway.plugin.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.context.GatewayContext;
@@ -13,6 +14,7 @@ import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageWriter;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
 import com.github.sparkzxl.gateway.plugin.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.plugin.handler.FilterDataHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcServiceContext;
@@ -45,14 +47,12 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     private final DubboRoutePredicate predicate;
     private final ApacheDubboProxyService dubboProxyService;
     private final DubboMessageConverter dubboMessageConverter;
-    /**
-     * Dubbo结果输出
-     */
     private final DubboMessageWriter writer;
 
     public ApacheDubboFilter(DubboMetaDataFactory dubboMetaDataFactory,
                              DubboRoutePredicate predicate,
-                             ApacheDubboProxyService dubboProxyService, DubboMessageConverter dubboMessageConverter, DubboMessageWriter writer) {
+                             ApacheDubboProxyService dubboProxyService,
+                             DubboMessageConverter dubboMessageConverter, DubboMessageWriter writer) {
         this.dubboMetaDataFactory = dubboMetaDataFactory;
         this.predicate = predicate;
         this.dubboProxyService = dubboProxyService;
@@ -61,7 +61,7 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     }
 
     @Override
-    protected String named() {
+    public String named() {
         return FilterEnum.DUBBO.getName();
     }
 
@@ -72,11 +72,21 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
         if (!matched) {
             return chain.filter(exchange);
         }
+        GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
+        assert gatewayContext != null;
+        // check filter config data
+        FilterData filterData = loadFilterData();
+        FilterDataHandler filterDataHandler = getFilterDataHandler();
+        filterDataHandler.handlerFilter(filterData);
+        String dataConfig = filterData.getConfig();
+        if (StringUtils.isEmpty(dataConfig)) {
+            logger.error(" path is : {}, {} filter configuration information is empty", gatewayContext.getPath(), FilterEnum.DUBBO.getName());
+            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ReactorHttpHelper.error(exchange.getResponse(), "500", "dubbo过滤器配置信息为空");
+        }
         exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_ALREADY_ROUTED_ATTR, true);
         MetaData metaData = dubboMetaDataFactory.get(route);
         if (!checkMetaData(metaData)) {
-            GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
-            assert gatewayContext != null;
             logger.error(" path is : {}, meta data have error : {}", gatewayContext.getPath(), metaData);
             exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
             return ReactorHttpHelper.error(exchange.getResponse(), "500", "dubbo元数据信息有误");

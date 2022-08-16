@@ -7,6 +7,12 @@ import java.net.URI;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR;
 
+/**
+ * description: dubbo 请求断言
+ *
+ * @author zhouxinlei
+ * @since 2022-08-15 13:59:09
+ */
 public class DubboRouteSchemePredicate implements DubboRoutePredicate {
 
     private final static String DUBBO_SCHEME = "dubbo";
