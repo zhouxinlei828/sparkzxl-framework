@@ -5,7 +5,6 @@ import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.plugin.common.constant.enums.FilterEnum;
-import com.github.sparkzxl.gateway.plugin.common.entity.FilterData;
 import com.github.sparkzxl.gateway.plugin.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.context.GatewayContext;
@@ -14,7 +13,6 @@ import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageWriter;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
 import com.github.sparkzxl.gateway.plugin.filter.AbstractGlobalFilter;
-import com.github.sparkzxl.gateway.plugin.handler.FilterDataHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcServiceContext;
@@ -75,17 +73,10 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         assert gatewayContext != null;
         // check filter config data
-        FilterData filterData = loadFilterData();
-        FilterDataHandler filterDataHandler = getFilterDataHandler();
-        filterDataHandler.handlerFilter(filterData);
-        String dataConfig = filterData.getConfig();
-        if (StringUtils.isEmpty(dataConfig)) {
-            logger.error(" path is : {}, {} filter configuration information is empty", gatewayContext.getPath(), FilterEnum.DUBBO.getName());
-            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-            return ReactorHttpHelper.error(exchange.getResponse(), "500", "dubbo过滤器配置信息为空");
-        }
+        getFilterDataHandler().handlerFilter(loadFilterData());
         exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_ALREADY_ROUTED_ATTR, true);
         MetaData metaData = dubboMetaDataFactory.get(route);
+        metaData.setPath(gatewayContext.getPath());
         if (!checkMetaData(metaData)) {
             logger.error(" path is : {}, meta data have error : {}", gatewayContext.getPath(), metaData);
             exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);

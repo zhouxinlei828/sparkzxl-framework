@@ -8,11 +8,6 @@ public class DubboRoute {
     private final String describe;
 
     /**
-     * 调用方法
-     */
-    private final String method;
-
-    /**
      * 参数类型
      */
     private final String[] parameterTypes;

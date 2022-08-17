@@ -13,7 +13,6 @@ import com.github.sparkzxl.gateway.plugin.dubbo.route.DefaultDubboMetaDataFactor
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRouteSchemePredicate;
-import com.github.sparkzxl.gateway.plugin.handler.FilterDataHandler;
 import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -72,10 +71,6 @@ public class GatewayPluginDubboAutoConfig {
                                           ApacheDubboProxyService apacheDubboProxyService,
                                           DubboMessageConverter dubboMessageConverter,
                                           DubboMessageWriter dubboMessageWriter) {
-        ApacheDubboFilter apacheDubboFilter = new ApacheDubboFilter(dubboMetaDataFactory, dubboRoutePredicate,
-                apacheDubboProxyService, dubboMessageConverter, dubboMessageWriter);
-        FilterDataHandler filterDataHandler = apacheDubboFilter.getFilterDataHandler();
-        filterDataHandler.handlerFilter(apacheDubboFilter.loadFilterData());
         return new ApacheDubboFilter(dubboMetaDataFactory, dubboRoutePredicate,
                 apacheDubboProxyService, dubboMessageConverter, dubboMessageWriter);
     }

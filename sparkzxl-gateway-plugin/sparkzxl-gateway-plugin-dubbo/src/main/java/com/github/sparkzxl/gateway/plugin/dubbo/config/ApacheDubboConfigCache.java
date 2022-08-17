@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.config;
 
+import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.support.GatewayException;
@@ -7,11 +8,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ConsumerConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
+import org.apache.dubbo.config.utils.ConfigValidationUtils;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,17 +71,25 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param dubboRegisterConfig the dubbo register config
      */
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
+        ApplicationConfig bean = SpringContextUtils.getBean(ApplicationConfig.class);
         if (Objects.isNull(applicationConfig)) {
-            applicationConfig = new ApplicationConfig("spring_gateway_proxy");
+            applicationConfig = new ApplicationConfig();
+            applicationConfig.setRegisterMode("instance");
+            applicationConfig.setName("spring-gateway-proxy");
         }
         if (needUpdateRegistryConfig(dubboRegisterConfig)) {
             RegistryConfig registryConfigTemp = new RegistryConfig();
             registryConfigTemp.setProtocol(dubboRegisterConfig.getProtocol());
-            registryConfigTemp.setId("spring_gateway_proxy");
+            registryConfigTemp.setId("spring-gateway-proxy");
             registryConfigTemp.setRegister(false);
-            registryConfigTemp.setAddress(dubboRegisterConfig.getRegister());
+            registryConfigTemp.setAddress(dubboRegisterConfig.getAddress());
             Optional.ofNullable(dubboRegisterConfig.getGroup()).ifPresent(registryConfigTemp::setGroup);
+            Map<String, String> parameters = dubboRegisterConfig.getParameters();
+            if (MapUtils.isNotEmpty(parameters)) {
+                registryConfigTemp.setParameters(parameters);
+            }
             registryConfig = registryConfigTemp;
+            ConfigValidationUtils.validateRegistryConfig(registryConfig);
         }
         if (Objects.isNull(consumerConfig)) {
             consumerConfig = new ConsumerConfig();
@@ -96,7 +107,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
             return true;
         }
         return !Objects.equals(dubboRegisterConfig.getProtocol(), registryConfig.getProtocol())
-                || !Objects.equals(dubboRegisterConfig.getRegister(), registryConfig.getAddress())
+                || !Objects.equals(dubboRegisterConfig.getAddress(), registryConfig.getAddress())
                 || !Objects.equals(dubboRegisterConfig.getProtocol(), registryConfig.getProtocol());
     }
 
@@ -138,10 +149,8 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
         reference.setRegistry(registryConfig);
         reference.setConsumer(consumerConfig);
         reference.setInterface(metaData.getServiceName());
-        reference.setProtocol("dubbo");
+        reference.setProtocol("nacos");
         reference.setCheck(false);
-        reference.setLoadbalance("gray");
-
         Map<String, String> parameters = new HashMap<>(2);
         parameters.put("dispatcher", "direct");
         reference.setParameters(parameters);
