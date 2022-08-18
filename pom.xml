@@ -59,9 +59,11 @@
         <module>sparkzxl-uid</module>
         <module>sparkzxl-dependencies</module>
         <module>sparkzxl-sms-starter</module>
+        <module>sparkzxl-monitor</module>
         <module>sparkzxl-remoting</module>
         <module>sparkzxl-metrics</module>
         <module>sparkzxl-micrometer</module>
+        <module>sparkzxl-framework-starter</module>
     </modules>
 
     <licenses>
