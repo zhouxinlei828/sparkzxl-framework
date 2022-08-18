@@ -2,14 +2,16 @@ package com.github.sparkzxl.core.base.result;
 
 import cn.hutool.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.entity.response.ResponseCode;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import java.util.Map;
 @Accessors(chain = true)
 public class Response<T> implements Serializable {
 
-    private static final long serialVersionUID = 1648240637156580226L;
+    private static final long serialVersionUID = -7545356835815831989L;
 
     @JsonProperty(index = 1)
     @ApiModelProperty(value = "响应编码")
@@ -54,11 +56,12 @@ public class Response<T> implements Serializable {
      * 响应时间
      */
     @ApiModelProperty(value = "响应时间戳")
-    private long timestamp = System.currentTimeMillis();
+    @JsonProperty(index = 7)
+    private long timestamp;
     /**
      * 附加数据
      */
-    @JsonProperty(index = 7)
+    @JsonProperty(index = 8)
     @ApiModelProperty(value = "附加数据")
     private Map<String, Object> extra;
 
@@ -132,11 +135,6 @@ public class Response<T> implements Serializable {
                 .build();
     }
 
-    public static void main(String[] args) {
-        Response<?> response = Response.fail(new RuntimeException("异常"));
-        System.out.println(JsonUtil.toJsonPretty(response));
-    }
-
     public Response<?> put(String key, Object value) {
         if (this.extra == null) {
             this.extra = new HashMap<>(16);
@@ -163,7 +161,6 @@ public class Response<T> implements Serializable {
         private T data;
         private String errorCode;
         private String errorMsg;
-        private long timestamp;
         private Map<String, Object> extra;
 
         public ResponseBuilder<T> code(int code) {
@@ -197,6 +194,8 @@ public class Response<T> implements Serializable {
         }
 
         public Response<T> build() {
+            Map<String, Object> map = this.extra == null ? Maps.newHashMap() : this.extra;
+            map.put(BaseContextConstants.LOG_TRACE_ID, TraceContext.traceId());
             return new Response<T>()
                     .setCode(this.code)
                     .setSuccess(this.code == HttpStatus.HTTP_OK)
@@ -205,7 +204,7 @@ public class Response<T> implements Serializable {
                     .setErrorCode(this.errorCode)
                     .setErrorMsg(this.errorMsg)
                     .setTimestamp(System.currentTimeMillis())
-                    .setExtra(this.extra);
+                    .setExtra(map);
         }
     }
 }
