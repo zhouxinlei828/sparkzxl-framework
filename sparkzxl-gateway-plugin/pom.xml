@@ -20,6 +20,7 @@
         <module>sparkzxl-spi</module>
         <module>sparkzxl-gateway-plugin-sign</module>
         <module>sparkzxl-gateway-plugin-dubbo</module>
+        <module>sparkzxl-gateway-plugin-trace</module>
     </modules>
 
     <dependencyManagement>
@@ -67,6 +68,11 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-gateway-plugin-trace</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

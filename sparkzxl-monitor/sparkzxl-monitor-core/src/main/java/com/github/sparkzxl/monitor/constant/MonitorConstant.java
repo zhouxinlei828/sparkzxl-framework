@@ -8,18 +8,6 @@ package com.github.sparkzxl.monitor.constant;
  */
 public class MonitorConstant {
 
-    public static final String TRACE_ID = "trace-id";
-    public static final String SPAN_ID = "span-id";
-    public static final String ROUTE_ADDRESS = "route-address";
-    public static final String SPARKZXL_UPPERCASE = "SPARKZXL";
-    public static final String EVENT = "event";
-    public static final String ERROR = "error";
-    public static final String ERROR_OBJECT = "error.object";
-    public static final String IGNORED = "ignored";
-
-
-    public static final String FEIGN = "Feign";
-    public static final String REST_TEMPLATE = "RestTemplate";
-    public static final String WEB_CLIENT = "WebClient";
+    public static final String SPRING_MONITOR_TRACER_ENABLED = "spring.monitor.tracer.enabled";
 
 }

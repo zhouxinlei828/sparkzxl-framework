@@ -1,6 +1,11 @@
 package com.github.sparkzxl.monitor;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.sparkzxl.monitor.configuration.TraceProperties;
+import com.google.common.collect.Maps;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.Map;
 
@@ -10,40 +15,39 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-07-25 13:44:37
  */
-public class MonitorContext {
+public class MonitorContext implements ApplicationContextAware, InitializingBean {
 
-    @Autowired(required = false)
-    protected TracerExecutor tracerExecutor;
+    private ApplicationContext applicationContext;
 
-    @Autowired(required = false)
-    protected TracerAdapter tracerAdapter;
+    private final Map<String, TracerExecutor> tracerExecutorMap;
+    private final TraceProperties traceProperties;
+
+    public MonitorContext(TraceProperties traceProperties) {
+        this.traceProperties = traceProperties;
+        this.tracerExecutorMap = Maps.newHashMap();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     public String getTraceId() {
+        if (!traceProperties.isEnabled()) {
+            return null;
+        }
+        TracerExecutor tracerExecutor = tracerExecutorMap.get(traceProperties.getType().name());
         if (tracerExecutor != null) {
             return tracerExecutor.getTraceId();
         }
-        if (tracerAdapter != null) {
-            return tracerAdapter.getTraceId();
-        }
         return null;
     }
 
-
-    public String getSpanId() {
-        if (tracerExecutor != null) {
-            return tracerExecutor.getSpanId();
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Map<String, TracerExecutor> executorMap = applicationContext.getBeansOfType(TracerExecutor.class);
+        for (TracerExecutor executor : executorMap.values()) {
+            tracerExecutorMap.put(executor.name(), executor);
         }
-        if (tracerAdapter != null) {
-            return tracerAdapter.getSpanId();
-        }
-        return null;
     }
-
-    public Map<String, String> getCustomizationMap() {
-        if (tracerAdapter != null) {
-            return tracerAdapter.getCustomizationMap();
-        }
-        return null;
-    }
-
 }

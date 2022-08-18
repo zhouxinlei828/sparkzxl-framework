@@ -1,6 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.gateway.plugin.TraceFilter;
 import com.github.sparkzxl.gateway.plugin.annotation.EnableExceptionJsonHandler;
 import com.github.sparkzxl.gateway.plugin.filter.GatewayContextFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.JwtFilter;
@@ -45,4 +46,12 @@ public class GatewayPluginAutoConfig {
     public GlobalFilter jwtFilter() {
         return new JwtFilter();
     }
+
+    @Bean
+    @ConditionalOnMissingBean(TraceFilter.class)
+    @ConditionalOnProperty(prefix = "spring.cloud.gateway.plugin.filter.trace", value = "enabled", havingValue = "true")
+    public GlobalFilter traceFilter() {
+        return new TraceFilter();
+    }
+
 }

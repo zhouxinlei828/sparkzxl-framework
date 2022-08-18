@@ -3,10 +3,10 @@ package com.github.sparkzxl.web.interceptor;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.web.annotation.Response;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.web.annotation.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
@@ -31,13 +31,11 @@ public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
         }
 
         //设置当前请求线程全局信息
-        RequestLocalContextHolder.setTenant(RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT_ID));
-        RequestLocalContextHolder.setUserId(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
-        RequestLocalContextHolder.setAccount(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
-        RequestLocalContextHolder.setName(RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_NAME));
-        RequestLocalContextHolder.setVersion(RequestContextHolderUtils.getHeader(request, BaseContextConstants.VERSION));
-        String traceId = RequestContextHolderUtils.getHeader(request, BaseContextConstants.TRACE_ID_HEADER);
-        MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? IdUtil.fastSimpleUUID() : traceId);
+        RequestLocalContextHolder.setTenant(request.getHeader(BaseContextConstants.TENANT_ID));
+        RequestLocalContextHolder.setUserId(request.getHeader(BaseContextConstants.JWT_KEY_USER_ID));
+        RequestLocalContextHolder.setAccount(request.getHeader(BaseContextConstants.JWT_KEY_ACCOUNT));
+        RequestLocalContextHolder.setName(request.getHeader(BaseContextConstants.JWT_KEY_NAME));
+        RequestLocalContextHolder.setVersion(request.getHeader(BaseContextConstants.VERSION));
         MDC.put(BaseContextConstants.TENANT_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT_ID));
         MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
         Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);

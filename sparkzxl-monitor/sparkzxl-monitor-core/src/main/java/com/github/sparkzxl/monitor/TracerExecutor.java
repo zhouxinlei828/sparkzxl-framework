@@ -1,7 +1,5 @@
 package com.github.sparkzxl.monitor;
 
-import java.util.Map;
-
 /**
  * description: 追踪执行器接口类
  *
@@ -10,16 +8,18 @@ import java.util.Map;
  */
 public interface TracerExecutor {
 
-    void spanBuild();
-
-    void spanOutput(Map<String, String> contextMap);
-
-    void spanError(Throwable e);
-
-    void spanFinish();
-
+    /**
+     * 获取链路id
+     *
+     * @return String
+     */
     String getTraceId();
 
-    String getSpanId();
+    /**
+     * 链路类型名称
+     *
+     * @return String
+     */
+    String name();
 
 }

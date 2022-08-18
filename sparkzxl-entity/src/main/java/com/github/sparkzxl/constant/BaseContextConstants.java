@@ -87,7 +87,7 @@ public class BaseContextConstants {
     /**
      * 日志链路追踪id日志标志
      */
-    public static final String LOG_TRACE_ID = "tid";
+    public static final String LOG_TRACE_ID = "traceId";
     /**
      * 角色资源常量
      */

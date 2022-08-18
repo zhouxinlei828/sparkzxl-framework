@@ -1,1 +1,1 @@
-com.github.sparkzxl.opentracing.configuration.OpenTracingAutoConfiguration
+com.github.sparkzxl.monitor.configuration.MonitorAutoConfiguration

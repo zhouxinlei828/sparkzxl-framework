@@ -147,6 +147,7 @@ public class RequestLocalContextHolder {
         set(BaseContextConstants.IS_BOOT, val);
     }
 
+
     public static void remove() {
         THREAD_LOCAL.remove();
     }
