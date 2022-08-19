@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ReactorHttpHelper {
 
-    public static String getHeader(String headerName, ServerHttpRequest request) {
+    public static String getHeader(ServerHttpRequest request,String headerName) {
         HttpHeaders headers = request.getHeaders();
         String val = StrUtil.EMPTY;
         if (headers.isEmpty()) {

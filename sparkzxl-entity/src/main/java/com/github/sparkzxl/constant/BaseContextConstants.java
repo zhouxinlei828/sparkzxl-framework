@@ -108,4 +108,9 @@ public class BaseContextConstants {
      */
     public static final String REQUEST_THREAD_LOCAL_MAP = "request-thread-local-map";
 
+    /**
+     * 客户端ip地址
+     */
+    public static final String CLIENT_IP = "clientIP";
+
 }
