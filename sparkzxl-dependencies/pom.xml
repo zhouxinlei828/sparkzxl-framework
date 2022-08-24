@@ -63,7 +63,7 @@
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
         <apm-toolkit-trace.version>8.11.0</apm-toolkit-trace.version>
-        <ip2region.version>1.7.2</ip2region.version>
+        <ip2region.version>2.6.5</ip2region.version>
         <caffeine.version>2.9.3</caffeine.version>
         <fastjson.version>1.2.83</fastjson.version>
         <easy-excel.version>3.0.5</easy-excel.version>

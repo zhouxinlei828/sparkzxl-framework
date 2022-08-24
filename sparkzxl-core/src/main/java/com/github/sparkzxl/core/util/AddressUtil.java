@@ -1,18 +1,16 @@
 package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.io.resource.ResourceUtil;
-import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.lionsoul.ip2region.DataBlock;
-import org.lionsoul.ip2region.DbConfig;
-import org.lionsoul.ip2region.DbSearcher;
-import org.lionsoul.ip2region.Util;
+import org.apache.commons.lang3.StringUtils;
+import org.lionsoul.ip2region.xdb.Searcher;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * description：获取ip地址
@@ -22,69 +20,55 @@ import java.lang.reflect.Method;
 @Slf4j
 public class AddressUtil {
 
-    static DbConfig config = null;
-    static DbSearcher searcher = null;
+    private static Searcher searcher = null;
+    private static byte[] vIndex;
+    private static String dbPath;
 
     static {
+        dbPath = Objects.requireNonNull(AddressUtil.class.getResource("/ip2region/ip2region.xdb")).getPath();
         try {
-            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
             File file = new File(dbPath);
             if (!file.exists()) {
                 String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
-                dbPath = tmpDir + "ip2region/ip2region.db";
+                dbPath = tmpDir + "ip2region/ip2region.xdb";
                 file = new File(dbPath);
-                String classPath = "classpath:ip2region/ip2region.db";
+                String classPath = "classpath:ip2region/ip2region.xdb";
                 InputStream resourceAsStream = ResourceUtil.getStreamSafe(classPath);
                 if (resourceAsStream != null) {
                     FileUtils.copyInputStreamToFile(resourceAsStream, file);
                 }
             }
-            config = new DbConfig();
-            searcher = new DbSearcher(config, dbPath);
-        } catch (Exception ignored) {
+            vIndex = Searcher.loadVectorIndexFromFile(dbPath);
+            searcher = Searcher.newWithVectorIndex(dbPath, vIndex);
+        } catch (Exception e) {
+            System.out.printf("failed to load vector index from `%s`: %s\n", dbPath, e);
         }
 
-    }
-
-    public AddressUtil() {
     }
 
     public static String getRegion(String ip) {
         try {
-            if (searcher != null && !StrUtil.isEmpty(ip)) {
-                long startTime = System.currentTimeMillis();
-                int algorithm = 3;
-                Method method = null;
-                switch (algorithm) {
-                    case 1:
-                        method = searcher.getClass().getMethod("btreeSearch", String.class);
-                        break;
-                    case 2:
-                        method = searcher.getClass().getMethod("binarySearch", String.class);
-                        break;
-                    case 3:
-                        method = searcher.getClass().getMethod("memorySearch", String.class);
-                        break;
-                    default:
-                        break;
-                }
-
-                DataBlock dataBlock;
-                if (!Util.isIpAddress(ip)) {
-                    log.warn("warning: Invalid ip address");
-                }
-
-                dataBlock = (DataBlock) method.invoke(searcher, ip);
-                String result = dataBlock.getRegion();
-                long endTime = System.currentTimeMillis();
-                log.debug("region use time[{}] result[{}]", endTime - startTime, result);
-                return JsonUtil.toJson(dataBlock);
-            } else {
-                log.error("DbSearcher is null");
+            Searcher searcher = Searcher.newWithVectorIndex(dbPath, vIndex);
+            if (StringUtils.isEmpty(ip)) {
+                return "";
             }
+            long startTime = System.currentTimeMillis();
+            String result = searcher.search(ip);
+            long endTime = System.currentTimeMillis();
+            log.debug("region use time[{}] result[{}]", endTime - startTime, result);
+            return result;
         } catch (Exception e) {
             log.error("error:[{}]", e.getMessage());
+            return "";
+        } finally {
+            try {
+                searcher.close();
+            } catch (IOException ignored) {
+            }
         }
-        return "";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(AddressUtil.getRegion("183.129.233.146"));
     }
 }

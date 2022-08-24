@@ -170,6 +170,7 @@
                             <nonFilteredFileExtension>key</nonFilteredFileExtension>
                             <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                             <nonFilteredFileExtension>db</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>xdb</nonFilteredFileExtension>
                             <nonFilteredFileExtension>txt</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
