@@ -26,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint(value = "/websocket", configurator = WebsocketConfigurator.class)
 public class WebsocketCollector {
     
-    private static final Logger LOG = LoggerFactory.getLogger(WebsocketCollector.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketCollector.class);
     
     private static final Set<Session> SESSION_SET = new CopyOnWriteArraySet<>();
     
@@ -39,7 +39,7 @@ public class WebsocketCollector {
      */
     @OnOpen
     public void onOpen(final Session session) {
-        LOG.info("websocket on client[{}] open successful,maxTextMessageBufferSize:{}",
+        logger.info("websocket on client[{}] open successful,maxTextMessageBufferSize:{}",
                 getClientIp(session), session.getMaxTextMessageBufferSize());
         SESSION_SET.add(session);
     }
@@ -82,7 +82,7 @@ public class WebsocketCollector {
     @OnClose
     public void onClose(final Session session) {
         clearSession(session);
-        LOG.warn("websocket close on client[{}]", getClientIp(session));
+        logger.warn("websocket close on client[{}]", getClientIp(session));
     }
     
     /**
@@ -94,7 +94,7 @@ public class WebsocketCollector {
     @OnError
     public void onError(final Session session, final Throwable error) {
         clearSession(session);
-        LOG.error("websocket collection on client[{}] error: ", getClientIp(session), error);
+        logger.error("websocket collection on client[{}] error: ", getClientIp(session), error);
     }
     
     /**
@@ -122,7 +122,7 @@ public class WebsocketCollector {
         try {
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
-            LOG.error("websocket send result is exception: ", e);
+            logger.error("websocket send result is exception: ", e);
         }
     }
     
