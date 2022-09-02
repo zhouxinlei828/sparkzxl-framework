@@ -604,12 +604,12 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-data-call-provider</artifactId>
+                <artifactId>sparkzxl-data-sync-provider</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-data-call-websocket</artifactId>
+                <artifactId>sparkzxl-data-sync-websocket</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
