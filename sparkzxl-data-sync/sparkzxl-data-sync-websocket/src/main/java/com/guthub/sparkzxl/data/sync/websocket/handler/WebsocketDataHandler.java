@@ -5,7 +5,9 @@ import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: The type Websocket cache handler.
@@ -15,7 +17,7 @@ import java.util.List;
  */
 public class WebsocketDataHandler {
 
-    private static final EnumMap<ConfigGroupEnum, DataHandler> ENUM_MAP = new EnumMap<>(ConfigGroupEnum.class);
+    private static final Map<String, DataHandler> DATA_HANDLER_MAP = new HashMap<>(16);
 
     /**
      * Instantiates a new Websocket data handler.
@@ -23,7 +25,7 @@ public class WebsocketDataHandler {
      * @param metaDataSubscribers  the meta data subscribers
      */
     public WebsocketDataHandler(final List<MetaDataSubscriber> metaDataSubscribers) {
-        ENUM_MAP.put(ConfigGroupEnum.META_DATA, new MetaDataHandler(metaDataSubscribers));
+        DATA_HANDLER_MAP.put(ConfigGroupEnum.META_DATA.name(), new MetaDataHandler(metaDataSubscribers));
     }
 
     /**
@@ -34,6 +36,6 @@ public class WebsocketDataHandler {
      * @param eventType the event type
      */
     public void executor(final ConfigGroupEnum type, final String json, final String eventType) {
-        ENUM_MAP.get(type).handle(json, eventType);
+        DATA_HANDLER_MAP.get(type.name()).handle(json, eventType);
     }
 }
