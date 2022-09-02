@@ -9,9 +9,9 @@ package com.guthub.sparkzxl.data.sync.websocket.handler;
 public interface DataHandler {
 
     /**
-     * Handle.
+     * Handle data json response.
      *
-     * @param json  the data for json
+     * @param json      the data for json
      * @param eventType the event type
      */
     void handle(String json, String eventType);

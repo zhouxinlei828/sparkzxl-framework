@@ -1,6 +1,7 @@
 package com.guthub.sparkzxl.data.sync.websocket.client;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.WebsocketData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
@@ -8,7 +9,6 @@ import com.github.sparkzxl.data.sync.common.timer.AbstractRoundTask;
 import com.github.sparkzxl.data.sync.common.timer.Timer;
 import com.github.sparkzxl.data.sync.common.timer.TimerTask;
 import com.github.sparkzxl.data.sync.common.timer.WheelTimerFactory;
-import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.guthub.sparkzxl.data.sync.websocket.handler.WebsocketDataHandler;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class WebsocketReceiveClient extends WebSocketClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebsocketReceiveClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketReceiveClient.class);
 
     private volatile boolean alreadySync = Boolean.FALSE;
 
@@ -61,7 +61,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
     public WebsocketReceiveClient(final URI serverUri,
                                   final Map<String, String> headers,
                                   final List<MetaDataSubscriber> metaDataSubscribers) {
-        super(serverUri,headers);
+        super(serverUri, headers);
         this.websocketDataHandler = new WebsocketDataHandler(metaDataSubscribers);
         this.timer = WheelTimerFactory.getSharedTimer();
         this.connection();
@@ -85,9 +85,9 @@ public class WebsocketReceiveClient extends WebSocketClient {
         } catch (Exception ignored) {
         }
         if (success) {
-            LOG.info("websocket connection server[{}] is successful.....", this.getURI().toString());
+            logger.info("websocket connection server[{}] is successful.....", this.getURI().toString());
         } else {
-            LOG.warn("websocket connection server[{}] is error.....", this.getURI().toString());
+            logger.warn("websocket connection server[{}] is error.....", this.getURI().toString());
         }
         return success;
     }
@@ -102,6 +102,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
 
     @Override
     public void onMessage(final String result) {
+        logger.info("websocket received the message [{}].", result);
         handleResult(result);
     }
 
@@ -112,7 +113,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
 
     @Override
     public void onError(final Exception e) {
-        LOG.error("websocket server[{}] is error.....", getURI(), e);
+        logger.error("websocket server[{}] is error.....", getURI(), e);
     }
 
     @Override
@@ -138,15 +139,14 @@ public class WebsocketReceiveClient extends WebSocketClient {
                 this.reconnectBlocking();
             } else {
                 this.sendPing();
-                LOG.debug("websocket send to [{}] ping message successful", this.getURI());
+                logger.debug("websocket send to [{}] ping message successful", this.getURI());
             }
         } catch (Exception e) {
-            LOG.error("websocket connect is error :{}", e.getMessage());
+            logger.error("websocket connect is error :{}", e.getMessage());
         }
     }
 
     private void handleResult(final String result) {
-        LOG.info("handleResult({})", result);
         WebsocketData<?> websocketData = JSONObject.parseObject(result, WebsocketData.class);
         ConfigGroupEnum groupEnum = ConfigGroupEnum.acquireByName(websocketData.getGroupType());
         String eventType = websocketData.getEventType();
