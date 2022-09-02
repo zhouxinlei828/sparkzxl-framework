@@ -1,8 +1,11 @@
-package com.github.sparkzxl.data.sync.admin;
+package com.github.sparkzxl.data.sync.admin.config;
 
+import com.github.sparkzxl.data.sync.admin.DataChangedEventDispatcher;
+import com.github.sparkzxl.data.sync.admin.ProviderStartRunner;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
 import com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketCollector;
 import com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketDataChangedListener;
+import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,18 +21,24 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  * @since 2022-08-25 15:19:14
  */
 @Configuration
-@EnableConfigurationProperties(WebsocketSyncProperties.class)
-public class DataSyncConfiguration {
+@EnableConfigurationProperties(value = {DataSyncProviderProperties.class, WebsocketProviderProperties.class})
+public class DataSyncProviderAutoConfiguration {
+
+    @Bean
+    public ProviderStartRunner providerStartRunner(final ApplicationContext applicationContext) {
+        return new ProviderStartRunner(applicationContext);
+    }
 
     @Bean
     public DataChangedEventDispatcher getDataChangedEventDispatcher(ApplicationContext applicationContext) {
         return new DataChangedEventDispatcher(applicationContext);
     }
+
     /**
      * The WebsocketListener(default strategy).
      */
     @Configuration
-    @ConditionalOnProperty(name = "sparkzxl.data.sync.provider.websocket.enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "websocket.enabled", havingValue = "true", matchIfMissing = true)
     static class WebsocketListener {
 
         /**

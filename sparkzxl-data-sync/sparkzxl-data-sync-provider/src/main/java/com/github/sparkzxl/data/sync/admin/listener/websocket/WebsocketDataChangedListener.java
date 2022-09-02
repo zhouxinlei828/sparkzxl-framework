@@ -3,9 +3,7 @@ package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
-import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.entity.WebsocketData;
-import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 
 import java.util.List;
@@ -18,10 +16,10 @@ import java.util.List;
  */
 public class WebsocketDataChangedListener implements DataChangedListener {
 
+
     @Override
-    public void onMetaDataChanged(final List<MetaData> metaDataList, final DataEventTypeEnum eventType) {
-        WebsocketData<MetaData> configData =
-                new WebsocketData<>(ConfigGroupEnum.META_DATA.name(), eventType.name(), metaDataList);
-        WebsocketCollector.send(JSON.toJSONString(configData), eventType);
+    public <T> void onChanged(String configGroup, String eventType, List<T> data) {
+        WebsocketData<?> configData = new WebsocketData<>(configGroup, eventType, data);
+        WebsocketCollector.send(JSON.toJSONString(configData), DataEventTypeEnum.acquireByName(eventType));
     }
 }

@@ -1,6 +1,10 @@
 package com.github.sparkzxl.data.sync.common.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * description:  租户元数据实体对象
@@ -9,7 +13,11 @@ import lombok.Data;
  * @since 2022-08-24 10:40:34
  */
 @Data
-public class MetaData {
+@ToString
+@EqualsAndHashCode(callSuper = false)
+public class MetaData implements Serializable {
+
+    private static final long serialVersionUID = -1647129778629174524L;
 
     /**
      * MetaData id

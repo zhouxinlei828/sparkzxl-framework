@@ -2,8 +2,10 @@ package com.guthub.sparkzxl.data.sync.websocket.handler;
 
 
 import com.alibaba.fastjson.JSONArray;
-import com.github.sparkzxl.data.sync.common.entity.MetaData;
+import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
+import com.github.sparkzxl.data.sync.common.entity.MetaData;
+import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 
 import java.util.List;
 
@@ -15,30 +17,33 @@ import java.util.List;
  */
 public class MetaDataHandler extends AbstractDataHandler<MetaData> {
 
-    private final List<MetaDataSubscriber> metaDataSubscribers;
-
-    public MetaDataHandler(final List<MetaDataSubscriber> metaDataSubscribers) {
-        this.metaDataSubscribers = metaDataSubscribers;
+    public MetaDataHandler(final List<MetaDataSubscriber> subscribers) {
+        super(subscribers);
     }
 
     @Override
     public List<MetaData> convert(final String json) {
-        return JSONArray.parseArray(json,MetaData.class);
+        return JSONArray.parseArray(json, MetaData.class);
     }
 
     @Override
     protected void doRefresh(final List<MetaData> dataList) {
-        metaDataSubscribers.forEach(MetaDataSubscriber::refresh);
-        dataList.forEach(metaData -> metaDataSubscribers.forEach(metaDataSubscriber -> metaDataSubscriber.onSubscribe(metaData)));
+        subscribers.forEach(DataSubscriber::refresh);
+        dataList.forEach(metaData -> subscribers.forEach(metaDataSubscriber -> metaDataSubscriber.onSubscribe(metaData)));
     }
 
     @Override
     protected void doUpdate(final List<MetaData> dataList) {
-        dataList.forEach(metaData -> metaDataSubscribers.forEach(metaDataSubscriber -> metaDataSubscriber.onSubscribe(metaData)));
+        dataList.forEach(metaData -> subscribers.forEach(metaDataSubscriber -> metaDataSubscriber.onSubscribe(metaData)));
     }
 
     @Override
     protected void doDelete(final List<MetaData> dataList) {
-        dataList.forEach(metaData -> metaDataSubscribers.forEach(metaDataSubscriber -> metaDataSubscriber.unSubscribe(metaData)));
+        dataList.forEach(metaData -> subscribers.forEach(metaDataSubscriber -> metaDataSubscriber.unSubscribe(metaData)));
+    }
+
+    @Override
+    public String group() {
+        return ConfigGroupEnum.META_DATA.name();
     }
 }

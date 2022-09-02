@@ -11,13 +11,14 @@ import java.util.stream.Collectors;
 
 /**
  * description: Data change event.
- * @see DataChangedEventDispatcher
+ *
  * @author zhouxinlei
+ * @see DataChangedEventDispatcher
  * @since 2022-08-25 09:00:50
  */
 public class DataChangedEvent extends ApplicationEvent {
 
-    private static final long serialVersionUID = -6567019416534398513L;
+    private static final long serialVersionUID = 8717534518634182507L;
 
     private final DataEventTypeEnum eventType;
 

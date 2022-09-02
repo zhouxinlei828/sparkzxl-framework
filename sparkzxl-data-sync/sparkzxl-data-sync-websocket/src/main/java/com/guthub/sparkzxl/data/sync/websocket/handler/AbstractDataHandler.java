@@ -1,5 +1,6 @@
 package com.guthub.sparkzxl.data.sync.websocket.handler;
 
+import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -13,6 +14,13 @@ import java.util.List;
  * @since 2022-08-25 13:42:07
  */
 public abstract class AbstractDataHandler<T> implements DataHandler {
+
+
+    protected final List<? extends DataSubscriber<T>> subscribers;
+
+    protected AbstractDataHandler(List<? extends DataSubscriber<T>> subscribers) {
+        this.subscribers = subscribers;
+    }
 
     /**
      * Convert list.
@@ -52,10 +60,12 @@ public abstract class AbstractDataHandler<T> implements DataHandler {
         DataEventTypeEnum eventTypeEnum = DataEventTypeEnum.acquireByName(eventType);
         switch (eventTypeEnum) {
             case REFRESH:
+                doRefresh(dataList);
             case MYSELF:
                 doRefresh(dataList);
                 break;
             case UPDATE:
+                doUpdate(dataList);
             case CREATE:
                 doUpdate(dataList);
                 break;

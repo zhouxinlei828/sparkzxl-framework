@@ -14,7 +14,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>sparkzxl-data-sync-api</module>
-        <module>sparkzxl-data-sync-nacos</module>
         <module>sparkzxl-data-sync-provider</module>
         <module>sparkzxl-data-sync-common</module>
         <module>sparkzxl-data-sync-websocket</module>

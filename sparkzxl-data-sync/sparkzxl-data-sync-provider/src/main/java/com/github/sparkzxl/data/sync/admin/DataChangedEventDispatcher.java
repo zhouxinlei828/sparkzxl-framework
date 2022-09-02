@@ -2,11 +2,9 @@ package com.github.sparkzxl.data.sync.admin;
 
 import com.github.sparkzxl.data.sync.admin.event.DataChangedEvent;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
-import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +17,6 @@ import java.util.List;
  * @author zhouxinlei
  * @since 2022-08-25 08:58:45
  */
-@Component
 public class DataChangedEventDispatcher implements ApplicationListener<DataChangedEvent>, InitializingBean {
 
     private final ApplicationContext applicationContext;
@@ -31,16 +28,9 @@ public class DataChangedEventDispatcher implements ApplicationListener<DataChang
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onApplicationEvent(DataChangedEvent event) {
         for (DataChangedListener listener : listeners) {
-            switch (event.getGroupKey()) {
-                case META_DATA:
-                    listener.onMetaDataChanged((List<MetaData>) event.getSource(), event.getEventType());
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + event.getGroupKey());
-            }
+            listener.onChanged(event.getGroupKey().name(), event.getEventType().name(), event.getSource());
         }
     }
 

@@ -1,8 +1,5 @@
 package com.github.sparkzxl.data.sync.admin.listener;
 
-import com.github.sparkzxl.data.sync.common.entity.MetaData;
-import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
-
 import java.util.List;
 
 /**
@@ -17,10 +14,11 @@ public interface DataChangedListener {
     /**
      * On meta data changed.
      *
-     * @param changed   the changed
-     * @param eventType the event type
+     * @param configGroup the config group
+     * @param eventType   the event type
+     * @param data     the changed data
      */
-    default void onMetaDataChanged(List<MetaData> changed, DataEventTypeEnum eventType) {
+    default <T> void onChanged(String configGroup, String eventType, List<T> data) {
 
     }
 

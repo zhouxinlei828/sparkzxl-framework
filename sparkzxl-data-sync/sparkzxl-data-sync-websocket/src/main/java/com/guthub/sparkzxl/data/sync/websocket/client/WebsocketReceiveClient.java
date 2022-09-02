@@ -1,7 +1,6 @@
 package com.guthub.sparkzxl.data.sync.websocket.client;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.WebsocketData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
@@ -9,7 +8,8 @@ import com.github.sparkzxl.data.sync.common.timer.AbstractRoundTask;
 import com.github.sparkzxl.data.sync.common.timer.Timer;
 import com.github.sparkzxl.data.sync.common.timer.TimerTask;
 import com.github.sparkzxl.data.sync.common.timer.WheelTimerFactory;
-import com.guthub.sparkzxl.data.sync.websocket.handler.WebsocketDataHandler;
+import com.guthub.sparkzxl.data.sync.websocket.handler.DataHandler;
+import com.guthub.sparkzxl.data.sync.websocket.handler.WebsocketDataConsumerHandler;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
 
     private volatile boolean alreadySync = Boolean.FALSE;
 
-    private final WebsocketDataHandler websocketDataHandler;
+    private final WebsocketDataConsumerHandler websocketDataConsumerHandler;
 
     private final Timer timer;
 
@@ -41,13 +41,13 @@ public class WebsocketReceiveClient extends WebSocketClient {
     /**
      * Instantiates a new websocket client.
      *
-     * @param serverUri           the server uri
-     * @param metaDataSubscribers the meta data subscribers
+     * @param serverUri       the server uri
+     * @param dataHandlerList the dataHandlers
      */
     public WebsocketReceiveClient(final URI serverUri,
-                                  final List<MetaDataSubscriber> metaDataSubscribers) {
+                                  final List<DataHandler> dataHandlerList) {
         super(serverUri);
-        this.websocketDataHandler = new WebsocketDataHandler(metaDataSubscribers);
+        this.websocketDataConsumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
         this.timer = WheelTimerFactory.getSharedTimer();
         this.connection();
     }
@@ -55,14 +55,14 @@ public class WebsocketReceiveClient extends WebSocketClient {
     /**
      * Instantiates a new websocket client.
      *
-     * @param serverUri           the server uri
-     * @param metaDataSubscribers the meta data subscribers
+     * @param serverUri       the server uri
+     * @param dataHandlerList the dataHandlers
      */
     public WebsocketReceiveClient(final URI serverUri,
                                   final Map<String, String> headers,
-                                  final List<MetaDataSubscriber> metaDataSubscribers) {
+                                  final List<DataHandler> dataHandlerList) {
         super(serverUri, headers);
-        this.websocketDataHandler = new WebsocketDataHandler(metaDataSubscribers);
+        this.websocketDataConsumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
         this.timer = WheelTimerFactory.getSharedTimer();
         this.connection();
     }
@@ -151,6 +151,6 @@ public class WebsocketReceiveClient extends WebSocketClient {
         ConfigGroupEnum groupEnum = ConfigGroupEnum.acquireByName(websocketData.getGroupType());
         String eventType = websocketData.getEventType();
         String json = JSONObject.toJSONString(websocketData.getData());
-        websocketDataHandler.executor(groupEnum, json, eventType);
+        websocketDataConsumerHandler.executor(groupEnum, json, eventType);
     }
 }

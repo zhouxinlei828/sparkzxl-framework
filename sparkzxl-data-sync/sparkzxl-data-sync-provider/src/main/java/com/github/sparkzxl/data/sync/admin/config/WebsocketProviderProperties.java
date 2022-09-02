@@ -1,5 +1,6 @@
-package com.github.sparkzxl.data.sync.admin;
+package com.github.sparkzxl.data.sync.admin.config;
 
+import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -8,8 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  * @since 2022-08-25 11:16:33
  */
-@ConfigurationProperties(prefix = "sparkzxl.data.sync.provider.websocket")
-public class WebsocketSyncProperties {
+@ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "websocket")
+public class WebsocketProviderProperties {
 
     /**
      * default: true.

@@ -2,9 +2,7 @@ package com.guthub.sparkzxl.data.sync.websocket.handler;
 
 
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
-import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,17 +13,19 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-08-25 11:28:31
  */
-public class WebsocketDataHandler {
+public class WebsocketDataConsumerHandler {
 
     private static final Map<String, DataHandler> DATA_HANDLER_MAP = new HashMap<>(16);
 
     /**
      * Instantiates a new Websocket data handler.
      *
-     * @param metaDataSubscribers  the meta data subscribers
+     * @param dataHandlerList the dataHandlers
      */
-    public WebsocketDataHandler(final List<MetaDataSubscriber> metaDataSubscribers) {
-        DATA_HANDLER_MAP.put(ConfigGroupEnum.META_DATA.name(), new MetaDataHandler(metaDataSubscribers));
+    public WebsocketDataConsumerHandler(final List<DataHandler> dataHandlerList) {
+        for (DataHandler dataHandler : dataHandlerList) {
+            DATA_HANDLER_MAP.put(dataHandler.group(), dataHandler);
+        }
     }
 
     /**

@@ -15,4 +15,11 @@ public interface DataHandler {
      * @param eventType the event type
      */
     void handle(String json, String eventType);
+
+    /**
+     * data group
+     * @see com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum
+     * @return String
+     */
+    String group();
 }

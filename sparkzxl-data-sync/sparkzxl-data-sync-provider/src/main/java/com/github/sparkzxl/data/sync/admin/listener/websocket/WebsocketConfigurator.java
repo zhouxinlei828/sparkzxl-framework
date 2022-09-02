@@ -1,6 +1,6 @@
 package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
-import com.github.sparkzxl.data.sync.admin.WebsocketSyncProperties;
+import com.github.sparkzxl.data.sync.admin.config.WebsocketProviderProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -27,7 +27,7 @@ import static org.apache.tomcat.websocket.server.Constants.TEXT_BUFFER_SIZE_SERV
 public class WebsocketConfigurator extends ServerEndpointConfig.Configurator implements ServletContextInitializer {
 
     @Autowired
-    private WebsocketSyncProperties websocketSyncProperties;
+    private WebsocketProviderProperties websocketProviderProperties;
 
     @Override
     public void modifyHandshake(final ServerEndpointConfig sec, final HandshakeRequest request, final HandshakeResponse response) {
@@ -38,7 +38,7 @@ public class WebsocketConfigurator extends ServerEndpointConfig.Configurator imp
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
-        int messageMaxSize = websocketSyncProperties.getMessageMaxSize();
+        int messageMaxSize = websocketProviderProperties.getMessageMaxSize();
         if (messageMaxSize > 0) {
             servletContext.setInitParameter(TEXT_BUFFER_SIZE_SERVLET_CONTEXT_INIT_PARAM,
                     String.valueOf(messageMaxSize));
