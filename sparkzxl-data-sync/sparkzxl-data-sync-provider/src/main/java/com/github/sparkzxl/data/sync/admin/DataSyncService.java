@@ -15,8 +15,7 @@ public interface DataSyncService {
      * Sync all boolean.
      *
      * @param type the type
-     * @return the boolean
      */
-    boolean syncAll(DataEventTypeEnum type);
+    void syncAll(DataEventTypeEnum type);
 
 }
