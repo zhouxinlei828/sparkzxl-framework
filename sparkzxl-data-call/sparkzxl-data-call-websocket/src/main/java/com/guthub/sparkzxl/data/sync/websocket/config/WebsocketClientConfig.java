@@ -11,11 +11,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "sparkzxl.data.call.websocket")
-public class WebsocketConfig {
+public class WebsocketClientConfig {
 
     /**
      * if you have more admin url,please config like this.
      * 127.0.0.1:8888,127.0.0.1:8889
      */
     private String urls;
+
+    /**
+     * allowOrigin.
+     */
+    private String allowOrigin;
 }

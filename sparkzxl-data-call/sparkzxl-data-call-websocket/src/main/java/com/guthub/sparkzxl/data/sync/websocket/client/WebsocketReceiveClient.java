@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,6 +47,21 @@ public class WebsocketReceiveClient extends WebSocketClient {
     public WebsocketReceiveClient(final URI serverUri,
                                   final List<MetaDataSubscriber> metaDataSubscribers) {
         super(serverUri);
+        this.websocketDataHandler = new WebsocketDataHandler(metaDataSubscribers);
+        this.timer = WheelTimerFactory.getSharedTimer();
+        this.connection();
+    }
+
+    /**
+     * Instantiates a new websocket client.
+     *
+     * @param serverUri           the server uri
+     * @param metaDataSubscribers the meta data subscribers
+     */
+    public WebsocketReceiveClient(final URI serverUri,
+                                  final Map<String, String> headers,
+                                  final List<MetaDataSubscriber> metaDataSubscribers) {
+        super(serverUri,headers);
         this.websocketDataHandler = new WebsocketDataHandler(metaDataSubscribers);
         this.timer = WheelTimerFactory.getSharedTimer();
         this.connection();
