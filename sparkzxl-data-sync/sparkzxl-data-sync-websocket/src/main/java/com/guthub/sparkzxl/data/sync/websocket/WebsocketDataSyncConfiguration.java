@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties(WebsocketClientConfig.class)
-@ConditionalOnProperty(prefix = "sparkzxl.data.sync.websocket", name = "urls")
+@ConditionalOnProperty(prefix = "sparkzxl.data.sync.client.websocket", name = "urls")
 public class WebsocketDataSyncConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncConfiguration.class);

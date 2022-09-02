@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2022-08-25 14:00:39
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.data.sync.websocket")
+@ConfigurationProperties(prefix = "sparkzxl.data.sync.client.websocket")
 public class WebsocketClientConfig {
 
     /**

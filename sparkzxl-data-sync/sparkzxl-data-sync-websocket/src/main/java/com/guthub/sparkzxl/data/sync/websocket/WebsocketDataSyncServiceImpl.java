@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * description: WebsocketSyncDataService implementation for SyncDataService
+ * description: WebsocketDataSyncServiceImpl implementation for SyncDataService
  *
  * @author zhouxinlei
  * @since 2022-08-25 14:01:40
  */
 public class WebsocketDataSyncServiceImpl implements DataCallService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebsocketDataSyncServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncServiceImpl.class);
 
     /**
      * @see <a href="https://github.com/apache/tomcat/blob/main/java/org/apache/tomcat/websocket/Constants.java#L99"/>
@@ -50,7 +50,7 @@ public class WebsocketDataSyncServiceImpl implements DataCallService {
                     clients.add(new WebsocketReceiveClient(new URI(url), metaDataSubscribers));
                 }
             } catch (URISyntaxException e) {
-                LOG.error("websocket url({}) is error", url, e);
+                logger.error("websocket url[{}] is error", url, e);
             }
         }
     }
