@@ -18,7 +18,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  * @since 2022-08-25 15:19:14
  */
 @Configuration
-public class DataCallConfiguration {
+@EnableConfigurationProperties(WebsocketSyncProperties.class)
+public class DataSyncConfiguration {
 
     @Bean
     public DataChangedEventDispatcher getDataChangedEventDispatcher(ApplicationContext applicationContext) {
@@ -28,8 +29,7 @@ public class DataCallConfiguration {
      * The WebsocketListener(default strategy).
      */
     @Configuration
-    @ConditionalOnProperty(name = "sparkzxl.data.provider.websocket.enabled", havingValue = "true", matchIfMissing = true)
-    @EnableConfigurationProperties(WebsocketCallProperties.class)
+    @ConditionalOnProperty(name = "sparkzxl.data.sync.provider.websocket.enabled", havingValue = "true", matchIfMissing = true)
     static class WebsocketListener {
 
         /**

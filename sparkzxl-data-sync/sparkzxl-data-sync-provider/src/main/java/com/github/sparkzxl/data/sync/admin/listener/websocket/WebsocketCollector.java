@@ -1,7 +1,7 @@
 package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.data.sync.admin.DataCallService;
+import com.github.sparkzxl.data.sync.admin.DataSyncService;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +68,7 @@ public class WebsocketCollector {
         }
         try {
             WebSocketThreadLocalContext.put(SESSION_KEY, session);
-            SpringContextUtils.getBean(DataCallService.class).syncAll(DataEventTypeEnum.MYSELF);
+            SpringContextUtils.getBean(DataSyncService.class).syncAll(DataEventTypeEnum.MYSELF);
         } finally {
             WebSocketThreadLocalContext.clear();
         }

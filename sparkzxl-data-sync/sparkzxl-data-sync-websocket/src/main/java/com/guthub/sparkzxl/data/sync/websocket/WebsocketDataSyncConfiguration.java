@@ -23,9 +23,9 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(WebsocketClientConfig.class)
 @ConditionalOnProperty(prefix = "sparkzxl.data.sync.websocket", name = "urls")
-public class WebsocketDataCallConfiguration {
+public class WebsocketDataSyncConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataCallConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncConfiguration.class);
 
     /**
      * Websocket data call service.
@@ -38,7 +38,7 @@ public class WebsocketDataCallConfiguration {
     public DataCallService websocketDataCallService(final ObjectProvider<WebsocketClientConfig> websocketConfig,
                                                     final ObjectProvider<List<MetaDataSubscriber>> metaSubscribers) {
         logger.info("you use websocket data called.......");
-        return new WebsocketDataCallServiceImpl(websocketConfig.getIfAvailable(WebsocketClientConfig::new),
+        return new WebsocketDataSyncServiceImpl(websocketConfig.getIfAvailable(WebsocketClientConfig::new),
                 metaSubscribers.getIfAvailable(Collections::emptyList));
     }
 

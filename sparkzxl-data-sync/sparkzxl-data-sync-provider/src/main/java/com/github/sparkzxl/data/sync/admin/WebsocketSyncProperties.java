@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  * @since 2022-08-25 11:16:33
  */
-@ConfigurationProperties(prefix = "sparkzxl.data.provider.websocket")
-public class WebsocketCallProperties {
+@ConfigurationProperties(prefix = "sparkzxl.data.sync.provider.websocket")
+public class WebsocketSyncProperties {
 
     /**
      * default: true.

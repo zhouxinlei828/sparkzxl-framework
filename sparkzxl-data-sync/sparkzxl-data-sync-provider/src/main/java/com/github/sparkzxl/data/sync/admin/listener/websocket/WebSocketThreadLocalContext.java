@@ -2,8 +2,8 @@ package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
 import cn.hutool.core.convert.Convert;
 import com.alibaba.ttl.TransmittableThreadLocal;
-import org.apache.poi.ss.formula.functions.T;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,7 +14,12 @@ import java.util.Map;
  */
 public class WebSocketThreadLocalContext {
 
-    private static final ThreadLocal<Map<String, Object>> THREAD_CONTEXT = new TransmittableThreadLocal<>();
+    private static final ThreadLocal<Map<String, Object>> THREAD_CONTEXT = new TransmittableThreadLocal<Map<String, Object>>() {
+        @Override
+        protected Map<String, Object> initialValue() {
+            return new HashMap<>(16);
+        }
+    };
 
     public static void put(final String key, final Object value) {
         THREAD_CONTEXT.get().put(key, value);
@@ -35,7 +40,7 @@ public class WebSocketThreadLocalContext {
      * @param key get key
      * @return the Object
      */
-    public static <T> T get(final String key,Class<T> type) {
+    public static <T> T get(final String key, Class<T> type) {
         Object o = THREAD_CONTEXT.get().get(key);
         return Convert.convert(type, o);
     }

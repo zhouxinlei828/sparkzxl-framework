@@ -21,9 +21,9 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-08-25 14:01:40
  */
-public class WebsocketDataCallServiceImpl implements DataCallService {
+public class WebsocketDataSyncServiceImpl implements DataCallService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebsocketDataCallServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WebsocketDataSyncServiceImpl.class);
 
     /**
      * @see <a href="https://github.com/apache/tomcat/blob/main/java/org/apache/tomcat/websocket/Constants.java#L99"/>
@@ -38,7 +38,7 @@ public class WebsocketDataCallServiceImpl implements DataCallService {
      * @param websocketClientConfig the websocket config
      * @param metaDataSubscribers   the meta data subscribers
      */
-    public WebsocketDataCallServiceImpl(final WebsocketClientConfig websocketClientConfig,
+    public WebsocketDataSyncServiceImpl(final WebsocketClientConfig websocketClientConfig,
                                         final List<MetaDataSubscriber> metaDataSubscribers) {
         String[] urls = StringUtils.split(websocketClientConfig.getUrls(), ",");
         for (String url : urls) {
