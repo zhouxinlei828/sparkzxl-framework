@@ -28,14 +28,14 @@ public class WebsocketDataCallConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(WebsocketDataCallConfiguration.class);
 
     /**
-     * Websocket sync data service.
+     * Websocket data call service.
      *
      * @param websocketConfig the websocket config
      * @param metaSubscribers the meta subscribers
-     * @return the sync data service
+     * @return DataCallService
      */
     @Bean
-    public DataCallService websocketSyncDataService(final ObjectProvider<WebsocketClientConfig> websocketConfig,
+    public DataCallService websocketDataCallService(final ObjectProvider<WebsocketClientConfig> websocketConfig,
                                                     final ObjectProvider<List<MetaDataSubscriber>> metaSubscribers) {
         logger.info("you use websocket data called.......");
         return new WebsocketDataCallServiceImpl(websocketConfig.getIfAvailable(WebsocketClientConfig::new),
