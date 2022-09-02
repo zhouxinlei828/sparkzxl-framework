@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sparkzxl-data-sync-websocket</artifactId>
+    <artifactId>sparkzxl-data-call-websocket</artifactId>
 
     <properties>
         <java-websocket.version>1.5.3</java-websocket.version>
