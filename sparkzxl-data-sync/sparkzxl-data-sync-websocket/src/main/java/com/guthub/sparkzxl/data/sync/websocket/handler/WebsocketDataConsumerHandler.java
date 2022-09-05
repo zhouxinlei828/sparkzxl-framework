@@ -35,7 +35,7 @@ public class WebsocketDataConsumerHandler {
      * @param json      the json
      * @param eventType the event type
      */
-    public void executor(final ConfigGroupEnum type, final String json, final String eventType) {
-        DATA_HANDLER_MAP.get(type.name()).handle(json, eventType);
+    public void executor(final String type, final String json, final String eventType) {
+        DATA_HANDLER_MAP.get(type).handle(json, eventType);
     }
 }

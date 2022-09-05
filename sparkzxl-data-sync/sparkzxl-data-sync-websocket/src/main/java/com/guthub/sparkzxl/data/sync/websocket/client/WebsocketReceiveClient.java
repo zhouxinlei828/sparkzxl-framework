@@ -148,9 +148,8 @@ public class WebsocketReceiveClient extends WebSocketClient {
 
     private void handleResult(final String result) {
         WebsocketData<?> websocketData = JSONObject.parseObject(result, WebsocketData.class);
-        ConfigGroupEnum groupEnum = ConfigGroupEnum.acquireByName(websocketData.getGroupType());
         String eventType = websocketData.getEventType();
         String json = JSONObject.toJSONString(websocketData.getData());
-        websocketDataConsumerHandler.executor(groupEnum, json, eventType);
+        websocketDataConsumerHandler.executor(websocketData.getGroupType(), json, eventType);
     }
 }
