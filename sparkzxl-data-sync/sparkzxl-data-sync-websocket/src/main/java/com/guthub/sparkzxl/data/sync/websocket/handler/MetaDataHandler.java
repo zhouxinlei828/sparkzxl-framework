@@ -43,7 +43,7 @@ public class MetaDataHandler extends AbstractDataHandler<MetaData> {
     }
 
     @Override
-    public String group() {
+    public String configGroup() {
         return ConfigGroupEnum.META_DATA.name();
     }
 }

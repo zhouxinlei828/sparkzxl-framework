@@ -1,11 +1,21 @@
 package com.github.sparkzxl.data.sync.admin.config;
 
+import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.PropertyKeyConst;
+import com.alibaba.nacos.api.config.ConfigService;
 import com.github.sparkzxl.data.sync.admin.DataChangedEventDispatcher;
 import com.github.sparkzxl.data.sync.admin.ProviderStartRunner;
+import com.github.sparkzxl.data.sync.admin.handler.MergeDataHandler;
+import com.github.sparkzxl.data.sync.admin.handler.MetaMergeDataHandler;
+import com.github.sparkzxl.data.sync.admin.listener.DataChangedInit;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
+import com.github.sparkzxl.data.sync.admin.listener.nacos.NacosDataChangedInit;
+import com.github.sparkzxl.data.sync.admin.listener.nacos.NacosDataChangedListener;
 import com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketCollector;
 import com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketDataChangedListener;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
+import com.github.sparkzxl.data.sync.common.entity.MetaData;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,6 +23,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 
 /**
  * description: The type Data sync configuration.
@@ -35,7 +49,10 @@ public class DataSyncProviderAutoConfiguration {
     }
 
     /**
-     * The WebsocketListener(default strategy).
+     * description: The WebsocketListener(default strategy).
+     *
+     * @author zhouxinlei
+     * @since 2022-09-05 09:59:26
      */
     @Configuration
     @ConditionalOnProperty(name = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "websocket.enabled", havingValue = "true", matchIfMissing = true)
@@ -73,6 +90,82 @@ public class DataSyncProviderAutoConfiguration {
         public ServerEndpointExporter serverEndpointExporter() {
             return new ServerEndpointExporter();
         }
+    }
+
+    /**
+     * description: The type Nacos listener.
+     *
+     * @author zhouxinlei
+     * @since 2022-09-05 09:59:16
+     */
+    @Configuration
+    @ConditionalOnProperty(prefix = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "nacos", name = "url")
+    @EnableConfigurationProperties(NacosProviderProperties.class)
+    static class NacosListener {
+
+        /**
+         * register configService in spring ioc.
+         *
+         * @param nacosProp the nacos configuration
+         * @return ConfigService {@linkplain ConfigService}
+         * @throws Exception the exception
+         */
+        @Bean
+        @ConditionalOnMissingBean(ConfigService.class)
+        public ConfigService nacosConfigService(final NacosProviderProperties nacosProp) throws Exception {
+            Properties properties = new Properties();
+            if (Objects.nonNull(nacosProp.getAcm()) && nacosProp.getAcm().isEnabled()) {
+                // Use aliyun ACM service
+                properties.put(PropertyKeyConst.ENDPOINT, nacosProp.getAcm().getEndpoint());
+                properties.put(PropertyKeyConst.NAMESPACE, nacosProp.getAcm().getNamespace());
+                // Use subaccount ACM administrative authority
+                properties.put(PropertyKeyConst.ACCESS_KEY, nacosProp.getAcm().getAccessKey());
+                properties.put(PropertyKeyConst.SECRET_KEY, nacosProp.getAcm().getSecretKey());
+            } else {
+                properties.put(PropertyKeyConst.SERVER_ADDR, nacosProp.getUrl());
+                if (StringUtils.isNotBlank(nacosProp.getNamespace())) {
+                    properties.put(PropertyKeyConst.NAMESPACE, nacosProp.getNamespace());
+                }
+                if (StringUtils.isNotBlank(nacosProp.getUsername())) {
+                    properties.put(PropertyKeyConst.USERNAME, nacosProp.getUsername());
+                }
+                if (StringUtils.isNotBlank(nacosProp.getPassword())) {
+                    properties.put(PropertyKeyConst.PASSWORD, nacosProp.getPassword());
+                }
+            }
+            return NacosFactory.createConfigService(properties);
+        }
+
+        /**
+         * Nacos data init nacos data init.
+         *
+         * @param configService the config service
+         * @return the nacos data init
+         */
+        @Bean
+        @ConditionalOnMissingBean(NacosDataChangedInit.class)
+        public DataChangedInit nacosDataChangedInit(final ConfigService configService) {
+            return new NacosDataChangedInit(configService);
+        }
+
+        /**
+         * Data changed listener data changed listener.
+         *
+         * @param configService the config service
+         * @return the data changed listener
+         */
+        @Bean
+        @ConditionalOnMissingBean(NacosDataChangedListener.class)
+        public DataChangedListener nacosDataChangedListener(final ConfigService configService, final List<MergeDataHandler> mergeDataHandlerList) {
+            return new NacosDataChangedListener(configService, mergeDataHandlerList);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(MetaMergeDataHandler.class)
+        public MergeDataHandler<MetaData> metaMergeDataHandler(final ConfigService configService) {
+            return new MetaMergeDataHandler(configService);
+        }
+
     }
 }
 

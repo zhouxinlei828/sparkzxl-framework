@@ -1,8 +1,7 @@
 package com.guthub.sparkzxl.data.sync.websocket.client;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.data.sync.common.entity.WebsocketData;
-import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
+import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import com.github.sparkzxl.data.sync.common.timer.AbstractRoundTask;
 import com.github.sparkzxl.data.sync.common.timer.Timer;
@@ -147,9 +146,9 @@ public class WebsocketReceiveClient extends WebSocketClient {
     }
 
     private void handleResult(final String result) {
-        WebsocketData<?> websocketData = JSONObject.parseObject(result, WebsocketData.class);
-        String eventType = websocketData.getEventType();
-        String json = JSONObject.toJSONString(websocketData.getData());
-        websocketDataConsumerHandler.executor(websocketData.getGroupType(), json, eventType);
+        PushData<?> pushData = JSONObject.parseObject(result, PushData.class);
+        String eventType = pushData.getEventType();
+        String json = JSONObject.toJSONString(pushData.getData());
+        websocketDataConsumerHandler.executor(pushData.getConfigGroup(), json, eventType);
     }
 }

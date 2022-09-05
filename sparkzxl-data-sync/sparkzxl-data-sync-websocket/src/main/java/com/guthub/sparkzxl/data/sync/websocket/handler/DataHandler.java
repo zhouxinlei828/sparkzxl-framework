@@ -17,9 +17,10 @@ public interface DataHandler {
     void handle(String json, String eventType);
 
     /**
-     * data group
-     * @see com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum
+     * config  group
+     *
      * @return String
+     * @see com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum
      */
-    String group();
+    String configGroup();
 }

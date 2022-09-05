@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.support;
 
 import com.github.sparkzxl.core.support.code.IErrorCode;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.Getter;
 
 /**
@@ -24,5 +25,9 @@ public class BizException extends BaseUncheckedException {
 
     public BizException(String code, String message) {
         super(code, message);
+    }
+
+    public BizException(String message) {
+        super(ResultErrorCode.FAILURE.getErrorCode(), message);
     }
 }

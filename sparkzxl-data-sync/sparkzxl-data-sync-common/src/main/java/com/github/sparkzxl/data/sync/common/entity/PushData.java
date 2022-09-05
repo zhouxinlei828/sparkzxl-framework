@@ -12,13 +12,13 @@ import java.util.Objects;
  * @author zhouxinlei
  * @since 2022-08-25 10:54:00
  */
-public class WebsocketData<T> {
+public class PushData<T> {
 
     /**
-     * group type.
+     * config group.
      * {@linkplain ConfigGroupEnum}
      */
-    private String groupType;
+    private String configGroup;
 
     /**
      * event type.
@@ -35,39 +35,28 @@ public class WebsocketData<T> {
     /**
      * no args constructor.
      */
-    public WebsocketData() {
+    public PushData() {
     }
 
     /**
      * all args constructor.
      *
-     * @param groupType groupType
-     * @param eventType eventType
-     * @param data      data
+     * @param configGroup config group
+     * @param eventType   eventType
+     * @param data        data
      */
-    public WebsocketData(final String groupType, final String eventType, final List<T> data) {
-        this.groupType = groupType;
+    public PushData(final String configGroup, final String eventType, final List<T> data) {
+        this.configGroup = configGroup;
         this.eventType = eventType;
         this.data = data;
     }
 
-    /**
-     * get groupType.
-     *
-     * @return groupType
-     */
-    public String getGroupType() {
-        return groupType;
+    public String getConfigGroup() {
+        return configGroup;
     }
 
-    /**
-     * set groupType.
-     *
-     * @param groupType groupType
-     * @return this
-     */
-    public WebsocketData<T> setGroupType(final String groupType) {
-        this.groupType = groupType;
+    public PushData<T> setConfigGroup(String configGroup) {
+        this.configGroup = configGroup;
         return this;
     }
 
@@ -86,7 +75,7 @@ public class WebsocketData<T> {
      * @param eventType eventType
      * @return this
      */
-    public WebsocketData<T> setEventType(final String eventType) {
+    public PushData<T> setEventType(final String eventType) {
         this.eventType = eventType;
         return this;
     }
@@ -106,7 +95,7 @@ public class WebsocketData<T> {
      * @param data data
      * @return this
      */
-    public WebsocketData<T> setData(final List<T> data) {
+    public PushData<T> setData(final List<T> data) {
         this.data = data;
         return this;
     }
@@ -119,20 +108,20 @@ public class WebsocketData<T> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        WebsocketData<?> that = (WebsocketData<?>) o;
-        return Objects.equals(groupType, that.groupType) && Objects.equals(eventType, that.eventType) && Objects.equals(data, that.data);
+        PushData<?> that = (PushData<?>) o;
+        return Objects.equals(configGroup, that.configGroup) && Objects.equals(eventType, that.eventType) && Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupType, eventType, data);
+        return Objects.hash(configGroup, eventType, data);
     }
 
     @Override
     public String toString() {
-        return "WebsocketData{"
-                + "groupType='"
-                + groupType
+        return "PushData{"
+                + "configGroup='"
+                + configGroup
                 + '\''
                 + ", eventType='"
                 + eventType

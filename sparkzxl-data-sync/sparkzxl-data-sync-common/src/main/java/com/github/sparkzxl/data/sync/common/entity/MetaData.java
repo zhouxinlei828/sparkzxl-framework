@@ -36,39 +36,39 @@ public class MetaData implements Serializable {
     private String areaCode;
 
     /**
-     * 属性类型
+     * 数据类型
      */
-    private String attributeType;
+    private String dataType;
 
     /**
-     * 属性类型描述
+     * 数据类型描述
      */
-    private String attributeTypeDesc;
+    private String dataTypeDesc;
 
     /**
      * 属性code
      */
-    private String attributeCode;
+    private String dataCode;
 
     /**
-     * 属性名
+     * 数据名
      */
-    private String attributeName;
+    private String dataName;
 
     /**
-     * 属性描述
+     * 数据描述
      */
-    private String attributeDescription;
+    private String dataDesc;
 
     /**
-     * 属性值
+     * 数据值
      */
-    private String attributeValue;
+    private String dataValue;
 
     /**
-     * 属性值扩展
+     * 数据值扩展
      */
-    private String attributeValueExtension;
+    private String dataValueExt;
 
     /**
      * 是否启用

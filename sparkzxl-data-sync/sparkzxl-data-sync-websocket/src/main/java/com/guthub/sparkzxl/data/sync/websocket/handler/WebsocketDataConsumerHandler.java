@@ -1,8 +1,6 @@
 package com.guthub.sparkzxl.data.sync.websocket.handler;
 
 
-import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,18 +22,18 @@ public class WebsocketDataConsumerHandler {
      */
     public WebsocketDataConsumerHandler(final List<DataHandler> dataHandlerList) {
         for (DataHandler dataHandler : dataHandlerList) {
-            DATA_HANDLER_MAP.put(dataHandler.group(), dataHandler);
+            DATA_HANDLER_MAP.put(dataHandler.configGroup(), dataHandler);
         }
     }
 
     /**
      * Executor.
      *
-     * @param type      the type
-     * @param json      the json
-     * @param eventType the event type
+     * @param configGroup the config group
+     * @param json        the json
+     * @param eventType   the event type
      */
-    public void executor(final String type, final String json, final String eventType) {
-        DATA_HANDLER_MAP.get(type).handle(json, eventType);
+    public void executor(final String configGroup, final String json, final String eventType) {
+        DATA_HANDLER_MAP.get(configGroup).handle(json, eventType);
     }
 }
