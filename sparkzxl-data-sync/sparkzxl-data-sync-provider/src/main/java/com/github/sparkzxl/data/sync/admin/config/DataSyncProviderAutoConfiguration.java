@@ -106,31 +106,31 @@ public class DataSyncProviderAutoConfiguration {
         /**
          * register configService in spring ioc.
          *
-         * @param nacosProp the nacos configuration
+         * @param nacosProviderProperties the nacos configuration
          * @return ConfigService {@linkplain ConfigService}
          * @throws Exception the exception
          */
         @Bean
         @ConditionalOnMissingBean(ConfigService.class)
-        public ConfigService nacosConfigService(final NacosProviderProperties nacosProp) throws Exception {
+        public ConfigService nacosConfigService(final NacosProviderProperties nacosProviderProperties) throws Exception {
             Properties properties = new Properties();
-            if (Objects.nonNull(nacosProp.getAcm()) && nacosProp.getAcm().isEnabled()) {
+            if (Objects.nonNull(nacosProviderProperties.getAcm()) && nacosProviderProperties.getAcm().isEnabled()) {
                 // Use aliyun ACM service
-                properties.put(PropertyKeyConst.ENDPOINT, nacosProp.getAcm().getEndpoint());
-                properties.put(PropertyKeyConst.NAMESPACE, nacosProp.getAcm().getNamespace());
+                properties.put(PropertyKeyConst.ENDPOINT, nacosProviderProperties.getAcm().getEndpoint());
+                properties.put(PropertyKeyConst.NAMESPACE, nacosProviderProperties.getAcm().getNamespace());
                 // Use subaccount ACM administrative authority
-                properties.put(PropertyKeyConst.ACCESS_KEY, nacosProp.getAcm().getAccessKey());
-                properties.put(PropertyKeyConst.SECRET_KEY, nacosProp.getAcm().getSecretKey());
+                properties.put(PropertyKeyConst.ACCESS_KEY, nacosProviderProperties.getAcm().getAccessKey());
+                properties.put(PropertyKeyConst.SECRET_KEY, nacosProviderProperties.getAcm().getSecretKey());
             } else {
-                properties.put(PropertyKeyConst.SERVER_ADDR, nacosProp.getUrl());
-                if (StringUtils.isNotBlank(nacosProp.getNamespace())) {
-                    properties.put(PropertyKeyConst.NAMESPACE, nacosProp.getNamespace());
+                properties.put(PropertyKeyConst.SERVER_ADDR, nacosProviderProperties.getUrl());
+                if (StringUtils.isNotBlank(nacosProviderProperties.getNamespace())) {
+                    properties.put(PropertyKeyConst.NAMESPACE, nacosProviderProperties.getNamespace());
                 }
-                if (StringUtils.isNotBlank(nacosProp.getUsername())) {
-                    properties.put(PropertyKeyConst.USERNAME, nacosProp.getUsername());
+                if (StringUtils.isNotBlank(nacosProviderProperties.getUsername())) {
+                    properties.put(PropertyKeyConst.USERNAME, nacosProviderProperties.getUsername());
                 }
-                if (StringUtils.isNotBlank(nacosProp.getPassword())) {
-                    properties.put(PropertyKeyConst.PASSWORD, nacosProp.getPassword());
+                if (StringUtils.isNotBlank(nacosProviderProperties.getPassword())) {
+                    properties.put(PropertyKeyConst.PASSWORD, nacosProviderProperties.getPassword());
                 }
             }
             return NacosFactory.createConfigService(properties);
