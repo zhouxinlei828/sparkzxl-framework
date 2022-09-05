@@ -60,12 +60,10 @@ public abstract class AbstractDataHandler<T> implements DataHandler {
         DataEventTypeEnum eventTypeEnum = DataEventTypeEnum.acquireByName(eventType);
         switch (eventTypeEnum) {
             case REFRESH:
-                doRefresh(dataList);
             case MYSELF:
                 doRefresh(dataList);
                 break;
             case UPDATE:
-                doUpdate(dataList);
             case CREATE:
                 doUpdate(dataList);
                 break;
