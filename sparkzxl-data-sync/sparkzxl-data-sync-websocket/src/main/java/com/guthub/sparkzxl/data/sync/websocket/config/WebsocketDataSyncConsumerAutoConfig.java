@@ -3,7 +3,7 @@ package com.guthub.sparkzxl.data.sync.websocket.config;
 import com.github.sparkzxl.data.sync.api.DataSyncService;
 import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
-import com.guthub.sparkzxl.data.sync.websocket.WebsocketDataSyncConsumerServiceImpl;
+import com.guthub.sparkzxl.data.sync.websocket.WebsocketDataSyncServiceImpl;
 import com.guthub.sparkzxl.data.sync.websocket.handler.DataHandler;
 import com.guthub.sparkzxl.data.sync.websocket.handler.MetaDataHandler;
 import org.slf4j.Logger;
@@ -26,9 +26,9 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(WebsocketConsumerProperties.class)
 @ConditionalOnProperty(prefix = ConfigConstant.DATA_SYNC_CONSUMER_PREFIX + "websocket", name = "urls")
-public class WebsocketDataSyncConsumerAutoConfiguration {
+public class WebsocketDataSyncConsumerAutoConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncConsumerAutoConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncConsumerAutoConfig.class);
 
 
     @Bean
@@ -39,15 +39,15 @@ public class WebsocketDataSyncConsumerAutoConfiguration {
     /**
      * Websocket data call service.
      *
-     * @param websocketConfig the websocket config
-     * @param dataHandlerList the dataHandlers
+     * @param websocketConsumerProperties the websocket config
+     * @param dataHandlerList             the dataHandlers
      * @return DataCallService
      */
     @Bean
-    public DataSyncService websocketDataCallService(final ObjectProvider<WebsocketConsumerProperties> websocketConfig,
+    public DataSyncService websocketDataCallService(final ObjectProvider<WebsocketConsumerProperties> websocketConsumerProperties,
                                                     final ObjectProvider<List<DataHandler>> dataHandlerList) {
-        logger.info("you use websocket data called.......");
-        return new WebsocketDataSyncConsumerServiceImpl(websocketConfig.getIfAvailable(WebsocketConsumerProperties::new),
+        logger.info("websocket data sync initialization.");
+        return new WebsocketDataSyncServiceImpl(websocketConsumerProperties.getIfAvailable(WebsocketConsumerProperties::new),
                 dataHandlerList.getIfAvailable(Collections::emptyList));
     }
 
@@ -57,7 +57,7 @@ public class WebsocketDataSyncConsumerAutoConfiguration {
      * @return the websocket config
      */
     @Bean
-    public WebsocketConsumerProperties websocketConfig() {
+    public WebsocketConsumerProperties websocketConsumerProperties() {
         return new WebsocketConsumerProperties();
     }
 

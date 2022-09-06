@@ -21,9 +21,9 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-08-25 14:01:40
  */
-public class WebsocketDataSyncConsumerServiceImpl implements DataSyncService {
+public class WebsocketDataSyncServiceImpl implements DataSyncService {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncConsumerServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketDataSyncServiceImpl.class);
 
     /**
      * @see <a href="https://github.com/apache/tomcat/blob/main/java/org/apache/tomcat/websocket/Constants.java#L99"/>
@@ -38,8 +38,8 @@ public class WebsocketDataSyncConsumerServiceImpl implements DataSyncService {
      * @param websocketConsumerProperties the websocket config
      * @param dataHandlerList       the dataHandlers
      */
-    public WebsocketDataSyncConsumerServiceImpl(final WebsocketConsumerProperties websocketConsumerProperties,
-                                                final List<DataHandler> dataHandlerList) {
+    public WebsocketDataSyncServiceImpl(final WebsocketConsumerProperties websocketConsumerProperties,
+                                        final List<DataHandler> dataHandlerList) {
         String[] urls = StringUtils.split(websocketConsumerProperties.getUrls(), ",");
         for (String url : urls) {
             try {
