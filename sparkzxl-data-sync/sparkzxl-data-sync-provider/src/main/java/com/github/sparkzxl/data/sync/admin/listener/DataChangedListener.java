@@ -16,7 +16,7 @@ public interface DataChangedListener {
      *
      * @param configGroup the config group
      * @param eventType   the event type
-     * @param data     the changed data
+     * @param data        the changed data
      */
     default <T> void onChanged(String configGroup, String eventType, List<T> data) {
 

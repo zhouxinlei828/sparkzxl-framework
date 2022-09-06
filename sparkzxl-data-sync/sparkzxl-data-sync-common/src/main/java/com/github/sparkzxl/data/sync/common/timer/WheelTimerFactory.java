@@ -3,15 +3,16 @@ package com.github.sparkzxl.data.sync.common.timer;
 /**
  * description: WheelTimerFactory .
  * shared wheel time.
+ *
  * @author zhouxinlei
  * @since 2022-08-25 13:40:48
  */
 public class WheelTimerFactory {
-    
+
     private static final String NAME = "shared_wheel_timer";
-    
+
     private static final TimerSharedRef SHARED_TIMER = new TimerSharedRef();
-    
+
     /**
      * Gets wheel timer.
      *
@@ -20,7 +21,7 @@ public class WheelTimerFactory {
     public static Timer getSharedTimer() {
         return SHARED_TIMER.getRef();
     }
-    
+
     /**
      * New wheel timer hashed wheel timer.
      *
@@ -29,13 +30,13 @@ public class WheelTimerFactory {
     public static Timer newWheelTimer() {
         return new HierarchicalWheelTimer(NAME);
     }
-    
+
     private abstract static class Shared<T> {
         /**
          * The Shared.
          */
         private final T shared;
-        
+
         /**
          * Instantiates a new Shared.
          *
@@ -44,7 +45,7 @@ public class WheelTimerFactory {
         Shared(final T shared) {
             this.shared = shared;
         }
-        
+
         /**
          * Gets ref.
          *
@@ -53,7 +54,7 @@ public class WheelTimerFactory {
         public T getRef() {
             return this.current();
         }
-        
+
         /**
          * Gets shared.
          *
@@ -62,7 +63,7 @@ public class WheelTimerFactory {
         protected T getSharedObj() {
             return shared;
         }
-        
+
         /**
          * Current t.
          *
@@ -70,11 +71,11 @@ public class WheelTimerFactory {
          */
         protected abstract T current();
     }
-    
+
     private abstract static class SharedRef<T> {
-        
+
         private Shared<T> shared;
-        
+
         /**
          * Gets ref.
          *
@@ -86,7 +87,7 @@ public class WheelTimerFactory {
             }
             return this.shared.getRef();
         }
-        
+
         /**
          * Create shared.
          *
@@ -94,9 +95,9 @@ public class WheelTimerFactory {
          */
         protected abstract Shared<T> create();
     }
-    
+
     private static class TimerShared extends Shared<Timer> implements Timer {
-        
+
         /**
          * Instantiates a new Shared.
          *
@@ -105,12 +106,12 @@ public class WheelTimerFactory {
         TimerShared(final Timer shared) {
             super(shared);
         }
-        
+
         @Override
         protected Timer current() {
             return this;
         }
-        
+
         /**
          * Add timer task.
          *
@@ -120,7 +121,7 @@ public class WheelTimerFactory {
         public void add(final TimerTask timerTask) {
             this.getSharedObj().add(timerTask);
         }
-        
+
         /**
          * Advance clock boolean.
          *
@@ -131,7 +132,7 @@ public class WheelTimerFactory {
         public void advanceClock(final long timeoutMs) throws InterruptedException {
             this.getSharedObj().advanceClock(timeoutMs);
         }
-        
+
         /**
          * Size int.
          *
@@ -141,7 +142,7 @@ public class WheelTimerFactory {
         public int size() {
             return this.getSharedObj().size();
         }
-        
+
         /**
          * Shutdown.
          */
@@ -150,9 +151,9 @@ public class WheelTimerFactory {
             this.getSharedObj().shutdown();
         }
     }
-    
+
     private static class TimerSharedRef extends SharedRef<Timer> {
-        
+
         /**
          * Create shared.
          *

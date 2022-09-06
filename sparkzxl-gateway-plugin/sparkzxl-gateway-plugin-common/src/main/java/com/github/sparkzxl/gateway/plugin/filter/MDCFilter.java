@@ -22,7 +22,7 @@ public class MDCFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        MDC.put(BaseContextConstants.TENANT_ID, ReactorHttpHelper.getHeader(request,BaseContextConstants.TENANT_ID));
+        MDC.put(BaseContextConstants.TENANT_ID, ReactorHttpHelper.getHeader(request, BaseContextConstants.TENANT_ID));
         String ipAddress = HostAddressUtils.acquireIp(exchange);
         MDC.put(BaseContextConstants.CLIENT_IP, ipAddress);
         return chain.filter(exchange);

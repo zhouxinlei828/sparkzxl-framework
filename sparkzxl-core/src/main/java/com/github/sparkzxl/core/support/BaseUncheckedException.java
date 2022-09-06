@@ -1,8 +1,8 @@
 package com.github.sparkzxl.core.support;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.core.support.code.IErrorCode;
+import com.github.sparkzxl.core.util.StrPool;
 
 /**
  * 非运行期异常基类，所有自定义非运行时异常继承该类

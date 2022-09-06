@@ -6,10 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * description: Event forwarders, which forward the changed events to each ConfigEventListener.
@@ -30,7 +27,7 @@ public class DataChangedEventDispatcher implements ApplicationListener<DataChang
     @Override
     public void onApplicationEvent(DataChangedEvent event) {
         for (DataChangedListener listener : listeners) {
-            listener.onChanged(event.getGroupKey().name(), event.getEventType().name(), event.getSource());
+            listener.onChanged(event.getGroupKey().getCode().toLowerCase(Locale.ROOT), event.getEventType().name(), event.getSource());
         }
     }
 

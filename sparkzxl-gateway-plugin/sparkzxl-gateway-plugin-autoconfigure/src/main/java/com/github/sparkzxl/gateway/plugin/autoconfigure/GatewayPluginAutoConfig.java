@@ -30,9 +30,10 @@ import org.springframework.context.annotation.Import;
 public class GatewayPluginAutoConfig {
 
     @Bean(name = "mdcFilter")
-    public GlobalFilter mdcFilter(){
+    public GlobalFilter mdcFilter() {
         return new MDCFilter();
     }
+
     @Bean
     @ConditionalOnMissingBean(RemoteAddressResolver.class)
     public RemoteAddressResolver remoteAddressResolver() {

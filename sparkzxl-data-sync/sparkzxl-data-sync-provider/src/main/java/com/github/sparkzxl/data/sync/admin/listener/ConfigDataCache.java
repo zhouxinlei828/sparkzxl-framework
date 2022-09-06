@@ -7,7 +7,7 @@ package com.github.sparkzxl.data.sync.admin.listener;
  * @since 2022-08-25 11:09:19
  */
 public class ConfigDataCache {
-    
+
     private final String group;
 
     private volatile String md5;
@@ -15,7 +15,7 @@ public class ConfigDataCache {
     private final String json;
 
     private volatile long lastModifyTime;
-    
+
     /**
      * Instantiates a new Config data cache.
      *
@@ -30,7 +30,7 @@ public class ConfigDataCache {
         this.md5 = md5;
         this.lastModifyTime = lastModifyTime;
     }
-    
+
     /**
      * Update.
      *
@@ -41,7 +41,7 @@ public class ConfigDataCache {
         this.md5 = md5;
         this.lastModifyTime = lastModifyTime;
     }
-    
+
     /**
      * Gets group.
      *
@@ -50,7 +50,7 @@ public class ConfigDataCache {
     public String getGroup() {
         return group;
     }
-    
+
     /**
      * Gets md5.
      *
@@ -59,7 +59,7 @@ public class ConfigDataCache {
     public String getMd5() {
         return md5;
     }
-    
+
     /**
      * Gets last modify time.
      *
@@ -68,7 +68,7 @@ public class ConfigDataCache {
     public long getLastModifyTime() {
         return lastModifyTime;
     }
-    
+
     /**
      * Gets json.
      *

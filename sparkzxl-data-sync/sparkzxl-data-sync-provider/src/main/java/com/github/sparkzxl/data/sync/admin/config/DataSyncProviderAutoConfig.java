@@ -35,8 +35,8 @@ import java.util.Properties;
  * @since 2022-08-25 15:19:14
  */
 @Configuration
-@EnableConfigurationProperties(value = {DataSyncProviderProperties.class, WebsocketProviderProperties.class})
-public class DataSyncProviderAutoConfiguration {
+@EnableConfigurationProperties(value = {DataSyncProviderProperties.class, WebsocketProviderProperties.class, NacosProviderProperties.class})
+public class DataSyncProviderAutoConfig {
 
     @Bean
     public ProviderStartRunner providerStartRunner(final ApplicationContext applicationContext) {
@@ -100,7 +100,6 @@ public class DataSyncProviderAutoConfiguration {
      */
     @Configuration
     @ConditionalOnProperty(prefix = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "nacos", name = "url")
-    @EnableConfigurationProperties(NacosProviderProperties.class)
     static class NacosListener {
 
         /**
@@ -144,8 +143,9 @@ public class DataSyncProviderAutoConfiguration {
          */
         @Bean
         @ConditionalOnMissingBean(NacosDataChangedInit.class)
-        public DataChangedInit nacosDataChangedInit(final ConfigService configService) {
-            return new NacosDataChangedInit(configService);
+        public DataChangedInit nacosDataChangedInit(final ConfigService configService,
+                                                    final NacosProviderProperties nacosProviderProperties) {
+            return new NacosDataChangedInit(configService, nacosProviderProperties.getWatchConfigs());
         }
 
         /**
@@ -156,14 +156,18 @@ public class DataSyncProviderAutoConfiguration {
          */
         @Bean
         @ConditionalOnMissingBean(NacosDataChangedListener.class)
-        public DataChangedListener nacosDataChangedListener(final ConfigService configService, final List<MergeDataHandler> mergeDataHandlerList) {
-            return new NacosDataChangedListener(configService, mergeDataHandlerList);
+        public DataChangedListener nacosDataChangedListener(final ConfigService configService,
+                                                            final List<MergeDataHandler> mergeDataHandlerList,
+                                                            final NacosProviderProperties nacosProviderProperties) {
+
+            return new NacosDataChangedListener(configService, mergeDataHandlerList, nacosProviderProperties.getWatchConfigs());
         }
 
         @Bean
         @ConditionalOnMissingBean(MetaMergeDataHandler.class)
-        public MergeDataHandler<MetaData> metaMergeDataHandler(final ConfigService configService) {
-            return new MetaMergeDataHandler(configService);
+        public MergeDataHandler<MetaData> metaMergeDataHandler(final ConfigService configService,
+                                                               final NacosProviderProperties nacosProviderProperties) {
+            return new MetaMergeDataHandler(configService, nacosProviderProperties.getWatchConfigs());
         }
 
     }

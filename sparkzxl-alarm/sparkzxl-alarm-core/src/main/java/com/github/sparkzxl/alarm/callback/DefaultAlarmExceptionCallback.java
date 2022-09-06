@@ -1,7 +1,7 @@
 package com.github.sparkzxl.alarm.callback;
 
-import com.github.sparkzxl.alarm.send.AlarmCallback;
 import com.github.sparkzxl.alarm.exception.AlarmException;
+import com.github.sparkzxl.alarm.send.AlarmCallback;
 import lombok.extern.slf4j.Slf4j;
 
 /**

@@ -32,24 +32,24 @@ public class WeText extends WeTalkMessage {
     public static class Text implements Serializable {
         /**
          * 文本内容，最长不超过2048个字节，必须是utf8编码
-         * */
+         */
         private String content;
         /**
          * userid的列表，提醒群中的指定成员(@某个成员)，@all表示提醒所有人；
          * 如果开发者获取不到userid，可以使用mentioned_mobile_list
          *
          * <p>
-         *     <code>["wangqing","@all"]</code>
+         * <code>["wangqing","@all"]</code>
          * </p>
-         * */
+         */
         private List<String> mentioned_list;
         /**
          * 手机号列表，提醒手机号对应的群成员(@某个成员)，@all表示提醒所有人
          *
          * <p>
-         *     <code>["13800001111","@all"]</code>
+         * <code>["13800001111","@all"]</code>
          * </p>
-         * */
+         */
         private List<String> mentioned_mobile_list;
 
         public String getContent() {

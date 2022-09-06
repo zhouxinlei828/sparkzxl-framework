@@ -3,8 +3,8 @@ package com.github.sparkzxl.gateway.plugin.common.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ReactorHttpHelper {
 
-    public static String getHeader(ServerHttpRequest request,String headerName) {
+    public static String getHeader(ServerHttpRequest request, String headerName) {
         HttpHeaders headers = request.getHeaders();
         String val = StrUtil.EMPTY;
         if (headers.isEmpty()) {

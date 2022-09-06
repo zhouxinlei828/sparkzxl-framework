@@ -14,7 +14,17 @@ public enum ConfigGroupEnum {
     /**
      * Meta data config group enum.
      */
-    META_DATA;
+    META_DATA("meta_data");
+
+    private final String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    ConfigGroupEnum(String code) {
+        this.code = code;
+    }
 
     /**
      * Acquire by name config group enum.
@@ -26,5 +36,17 @@ public enum ConfigGroupEnum {
         return Arrays.stream(ConfigGroupEnum.values())
                 .filter(e -> Objects.equals(e.name(), name))
                 .findFirst().orElseThrow(() -> new RuntimeException(String.format(" this ConfigGroupEnum can not support %s", name)));
+    }
+
+    /**
+     * Acquire by code config group enum.
+     *
+     * @param code the code
+     * @return the config group enum
+     */
+    public static ConfigGroupEnum acquireByCode(final String code) {
+        return Arrays.stream(ConfigGroupEnum.values())
+                .filter(e -> Objects.equals(e.getCode(), code))
+                .findFirst().orElseThrow(() -> new RuntimeException(String.format(" this ConfigGroupEnum can not support %s", code)));
     }
 }

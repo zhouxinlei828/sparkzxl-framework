@@ -1,8 +1,5 @@
 package com.guthub.sparkzxl.data.sync.nacos.config;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * description: nacos watcher Data properties
@@ -10,13 +7,25 @@ import lombok.NoArgsConstructor;
  * @author zhouxinlei
  * @since 2022-09-06 10:38:18
  */
-@NoArgsConstructor
-@Data
 public class NacosWatchProperties {
 
-    @JsonProperty("dataId")
     private String dataId;
 
-    @JsonProperty("group")
     private String group;
+
+    public String getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
 }

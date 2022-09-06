@@ -14,13 +14,13 @@ import java.util.function.Consumer;
  * @since 2022-08-25 13:39:42
  */
 public class TimerTaskList implements Delayed, Iterable<TimerTask> {
-    
+
     private final TimerTaskEntry root;
-    
+
     private final AtomicInteger taskCounter;
-    
+
     private final AtomicLong expiration = new AtomicLong(-1L);
-    
+
     /**
      * Instantiates a new Timer task list.
      *
@@ -32,7 +32,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         root.next = root;
         root.prev = root;
     }
-    
+
     /**
      * Sets expiration.
      *
@@ -42,7 +42,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
     public boolean setExpiration(final long expirationMs) {
         return expiration.getAndSet(expirationMs) != expirationMs;
     }
-    
+
     /**
      * Get the bucket's expiration time.
      *
@@ -51,7 +51,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
     public long getExpiration() {
         return expiration.get();
     }
-    
+
     /**
      * Flush.
      *
@@ -66,7 +66,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         }
         expiration.set(-1L);
     }
-    
+
     /**
      * Add.
      *
@@ -90,7 +90,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
             }
         }
     }
-    
+
     /**
      * Traversing using this is thread-safe.
      *
@@ -106,13 +106,13 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
             entry = next;
         }
     }
-    
+
     @Override
     public long getDelay(final TimeUnit unit) {
         long millis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
         return unit.convert(Math.max(getExpiration() - millis, 0), TimeUnit.MILLISECONDS);
     }
-    
+
     @Override
     public int compareTo(final Delayed delayed) {
         boolean other = delayed instanceof TimerTaskList;
@@ -123,7 +123,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
             return -1;
         }
     }
-    
+
     /**
      * Remove.
      *
@@ -141,7 +141,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
             }
         }
     }
-    
+
     /**
      * Using Iterator is not thread safe.
      *
@@ -151,34 +151,34 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
     public Iterator<TimerTask> iterator() {
         return new Itr(root.next);
     }
-    
-    
+
+
     /**
      * The type Timer task entry.
      */
     public static class TimerTaskEntry implements TaskEntity, Comparable<TimerTaskEntry> {
-        
+
         private final Timer timer;
-        
+
         private final TimerTask timerTask;
-        
+
         private final Long expirationMs;
-        
+
         /**
          * The List.
          */
         private TimerTaskList list;
-        
+
         /**
          * The Next.
          */
         private TimerTaskEntry next;
-        
+
         /**
          * The Prev.
          */
         private TimerTaskEntry prev;
-        
+
         /**
          * Instantiates a new Timer task entry.
          *
@@ -194,7 +194,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
                 timerTask.setTimerTaskEntry(this);
             }
         }
-        
+
         /**
          * Has the current task been cancelled.
          *
@@ -204,7 +204,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         public boolean cancelled() {
             return this.timerTask.getTimerTaskEntry() != this;
         }
-        
+
         /**
          * Cancel boolean.
          */
@@ -212,7 +212,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         public void cancel() {
             this.timerTask.cancel();
         }
-        
+
         /**
          * Gets expiration ms.
          *
@@ -221,7 +221,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         public Long getExpirationMs() {
             return expirationMs;
         }
-        
+
         /**
          * Gets timer.
          *
@@ -231,7 +231,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         public Timer getTimer() {
             return this.timer;
         }
-        
+
         /**
          * Gets timer task.
          *
@@ -241,7 +241,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         public TimerTask getTimerTask() {
             return timerTask;
         }
-        
+
         /**
          * Remove.
          */
@@ -252,20 +252,20 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
                 currentList = list;
             }
         }
-        
+
         @Override
         public int compareTo(final TimerTaskEntry timerTaskEntry) {
             return Long.compare(expirationMs, timerTaskEntry.expirationMs);
         }
     }
-    
+
     /**
      * The type Itr.
      */
     private class Itr implements Iterator<TimerTask> {
-        
+
         private TimerTaskEntry entry;
-        
+
         /**
          * Instantiates a new Itr.
          *
@@ -274,7 +274,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
         Itr(final TimerTaskEntry entry) {
             this.entry = entry;
         }
-        
+
         @Override
         public boolean hasNext() {
             if (entry != root) {
@@ -282,7 +282,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
             }
             return false;
         }
-        
+
         @Override
         public TimerTask next() {
             TimerTask timerTask = null;
@@ -295,7 +295,7 @@ public class TimerTaskList implements Delayed, Iterable<TimerTask> {
             }
             return timerTask;
         }
-        
+
         @Override
         public void remove() {
             entry.remove();

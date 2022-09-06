@@ -4,7 +4,7 @@ import com.github.sparkzxl.data.sync.admin.DataSyncService;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractDataChangedInit implements DataChangedInit{
+public abstract class AbstractDataChangedInit implements DataChangedInit {
 
     @Autowired
     private DataSyncService dataSyncService;

@@ -10,7 +10,7 @@ import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
  * @since 2022-08-25 11:06:14
  */
 public interface DataSyncService {
-    
+
     /**
      * Sync all boolean.
      *

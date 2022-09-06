@@ -4,19 +4,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.github.sparkzxl.core.support.BizException;
-import com.github.sparkzxl.core.util.KeyGeneratorUtil;
+import com.github.sparkzxl.data.sync.admin.config.NacosWatchProperties;
 import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 /**
  * description: 元数据合并处理
@@ -29,10 +31,13 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
     private static final Logger logger = LoggerFactory.getLogger(MetaMergeDataHandler.class);
 
     private final ConfigService configService;
+    private final Map<String, String> watchConfigMap = Maps.newConcurrentMap();
     private static final ConcurrentMap<String, MetaData> META_DATA = Maps.newConcurrentMap();
 
-    public MetaMergeDataHandler(ConfigService configService) {
+    public MetaMergeDataHandler(ConfigService configService,
+                                List<NacosWatchProperties> watchConfigs) {
         this.configService = configService;
+        watchConfigMap.putAll(watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
     }
 
     @Override
@@ -87,10 +92,14 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
         META_DATA.keySet().removeAll(set);
     }
 
-    private String getConfig(final String dataId) {
+    private String getConfig(String dataId) {
         try {
-            String config = configService.getConfig(dataId.concat(".json"), NacosPathConstants.GROUP, NacosPathConstants.DEFAULT_TIME_OUT);
-            return StringUtils.hasLength(config) ? config : NacosPathConstants.EMPTY_CONFIG_DEFAULT_VALUE;
+            if (StringUtils.endsWith(dataId, NacosPathConstants.JSON_SUFFIX)) {
+                dataId = dataId.concat(NacosPathConstants.JSON_SUFFIX);
+            }
+            String group = watchConfigMap.get(dataId.concat(NacosPathConstants.JSON_SUFFIX));
+            String config = configService.getConfig(dataId.concat(NacosPathConstants.JSON_SUFFIX), group, NacosPathConstants.DEFAULT_TIME_OUT);
+            return StringUtils.isNotEmpty(config) ? config : NacosPathConstants.EMPTY_CONFIG_DEFAULT_VALUE;
         } catch (NacosException e) {
             logger.error("Get data from nacos error.", e);
             throw new BizException(e.getMessage());
@@ -99,7 +108,7 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
 
     private String getKey(MetaData metaData) {
-        return KeyGeneratorUtil.generateKey("{}-{}-{}-{}",
+        return MessageFormat.format("{0}-{1}-{3}-{14}",
                 metaData.getTenantId(), metaData.getAreaCode(),
                 metaData.getDataType(), metaData.getDataValue());
     }

@@ -10,17 +10,17 @@ import org.slf4j.LoggerFactory;
  * @since 2022-08-25 13:35:29
  */
 public abstract class AbstractRetryTask extends TimerTask {
-    
+
     private final Logger logger = LoggerFactory.getLogger(AbstractRetryTask.class);
-    
+
     private final String key;
-    
+
     private final Integer retryCount;
-    
+
     private int tickCount = 1;
-    
+
     private final boolean retryLimit;
-    
+
     /**
      * Instantiates a new Timer task.
      *
@@ -31,7 +31,7 @@ public abstract class AbstractRetryTask extends TimerTask {
                              final long delayMs) {
         this(key, delayMs, 1);
     }
-    
+
     /**
      * Instantiates a new Abstract retry task.
      *
@@ -44,7 +44,7 @@ public abstract class AbstractRetryTask extends TimerTask {
                              final Integer retryCount) {
         this(key, delayMs, retryCount, retryCount < 0);
     }
-    
+
     /**
      * Instantiates a new Abstract retry task.
      * The retryCount parameter has no effect when retryLimit is true.
@@ -63,7 +63,7 @@ public abstract class AbstractRetryTask extends TimerTask {
         this.retryCount = retryCount;
         this.retryLimit = retryLimit;
     }
-    
+
     protected void again(final TaskEntity taskEntity) {
         Timer timer = taskEntity.getTimer();
         if (timer == null) {
@@ -79,7 +79,7 @@ public abstract class AbstractRetryTask extends TimerTask {
         timer.add(timerTask);
         tickCount++;
     }
-    
+
     @Override
     public void run(final TaskEntity taskEntity) {
         if (taskEntity == null) {
@@ -99,7 +99,7 @@ public abstract class AbstractRetryTask extends TimerTask {
             this.again(taskEntity);
         }
     }
-    
+
     /**
      * Do retry.
      *
@@ -107,5 +107,5 @@ public abstract class AbstractRetryTask extends TimerTask {
      * @param timerTask the timer task
      */
     protected abstract void doRetry(String key, TimerTask timerTask);
-    
+
 }

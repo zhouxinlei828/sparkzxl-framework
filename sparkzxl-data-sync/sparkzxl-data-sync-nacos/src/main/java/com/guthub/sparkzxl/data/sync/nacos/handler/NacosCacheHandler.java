@@ -5,6 +5,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
+import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -50,9 +51,9 @@ public class NacosCacheHandler {
     }
 
 
-    protected void updateDataMap(final String configInfo) {
+    protected void updateDataMap(final String dataId, final String configInfo) {
         try {
-            String key = StringUtils.removeEnd(configInfo, ".json");
+            String key = StringUtils.removeEnd(dataId, NacosPathConstants.JSON_SUFFIX);
             List<DataSubscriber> subscribers = dataSubscriberMap.get(key);
             JSONArray jsonArray = JSONArray.parseArray(configInfo);
             jsonArray.forEach(metaData -> subscribers.forEach(subscriber -> {

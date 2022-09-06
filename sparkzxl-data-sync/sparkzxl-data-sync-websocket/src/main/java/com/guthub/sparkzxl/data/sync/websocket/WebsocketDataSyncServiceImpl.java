@@ -36,7 +36,7 @@ public class WebsocketDataSyncServiceImpl implements DataSyncService {
      * Instantiates a new Websocket sync cache.
      *
      * @param websocketConsumerProperties the websocket config
-     * @param dataHandlerList       the dataHandlers
+     * @param dataHandlerList             the dataHandlers
      */
     public WebsocketDataSyncServiceImpl(final WebsocketConsumerProperties websocketConsumerProperties,
                                         final List<DataHandler> dataHandlerList) {

@@ -4,7 +4,6 @@ import com.github.sparkzxl.entity.core.AuthUserInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: 用户状态管理

@@ -1,4 +1,3 @@
-
 package com.github.sparkzxl.gateway.plugin.common;
 
 import java.util.Map;

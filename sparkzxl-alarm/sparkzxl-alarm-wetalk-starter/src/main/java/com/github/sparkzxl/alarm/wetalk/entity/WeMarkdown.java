@@ -43,7 +43,7 @@ public class WeMarkdown extends WeTalkMessage {
     public static class Markdown implements Serializable {
         /**
          * markdown内容，最长不超过4096个字节，必须是utf8编码
-         * */
+         */
         private String content;
 
         public String getContent() {

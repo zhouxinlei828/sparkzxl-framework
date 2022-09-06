@@ -9,14 +9,14 @@ import java.util.concurrent.TimeUnit;
  * @since 2022-08-25 13:39:24
  */
 public abstract class TimerTask {
-    
+
     /**
      * The time the current task delays execution ms.
      */
     private final long delayMs;
-    
+
     private TimerTaskList.TimerTaskEntry timerTaskEntry;
-    
+
     /**
      * Instantiates a new Timer task.
      *
@@ -25,7 +25,7 @@ public abstract class TimerTask {
     public TimerTask(final long delayMs) {
         this(delayMs, TimeUnit.MILLISECONDS);
     }
-    
+
     /**
      * Instantiates a new Timer task.
      *
@@ -35,7 +35,7 @@ public abstract class TimerTask {
     public TimerTask(final long delay, final TimeUnit unit) {
         delayMs = unit.toMillis(delay);
     }
-    
+
     /**
      * Sets timer task entry.
      *
@@ -47,7 +47,7 @@ public abstract class TimerTask {
         }
         timerTaskEntry = entry;
     }
-    
+
     /**
      * Gets delay ms.
      *
@@ -56,7 +56,7 @@ public abstract class TimerTask {
     long getDelayMs() {
         return delayMs;
     }
-    
+
     /**
      * Gets timer task entry.
      *
@@ -65,7 +65,7 @@ public abstract class TimerTask {
     TimerTaskList.TimerTaskEntry getTimerTaskEntry() {
         return timerTaskEntry;
     }
-    
+
     /**
      * Cancel task.
      */
@@ -75,7 +75,7 @@ public abstract class TimerTask {
         }
         timerTaskEntry = null;
     }
-    
+
     /**
      * Run.
      *

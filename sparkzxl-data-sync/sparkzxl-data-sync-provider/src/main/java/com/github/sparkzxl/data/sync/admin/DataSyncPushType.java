@@ -8,5 +8,6 @@ package com.github.sparkzxl.data.sync.admin;
  */
 public enum DataSyncPushType {
     WEBSOCKET,
+    NACOS,
     ;
 }

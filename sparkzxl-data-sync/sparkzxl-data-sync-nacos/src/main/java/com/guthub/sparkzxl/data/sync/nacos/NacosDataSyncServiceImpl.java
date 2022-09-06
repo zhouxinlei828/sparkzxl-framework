@@ -26,8 +26,7 @@ public class NacosDataSyncServiceImpl extends NacosCacheHandler implements DataS
      *
      * @param configService   the config service
      * @param dataSubscribers the data subscribers
-     * @param watchConfigs    the nacos data group
-     * @param watchConfigs
+     * @param watchConfigs    the watch config list
      */
     public NacosDataSyncServiceImpl(final ConfigService configService,
                                     final List<DataSubscriber> dataSubscribers,
@@ -42,7 +41,7 @@ public class NacosDataSyncServiceImpl extends NacosCacheHandler implements DataS
      */
     public void start() {
         for (Map.Entry<String, String> entry : watchConfigMap.entrySet()) {
-            watcherData(entry.getKey(), entry.getValue(), this::updateDataMap);
+            watcherData(entry.getKey(), entry.getValue(), (x) -> this.updateDataMap(entry.getKey(), x));
         }
     }
 

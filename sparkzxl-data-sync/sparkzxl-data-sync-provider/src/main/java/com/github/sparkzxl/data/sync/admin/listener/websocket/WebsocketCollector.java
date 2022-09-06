@@ -25,13 +25,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @ServerEndpoint(value = "/websocket", configurator = WebsocketConfigurator.class)
 public class WebsocketCollector {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(WebsocketCollector.class);
-    
+
     private static final Set<Session> SESSION_SET = new CopyOnWriteArraySet<>();
-    
+
     private static final String SESSION_KEY = "sessionKey";
-    
+
     /**
      * On open.
      *
@@ -43,18 +43,18 @@ public class WebsocketCollector {
                 getClientIp(session), session.getMaxTextMessageBufferSize());
         SESSION_SET.add(session);
     }
-    
+
     private static String getClientIp(final Session session) {
         Map<String, Object> userProperties = session.getUserProperties();
         if (MapUtils.isEmpty(userProperties)) {
             return StringUtils.EMPTY;
         }
-        
+
         return Optional.ofNullable(userProperties.get(WebsocketListener.CLIENT_IP_NAME))
                 .map(Object::toString)
                 .orElse(StringUtils.EMPTY);
     }
-    
+
     /**
      * On message.
      *
@@ -73,7 +73,7 @@ public class WebsocketCollector {
             WebSocketThreadLocalContext.clear();
         }
     }
-    
+
     /**
      * On close.
      *
@@ -84,7 +84,7 @@ public class WebsocketCollector {
         clearSession(session);
         logger.warn("websocket close on client[{}]", getClientIp(session));
     }
-    
+
     /**
      * On error.
      *
@@ -96,7 +96,7 @@ public class WebsocketCollector {
         clearSession(session);
         logger.error("websocket collection on client[{}] error: ", getClientIp(session), error);
     }
-    
+
     /**
      * Send.
      *
@@ -108,16 +108,16 @@ public class WebsocketCollector {
             return;
         }
         if (DataEventTypeEnum.MYSELF == type) {
-            Session session = WebSocketThreadLocalContext.get(SESSION_KEY,Session.class);
+            Session session = WebSocketThreadLocalContext.get(SESSION_KEY, Session.class);
             if (Objects.nonNull(session)) {
                 sendMessageBySession(session, message);
             }
         } else {
             SESSION_SET.forEach(session -> sendMessageBySession(session, message));
         }
-        
+
     }
-    
+
     private static synchronized void sendMessageBySession(final Session session, final String message) {
         try {
             session.getBasicRemote().sendText(message);
@@ -125,7 +125,7 @@ public class WebsocketCollector {
             logger.error("websocket send result is exception: ", e);
         }
     }
-    
+
     private void clearSession(final Session session) {
         SESSION_SET.remove(session);
         WebSocketThreadLocalContext.clear();

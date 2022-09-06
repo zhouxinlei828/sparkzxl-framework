@@ -14,6 +14,7 @@ public interface FeignDecoratorBuilderInterceptor {
 
     /**
      * 拦截方法
+     *
      * @param builder 装饰器构建
      */
     void intercept(FeignDecorators.Builder builder);

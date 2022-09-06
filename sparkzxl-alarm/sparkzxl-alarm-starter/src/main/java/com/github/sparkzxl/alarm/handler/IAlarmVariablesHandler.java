@@ -2,7 +2,6 @@ package com.github.sparkzxl.alarm.handler;
 
 import com.github.sparkzxl.alarm.annotation.Alarm;
 import org.aopalliance.intercept.MethodInvocation;
-import org.aspectj.lang.JoinPoint;
 
 import java.util.Map;
 

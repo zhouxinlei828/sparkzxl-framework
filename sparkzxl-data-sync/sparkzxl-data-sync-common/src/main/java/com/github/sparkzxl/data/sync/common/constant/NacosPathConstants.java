@@ -19,6 +19,11 @@ public final class NacosPathConstants {
     public static final String META_DATA_ID = "metadata.json";
 
     /**
+     * json suffix.
+     */
+    public static final String JSON_SUFFIX = ".json";
+
+    /**
      * default value of get config.
      */
     public static final String EMPTY_CONFIG_DEFAULT_VALUE = "{}";

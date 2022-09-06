@@ -1,8 +1,8 @@
 package com.github.sparkzxl.security.component;
 
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
-import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.AuthenticationException;

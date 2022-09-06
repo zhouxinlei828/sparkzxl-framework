@@ -10,14 +10,12 @@ import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.support.AlarmErrorCodeEnum;
 import com.google.common.collect.Maps;
-import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
