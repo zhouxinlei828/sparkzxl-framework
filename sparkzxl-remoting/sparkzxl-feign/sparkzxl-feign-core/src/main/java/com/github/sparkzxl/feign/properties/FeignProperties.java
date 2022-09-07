@@ -3,7 +3,6 @@ package com.github.sparkzxl.feign.properties;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.List;
 
@@ -20,7 +19,6 @@ public class FeignProperties {
 
     private FeignInterceptorProperties interceptor = new FeignInterceptorProperties();
 
-    @NestedConfigurationProperty
     private FeignSeataProperties seata = new FeignSeataProperties();
 
     @Data

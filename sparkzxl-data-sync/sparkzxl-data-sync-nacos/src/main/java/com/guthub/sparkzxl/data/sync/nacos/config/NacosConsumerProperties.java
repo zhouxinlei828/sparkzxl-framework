@@ -2,7 +2,6 @@ package com.guthub.sparkzxl.data.sync.nacos.config;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,10 +23,8 @@ public class NacosConsumerProperties {
 
     private String password;
 
-    @NestedConfigurationProperty
     private NacosACMProperties acm;
 
-    @NestedConfigurationProperty
     private List<NacosWatchProperties> watchConfigs;
 
     /**

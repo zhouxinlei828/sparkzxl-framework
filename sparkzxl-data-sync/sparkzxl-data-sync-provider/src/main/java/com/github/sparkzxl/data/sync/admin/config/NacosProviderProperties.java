@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,10 +26,8 @@ public class NacosProviderProperties implements InitializingBean {
 
     private String password;
 
-    @NestedConfigurationProperty
     private NacosACMProperties acm;
 
-    @NestedConfigurationProperty
     private List<NacosWatchProperties> watchConfigs;
 
 

@@ -6,7 +6,6 @@ import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.AntPathMatcher;
 
 import java.io.Serializable;
@@ -35,7 +34,6 @@ public class GatewayPluginProperties implements InitializingBean, Serializable {
 
     private boolean exceptionJsonHandler;
 
-    @NestedConfigurationProperty
     private LoggingProperties logging;
 
     public boolean match(String path) {
