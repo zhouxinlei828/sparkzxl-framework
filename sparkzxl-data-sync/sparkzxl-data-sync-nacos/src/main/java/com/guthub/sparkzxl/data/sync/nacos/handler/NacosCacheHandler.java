@@ -1,20 +1,17 @@
 package com.guthub.sparkzxl.data.sync.nacos.handler;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
-import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
+import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -54,8 +51,8 @@ public class NacosCacheHandler {
     protected void updateDataMap(final String dataId, final String configInfo) {
         try {
             List<DataSubscriber> subscribers = dataSubscriberMap.get(dataId);
-            JSONArray jsonArray = JSONArray.parseArray(configInfo);
-            jsonArray.forEach(metaData -> subscribers.forEach(subscriber -> {
+            Map<String, MetaData> metaDataMap = JSONObject.parseObject(configInfo, new TypeReference<Map<String, MetaData>>() {});
+            metaDataMap.values().forEach(metaData -> subscribers.forEach(subscriber -> {
                 subscriber.unSubscribe(metaData);
                 subscriber.onSubscribe(metaData);
             }));
