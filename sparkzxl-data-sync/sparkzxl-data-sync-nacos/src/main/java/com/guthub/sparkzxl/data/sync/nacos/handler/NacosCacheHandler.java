@@ -53,8 +53,7 @@ public class NacosCacheHandler {
 
     protected void updateDataMap(final String dataId, final String configInfo) {
         try {
-            String key = StringUtils.removeEnd(dataId, NacosPathConstants.JSON_SUFFIX);
-            List<DataSubscriber> subscribers = dataSubscriberMap.get(key);
+            List<DataSubscriber> subscribers = dataSubscriberMap.get(dataId);
             JSONArray jsonArray = JSONArray.parseArray(configInfo);
             jsonArray.forEach(metaData -> subscribers.forEach(subscriber -> {
                 subscriber.unSubscribe(metaData);

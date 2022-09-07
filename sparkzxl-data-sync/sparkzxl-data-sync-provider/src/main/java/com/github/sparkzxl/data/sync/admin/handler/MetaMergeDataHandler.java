@@ -79,7 +79,7 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
     @Override
     public String configGroup() {
-        return ConfigGroupEnum.META_DATA.name();
+        return ConfigGroupEnum.META_DATA.getCode();
     }
 
     private void updateMetaDataMap(final String configInfo) {
@@ -94,11 +94,8 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
     private String getConfig(String dataId) {
         try {
-            if (StringUtils.endsWith(dataId, NacosPathConstants.JSON_SUFFIX)) {
-                dataId = dataId.concat(NacosPathConstants.JSON_SUFFIX);
-            }
-            String group = watchConfigMap.get(dataId.concat(NacosPathConstants.JSON_SUFFIX));
-            String config = configService.getConfig(dataId.concat(NacosPathConstants.JSON_SUFFIX), group, NacosPathConstants.DEFAULT_TIME_OUT);
+            String group = watchConfigMap.get(dataId);
+            String config = configService.getConfig(dataId, group, NacosPathConstants.DEFAULT_TIME_OUT);
             return StringUtils.isNotEmpty(config) ? config : NacosPathConstants.EMPTY_CONFIG_DEFAULT_VALUE;
         } catch (NacosException e) {
             logger.error("Get data from nacos error.", e);
@@ -108,9 +105,11 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
 
     private String getKey(MetaData metaData) {
-        return MessageFormat.format("{0}-{1}-{3}-{14}",
-                metaData.getTenantId(), metaData.getAreaCode(),
-                metaData.getDataType(), metaData.getDataValue());
+        return MessageFormat.format("{0}-{1}-{2}-{3}",
+                StringUtils.isEmpty(metaData.getTenantId()) ? "default" : metaData.getTenantId(),
+                StringUtils.isEmpty(metaData.getAreaCode()) ? "default" : metaData.getAreaCode(),
+                metaData.getDataType(),
+                metaData.getDataValue());
     }
 
 }

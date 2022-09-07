@@ -20,6 +20,6 @@ public interface MetaDataSubscriber extends DataSubscriber<MetaData> {
      */
     @Override
     default String group() {
-        return ConfigGroupEnum.META_DATA.name();
+        return ConfigGroupEnum.META_DATA.getCode();
     }
 }
