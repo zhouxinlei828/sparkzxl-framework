@@ -1,4 +1,4 @@
-package com.github.sparkzxl.data.sync.admin.config;
+package com.github.sparkzxl.data.sync.admin.config.nacos;
 
 import java.util.Objects;
 

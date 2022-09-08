@@ -41,7 +41,7 @@ public class DefaultGatewayContextBuilder implements GatewayContextBuilder {
         gatewayContext.setHost(host);
         gatewayContext.setIp(ip);
         gatewayContext.setUrl(url);
-        gatewayContext.setPath(url.replaceFirst(StrPool.SLASH.concat(route.getId()), ""));
+        gatewayContext.setPath(url.replaceFirst(StrPool.PATH_SEPARATOR.concat(route.getId()), ""));
         gatewayContext.setAppKey(appKey);
         gatewayContext.setSign(sign);
         gatewayContext.setTimestamp(timestamp);

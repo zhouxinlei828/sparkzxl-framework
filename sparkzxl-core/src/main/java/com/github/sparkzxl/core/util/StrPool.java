@@ -24,7 +24,7 @@ public interface StrPool {
     String EMPTY = "";
     String EQUALS = "=";
     String FALSE = "false";
-    String SLASH = "/";
+    String PATH_SEPARATOR = "/";
     String HASH = "#";
     String HAT = "^";
     String LEFT_BRACE = "{";

@@ -1,4 +1,4 @@
-package com.github.sparkzxl.data.sync.admin.config;
+package com.github.sparkzxl.data.sync.admin.config.websocket;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,6 +1,9 @@
 package com.github.sparkzxl.data.sync.admin.handler;
 
+import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
+
+import java.util.Map;
 
 /**
  * description: 数据合并处理
@@ -14,9 +17,9 @@ public interface MergeDataHandler<T> {
      * 合并数据处理
      *
      * @param pushData 推送数据
-     * @return Object
+     * @return Map<String, T>
      */
-    Object handle(PushData<T> pushData);
+    Map<String, T> handle(PushData<T> pushData);
 
     /**
      * 配置类型

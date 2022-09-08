@@ -1,4 +1,4 @@
-package com.github.sparkzxl.data.sync.admin.config;
+package com.github.sparkzxl.data.sync.admin.config.nacos;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.google.common.collect.Lists;

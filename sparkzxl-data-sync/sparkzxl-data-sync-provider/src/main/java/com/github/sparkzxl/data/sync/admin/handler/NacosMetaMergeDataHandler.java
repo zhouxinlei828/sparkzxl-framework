@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.github.sparkzxl.core.support.BizException;
-import com.github.sparkzxl.data.sync.admin.config.NacosWatchProperties;
+import com.github.sparkzxl.core.util.StrPool;
+import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
+import com.github.sparkzxl.data.sync.admin.config.nacos.NacosWatchProperties;
 import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
@@ -21,27 +23,27 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 /**
- * description: 元数据合并处理
+ * description: Nacos元数据合并处理
  *
  * @author zhouxinlei
  * @since 2022-09-05 14:50:02
  */
-public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
+public class NacosMetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
-    private static final Logger logger = LoggerFactory.getLogger(MetaMergeDataHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(NacosMetaMergeDataHandler.class);
 
     private final ConfigService configService;
     private final Map<String, String> watchConfigMap = Maps.newConcurrentMap();
     private static final ConcurrentMap<String, MetaData> META_DATA = Maps.newConcurrentMap();
 
-    public MetaMergeDataHandler(ConfigService configService,
-                                List<NacosWatchProperties> watchConfigs) {
+    public NacosMetaMergeDataHandler(ConfigService configService,
+                                     List<NacosWatchProperties> watchConfigs) {
         this.configService = configService;
         watchConfigMap.putAll(watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
     }
 
     @Override
-    public Object handle(PushData<MetaData> pushData) {
+    public Map<String, MetaData> handle(PushData<MetaData> pushData) {
         updateMetaDataMap(getConfig(pushData.getConfigGroup()));
         List<MetaData> dataList = pushData.getData();
         DataEventTypeEnum eventType = DataEventTypeEnum.acquireByName(pushData.getEventType());
@@ -79,7 +81,7 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
     @Override
     public String configGroup() {
-        return ConfigGroupEnum.META_DATA.getCode();
+        return ConfigGroupEnum.META_DATA.getCode().concat(StrPool.COLON).concat(DataSyncPushType.NACOS.name().toLowerCase(Locale.ROOT));
     }
 
     private void updateMetaDataMap(final String configInfo) {
@@ -102,7 +104,6 @@ public class MetaMergeDataHandler implements MergeDataHandler<MetaData> {
             throw new BizException(e.getMessage());
         }
     }
-
 
     private String getKey(MetaData metaData) {
         return MessageFormat.format("{0}-{1}-{2}-{3}",

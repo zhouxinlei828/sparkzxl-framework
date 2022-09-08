@@ -3,7 +3,7 @@ package com.github.sparkzxl.data.sync.admin.listener.nacos;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.github.sparkzxl.core.support.BizException;
-import com.github.sparkzxl.data.sync.admin.config.NacosWatchProperties;
+import com.github.sparkzxl.data.sync.admin.config.nacos.NacosWatchProperties;
 import com.github.sparkzxl.data.sync.admin.listener.AbstractDataChangedInit;
 import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
 import com.google.common.collect.Maps;

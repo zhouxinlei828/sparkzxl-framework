@@ -5,22 +5,34 @@ import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.github.sparkzxl.data.sync.admin.DataChangedEventDispatcher;
 import com.github.sparkzxl.data.sync.admin.ProviderStartRunner;
+import com.github.sparkzxl.data.sync.admin.config.condition.ZookeeperCondition;
+import com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties;
+import com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties;
+import com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties;
 import com.github.sparkzxl.data.sync.admin.handler.MergeDataHandler;
-import com.github.sparkzxl.data.sync.admin.handler.MetaMergeDataHandler;
+import com.github.sparkzxl.data.sync.admin.handler.NacosMetaMergeDataHandler;
+import com.github.sparkzxl.data.sync.admin.handler.ZkMetaMergeDataHandler;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedInit;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
 import com.github.sparkzxl.data.sync.admin.listener.nacos.NacosDataChangedInit;
 import com.github.sparkzxl.data.sync.admin.listener.nacos.NacosDataChangedListener;
 import com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketCollector;
 import com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketDataChangedListener;
+import com.github.sparkzxl.data.sync.admin.listener.zookeeper.ZookeeperDataChangedInit;
+import com.github.sparkzxl.data.sync.admin.listener.zookeeper.ZookeeperDataChangedListener;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
@@ -164,10 +176,54 @@ public class DataSyncProviderAutoConfig {
         }
 
         @Bean
-        @ConditionalOnMissingBean(MetaMergeDataHandler.class)
+        @ConditionalOnMissingBean(NacosMetaMergeDataHandler.class)
         public MergeDataHandler<MetaData> metaMergeDataHandler(final ConfigService configService,
                                                                final NacosProviderProperties nacosProviderProperties) {
-            return new MetaMergeDataHandler(configService, nacosProviderProperties.getWatchConfigs());
+            return new NacosMetaMergeDataHandler(configService, nacosProviderProperties.getWatchConfigs());
+        }
+
+    }
+
+    /**
+     * description: The type Zookeeper listener.
+     *
+     * @author zhouxinlei
+     * @since 2022-09-05 09:59:16
+     */
+    @Conditional(ZookeeperCondition.class)
+    @Configuration
+    @EnableConfigurationProperties(CuratorProperties.class)
+    static class ZookeeperListener {
+
+        @Bean(initMethod = "start", destroyMethod = "close")
+        @ConditionalOnMissingBean(CuratorFramework.class)
+        public CuratorFramework curatorFramework(CuratorProperties curatorProperties) {
+            RetryPolicy retryPolicy = new ExponentialBackoffRetry(curatorProperties.getTimeout(), curatorProperties.getRetryCount());
+            return CuratorFrameworkFactory.newClient(
+                    curatorProperties.getZkServers(),
+                    curatorProperties.getSessionTimeoutMs(),
+                    curatorProperties.getConnectionTimeoutMs(),
+                    retryPolicy);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(ZookeeperDataChangedInit.class)
+        public DataChangedInit zookeeperDataChangedInit(CuratorFramework curatorFramework,
+                                                        CuratorProperties curatorProperties) {
+            return new ZookeeperDataChangedInit(curatorFramework, curatorProperties.getWatchConfigs());
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(ZookeeperDataChangedListener.class)
+        public DataChangedListener zookeeperDataChangedListener(CuratorFramework curatorFramework,
+                                                                List<MergeDataHandler> mergeDataHandlerList) {
+            return new ZookeeperDataChangedListener(curatorFramework, mergeDataHandlerList);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(ZkMetaMergeDataHandler.class)
+        public MergeDataHandler<MetaData> zkMetaMergeDataHandler() {
+            return new ZkMetaMergeDataHandler();
         }
 
     }

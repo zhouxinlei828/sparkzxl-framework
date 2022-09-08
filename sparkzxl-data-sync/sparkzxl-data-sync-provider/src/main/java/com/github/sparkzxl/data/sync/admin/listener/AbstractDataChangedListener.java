@@ -1,6 +1,5 @@
-package com.github.sparkzxl.data.sync.admin.listener.nacos;
+package com.github.sparkzxl.data.sync.admin.listener;
 
-import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
