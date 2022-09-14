@@ -49,30 +49,25 @@ public class NacosMetaMergeDataHandler implements MergeDataHandler<MetaData> {
         DataEventTypeEnum eventType = DataEventTypeEnum.acquireByName(pushData.getEventType());
         switch (eventType) {
             case DELETE:
-                dataList.forEach(meta -> {
-                    String key = getKey(meta);
-                    META_DATA.remove(key);
-                });
+                dataList.forEach(meta -> META_DATA.remove(meta.getUnionId()));
                 break;
             case REFRESH:
             case MYSELF:
                 Set<String> set = new HashSet<>(META_DATA.keySet());
                 dataList.forEach(meta -> {
-                    String key = getKey(meta);
-                    set.remove(key);
-                    META_DATA.put(key, meta);
+                    set.remove(meta.getUnionId());
+                    META_DATA.put(meta.getUnionId(), meta);
                 });
                 META_DATA.keySet().removeAll(set);
                 break;
             default:
                 dataList.forEach(meta -> {
-                    String key = getKey(meta);
                     META_DATA
                             .values()
                             .stream()
                             .filter(md -> Objects.equals(md.getId(), meta.getId()))
-                            .forEach(md -> META_DATA.remove(key));
-                    META_DATA.put(key, meta);
+                            .forEach(md -> META_DATA.remove(meta.getUnionId()));
+                    META_DATA.put(meta.getUnionId(), meta);
                 });
                 break;
         }

@@ -3,8 +3,10 @@ package com.github.sparkzxl.data.sync.common.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 
 /**
  * description:  租户元数据实体对象
@@ -17,12 +19,17 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 public class MetaData implements Serializable {
 
-    private static final long serialVersionUID = -1647129778629174524L;
+    private static final long serialVersionUID = 6649767003809530658L;
 
     /**
      * MetaData id
      */
     private String id;
+
+    /**
+     * 组合id
+     */
+    private String unionId;
 
     /**
      * 租户id
@@ -74,4 +81,12 @@ public class MetaData implements Serializable {
      * 是否启用
      */
     private boolean enabled;
+
+    public void generatedUnionId() {
+        this.unionId = MessageFormat.format("{0}-{1}-{2}-{3}",
+                StringUtils.isEmpty(getTenantId()) ? "default" : getTenantId(),
+                StringUtils.isEmpty(getAreaCode()) ? "default" : getAreaCode(),
+                getDataType(),
+                getDataValue());
+    }
 }
