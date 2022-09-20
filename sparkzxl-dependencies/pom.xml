@@ -49,7 +49,7 @@
         <!-- jwt组件-->
         <jwt.version>9.12.1</jwt.version>
 
-        <aws.version>1.12.2</aws.version>
+        <aws.version>1.12.261</aws.version>
         <!-- google-->
         <guava.version>30.1.1-jre</guava.version>
         <hutool.version>5.7.11</hutool.version>
