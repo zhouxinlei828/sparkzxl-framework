@@ -1,1 +1,2 @@
 com.github.sparkzxl.oss.config.OssAutoConfiguration
+com.github.sparkzxl.oss.config.OssAspectAutoConfiguration
