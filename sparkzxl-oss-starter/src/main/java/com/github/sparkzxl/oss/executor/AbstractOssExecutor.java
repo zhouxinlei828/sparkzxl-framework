@@ -35,10 +35,10 @@ public abstract class AbstractOssExecutor<T> implements OssExecutor, Initializin
      */
     protected T obtainClient(String clientId) {
         if (StringUtils.isEmpty(clientId)) {
-            ArgumentAssert.notNull(clientId, String.format("can not get client of %s", clientId));
+            ArgumentAssert.notNull(clientId, String.format("can not get clientId of %s", clientId));
         }
         final T ossClient = clientMap.get(clientId);
-        ArgumentAssert.notNull(ossClient, String.format("can not get client of %s", ossClient));
+        ArgumentAssert.notNull(ossClient, String.format("can not get clientId of %s", ossClient));
         return ossClient;
     }
 
@@ -50,7 +50,7 @@ public abstract class AbstractOssExecutor<T> implements OssExecutor, Initializin
      */
     protected OssConfigInfo obtainConfigInfo(String clientId) {
         if (StringUtils.isEmpty(clientId)) {
-            ArgumentAssert.notNull(clientId, String.format("can not get client of %s", clientId));
+            ArgumentAssert.notNull(clientId, String.format("can not get clientId of %s", clientId));
         }
         final OssConfigInfo configInfo = configInfoMap.get(clientId);
         ArgumentAssert.notNull(configInfo, String.format("can not get configInfo of %s", configInfo));

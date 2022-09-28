@@ -18,6 +18,11 @@ public class YamlOssConfigProvider extends AbstractOssConfigProvider {
     private final List<OssConfigInfo> configInfoList;
 
     public YamlOssConfigProvider(List<OssConfigInfo> configInfoList) {
+        for (OssConfigInfo configInfo : configInfoList) {
+            if (StringUtils.isEmpty(configInfo.getClientType())) {
+                throw new RuntimeException("Oss client clientType cannot be empty.");
+            }
+        }
         this.configInfoList = configInfoList;
     }
 

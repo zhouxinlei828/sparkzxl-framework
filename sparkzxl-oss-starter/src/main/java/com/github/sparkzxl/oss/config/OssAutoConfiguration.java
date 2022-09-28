@@ -6,6 +6,7 @@ import com.github.sparkzxl.oss.executor.AliYunExecutor;
 import com.github.sparkzxl.oss.executor.MinioExecutor;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.OssProperties;
+import com.github.sparkzxl.oss.provider.FileOssConfigProvider;
 import com.github.sparkzxl.oss.provider.JdbcOssConfigProvider;
 import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.github.sparkzxl.oss.provider.YamlOssConfigProvider;
@@ -57,6 +58,13 @@ public class OssAutoConfiguration {
     @ConditionalOnProperty(name = "oss.register", havingValue = "jdbc")
     public OssConfigProvider ossConfigProvider() {
         return new JdbcOssConfigProvider((clientType) -> Lists.newArrayList());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(FileOssConfigProvider.class)
+    @ConditionalOnProperty(name = "oss.register", havingValue = "file")
+    public OssConfigProvider fileOssConfigProvider() {
+        return new FileOssConfigProvider(ossProperties.getPath());
     }
 
     @Bean
