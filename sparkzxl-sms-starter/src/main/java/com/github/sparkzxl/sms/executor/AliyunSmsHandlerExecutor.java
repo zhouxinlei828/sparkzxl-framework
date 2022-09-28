@@ -1,4 +1,4 @@
-package com.github.sparkzxl.sms.strategy;
+package com.github.sparkzxl.sms.executor;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
@@ -8,7 +8,7 @@ import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.*;
 import com.aliyun.teaopenapi.models.Config;
 import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
-import com.github.sparkzxl.sms.constant.enums.SmsChannel;
+import com.github.sparkzxl.sms.constant.enums.SmsRegister;
 import com.github.sparkzxl.sms.constant.enums.SmsStatus;
 import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
@@ -20,7 +20,6 @@ import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
@@ -34,14 +33,10 @@ import java.util.Set;
  * @since 2022-01-03 12:45:45
  */
 @Slf4j
-public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, InitializingBean {
+public class AliyunSmsHandlerExecutor extends AbstractSmsHandlerExecutor<Client> {
 
-    private final SmsProperties smsProperties;
-
-    private Client client;
-
-    public AliyunSmsHandlerStrategy(SmsProperties smsProperties) {
-        this.smsProperties = smsProperties;
+    public AliyunSmsHandlerExecutor(SmsProperties smsProperties) {
+        super(smsProperties);
     }
 
     @Override
@@ -57,7 +52,7 @@ public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, Initializin
                     .setTemplateCode(sendSmsReq.getTemplateId())
                     .setTemplateParam(JSONUtil.toJsonStr(sendSmsReq.getTemplateParams()))
                     .setPhoneNumbers(phoneNumberListStr);
-            SendSmsResponse response = client.sendSms(smsRequest);
+            SendSmsResponse response = obtainClient().sendSms(smsRequest);
             SendSmsResponseBody sendSmsResponseBody = response.getBody();
             String smsResponseBody = JSON.toJSONString(sendSmsResponseBody);
             log.info("阿里云短信发送结果：【{}】", smsResponseBody);
@@ -73,8 +68,8 @@ public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, Initializin
                         .setPhone(phone)
                         .setBizId(sendSmsResponseBody.getBizId())
                         .setMsgContent(content)
-                        .setSupplierId(SmsChannel.ALIYUN.getId())
-                        .setSupplierName(SmsChannel.ALIYUN.getName())
+                        .setSupplierId(SmsRegister.ALIYUN.getId())
+                        .setSupplierName(SmsRegister.ALIYUN.getName())
                         .setReportContent(smsResponseBody)
                         .setStatus(SmsStatus.SEND_SUCCESS.getCode())
                         .setStatusName(SmsStatus.SEND_SUCCESS.getDescription())
@@ -93,7 +88,7 @@ public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, Initializin
         try {
             QuerySmsSignRequest querySmsSignRequest = new QuerySmsSignRequest();
             querySmsSignRequest.setSignName(sign);
-            QuerySmsSignResponse querySmsSignResponse = client.querySmsSign(querySmsSignRequest);
+            QuerySmsSignResponse querySmsSignResponse = obtainClient().querySmsSign(querySmsSignRequest);
             QuerySmsSignResponseBody signResponseBody = querySmsSignResponse.getBody();
             SmsSignDetail smsSignDetail = new SmsSignDetail();
             smsSignDetail.setSignName(signResponseBody.getSignName());
@@ -112,7 +107,7 @@ public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, Initializin
         try {
             QuerySmsTemplateRequest request = new QuerySmsTemplateRequest();
             request.setTemplateCode(templateId);
-            QuerySmsTemplateResponse smsTemplateResponse = client.querySmsTemplate(request);
+            QuerySmsTemplateResponse smsTemplateResponse = obtainClient().querySmsTemplate(request);
             QuerySmsTemplateResponseBody templateResponseBody = smsTemplateResponse.getBody();
             SmsTemplateDetail smsTemplateDetail = new SmsTemplateDetail();
             smsTemplateDetail.setTemplateId(templateResponseBody.getTemplateCode());
@@ -129,17 +124,17 @@ public class AliyunSmsHandlerStrategy implements SmsHandlerStrategy, Initializin
     }
 
     @Override
-    public String support() {
-        return SmsChannel.ALIYUN.getName();
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    protected Client initClient(SmsProperties smsProperties) throws Exception{
         Config config = new Config()
                 .setAccessKeyId(smsProperties.getAccessKeyId())
                 .setAccessKeySecret(smsProperties.getAccessKeySecret());
         // 访问的域名
         config.endpoint = smsProperties.getEndpoint();
-        this.client = new Client(config);
+        return new Client(config);
+    }
+
+    @Override
+    public String named() {
+        return SmsRegister.ALIYUN.getName();
     }
 }

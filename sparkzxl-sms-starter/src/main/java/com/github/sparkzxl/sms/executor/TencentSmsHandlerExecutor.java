@@ -1,11 +1,11 @@
-package com.github.sparkzxl.sms.strategy;
+package com.github.sparkzxl.sms.executor;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
-import com.github.sparkzxl.sms.constant.enums.SmsChannel;
+import com.github.sparkzxl.sms.constant.enums.SmsRegister;
 import com.github.sparkzxl.sms.constant.enums.SmsStatus;
 import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
@@ -23,7 +23,6 @@ import com.tencentcloudapi.sms.v20210111.models.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
 
 import java.text.MessageFormat;
@@ -39,13 +38,13 @@ import java.util.Set;
  * @since 2022-01-03 12:45:45
  */
 @Slf4j
-public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, InitializingBean {
+public class TencentSmsHandlerExecutor extends AbstractSmsHandlerExecutor<SmsClient> {
 
     private final SmsProperties smsProperties;
-    private SmsClient client;
     private static final Integer PHONE_NUM = 11;
 
-    public TencentSmsHandlerStrategy(SmsProperties smsProperties) {
+    public TencentSmsHandlerExecutor(SmsProperties smsProperties) {
+        super(smsProperties);
         this.smsProperties = smsProperties;
     }
 
@@ -71,7 +70,7 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
                 content = MessageFormat.format(content, templateParamMap.values().toArray());
             }
             req.setSessionContext(IdUtil.fastSimpleUUID());
-            SendSmsResponse response = client.SendSms(req);
+            SendSmsResponse response = obtainClient().SendSms(req);
             String sendSmsResponseStr = SendSmsResponse.toJsonString(response);
             // 输出json格式的字符串回包
             log.info("腾讯云短信发送结果：【{}】", sendSmsResponseStr);
@@ -86,8 +85,8 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
                         .setPhone(phone)
                         .setSmsReqId(sendStatus.getSessionContext())
                         .setTemplateId(sendSmsReq.getTemplateId())
-                        .setSupplierId(SmsChannel.TENCENT.getId())
-                        .setSupplierName(SmsChannel.TENCENT.getName())
+                        .setSupplierId(SmsRegister.TENCENT.getId())
+                        .setSupplierName(SmsRegister.TENCENT.getName())
                         .setMsgContent(content)
                         .setBizId(sendStatus.getSerialNo())
                         .setStatus(SmsStatus.SEND_SUCCESS.getCode())
@@ -109,7 +108,7 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
             DescribeSmsSignListRequest describeSmsSignListRequest = new DescribeSmsSignListRequest();
             Long[] signIdSet = {Long.valueOf(sign)};
             describeSmsSignListRequest.setSignIdSet(signIdSet);
-            DescribeSmsSignListResponse describeSmsSignListResponse = client.DescribeSmsSignList(describeSmsSignListRequest);
+            DescribeSmsSignListResponse describeSmsSignListResponse = obtainClient().DescribeSmsSignList(describeSmsSignListRequest);
             DescribeSignListStatus[] describeSignListStatusSet = describeSmsSignListResponse.getDescribeSignListStatusSet();
             if (ArrayUtils.isNotEmpty(describeSignListStatusSet)) {
                 DescribeSignListStatus describeSignListStatus = describeSignListStatusSet[0];
@@ -134,7 +133,7 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
             DescribeSmsTemplateListRequest req = new DescribeSmsTemplateListRequest();
             req.setInternational(0L);
             req.setTemplateIdSet(new Long[]{Long.valueOf(templateId)});
-            DescribeSmsTemplateListResponse templateListResponse = client.DescribeSmsTemplateList(req);
+            DescribeSmsTemplateListResponse templateListResponse = obtainClient().DescribeSmsTemplateList(req);
             DescribeTemplateListStatus[] describeTemplateStatusSet = templateListResponse.getDescribeTemplateStatusSet();
             if (ArrayUtils.isNotEmpty(describeTemplateStatusSet)) {
                 DescribeTemplateListStatus describeTemplateListStatus = describeTemplateStatusSet[0];
@@ -154,7 +153,7 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    protected SmsClient initClient(SmsProperties smsProperties) throws Exception {
         /* 必要步骤：
          * 实例化一个认证对象，入参需要传入腾讯云账户密钥对secretId，secretKey。
          * 这里采用的是从环境变量读取的方式，需要在环境变量中先设置这两个值。
@@ -182,11 +181,11 @@ public class TencentSmsHandlerStrategy implements SmsHandlerStrategy, Initializi
         clientProfile.setHttpProfile(httpProfile);
         /* 实例化要请求产品(以sms为例)的client对象
          * 第二个参数是地域信息，可以直接填写字符串ap-guangzhou，或者引用预设的常量 */
-        this.client = new SmsClient(cred, smsProperties.getRegion(), clientProfile);
+        return new SmsClient(cred, smsProperties.getRegion(), clientProfile);
     }
 
     @Override
-    public String support() {
-        return SmsChannel.TENCENT.getName();
+    public String named() {
+        return SmsRegister.TENCENT.getName();
     }
 }

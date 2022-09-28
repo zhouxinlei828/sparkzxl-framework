@@ -3,6 +3,7 @@ package com.github.sparkzxl.sms.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -13,8 +14,9 @@ import java.time.LocalDateTime;
  */
 @Accessors(chain = true)
 @Data
-public class SmsSendRecord {
+public class SmsSendRecord implements Serializable {
 
+    private static final long serialVersionUID = -2233930212234145216L;
     /**
      * id
      */

@@ -1,4 +1,4 @@
-package com.github.sparkzxl.sms.strategy;
+package com.github.sparkzxl.sms.executor;
 
 import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author zhouxinlei
  * @since 2022-01-03 12:31:56
  */
-public interface SmsHandlerStrategy {
+public interface SmsHandlerExecutor {
 
     /**
      * 发送短信
@@ -40,9 +40,9 @@ public interface SmsHandlerStrategy {
     SmsTemplateDetail findSmsTemplate(String templateId);
 
     /**
-     * 支持类型
+     * 支持类型名称
      *
      * @return String
      */
-    String support();
+    String named();
 }

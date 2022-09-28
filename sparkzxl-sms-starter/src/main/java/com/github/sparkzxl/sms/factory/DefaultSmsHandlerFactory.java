@@ -1,7 +1,7 @@
 package com.github.sparkzxl.sms.factory;
 
-import com.github.sparkzxl.sms.constant.enums.SmsChannel;
-import com.github.sparkzxl.sms.strategy.SmsHandlerStrategy;
+import com.github.sparkzxl.sms.constant.enums.SmsRegister;
+import com.github.sparkzxl.sms.executor.SmsHandlerExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,18 +14,18 @@ import java.util.Map;
  */
 public class DefaultSmsHandlerFactory implements SmsHandlerFactory {
 
-    private final Map<String, SmsHandlerStrategy> strategyContainer;
+    private final Map<String, SmsHandlerExecutor> strategyContainer;
 
     public DefaultSmsHandlerFactory() {
         this.strategyContainer = new HashMap<>();
     }
 
     @Override
-    public SmsHandlerStrategy getStrategy(SmsChannel smsChannel) {
-        return strategyContainer.get(smsChannel.getName());
+    public SmsHandlerExecutor getExecutor(SmsRegister smsRegister) {
+        return strategyContainer.get(smsRegister.getName());
     }
 
-    public void addStrategy(SmsHandlerStrategy smsHandlerStrategy) {
-        this.strategyContainer.put(smsHandlerStrategy.support(), smsHandlerStrategy);
+    public void addStrategy(SmsHandlerExecutor smsHandlerExecutor) {
+        this.strategyContainer.put(smsHandlerExecutor.named(), smsHandlerExecutor);
     }
 }

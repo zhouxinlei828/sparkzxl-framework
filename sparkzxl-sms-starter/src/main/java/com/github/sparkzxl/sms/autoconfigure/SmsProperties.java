@@ -1,6 +1,6 @@
 package com.github.sparkzxl.sms.autoconfigure;
 
-import com.github.sparkzxl.sms.constant.enums.SmsChannel;
+import com.github.sparkzxl.sms.constant.enums.SmsRegister;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -17,7 +17,7 @@ public class SmsProperties {
     public static final String PREFIX = "sms";
     private boolean enabled;
 
-    private SmsChannel channel = SmsChannel.ALIYUN;
+    private SmsRegister register = SmsRegister.ALIYUN;
 
     private String region;
 
