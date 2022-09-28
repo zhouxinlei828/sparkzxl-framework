@@ -27,7 +27,7 @@ public class OssProperties {
     /**
      * yaml mode required
      */
-    private List<OssConfigInfo> configInfoList;
+    private List<OssConfigInfo> configInfos;
 
     /**
      * file mode required

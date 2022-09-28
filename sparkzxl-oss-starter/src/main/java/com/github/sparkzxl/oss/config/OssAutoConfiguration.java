@@ -40,7 +40,7 @@ public class OssAutoConfiguration {
             throw new RuntimeException("store cannot be empty.");
         }
         if (registerMode.equals(RegisterMode.YAML)) {
-            if (CollectionUtils.isEmpty(ossProperties.getConfigInfoList())) {
+            if (CollectionUtils.isEmpty(ossProperties.getConfigInfos())) {
                 throw new RuntimeException("In yaml mode, configInfoList cannot be empty.");
             }
         }
@@ -50,7 +50,7 @@ public class OssAutoConfiguration {
     @ConditionalOnMissingBean(YamlOssConfigProvider.class)
     @ConditionalOnProperty(name = "oss.register", havingValue = "yaml")
     public OssConfigProvider yamlOssConfigProvider() {
-        return new YamlOssConfigProvider(ossProperties.getConfigInfoList());
+        return new YamlOssConfigProvider(ossProperties.getConfigInfos());
     }
 
     @Bean
