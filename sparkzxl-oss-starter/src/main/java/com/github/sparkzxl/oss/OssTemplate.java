@@ -148,13 +148,13 @@ public class OssTemplate implements InitializingBean, DisposableBean {
             return primaryExecutor;
         }
         final OssExecutor ossExecutor = executorMap.get(clazz);
-        Assert.notNull(ossExecutor, String.format("can not get bean type of %s", clazz));
+        Assert.notNull(ossExecutor, String.format("Can not get bean type of %s", clazz));
         return ossExecutor;
     }
 
     @Override
     public void afterPropertiesSet() {
-        Assert.notNull(ossProperties.getStore(), "store mode must be not null");
+        Assert.notNull(ossProperties.getRegister(), "Register mode must be not null");
         for (OssExecutor executor : executors) {
             executorMap.put(executor.getClass(), executor);
         }
@@ -164,7 +164,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
             this.primaryExecutor = executors.get(0);
         } else {
             this.primaryExecutor = executorMap.get(primaryExecutor);
-            Assert.notNull(this.primaryExecutor, "primaryExecutor must be not null");
+            Assert.notNull(this.primaryExecutor, "Primary executor must be not null");
         }
     }
 

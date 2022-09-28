@@ -1,12 +1,11 @@
 package com.github.sparkzxl.oss.provider;
 
 import com.github.sparkzxl.oss.properties.OssConfigInfo;
-import com.github.sparkzxl.oss.properties.OssProperties;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * description: yaml 加载oss配置信息
@@ -14,20 +13,16 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-05-05 13:56:54
  */
-@RequiredArgsConstructor
 public class YamlOssConfigProvider extends AbstractOssConfigProvider {
 
-    private final OssProperties ossProperties;
+    private final List<OssConfigInfo> configInfoList;
+
+    public YamlOssConfigProvider(List<OssConfigInfo> configInfoList) {
+        this.configInfoList = configInfoList;
+    }
 
     @Override
     protected List<OssConfigInfo> get(String clientType) {
-        Map<String, OssConfigInfo> provider = ossProperties.getProvider();
-        List<OssConfigInfo> configInfoList = Lists.newArrayList();
-        provider.forEach((key, value) -> {
-            if (value.getClientType().equals(clientType)) {
-                configInfoList.add(value);
-            }
-        });
-        return configInfoList;
+        return configInfoList.stream().filter(x -> StringUtils.equals(clientType, x.getClientType())).collect(Collectors.toList());
     }
 }

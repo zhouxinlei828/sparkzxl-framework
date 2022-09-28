@@ -1,17 +1,16 @@
 package com.github.sparkzxl.oss.config;
 
-import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.oss.OssTemplate;
-import com.github.sparkzxl.oss.enums.StoreMode;
+import com.github.sparkzxl.oss.enums.RegisterMode;
 import com.github.sparkzxl.oss.executor.AliYunExecutor;
 import com.github.sparkzxl.oss.executor.MinioExecutor;
 import com.github.sparkzxl.oss.executor.OssExecutor;
-import com.github.sparkzxl.oss.properties.OssConfigInfo;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import com.github.sparkzxl.oss.provider.JdbcOssConfigProvider;
 import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.github.sparkzxl.oss.provider.YamlOssConfigProvider;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * description: oss自动配置
@@ -36,28 +34,27 @@ public class OssAutoConfiguration {
 
     public OssAutoConfiguration(OssProperties ossProperties) {
         this.ossProperties = ossProperties;
-        StoreMode store = ossProperties.getStore();
-        if (ObjectUtils.isEmpty(store)) {
+        RegisterMode registerMode = ossProperties.getRegister();
+        if (ObjectUtils.isEmpty(registerMode)) {
             throw new RuntimeException("store cannot be empty.");
         }
-        if (store.equals(StoreMode.YAML)) {
-            Map<String, OssConfigInfo> provider = ossProperties.getProvider();
-            if (MapUtil.isEmpty(provider)) {
-                throw new RuntimeException("In yaml mode, provider cannot be empty.");
+        if (registerMode.equals(RegisterMode.YAML)) {
+            if (CollectionUtils.isEmpty(ossProperties.getConfigInfoList())) {
+                throw new RuntimeException("In yaml mode, configInfoList cannot be empty.");
             }
         }
     }
 
     @Bean
     @ConditionalOnMissingBean(YamlOssConfigProvider.class)
-    @ConditionalOnProperty(name = "oss.store", havingValue = "yaml")
+    @ConditionalOnProperty(name = "oss.register", havingValue = "yaml")
     public OssConfigProvider yamlOssConfigProvider() {
-        return new YamlOssConfigProvider(ossProperties);
+        return new YamlOssConfigProvider(ossProperties.getConfigInfoList());
     }
 
     @Bean
     @ConditionalOnMissingBean(JdbcOssConfigProvider.class)
-    @ConditionalOnProperty(name = "oss.store", havingValue = "jdbc")
+    @ConditionalOnProperty(name = "oss.register", havingValue = "jdbc")
     public OssConfigProvider ossConfigProvider() {
         return new JdbcOssConfigProvider((clientType) -> Lists.newArrayList());
     }
