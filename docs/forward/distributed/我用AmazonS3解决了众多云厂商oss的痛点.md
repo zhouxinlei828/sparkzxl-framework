@@ -184,7 +184,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import com.github.sparkzxl.oss.properties.OssConfigInfo;
+import com.github.sparkzxl.oss.properties.Configuration;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -567,7 +567,7 @@ public class OssTemplate implements InitializingBean {
 package com.github.sparkzxl.oss.config;
 
 import com.github.sparkzxl.oss.http.OssEndpoint;
-import com.github.sparkzxl.oss.properties.OssConfigInfo;
+import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.service.OssTemplate;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

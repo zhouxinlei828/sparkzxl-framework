@@ -1,10 +1,10 @@
 package com.github.sparkzxl.oss.provider;
 
-import com.github.sparkzxl.oss.properties.OssConfigInfo;
-import lombok.RequiredArgsConstructor;
+import com.github.sparkzxl.oss.properties.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -15,19 +15,25 @@ import java.util.stream.Collectors;
  */
 public class YamlOssConfigProvider extends AbstractOssConfigProvider {
 
-    private final List<OssConfigInfo> configInfoList;
+    private final List<Configuration> configList;
 
-    public YamlOssConfigProvider(List<OssConfigInfo> configInfoList) {
-        for (OssConfigInfo configInfo : configInfoList) {
+    public YamlOssConfigProvider(List<Configuration> configList) {
+        for (Configuration configInfo : configList) {
             if (StringUtils.isEmpty(configInfo.getClientType())) {
                 throw new RuntimeException("Oss client clientType cannot be empty.");
             }
         }
-        this.configInfoList = configInfoList;
+        this.configList = configList;
     }
 
     @Override
-    protected List<OssConfigInfo> get(String clientType) {
-        return configInfoList.stream().filter(x -> StringUtils.equals(clientType, x.getClientType())).collect(Collectors.toList());
+    public Configuration load(String clientId) {
+        Optional<Configuration> optional = configList.stream().filter(config -> config.getClientId().equals(clientId)).findFirst();
+        return optional.orElse(null);
+    }
+
+    @Override
+    protected List<Configuration> list() {
+        return configList;
     }
 }

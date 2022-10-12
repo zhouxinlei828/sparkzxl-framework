@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author zhouxinlei
  */
 @Data
-public class OssConfigInfo implements Serializable {
+public class Configuration implements Serializable {
 
 
     private static final long serialVersionUID = -6310199657139774329L;

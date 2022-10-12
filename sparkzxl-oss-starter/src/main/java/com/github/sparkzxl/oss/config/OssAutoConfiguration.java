@@ -1,10 +1,9 @@
 package com.github.sparkzxl.oss.config;
 
+import com.github.sparkzxl.oss.OssExecutorFactoryContext;
 import com.github.sparkzxl.oss.OssTemplate;
+import com.github.sparkzxl.oss.client.OssClientManager;
 import com.github.sparkzxl.oss.enums.RegisterMode;
-import com.github.sparkzxl.oss.executor.AliYunExecutor;
-import com.github.sparkzxl.oss.executor.MinioExecutor;
-import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import com.github.sparkzxl.oss.provider.FileOssConfigProvider;
 import com.github.sparkzxl.oss.provider.JdbcOssConfigProvider;
@@ -18,8 +17,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 /**
  * description: oss自动配置
@@ -40,8 +37,8 @@ public class OssAutoConfiguration {
             throw new RuntimeException("store cannot be empty.");
         }
         if (registerMode.equals(RegisterMode.YAML)) {
-            if (CollectionUtils.isEmpty(ossProperties.getConfigInfos())) {
-                throw new RuntimeException("In yaml mode, configInfoList cannot be empty.");
+            if (CollectionUtils.isEmpty(ossProperties.getConfigs())) {
+                throw new RuntimeException("In yaml mode, configList cannot be empty.");
             }
         }
     }
@@ -50,14 +47,14 @@ public class OssAutoConfiguration {
     @ConditionalOnMissingBean(YamlOssConfigProvider.class)
     @ConditionalOnProperty(name = "oss.register", havingValue = "yaml")
     public OssConfigProvider yamlOssConfigProvider() {
-        return new YamlOssConfigProvider(ossProperties.getConfigInfos());
+        return new YamlOssConfigProvider(ossProperties.getConfigs());
     }
 
     @Bean
     @ConditionalOnMissingBean(JdbcOssConfigProvider.class)
     @ConditionalOnProperty(name = "oss.register", havingValue = "jdbc")
     public OssConfigProvider ossConfigProvider() {
-        return new JdbcOssConfigProvider((clientType) -> Lists.newArrayList());
+        return new JdbcOssConfigProvider((clientType) -> null, Lists::newArrayList);
     }
 
     @Bean
@@ -67,25 +64,27 @@ public class OssAutoConfiguration {
         return new FileOssConfigProvider(ossProperties.getPath());
     }
 
+
+    @Bean
+    @ConditionalOnMissingBean(OssClientManager.class)
+    public OssClientManager ossClientManager() {
+        return new OssClientManager();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(OssExecutorFactoryContext.class)
+    public OssExecutorFactoryContext ossExecutorFactoryContext(OssClientManager ossClientManager,
+                                                               OssConfigProvider configProvider) {
+        return new OssExecutorFactoryContext(ossClientManager, configProvider);
+    }
+
     @Bean
     @ConditionalOnMissingBean(OssTemplate.class)
-    public OssTemplate ossTemplate(List<OssExecutor> executors) {
+    public OssTemplate ossTemplate(OssExecutorFactoryContext ossExecutorFactoryContext) {
         OssTemplate ossTemplate = new OssTemplate();
         ossTemplate.setOssProperties(ossProperties);
-        ossTemplate.setExecutors(executors);
+        ossTemplate.setOssExecutorFactoryContext(ossExecutorFactoryContext);
         return ossTemplate;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(MinioExecutor.class)
-    public MinioExecutor minioExecutor(OssConfigProvider ossConfigProvider) {
-        return new MinioExecutor(ossConfigProvider);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(AliYunExecutor.class)
-    public AliYunExecutor aliYunExecutor(OssConfigProvider ossConfigProvider) {
-        return new AliYunExecutor(ossConfigProvider);
     }
 
 }

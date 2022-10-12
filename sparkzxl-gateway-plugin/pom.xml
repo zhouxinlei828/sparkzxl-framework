@@ -18,7 +18,6 @@
         <module>sparkzxl-gateway-plugin-autoconfigure</module>
         <module>sparkzxl-gateway-plugin-loadbalancer</module>
         <module>sparkzxl-gateway-plugin-exception</module>
-        <module>sparkzxl-spi</module>
         <module>sparkzxl-gateway-plugin-sign</module>
         <module>sparkzxl-gateway-plugin-dubbo</module>
         <module>sparkzxl-gateway-plugin-trace</module>
@@ -29,11 +28,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-gateway-plugin-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

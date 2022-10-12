@@ -1,20 +1,17 @@
 package com.github.sparkzxl.oss;
 
 import com.amazonaws.services.s3.model.S3Object;
+import com.github.sparkzxl.oss.context.OssClientContextHolder;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * description:  文件操作模板类
@@ -24,14 +21,13 @@ import java.util.Map;
  */
 @Slf4j
 @NoArgsConstructor
-public class OssTemplate implements InitializingBean, DisposableBean {
+public class OssTemplate implements InitializingBean {
 
     @Setter
     private OssProperties ossProperties;
-    @Setter
-    private List<OssExecutor> executors;
-    private final Map<Class<? extends OssExecutor>, OssExecutor> executorMap = new LinkedHashMap<>();
     private OssExecutor primaryExecutor;
+    @Setter
+    private OssExecutorFactoryContext ossExecutorFactoryContext;
 
     /**
      * 创建bucket
@@ -39,7 +35,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @param bucketName bucket名称
      */
     public void createBucket(String bucketName) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.createBucket(bucketName);
     }
 
@@ -49,7 +45,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @param bucketName bucket名称
      */
     public void removeBucket(String bucketName) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.removeBucket(bucketName);
     }
 
@@ -62,7 +58,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @return url
      */
     public String getObjectUrl(String bucketName, String objectName, Integer expires) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         return ossExecutor.getObjectUrl(bucketName, objectName, expires);
     }
 
@@ -74,7 +70,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @return url
      */
     public String getObjectUrl(String bucketName, String objectName) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         return ossExecutor.getObjectUrl(bucketName, objectName);
     }
 
@@ -87,7 +83,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/GetObject">API Documentation</a>
      */
     public S3Object getObjectInfo(String bucketName, String objectName) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         return ossExecutor.getObjectInfo(bucketName, objectName);
     }
 
@@ -99,7 +95,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @param multipartFile 文件
      */
     public void putObject(String bucketName, String objectName, MultipartFile multipartFile) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.putObject(bucketName, objectName, multipartFile);
     }
 
@@ -111,7 +107,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @param filePath   文件地址
      */
     public void putObject(String bucketName, String objectName, String filePath) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.putObject(bucketName, objectName, filePath);
     }
 
@@ -123,7 +119,7 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @param multipartFile 上传文件
      */
     public void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.multipartUpload(bucketName, objectName, multipartFile);
     }
 
@@ -134,48 +130,29 @@ public class OssTemplate implements InitializingBean, DisposableBean {
      * @param objectName 文件名称
      */
     public void removeObject(String bucketName, String objectName) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.removeObject(bucketName, objectName);
     }
 
     public void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response) {
-        OssExecutor ossExecutor = obtainExecutor(primaryExecutor.getClass());
+        OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.downloadFile(bucketName, objectName, fileName, response);
     }
 
-    protected OssExecutor obtainExecutor(Class<? extends OssExecutor> clazz) {
-        if (null == clazz || clazz == OssExecutor.class) {
+    protected OssExecutor obtainExecutor() {
+        String clientId = OssClientContextHolder.peek();
+        if (clientId == null) {
             return primaryExecutor;
         }
-        final OssExecutor ossExecutor = executorMap.get(clazz);
-        Assert.notNull(ossExecutor, String.format("Can not get bean type of %s", clazz));
+        final OssExecutor ossExecutor = ossExecutorFactoryContext.create(clientId);
+        Assert.notNull(ossExecutor, String.format("Can not get bean type of %s", ossExecutor.getClass()));
         return ossExecutor;
     }
 
     @Override
     public void afterPropertiesSet() {
         Assert.notNull(ossProperties.getRegister(), "Register mode must be not null");
-        for (OssExecutor executor : executors) {
-            executorMap.put(executor.getClass(), executor);
-        }
-
-        final Class<? extends OssExecutor> primaryExecutor = ossProperties.getPrimaryExecutor();
-        if (null == primaryExecutor) {
-            this.primaryExecutor = executors.get(0);
-        } else {
-            this.primaryExecutor = executorMap.get(primaryExecutor);
-            Assert.notNull(this.primaryExecutor, "Primary executor must be not null");
-        }
+        this.primaryExecutor = ossExecutorFactoryContext.create();
     }
 
-    @Override
-    public void destroy() {
-        log.info("executor start closing ....");
-        shutdownExecutor();
-        log.info("executor all closed success,bye");
-    }
-
-    private void shutdownExecutor() {
-        executorMap.clear();
-    }
 }

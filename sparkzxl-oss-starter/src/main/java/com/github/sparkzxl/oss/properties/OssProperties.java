@@ -27,16 +27,11 @@ public class OssProperties {
     /**
      * yaml mode required
      */
-    private List<OssConfigInfo> configInfos;
+    private List<Configuration> configs;
 
     /**
      * file mode required
      */
     private String path;
-
-    /**
-     * 默认主执行器
-     */
-    private Class<? extends OssExecutor> primaryExecutor;
 
 }

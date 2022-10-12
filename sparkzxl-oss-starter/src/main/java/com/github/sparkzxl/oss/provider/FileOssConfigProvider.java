@@ -5,13 +5,14 @@ import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSONArray;
-import com.github.sparkzxl.oss.properties.OssConfigInfo;
+import com.github.sparkzxl.oss.properties.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,7 +25,7 @@ public class FileOssConfigProvider extends AbstractOssConfigProvider {
     private final static String HTTP = "http";
     private final static String HTTPS = "https";
 
-    private final List<OssConfigInfo> configInfoList;
+    private final List<Configuration> configList;
 
     public FileOssConfigProvider(String path) {
         String fileStr;
@@ -37,17 +38,24 @@ public class FileOssConfigProvider extends AbstractOssConfigProvider {
         } else {
             fileStr = ResourceUtil.readUtf8Str(path);
         }
-        List<OssConfigInfo> configInfoList = JSONArray.parseArray(fileStr, OssConfigInfo.class);
-        for (OssConfigInfo configInfo : configInfoList) {
+        List<Configuration> configList = JSONArray.parseArray(fileStr, Configuration.class);
+        for (Configuration configInfo : configList) {
             if (StringUtils.isEmpty(configInfo.getClientType())) {
                 throw new RuntimeException("Oss client clientType cannot be empty.");
             }
         }
-        this.configInfoList = configInfoList;
+        this.configList = configList;
+    }
+
+
+    @Override
+    public Configuration load(String clientId) {
+        Optional<Configuration> optional = configList.stream().filter(config -> config.getClientId().equals(clientId)).findFirst();
+        return optional.orElse(null);
     }
 
     @Override
-    protected List<OssConfigInfo> get(String clientType) {
-        return configInfoList.stream().filter(x -> StringUtils.equals(clientType, x.getClientType())).collect(Collectors.toList());
+    protected List<Configuration> list() {
+        return configList;
     }
 }

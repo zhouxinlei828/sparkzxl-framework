@@ -559,6 +559,11 @@
             <!-- sparkzxl-framework 组件库-->
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-alarm-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
