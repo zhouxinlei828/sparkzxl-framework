@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.List;
 
@@ -23,16 +22,13 @@ public class LogProperties {
      */
     private boolean enableConsole = true;
 
-    @NestedConfigurationProperty
     private FileProperties file = new FileProperties();
 
-    @NestedConfigurationProperty
     private KafkaProperties kafka = new KafkaProperties();
 
     /**
      * 日志告警
      */
-    @NestedConfigurationProperty
     private AlarmProperties alarm = new AlarmProperties();
 
 

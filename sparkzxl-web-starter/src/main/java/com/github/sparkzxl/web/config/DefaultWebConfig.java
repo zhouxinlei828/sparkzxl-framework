@@ -75,4 +75,5 @@ public class DefaultWebConfig implements WebMvcConfigurer {
             log.info("Interceptor loaded：[{}]", ClassUtils.getName(interceptor.getInterceptor()));
         });
     }
+
 }

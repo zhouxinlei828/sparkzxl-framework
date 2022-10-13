@@ -16,13 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public interface OssExecutor {
 
     /**
-     * 获取客户端类型
-     *
-     * @return String
-     */
-    String getClientType();
-
-    /**
      * 创建bucket
      *
      * @param bucketName bucket名称
@@ -127,4 +120,8 @@ public interface OssExecutor {
      */
     UrlBuilder getObjectPrefixUrl(String bucket);
 
+    /**
+     * 销毁
+     */
+    void showdown();
 }

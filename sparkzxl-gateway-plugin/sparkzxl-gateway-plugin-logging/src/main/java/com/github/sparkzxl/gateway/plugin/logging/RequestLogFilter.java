@@ -41,7 +41,7 @@ import java.util.Map;
 public class RequestLogFilter extends AbstractGlobalFilter {
 
     @Override
-    protected String named() {
+    public String named() {
         return FilterEnum.REQUES_TLOG.getName();
     }
 
@@ -57,13 +57,15 @@ public class RequestLogFilter extends AbstractGlobalFilter {
         }
         HttpHeaders headers = exchange.getRequest().getHeaders();
         String contentType = headers.getFirst(HttpHeaders.CONTENT_TYPE);
+        LogContext logContext = new LogContext();
+        exchange.getAttributes().put(GatewayConstant.GATEWAY_LOG_CONTEXT_CONSTANT, logContext);
         if (headers.getContentLength() > 0) {
             if (StringUtils.startsWithIgnoreCase(contentType, MediaType.APPLICATION_JSON_VALUE)
                     || StringUtils.startsWithIgnoreCase(contentType, MediaType.MULTIPART_FORM_DATA_VALUE)) {
-                return readBody(exchange, chain, gatewayContext, logging);
+                return readBody(exchange, chain, logContext);
             }
             if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(contentType)) {
-                return readFormData(exchange, chain, gatewayContext, logging);
+                return readFormData(exchange, chain, logContext);
             }
         }
         return chain.filter(exchange);
@@ -91,15 +93,15 @@ public class RequestLogFilter extends AbstractGlobalFilter {
      * @param chain
      * @return
      */
-    private Mono<Void> readFormData(ServerWebExchange exchange, GatewayFilterChain chain, GatewayContext gatewayContext, LoggingProperties logging) {
+    private Mono<Void> readFormData(ServerWebExchange exchange, GatewayFilterChain chain, LogContext logContext) {
         HttpHeaders headers = exchange.getRequest().getHeaders();
         return exchange.getFormData()
-                .doOnNext(gatewayContext::setFormData)
+                .doOnNext(logContext::setFormData)
                 .then(Mono.defer(() -> {
                     Charset charset = headers.getContentType().getCharset();
                     charset = charset == null ? StandardCharsets.UTF_8 : charset;
                     String charsetName = charset.name();
-                    MultiValueMap<String, String> formData = gatewayContext.getFormData();
+                    MultiValueMap<String, String> formData = logContext.getFormData();
                     /*
                      * formData is empty just return
                      */
@@ -177,14 +179,14 @@ public class RequestLogFilter extends AbstractGlobalFilter {
      * @param chain    chain
      * @return Mono<Void>
      */
-    private Mono<Void> readBody(ServerWebExchange exchange, GatewayFilterChain chain, GatewayContext gatewayContext, LoggingProperties logging) {
+    private Mono<Void> readBody(ServerWebExchange exchange, GatewayFilterChain chain, LogContext logContext) {
         return DataBufferUtils.join(exchange.getRequest().getBody())
                 .flatMap(dataBuffer -> {
                     byte[] bytes = new byte[dataBuffer.readableByteCount()];
                     dataBuffer.read(bytes);
                     DataBufferUtils.release(dataBuffer);
                     String requestData = new String(bytes, StandardCharsets.UTF_8);
-                    gatewayContext.setRequestBody(requestData);
+                    logContext.setRequestBody(requestData);
                     log.debug("[RequestLogFilter]Read JsonBody Success");
                     Flux<DataBuffer> cachedFlux = Flux.defer(() -> {
                         DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);

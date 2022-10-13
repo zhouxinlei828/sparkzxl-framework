@@ -5,8 +5,8 @@ import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
-import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
+import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 
 /**
  * description: 钉钉卡片类型消息

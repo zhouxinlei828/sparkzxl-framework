@@ -20,9 +20,7 @@ public class AlarmMessageFactory {
     private final Map<String, MsgHandleStrategy> ALARM_MESSAGE_STRATEGY_MAP = Maps.newHashMap();
 
     public AlarmMessageFactory(List<MsgHandleStrategy> msgHandleStrategyList) {
-        msgHandleStrategyList.forEach(msgHandleStrategy -> {
-            ALARM_MESSAGE_STRATEGY_MAP.put(msgHandleStrategy.unionId(), msgHandleStrategy);
-        });
+        msgHandleStrategyList.forEach(msgHandleStrategy -> ALARM_MESSAGE_STRATEGY_MAP.put(msgHandleStrategy.unionId(), msgHandleStrategy));
     }
 
     public MsgHandleStrategy create(String type, String messageType) {

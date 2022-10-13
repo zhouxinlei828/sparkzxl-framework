@@ -15,13 +15,18 @@ import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.StrPool;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -105,20 +110,26 @@ public class JsonUtil {
     }
 
     public static Map toMap(String content) {
-        return Try.of(() -> getInstance().readValue(content, Map.class)).getOrElseThrow(e ->
+        return Try.of(() -> {
+            if (StringUtils.isBlank(content)) {
+                return null;
+            }
+            return getInstance().readValue(content, Map.class);
+        }).getOrElseThrow(e ->
                 new JwtParseException(e.getMessage()));
     }
 
     public static <T> Map toMap(T val) {
-        ObjectMapper instance = getInstance();
-        return Try.of(() -> instance.readValue(instance.writeValueAsString(val), Map.class)).getOrElseThrow(e ->
+        return Try.of(() -> getInstance().readValue(getInstance().writeValueAsString(val), Map.class)).getOrElseThrow(e ->
                 new JwtParseException(e.getMessage()));
     }
 
     public static <T> Map<String, T> toMap(String content, Class<T> valueTypeRef) {
-        ObjectMapper instance = getInstance();
         return Try.of(() -> {
-            Map<String, Map<String, Object>> map = instance.readValue(content, new TypeReference<Map<String, Map<String, Object>>>() {});
+            if (StringUtils.isBlank(content)) {
+                return null;
+            }
+            Map<String, Map<String, Object>> map = getInstance().readValue(content, new TypeReference<Map<String, Map<String, Object>>>() {});
             Map<String, T> result = new HashMap<>(map.size());
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
@@ -127,9 +138,11 @@ public class JsonUtil {
     }
 
     public static <T, E> Map<String, T> toMap(E data, Class<T> valueTypeRef) {
-        ObjectMapper instance = getInstance();
         return Try.of(() -> {
-            Map<String, Map<String, Object>> map = instance.readValue(toJson(data), new TypeReference<Map<String, Map<String, Object>>>() {});
+            if (ObjectUtils.isEmpty(data)) {
+                return null;
+            }
+            Map<String, Map<String, Object>> map = getInstance().readValue(toJson(data), new TypeReference<Map<String, Map<String, Object>>>() {});
             Map<String, T> result = new HashMap<>(map.size());
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
@@ -137,13 +150,21 @@ public class JsonUtil {
     }
 
     public static <T> T toPojo(Map fromValue, Class<T> toValueType) {
-        return Try.of(() -> getInstance().convertValue(fromValue, toValueType)).getOrElseThrow(e ->
-                new JwtParseException(e.getMessage()));
+        return Try.of(() -> {
+            if (MapUtils.isEmpty(fromValue)) {
+                return null;
+            }
+            return getInstance().convertValue(fromValue, toValueType);
+        }).getOrElseThrow(e -> new JwtParseException(e.getMessage()));
     }
 
     public static <T> T toPojo(String data, Class<T> toValueType) {
-        return Try.of(() -> getInstance().readValue(data, toValueType)).getOrElseThrow(e ->
-                new JwtParseException(e.getMessage()));
+        return Try.of(() -> {
+            if (StringUtils.isBlank(data)) {
+                return null;
+            }
+            return getInstance().readValue(data, toValueType);
+        }).getOrElseThrow(e -> new JwtParseException(e.getMessage()));
     }
 
     public static <T> T toPojo(JsonNode resultNode, Class<T> toValueType) {
@@ -152,8 +173,12 @@ public class JsonUtil {
     }
 
     public static JsonNode readTree(String data) {
-        return Try.of(() -> getInstance().readTree(data)).getOrElseThrow(e ->
-                new JwtParseException(e.getMessage()));
+        return Try.of(() -> {
+            if (StringUtils.isBlank(data)) {
+                return null;
+            }
+            return getInstance().readTree(data);
+        }).getOrElseThrow(e -> new JwtParseException(e.getMessage()));
     }
 
     public static JsonNode readTree(InputStream in) {
@@ -213,8 +238,9 @@ public class JsonUtil {
                     .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
                     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                    .getDeserializationConfig()
-                    .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, false)
+                    .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
             super.registerModules(new BasicJacksonModule(), new CustomJavaTimeModule());
             super.findAndRegisterModules();
         }

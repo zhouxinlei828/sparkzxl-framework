@@ -35,7 +35,7 @@ public class AlarmProperties implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         if (MapUtil.isEmpty(channel)) {
-            throw new InvalidParameterException("alarm Can not be empty");
+            throw new InvalidParameterException("alarm can not be empty");
         }
         channel.forEach((key, value) -> {
             if (!key.isEnabled()) {

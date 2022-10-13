@@ -1,16 +1,18 @@
 package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.gateway.plugin.TraceFilter;
 import com.github.sparkzxl.gateway.plugin.annotation.EnableExceptionJsonHandler;
-import com.github.sparkzxl.gateway.plugin.context.GatewayContextFilter;
+import com.github.sparkzxl.gateway.plugin.filter.GatewayContextFilter;
+import com.github.sparkzxl.gateway.plugin.filter.MDCFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.JwtFilter;
 import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
+import com.github.sparkzxl.gateway.plugin.resolver.ForwardedRemoteAddressResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.support.ipresolver.RemoteAddressResolver;
-import org.springframework.cloud.gateway.support.ipresolver.XForwardedRemoteAddressResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,10 +29,15 @@ import org.springframework.context.annotation.Import;
 @EnableExceptionJsonHandler
 public class GatewayPluginAutoConfig {
 
+    @Bean(name = "mdcFilter")
+    public GlobalFilter mdcFilter() {
+        return new MDCFilter();
+    }
+
     @Bean
     @ConditionalOnMissingBean(RemoteAddressResolver.class)
     public RemoteAddressResolver remoteAddressResolver() {
-        return XForwardedRemoteAddressResolver.maxTrustedIndex(1);
+        return new ForwardedRemoteAddressResolver(1);
     }
 
     @Bean
@@ -45,4 +52,12 @@ public class GatewayPluginAutoConfig {
     public GlobalFilter jwtFilter() {
         return new JwtFilter();
     }
+
+    @Bean
+    @ConditionalOnMissingBean(TraceFilter.class)
+    @ConditionalOnProperty(prefix = "spring.cloud.gateway.plugin.filter.trace", value = "enabled", havingValue = "true")
+    public GlobalFilter traceFilter() {
+        return new TraceFilter();
+    }
+
 }

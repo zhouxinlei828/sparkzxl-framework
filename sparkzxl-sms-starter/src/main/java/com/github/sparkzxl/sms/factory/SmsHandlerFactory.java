@@ -1,7 +1,7 @@
 package com.github.sparkzxl.sms.factory;
 
-import com.github.sparkzxl.sms.constant.enums.SmsChannel;
-import com.github.sparkzxl.sms.strategy.SmsHandlerStrategy;
+import com.github.sparkzxl.sms.constant.enums.SmsRegister;
+import com.github.sparkzxl.sms.executor.SmsHandlerExecutor;
 
 /**
  * description: 短信处理工厂
@@ -14,8 +14,8 @@ public interface SmsHandlerFactory {
     /**
      * 获取短信策略
      *
-     * @param smsChannel 短信渠道
-     * @return SmsHandlerStrategy
+     * @param smsRegister 短信注册商
+     * @return SmsHandlerExecutor
      */
-    SmsHandlerStrategy getStrategy(SmsChannel smsChannel);
+    SmsHandlerExecutor getExecutor(SmsRegister smsRegister);
 }

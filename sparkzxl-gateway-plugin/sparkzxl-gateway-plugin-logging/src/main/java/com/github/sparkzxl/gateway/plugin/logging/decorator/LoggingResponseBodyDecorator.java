@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.logging.decorator;
 
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
-import com.github.sparkzxl.gateway.plugin.context.GatewayContext;
+import com.github.sparkzxl.gateway.plugin.logging.LogContext;
 import com.github.sparkzxl.gateway.plugin.logging.service.IOptLogService;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Publisher;
@@ -76,7 +76,7 @@ public class LoggingResponseBodyDecorator extends ServerHttpResponseDecorator {
     }
 
     private void cacheResponseBody(String responseData) {
-        GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
+        LogContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_LOG_CONTEXT_CONSTANT);
         gatewayContext.setResponseBody(responseData);
         optLogService.recordLog(exchange);
     }

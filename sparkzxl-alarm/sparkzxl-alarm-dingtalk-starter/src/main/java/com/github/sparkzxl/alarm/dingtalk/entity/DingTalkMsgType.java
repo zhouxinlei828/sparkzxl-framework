@@ -45,9 +45,7 @@ public enum DingTalkMsgType {
     /**
      * FeedCard类型
      */
-    FEED_CARD("feedCard")
-
-    ;
+    FEED_CARD("feedCard");
 
     private final String type;
 

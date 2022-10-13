@@ -46,7 +46,7 @@ public interface AlarmClient {
      * 指定机器人发送
      *
      * @param robotId        机器人id {@link com.github.sparkzxl.alarm.properties.AlarmProperties.AlarmConfig#getRobotId()}
-     * @param alarmChannel      告警类型 {@link AlarmChannel}
+     * @param alarmChannel   告警类型 {@link AlarmChannel}
      * @param messageSubType 消息类型{@link MessageSubType}
      * @param request        请求体 {@link AlarmRequest}
      * @return AlarmResponse 响应报文

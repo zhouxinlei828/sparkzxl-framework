@@ -200,7 +200,7 @@ public interface CurdController<Entity, Id extends Serializable, SaveDTO, Update
         handlerQueryParams(params);
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
         QueryWrapper<Entity> wrapper = handlerWrapper(model, params);
-        Page<Entity> page = getBaseService().page(new Page<>(params.getPageNum(), params.getPageSize()),wrapper);
+        Page<Entity> page = getBaseService().page(new Page<>(params.getPageNum(), params.getPageSize()), wrapper);
         // 处理结果
         Page<?> pageDto = handlerResult(page);
         if (ObjectUtils.isNotEmpty(pageDto)) {

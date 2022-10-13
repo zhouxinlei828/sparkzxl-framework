@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.github.sparkzxl</groupId>
         <artifactId>sparkzxl-framework</artifactId>
@@ -12,14 +13,14 @@
 
     <modules>
         <module>sparkzxl-gateway-plugin-common</module>
-        <module>sparkzxl-gateway-plugin-context</module>
         <module>sparkzxl-gateway-plugin-logging</module>
         <module>sparkzxl-gateway-plugin-jwt</module>
         <module>sparkzxl-gateway-plugin-autoconfigure</module>
         <module>sparkzxl-gateway-plugin-loadbalancer</module>
         <module>sparkzxl-gateway-plugin-exception</module>
-        <module>sparkzxl-spi</module>
         <module>sparkzxl-gateway-plugin-sign</module>
+        <module>sparkzxl-gateway-plugin-dubbo</module>
+        <module>sparkzxl-gateway-plugin-trace</module>
     </modules>
 
     <dependencyManagement>
@@ -27,16 +28,6 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-gateway-plugin-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-spi</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -62,6 +53,16 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-gateway-plugin-sign</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-gateway-plugin-trace</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

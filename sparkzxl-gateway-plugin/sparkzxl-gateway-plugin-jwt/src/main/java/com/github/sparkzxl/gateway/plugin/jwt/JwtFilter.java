@@ -4,10 +4,10 @@ import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.HuSecretUtil;
 import com.github.sparkzxl.gateway.plugin.common.constant.GatewayConstant;
@@ -42,7 +42,7 @@ import java.util.List;
 public class JwtFilter extends AbstractGlobalFilter {
 
     @Override
-    protected String named() {
+    public String named() {
         return FilterEnum.JWT.getName();
     }
 

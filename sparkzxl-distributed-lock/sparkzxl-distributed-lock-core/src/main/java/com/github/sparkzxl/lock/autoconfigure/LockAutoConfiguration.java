@@ -23,13 +23,14 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(DistributedLockProperties.class)
 @RequiredArgsConstructor
+@SuppressWarnings("rawtypes")
 public class LockAutoConfiguration {
 
     private final DistributedLockProperties properties;
 
     @Bean
     @ConditionalOnMissingBean
-    public LockTemplate lockTemplate(@SuppressWarnings("rawtypes") List<LockExecutor> executors) {
+    public LockTemplate lockTemplate(List<LockExecutor> executors) {
         LockTemplate lockTemplate = new LockTemplate();
         lockTemplate.setProperties(properties);
         lockTemplate.setExecutors(executors);

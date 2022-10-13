@@ -20,27 +20,32 @@ public enum FilterEnum {
     /**
      * Sign Filter enum.
      */
-    SIGN(Integer.MIN_VALUE + 1, "sign"),
+    SIGN(Integer.MIN_VALUE + 10, "sign"),
 
     /**
      * Jwt Filter enum.
      */
-    JWT(Integer.MIN_VALUE + 2, "jwt"),
+    JWT(Integer.MIN_VALUE + 20, "jwt"),
+
+    /**
+     * Param transform plugin enum.
+     */
+    RPC_PARAM_TRANSFORM(Integer.MIN_VALUE + 30, "paramTransform"),
 
     /**
      * authorization Filter enum.
      */
-    OAUTH2(Integer.MIN_VALUE + 3, "oauth2"),
+    OAUTH2(Integer.MIN_VALUE + 40, "oauth2"),
 
     /**
      * Rate limiter Filter enum.
      */
-    RATE_LIMITER(Integer.MIN_VALUE + 5, "rateLimiter"),
+    RATE_LIMITER(Integer.MIN_VALUE + 50, "rateLimiter"),
 
     /**
      * Request Filter enum.
      */
-    REQUES_TLOG(Integer.MIN_VALUE + 6, "requestLog"),
+    REQUES_TLOG(Integer.MIN_VALUE + 60, "requestLog"),
 
     /**
      * response Filter enum.
@@ -48,9 +53,9 @@ public enum FilterEnum {
     LOGGING(WRITE_RESPONSE_FILTER_ORDER - 1, "logging"),
 
     /**
-     * Waf Filter enum.
+     * Global Filter enum.
      */
-    WAF(10, "waf"),
+    DUBBO(9999, "dubbo"),
 
     /**
      * loadBalancer Filter enum.

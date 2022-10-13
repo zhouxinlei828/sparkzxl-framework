@@ -1,0 +1,2 @@
+aliyun=com.github.sparkzxl.oss.client.AliyunOssClient
+minio=com.github.sparkzxl.oss.client.MinioOssClient

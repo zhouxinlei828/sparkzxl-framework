@@ -10,6 +10,8 @@ public class GatewayConstant {
 
     public static final String GATEWAY_CONTEXT_CONSTANT = "gatewayContext";
 
+    public static final String GATEWAY_LOG_CONTEXT_CONSTANT = "logContext";
+
     /**
      * The constant APP_KEY.
      */
@@ -31,5 +33,10 @@ public class GatewayConstant {
      * enable logging out
      */
     public static final String ENABLE_LOGGING = "enableLogging";
+
+    /**
+     * cache max count.
+     */
+    public static int CACHE_MAX_COUNT = 1000;
 
 }

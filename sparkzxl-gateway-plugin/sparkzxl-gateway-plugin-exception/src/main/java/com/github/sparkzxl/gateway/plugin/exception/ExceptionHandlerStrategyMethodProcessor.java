@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.exception;
 
-import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategyAdapter;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;

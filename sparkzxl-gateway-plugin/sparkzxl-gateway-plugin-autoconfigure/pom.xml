@@ -19,10 +19,6 @@
     <dependencies>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-gateway-plugin-exception</artifactId>
         </dependency>
         <dependency>
@@ -40,6 +36,14 @@
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-gateway-plugin-sign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-gateway-plugin-trace</artifactId>
         </dependency>
     </dependencies>
 </project>

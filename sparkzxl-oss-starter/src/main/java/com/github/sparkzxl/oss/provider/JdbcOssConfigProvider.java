@@ -1,12 +1,15 @@
 package com.github.sparkzxl.oss.provider;
 
-import com.github.sparkzxl.oss.properties.OssConfigInfo;
+import com.github.sparkzxl.oss.properties.Configuration;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * description: jdbc 加载oss 配置信息
@@ -19,10 +22,30 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JdbcOssConfigProvider extends AbstractOssConfigProvider {
 
-    private final Function<String, List<OssConfigInfo>> function;
+    private final Function<String, Configuration> function;
+    private final Supplier<List<Configuration>> supplier;
+    private final List<Configuration> configList;
+
+    public JdbcOssConfigProvider(Function<String, Configuration> function,
+                                 Supplier<List<Configuration>> supplier) {
+        this.configList = Lists.newArrayList();
+        this.function = function;
+        this.supplier = supplier;
+    }
 
     @Override
-    protected List<OssConfigInfo> get(String clientType) {
-        return function.apply(clientType);
+    public Configuration load(String clientId) {
+        Optional<Configuration> optional = configList.stream().filter(config -> config.getClientId().equals(clientId)).findFirst();
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        Configuration configuration = function.apply(clientId);
+        configList.add(configuration);
+        return configuration;
+    }
+
+    @Override
+    protected List<Configuration> list() {
+        return supplier.get();
     }
 }

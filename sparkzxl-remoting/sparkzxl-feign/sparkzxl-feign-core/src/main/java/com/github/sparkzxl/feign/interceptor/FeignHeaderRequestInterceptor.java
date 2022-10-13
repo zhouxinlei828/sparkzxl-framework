@@ -36,7 +36,6 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
             BaseContextConstants.TENANT_ID,
             BaseContextConstants.VERSION,
-            BaseContextConstants.TRACE_ID_HEADER,
             BaseContextConstants.JWT_TOKEN_HEADER,
             "X-Real-IP",
             HttpHeaders.X_FORWARDED_FOR

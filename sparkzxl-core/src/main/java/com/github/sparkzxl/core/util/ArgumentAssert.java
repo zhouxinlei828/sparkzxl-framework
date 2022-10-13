@@ -36,7 +36,7 @@ public class ArgumentAssert {
      */
     public static <X extends Throwable> void isTrue(boolean expression,
                                                     Supplier<? extends X> supplier) throws X {
-        if (false == expression) {
+        if (!expression) {
             throw supplier.get();
         }
     }
@@ -151,7 +151,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象是否为{@code null} ，如果不为{@code null} 抛出{@link ArgumentException} 异常
-     *
+     * <p>
      * <pre class="code">
      * Assert.isNull(value, "The value must be null");
      * </pre>
@@ -168,7 +168,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象是否为{@code null} ，如果不为{@code null} 抛出{@link ArgumentException} 异常
-     *
+     * <p>
      * <pre class="code">
      * Assert.isNull(value);
      * </pre>
@@ -209,7 +209,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
-     *
+     * <p>
      * <pre class="code">
      * Assert.notNull(clazz, "The class must not be null");
      * </pre>
@@ -229,7 +229,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常
-     *
+     * <p>
      * <pre class="code">
      * Assert.notNull(clazz);
      * </pre>
@@ -273,7 +273,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
-     *
+     * <p>
      * <pre class="code">
      * Assert.notNull(clazz, "The class must not be null");
      * </pre>
@@ -293,7 +293,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
-     *
+     * <p>
      * <pre class="code">
      * Assert.notNull(clazz, "The class must not be null");
      * </pre>
@@ -338,7 +338,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
-     *
+     * <p>
      * <pre class="code">
      * Assert.notNull(clazz, "The class must not be null");
      * </pre>
@@ -357,7 +357,7 @@ public class ArgumentAssert {
 
     /**
      * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常 Assert that an object is not {@code null} .
-     *
+     * <p>
      * <pre class="code">
      * Assert.notNull(clazz, "The class must not be null");
      * </pre>
@@ -540,7 +540,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定字符串是否不被另一个字符串包含（即是否为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(name, "rod", "Name must not contain 'rod'");
      * </pre>
@@ -562,7 +562,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定字符串是否不被另一个字符串包含（即是否为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(name, "rod", "Name must not contain 'rod'");
      * </pre>
@@ -581,7 +581,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定值是否被另一个集合包含（即是否不为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(names, "张三", "name's 中必须包含 '张三'");
      * </pre>
@@ -597,7 +597,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定值是否被另一个集合包含（即是否不为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(names, "张三", "name's 中必须包含 '张三'");
      * </pre>
@@ -619,7 +619,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定值是否被另一个集合包含（即是否不为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(names, "张三", "name's 中必须包含 '张三'");
      * </pre>
@@ -640,7 +640,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定值是否不被另一个集合包含（即是否为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(names, "张三", "name's 中不能包含 '张三'");
      * </pre>
@@ -656,7 +656,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定值是否不被另一个集合包含（即是否为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(names, "张三", "name's 中不能包含 '张三'");
      * </pre>
@@ -678,7 +678,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定值是否不被另一个集合包含（即是否为子串）
-     *
+     * <p>
      * <pre class="code">
      * Assert.notContain(names, "张三", "name's 中不能包含 '张三'");
      * </pre>
@@ -700,7 +700,7 @@ public class ArgumentAssert {
     /**
      * 断言给定数组是否包含元素，数组必须不为 {@code null} 且至少包含一个元素
      * 并使用指定的函数获取错误信息返回
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(array, ()-&gt;{
      *      // to query relation message
@@ -727,7 +727,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定数组是否包含元素，数组必须不为 {@code null} 且至少包含一个元素
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(array, "The array must have elements");
      * </pre>
@@ -747,7 +747,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定数组是否包含元素，数组必须不为 {@code null} 且至少包含一个元素
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(array, "The array must have elements");
      * </pre>
@@ -791,7 +791,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定数组是否不包含{@code null}元素，如果数组为空或 {@code null}将被认为不包含
-     *
+     * <p>
      * <pre class="code">
      * Assert.noNullElements(array, "The array must have non-null elements");
      * </pre>
@@ -811,7 +811,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定数组是否不包含{@code null}元素，如果数组为空或 {@code null}将被认为不包含
-     *
+     * <p>
      * <pre class="code">
      * Assert.noNullElements(array);
      * </pre>
@@ -857,7 +857,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定集合非空
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(collection, "Collection must have elements");
      * </pre>
@@ -879,7 +879,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定集合非空
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(collection);
      * </pre>
@@ -927,7 +927,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定Map非空
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(map, "Map must have entries");
      * </pre>
@@ -950,7 +950,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定Map非空
-     *
+     * <p>
      * <pre class="code">
      * Assert.notEmpty(map, "Map must have entries");
      * </pre>
@@ -969,7 +969,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定对象是否是给定类的实例
-     *
+     * <p>
      * <pre class="code">
      * Assert.instanceOf(Foo.class, foo);
      * </pre>
@@ -987,7 +987,7 @@ public class ArgumentAssert {
 
     /**
      * 断言给定对象是否是给定类的实例
-     *
+     * <p>
      * <pre class="code">
      * Assert.instanceOf(Foo.class, foo);
      * </pre>
@@ -1006,7 +1006,7 @@ public class ArgumentAssert {
                                      String errorMsgTemplate,
                                      Object... params) throws ArgumentException {
         notNull(type, "Type to check against must not be null");
-        if (false == type.isInstance(obj)) {
+        if (!type.isInstance(obj)) {
             throw new ArgumentException(StrUtil.format(errorMsgTemplate, params));
         }
         return obj;
@@ -1014,7 +1014,7 @@ public class ArgumentAssert {
 
     /**
      * 断言 {@code superType.isAssignableFrom(subType)} 是否为 {@code true}.
-     *
+     * <p>
      * <pre class="code">
      * Assert.isAssignable(Number.class, myClass);
      * </pre>
@@ -1029,7 +1029,7 @@ public class ArgumentAssert {
 
     /**
      * 断言 {@code superType.isAssignableFrom(subType)} 是否为 {@code true}.
-     *
+     * <p>
      * <pre class="code">
      * Assert.isAssignable(Number.class, myClass);
      * </pre>
@@ -1066,14 +1066,14 @@ public class ArgumentAssert {
      */
     public static void state(boolean expression, Supplier<String> errorMsgSupplier)
             throws IllegalStateException {
-        if (false == expression) {
+        if (!expression) {
             throw new IllegalStateException(errorMsgSupplier.get());
         }
     }
 
     /**
      * 检查boolean表达式，当检查结果为false时抛出 {@code IllegalStateException}。
-     *
+     * <p>
      * <pre class="code">
      * Assert.state(id == null, "The id property must not already be initialized");
      * </pre>
@@ -1085,14 +1085,14 @@ public class ArgumentAssert {
      */
     public static void state(boolean expression, String errorMsgTemplate, Object... params)
             throws IllegalStateException {
-        if (false == expression) {
+        if (!expression) {
             throw new IllegalStateException(StrUtil.format(errorMsgTemplate, params));
         }
     }
 
     /**
      * 检查boolean表达式，当检查结果为false时抛出 {@code IllegalStateException}。
-     *
+     * <p>
      * <pre class="code">
      * Assert.state(id == null);
      * </pre>

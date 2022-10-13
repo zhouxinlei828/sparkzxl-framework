@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.sparkzxl</groupId>
@@ -59,10 +60,11 @@
         <curator.version>5.2.0</curator.version>
 
         <elasticsearch.version>7.17.1</elasticsearch.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok.version>1.18.8</lombok.version>
         <userAgent.version>1.21</userAgent.version>
         <apm-toolkit-trace.version>8.11.0</apm-toolkit-trace.version>
-        <ip2region.version>1.7.2</ip2region.version>
+        <ip2region.version>2.6.5</ip2region.version>
         <caffeine.version>2.9.3</caffeine.version>
         <fastjson.version>1.2.83</fastjson.version>
         <easy-excel.version>3.0.5</easy-excel.version>
@@ -184,6 +186,17 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
+            </dependency>
+            <!-- use mapstruct-jdk8 for Java 8 or higher -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-jdk8</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
             <!-- mybatis-plus -->
             <dependency>
@@ -546,6 +559,11 @@
             <!-- sparkzxl-framework 组件库-->
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-alarm-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -587,6 +605,21 @@
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-data-sync-provider</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-data-sync-websocket</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-data-sync-nacos</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

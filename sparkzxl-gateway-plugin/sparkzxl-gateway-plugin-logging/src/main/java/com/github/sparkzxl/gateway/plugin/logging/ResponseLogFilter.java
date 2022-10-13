@@ -60,7 +60,7 @@ public class ResponseLogFilter extends AbstractGlobalFilter {
     }
 
     @Override
-    protected String named() {
+    public String named() {
         return FilterEnum.LOGGING.getName();
     }
 

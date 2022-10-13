@@ -2,11 +2,11 @@ package com.github.sparkzxl.alarm.wetalk.strategy;
 
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.MsgType;
-import com.github.sparkzxl.alarm.wetalk.entity.WeMarkdown;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
-import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
+import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
+import com.github.sparkzxl.alarm.wetalk.entity.WeMarkdown;
 
 /**
  * description: 企业微信富文本消息
