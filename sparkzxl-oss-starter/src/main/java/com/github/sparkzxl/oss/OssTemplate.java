@@ -3,6 +3,7 @@ package com.github.sparkzxl.oss;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.context.OssClientContextHolder;
 import com.github.sparkzxl.oss.executor.OssExecutor;
+import com.github.sparkzxl.oss.executor.OssExecutorFactoryContext;
 import com.github.sparkzxl.oss.properties.OssProperties;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

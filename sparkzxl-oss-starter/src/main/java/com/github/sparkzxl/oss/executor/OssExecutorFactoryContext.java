@@ -1,9 +1,9 @@
-package com.github.sparkzxl.oss;
+package com.github.sparkzxl.oss.executor;
 
 import com.github.sparkzxl.core.util.ArgumentAssert;
+import com.github.sparkzxl.oss.ConfigCache;
 import com.github.sparkzxl.oss.client.OssClient;
 import com.github.sparkzxl.oss.client.OssClientManager;
-import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.github.sparkzxl.spi.ExtensionLoader;

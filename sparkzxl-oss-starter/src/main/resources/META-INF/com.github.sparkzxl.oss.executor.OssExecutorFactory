@@ -1,0 +1,2 @@
+aliyun=com.github.sparkzxl.oss.executor.AliyunOssExecutorFactory
+minio=com.github.sparkzxl.oss.executor.MinioOssExecutorFactory

@@ -1,8 +1,6 @@
-package com.github.sparkzxl.oss;
+package com.github.sparkzxl.oss.executor;
 
 import com.github.sparkzxl.oss.client.OssClient;
-import com.github.sparkzxl.oss.executor.MinioExecutor;
-import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.spi.Join;
 
 /**

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oss.config;
 
-import com.github.sparkzxl.oss.OssExecutorFactoryContext;
+import com.github.sparkzxl.oss.executor.OssExecutorFactoryContext;
 import com.github.sparkzxl.oss.OssTemplate;
 import com.github.sparkzxl.oss.client.OssClientManager;
 import com.github.sparkzxl.oss.enums.RegisterMode;
