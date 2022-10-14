@@ -2,7 +2,6 @@ package com.github.sparkzxl.oss.properties;
 
 import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.oss.enums.RegisterMode;
-import com.github.sparkzxl.oss.executor.OssExecutor;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

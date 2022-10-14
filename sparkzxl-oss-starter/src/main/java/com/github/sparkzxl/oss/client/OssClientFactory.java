@@ -15,7 +15,7 @@ public class OssClientFactory {
         return ExtensionLoader.getExtensionLoader(OssClient.class).getJoin(ossType);
     }
 
-    public static OssClient<?> buildOssClient(final String ossType, Configuration configuration){
+    public static OssClient<?> buildOssClient(final String ossType, Configuration configuration) {
         return newInstance(ossType).init(configuration);
     }
 

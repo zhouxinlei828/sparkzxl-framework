@@ -15,7 +15,7 @@ public interface OssExecutorFactory {
     /**
      * create OssExecutor
      *
-     * @param ossClient   客户端client
+     * @param ossClient 客户端client
      * @return OssExecutor
      */
     OssExecutor create(OssClient ossClient);

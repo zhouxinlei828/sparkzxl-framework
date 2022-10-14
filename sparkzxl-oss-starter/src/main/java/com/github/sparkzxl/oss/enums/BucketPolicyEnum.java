@@ -10,5 +10,5 @@ public enum BucketPolicyEnum {
 
     READ_ONLY,
     WRITE_ONLY,
-    READ_WRITE;
+    READ_WRITE
 }

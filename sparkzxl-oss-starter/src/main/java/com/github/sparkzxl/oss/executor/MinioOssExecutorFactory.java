@@ -10,7 +10,7 @@ import com.github.sparkzxl.spi.Join;
  * @since 2022-10-12 08:47:30
  */
 @Join
-public class MinioOssExecutorFactory implements OssExecutorFactory{
+public class MinioOssExecutorFactory implements OssExecutorFactory {
 
 
     @Override
