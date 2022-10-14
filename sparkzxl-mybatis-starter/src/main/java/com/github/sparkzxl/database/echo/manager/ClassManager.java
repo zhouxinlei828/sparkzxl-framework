@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 类管理器
+ * description: 类管理器
  *
- * @author zuihou
- * @since 2021年03月22日15:53:22
+ * @author zhouxinlei
+ * @since 2022-10-14 16:29:42
  */
 @Slf4j
 public class ClassManager implements Serializable {

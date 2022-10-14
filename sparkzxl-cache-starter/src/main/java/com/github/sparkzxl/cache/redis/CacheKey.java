@@ -8,9 +8,10 @@ import org.springframework.lang.NonNull;
 import java.time.Duration;
 
 /**
- * 缓存 key 封装
+ * description: 缓存 key 封装
  *
- * @author zuihou
+ * @author zhouxinlei
+ * @since 2022-10-14 16:29:54
  */
 @Data
 @AllArgsConstructor

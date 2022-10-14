@@ -15,12 +15,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 封装 Echo 注解中解析出来的参数
+ * description: 封装 Echo 注解中解析出来的参数
  * <p>
  * 必须重写该类的 equals() 和 hashCode() 便于Map操作
+ * </p>
  *
- * @author zuihou
- * @since 2020年02月03日18:48:29
+ * @author zhouxinlei
+ * @since 2022-10-14 16:27:51
  */
 @Data
 @NoArgsConstructor
