@@ -6,7 +6,7 @@ import com.github.sparkzxl.alarm.callback.AlarmExceptionCallback;
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
-import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
+import com.github.sparkzxl.alarm.enums.AlarmErrorEnum;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
@@ -108,12 +108,12 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
     public AlarmProperties.AlarmConfig getAlarmConfig(AlarmChannel alarmChannel, Function<List<AlarmProperties.AlarmConfig>, AlarmProperties.AlarmConfig> function) {
         Map<AlarmChannel, AlarmProperties.AlarmChannelConfig> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmChannel)) {
-            throw new AlarmException(AlarmResponseCodeEnum.ALARM_DISABLED);
+            throw new AlarmException(AlarmErrorEnum.ALARM_DISABLED);
         }
         AlarmProperties.AlarmChannelConfig alarmTypeConfig = alarms.get(alarmChannel);
         AlarmProperties.AlarmConfig alarmConfig = function.apply(alarmTypeConfig.getConfigs());
         if (ObjectUtils.isEmpty(alarmConfig)) {
-            throw new AlarmException(AlarmResponseCodeEnum.CONFIG_NOT_FIND);
+            throw new AlarmException(AlarmErrorEnum.CONFIG_NOT_FIND);
         }
         return alarmConfig;
     }

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.alarm.strategy;
 
-import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
+import com.github.sparkzxl.alarm.enums.AlarmErrorEnum;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ObjectUtils;
@@ -27,8 +27,8 @@ public class AlarmMessageFactory {
         String unionId = MessageFormat.format("{0}#{1}", type, messageType);
         MsgHandleStrategy msgHandleStrategy = ALARM_MESSAGE_STRATEGY_MAP.get(unionId);
         if (ObjectUtils.isEmpty(msgHandleStrategy)) {
-            throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(),
-                    MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
+            throw new AlarmException(AlarmErrorEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(),
+                    MessageFormat.format(AlarmErrorEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
                             type,
                             messageType));
         }

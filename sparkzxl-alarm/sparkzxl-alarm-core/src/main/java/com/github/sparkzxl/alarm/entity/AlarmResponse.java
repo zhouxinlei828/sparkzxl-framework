@@ -1,6 +1,6 @@
 package com.github.sparkzxl.alarm.entity;
 
-import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
+import com.github.sparkzxl.alarm.enums.AlarmErrorEnum;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 
 /**
@@ -33,42 +33,42 @@ public class AlarmResponse {
         this.message = resultCode.getErrorMsg();
     }
 
-    private AlarmResponse(String logId, AlarmResponseCodeEnum resultCode) {
+    private AlarmResponse(String logId, AlarmErrorEnum resultCode) {
         this(resultCode);
         this.logId = logId;
     }
 
-    private AlarmResponse(AlarmResponseCodeEnum resultCode, String data) {
+    private AlarmResponse(AlarmErrorEnum resultCode, String data) {
         this(resultCode);
         this.data = data;
     }
 
-    private AlarmResponse(AlarmResponseCodeEnum resultCode, String logid, String data) {
+    private AlarmResponse(AlarmErrorEnum resultCode, String logid, String data) {
         this(logid, resultCode);
         this.data = data;
     }
 
     public static <T> AlarmResponse success(String logId, String data) {
-        return new AlarmResponse(AlarmResponseCodeEnum.SUCCESS, logId, data);
+        return new AlarmResponse(AlarmErrorEnum.SUCCESS, logId, data);
     }
 
-    public static <T> AlarmResponse success(AlarmResponseCodeEnum resultCode, String logId, String data) {
+    public static <T> AlarmResponse success(AlarmErrorEnum resultCode, String logId, String data) {
         return new AlarmResponse(resultCode, logId, data);
     }
 
     public static AlarmResponse failed(String logId) {
-        return new AlarmResponse(logId, AlarmResponseCodeEnum.FAILED);
+        return new AlarmResponse(logId, AlarmErrorEnum.FAILED);
     }
 
-    public static AlarmResponse failed(String logId, AlarmResponseCodeEnum resultCode) {
+    public static AlarmResponse failed(String logId, AlarmErrorEnum resultCode) {
         return new AlarmResponse(logId, resultCode);
     }
 
-    public static AlarmResponse failed(AlarmResponseCodeEnum resultCode, String data) {
+    public static AlarmResponse failed(AlarmErrorEnum resultCode, String data) {
         return new AlarmResponse(resultCode, data);
     }
 
-    public static AlarmResponse failed(AlarmResponseCodeEnum resultCode) {
+    public static AlarmResponse failed(AlarmErrorEnum resultCode) {
         return new AlarmResponse(resultCode);
     }
 

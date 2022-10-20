@@ -3,7 +3,7 @@ package com.github.sparkzxl.alarm.wetalk.strategy;
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
-import com.github.sparkzxl.alarm.enums.AlarmResponseCodeEnum;
+import com.github.sparkzxl.alarm.enums.AlarmErrorEnum;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
@@ -21,8 +21,8 @@ public class MsgLinkHandleStrategy implements MsgHandleStrategy {
 
     @Override
     public MsgType newInstance(AlarmRequest request) {
-        throw new AlarmException(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(),
-                MessageFormat.format(AlarmResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
+        throw new AlarmException(AlarmErrorEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorCode(),
+                MessageFormat.format(AlarmErrorEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
                         AlarmChannel.WETALK.getType(),
                         MessageSubType.LINK.getCode()));
     }

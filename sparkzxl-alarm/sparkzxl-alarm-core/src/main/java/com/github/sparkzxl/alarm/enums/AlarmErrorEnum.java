@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AlarmResponseCodeEnum implements IErrorCode {
+public enum AlarmErrorEnum implements IErrorCode {
     SUCCESS("D000", "成功"),
     FAILED("D999", "失败"),
     ALARM_DISABLED("D101", "Alarm未启用"),
