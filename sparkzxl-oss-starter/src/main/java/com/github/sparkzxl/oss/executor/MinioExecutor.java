@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -119,7 +120,11 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     public void putObject(String bucketName, String objectName, MultipartFile multipartFile) {
         MinioClient minioClient = obtainClient();
         try {
-            PutObjectArgs putObjectArgs = PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(multipartFile.getInputStream(), multipartFile.getSize(), PutObjectArgs.MIN_MULTIPART_SIZE).contentType(multipartFile.getContentType()).build();
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder().bucket(bucketName)
+                    .object(objectName)
+                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), PutObjectArgs.MIN_MULTIPART_SIZE)
+                    .contentType(multipartFile.getContentType())
+                    .build();
             minioClient.putObject(putObjectArgs);
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,7 +144,30 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
                 inputStream = FileUtil.getInputStream(filePath);
             }
             String mimeType = FileUtil.getMimeType(filePath);
-            PutObjectArgs putObjectArgs = PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(inputStream, inputStream.available(), -1).contentType(mimeType).build();
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName).stream(inputStream, inputStream.available(), -1)
+                    .contentType(mimeType)
+                    .build();
+            minioClient.putObject(putObjectArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
+        }
+    }
+
+    @Override
+    public void putObject(String bucketName, String objectName, URL url) {
+        MinioClient minioClient = obtainClient();
+        try {
+            InputStream inputStream = url.openStream();
+            String mimeType = FileUtil.getMimeType(url.getPath());
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .stream(inputStream, inputStream.available(), -1)
+                    .contentType(mimeType)
+                    .build();
             minioClient.putObject(putObjectArgs);
         } catch (Exception e) {
             e.printStackTrace();

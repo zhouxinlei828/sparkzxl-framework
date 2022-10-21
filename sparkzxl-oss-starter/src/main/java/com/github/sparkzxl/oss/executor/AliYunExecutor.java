@@ -197,6 +197,32 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
     }
 
     @Override
+    public void putObject(String bucketName, String objectName, URL url) {
+        OSSClient ossClient = obtainClient();
+        try {
+            File tempFile = FileUtil.file(url);
+            String mimeType = FileUtil.getType(tempFile);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(tempFile.length());
+            objectMetadata.setContentType(mimeType);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile));
+            putObjectRequest.setMetadata(objectMetadata);
+            ossClient.putObject(putObjectRequest);
+        } catch (OSSException e) {
+            log.error("Caught an OSSException, which means your request made it to OSS, "
+                            + "but was rejected with an error response for some reason.\n"
+                            + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
+                    e.getErrorCode(),
+                    e.getErrorMessage(),
+                    e.getRequestId(),
+                    e.getHostId());
+            e.printStackTrace();
+            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
+        }
+
+    }
+
+    @Override
     public void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
         OSSClient ossClient = obtainClient();
         try {
