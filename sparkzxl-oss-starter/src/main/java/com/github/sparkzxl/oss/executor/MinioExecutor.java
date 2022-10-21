@@ -103,11 +103,11 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     public S3Object getObjectInfo(String bucketName, String objectName) {
         MinioClient minioClient = obtainClient();
         try {
-            GetObjectResponse minioClientObject = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+            GetObjectResponse getObject = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
             S3Object s3Object = new S3Object();
-            s3Object.setObjectContent(minioClientObject);
-            s3Object.setBucketName(minioClientObject.bucket());
-            s3Object.setKey(minioClientObject.object());
+            s3Object.setObjectContent(getObject);
+            s3Object.setBucketName(getObject.bucket());
+            s3Object.setKey(getObject.object());
             return s3Object;
         } catch (Exception e) {
             e.printStackTrace();
