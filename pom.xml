@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>sparkzxl-framework</name>
     <description>sparkzxl framework</description>
-    <url>https://github.com/sparkzxl/sparkzxl-framework</url>
+    <url>https://github.com/zhouxinlei828/sparkzxl-framework</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,11 +60,7 @@
         <module>sparkzxl-uid</module>
         <module>sparkzxl-dependencies</module>
         <module>sparkzxl-sms-starter</module>
-        <module>sparkzxl-monitor</module>
-        <module>sparkzxl-remoting</module>
-        <module>sparkzxl-metrics</module>
-        <module>sparkzxl-micrometer</module>
-        <module>sparkzxl-framework-starter</module>
+        <module>sparkzxl-rpc</module>
         <module>sparkzxl-data-sync</module>
     </modules>
 
@@ -88,8 +84,8 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/sparkzxl/sparkzxl-framework</url>
-        <connection>https://github.com/sparkzxl/sparkzxl-framework.git</connection>
+        <url>https://github.com/zhouxinlei828/sparkzxl-framework</url>
+        <connection>https://github.com/zhouxinlei828/sparkzxl-framework.git</connection>
     </scm>
 
     <distributionManagement>

@@ -41,9 +41,5 @@
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-trace</artifactId>
-        </dependency>
     </dependencies>
 </project>

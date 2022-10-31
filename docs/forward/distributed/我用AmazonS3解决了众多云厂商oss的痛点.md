@@ -650,7 +650,7 @@ sparkzxl:
 
 ### 4.2 源码地址
 
-[sparkzxl-framework](https://github.com/sparkzxl/sparkzxl-framework.git)
+[sparkzxl-framework](https://github.com/zhouxinlei828/sparkzxl-framework.git)
 
 # 公众号
 

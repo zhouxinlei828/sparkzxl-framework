@@ -9,18 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sparkzxl-micrometer</artifactId>
+    <artifactId>sparkzxl-rpc</artifactId>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-core</artifactId>
-        </dependency>
-        <!--prometheus监控-->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-    </dependencies>
+
+    <modules>
+        <module>sparkzxl-feign</module>
+        <module>sparkzxl-dubbo</module>
+        <module>sparkzxl-grpc</module>
+    </modules>
 
 </project>
