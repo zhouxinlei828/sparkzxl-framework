@@ -589,7 +589,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-entity</artifactId>
+                <artifactId>sparkzxl-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

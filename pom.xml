@@ -33,8 +33,12 @@
         <module>sparkzxl-annotations</module>
         <module>sparkzxl-boot-starter</module>
         <module>sparkzxl-cache-starter</module>
+        <module>sparkzxl-common</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-mybatis-starter</module>
+        <module>sparkzxl-data-sync</module>
+        <module>sparkzxl-datasource-starter</module>
+        <module>sparkzxl-dependencies</module>
         <module>sparkzxl-distributed-cloud-starter</module>
         <module>sparkzxl-distributed-dubbo-starter</module>
         <module>sparkzxl-distributed-lock</module>
@@ -49,19 +53,15 @@
         <module>sparkzxl-oauth2-resource-starter</module>
         <module>sparkzxl-oss-starter</module>
         <module>sparkzxl-patterns-starter</module>
+        <module>sparkzxl-rpc</module>
         <module>sparkzxl-security-starter</module>
         <module>sparkzxl-sentinel-starter</module>
+        <module>sparkzxl-sms-starter</module>
         <module>sparkzxl-spi</module>
         <module>sparkzxl-swagger-starter</module>
+        <module>sparkzxl-uid</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
-        <module>sparkzxl-entity</module>
-        <module>sparkzxl-datasource-starter</module>
-        <module>sparkzxl-uid</module>
-        <module>sparkzxl-dependencies</module>
-        <module>sparkzxl-sms-starter</module>
-        <module>sparkzxl-rpc</module>
-        <module>sparkzxl-data-sync</module>
     </modules>
 
     <licenses>
