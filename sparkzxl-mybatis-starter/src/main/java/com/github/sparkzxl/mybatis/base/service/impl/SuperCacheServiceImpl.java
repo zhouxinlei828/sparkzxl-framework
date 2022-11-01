@@ -3,9 +3,9 @@ package com.github.sparkzxl.mybatis.base.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
+import com.github.sparkzxl.entity.data.SuperEntity;
 import com.github.sparkzxl.mybatis.base.mapper.SuperMapper;
 import com.github.sparkzxl.mybatis.base.service.SuperCacheService;
-import com.github.sparkzxl.entity.data.SuperEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
