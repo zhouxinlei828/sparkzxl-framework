@@ -11,7 +11,7 @@
     <artifactId>sparkzxl-distributed-dubbo-starter</artifactId>
 
     <properties>
-        <dubbo.version>3.0.10</dubbo.version>
+        <dubbo.version>3.1.1</dubbo.version>
     </properties>
 
     <dependencies>
