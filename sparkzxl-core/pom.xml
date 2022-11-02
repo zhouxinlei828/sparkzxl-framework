@@ -91,7 +91,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-entity</artifactId>
+            <artifactId>sparkzxl-common</artifactId>
         </dependency>
         <!--敏感词处理-->
         <dependency>

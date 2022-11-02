@@ -351,7 +351,7 @@ knife4j:
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 ```
 
 ### 2.2 新建启动类

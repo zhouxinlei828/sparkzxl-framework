@@ -1,2 +1,2 @@
-com.github.sparkzxl.database.MyBatisAutoConfiguration
-com.github.sparkzxl.database.EchoAutoConfiguration
+com.github.sparkzxl.mybatis.MyBatisAutoConfiguration
+com.github.sparkzxl.mybatis.EchoAutoConfiguration

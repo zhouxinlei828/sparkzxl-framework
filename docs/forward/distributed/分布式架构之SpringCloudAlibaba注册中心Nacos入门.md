@@ -49,8 +49,8 @@
 ## 3. 快速入门
 
 > 示例代码对应仓库：
-> - 服务提供者：[sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
-> - 服务消费者：[sparkzxl-nacos-discovery-consumer](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer)
+> - 服务提供者：[sparkzxl-nacos-discovery-provider](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
+> - 服务消费者：[sparkzxl-nacos-discovery-consumer](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer)
 
 本小节，我们来搭建一个 Nacos Discovery 组件的快速入门示例。步骤如下：
 
@@ -328,11 +328,11 @@ knife4j:
   terms-of-service-url: https://www.sparksys.top
   version: 1.0
   license: Powered By sparkzxl
-  license-url: https://github.com/sparkzxl
+  license-url: https://github.com/zhouxinlei828
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 
 ```
 
@@ -454,11 +454,11 @@ knife4j:
   terms-of-service-url: https://www.sparksys.top
   version: 1.0
   license: Powered By sparkzxl
-  license-url: https://github.com/sparkzxl
+  license-url: https://github.com/zhouxinlei828
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 
 ```
 
@@ -754,8 +754,8 @@ Metadata|    spring.cloud.nacos.discovery.metadata    |使用Map格式配置，�
 ## 6. 多环境配置
 
 > 示例代码对应仓库：
-> - 服务提供者：[sparkzxl-nacos-discovery-provider-env](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider-env)
-> - 服务消费者：[sparkzxl-nacos-discovery-consumer-env](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer-env)
+> - 服务提供者：[sparkzxl-nacos-discovery-provider-env](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider-env)
+> - 服务消费者：[sparkzxl-nacos-discovery-consumer-env](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer-env)
 
 同一个服务，我们会部署到开发、测试、预发布、生产等环境中，那么我们需要在项目中，添加不同环境的 Nacos 配置。一般情况下，开发和测试使用同一个 Nacos，预发布和生产使用另一个 Nacos。那么针对相同的 Nacos，我们怎么实现不同环境的隔离呢？
 
@@ -824,11 +824,11 @@ knife4j:
   terms-of-service-url: https://www.sparksys.top
   version: 1.0
   license: Powered By sparkzxl
-  license-url: https://github.com/sparkzxl
+  license-url: https://github.com/zhouxinlei828
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 ```
 
 创建测试环境使用的 application-uat.yaml 配置文件，增加 Namespace 为 uat 的 Nacos Discovery 配置项。配置如下：
@@ -851,11 +851,11 @@ knife4j:
   terms-of-service-url: https://www.sparksys.top
   version: 1.0
   license: Powered By sparkzxl
-  license-url: https://github.com/sparkzxl
+  license-url: https://github.com/zhouxinlei828
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 ```
 
 6.2.2 简单测试 下面，我们使用命令行参数进行 --spring.profiles.active 配置项，实现不同环境，读取不同配置文件。
@@ -909,11 +909,11 @@ knife4j:
   terms-of-service-url: https://www.sparksys.top
   version: 1.0
   license: Powered By sparkzxl
-  license-url: https://github.com/sparkzxl
+  license-url: https://github.com/zhouxinlei828
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 ```
 
 创建测试环境使用的 application-uat.yaml 配置文件，增加 Namespace 为 uat 的 Nacos Discovery 配置项。配置如下：
@@ -936,11 +936,11 @@ knife4j:
   terms-of-service-url: https://www.sparksys.top
   version: 1.0
   license: Powered By sparkzxl
-  license-url: https://github.com/sparkzxl
+  license-url: https://github.com/zhouxinlei828
   contact:
     name: zhouxinlei
     email: zhouxinlei298@163.com
-    url: https://github.com/sparkzxl
+    url: https://github.com/zhouxinlei828
 ```
 
 #### 6.2.3 简单测试
@@ -972,8 +972,8 @@ knife4j:
 ## 7. 监控端点
 
 > 示例代码对应仓库：
-> - 服务提供者：[sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
-> - 服务消费者：[sparkzxl-nacos-discovery-consumer](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer)
+> - 服务提供者：[sparkzxl-nacos-discovery-provider](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
+> - 服务消费者：[sparkzxl-nacos-discovery-consumer](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-consumer)
 
 Nacos Discovery 基于 Spring Boot Actuator，提供了自定义监控端点 nacos-discovery，获取 Nacos Discovery 配置项，和订阅的服务信息。
 
@@ -986,7 +986,7 @@ Nacos Discovery 基于 Spring Boot Actuator，提供了自定义监控端点 nac
 - 首先，搭建一个服务提供者 nacos-provider ，注册服务到 Nacos 中。
 - 然后，搭建一个服务消费者 nacos-consumer，调用服务提供者 demo-provider 提供的 HTTP 接口。同时，配置开启服务消费者的 Nacos Discovery 监控端点。
 - 最后，访问服务消费者的 Nacos Discovery 监控端点，查看下返回的监控数据。 7.1 搭建服务提供者 直接复用**3.1 搭建服务提供者**
-  小节的 [sparkzxl-nacos-discovery-provider](https://github.com/sparkzxl/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
+  小节的 [sparkzxl-nacos-discovery-provider](https://github.com/zhouxinlei828/sparkzxl-cloud-learning/tree/main/sparkzxl-nacos-learn/sparkzxl-nacos-discovery-provider)
   项目即可。
 
 因为 **sparkzxl-nacos-discovery-provider** 项目没有从 Nacos 订阅任何服务，无法完整看到 nacos-discovery 端点的完整效果，所以我们暂时不配置该项目的 Nacos Discovery 监控端点。

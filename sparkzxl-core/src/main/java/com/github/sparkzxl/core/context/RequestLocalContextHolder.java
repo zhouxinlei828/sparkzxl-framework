@@ -4,8 +4,12 @@ import cn.hutool.core.convert.Convert;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.StrPool;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -150,5 +154,26 @@ public class RequestLocalContextHolder {
 
     public static void remove() {
         THREAD_LOCAL.remove();
+    }
+
+    public static <T> List<T> getList(String key, Class<T> type) {
+        Map<String, Object> map = getLocalMap();
+        Object o = map.get(key);
+        if (o == null) {
+            return Collections.emptyList();
+        }
+        List<T> dataList = Lists.newArrayList();
+        if (o instanceof Collection) {
+            List<Object> list = (List<Object>) o;
+            for (Object val : list) {
+                dataList.add(Convert.convert(type, val));
+            }
+        } else {
+            List<Object> list = Lists.newArrayList(o);
+            for (Object val : list) {
+                dataList.add(Convert.convert(type, val));
+            }
+        }
+        return dataList;
     }
 }

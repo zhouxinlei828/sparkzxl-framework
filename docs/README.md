@@ -3,8 +3,8 @@
 <p>
 <a href="https://search.maven.org/search?q=sparkzxl"><img src="https://img.shields.io/badge/sparkzxl--component-1.3-blue" alt="maven"></a>
 <a href="https://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2.0"></a>
-<a href="https://github.com/sparkzxl/sparkzxl-framework"><img src="https://img.shields.io/badge/组件-sparkzxl--component-orange" alt="sparkzxl-framework"></a>
-<a href="https://github.com/sparkzxl/sparkzxl-auth"><img src="https://img.shields.io/badge/分布式认证-sparkzxl--auth-success" alt="分布式认证"></a>
+<a href="https://github.com/zhouxinlei828/sparkzxl-framework"><img src="https://img.shields.io/badge/组件-sparkzxl--component-orange" alt="sparkzxl-framework"></a>
+<a href="https://github.com/zhouxinlei828/sparkzxl-auth"><img src="https://img.shields.io/badge/分布式认证-sparkzxl--auth-success" alt="分布式认证"></a>
 </p>
 
 [更新日志](forward/CHANGELOG.md)
@@ -15,12 +15,12 @@
 
 ## 项目地址
 
-[sparkzxl-framework](https://github.com/sparkzxl/sparkzxl-framework.git)
+[sparkzxl-framework](https://github.com/zhouxinlei828/sparkzxl-framework.git)
 
 **落地最佳实践**：
 
-- [sparkzxl-cloud](https://github.com/sparkzxl/sparkzxl-cloud.git)
-- [sparkzxl-auth](https://github.com/sparkzxl/sparkzxl-auth.git)
+- [sparkzxl-cloud](https://github.com/zhouxinlei828/sparkzxl-cloud.git)
+- [sparkzxl-auth](https://github.com/zhouxinlei828/sparkzxl-auth.git)
 
 ## 在线体验
 
@@ -30,19 +30,19 @@
 
 ## 演示效果
 
-![sparkzxl-demo-7.png](https://oss.sparksys.top/images/sparkzxl-demo-7.png)
+![sparkzxl-demo-7.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-7.png)
 
-![sparkzxl-demo-6.png](https://oss.sparksys.top/images/sparkzxl-demo-6.png)
+![sparkzxl-demo-6.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-6.png)
 
-![sparkzxl-demo-5.png](https://oss.sparksys.top/images/sparkzxl-demo-5.png)
+![sparkzxl-demo-5.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-5.png)
 
-![sparkzxl-demo-4.png](https://oss.sparksys.top/images/sparkzxl-demo-4.png)
+![sparkzxl-demo-4.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-4.png)
 
-![sparkzxl-demo-3.png](https://oss.sparksys.top/images/sparkzxl-demo-3.png)
+![sparkzxl-demo-3.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-3.png)
 
-![sparkzxl-demo-2.png](https://oss.sparksys.top/images/sparkzxl-demo-2.png)
+![sparkzxl-demo-2.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-2.png)
 
-![sparkzxl-demo-1.png](https://oss.sparksys.top/images/sparkzxl-demo-1.png)
+![sparkzxl-demo-1.png](https://oss.sparksys.top/sparkzxl-framework/sparkzxl-demo-1.png)
 
 ## 开源博客
 

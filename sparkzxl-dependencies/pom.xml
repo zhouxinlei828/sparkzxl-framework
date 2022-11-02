@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>sparkzxl-dependencies</name>
     <description>sparkzxl dependencies pom</description>
-    <url>https://github.com/sparkzxl/sparkzxl-dependencies</url>
+    <url>https://github.com/zhouxinlei828/sparkzxl-dependencies</url>
 
     <properties>
         <java.version>1.8</java.version>
@@ -111,8 +111,8 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/sparkzxl/sparkzxl-dependencies</url>
-        <connection>https://github.com/sparkzxl/sparkzxl-dependencies.git</connection>
+        <url>https://github.com/zhouxinlei828/sparkzxl-dependencies</url>
+        <connection>https://github.com/zhouxinlei828/sparkzxl-dependencies.git</connection>
     </scm>
 
     <distributionManagement>
@@ -589,7 +589,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-entity</artifactId>
+                <artifactId>sparkzxl-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

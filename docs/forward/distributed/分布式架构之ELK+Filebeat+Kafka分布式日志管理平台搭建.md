@@ -232,7 +232,7 @@ docker logs -f --tail=200 filebeat
 
 3. 该平台的搭建是比较简便的方式，大家可以更加灵活以及动态的配置该平台。
 
-4. 源码下载[elfk部署源码]( https://github.com/sparkzxl/sparkzxl-docker/tree/master/elfk) 相对应kafka的部署源码在上层目录中
+4. 源码下载[elfk部署源码]( https://github.com/zhouxinlei828/sparkzxl-docker/tree/master/elfk) 相对应kafka的部署源码在上层目录中
 
 # 公众号
 
