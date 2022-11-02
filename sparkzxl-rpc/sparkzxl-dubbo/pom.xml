@@ -13,7 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dubbo.version>3.0.10</dubbo.version>
+        <dubbo.version>3.0.12</dubbo.version>
         <javax.el.version>3.0.1-b12</javax.el.version>
         <hibernate-validator.version>7.0.4.Final</hibernate-validator.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
