@@ -27,9 +27,6 @@ public class RequestLocalContextFilter implements Filter, Filter.Listener {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         RpcServiceContext context = RpcContext.getServiceContext();
         if (context.isProviderSide()) {
-            Map<String, Object> threadLocalMap = RequestLocalContextHolder.getLocalMap();
-            context.setObjectAttachment(REQUEST_LOCAL_CONTEXT, threadLocalMap);
-        } else if (RpcContext.getServiceContext().isConsumerSide()) {
             Map<String, Object> attachmentMap = context.getObjectAttachments();
             Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {
                 @Override
@@ -39,6 +36,9 @@ public class RequestLocalContextFilter implements Filter, Filter.Listener {
             }, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
             attachmentMap.putAll(threadLocalMap);
             RequestLocalContextHolder.setLocalMap(attachmentMap);
+        } else if (RpcContext.getServiceContext().isConsumerSide()) {
+            Map<String, Object> threadLocalMap = RequestLocalContextHolder.getLocalMap();
+            context.setObjectAttachment(REQUEST_LOCAL_CONTEXT, threadLocalMap);
         }
         return invoker.invoke(invocation);
     }
@@ -46,7 +46,7 @@ public class RequestLocalContextFilter implements Filter, Filter.Listener {
     @Override
     public void onResponse(Result appResponse, Invoker<?> invoker, Invocation invocation) {
         RpcServiceContext context = RpcContext.getServiceContext();
-        if (context.isConsumerSide()) {
+        if (context.isProviderSide()) {
             RequestLocalContextHolder.remove();
         }
     }
@@ -54,7 +54,7 @@ public class RequestLocalContextFilter implements Filter, Filter.Listener {
     @Override
     public void onError(Throwable t, Invoker<?> invoker, Invocation invocation) {
         RpcServiceContext context = RpcContext.getServiceContext();
-        if (context.isConsumerSide()) {
+        if (context.isProviderSide()) {
             RequestLocalContextHolder.remove();
         }
     }
