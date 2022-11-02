@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
     private static final int WRITE_OPERATION = 1;
-    private static final int MAP_COPY_OPERATION = 2;
+    private static final int READ_OPERATION = 2;
     private static final TransmittableThreadLocalMdcAdapter CUSTOM_MDC_ADAPTER;
 
     static {
@@ -35,7 +35,7 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
     }
 
     private static boolean wasLastOpReadOrNull(Integer lastOp) {
-        return lastOp == null || lastOp == MAP_COPY_OPERATION;
+        return lastOp == null || lastOp == READ_OPERATION;
     }
 
     private Integer getAndSetLastOperation(int op) {
@@ -127,7 +127,7 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
      */
     @Override
     public String get(String key) {
-        final Map<String, String> map = copyOnInheritThreadLocal.get();
+        final Map<String, String> map = getPropertyMap();
         if ((map != null) && (key != null)) {
             return map.get(key);
         } else {
@@ -140,22 +140,8 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
      * internally.
      */
     public Map<String, String> getPropertyMap() {
-        lastOperation.set(MAP_COPY_OPERATION);
+        lastOperation.set(READ_OPERATION);
         return copyOnInheritThreadLocal.get();
-    }
-
-    /**
-     * Returns the keys in the MDC as a {@link Set}. The returned value can be
-     * null.
-     */
-    public Set<String> getKeys() {
-        Map<String, String> map = getPropertyMap();
-
-        if (map != null) {
-            return map.keySet();
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -164,6 +150,7 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
      */
     @Override
     public Map<String, String> getCopyOfContextMap() {
+        lastOperation.set(READ_OPERATION);
         Map<String, String> hashMap = copyOnInheritThreadLocal.get();
         if (hashMap == null) {
             return null;
