@@ -56,7 +56,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             SqlCommandType sct = ms.getSqlCommandType();
             if (sct == SqlCommandType.UPDATE || sct == SqlCommandType.DELETE) {
                 PluginUtils.MPBoundSql mpBs = mpSh.mPBoundSql();
-                mpBs.sql(parserSingle(mpBs.sql(), ms.getId()));
+                mpBs.sql(parserSingle(mpBs.sql(), null));
             }
         }
     }
@@ -65,7 +65,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
         if (dataScopeLineHandler.match()) {
             PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
-            mpBs.sql(parserSingle(mpBs.sql(), ms.getId()));
+            mpBs.sql(parserMulti(mpBs.sql(), null));
         }
     }
 

@@ -73,8 +73,9 @@ public class MyBatisAutoConfiguration {
             }
         } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
             // 多租户插件
-            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(dataProperties.getTenantDatabasePrefix());
-            interceptor.addInnerInterceptor(schemaInterceptor);
+            DynamicSchemaInterceptor dynamicSchemaInterceptor = new DynamicSchemaInterceptor(dataProperties.getDbType(),
+                    dataProperties.getTenantDatabasePrefix());
+            interceptor.addInnerInterceptor(dynamicSchemaInterceptor);
         }
         // 分页插件
         PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();

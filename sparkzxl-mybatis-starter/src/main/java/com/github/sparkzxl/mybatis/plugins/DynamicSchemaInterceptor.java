@@ -1,6 +1,7 @@
 package com.github.sparkzxl.mybatis.plugins;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
@@ -24,11 +25,13 @@ import java.sql.Connection;
  * @since 2021-06-30 21:44:12
  */
 @Slf4j
-public class SchemaInterceptor implements InnerInterceptor {
+public class DynamicSchemaInterceptor implements InnerInterceptor {
 
+    private final DbType dbType;
     private final String tenantDatabasePrefix;
 
-    public SchemaInterceptor(String tenantDatabasePrefix) {
+    public DynamicSchemaInterceptor(DbType dbType, String tenantDatabasePrefix) {
+        this.dbType = dbType;
         this.tenantDatabasePrefix = tenantDatabasePrefix;
     }
 
@@ -41,12 +44,7 @@ public class SchemaInterceptor implements InnerInterceptor {
 
         String schemaName = StrUtil.format("{}_{}", tenantDatabasePrefix, tenantId);
         // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
-        return ReplaceSql.replaceSql(schemaName, sql);
-    }
-
-    @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-        // 统一交给 beforePrepare 处理,防止某些sql解析不到，又被beforePrepare重复处理
+        return ReplaceSql.replaceSql(dbType, schemaName, sql);
     }
 
 
