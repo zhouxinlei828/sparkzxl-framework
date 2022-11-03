@@ -160,7 +160,7 @@ public class RequestLocalContextHolder {
         Map<String, Object> map = getLocalMap();
         Object o = map.get(key);
         if (o == null) {
-            return Collections.emptyList();
+            return null;
         }
         List<T> dataList = Lists.newArrayList();
         if (o instanceof Collection) {

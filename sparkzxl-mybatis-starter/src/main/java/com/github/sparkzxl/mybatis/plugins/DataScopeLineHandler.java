@@ -35,7 +35,7 @@ public interface DataScopeLineHandler {
      * @return String
      */
     default String getScopeIdColumn() {
-        return "authority_code";
+        return "scope_code";
     }
 
     /**

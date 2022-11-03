@@ -1,10 +1,14 @@
 package com.github.sparkzxl.mybatis.plugins;
 
+import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import com.baomidou.mybatisplus.extension.toolkit.PropertyMapper;
+import lombok.Getter;
+import lombok.Setter;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
@@ -25,6 +29,7 @@ import org.apache.ibatis.session.RowBounds;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * description: 数据权限拦截器
@@ -32,10 +37,12 @@ import java.util.List;
  * @author zhouxinlei
  * @since 2022-07-2022/7/18 13:36:09
  */
+@Setter
+@Getter
 public class DataScopeInnerInterceptor extends JsqlParserSupport implements InnerInterceptor {
 
     private final static String SELECT = "SELECT";
-    private final DataScopeLineHandler dataScopeLineHandler;
+    private DataScopeLineHandler dataScopeLineHandler;
 
     public DataScopeInnerInterceptor(DataScopeLineHandler dataScopeLineHandler) {
         this.dataScopeLineHandler = dataScopeLineHandler;
@@ -49,7 +56,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             SqlCommandType sct = ms.getSqlCommandType();
             if (sct == SqlCommandType.UPDATE || sct == SqlCommandType.DELETE) {
                 PluginUtils.MPBoundSql mpBs = mpSh.mPBoundSql();
-                mpBs.sql(parserMulti(mpBs.sql(), null));
+                mpBs.sql(parserSingle(mpBs.sql(), ms.getId()));
             }
         }
     }
@@ -58,7 +65,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
         if (dataScopeLineHandler.match()) {
             PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
-            mpBs.sql(parserSingle(mpBs.sql(), null));
+            mpBs.sql(parserSingle(mpBs.sql(), ms.getId()));
         }
     }
 
@@ -368,5 +375,11 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
         }
         column.append(dataScopeLineHandler.getScopeIdColumn());
         return new Column(column.toString());
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        PropertyMapper.newInstance(properties).whenNotBlank("dataScopeLineHandler",
+                ClassUtils::newInstance, this::setDataScopeLineHandler);
     }
 }
