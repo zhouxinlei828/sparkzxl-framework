@@ -62,7 +62,7 @@ public class RequestInfoLog implements Serializable {
     private LocalDateTime finishTime;
 
     @ApiModelProperty(value = "consumingTime")
-    private Long consumingTime;
+    private String consumingTime;
 
     @ApiModelProperty(value = "tenantId")
     private String tenantId;

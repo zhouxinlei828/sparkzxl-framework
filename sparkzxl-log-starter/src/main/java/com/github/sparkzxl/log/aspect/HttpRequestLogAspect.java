@@ -12,6 +12,7 @@ import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
 import com.github.sparkzxl.log.utils.LogUtils;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -27,7 +28,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -42,6 +42,7 @@ public class HttpRequestLogAspect {
 
     public static final int MAX_LENGTH = 65535;
     private static final ThreadLocal<RequestInfoLog> THREAD_LOCAL = new ThreadLocal<>();
+    private Stopwatch watch = Stopwatch.createUnstarted();
     /**
      * 用于获取方法参数定义名字.
      */
@@ -58,6 +59,7 @@ public class HttpRequestLogAspect {
     @Before("pointCut()")
     public void beforeMethod(JoinPoint joinPoint) {
         tryCatch((x) -> {
+            watch.start();
             HttpRequestLog httpRequestLog = LogUtils.getTargetAnnotation(joinPoint);
             HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
             assert httpRequestLog != null;
@@ -103,7 +105,9 @@ public class HttpRequestLogAspect {
 
     private void publishEvent(RequestInfoLog requestInfoLog) {
         requestInfoLog.setFinishTime(LocalDateTime.now());
-        requestInfoLog.setConsumingTime(requestInfoLog.getStartTime().until(requestInfoLog.getFinishTime(), ChronoUnit.MILLIS));
+        watch.stop();
+        requestInfoLog.setConsumingTime(watch.toString());
+        watch.reset();
         SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
         remove();
     }
