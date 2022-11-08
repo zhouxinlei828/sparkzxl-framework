@@ -1,7 +1,5 @@
 package com.github.sparkzxl.sms.executor;
 
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.aliyun.dysmsapi20170525.Client;
@@ -9,21 +7,16 @@ import com.aliyun.dysmsapi20170525.models.*;
 import com.aliyun.teaopenapi.models.Config;
 import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
 import com.github.sparkzxl.sms.constant.enums.SmsRegister;
-import com.github.sparkzxl.sms.constant.enums.SmsStatus;
-import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
 import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
-import com.github.sparkzxl.sms.parser.TemplateParamParser;
 import com.github.sparkzxl.sms.request.SendSmsReq;
+import com.github.sparkzxl.sms.resp.SmsResult;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,7 +33,7 @@ public class AliyunSmsExecutor extends AbstractSmsExecutor<Client> {
     }
 
     @Override
-    public List<SmsSendRecord> send(SendSmsReq sendSmsReq) {
+    public SmsResult send(SendSmsReq sendSmsReq) {
         Set<String> phones = sendSmsReq.getPhones();
         if (CollectionUtils.isEmpty(phones)) {
             throw new SmsException(SmsExceptionCodeEnum.PHONE_IS_EMPTY);
@@ -56,27 +49,11 @@ public class AliyunSmsExecutor extends AbstractSmsExecutor<Client> {
             SendSmsResponseBody sendSmsResponseBody = response.getBody();
             String smsResponseBody = JSON.toJSONString(sendSmsResponseBody);
             log.info("阿里云短信发送结果：【{}】", smsResponseBody);
-            LocalDateTime sendDateTime = LocalDateTime.now();
-            String content = sendSmsReq.getTemplateContent();
-            if (MapUtil.isNotEmpty(sendSmsReq.getTemplateParams())) {
-                content = TemplateParamParser.replaceContent(content, sendSmsReq.getTemplateParams());
-            }
-            List<SmsSendRecord> sendRecordList = Lists.newArrayList();
-            for (String phone : phones) {
-                SmsSendRecord smsSendRecord = new SmsSendRecord()
-                        .setId(IdUtil.getSnowflake().nextId())
-                        .setPhone(phone)
-                        .setBizId(sendSmsResponseBody.getBizId())
-                        .setMsgContent(content)
-                        .setSupplierId(SmsRegister.ALIYUN.getId())
-                        .setSupplierName(SmsRegister.ALIYUN.getName())
-                        .setReportContent(smsResponseBody)
-                        .setStatus(SmsStatus.SEND_SUCCESS.getCode())
-                        .setStatusName(SmsStatus.SEND_SUCCESS.getDescription())
-                        .setSendDateTime(sendDateTime);
-                sendRecordList.add(smsSendRecord);
-            }
-            return sendRecordList;
+            return SmsResult.builder()
+                    .isSuccess("OK".equals(sendSmsResponseBody.getCode()))
+                    .message(sendSmsResponseBody.getMessage())
+                    .response(smsResponseBody)
+                    .build();
         } catch (Exception e) {
             log.error("阿里云短信发送异常：", e);
             return null;
@@ -124,7 +101,7 @@ public class AliyunSmsExecutor extends AbstractSmsExecutor<Client> {
     }
 
     @Override
-    protected Client initClient(SmsProperties smsProperties) throws Exception{
+    protected Client initClient(SmsProperties smsProperties) throws Exception {
         Config config = new Config()
                 .setAccessKeyId(smsProperties.getAccessKeyId())
                 .setAccessKeySecret(smsProperties.getAccessKeySecret());

@@ -11,6 +11,7 @@ import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
 import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
 import com.github.sparkzxl.sms.request.SendSmsReq;
+import com.github.sparkzxl.sms.resp.SmsResult;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
 import com.google.common.collect.Lists;
@@ -49,7 +50,7 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
     }
 
     @Override
-    public List<SmsSendRecord> send(SendSmsReq sendSmsReq) {
+    public SmsResult send(SendSmsReq sendSmsReq) {
         Set<String> phones = sendSmsReq.getPhones();
         if (CollectionUtils.isEmpty(phones)) {
             throw new SmsException(SmsExceptionCodeEnum.PHONE_IS_EMPTY);
@@ -74,28 +75,17 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
             String sendSmsResponseStr = SendSmsResponse.toJsonString(response);
             // 输出json格式的字符串回包
             log.info("腾讯云短信发送结果：【{}】", sendSmsResponseStr);
-            LocalDateTime sendDateTime = LocalDateTime.now();
-            List<SmsSendRecord> sendRecordList = Lists.newArrayList();
+            SmsResult.SmsResultBuilder builder = SmsResult.builder()
+                    .isSuccess(true)
+                    .message("send success")
+                    .response(sendSmsResponseStr);
             for (SendStatus sendStatus : response.getSendStatusSet()) {
-                // 腾讯返回的电话号有前缀，这里取巧直接翻转获取手机号
-                String phone = new StringBuilder(new StringBuilder(sendStatus.getPhoneNumber())
-                        .reverse().substring(0, PHONE_NUM)).reverse().toString();
-                SmsSendRecord smsSendRecord = new SmsSendRecord()
-                        .setId(IdUtil.getSnowflake().nextId())
-                        .setPhone(phone)
-                        .setSmsReqId(sendStatus.getSessionContext())
-                        .setTemplateId(sendSmsReq.getTemplateId())
-                        .setSupplierId(SmsRegister.TENCENT.getId())
-                        .setSupplierName(SmsRegister.TENCENT.getName())
-                        .setMsgContent(content)
-                        .setBizId(sendStatus.getSerialNo())
-                        .setStatus(SmsStatus.SEND_SUCCESS.getCode())
-                        .setStatusName(SmsStatus.SEND_SUCCESS.getDescription())
-                        .setReportContent(sendStatus.getCode())
-                        .setSendDateTime(sendDateTime);
-                sendRecordList.add(smsSendRecord);
+                if (!"Ok".equals(sendStatus.getCode())) {
+                    builder.isSuccess(false).message(sendStatus.getMessage());
+                    break;
+                }
             }
-            return sendRecordList;
+            return builder.build();
         } catch (TencentCloudSDKException e) {
             log.error("腾讯云短信发送异常：", e);
             return null;

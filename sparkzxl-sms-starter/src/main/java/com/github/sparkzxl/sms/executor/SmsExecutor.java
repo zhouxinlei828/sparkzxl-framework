@@ -4,6 +4,7 @@ import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
 import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
 import com.github.sparkzxl.sms.request.SendSmsReq;
+import com.github.sparkzxl.sms.resp.SmsResult;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ public interface SmsExecutor {
      * 发送短信
      *
      * @param sendSmsReq 发送参数
-     * @return SmsResp<SendSmsResult> 发送结果
+     * @return SmsResult 发送结果
      */
-    List<SmsSendRecord> send(SendSmsReq sendSmsReq);
+    SmsResult send(SendSmsReq sendSmsReq);
 
     /**
      * 查询短信签名
