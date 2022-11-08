@@ -64,11 +64,9 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
             req.setPhoneNumberSet(phoneNumberSet);
             /* 模板参数: 若无模板参数，则设置为空 */
             Map<String, Object> templateParamMap = sendSmsReq.getTemplateParams();
-            String content = sendSmsReq.getTemplateContent();
             if (MapUtil.isNotEmpty(templateParamMap)) {
                 String[] templateParamSet = templateParamMap.values().stream().map(String::valueOf).toArray(String[]::new);
                 req.setTemplateParamSet(templateParamSet);
-                content = MessageFormat.format(content, templateParamMap.values().toArray());
             }
             req.setSessionContext(IdUtil.fastSimpleUUID());
             SendSmsResponse response = obtainClient().SendSms(req);
