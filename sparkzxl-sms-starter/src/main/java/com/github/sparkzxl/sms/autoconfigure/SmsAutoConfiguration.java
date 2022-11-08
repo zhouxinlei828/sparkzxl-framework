@@ -1,11 +1,11 @@
 package com.github.sparkzxl.sms.autoconfigure;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.github.sparkzxl.sms.executor.AliyunSmsHandlerExecutor;
-import com.github.sparkzxl.sms.executor.SmsHandlerExecutor;
-import com.github.sparkzxl.sms.executor.TencentSmsHandlerExecutor;
-import com.github.sparkzxl.sms.factory.DefaultSmsHandlerFactory;
-import com.github.sparkzxl.sms.factory.SmsHandlerFactory;
+import com.github.sparkzxl.sms.executor.AliyunSmsExecutor;
+import com.github.sparkzxl.sms.executor.SmsExecutor;
+import com.github.sparkzxl.sms.executor.TencentSmsExecutor;
+import com.github.sparkzxl.sms.factory.DefaultSmsFactory;
+import com.github.sparkzxl.sms.factory.SmsFactory;
 import com.github.sparkzxl.sms.service.ISmsService;
 import com.github.sparkzxl.sms.service.SmsServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -28,11 +28,11 @@ import java.util.List;
 public class SmsAutoConfiguration {
 
     @Bean
-    public SmsHandlerFactory smsHandlerFactory(List<SmsHandlerExecutor> smsHandlerExecutorList) {
-        DefaultSmsHandlerFactory smsHandlerFactory = new DefaultSmsHandlerFactory();
-        if (CollectionUtil.isNotEmpty(smsHandlerExecutorList)) {
-            for (SmsHandlerExecutor smsHandlerExecutor : smsHandlerExecutorList) {
-                smsHandlerFactory.addStrategy(smsHandlerExecutor);
+    public SmsFactory smsHandlerFactory(List<SmsExecutor> smsExecutorList) {
+        DefaultSmsFactory smsHandlerFactory = new DefaultSmsFactory();
+        if (CollectionUtil.isNotEmpty(smsExecutorList)) {
+            for (SmsExecutor smsExecutor : smsExecutorList) {
+                smsHandlerFactory.addStrategy(smsExecutor);
             }
         }
         return smsHandlerFactory;
@@ -40,20 +40,20 @@ public class SmsAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "channel", havingValue = "aliyun")
-    public SmsHandlerExecutor aliyunSmsHandlerStrategy(SmsProperties smsProperties) {
-        return new AliyunSmsHandlerExecutor(smsProperties);
+    public SmsExecutor aliyunSmsHandlerStrategy(SmsProperties smsProperties) {
+        return new AliyunSmsExecutor(smsProperties);
     }
 
     @Bean
     @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "channel", havingValue = "tencent")
-    public SmsHandlerExecutor tencentSmsHandlerStrategy(SmsProperties smsProperties) {
-        return new TencentSmsHandlerExecutor(smsProperties);
+    public SmsExecutor tencentSmsHandlerStrategy(SmsProperties smsProperties) {
+        return new TencentSmsExecutor(smsProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean(ISmsService.class)
-    public ISmsService smsService(SmsHandlerFactory smsHandlerFactory, SmsProperties smsProperties) {
-        return new SmsServiceImpl(smsHandlerFactory, smsProperties);
+    public ISmsService smsService(SmsFactory smsFactory, SmsProperties smsProperties) {
+        return new SmsServiceImpl(smsFactory, smsProperties);
     }
 
 

@@ -13,7 +13,7 @@ import java.util.List;
  * @author zhouxinlei
  * @since 2022-01-03 12:31:56
  */
-public interface SmsHandlerExecutor {
+public interface SmsExecutor {
 
     /**
      * 发送短信

@@ -21,7 +21,7 @@ public enum SendStatusEnum {
 
     public static SendStatusEnum get(Integer code) {
         for (SendStatusEnum sendStatusEnum : SendStatusEnum.values()) {
-            if (sendStatusEnum.getCode() == code) {
+            if (sendStatusEnum.getCode().equals(code)) {
                 return sendStatusEnum;
             }
         }

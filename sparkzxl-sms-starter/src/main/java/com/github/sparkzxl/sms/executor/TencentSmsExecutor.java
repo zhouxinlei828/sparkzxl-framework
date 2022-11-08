@@ -38,12 +38,12 @@ import java.util.Set;
  * @since 2022-01-03 12:45:45
  */
 @Slf4j
-public class TencentSmsHandlerExecutor extends AbstractSmsHandlerExecutor<SmsClient> {
+public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
 
     private final SmsProperties smsProperties;
     private static final Integer PHONE_NUM = 11;
 
-    public TencentSmsHandlerExecutor(SmsProperties smsProperties) {
+    public TencentSmsExecutor(SmsProperties smsProperties) {
         super(smsProperties);
         this.smsProperties = smsProperties;
     }

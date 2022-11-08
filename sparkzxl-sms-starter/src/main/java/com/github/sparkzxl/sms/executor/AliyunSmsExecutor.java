@@ -33,9 +33,9 @@ import java.util.Set;
  * @since 2022-01-03 12:45:45
  */
 @Slf4j
-public class AliyunSmsHandlerExecutor extends AbstractSmsHandlerExecutor<Client> {
+public class AliyunSmsExecutor extends AbstractSmsExecutor<Client> {
 
-    public AliyunSmsHandlerExecutor(SmsProperties smsProperties) {
+    public AliyunSmsExecutor(SmsProperties smsProperties) {
         super(smsProperties);
     }
 

@@ -4,8 +4,8 @@ import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
 import com.github.sparkzxl.sms.entity.SmsSendRecord;
 import com.github.sparkzxl.sms.entity.SmsSignDetail;
 import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
-import com.github.sparkzxl.sms.executor.SmsHandlerExecutor;
-import com.github.sparkzxl.sms.factory.SmsHandlerFactory;
+import com.github.sparkzxl.sms.executor.SmsExecutor;
+import com.github.sparkzxl.sms.factory.SmsFactory;
 import com.github.sparkzxl.sms.request.SendSmsReq;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SmsServiceImpl implements ISmsService {
 
-    private final SmsHandlerFactory smsHandlerFactory;
+    private final SmsFactory smsFactory;
     private final SmsProperties smsProperties;
 
     @Override
@@ -37,8 +37,8 @@ public class SmsServiceImpl implements ISmsService {
         return loadSmsHandler().findSmsTemplate(templateId);
     }
 
-    private SmsHandlerExecutor loadSmsHandler() {
-        return smsHandlerFactory.getExecutor(smsProperties.getRegister());
+    private SmsExecutor loadSmsHandler() {
+        return smsFactory.getExecutor(smsProperties.getRegister());
     }
 
 }

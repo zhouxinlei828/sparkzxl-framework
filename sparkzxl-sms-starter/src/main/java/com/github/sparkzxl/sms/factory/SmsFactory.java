@@ -1,7 +1,7 @@
 package com.github.sparkzxl.sms.factory;
 
 import com.github.sparkzxl.sms.constant.enums.SmsRegister;
-import com.github.sparkzxl.sms.executor.SmsHandlerExecutor;
+import com.github.sparkzxl.sms.executor.SmsExecutor;
 
 /**
  * description: 短信处理工厂
@@ -9,7 +9,7 @@ import com.github.sparkzxl.sms.executor.SmsHandlerExecutor;
  * @author zhouxinlei
  * @since 2022-01-03 16:29:08
  */
-public interface SmsHandlerFactory {
+public interface SmsFactory {
 
     /**
      * 获取短信策略
@@ -17,5 +17,5 @@ public interface SmsHandlerFactory {
      * @param smsRegister 短信注册商
      * @return SmsHandlerExecutor
      */
-    SmsHandlerExecutor getExecutor(SmsRegister smsRegister);
+    SmsExecutor getExecutor(SmsRegister smsRegister);
 }

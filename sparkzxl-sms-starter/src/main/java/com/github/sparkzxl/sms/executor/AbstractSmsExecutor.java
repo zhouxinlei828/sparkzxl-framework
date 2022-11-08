@@ -9,13 +9,13 @@ import org.springframework.beans.factory.InitializingBean;
  * @author zhouxinlei
  * @since 2022-09-28 15:12:19
  */
-public abstract class AbstractSmsHandlerExecutor<C> implements SmsHandlerExecutor, InitializingBean {
+public abstract class AbstractSmsExecutor<C> implements SmsExecutor, InitializingBean {
 
     private final SmsProperties smsProperties;
 
     private C client;
 
-    public AbstractSmsHandlerExecutor(SmsProperties smsProperties) {
+    public AbstractSmsExecutor(SmsProperties smsProperties) {
         this.smsProperties = smsProperties;
     }
 
