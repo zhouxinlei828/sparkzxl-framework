@@ -50,7 +50,9 @@ public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
             log.info("阿里云短信发送结果：【{}】", smsResponseBody);
             boolean success = "OK".equals(sendSmsResponseBody.getCode());
 
+            SmsExceptionCodeEnum exceptionCodeEnum = SmsExceptionCodeEnum.SUCCESS;
             if (!success) {
+                exceptionCodeEnum = SmsExceptionCodeEnum.SMS_SEND_FAIL;
                 publishSendFailEvent(smsResponseBody, sendSmsReq, new SmsException(sendSmsResponseBody.getCode(), sendSmsResponseBody.getMessage()));
             }
             String content = sendSmsReq.getTemplateContent();
@@ -58,7 +60,7 @@ public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
                 content = TemplateParamParser.replaceContent(content, sendSmsReq.getTemplateParams());
             }
             publishSendSuccessEvent(smsResponseBody, content, sendSmsReq);
-            return SmsResult.builder().code(SmsExceptionCodeEnum.SUCCESS.getErrorCode()).isSuccess(success).message(sendSmsResponseBody.getMessage()).response(smsResponseBody).build();
+            return SmsResult.builder().code(exceptionCodeEnum.getErrorCode()).isSuccess(success).message(sendSmsResponseBody.getMessage()).response(smsResponseBody).build();
         } catch (Exception e) {
             log.error("阿里云短信发送异常：", e);
             publishSendFailEvent(null, sendSmsReq, e);
