@@ -1,12 +1,7 @@
 package com.github.sparkzxl.sms.executor;
 
-import com.github.sparkzxl.sms.entity.SmsSendRecord;
-import com.github.sparkzxl.sms.entity.SmsSignDetail;
-import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
 import com.github.sparkzxl.sms.request.SendSmsReq;
-import com.github.sparkzxl.sms.resp.SmsResult;
-
-import java.util.List;
+import com.github.sparkzxl.sms.entity.SmsResult;
 
 /**
  * description: 短信处理策略类
@@ -23,22 +18,6 @@ public interface SmsExecutor {
      * @return SmsResult 发送结果
      */
     SmsResult send(SendSmsReq sendSmsReq);
-
-    /**
-     * 查询短信签名
-     *
-     * @param sign 短信签名
-     * @return SmsSignDetail
-     */
-    SmsSignDetail findSmsSign(String sign);
-
-    /**
-     * 查询短信签名
-     *
-     * @param templateId 模板id
-     * @return SmsTemplateDetail
-     */
-    SmsTemplateDetail findSmsTemplate(String templateId);
 
     /**
      * 支持类型名称

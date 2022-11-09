@@ -1,4 +1,4 @@
-package com.github.sparkzxl.sms.resp;
+package com.github.sparkzxl.sms.entity;
 
 import lombok.Builder;
 import lombok.Data;

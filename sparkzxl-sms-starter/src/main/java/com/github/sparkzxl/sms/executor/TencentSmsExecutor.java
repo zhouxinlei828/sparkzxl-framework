@@ -1,15 +1,11 @@
 package com.github.sparkzxl.sms.executor;
 
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
 import com.github.sparkzxl.sms.constant.enums.SmsRegister;
-import com.github.sparkzxl.sms.entity.SmsSignDetail;
-import com.github.sparkzxl.sms.entity.SmsTemplateDetail;
+import com.github.sparkzxl.sms.entity.SmsResult;
 import com.github.sparkzxl.sms.request.SendSmsReq;
-import com.github.sparkzxl.sms.resp.SmsResult;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
 import com.tencentcloudapi.common.Credential;
@@ -19,8 +15,8 @@ import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
@@ -35,12 +31,8 @@ import java.util.Set;
 @Slf4j
 public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
 
-    private final SmsProperties smsProperties;
-    private static final Integer PHONE_NUM = 11;
-
-    public TencentSmsExecutor(SmsProperties smsProperties) {
-        super(smsProperties);
-        this.smsProperties = smsProperties;
+    public TencentSmsExecutor(SmsProperties smsProperties, ApplicationEventPublisher eventPublisher) {
+        super(smsProperties, eventPublisher);
     }
 
     @Override
@@ -64,74 +56,38 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
             }
             req.setSessionContext(IdUtil.fastSimpleUUID());
             SendSmsResponse response = obtainClient().SendSms(req);
-            String sendSmsResponseStr = SendSmsResponse.toJsonString(response);
+            String sendSmsResponseJson = SendSmsResponse.toJsonString(response);
             // 输出json格式的字符串回包
-            log.info("腾讯云短信发送结果：【{}】", sendSmsResponseStr);
-            SmsResult.SmsResultBuilder builder = SmsResult.builder()
-                    .isSuccess(true)
-                    .message("send success")
-                    .response(sendSmsResponseStr);
+            log.info("腾讯云短信发送结果：【{}】", sendSmsResponseJson);
+            boolean success = true;
+            String code = SmsExceptionCodeEnum.SUCCESS.getErrorCode();
+            String message = "";
             for (SendStatus sendStatus : response.getSendStatusSet()) {
                 if (!"Ok".equals(sendStatus.getCode())) {
-                    builder.isSuccess(false).message(sendStatus.getMessage());
+                    success = false;
+                    code = SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode();
+                    message = sendStatus.getMessage();
                     break;
                 }
             }
-            return builder.build();
+            if (!success) {
+                publishSendFailEvent(sendSmsResponseJson, sendSmsReq, new SmsException(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode(), message));
+            }
+            publishSendSuccessEvent(sendSmsResponseJson, sendSmsReq);
+            return SmsResult.builder()
+                    .code(code)
+                    .isSuccess(success)
+                    .response(sendSmsResponseJson)
+                    .message(message).build();
         } catch (TencentCloudSDKException e) {
             log.error("腾讯云短信发送异常：", e);
-            return null;
+            publishSendFailEvent(null, sendSmsReq, e);
+            return SmsResult.builder()
+                    .code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode())
+                    .isSuccess(false)
+                    .message(e.getMessage())
+                    .build();
         }
-    }
-
-    @Override
-    public SmsSignDetail findSmsSign(String sign) {
-        try {
-            DescribeSmsSignListRequest describeSmsSignListRequest = new DescribeSmsSignListRequest();
-            Long[] signIdSet = {Long.valueOf(sign)};
-            describeSmsSignListRequest.setSignIdSet(signIdSet);
-            DescribeSmsSignListResponse describeSmsSignListResponse = obtainClient().DescribeSmsSignList(describeSmsSignListRequest);
-            DescribeSignListStatus[] describeSignListStatusSet = describeSmsSignListResponse.getDescribeSignListStatusSet();
-            if (ArrayUtils.isNotEmpty(describeSignListStatusSet)) {
-                DescribeSignListStatus describeSignListStatus = describeSignListStatusSet[0];
-                SmsSignDetail smsSignDetail = new SmsSignDetail();
-                smsSignDetail.setSignId(describeSignListStatus.getSignId());
-                smsSignDetail.setSignName(describeSignListStatus.getSignName());
-                smsSignDetail.setStatus(describeSignListStatus.getStatusCode().intValue());
-                smsSignDetail.setReason(describeSignListStatus.getReviewReply());
-                smsSignDetail.setCreateDate(DateUtil.format(DateUtil.date(describeSignListStatus.getCreateTime()),
-                        DatePattern.NORM_DATETIME_PATTERN));
-                return smsSignDetail;
-            }
-        } catch (TencentCloudSDKException e) {
-            log.error("腾讯云查询短信签名异常：", e);
-        }
-        return null;
-    }
-
-    @Override
-    public SmsTemplateDetail findSmsTemplate(String templateId) {
-        try {
-            DescribeSmsTemplateListRequest req = new DescribeSmsTemplateListRequest();
-            req.setInternational(0L);
-            req.setTemplateIdSet(new Long[]{Long.valueOf(templateId)});
-            DescribeSmsTemplateListResponse templateListResponse = obtainClient().DescribeSmsTemplateList(req);
-            DescribeTemplateListStatus[] describeTemplateStatusSet = templateListResponse.getDescribeTemplateStatusSet();
-            if (ArrayUtils.isNotEmpty(describeTemplateStatusSet)) {
-                DescribeTemplateListStatus describeTemplateListStatus = describeTemplateStatusSet[0];
-                SmsTemplateDetail smsTemplateDetail = new SmsTemplateDetail();
-                smsTemplateDetail.setTemplateId(String.valueOf(describeTemplateListStatus.getTemplateId()));
-                smsTemplateDetail.setTemplateName(describeTemplateListStatus.getTemplateName());
-                smsTemplateDetail.setTemplateStatus(Math.toIntExact(describeTemplateListStatus.getStatusCode()));
-                smsTemplateDetail.setReason(describeTemplateListStatus.getReviewReply());
-                smsTemplateDetail.setCreateDate(DateUtil.format(DateUtil.date(describeTemplateListStatus.getCreateTime()),
-                        DatePattern.NORM_DATETIME_PATTERN));
-                return smsTemplateDetail;
-            }
-        } catch (TencentCloudSDKException e) {
-            log.error("腾讯云查询短信模板异常：", e);
-        }
-        return null;
     }
 
     @Override
@@ -168,6 +124,6 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
 
     @Override
     public String named() {
-        return SmsRegister.TENCENT.getName();
+        return SmsRegister.TENCENT.getCode();
     }
 }

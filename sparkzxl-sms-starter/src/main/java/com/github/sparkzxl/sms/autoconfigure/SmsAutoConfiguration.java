@@ -1,7 +1,7 @@
 package com.github.sparkzxl.sms.autoconfigure;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.github.sparkzxl.sms.executor.AliyunSmsExecutor;
+import com.github.sparkzxl.sms.executor.AliYunSmsExecutor;
 import com.github.sparkzxl.sms.executor.SmsExecutor;
 import com.github.sparkzxl.sms.executor.TencentSmsExecutor;
 import com.github.sparkzxl.sms.factory.DefaultSmsFactory;
@@ -11,6 +11,7 @@ import com.github.sparkzxl.sms.service.SmsServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,26 +29,26 @@ import java.util.List;
 public class SmsAutoConfiguration {
 
     @Bean
-    public SmsFactory smsHandlerFactory(List<SmsExecutor> smsExecutorList) {
-        DefaultSmsFactory smsHandlerFactory = new DefaultSmsFactory();
+    public SmsFactory smsFactory(List<SmsExecutor> smsExecutorList) {
+        DefaultSmsFactory smsFactory = new DefaultSmsFactory();
         if (CollectionUtil.isNotEmpty(smsExecutorList)) {
             for (SmsExecutor smsExecutor : smsExecutorList) {
-                smsHandlerFactory.addStrategy(smsExecutor);
+                smsFactory.addExecutor(smsExecutor);
             }
         }
-        return smsHandlerFactory;
+        return smsFactory;
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "channel", havingValue = "aliyun")
-    public SmsExecutor aliyunSmsHandlerStrategy(SmsProperties smsProperties) {
-        return new AliyunSmsExecutor(smsProperties);
+    @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "register", havingValue = "aliyun")
+    public SmsExecutor aliYunSmsExecutor(SmsProperties smsProperties, ApplicationEventPublisher eventPublisher) {
+        return new AliYunSmsExecutor(smsProperties, eventPublisher);
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "channel", havingValue = "tencent")
-    public SmsExecutor tencentSmsHandlerStrategy(SmsProperties smsProperties) {
-        return new TencentSmsExecutor(smsProperties);
+    @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "register", havingValue = "tencent")
+    public SmsExecutor tencentSmsExecutor(SmsProperties smsProperties, ApplicationEventPublisher eventPublisher) {
+        return new TencentSmsExecutor(smsProperties, eventPublisher);
     }
 
     @Bean
