@@ -41,7 +41,7 @@ public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
         if (CollectionUtils.isEmpty(phones)) {
             throw new SmsException(SmsExceptionCodeEnum.PHONE_IS_EMPTY);
         }
-        String phoneNumberListStr = StringUtils.joinWith(",", phones);
+        String phoneNumberListStr = StringUtils.join(phones, ",");
         try {
             SendSmsRequest smsRequest = new SendSmsRequest().setSignName(sendSmsReq.getSign()).setTemplateCode(sendSmsReq.getTemplateId()).setTemplateParam(JSONUtil.toJsonStr(sendSmsReq.getTemplateParams())).setPhoneNumbers(phoneNumberListStr);
             SendSmsResponse response = obtainClient().sendSms(smsRequest);

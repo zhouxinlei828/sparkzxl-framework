@@ -40,13 +40,11 @@ public class SmsAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "register", havingValue = "aliyun")
     public SmsExecutor aliYunSmsExecutor(SmsProperties smsProperties, ApplicationEventPublisher eventPublisher) {
         return new AliYunSmsExecutor(smsProperties, eventPublisher);
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SmsProperties.PREFIX, name = "register", havingValue = "tencent")
     public SmsExecutor tencentSmsExecutor(SmsProperties smsProperties, ApplicationEventPublisher eventPublisher) {
         return new TencentSmsExecutor(smsProperties, eventPublisher);
     }
