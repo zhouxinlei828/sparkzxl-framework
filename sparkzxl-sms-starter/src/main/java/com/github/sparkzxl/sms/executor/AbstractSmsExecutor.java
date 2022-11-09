@@ -45,12 +45,12 @@ public abstract class AbstractSmsExecutor<C> implements SmsExecutor, Initializin
      * @param response   发送结果
      * @param sendSmsReq 发送参数
      */
-    protected final void publishSendSuccessEvent(String response, SendSmsReq sendSmsReq) {
+    protected final void publishSendSuccessEvent(String response, String content, SendSmsReq sendSmsReq) {
         if (eventPublisher == null) {
             return;
         }
         eventPublisher.publishEvent(
-                new SmsSendSuccessEvent(response, named(), sendSmsReq.getPhones(), sendSmsReq.getTemplateParams()));
+                new SmsSendSuccessEvent(response, named(), sendSmsReq.getPhones(), content, sendSmsReq.getTemplateParams()));
     }
 
     /**

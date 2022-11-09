@@ -1,13 +1,17 @@
 package com.github.sparkzxl.sms.executor;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.aliyun.dysmsapi20170525.Client;
-import com.aliyun.dysmsapi20170525.models.*;
+import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
+import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
+import com.aliyun.dysmsapi20170525.models.SendSmsResponseBody;
 import com.aliyun.teaopenapi.models.Config;
 import com.github.sparkzxl.sms.autoconfigure.SmsProperties;
 import com.github.sparkzxl.sms.constant.enums.SmsRegister;
 import com.github.sparkzxl.sms.entity.SmsResult;
+import com.github.sparkzxl.sms.parser.TemplateParamParser;
 import com.github.sparkzxl.sms.request.SendSmsReq;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
@@ -27,8 +31,7 @@ import java.util.Set;
 @Slf4j
 public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
 
-    public AliYunSmsExecutor(SmsProperties smsProperties,
-                             ApplicationEventPublisher eventPublisher) {
+    public AliYunSmsExecutor(SmsProperties smsProperties, ApplicationEventPublisher eventPublisher) {
         super(smsProperties, eventPublisher);
     }
 
@@ -40,43 +43,32 @@ public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
         }
         String phoneNumberListStr = StringUtils.joinWith(",", phones);
         try {
-            SendSmsRequest smsRequest = new SendSmsRequest()
-                    .setSignName(sendSmsReq.getSign())
-                    .setTemplateCode(sendSmsReq.getTemplateId())
-                    .setTemplateParam(JSONUtil.toJsonStr(sendSmsReq.getTemplateParams()))
-                    .setPhoneNumbers(phoneNumberListStr);
+            SendSmsRequest smsRequest = new SendSmsRequest().setSignName(sendSmsReq.getSign()).setTemplateCode(sendSmsReq.getTemplateId()).setTemplateParam(JSONUtil.toJsonStr(sendSmsReq.getTemplateParams())).setPhoneNumbers(phoneNumberListStr);
             SendSmsResponse response = obtainClient().sendSms(smsRequest);
             SendSmsResponseBody sendSmsResponseBody = response.getBody();
             String smsResponseBody = JSON.toJSONString(sendSmsResponseBody);
             log.info("阿里云短信发送结果：【{}】", smsResponseBody);
             boolean success = "OK".equals(sendSmsResponseBody.getCode());
+
             if (!success) {
-                publishSendFailEvent(smsResponseBody, sendSmsReq,
-                        new SmsException(sendSmsResponseBody.getCode(), sendSmsResponseBody.getMessage()));
+                publishSendFailEvent(smsResponseBody, sendSmsReq, new SmsException(sendSmsResponseBody.getCode(), sendSmsResponseBody.getMessage()));
             }
-            publishSendSuccessEvent(smsResponseBody, sendSmsReq);
-            return SmsResult.builder()
-                    .code(SmsExceptionCodeEnum.SUCCESS.getErrorCode())
-                    .isSuccess(success)
-                    .message(sendSmsResponseBody.getMessage())
-                    .response(smsResponseBody)
-                    .build();
+            String content = sendSmsReq.getTemplateContent();
+            if (MapUtil.isNotEmpty(sendSmsReq.getTemplateParams())) {
+                content = TemplateParamParser.replaceContent(content, sendSmsReq.getTemplateParams());
+            }
+            publishSendSuccessEvent(smsResponseBody, content, sendSmsReq);
+            return SmsResult.builder().code(SmsExceptionCodeEnum.SUCCESS.getErrorCode()).isSuccess(success).message(sendSmsResponseBody.getMessage()).response(smsResponseBody).build();
         } catch (Exception e) {
             log.error("阿里云短信发送异常：", e);
             publishSendFailEvent(null, sendSmsReq, e);
-            return SmsResult.builder()
-                    .code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode())
-                    .isSuccess(false)
-                    .message(e.getMessage())
-                    .build();
+            return SmsResult.builder().code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode()).isSuccess(false).message(e.getMessage()).build();
         }
     }
 
     @Override
     protected Client initClient(SmsProperties smsProperties) throws Exception {
-        Config config = new Config()
-                .setAccessKeyId(smsProperties.getAccessKeyId())
-                .setAccessKeySecret(smsProperties.getAccessKeySecret());
+        Config config = new Config().setAccessKeyId(smsProperties.getAccessKeyId()).setAccessKeySecret(smsProperties.getAccessKeySecret());
         // 访问的域名
         config.endpoint = smsProperties.getEndpoint();
         return new Client(config);

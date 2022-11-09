@@ -40,7 +40,8 @@ public class SmsSendFailEvent extends ApplicationEvent {
     private final Throwable cause;
 
     public SmsSendFailEvent(String response, String smsRegister,
-                            Set<String> phones, Map<String, Object> params, Throwable cause) {
+                            Set<String> phones, Map<String, Object> params,
+                            Throwable cause) {
         super(response);
         this.smsRegister = smsRegister;
         this.phones = phones;

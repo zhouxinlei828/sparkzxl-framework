@@ -13,12 +13,15 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
-import com.tencentcloudapi.sms.v20210111.models.*;
+import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
+import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.util.CollectionUtils;
 
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,9 +53,11 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
             req.setPhoneNumberSet(phoneNumberSet);
             /* 模板参数: 若无模板参数，则设置为空 */
             Map<String, Object> templateParamMap = sendSmsReq.getTemplateParams();
+            String content = sendSmsReq.getTemplateContent();
             if (MapUtil.isNotEmpty(templateParamMap)) {
                 String[] templateParamSet = templateParamMap.values().stream().map(String::valueOf).toArray(String[]::new);
                 req.setTemplateParamSet(templateParamSet);
+                content = MessageFormat.format(content, templateParamMap.values().toArray());
             }
             req.setSessionContext(IdUtil.fastSimpleUUID());
             SendSmsResponse response = obtainClient().SendSms(req);
@@ -73,20 +78,12 @@ public class TencentSmsExecutor extends AbstractSmsExecutor<SmsClient> {
             if (!success) {
                 publishSendFailEvent(sendSmsResponseJson, sendSmsReq, new SmsException(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode(), message));
             }
-            publishSendSuccessEvent(sendSmsResponseJson, sendSmsReq);
-            return SmsResult.builder()
-                    .code(code)
-                    .isSuccess(success)
-                    .response(sendSmsResponseJson)
-                    .message(message).build();
+            publishSendSuccessEvent(sendSmsResponseJson, content, sendSmsReq);
+            return SmsResult.builder().code(code).isSuccess(success).response(sendSmsResponseJson).message(message).build();
         } catch (TencentCloudSDKException e) {
             log.error("腾讯云短信发送异常：", e);
             publishSendFailEvent(null, sendSmsReq, e);
-            return SmsResult.builder()
-                    .code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode())
-                    .isSuccess(false)
-                    .message(e.getMessage())
-                    .build();
+            return SmsResult.builder().code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode()).isSuccess(false).message(e.getMessage()).build();
         }
     }
 

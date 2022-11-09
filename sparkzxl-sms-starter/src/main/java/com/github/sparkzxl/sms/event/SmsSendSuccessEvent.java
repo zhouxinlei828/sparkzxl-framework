@@ -1,6 +1,5 @@
 package com.github.sparkzxl.sms.event;
 
-import com.github.sparkzxl.sms.constant.enums.SmsRegister;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -30,15 +29,20 @@ public class SmsSendSuccessEvent extends ApplicationEvent {
      */
     private final Set<String> phones;
 
+    private final String msgContent;
+
     /**
      * 参数列表.
      */
     private final Map<String, Object> params;
 
-    public SmsSendSuccessEvent(String response, String smsRegister, Set<String> phones, Map<String, Object> params) {
+    public SmsSendSuccessEvent(String response, String smsRegister,
+                               Set<String> phones, String msgContent,
+                               Map<String, Object> params) {
         super(response);
         this.smsRegister = smsRegister;
         this.phones = phones;
+        this.msgContent = msgContent;
         this.params = params;
     }
 }
