@@ -1,14 +1,14 @@
 package com.github.sparkzxl.mybatis.plugins;
 
-import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import com.baomidou.mybatisplus.extension.toolkit.PropertyMapper;
-import lombok.Getter;
-import lombok.Setter;
+import com.github.sparkzxl.mybatis.constant.SqlConditions;
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
@@ -18,6 +18,7 @@ import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
+import net.sf.jsqlparser.util.cnfexpression.MultiOrExpression;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
@@ -29,7 +30,7 @@ import org.apache.ibatis.session.RowBounds;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * description: 数据权限拦截器
@@ -37,15 +38,16 @@ import java.util.Properties;
  * @author zhouxinlei
  * @since 2022-07-2022/7/18 13:36:09
  */
-@Setter
-@Getter
+@Slf4j
 public class DataScopeInnerInterceptor extends JsqlParserSupport implements InnerInterceptor {
 
     private final static String SELECT = "SELECT";
-    private DataScopeLineHandler dataScopeLineHandler;
+    private final DataScopeLineHandler dataScopeLineHandler;
+    private final DbType dbType;
 
-    public DataScopeInnerInterceptor(DataScopeLineHandler dataScopeLineHandler) {
+    public DataScopeInnerInterceptor(DataScopeLineHandler dataScopeLineHandler, DbType dbType) {
         this.dataScopeLineHandler = dataScopeLineHandler;
+        this.dbType = dbType;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             SqlCommandType sct = ms.getSqlCommandType();
             if (sct == SqlCommandType.UPDATE || sct == SqlCommandType.DELETE) {
                 PluginUtils.MPBoundSql mpBs = mpSh.mPBoundSql();
-                mpBs.sql(parserSingle(mpBs.sql(), null));
+                mpBs.sql(parserMulti(mpBs.sql(), null));
             }
         }
     }
@@ -65,7 +67,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
         if (dataScopeLineHandler.match()) {
             PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
-            mpBs.sql(parserMulti(mpBs.sql(), null));
+            mpBs.sql(parserSingle(mpBs.sql(), null));
         }
     }
 
@@ -76,6 +78,10 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     protected void processUpdate(Update update, int index, String sql, Object obj) {
         final Table table = update.getTable();
         if (dataScopeLineHandler.ignoreTable(table.getName())) {
+            // 过滤退出执行
+            return;
+        }
+        if (!SqlCommandType.UPDATE.equals(dataScopeLineHandler.getSqlCommandType())) {
             // 过滤退出执行
             return;
         }
@@ -95,11 +101,19 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             // 过滤退出执行
             return;
         }
-        Expression expression = this.andExpression(delete.getTable(), delete.getWhere());
-        if (expression == null) {
+        if (!SqlCommandType.DELETE.equals(dataScopeLineHandler.getSqlCommandType())) {
+            // 过滤退出执行
             return;
         }
-        delete.setWhere(expression);
+        SqlConditions sqlCondition = dataScopeLineHandler.getSqlCondition();
+        if (sqlCondition == SqlConditions.AND) {
+            Expression expression = this.andExpression(delete.getTable(), delete.getWhere());
+            if (expression == null) {
+                return;
+            }
+            delete.setWhere(expression);
+        }
+
     }
 
     /**
@@ -113,7 +127,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
         //获得where条件表达式
         EqualsTo equalsTo = new EqualsTo();
         equalsTo.setLeftExpression(this.getAliasColumn(table));
-        equalsTo.setRightExpression(dataScopeLineHandler.getScopeId());
+        equalsTo.setRightExpression(new StringValue(dataScopeLineHandler.getScopeId()));
         if (null != where) {
             if (where instanceof OrExpression) {
                 return new AndExpression(equalsTo, new Parenthesis(where));
@@ -328,25 +342,13 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
      * @return Expression
      */
     protected Expression builderExpression(Expression currentExpression, Table table) {
-        ValueListExpression listExpression = dataScopeLineHandler.getScopeIdList();
-        if (listExpression != null) {
-            InExpression in = new InExpression();
-            in.setLeftExpression(this.getAliasColumn(table));
-            in.setRightExpression(listExpression);
-            if (currentExpression == null) {
-                return in;
-            }
-            if (currentExpression instanceof OrExpression) {
-                return new AndExpression(new Parenthesis(currentExpression), in);
-            } else {
-                return new AndExpression(currentExpression, in);
-            }
-        } else {
-            Expression scopeId = dataScopeLineHandler.getScopeId();
+        SqlConditions sqlCondition = dataScopeLineHandler.getSqlCondition();
+        if (sqlCondition == SqlConditions.AND) {
+            String scopeId = dataScopeLineHandler.getScopeId();
             EqualsTo equalsTo = new EqualsTo();
             if (scopeId != null) {
                 equalsTo.setLeftExpression(this.getAliasColumn(table));
-                equalsTo.setRightExpression(dataScopeLineHandler.getScopeId());
+                equalsTo.setRightExpression(new StringValue(scopeId));
             } else {
                 return null;
             }
@@ -358,7 +360,51 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             } else {
                 return new AndExpression(currentExpression, equalsTo);
             }
+        } else if (sqlCondition == SqlConditions.IN) {
+            List<String> scopeIdList = dataScopeLineHandler.getScopeIdList();
+            if (scopeIdList != null) {
+                ValueListExpression valueListExpression = new ValueListExpression();
+                List<Expression> expressionList = scopeIdList.stream().map(StringValue::new).collect(Collectors.toList());
+                valueListExpression.setExpressionList(new ExpressionList(expressionList));
+                InExpression in = new InExpression();
+                in.setLeftExpression(this.getAliasColumn(table));
+                in.setRightExpression(valueListExpression);
+                if (currentExpression == null) {
+                    return in;
+                }
+                if (currentExpression instanceof OrExpression) {
+                    return new AndExpression(new Parenthesis(currentExpression), in);
+                } else {
+                    return new AndExpression(currentExpression, in);
+                }
+            }
+
+        } else if (sqlCondition == SqlConditions.LIST_IN) {
+            List<String> scopeIdList = dataScopeLineHandler.getScopeIdList();
+            if (scopeIdList != null) {
+                List<Expression> functionList = Lists.newArrayList();
+                String functionName = "";
+                if (dbType == DbType.MYSQL) {
+                    functionName = "FIND_IN_SET";
+                } else {
+                    log.debug("Check whether the FIND_IN_SET function is available in {}", dbType.getDb());
+                }
+                for (String scopeId : scopeIdList) {
+                    Function function = new Function();
+                    // 设置函数名
+                    function.setName(functionName);
+                    // 创建参数表达式
+                    ExpressionList expressionListCount = new ExpressionList();
+                    expressionListCount.setExpressions(Lists.newArrayList(new StringValue(scopeId), this.getAliasColumn(table)));
+                    // 设置参数
+                    function.setParameters(expressionListCount);
+                    functionList.add(function);
+                }
+                MultiOrExpression multiOrExpression = new MultiOrExpression(functionList);
+                return new AndExpression(currentExpression, multiOrExpression);
+            }
         }
+        return null;
     }
 
     /**
@@ -375,11 +421,5 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
         }
         column.append(dataScopeLineHandler.getScopeIdColumn());
         return new Column(column.toString());
-    }
-
-    @Override
-    public void setProperties(Properties properties) {
-        PropertyMapper.newInstance(properties).whenNotBlank("dataScopeLineHandler",
-                ClassUtils::newInstance, this::setDataScopeLineHandler);
     }
 }

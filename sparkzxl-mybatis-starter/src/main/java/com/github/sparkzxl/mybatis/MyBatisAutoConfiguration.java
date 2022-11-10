@@ -93,7 +93,7 @@ public class MyBatisAutoConfiguration {
             interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         }
         if (dataProperties.isEnableDataScope()) {
-            interceptor.addInnerInterceptor(new DataScopeInnerInterceptor(dataScopeLineHandler));
+            interceptor.addInnerInterceptor(new DataScopeInnerInterceptor(dataScopeLineHandler, dataProperties.getDbType()));
         }
         // sql性能规范插件
         if (dataProperties.getIsIllegalSql()) {

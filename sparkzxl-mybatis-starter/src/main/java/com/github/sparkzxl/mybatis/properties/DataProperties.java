@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.constant.enums.IdTypeEnum;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
+import com.github.sparkzxl.mybatis.constant.SqlConditions;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -105,7 +107,6 @@ public class DataProperties {
      * 使用数据权限
      */
     private List<DataScope> dataScopeList;
-
 
 
     @Data
@@ -211,9 +212,30 @@ public class DataProperties {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DataScope {
+        /**
+         * 数据权限id标识
+         */
         private String scopeId;
+        /**
+         * 数据权限字段
+         */
         private String column;
+        /**
+         * SQL类型
+         */
+        private SqlCommandType sqlCommandType;
+        /**
+         * 条件类型
+         */
+        private SqlConditions condition;
+        /**
+         * 表名
+         */
         private String tableName;
+        /**
+         * 查询key值
+         * 查询key值
+         */
         private String loadKey;
     }
 
