@@ -92,4 +92,9 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
         }
         return dataPermissions;
     }
+
+    @Override
+    public void remove() {
+        scopeThreadLocal.remove();
+    }
 }

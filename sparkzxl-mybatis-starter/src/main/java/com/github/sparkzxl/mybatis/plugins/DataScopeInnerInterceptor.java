@@ -90,6 +90,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             return;
         }
         update.setWhere(expression);
+        dataScopeLineHandler.remove();
     }
 
     /**
@@ -113,7 +114,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             }
             delete.setWhere(expression);
         }
-
+        dataScopeLineHandler.remove();
     }
 
     /**
@@ -138,7 +139,6 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
         return equalsTo;
     }
 
-
     @Override
     protected void processSelect(Select select, int index, String sql, Object obj) {
         processSelectBody(select.getSelectBody());
@@ -146,6 +146,7 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
         if (!CollectionUtils.isEmpty(withItemsList)) {
             withItemsList.forEach(this::processSelectBody);
         }
+        dataScopeLineHandler.remove();
     }
 
     protected void processSelectBody(SelectBody selectBody) {
@@ -378,7 +379,6 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                     return new AndExpression(currentExpression, in);
                 }
             }
-
         } else if (sqlCondition == SqlConditions.LIST_IN) {
             List<String> scopeIdList = dataScopeLineHandler.getScopeIdList();
             if (scopeIdList != null) {

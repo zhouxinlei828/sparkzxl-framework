@@ -77,4 +77,6 @@ public interface DataScopeLineHandler {
      * @return 数据权限值表达式
      */
     List<String> getScopeIdList();
+
+    void remove();
 }
