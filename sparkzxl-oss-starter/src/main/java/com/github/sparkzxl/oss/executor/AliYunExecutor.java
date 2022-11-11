@@ -18,24 +18,19 @@ import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * description: aliYun 执行器
@@ -134,6 +129,24 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     e.getHostId());
             e.printStackTrace();
             throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
+        }
+    }
+
+    @Override
+    public boolean exists(String bucketName, String objectName) {
+        OSSClient ossClient = obtainClient();
+        try {
+            return ossClient.doesObjectExist(bucketName, objectName);
+        } catch (OSSException e) {
+            log.error("Caught an OSSException, which means your request made it to OSS, "
+                            + "but was rejected with an error response for some reason.\n"
+                            + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
+                    e.getErrorCode(),
+                    e.getErrorMessage(),
+                    e.getRequestId(),
+                    e.getHostId());
+            e.printStackTrace();
+            throw new OssException(OssErrorCode.OSS_ERROR);
         }
     }
 
@@ -330,38 +343,14 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         }
     }
 
-    @SneakyThrows(IOException.class)
     @Override
-    public void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response) {
+    public void downloadFile(String bucketName, String objectName, Consumer<InputStream> consumer) {
         OSSClient ossClient = obtainClient();
-        ServletOutputStream outputStream = null;
-        InputStream inputStream = null;
-        try {
-            OSSObject ossObject = ossClient.getObject(bucketName, objectName);
-            String contentLength = String.valueOf(ossObject.getObjectMetadata().getContentLength());
-            inputStream = ossObject.getObjectContent();
-            // 清空response
-            response.reset();
-            response.setContentType(ossObject.getObjectMetadata().getContentType());
-            // 设置response的Header
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.addHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
-            response.addHeader("Content-Length", contentLength);
-            outputStream = response.getOutputStream();
-            int length;
-            byte[] bs = new byte[1024];
-            while ((length = inputStream.read(bs)) != -1) {
-                outputStream.write(bs, 0, length);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            if (Objects.nonNull(outputStream)) {
-                outputStream.close();
-            }
-            if (Objects.nonNull(inputStream)) {
-                inputStream.close();
-            }
+        OSSObject ossObject = ossClient.getObject(bucketName, objectName);
+        try (InputStream in = ossObject.getObjectContent()) {
+            consumer.accept(in);
+        } catch (IOException e) {
+            throw new OssException(OssErrorCode.DOWNLOAD_OBJECT_ERROR, e);
         }
     }
 

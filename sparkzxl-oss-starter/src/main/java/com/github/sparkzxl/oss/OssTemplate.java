@@ -13,6 +13,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.util.function.Consumer;
 
 /**
  * description:  文件操作模板类
@@ -89,6 +91,18 @@ public class OssTemplate implements InitializingBean {
     }
 
     /**
+     * 文件是否存在
+     *
+     * @param bucketName bucket名称
+     * @param objectName 文件名称
+     * @return boolean
+     */
+    public boolean exists(String bucketName, String objectName) {
+        OssExecutor ossExecutor = obtainExecutor();
+        return ossExecutor.exists(bucketName, objectName);
+    }
+
+    /**
      * 上传文件
      *
      * @param bucketName    bucket名称
@@ -135,9 +149,9 @@ public class OssTemplate implements InitializingBean {
         ossExecutor.removeObject(bucketName, objectName);
     }
 
-    public void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response) {
+    public void downloadFile(String bucketName, String objectName, Consumer<InputStream> consumer) {
         OssExecutor ossExecutor = obtainExecutor();
-        ossExecutor.downloadFile(bucketName, objectName, fileName, response);
+        ossExecutor.downloadFile(bucketName, objectName, consumer);
     }
 
     protected OssExecutor obtainExecutor() {

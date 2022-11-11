@@ -5,7 +5,8 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.util.function.Consumer;
 
 /**
  * description: oss 执行器
@@ -68,6 +69,15 @@ public interface OssExecutor {
     S3Object getObjectInfo(String bucketName, String objectName);
 
     /**
+     * 判断文件是否存在
+     *
+     * @param bucketName bucket名称
+     * @param objectName 文件名称
+     * @return boolean
+     */
+    boolean exists(String bucketName, String objectName);
+
+    /**
      * 上传文件
      *
      * @param bucketName    bucket名称
@@ -107,15 +117,14 @@ public interface OssExecutor {
      *
      * @param bucketName bucket名称
      * @param objectName 文件名称
-     * @param fileName   文件名
-     * @param response   响应
+     * @param consumer   消费
      */
-    void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response);
+    void downloadFile(String bucketName, String objectName, Consumer<InputStream> consumer);
 
     /**
      * 文件url前半段
      *
-     * @param bucket 桶
+     * @param bucket bucket名称
      * @return UrlBuilder
      */
     UrlBuilder getObjectPrefixUrl(String bucket);
