@@ -14,6 +14,7 @@ public enum SqlConditions implements ISqlSegment {
 
     AND("AND"),
     IN("IN"),
+    LIKE("LIKE"),
     LIST_IN("LIST_IN"),
     ;
 

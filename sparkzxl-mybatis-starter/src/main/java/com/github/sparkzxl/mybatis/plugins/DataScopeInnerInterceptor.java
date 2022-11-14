@@ -403,6 +403,23 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                 MultiOrExpression multiOrExpression = new MultiOrExpression(functionList);
                 return new AndExpression(currentExpression, multiOrExpression);
             }
+        } else if (sqlCondition == SqlConditions.LIKE) {
+            String scopeId = dataScopeLineHandler.getScopeId();
+            LikeExpression likeExpression = new LikeExpression();
+            if (scopeId != null) {
+                likeExpression.setLeftExpression(this.getAliasColumn(table));
+                likeExpression.setRightExpression(new StringValue(scopeId));
+            } else {
+                return null;
+            }
+            if (currentExpression == null) {
+                return likeExpression;
+            }
+            if (currentExpression instanceof OrExpression) {
+                return new AndExpression(new Parenthesis(currentExpression), likeExpression);
+            } else {
+                return new AndExpression(currentExpression, likeExpression);
+            }
         }
         return null;
     }
