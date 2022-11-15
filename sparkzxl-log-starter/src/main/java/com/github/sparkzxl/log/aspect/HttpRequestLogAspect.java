@@ -1,18 +1,19 @@
 package com.github.sparkzxl.log.aspect;
 
+import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
 import com.github.sparkzxl.log.utils.LogUtils;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -42,7 +43,6 @@ public class HttpRequestLogAspect {
 
     public static final int MAX_LENGTH = 65535;
     private static final ThreadLocal<RequestInfoLog> THREAD_LOCAL = new ThreadLocal<>();
-    private Stopwatch watch = Stopwatch.createUnstarted();
     /**
      * 用于获取方法参数定义名字.
      */
@@ -59,7 +59,6 @@ public class HttpRequestLogAspect {
     @Before("pointCut()")
     public void beforeMethod(JoinPoint joinPoint) {
         tryCatch((x) -> {
-            watch.start();
             HttpRequestLog httpRequestLog = LogUtils.getTargetAnnotation(joinPoint);
             HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
             assert httpRequestLog != null;
@@ -105,9 +104,7 @@ public class HttpRequestLogAspect {
 
     private void publishEvent(RequestInfoLog requestInfoLog) {
         requestInfoLog.setFinishTime(LocalDateTime.now());
-        watch.stop();
-        requestInfoLog.setConsumingTime(watch.toString());
-        watch.reset();
+        requestInfoLog.setConsumingTime(DateUtils.formatBetween(requestInfoLog.getStartTime(), requestInfoLog.getFinishTime(), BetweenFormatter.Level.MILLISECOND));
         SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
         remove();
     }
