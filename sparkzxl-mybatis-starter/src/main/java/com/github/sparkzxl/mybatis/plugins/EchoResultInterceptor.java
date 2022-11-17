@@ -37,9 +37,9 @@ public class EchoResultInterceptor implements Interceptor {
         Object proceed = invocation.proceed();
         EchoService echoService = applicationContext.getBean(EchoService.class);
         if (echoProperties.getEnabled()) {
-            log.info("查询数据回显注入开始======>");
+            log.debug("查询数据回显注入开始======>");
             echoService.action(proceed, echoProperties.getGuavaCache().getEnabled(), ArrayUtils.EMPTY_STRING_ARRAY);
-            log.info("查询数据回显注入结束======>");
+            log.debug("查询数据回显注入结束======>");
         }
         return proceed;
     }
