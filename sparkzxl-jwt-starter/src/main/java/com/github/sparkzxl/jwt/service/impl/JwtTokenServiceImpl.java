@@ -49,6 +49,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public String createTokenByRsa(JwtUserInfo jwtUserInfo) {
+        JWSObject jwsObject = null;
         try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
@@ -62,7 +63,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             String payloadStr = JSONUtil.toJsonStr(jwtUserInfo);
             Payload payload = new Payload(payloadStr);
             //创建JWS对象
-            JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+            jwsObject = new JWSObject(jwsHeader, payload);
             //创建RSA签名器
             JWSSigner jwsSigner = new RSASSASigner(getRsaKey());
             //签名
@@ -71,7 +72,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             e.printStackTrace();
             ExceptionAssert.failure("生成token发生异常：".concat(e.getMessage()));
         }
-        return "";
+        return jwsObject.serialize();
     }
 
     @Override
@@ -123,6 +124,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public String createTokenByHmac(JwtUserInfo jwtUserInfo) {
+        JWSObject jwsObject = null;
         try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
@@ -132,14 +134,14 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             String payloadStr = JSONUtil.toJsonStr(jwtUserInfo);
             Payload payload = new Payload(payloadStr);
             //创建JWS对象
-            JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+            jwsObject = new JWSObject(jwsHeader, payload);
             JWSSigner jwsSigner = new MACSigner(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
             jwsObject.sign(jwsSigner);
         } catch (Exception e) {
             e.printStackTrace();
             ExceptionAssert.failure("生成token发生异常：".concat(e.getMessage()));
         }
-        return "";
+        return jwsObject.serialize();
     }
 
     @Override
