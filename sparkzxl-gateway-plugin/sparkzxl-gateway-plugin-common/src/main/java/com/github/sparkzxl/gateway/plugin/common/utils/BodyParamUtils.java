@@ -111,12 +111,7 @@ public final class BodyParamUtils {
             if (obj instanceof JSONObject) {
                 return Convert.toMap(String.class, Object.class, obj);
             } else if (obj instanceof JSONArray) {
-                return Convert.convert(new TypeReference<List<Object>>() {
-                    @Override
-                    public Type getType() {
-                        return super.getType();
-                    }
-                }, obj);
+                return Convert.convert(new TypeReference<List<Object>>() {}, obj);
             } else {
                 return obj;
             }

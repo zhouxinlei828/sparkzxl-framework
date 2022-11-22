@@ -65,8 +65,7 @@ public class RedisCacheImpl implements CacheService {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
-        T obj = Convert.convert(new TypeReference<T>() {
-        }, valueOperations.get(key));
+        T obj = Convert.convert(new TypeReference<T>() {}, valueOperations.get(key));
         if (obj == null && function != null) {
             obj = function.apply(funcParam);
             Optional.ofNullable(obj).ifPresent(value -> set(key, value, timeout));

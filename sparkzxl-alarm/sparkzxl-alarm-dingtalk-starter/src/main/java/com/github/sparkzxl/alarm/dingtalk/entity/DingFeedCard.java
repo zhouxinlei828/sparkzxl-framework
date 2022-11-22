@@ -113,8 +113,7 @@ public class DingFeedCard extends DingTalkMessage {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
-                }, value);
+                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {}, value);
                 for (BaseImageText baseImageText : baseImageTexts) {
                     this.feedCard.links.add(new FeedCard.Link(baseImageText.getTitle(), baseImageText.getUrl(), baseImageText.getPicUrl()));
                 }

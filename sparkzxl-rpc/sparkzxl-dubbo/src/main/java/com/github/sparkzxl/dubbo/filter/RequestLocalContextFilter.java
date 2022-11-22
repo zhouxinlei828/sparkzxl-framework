@@ -28,12 +28,7 @@ public class RequestLocalContextFilter implements Filter, Filter.Listener {
         RpcServiceContext context = RpcContext.getServiceContext();
         if (context.isProviderSide()) {
             Map<String, Object> attachmentMap = context.getObjectAttachments();
-            Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {
-                @Override
-                public Type getType() {
-                    return super.getType();
-                }
-            }, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
+            Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {}, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
             attachmentMap.putAll(threadLocalMap);
             RequestLocalContextHolder.setLocalMap(attachmentMap);
         } else if (RpcContext.getServiceContext().isConsumerSide()) {

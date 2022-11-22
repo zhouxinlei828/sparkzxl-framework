@@ -42,8 +42,7 @@ public class FeiShuTalkText extends Message {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<FeiShuAt> atList = Convert.convert(new TypeReference<List<FeiShuAt>>() {
-                }, value);
+                List<FeiShuAt> atList = Convert.convert(new TypeReference<List<FeiShuAt>>() {}, value);
                 setAtList(atList);
                 break;
             }

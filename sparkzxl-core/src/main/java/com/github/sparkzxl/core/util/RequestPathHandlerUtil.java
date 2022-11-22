@@ -1,7 +1,6 @@
 package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.text.StrSplitter;
-import cn.hutool.core.util.CreditCodeUtil;
 import cn.hutool.core.util.URLUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +16,7 @@ import java.util.Map;
  *
  * @author zhouxinlei
  */
-public class StringHandlerUtil {
+public class RequestPathHandlerUtil {
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 
@@ -73,11 +72,5 @@ public class StringHandlerUtil {
             stringBuilder.append(String.valueOf(cs));
         }
         return stringBuilder.toString();
-    }
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 20; i++) {
-            System.out.println(CreditCodeUtil.randomCreditCode());
-        }
     }
 }
