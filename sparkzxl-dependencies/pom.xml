@@ -68,7 +68,7 @@
         <caffeine.version>2.9.3</caffeine.version>
         <fastjson.version>1.2.83</fastjson.version>
         <easy-excel.version>3.0.5</easy-excel.version>
-        <retrofit-spring-boot-starter.version>2.2.21</retrofit-spring-boot-starter.version>
+        <retrofit-spring-boot-starter.version>2.3.10</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.0</xxl-job.version>
         <javax.el.version>3.0-b01</javax.el.version>
         <dubbo-spring-boot-actuator.version>2.7.8</dubbo-spring-boot-actuator.version>
