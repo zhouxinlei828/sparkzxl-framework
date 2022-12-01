@@ -24,7 +24,7 @@ public class TraceFilter implements WebFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         //链路追踪id
         String traceId = IdUtil.fastSimpleUUID();
-        MDC.put("tid", traceId);
+        MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
         ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate()
                 .headers(h -> h.add(BaseContextConstants.TRACE_ID_HEADER, traceId))
                 .build();
