@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
  * @since 2022-12-01 10:10:16
  */
 @Slf4j
+@SuppressWarnings("ALL")
 public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
     /**
