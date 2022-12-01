@@ -3,6 +3,7 @@ package com.github.sparkzxl.feign.resilience4j.client;
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
+import com.github.sparkzxl.feign.resilience4j.utils.ServiceInstanceUtil;
 import feign.Client;
 import feign.Request;
 import feign.Response;
@@ -69,9 +70,9 @@ public class Resilience4jFeignClient implements Client {
         String contextId = feignClient.contextId();
 
         //获取实例唯一id
-        String serviceInstanceId = getServiceInstanceId(request);
+        String serviceInstanceId = ServiceInstanceUtil.getServiceInstanceId(request);
         //获取实例+方法唯一id
-        String serviceInstanceMethodId = getServiceInstanceMethodId(request);
+        String serviceInstanceMethodId = ServiceInstanceUtil.getServiceInstanceMethodId(request);
 
         ThreadPoolBulkheadConfig threadPoolBulkheadConfig = threadPoolBulkheadConfigs.computeIfAbsent(contextId, defaultThreadPoolBulkheadConfig);
         //每个实例一个线程池
@@ -121,27 +122,6 @@ public class Resilience4jFeignClient implements Client {
             }
             throw e;
         }
-    }
-
-    public static String getServiceInstance(String host, int port) {
-        return MessageFormat.format("{0}:{1}", host, String.valueOf(port));
-    }
-
-    private String getServiceInstanceId(Request request) throws MalformedURLException {
-        URL url = new URL(request.url());
-        return getServiceInstance(url.getHost(), url.getPort());
-    }
-
-    private String getServiceInstanceMethodId(Request request) throws MalformedURLException {
-        URL url = new URL(request.url());
-        //通过微服务名称 + 实例 + 方法的方式，获取唯一id
-        return getServiceInstanceMethodId(url.getHost(), url.getPort(), request.requestTemplate().methodMetadata().method());
-    }
-
-    public static String getServiceInstanceMethodId(String host, int port, Method method) {
-        return getServiceInstance(host, port) + ":" + MessageFormat.format("{0}:{1}",
-                method.getDeclaringClass().getName(),
-                method.getName());
     }
 
 }

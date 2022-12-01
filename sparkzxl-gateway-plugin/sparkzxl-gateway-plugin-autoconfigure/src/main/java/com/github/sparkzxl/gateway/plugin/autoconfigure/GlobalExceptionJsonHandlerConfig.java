@@ -5,7 +5,7 @@ import com.github.sparkzxl.gateway.plugin.exception.JsonExceptionHandler;
 import com.github.sparkzxl.gateway.plugin.exception.factory.DefaultExceptionHandlerStrategyFactory;
 import com.github.sparkzxl.gateway.plugin.exception.factory.ExceptionHandlerStrategyFactory;
 import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategy;
-import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
+import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

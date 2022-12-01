@@ -19,27 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-exception</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-jwt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-loadbalancer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-sign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
+            <artifactId>sparkzxl-gateway-plugin-core</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
 import com.github.sparkzxl.gateway.plugin.exception.strategy.*;
-import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
+import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

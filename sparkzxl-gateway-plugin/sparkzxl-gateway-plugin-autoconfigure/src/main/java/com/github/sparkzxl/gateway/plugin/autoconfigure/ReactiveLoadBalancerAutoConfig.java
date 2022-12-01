@@ -6,7 +6,7 @@ import com.github.sparkzxl.gateway.plugin.loadbalancer.rule.RandomLoadBalancerRu
 import com.github.sparkzxl.gateway.plugin.loadbalancer.rule.RoundRobinLoadBalancerRule;
 import com.github.sparkzxl.gateway.plugin.loadbalancer.service.IReactorServiceInstanceLoadBalancer;
 import com.github.sparkzxl.gateway.plugin.loadbalancer.service.ReactorServiceInstanceLoadBalancer;
-import com.github.sparkzxl.gateway.plugin.properties.ReactiveLoadBalancerProperties;
+import com.github.sparkzxl.gateway.properties.ReactiveLoadBalancerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
