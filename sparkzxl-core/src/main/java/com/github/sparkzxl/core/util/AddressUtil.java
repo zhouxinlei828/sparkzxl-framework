@@ -66,8 +66,4 @@ public class AddressUtil {
             }
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println(AddressUtil.getRegion("127.0.0.1"));
-    }
 }

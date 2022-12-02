@@ -1,7 +1,9 @@
 package com.github.sparkzxl.mybatis.plugins;
 
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.ValueListExpression;
+import com.github.sparkzxl.mybatis.constant.SqlConditions;
+import org.apache.ibatis.mapping.SqlCommandType;
+
+import java.util.List;
 
 /**
  * description: 数据权限 行级处理器
@@ -23,11 +25,29 @@ public interface DataScopeLineHandler {
     }
 
     /**
+     * 获取sql命令类型
+     *
+     * @return SqlCommandType
+     */
+    default SqlCommandType getSqlCommandType() {
+        return SqlCommandType.UNKNOWN;
+    }
+
+    /**
+     * 获取sql条件类型
+     *
+     * @return SqlConditions
+     */
+    default SqlConditions getSqlCondition() {
+        return SqlConditions.AND;
+    }
+
+    /**
      * 获取数据权限值表达式，只支持单个 ID 值
      *
      * @return scopeId 值表达式
      */
-    Expression getScopeId();
+    String getScopeId();
 
     /**
      * 数据权限字段列
@@ -35,7 +55,7 @@ public interface DataScopeLineHandler {
      * @return String
      */
     default String getScopeIdColumn() {
-        return "authority_code";
+        return "scope_id";
     }
 
     /**
@@ -56,5 +76,7 @@ public interface DataScopeLineHandler {
      *
      * @return 数据权限值表达式
      */
-    ValueListExpression getScopeIdList();
+    List<String> getScopeIdList();
+
+    void remove();
 }

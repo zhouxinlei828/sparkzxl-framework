@@ -1,5 +1,7 @@
 package com.github.sparkzxl.core.util;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.TypeReference;
 import com.google.common.collect.Lists;
 
 import java.io.ByteArrayInputStream;
@@ -23,7 +25,7 @@ public class CopyUtils {
             out.writeObject(srcList);
             ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
             ObjectInputStream inStream = new ObjectInputStream(byteIn);
-            return (List<T>) inStream.readObject();
+            return Convert.convert(new TypeReference<List<T>>() {}, inStream.readObject());
         } catch (Exception e) {
             e.printStackTrace();
             return Lists.newArrayList();
@@ -32,7 +34,7 @@ public class CopyUtils {
 
     public static <T extends Object> T deepCopy(T data) {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-        ObjectOutputStream out = null;
+        ObjectOutputStream out;
         try {
             out = new ObjectOutputStream(byteOut);
             out.writeObject(data);

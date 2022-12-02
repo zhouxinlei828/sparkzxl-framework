@@ -13,10 +13,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SmsExceptionCodeEnum {
 
-    SUCCESS("S000", "成功"),
-    PHONE_IS_EMPTY("S001", "手机号为空"),
+    SUCCESS("0000", "发送成功"),
+    SMS_SEND_FAIL("S001", "发送失败"),
+    PHONE_IS_EMPTY("S002", "手机号为空"),
+    NOT_FOUND_SMS_REGISTER("S003", "未找到短信注册商"),
     ;
-
     private final String errorCode;
     private final String errorMsg;
 }

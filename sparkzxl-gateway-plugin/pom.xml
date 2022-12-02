@@ -12,51 +12,15 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>sparkzxl-gateway-plugin-common</module>
-        <module>sparkzxl-gateway-plugin-logging</module>
-        <module>sparkzxl-gateway-plugin-jwt</module>
+        <module>sparkzxl-gateway-plugin-core</module>
         <module>sparkzxl-gateway-plugin-autoconfigure</module>
-        <module>sparkzxl-gateway-plugin-loadbalancer</module>
-        <module>sparkzxl-gateway-plugin-exception</module>
-        <module>sparkzxl-gateway-plugin-sign</module>
-        <module>sparkzxl-gateway-plugin-dubbo</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-exception</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-jwt</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-loadbalancer</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-logging</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-sign</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sparkzxl</groupId>
-                <artifactId>sparkzxl-gateway-plugin-dubbo</artifactId>
+                <artifactId>sparkzxl-gateway-plugin-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

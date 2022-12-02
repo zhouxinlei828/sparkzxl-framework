@@ -15,9 +15,9 @@ public enum SmsRegister {
     /**
      * 注册商
      */
-    ALIYUN(1, "aliyun"),
-    TENCENT(2, "tencent");
-    private final Integer id;
+    ALIYUN("aliyun", "阿里云短信"),
+    TENCENT("tencent", "腾讯云短信");
+    private final String code;
     private final String name;
 
 }

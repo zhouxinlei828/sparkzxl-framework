@@ -194,13 +194,13 @@ public class DateUtils extends DateUtil {
     /**
      * 计算时间差
      *
-     * @param localDateTime 开始时间
-     * @param endDate       结束时间
+     * @param beginTime 开始时间
+     * @param endTime       结束时间
      * @param level         格式化类型
      * @return String
      */
-    public static String formatBetween(LocalDateTime localDateTime, Date endDate, BetweenFormatter.Level level) {
-        return formatBetween(DateUtils.localDateTime2Date(localDateTime), endDate, level);
+    public static String formatBetween(LocalDateTime beginTime, LocalDateTime endTime, BetweenFormatter.Level level) {
+        return formatBetween(DateUtils.localDateTime2Date(beginTime), DateUtils.localDateTime2Date(endTime), level);
     }
 
     /**

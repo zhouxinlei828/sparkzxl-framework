@@ -13,11 +13,6 @@ import lombok.Getter;
 public class SmsException extends RuntimeException {
 
     private static final long serialVersionUID = -9028217853132686956L;
-
-    private int code;
-
-    private String message;
-
     private String errorCode;
 
     private String errorMsg;
@@ -27,9 +22,9 @@ public class SmsException extends RuntimeException {
         super(cause);
     }
 
-    public SmsException(int code, String message) {
-        this.code = code;
-        this.message = message;
+    public SmsException(String errorCode, String errorMsg) {
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
     }
 
     public SmsException(SmsExceptionCodeEnum smsExceptionCodeEnum) {

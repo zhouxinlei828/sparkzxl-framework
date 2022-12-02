@@ -34,6 +34,17 @@ public class OssException extends RuntimeException implements BaseException {
         this.errorMsg = errorCode.getErrorMsg();
     }
 
+    public OssException(IErrorCode errorCode, Throwable cause) {
+        super(errorCode.getErrorMsg(), cause);
+        this.errorCode = errorCode.getErrorCode();
+        this.errorMsg = errorCode.getErrorMsg();
+    }
+
+    public OssException(String errorCode, String errorMsg, Throwable cause) {
+        super(errorMsg, cause);
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
+    }
 
     @Override
     public String getErrorMsg() {

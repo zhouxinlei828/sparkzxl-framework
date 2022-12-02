@@ -34,6 +34,8 @@ public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
         RequestLocalContextHolder.setAccount(request.getHeader(BaseContextConstants.JWT_KEY_ACCOUNT));
         RequestLocalContextHolder.setName(request.getHeader(BaseContextConstants.JWT_KEY_NAME));
         RequestLocalContextHolder.setVersion(request.getHeader(BaseContextConstants.VERSION));
+        String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
+        MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
         MDC.put(BaseContextConstants.TENANT_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT_ID));
         MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
         Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);

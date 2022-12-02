@@ -73,8 +73,9 @@ public class MyBatisAutoConfiguration {
             }
         } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
             // 多租户插件
-            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(dataProperties.getTenantDatabasePrefix());
-            interceptor.addInnerInterceptor(schemaInterceptor);
+            DynamicSchemaInterceptor dynamicSchemaInterceptor = new DynamicSchemaInterceptor(dataProperties.getDbType(),
+                    dataProperties.getTenantDatabasePrefix());
+            interceptor.addInnerInterceptor(dynamicSchemaInterceptor);
         }
         // 分页插件
         PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
@@ -92,7 +93,7 @@ public class MyBatisAutoConfiguration {
             interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         }
         if (dataProperties.isEnableDataScope()) {
-            interceptor.addInnerInterceptor(new DataScopeInnerInterceptor(dataScopeLineHandler));
+            interceptor.addInnerInterceptor(new DataScopeInnerInterceptor(dataScopeLineHandler, dataProperties.getDbType()));
         }
         // sql性能规范插件
         if (dataProperties.getIsIllegalSql()) {

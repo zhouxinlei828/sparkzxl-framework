@@ -1,11 +1,13 @@
 package com.github.sparkzxl.log.aspect;
 
+import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.entity.core.AuthUserInfo;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
@@ -27,7 +29,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -103,7 +104,7 @@ public class HttpRequestLogAspect {
 
     private void publishEvent(RequestInfoLog requestInfoLog) {
         requestInfoLog.setFinishTime(LocalDateTime.now());
-        requestInfoLog.setConsumingTime(requestInfoLog.getStartTime().until(requestInfoLog.getFinishTime(), ChronoUnit.MILLIS));
+        requestInfoLog.setConsumingTime(DateUtils.formatBetween(requestInfoLog.getStartTime(), requestInfoLog.getFinishTime(), BetweenFormatter.Level.MILLISECOND));
         SpringContextUtils.publishEvent(new HttpRequestLogEvent(requestInfoLog));
         remove();
     }

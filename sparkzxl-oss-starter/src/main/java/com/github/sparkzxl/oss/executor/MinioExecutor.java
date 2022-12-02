@@ -12,17 +12,22 @@ import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
 import io.minio.*;
+import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * description: minio 执行器
@@ -113,6 +118,20 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
+        }
+    }
+
+    @Override
+    public boolean exists(String bucketName, String objectName) {
+        MinioClient minioClient = obtainClient();
+        try {
+            StatObjectResponse stat = minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+            return stat != null && stat.lastModified() != null;
+        } catch (ErrorResponseException e) {
+            throw new RuntimeException(e);
+        } catch (InsufficientDataException | InternalException | ServerException | InvalidKeyException |
+                 InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException e) {
+            throw new OssException(OssErrorCode.OSS_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -219,17 +238,14 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     }
 
     @Override
-    public void downloadFile(String bucketName, String objectName, String fileName, HttpServletResponse response) {
+    public void downloadFile(String bucketName, String objectName, Consumer<InputStream> consumer) {
         MinioClient minioClient = obtainClient();
-        try {
-            StatObjectResponse statObjectResponse = minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
-            if (statObjectResponse != null) {
-                DownloadObjectArgs downloadObjectArgs = DownloadObjectArgs.builder().bucket(bucketName).object(objectName).filename(fileName).build();
-                minioClient.downloadObject(downloadObjectArgs);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.DOWNLOAD_OBJECT_ERROR);
+        try (InputStream in = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build())) {
+            consumer.accept(in);
+        } catch (ErrorResponseException | InsufficientDataException | InternalException | ServerException |
+                 InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException |
+                 XmlParserException e) {
+            throw new OssException(OssErrorCode.DOWNLOAD_OBJECT_ERROR, e);
         }
     }
 

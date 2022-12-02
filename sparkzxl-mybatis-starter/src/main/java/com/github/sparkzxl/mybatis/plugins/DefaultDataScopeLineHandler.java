@@ -3,17 +3,15 @@ package com.github.sparkzxl.mybatis.plugins;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.database.DataScope;
+import com.github.sparkzxl.mybatis.constant.SqlConditions;
 import com.github.sparkzxl.mybatis.properties.DataProperties;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.ValueListExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,7 +30,7 @@ import java.util.stream.Collectors;
 public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
 
     private final Map<String, DataProperties.DataScope> dataScopeMap;
-    private DataProperties.DataScope current;
+    private ThreadLocal<DataProperties.DataScope> scopeThreadLocal = new InheritableThreadLocal<>();
 
     public DefaultDataScopeLineHandler(List<DataProperties.DataScope> dataScopeList) {
         if (CollectionUtils.isEmpty(dataScopeList)) {
@@ -48,39 +46,55 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
         if (ObjectUtils.isEmpty(dataScope)) {
             return false;
         }
-        this.current = dataScopeMap.get(dataScope.value());
+        scopeThreadLocal.set(dataScopeMap.get(dataScope.value()));
         return true;
     }
 
     @Override
-    public Expression getScopeId() {
-        String val = RequestLocalContextHolder.get(current.getLoadKey());
+    public SqlCommandType getSqlCommandType() {
+        return scopeThreadLocal.get().getSqlCommandType();
+    }
+
+    @Override
+    public SqlConditions getSqlCondition() {
+        DataProperties.DataScope dataScope = scopeThreadLocal.get();
+        if (dataScope.getCondition() == null) {
+            return DataScopeLineHandler.super.getSqlCondition();
+        }
+        return dataScope.getCondition();
+    }
+
+    @Override
+    public String getScopeId() {
+        String val = RequestLocalContextHolder.get(scopeThreadLocal.get().getLoadKey());
         if (StringUtils.isEmpty(val)) {
             return null;
         }
-        return new StringValue(val);
+        return val;
     }
 
     @Override
     public String getScopeIdColumn() {
-        return current.getColumn();
+        return scopeThreadLocal.get().getColumn();
     }
 
     @Override
     public boolean ignoreTable(String tableName) {
         // 如果等于，则需要解析并拼接scope条件
-        return !tableName.equalsIgnoreCase(current.getTableName());
+        return !tableName.equalsIgnoreCase(scopeThreadLocal.get().getTableName());
     }
 
     @Override
-    public ValueListExpression getScopeIdList() {
-        ValueListExpression valueListExpression = new ValueListExpression();
-        List<String> dataPermissions = RequestLocalContextHolder.getList(current.getLoadKey(), String.class);
+    public List<String> getScopeIdList() {
+        List<String> dataPermissions = RequestLocalContextHolder.getList(scopeThreadLocal.get().getLoadKey());
         if (CollectionUtils.isEmpty(dataPermissions)) {
             return null;
         }
-        List<Expression> expressionList = dataPermissions.stream().map(StringValue::new).collect(Collectors.toList());
-        valueListExpression.setExpressionList(new ExpressionList(expressionList));
-        return valueListExpression;
+        return dataPermissions;
+    }
+
+    @Override
+    public void remove() {
+        scopeThreadLocal.remove();
     }
 }

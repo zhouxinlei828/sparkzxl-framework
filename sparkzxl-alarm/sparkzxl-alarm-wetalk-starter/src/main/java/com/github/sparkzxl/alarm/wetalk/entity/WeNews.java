@@ -126,8 +126,7 @@ public class WeNews extends WeTalkMessage {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
-                }, value);
+                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {}, value);
                 for (BaseImageText baseImageText : baseImageTexts) {
                     this.news.articles.add(new News.Article(baseImageText.getTitle(), baseImageText.getDescription(), baseImageText.getUrl(), baseImageText.getPicUrl()));
                 }

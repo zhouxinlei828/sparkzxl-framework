@@ -13,7 +13,7 @@ import com.github.sparkzxl.gateway.plugin.dubbo.route.DefaultDubboMetaDataFactor
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRouteSchemePredicate;
-import com.github.sparkzxl.gateway.plugin.properties.GatewayPluginProperties;
+import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
