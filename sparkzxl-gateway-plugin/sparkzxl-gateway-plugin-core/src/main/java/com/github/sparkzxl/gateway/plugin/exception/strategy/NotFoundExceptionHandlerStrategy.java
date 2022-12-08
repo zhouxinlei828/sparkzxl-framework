@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrategy<NotFoundException> {
 
     @Override
-    public Class getHandleClass() {
+    public Class<NotFoundException> getHandleClass() {
         return NotFoundException.class;
     }
 
