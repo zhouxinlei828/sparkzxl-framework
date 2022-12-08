@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.util;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AccessLevel;
@@ -209,11 +209,11 @@ public class HttpRequestUtils {
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            Response<?> result;
+            ApiResult<?> result;
             if (success) {
-                result = Response.success(message, data);
+                result = ApiResult.success(message, data);
             } else {
-                result = Response.fail(errorCode, errorMsg);
+                result = ApiResult.fail(errorCode, errorMsg);
             }
             response.getWriter().println(JsonUtil.toJson(result));
             response.getWriter().flush();

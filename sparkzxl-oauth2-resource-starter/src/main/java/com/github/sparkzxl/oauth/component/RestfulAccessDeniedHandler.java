@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oauth.component;
 
 import cn.hutool.json.JSONUtil;
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -28,7 +28,7 @@ public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {
         log.error("AccessDeniedException：[{}]", e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body = JSONUtil.toJsonStr(Response.fail(ResultErrorCode.AUTHORIZED_DENIED));
+        String body = JSONUtil.toJsonStr(ApiResult.fail(ResultErrorCode.AUTHORIZED_DENIED));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

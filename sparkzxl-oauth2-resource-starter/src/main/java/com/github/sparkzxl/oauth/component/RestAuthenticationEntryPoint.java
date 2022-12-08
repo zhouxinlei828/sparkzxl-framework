@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.component;
 
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         if (e instanceof InvalidBearerTokenException) {
             exceptionCode = ResultErrorCode.LOGIN_EXPIRE;
         }
-        String body = JsonUtil.toJson(Response.fail(exceptionCode));
+        String body = JsonUtil.toJson(ApiResult.fail(exceptionCode));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

@@ -25,7 +25,7 @@ import java.util.Map;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class Response<T> implements Serializable {
+public class ApiResult<T> implements Serializable {
 
     private static final long serialVersionUID = -7545356835815831989L;
 
@@ -52,12 +52,7 @@ public class Response<T> implements Serializable {
     @JsonProperty(index = 6)
     @ApiModelProperty(value = "异常信息")
     private String errorMsg;
-    /**
-     * 响应时间
-     */
-    @ApiModelProperty(value = "响应时间戳")
-    @JsonProperty(index = 7)
-    private long timestamp;
+
     /**
      * 附加数据
      */
@@ -69,9 +64,9 @@ public class Response<T> implements Serializable {
      * 成功返回结果
      *
      * @param data 数据
-     * @return Response
+     * @return ApiResult
      */
-    public static <T> Response<?> success(T data) {
+    public static <T> ApiResult<?> success(T data) {
         return response(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), data, null, null, null);
     }
 
@@ -79,9 +74,9 @@ public class Response<T> implements Serializable {
      * 成功返回结果
      *
      * @param data 数据
-     * @return Response
+     * @return ApiResult
      */
-    public static <T> Response<?> success(String msg, T data) {
+    public static <T> ApiResult<?> success(String msg, T data) {
         return response(ResponseCode.SUCCESS.getCode(), msg, data, null, null, null);
     }
 
@@ -90,9 +85,9 @@ public class Response<T> implements Serializable {
      *
      * @param errorCode 异常状态码
      * @param errorMsg  异常信息
-     * @return Response
+     * @return ApiResult
      */
-    public static Response<?> fail(String errorCode, String errorMsg) {
+    public static ApiResult<?> fail(String errorCode, String errorMsg) {
         return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode, errorMsg, null);
     }
 
@@ -100,9 +95,9 @@ public class Response<T> implements Serializable {
      * 异常返回结果
      *
      * @param errorCode 异常状态
-     * @return Response
+     * @return ApiResult
      */
-    public static Response<?> fail(IErrorCode errorCode) {
+    public static ApiResult<?> fail(IErrorCode errorCode) {
         return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode.getErrorCode(), errorCode.getErrorMsg(), null);
     }
 
@@ -112,7 +107,7 @@ public class Response<T> implements Serializable {
      * @param throwable 异常
      * @return RPC调用结果
      */
-    public static Response<?> fail(Throwable throwable) {
+    public static ApiResult<?> fail(Throwable throwable) {
         String msg = throwable != null ? throwable.getMessage() : ResultErrorCode.FAILURE.getErrorMsg();
         return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, ResultErrorCode.FAILURE.getErrorCode(), msg, null);
     }
@@ -122,10 +117,10 @@ public class Response<T> implements Serializable {
      *
      * @param errorCode 异常状态码
      * @param errorMsg  异常信息
-     * @return Response
+     * @return ApiResult
      */
-    private static <T> Response<?> response(int code, String msg, T data, String errorCode, String errorMsg, Map<String, Object> extra) {
-        return Response.builder()
+    private static <T> ApiResult<?> response(int code, String msg, T data, String errorCode, String errorMsg, Map<String, Object> extra) {
+        return ApiResult.builder()
                 .code(code)
                 .msg(msg)
                 .data(data)
@@ -135,7 +130,7 @@ public class Response<T> implements Serializable {
                 .build();
     }
 
-    public Response<?> put(String key, Object value) {
+    public ApiResult<?> put(String key, Object value) {
         if (this.extra == null) {
             this.extra = new HashMap<>(16);
         }
@@ -147,7 +142,7 @@ public class Response<T> implements Serializable {
         return new ResponseBuilder<>();
     }
 
-    public Response<?> putAll(Map<String, Object> extra) {
+    public ApiResult<?> putAll(Map<String, Object> extra) {
         if (this.extra == null) {
             this.extra = new HashMap<>(16);
         }
@@ -193,17 +188,16 @@ public class Response<T> implements Serializable {
             return this;
         }
 
-        public Response<T> build() {
+        public ApiResult<T> build() {
             Map<String, Object> map = this.extra == null ? Maps.newHashMap() : this.extra;
             map.put(BaseContextConstants.LOG_TRACE_ID, TraceContext.traceId());
-            return new Response<T>()
+            return new ApiResult<T>()
                     .setCode(this.code)
                     .setSuccess(this.code == HttpStatus.HTTP_OK)
                     .setMsg(this.msg)
                     .setData(this.data)
                     .setErrorCode(this.errorCode)
                     .setErrorMsg(this.errorMsg)
-                    .setTimestamp(System.currentTimeMillis())
                     .setExtra(map);
         }
     }

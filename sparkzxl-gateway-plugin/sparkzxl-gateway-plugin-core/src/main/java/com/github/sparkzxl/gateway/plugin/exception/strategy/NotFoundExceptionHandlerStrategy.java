@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.plugin.exception.strategy;
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.text.StrFormatter;
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrateg
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
         NotFoundException e = (NotFoundException) throwable;
-        log.error("NotFoundException：[{}]", e.getReason());
+        log.error("NotFoundException：", throwable);
         String matchString = "Unable to find instance for ";
         String message = e.getReason();
         assert message != null;
@@ -36,10 +36,7 @@ public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrateg
             String applicationName = OptionalBean.ofNullable(serviceName).orElseGet(() -> "unKnownServer");
             message = StrFormatter.format(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
         }
-        Response<?> responseResult = Response.fail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
-        String response = JSON.toJSONString(responseResult);
-        ExceptionHandlerResult result = new ExceptionHandlerResult(HttpStatus.NOT_FOUND, response);
-        log.debug("Handle NotFoundException:{},Result:{}", throwable.getMessage(), result);
-        return result;
+        ApiResult<?> apiResult = ApiResult.fail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        return new ExceptionHandlerResult(HttpStatus.NOT_FOUND, JSON.toJSONString(apiResult));
     }
 }

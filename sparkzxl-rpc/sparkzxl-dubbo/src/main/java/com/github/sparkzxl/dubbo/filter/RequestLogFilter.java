@@ -65,7 +65,7 @@ public class RequestLogFilter implements Filter {
             if (properties.getLevel() == LogLevel.INFO) {
                 log.info("dubbo -> 服务响应: {},consumeTime=[{}ms]", baseLog, elapsed);
             } else if (properties.getLevel() == LogLevel.DEBUG) {
-                log.info("dubbo -> 服务响应: {},consumeTime=[{}ms],Response={}", baseLog, elapsed, JsonUtil.toJson(new Object[]{result.getValue()}));
+                log.info("dubbo -> 服务响应: {},consumeTime=[{}ms],ApiResult={}", baseLog, elapsed, JsonUtil.toJson(new Object[]{result.getValue()}));
             }
         }
         return result;
