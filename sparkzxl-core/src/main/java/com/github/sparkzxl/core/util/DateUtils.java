@@ -195,8 +195,8 @@ public class DateUtils extends DateUtil {
      * 计算时间差
      *
      * @param beginTime 开始时间
-     * @param endTime       结束时间
-     * @param level         格式化类型
+     * @param endTime   结束时间
+     * @param level     格式化类型
      * @return String
      */
     public static String formatBetween(LocalDateTime beginTime, LocalDateTime endTime, BetweenFormatter.Level level) {

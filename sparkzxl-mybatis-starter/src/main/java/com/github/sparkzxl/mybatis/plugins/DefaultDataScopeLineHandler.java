@@ -2,71 +2,75 @@ package com.github.sparkzxl.mybatis.plugins;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.database.DataScope;
+import com.github.sparkzxl.core.util.ArgumentAssert;
+import com.github.sparkzxl.mybatis.annotation.DataScope;
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
-import com.github.sparkzxl.mybatis.properties.DataProperties;
+import com.github.sparkzxl.mybatis.properties.DataScopeConfig;
 import com.google.common.collect.Maps;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * description: 全局数据权限处理器
+ * description: 多列数据权限 行级处理器
  *
  * @author zhouxinlei
- * @since 2022-07-2022/7/18 16:35:40}
+ * @since 2022-11-14 11:01:53
  */
-@Getter
-@Setter
-@Component
 public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
 
-    private final Map<String, DataProperties.DataScope> dataScopeMap;
-    private ThreadLocal<DataProperties.DataScope> scopeThreadLocal = new InheritableThreadLocal<>();
+    private final Map<String, DataScopeConfig> dataScopeMap;
+    private final ThreadLocal<DataScopeConfig> dataScopeThreadLocal = new InheritableThreadLocal<>();
+    private final ThreadLocal<Map<String, DataScopeConfig.DataColumn>> columnThreadLocal = new InheritableThreadLocal<>();
 
-    public DefaultDataScopeLineHandler(List<DataProperties.DataScope> dataScopeList) {
+    public DefaultDataScopeLineHandler(List<DataScopeConfig> dataScopeList) {
         if (CollectionUtils.isEmpty(dataScopeList)) {
             dataScopeMap = Maps.newConcurrentMap();
         } else {
-            this.dataScopeMap = dataScopeList.stream().collect(Collectors.toMap(DataProperties.DataScope::getScopeId, k -> k));
+            dataScopeMap = dataScopeList.stream().collect(Collectors.toMap(DataScopeConfig::getScopeId, k -> k));
         }
+
     }
 
     @Override
     public boolean match() {
-        DataScope dataScope = RequestLocalContextHolder.get(BaseContextConstants.DATA_SCOPE, DataScope.class);
+        DataScope dataScope = RequestLocalContextHolder.get(BaseContextConstants.MULTI_DATA_SCOPE, DataScope.class);
         if (ObjectUtils.isEmpty(dataScope)) {
             return false;
         }
-        scopeThreadLocal.set(dataScopeMap.get(dataScope.value()));
+        DataScopeConfig dataScopeConfig = dataScopeMap.get(dataScope.value());
+        ArgumentAssert.notNull(dataScopeConfig, "未找到[{}]数据权限配置，请联系管理员！", dataScope.value());
+        dataScopeThreadLocal.set(dataScopeConfig);
+        Map<String, DataScopeConfig.DataColumn> dataColumnMap = dataScopeConfig.getColumns().stream().collect(
+                Collectors.toMap(DataScopeConfig.DataColumn::getColumn, k -> k));
+        columnThreadLocal.set(dataColumnMap);
         return true;
     }
 
     @Override
-    public SqlCommandType getSqlCommandType() {
-        return scopeThreadLocal.get().getSqlCommandType();
+    public SqlConditions getSqlCondition(String columnName) {
+        return columnThreadLocal.get().get(columnName).getCondition();
     }
 
     @Override
-    public SqlConditions getSqlCondition() {
-        DataProperties.DataScope dataScope = scopeThreadLocal.get();
-        if (dataScope.getCondition() == null) {
-            return DataScopeLineHandler.super.getSqlCondition();
-        }
-        return dataScope.getCondition();
+    public List<String> getScopeIdColumnList() {
+        return new ArrayList<>(columnThreadLocal.get().keySet());
     }
 
     @Override
-    public String getScopeId() {
-        String val = RequestLocalContextHolder.get(scopeThreadLocal.get().getLoadKey());
+    public boolean ignoreTable(String tableName) {
+        return !tableName.equalsIgnoreCase(dataScopeThreadLocal.get().getTableName());
+    }
+
+    @Override
+    public String getScopeId(String columnName) {
+        DataScopeConfig.DataColumn dataColumn = columnThreadLocal.get().get(columnName);
+        String val = RequestLocalContextHolder.get(dataColumn.getLoadKey());
         if (StringUtils.isEmpty(val)) {
             return null;
         }
@@ -74,19 +78,9 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
     }
 
     @Override
-    public String getScopeIdColumn() {
-        return scopeThreadLocal.get().getColumn();
-    }
-
-    @Override
-    public boolean ignoreTable(String tableName) {
-        // 如果等于，则需要解析并拼接scope条件
-        return !tableName.equalsIgnoreCase(scopeThreadLocal.get().getTableName());
-    }
-
-    @Override
-    public List<String> getScopeIdList() {
-        List<String> dataPermissions = RequestLocalContextHolder.getList(scopeThreadLocal.get().getLoadKey());
+    public List<String> getScopeIdList(String columnName) {
+        DataScopeConfig.DataColumn dataColumn = columnThreadLocal.get().get(columnName);
+        List<String> dataPermissions = RequestLocalContextHolder.getList(dataColumn.getLoadKey());
         if (CollectionUtils.isEmpty(dataPermissions)) {
             return null;
         }
@@ -95,6 +89,7 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
 
     @Override
     public void remove() {
-        scopeThreadLocal.remove();
+        dataScopeThreadLocal.remove();
+        columnThreadLocal.remove();
     }
 }

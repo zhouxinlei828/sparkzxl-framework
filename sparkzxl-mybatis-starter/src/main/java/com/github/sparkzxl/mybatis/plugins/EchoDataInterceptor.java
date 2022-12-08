@@ -22,12 +22,12 @@ import java.sql.Statement;
         args = {Statement.class}
 )})
 @Slf4j
-public class EchoResultInterceptor implements Interceptor {
+public class EchoDataInterceptor implements Interceptor {
 
     private final ApplicationContext applicationContext;
     private final EchoProperties echoProperties;
 
-    public EchoResultInterceptor(ApplicationContext applicationContext, EchoProperties echoProperties) {
+    public EchoDataInterceptor(ApplicationContext applicationContext, EchoProperties echoProperties) {
         this.applicationContext = applicationContext;
         this.echoProperties = echoProperties;
     }

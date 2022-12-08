@@ -1,6 +1,5 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,7 +19,7 @@ import java.util.Map;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(DynamicMongoProperties.class)
-@ConditionalOnProperty(prefix = ConfigurationConstant.DYNAMIC_MONGO_PREFIX, name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = DynamicMongoProperties.DYNAMIC_MONGO_PREFIX, name = "enabled", havingValue = "true")
 @EnableMongoAuditing
 @Slf4j
 public class MongoDynamicAutoConfig {

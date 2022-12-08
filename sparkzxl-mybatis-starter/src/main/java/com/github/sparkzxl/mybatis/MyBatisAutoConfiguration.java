@@ -12,8 +12,10 @@ import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.constant.enums.MultiTenantType;
+import com.github.sparkzxl.mybatis.annotation.DataScope;
+import com.github.sparkzxl.mybatis.aop.DataScopeAnnotationAdvisor;
+import com.github.sparkzxl.mybatis.aop.DataScopeInterceptor;
 import com.github.sparkzxl.mybatis.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.mybatis.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.mybatis.plugins.*;
@@ -31,6 +33,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.core.Ordered;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -54,6 +57,9 @@ public class MyBatisAutoConfiguration {
 
     /**
      * 多租户插件配置,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存万一出现问题
+     *
+     * @param dataScopeLineHandler 数据权限处理
+     * @return MybatisPlusInterceptor
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(DataScopeLineHandler dataScopeLineHandler) {
@@ -104,7 +110,7 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT")
+    @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT")
     public UidGenerator getDefaultUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
         DefaultUidGenerator uidGenerator = new DefaultUidGenerator();
         BeanUtil.copyProperties(dataProperties.getDefaultId(), uidGenerator);
@@ -114,7 +120,7 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "CACHE")
+    @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "id-type", havingValue = "CACHE")
     public UidGenerator getCacheUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
         CachedUidGenerator uidGenerator = new CachedUidGenerator();
         DataProperties.CacheId cacheId = dataProperties.getCacheId();
@@ -133,7 +139,7 @@ public class MyBatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL", matchIfMissing = true)
     public UidGenerator getHuToolUidGenerator() {
         DataProperties.HuToolId id = dataProperties.getHutoolId();
         return new HuToolUidGenerator(id.getWorkerId(), id.getDataCenterId());
@@ -153,7 +159,7 @@ public class MyBatisAutoConfiguration {
     @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
     @DependsOn("dataSource")
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_PREFIX, name = "p6spy", havingValue = "true")
+    @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "p6spy", havingValue = "true")
     public DataSource dataSource(DataSource dataSource) {
         if (dataProperties.getP6spy()) {
             return new P6DataSource(dataSource);
@@ -187,9 +193,19 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(value = DataScopeLineHandler.class)
+    @ConditionalOnProperty(value = "mybatis-plus.data.enable-data-scope", havingValue = "true")
+    public DataScopeInterceptor dataScopeInterceptor() {
+        return new DataScopeInterceptor();
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "mybatis-plus.data.enable-data-scope", havingValue = "true")
+    public DataScopeAnnotationAdvisor dataScopeAnnotationAdvisor(DataScopeInterceptor dataScopeInterceptor) {
+        return new DataScopeAnnotationAdvisor(dataScopeInterceptor, DataScope.class, Ordered.HIGHEST_PRECEDENCE);
+    }
+
+    @Bean
     public DataScopeLineHandler dataScopeLineHandler() {
         return new DefaultDataScopeLineHandler(dataProperties.getDataScopeList());
     }
-
 }

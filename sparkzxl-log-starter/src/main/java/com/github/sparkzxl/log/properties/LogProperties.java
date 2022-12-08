@@ -1,6 +1,5 @@
 package com.github.sparkzxl.log.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,14 +7,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
+import static com.github.sparkzxl.log.properties.LogProperties.LOG_PREFIX;
+
 /**
  * description: 日志配置类
  *
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.LOG_PREFIX)
+@ConfigurationProperties(prefix = LOG_PREFIX)
 public class LogProperties {
+
+    public static final String LOG_PREFIX = "logging";
 
     /**
      * 是否开启控制台输出

@@ -23,5 +23,5 @@ import org.springframework.context.ApplicationListener;
  * @since 2022-11-09 11:30:23
  */
 public interface SmsSendSuccessEventListener extends ApplicationListener<SmsSendSuccessEvent> {
-    
+
 }

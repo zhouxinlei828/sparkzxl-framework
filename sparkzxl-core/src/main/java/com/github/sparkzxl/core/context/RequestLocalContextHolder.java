@@ -157,7 +157,7 @@ public class RequestLocalContextHolder {
         THREAD_LOCAL.remove();
     }
 
-    public static  List<String> getList(String key) {
+    public static List<String> getList(String key) {
         Map<String, Object> map = getLocalMap();
         Object o = map.get(key);
         if (o == null) {

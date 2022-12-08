@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum SqlConditions implements ISqlSegment {
 
-    AND("AND"),
+    EQ("="),
     IN("IN"),
     LIKE("LIKE"),
     LIST_IN("LIST_IN"),

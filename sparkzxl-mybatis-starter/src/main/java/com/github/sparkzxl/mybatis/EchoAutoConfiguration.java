@@ -1,11 +1,10 @@
 package com.github.sparkzxl.mybatis;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.mybatis.echo.core.EchoService;
 import com.github.sparkzxl.mybatis.echo.core.LoadService;
 import com.github.sparkzxl.mybatis.echo.properties.EchoProperties;
 import com.github.sparkzxl.mybatis.echo.typehandler.RemoteDataTypeHandler;
-import com.github.sparkzxl.mybatis.plugins.EchoResultInterceptor;
+import com.github.sparkzxl.mybatis.plugins.EchoDataInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,14 +29,14 @@ public class EchoAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DATA_ECHO_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = EchoProperties.DATA_ECHO_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public EchoService echoService(Map<String, LoadService> loadServiceMap) {
         return new EchoService(echoProperties, loadServiceMap);
     }
 
     @Bean
-    public EchoResultInterceptor echoResultInterceptor(ApplicationContext applicationContext, EchoProperties echoProperties) {
-        return new EchoResultInterceptor(applicationContext, echoProperties);
+    public EchoDataInterceptor echoResultInterceptor(ApplicationContext applicationContext, EchoProperties echoProperties) {
+        return new EchoDataInterceptor(applicationContext, echoProperties);
     }
 
     /**

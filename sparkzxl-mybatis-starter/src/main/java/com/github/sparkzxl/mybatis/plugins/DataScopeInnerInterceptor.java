@@ -15,25 +15,21 @@ import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.select.*;
-import net.sf.jsqlparser.statement.update.Update;
+import net.sf.jsqlparser.util.cnfexpression.MultiAndExpression;
 import net.sf.jsqlparser.util.cnfexpression.MultiOrExpression;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * description: 数据权限拦截器
+ * description: 多列数据权限拦截器
  *
  * @author zhouxinlei
  * @since 2022-07-2022/7/18 13:36:09
@@ -51,92 +47,11 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     }
 
     @Override
-    public void beforePrepare(StatementHandler sh, Connection connection, Integer transactionTimeout) {
-        if (dataScopeLineHandler.match()) {
-            PluginUtils.MPStatementHandler mpSh = PluginUtils.mpStatementHandler(sh);
-            MappedStatement ms = mpSh.mappedStatement();
-            SqlCommandType sct = ms.getSqlCommandType();
-            if (sct == SqlCommandType.UPDATE || sct == SqlCommandType.DELETE) {
-                PluginUtils.MPBoundSql mpBs = mpSh.mPBoundSql();
-                mpBs.sql(parserMulti(mpBs.sql(), null));
-            }
-        }
-    }
-
-    @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
         if (dataScopeLineHandler.match()) {
             PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
             mpBs.sql(parserSingle(mpBs.sql(), null));
         }
-    }
-
-    /**
-     * update 语句处理
-     */
-    @Override
-    protected void processUpdate(Update update, int index, String sql, Object obj) {
-        final Table table = update.getTable();
-        if (dataScopeLineHandler.ignoreTable(table.getName())) {
-            // 过滤退出执行
-            return;
-        }
-        if (!SqlCommandType.UPDATE.equals(dataScopeLineHandler.getSqlCommandType())) {
-            // 过滤退出执行
-            return;
-        }
-        Expression expression = this.andExpression(table, update.getWhere());
-        if (expression == null) {
-            return;
-        }
-        update.setWhere(expression);
-        dataScopeLineHandler.remove();
-    }
-
-    /**
-     * delete 语句处理
-     */
-    @Override
-    protected void processDelete(Delete delete, int index, String sql, Object obj) {
-        if (dataScopeLineHandler.ignoreTable(delete.getTable().getName())) {
-            // 过滤退出执行
-            return;
-        }
-        if (!SqlCommandType.DELETE.equals(dataScopeLineHandler.getSqlCommandType())) {
-            // 过滤退出执行
-            return;
-        }
-        SqlConditions sqlCondition = dataScopeLineHandler.getSqlCondition();
-        if (sqlCondition == SqlConditions.AND) {
-            Expression expression = this.andExpression(delete.getTable(), delete.getWhere());
-            if (expression == null) {
-                return;
-            }
-            delete.setWhere(expression);
-        }
-        dataScopeLineHandler.remove();
-    }
-
-    /**
-     * delete update 语句 where 处理
-     */
-    protected Expression andExpression(Table table, Expression where) {
-        // 返回空即表示当前语句不需要拼接 scopeId
-        if (dataScopeLineHandler.getScopeId() == null) {
-            return null;
-        }
-        //获得where条件表达式
-        EqualsTo equalsTo = new EqualsTo();
-        equalsTo.setLeftExpression(this.getAliasColumn(table));
-        equalsTo.setRightExpression(new StringValue(dataScopeLineHandler.getScopeId()));
-        if (null != where) {
-            if (where instanceof OrExpression) {
-                return new AndExpression(equalsTo, new Parenthesis(where));
-            } else {
-                return new AndExpression(equalsTo, where);
-            }
-        }
-        return equalsTo;
     }
 
     @Override
@@ -343,100 +258,88 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
      * @return Expression
      */
     protected Expression builderExpression(Expression currentExpression, Table table) {
-        SqlConditions sqlCondition = dataScopeLineHandler.getSqlCondition();
-        if (sqlCondition == SqlConditions.AND) {
-            String scopeId = dataScopeLineHandler.getScopeId();
-            EqualsTo equalsTo = new EqualsTo();
-            if (scopeId != null) {
-                equalsTo.setLeftExpression(this.getAliasColumn(table));
-                equalsTo.setRightExpression(new StringValue(scopeId));
-            } else {
-                return null;
-            }
-            if (currentExpression == null) {
-                return equalsTo;
-            }
-            if (currentExpression instanceof OrExpression) {
-                return new AndExpression(new Parenthesis(currentExpression), equalsTo);
-            } else {
-                return new AndExpression(currentExpression, equalsTo);
-            }
-        } else if (sqlCondition == SqlConditions.IN) {
-            List<String> scopeIdList = dataScopeLineHandler.getScopeIdList();
-            if (scopeIdList != null) {
-                ValueListExpression valueListExpression = new ValueListExpression();
-                List<Expression> expressionList = scopeIdList.stream().map(StringValue::new).collect(Collectors.toList());
-                valueListExpression.setExpressionList(new ExpressionList(expressionList));
-                InExpression in = new InExpression();
-                in.setLeftExpression(this.getAliasColumn(table));
-                in.setRightExpression(valueListExpression);
-                if (currentExpression == null) {
-                    return in;
-                }
-                if (currentExpression instanceof OrExpression) {
-                    return new AndExpression(new Parenthesis(currentExpression), in);
+        List<String> scopeIdColumnList = dataScopeLineHandler.getScopeIdColumnList();
+        List<Expression> expressionList = Lists.newArrayList();
+        for (String columnName : scopeIdColumnList) {
+            SqlConditions sqlCondition = dataScopeLineHandler.getSqlCondition(columnName);
+            if (sqlCondition == SqlConditions.EQ) {
+                String scopeId = dataScopeLineHandler.getScopeId(columnName);
+                EqualsTo equalsTo = new EqualsTo();
+                if (scopeId != null) {
+                    equalsTo.setLeftExpression(this.getAliasColumn(table, columnName));
+                    equalsTo.setRightExpression(new StringValue(scopeId));
                 } else {
-                    return new AndExpression(currentExpression, in);
+                    continue;
                 }
-            }
-        } else if (sqlCondition == SqlConditions.LIST_IN) {
-            List<String> scopeIdList = dataScopeLineHandler.getScopeIdList();
-            if (scopeIdList != null) {
-                List<Expression> functionList = Lists.newArrayList();
-                String functionName = "";
-                if (dbType == DbType.MYSQL) {
-                    functionName = "FIND_IN_SET";
-                } else {
-                    log.debug("Check whether the FIND_IN_SET function is available in {}", dbType.getDb());
+                expressionList.add(equalsTo);
+            } else if (sqlCondition == SqlConditions.IN) {
+                List<String> scopeIdList = dataScopeLineHandler.getScopeIdList(columnName);
+                if (scopeIdList != null) {
+                    ValueListExpression valueListExpression = new ValueListExpression();
+                    List<Expression> inExpressionList = scopeIdList.stream().map(StringValue::new).collect(Collectors.toList());
+                    valueListExpression.setExpressionList(new ExpressionList(inExpressionList));
+                    InExpression in = new InExpression();
+                    in.setLeftExpression(this.getAliasColumn(table, columnName));
+                    in.setRightExpression(valueListExpression);
+                    expressionList.add(in);
                 }
-                for (String scopeId : scopeIdList) {
-                    Function function = new Function();
-                    // 设置函数名
-                    function.setName(functionName);
-                    // 创建参数表达式
-                    ExpressionList expressionListCount = new ExpressionList();
-                    expressionListCount.setExpressions(Lists.newArrayList(new StringValue(scopeId), this.getAliasColumn(table)));
-                    // 设置参数
-                    function.setParameters(expressionListCount);
-                    functionList.add(function);
+            } else if (sqlCondition == SqlConditions.LIST_IN) {
+                List<String> scopeIdList = dataScopeLineHandler.getScopeIdList(columnName);
+                if (scopeIdList != null) {
+                    List<Expression> functionList = Lists.newArrayList();
+                    String functionName = "";
+                    if (dbType == DbType.MYSQL) {
+                        functionName = "FIND_IN_SET";
+                    } else {
+                        log.debug("Check whether the FIND_IN_SET function is available in {}", dbType.getDb());
+                    }
+                    for (String scopeId : scopeIdList) {
+                        Function function = new Function();
+                        // 设置函数名
+                        function.setName(functionName);
+                        // 创建参数表达式
+                        ExpressionList expressionListCount = new ExpressionList();
+                        expressionListCount.setExpressions(Lists.newArrayList(new StringValue(scopeId), this.getAliasColumn(table, columnName)));
+                        // 设置参数
+                        function.setParameters(expressionListCount);
+                        functionList.add(function);
+                    }
+                    expressionList.add(new MultiOrExpression(functionList));
                 }
-                MultiOrExpression multiOrExpression = new MultiOrExpression(functionList);
-                return new AndExpression(currentExpression, multiOrExpression);
-            }
-        } else if (sqlCondition == SqlConditions.LIKE) {
-            String scopeId = dataScopeLineHandler.getScopeId();
-            LikeExpression likeExpression = new LikeExpression();
-            if (scopeId != null) {
-                likeExpression.setLeftExpression(this.getAliasColumn(table));
-                likeExpression.setRightExpression(new StringValue(scopeId));
-            } else {
-                return null;
-            }
-            if (currentExpression == null) {
-                return likeExpression;
-            }
-            if (currentExpression instanceof OrExpression) {
-                return new AndExpression(new Parenthesis(currentExpression), likeExpression);
-            } else {
-                return new AndExpression(currentExpression, likeExpression);
+            } else if (sqlCondition == SqlConditions.LIKE) {
+                String scopeId = dataScopeLineHandler.getScopeId(columnName);
+                if (scopeId != null) {
+                    LikeExpression likeExpression = new LikeExpression();
+                    likeExpression.setLeftExpression(this.getAliasColumn(table, columnName));
+                    likeExpression.setRightExpression(new StringValue("%".concat(scopeId).concat("%")));
+                    expressionList.add(likeExpression);
+                }
             }
         }
-        return null;
+        if (currentExpression == null) {
+            return new MultiAndExpression(expressionList);
+        }
+        if (currentExpression instanceof OrExpression) {
+            return new AndExpression(new Parenthesis(currentExpression), new MultiAndExpression(expressionList));
+        } else {
+            return new AndExpression(currentExpression, new MultiAndExpression(expressionList));
+        }
     }
 
     /**
      * 数据权限字段别名设置
      * <p>scopeId 或 tableAlias.scopeId</p>
      *
-     * @param table 表对象
+     * @param table      表对象
+     * @param columnName 字段名
      * @return 字段
      */
-    protected Column getAliasColumn(Table table) {
+    protected Column getAliasColumn(Table table, String columnName) {
         StringBuilder column = new StringBuilder();
         if (table.getAlias() != null) {
             column.append(table.getAlias().getName()).append(StringPool.DOT);
         }
-        column.append(dataScopeLineHandler.getScopeIdColumn());
+        column.append(columnName);
         return new Column(column.toString());
     }
 }

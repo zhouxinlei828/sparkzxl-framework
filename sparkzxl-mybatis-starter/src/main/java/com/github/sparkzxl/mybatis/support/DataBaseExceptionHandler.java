@@ -88,7 +88,7 @@ public class DataBaseExceptionHandler implements Ordered {
     @ExceptionHandler(PersistenceException.class)
     public Response<?> handlePersistenceException(PersistenceException e) {
         Throwable rootCause = ExceptionUtil.getRootCause(e);
-        if (rootCause instanceof SQLIntegrityConstraintViolationException){
+        if (rootCause instanceof SQLIntegrityConstraintViolationException) {
             return handleSqlIntegrityConstraintViolationException((SQLIntegrityConstraintViolationException) rootCause);
         }
         log.error("数据库异常：", e);

@@ -1,7 +1,5 @@
 package com.github.sparkzxl.feign.resilience4j.autoconfigure;
 
-import com.github.sparkzxl.feign.resilience4j.CircuitBreakerExtractor;
-import com.github.sparkzxl.feign.resilience4j.FeignRequestCircuitBreakerExtractor;
 import com.github.sparkzxl.feign.resilience4j.client.FeignBlockingLoadBalancerClientDelegate;
 import com.github.sparkzxl.feign.resilience4j.client.Resilience4jFeignClient;
 import feign.okhttp.OkHttpClient;

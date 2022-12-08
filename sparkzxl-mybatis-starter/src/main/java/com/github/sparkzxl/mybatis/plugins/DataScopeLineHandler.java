@@ -1,15 +1,16 @@
 package com.github.sparkzxl.mybatis.plugins;
 
-import com.github.sparkzxl.mybatis.constant.SqlConditions;
-import org.apache.ibatis.mapping.SqlCommandType;
 
+import com.github.sparkzxl.mybatis.constant.SqlConditions;
+
+import java.util.Collections;
 import java.util.List;
 
 /**
- * description: 数据权限 行级处理器
+ * description: 多列数据权限 行级处理器
  *
  * @author zhouxinlei
- * @since 2022-07-2022/7/18 13:43:58}
+ * @since 2022-11-14 10:38:32
  */
 public interface DataScopeLineHandler {
 
@@ -25,37 +26,30 @@ public interface DataScopeLineHandler {
     }
 
     /**
-     * 获取sql命令类型
-     *
-     * @return SqlCommandType
-     */
-    default SqlCommandType getSqlCommandType() {
-        return SqlCommandType.UNKNOWN;
-    }
-
-    /**
      * 获取sql条件类型
      *
+     * @param columnName 字段名
      * @return SqlConditions
      */
-    default SqlConditions getSqlCondition() {
-        return SqlConditions.AND;
+    default SqlConditions getSqlCondition(String columnName) {
+        return SqlConditions.EQ;
     }
 
     /**
      * 获取数据权限值表达式，只支持单个 ID 值
      *
+     * @param columnName 字段名
      * @return scopeId 值表达式
      */
-    String getScopeId();
+    String getScopeId(String columnName);
 
     /**
      * 数据权限字段列
      *
      * @return String
      */
-    default String getScopeIdColumn() {
-        return "scope_id";
+    default List<String> getScopeIdColumnList() {
+        return Collections.singletonList("scope_id");
     }
 
     /**
@@ -74,9 +68,10 @@ public interface DataScopeLineHandler {
     /**
      * 获取数据权限值表达式，支持多个 ID 值
      *
+     * @param columnName 字段名
      * @return 数据权限值表达式
      */
-    List<String> getScopeIdList();
+    List<String> getScopeIdList(String columnName);
 
     void remove();
 }

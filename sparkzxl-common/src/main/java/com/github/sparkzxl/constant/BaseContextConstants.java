@@ -114,4 +114,5 @@ public class BaseContextConstants {
     public static final String CLIENT_IP = "clientIP";
 
     public static final String DATA_SCOPE = "data_scope";
+    public static final String MULTI_DATA_SCOPE = "multiDataScope";
 }

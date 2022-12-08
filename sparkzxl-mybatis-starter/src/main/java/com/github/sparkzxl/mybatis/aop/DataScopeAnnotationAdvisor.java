@@ -12,7 +12,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import java.lang.annotation.Annotation;
 
 /**
- * description: 数据权限aop通知
+ * description: 多列数据权限aop通知
  *
  * @author zhouxinlei
  * @since 2022-05-27 12:25:59
