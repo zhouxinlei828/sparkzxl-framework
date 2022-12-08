@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApacheDubboConfigCache extends DubboConfigCache {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ApacheDubboConfigCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApacheDubboConfigCache.class);
     private final LoadingCache<String, ReferenceConfig<GenericService>> cache = CacheBuilder.newBuilder()
             .maximumSize(GatewayConstant.CACHE_MAX_COUNT)
             .removalListener((RemovalListener<Object, ReferenceConfig<GenericService>>) notification -> {
@@ -124,7 +124,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
                 return referenceConfig;
             }
         } catch (ExecutionException e) {
-            LOG.error("init dubbo ref exception", e);
+            logger.error("init dubbo ref exception", e);
         }
         return build(metaData);
     }
@@ -177,11 +177,11 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
         try {
             Object obj = reference.get();
             if (Objects.nonNull(obj)) {
-                LOG.info("init apache dubbo reference success there meteData is :{}", metaData);
+                logger.info("init apache dubbo reference success there meteData is :{}", metaData);
                 cache.put(metaData.getPath(), reference);
             }
         } catch (Exception e) {
-            LOG.error("init apache dubbo reference exception", e);
+            logger.error("init apache dubbo reference exception", e);
         }
         return reference;
     }

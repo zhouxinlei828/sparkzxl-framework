@@ -50,8 +50,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             try {
                 jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
             } catch (Exception e) {
-                e.printStackTrace();
-                log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
+                log.error("校验token发生异常：", e);
                 ExceptionAssert.failure(ResultErrorCode.LOGIN_EXPIRE);
             }
             String username = jwtUserInfo.getUsername();

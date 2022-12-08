@@ -90,7 +90,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
          * if is Default Strategy Print Stack Trace
          */
         if (strategy instanceof DefaultExceptionHandlerStrategy && log.isDebugEnabled()) {
-            log.debug("[Global Exception Handler]Request Path:{},Exception Detail:{}", request.getPath(), ExceptionUtils.getStackTrace(ex));
+            log.debug("Global Exception Handler Request Path:{},Exception Detail:{}", request.getPath(), ExceptionUtils.getStackTrace(ex));
         }
         exceptionHandlerResult.set(result);
         ServerRequest newRequest = ServerRequest.create(exchange, this.messageReaders);

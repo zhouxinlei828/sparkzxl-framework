@@ -60,8 +60,7 @@ public class DateUtils extends DateUtil {
         try {
             return fastDateFormat.parse(dateStr);
         } catch (ParseException e) {
-            log.error("格式化日期发生异常：[{}]", e.getMessage());
-            e.printStackTrace();
+            log.warn("格式化日期发生异常：[{}]", e.getMessage(),e);
         }
         return null;
     }

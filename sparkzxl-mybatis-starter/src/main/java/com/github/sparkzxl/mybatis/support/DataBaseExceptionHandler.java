@@ -45,7 +45,7 @@ public class DataBaseExceptionHandler implements Ordered {
 
     @ExceptionHandler(TooManyResultsException.class)
     public ApiResult<?> handleTooManyResultsException(TooManyResultsException e) {
-        log.error("查询异常：", e);
+        log.error("SQL异常：", e);
         return ApiResult.fail(
                 ResultErrorCode.SQL_MANY_RESULT_EX.getErrorCode(), ResultErrorCode.SQL_MANY_RESULT_EX.getErrorMsg());
     }

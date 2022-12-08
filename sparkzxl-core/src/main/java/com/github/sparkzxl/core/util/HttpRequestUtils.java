@@ -218,7 +218,7 @@ public class HttpRequestUtils {
             response.getWriter().println(JsonUtil.toJson(result));
             response.getWriter().flush();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("IO异常：",e);
         }
     }
 }

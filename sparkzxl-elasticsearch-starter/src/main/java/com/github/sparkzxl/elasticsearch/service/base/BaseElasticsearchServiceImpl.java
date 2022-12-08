@@ -178,7 +178,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         try {
             searchResponse = restHighLevelClient.search(searchRequest, COMMON_OPTIONS);
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("IO异常：",e);
         }
         return searchResponse;
     }

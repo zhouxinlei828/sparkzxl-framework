@@ -25,7 +25,7 @@ public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
-        log.error("AccessDeniedException：[{}]", e.getMessage());
+        log.warn("AccessDeniedException：[{}]", e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         String body = JSONUtil.toJsonStr(ApiResult.fail(ResultErrorCode.AUTHORIZED_DENIED));

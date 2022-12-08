@@ -103,7 +103,6 @@ public class JwtFilter extends AbstractGlobalFilter {
             }
             return jsonNode;
         }).getOrElseThrow(throwable -> {
-            log.error("JSON转换异常：", throwable);
             throw new JwtInvalidException(throwable);
         });
     }

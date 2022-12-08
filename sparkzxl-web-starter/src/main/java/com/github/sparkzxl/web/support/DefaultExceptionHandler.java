@@ -63,7 +63,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(ArgumentException.class)
     public ApiResult<?> handleArgumentException(ArgumentException e) {
-        log.error("ArgumentException异常:", e);
+        log.warn("ArgumentException异常:", e);
         return ApiResult.fail(e.getErrorCode(), e.getErrorMsg());
     }
 
@@ -113,20 +113,20 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("方法参数无效异常:", e);
+        log.warn("方法参数无效异常:", e);
         return ApiResult.fail(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(),
                 bindingResult(e.getBindingResult()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResult<?> handleIllegalArgumentException(IllegalArgumentException e) {
-        log.error("IllegalArgumentException异常:", e);
+        log.warn("IllegalArgumentException异常:", e);
         return ApiResult.fail(ResultErrorCode.PARAM_VALID_ERROR);
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ApiResult<?> handleIllegalStateException(IllegalStateException e) {
-        log.error("IllegalStateException:", e);
+        log.warn("IllegalStateException:", e);
         return ApiResult.fail(ResultErrorCode.PARAM_VALID_ERROR);
     }
 
@@ -150,7 +150,7 @@ public class DefaultExceptionHandler implements Ordered {
      */
     @ExceptionHandler(BindException.class)
     public ApiResult<?> handleBindException(BindException e) {
-        log.error("form非法参数验证异常:", e);
+        log.warn("form非法参数验证异常:", e);
         try {
             String msg = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
             if (StrUtil.isNotEmpty(msg)) {
@@ -171,7 +171,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler({AccountNotFoundException.class})
     public ApiResult<?> handleAccountNotFoundException(AccountNotFoundException e) {
-        log.error("账户找不到异常:", e);
+        log.warn("账户找不到异常:", e);
         return ApiResult.fail(ResultErrorCode.USER_NOT_FOUND);
     }
 
