@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author zhouxinlei
  * @see <a href="https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/extension/ExtensionLoader.java">ExtensionLoader</a>
- * @since 2022-01-10 10:40:11@param
+ * @since 2022-01-10 10:40:11
  * <T> the type parameter
  */
 @SuppressWarnings("all")

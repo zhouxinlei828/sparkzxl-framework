@@ -19,7 +19,7 @@ public class WebProperties {
 
     public static final String WEB_PREFIX = "spring.web";
 
-    private List<InterceptorProperties> interceptorList = Lists.newArrayList(new InterceptorProperties());
+    private List<InterceptorProperties> interceptorConfigList = Lists.newArrayList();
 
 
 }

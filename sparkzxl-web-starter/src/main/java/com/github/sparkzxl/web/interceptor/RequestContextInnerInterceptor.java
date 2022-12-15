@@ -4,28 +4,29 @@ import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.spi.Join;
 import com.github.sparkzxl.web.annotation.Response;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.AsyncHandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 /**
- * description: 全局请求拦截处理
+ * description: 请求上下文拦截器
  *
  * @author zhouxinlei
+ * @since 2022-12-09 09:07:20
  */
-@Slf4j
-public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
+@Join
+public class RequestContextInnerInterceptor extends AbstractInnerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public void doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) {
-            return true;
+            return;
         }
 
         //设置当前请求线程全局信息
@@ -40,9 +41,8 @@ public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
         MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
         Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (feign) {
-            return true;
+            return;
         }
-
         if (handler instanceof HandlerMethod) {
             final HandlerMethod handlerMethod = (HandlerMethod) handler;
             final Class<?> classz = handlerMethod.getBeanType();
@@ -53,11 +53,15 @@ public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
                 request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(Response.class));
             }
         }
-        return true;
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        RequestLocalContextHolder.remove();
+    public void doPostHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public int getOrder() {
+        return -99;
     }
 }

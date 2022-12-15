@@ -35,6 +35,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.github.sparkzxl</groupId>
+            <artifactId>sparkzxl-spi</artifactId>
+        </dependency>
         <!-- undertow web服务器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

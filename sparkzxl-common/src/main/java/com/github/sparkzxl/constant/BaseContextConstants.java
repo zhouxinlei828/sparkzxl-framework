@@ -115,4 +115,5 @@ public class BaseContextConstants {
 
     public static final String DATA_SCOPE = "data_scope";
     public static final String MULTI_DATA_SCOPE = "multiDataScope";
+    public static final String RPC_TYPE = "rpc_type";
 }
