@@ -17,6 +17,12 @@ import java.lang.annotation.*;
 public @interface Alarm {
 
     /**
+     * 机器人id
+     * @return String
+     */
+    String robotId() default "";
+
+    /**
      * 报警名称
      *
      * @return String

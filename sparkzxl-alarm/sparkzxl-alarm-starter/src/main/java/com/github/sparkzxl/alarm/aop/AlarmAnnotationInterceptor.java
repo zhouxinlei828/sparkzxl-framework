@@ -15,6 +15,7 @@ import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopProxyUtils;
 
 import javax.annotation.Nonnull;
@@ -77,7 +78,11 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
         }).andFinally(() -> {
             alarmRequest.setContent(templateContentBuilder.toString());
             alarmRequest.setVariables(alarmParamMap);
-            alarmClient.send(messageSubType, alarmRequest);
+            if (StringUtils.isEmpty(annotation.robotId())) {
+                alarmClient.send(messageSubType, alarmRequest);
+            } else {
+                alarmClient.designatedRobotSend(annotation.robotId(), messageSubType, alarmRequest);
+            }
         }).get();
 
     }
