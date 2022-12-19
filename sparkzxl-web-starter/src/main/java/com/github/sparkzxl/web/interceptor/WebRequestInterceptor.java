@@ -23,18 +23,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * description: http request interceptor
+ * description: web request interceptor
  *
  * @author zhouxinlei
  * @since 2022-12-08 19:24:09
  */
 @Getter
 @Setter
-public class HttpRequestInterceptor implements AsyncHandlerInterceptor {
+public class WebRequestInterceptor implements AsyncHandlerInterceptor {
 
     private final List<InnerInterceptor> innerInterceptorList = Lists.newArrayList();
 
-    public HttpRequestInterceptor(WebProperties webProperties) {
+    public WebRequestInterceptor(WebProperties webProperties) {
         List<InterceptorProperties> interceptorConfigList = webProperties.getInterceptorConfigList();
         Map<String, InterceptorProperties> interceptorPropertiesMap = interceptorConfigList.stream()
                 .collect(Collectors.toMap(InterceptorProperties::getName, k -> k));
@@ -62,8 +62,13 @@ public class HttpRequestInterceptor implements AsyncHandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         RequestLocalContextHolder.set(BaseContextConstants.RPC_TYPE, RpcType.HTTP.getCode());
-        for (InnerInterceptor innerInterceptor : innerInterceptorList) {
-            innerInterceptor.preHandle(request, response, handler);
+        try {
+            for (InnerInterceptor innerInterceptor : innerInterceptorList) {
+                innerInterceptor.preHandle(request, response, handler);
+            }
+        } catch (Exception e) {
+            RequestLocalContextHolder.remove();
+            throw new RuntimeException(e);
         }
         return true;
     }
@@ -71,8 +76,13 @@ public class HttpRequestInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        for (InnerInterceptor innerInterceptor : innerInterceptorList) {
-            innerInterceptor.postHandle(request, response, handler, modelAndView);
+        try {
+            for (InnerInterceptor innerInterceptor : innerInterceptorList) {
+                innerInterceptor.postHandle(request, response, handler, modelAndView);
+            }
+        } catch (Exception e) {
+            RequestLocalContextHolder.remove();
+            throw new RuntimeException(e);
         }
     }
 

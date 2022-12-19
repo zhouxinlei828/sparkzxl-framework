@@ -1,7 +1,7 @@
 package com.github.sparkzxl.web.config;
 
 import com.github.sparkzxl.core.util.SwaggerStaticResource;
-import com.github.sparkzxl.web.interceptor.HttpRequestInterceptor;
+import com.github.sparkzxl.web.interceptor.WebRequestInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
 import com.github.sparkzxl.web.support.ResponseResultAdvice;
@@ -45,13 +45,13 @@ public class DefaultWebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public HttpRequestInterceptor httpRequestInterceptor() {
-        return new HttpRequestInterceptor(webProperties);
+    public WebRequestInterceptor webRequestInterceptor() {
+        return new WebRequestInterceptor(webProperties);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(httpRequestInterceptor())
+        registry.addInterceptor(webRequestInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
     }
