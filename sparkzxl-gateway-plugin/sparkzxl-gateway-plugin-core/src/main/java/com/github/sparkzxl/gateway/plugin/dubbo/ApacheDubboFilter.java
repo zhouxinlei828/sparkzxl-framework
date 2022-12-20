@@ -60,6 +60,10 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String rpcType = ReactorHttpHelper.getHeader(exchange.getRequest(), "rpcType");
+        if (StringUtils.isBlank(rpcType) || !StringUtils.equals(rpcType, "dubbo")) {
+            return chain.filter(exchange);
+        }
         Route route = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         boolean matched = predicate.test(exchange, route);
         if (!matched) {

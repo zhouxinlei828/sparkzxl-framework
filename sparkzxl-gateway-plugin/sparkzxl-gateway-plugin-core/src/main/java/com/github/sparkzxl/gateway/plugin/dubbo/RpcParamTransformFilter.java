@@ -5,9 +5,11 @@ import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.utils.BodyParamUtils;
+import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -34,6 +36,10 @@ public class RpcParamTransformFilter extends AbstractGlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        String rpcType = ReactorHttpHelper.getHeader(request, "rpcType");
+        if (StringUtils.isBlank(rpcType) || !StringUtils.equals(rpcType, "dubbo")) {
+            return chain.filter(exchange);
+        }
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         if (ObjectUtils.isNotEmpty(gatewayContext)) {
             MediaType mediaType = request.getHeaders().getContentType();
