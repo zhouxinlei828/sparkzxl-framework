@@ -1,1 +1,2 @@
 com.github.sparkzxl.boot.BootAutoConfiguration
+com.github.sparkzxl.boot.config.ThreadPoolAutoConfig
