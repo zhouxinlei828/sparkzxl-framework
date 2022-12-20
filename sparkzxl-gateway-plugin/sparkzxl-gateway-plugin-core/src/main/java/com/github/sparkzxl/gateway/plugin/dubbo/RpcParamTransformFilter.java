@@ -90,14 +90,13 @@ public class RpcParamTransformFilter extends AbstractGlobalFilter {
         return new String(bytes, StandardCharsets.UTF_8);
     }
 
+    @Override
+    public int getOrder() {
+        return FilterEnum.RPC_PARAM_TRANSFORM.getCode();
+    }
 
     @Override
     public String named() {
         return FilterEnum.RPC_PARAM_TRANSFORM.getName();
-    }
-
-    @Override
-    public int getOrder() {
-        return FilterEnum.RPC_PARAM_TRANSFORM.getCode();
     }
 }

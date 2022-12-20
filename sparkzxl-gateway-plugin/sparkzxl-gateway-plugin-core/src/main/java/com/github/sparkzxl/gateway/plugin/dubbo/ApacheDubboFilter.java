@@ -59,11 +59,6 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     }
 
     @Override
-    public String named() {
-        return FilterEnum.DUBBO.getName();
-    }
-
-    @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         Route route = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         boolean matched = predicate.test(exchange, route);
@@ -129,5 +124,10 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     @Override
     public int getOrder() {
         return FilterEnum.DUBBO.getCode();
+    }
+
+    @Override
+    public String named() {
+        return FilterEnum.DUBBO.getName();
     }
 }

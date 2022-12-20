@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.config;
 
-import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
@@ -72,7 +71,6 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param dubboRegisterConfig the dubbo register config
      */
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
-        ApplicationConfig bean = SpringContextUtils.getBean(ApplicationConfig.class);
         if (Objects.isNull(applicationConfig)) {
             applicationConfig = new ApplicationConfig("spring-gateway-proxy");
             applicationConfig.setRegisterMode("instance");

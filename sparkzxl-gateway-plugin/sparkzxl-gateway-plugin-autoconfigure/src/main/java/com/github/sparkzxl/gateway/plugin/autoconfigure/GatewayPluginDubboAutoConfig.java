@@ -2,6 +2,7 @@ package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
 import com.github.sparkzxl.gateway.plugin.dubbo.ApacheDubboFilter;
 import com.github.sparkzxl.gateway.plugin.dubbo.ApacheDubboProxyService;
+import com.github.sparkzxl.gateway.plugin.dubbo.RpcParamTransformFilter;
 import com.github.sparkzxl.gateway.plugin.dubbo.handler.ApacheDubboFilterDataHandler;
 import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageConverter;
 import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageWriter;
@@ -73,6 +74,12 @@ public class GatewayPluginDubboAutoConfig {
                                           DubboMessageWriter dubboMessageWriter) {
         return new ApacheDubboFilter(dubboMetaDataFactory, dubboRoutePredicate,
                 apacheDubboProxyService, dubboMessageConverter, dubboMessageWriter);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RpcParamTransformFilter.class)
+    public GlobalFilter rpcParamTransformFilter() {
+        return new RpcParamTransformFilter();
     }
 
     @Bean
