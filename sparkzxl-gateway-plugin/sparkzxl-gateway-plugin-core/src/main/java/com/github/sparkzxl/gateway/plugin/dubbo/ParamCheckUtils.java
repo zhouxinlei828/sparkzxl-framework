@@ -9,12 +9,12 @@ package com.github.sparkzxl.gateway.plugin.dubbo;
 public class ParamCheckUtils {
 
     /**
-     * Dubbo body is empty boolean.
+     * body is empty boolean.
      *
      * @param body the body
      * @return the boolean
      */
-    public static boolean dubboBodyIsEmpty(final String body) {
-        return null == body || "".equals(body) || "{}".equals(body) || "null".equals(body);
+    public static boolean bodyIsEmpty(final String body) {
+        return null == body || "".equals(body) || "null".equals(body);
     }
 }

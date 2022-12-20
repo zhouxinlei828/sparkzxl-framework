@@ -90,13 +90,11 @@ public final class BodyParamUtils {
         List<String> paramTypeList = new ArrayList<>();
 
         if (isNameMapping(parameterTypes)) {
-            Map<String, String> paramNameMap = JSONObject.parseObject(parameterTypes,
-                    new TypeReference<Map<String, String>>() {});
+            Map<String, String> paramNameMap = JSONObject.parseObject(parameterTypes, new TypeReference<Map<String, String>>() {});
             paramNameList.addAll(paramNameMap.keySet());
             paramTypeList.addAll(paramNameMap.values());
         } else {
-            Map<String, Object> paramMap = JSONObject.parseObject(body,
-                    new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> paramMap = JSONObject.parseObject(body, new TypeReference<Map<String, Object>>() {});
             paramNameList.addAll(paramMap.keySet());
             paramTypeList.addAll(Arrays.asList(StringUtils.split(parameterTypes, ",")));
         }

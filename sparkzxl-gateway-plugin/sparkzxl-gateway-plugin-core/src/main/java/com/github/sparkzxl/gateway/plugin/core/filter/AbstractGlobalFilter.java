@@ -6,14 +6,13 @@ import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
 
+import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,11 +26,8 @@ public abstract class AbstractGlobalFilter implements GlobalFilter, Ordered, Ini
     private ApplicationContext applicationContext;
     private final Map<String, FilterData> filterDataMap = Maps.newHashMap();
     private final Map<String, FilterDataHandler> filterDataHandlerMap = Maps.newHashMap();
-    @Autowired
+    @Resource
     protected GatewayPluginProperties gatewayPluginProperties;
-    @Autowired
-    protected List<FilterDataHandler> filterDataHandlerList;
-
     public AbstractGlobalFilter() {
     }
 

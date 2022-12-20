@@ -3,6 +3,7 @@ package com.github.sparkzxl.gateway.plugin.dubbo.config;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
+import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -14,7 +15,6 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ConsumerConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
-import org.apache.dubbo.config.utils.ConfigValidationUtils;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +35,10 @@ import java.util.concurrent.ExecutionException;
 public class ApacheDubboConfigCache extends DubboConfigCache {
 
     private static final Logger logger = LoggerFactory.getLogger(ApacheDubboConfigCache.class);
+    private ApplicationConfig applicationConfig;
+    private RegistryConfig registryConfig;
+    private ConsumerConfig consumerConfig;
+
     private final LoadingCache<String, ReferenceConfig<GenericService>> cache = CacheBuilder.newBuilder()
             .maximumSize(GatewayConstant.CACHE_MAX_COUNT)
             .removalListener((RemovalListener<Object, ReferenceConfig<GenericService>>) notification -> {
@@ -52,9 +56,6 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
                     return new ReferenceConfig<>();
                 }
             });
-    private ApplicationConfig applicationConfig;
-    private RegistryConfig registryConfig;
-    private ConsumerConfig consumerConfig;
 
     /**
      * Gets instance.
@@ -73,9 +74,8 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
         ApplicationConfig bean = SpringContextUtils.getBean(ApplicationConfig.class);
         if (Objects.isNull(applicationConfig)) {
-            applicationConfig = new ApplicationConfig();
+            applicationConfig = new ApplicationConfig("spring-gateway-proxy");
             applicationConfig.setRegisterMode("instance");
-            applicationConfig.setName("spring-gateway-proxy");
         }
         if (needUpdateRegistryConfig(dubboRegisterConfig)) {
             RegistryConfig registryConfigTemp = new RegistryConfig();
@@ -89,7 +89,6 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
                 registryConfigTemp.setParameters(parameters);
             }
             registryConfig = registryConfigTemp;
-            ConfigValidationUtils.validateRegistryConfig(registryConfig);
         }
         if (Objects.isNull(consumerConfig)) {
             consumerConfig = new ConsumerConfig();
@@ -107,8 +106,28 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
             return true;
         }
         return !Objects.equals(dubboRegisterConfig.getProtocol(), registryConfig.getProtocol())
-                || !Objects.equals(dubboRegisterConfig.getAddress(), registryConfig.getAddress())
-                || !Objects.equals(dubboRegisterConfig.getProtocol(), registryConfig.getProtocol());
+                || !Objects.equals(dubboRegisterConfig.getAddress(), registryConfig.getAddress());
+    }
+
+    /**
+     * Init ref reference config.
+     *
+     * @param metaData the meta data
+     * @return the reference config
+     */
+    public ReferenceConfig<GenericService> initRef(final MetaData metaData, final String namespace) {
+        if (StringUtils.isBlank(namespace)) {
+            return initRef(metaData);
+        }
+        try {
+            ReferenceConfig<GenericService> referenceConfig = cache.get(metaData.getPath());
+            if (StringUtils.isNoneBlank(referenceConfig.getInterface())) {
+                return referenceConfig;
+            }
+        } catch (ExecutionException e) {
+            logger.error("init dubbo ref exception", e);
+        }
+        return build(metaData, namespace);
     }
 
     /**
@@ -126,7 +145,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
         } catch (ExecutionException e) {
             logger.error("init dubbo ref exception", e);
         }
-        return build(metaData);
+        return build(metaData, "");
     }
 
 
@@ -137,20 +156,42 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @return the reference config
      */
     @SuppressWarnings("deprecation")
-    public ReferenceConfig<GenericService> build(final MetaData metaData) {
+    public ReferenceConfig<GenericService> build(final MetaData metaData, final String namespace) {
         if (Objects.isNull(applicationConfig) || Objects.isNull(registryConfig)) {
             return new ReferenceConfig<>();
         }
+        ReferenceConfig<GenericService> reference = buildReference(metaData, namespace);
+        try {
+            Object obj = reference.get();
+            if (Objects.nonNull(obj)) {
+                logger.info("build init apache dubbo reference success there meteData is :{}", metaData);
+                cache.put(namespace + ":" + metaData.getPath(), reference);
+            }
+        } catch (Exception e) {
+            logger.error("init apache dubbo reference exception", e);
+        }
+        return reference;
+    }
+
+    /**
+     * buildReference param.
+     *
+     * @param metaData  metaData
+     * @param namespace namespace
+     * @return the reference config
+     */
+    private ReferenceConfig<GenericService> buildReference(final MetaData metaData, final String namespace) {
         ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
         reference.setGeneric("true");
         reference.setAsync(true);
-
         reference.setApplication(applicationConfig);
         reference.setRegistry(registryConfig);
         reference.setConsumer(consumerConfig);
         reference.setInterface(metaData.getServiceName());
-        reference.setProtocol("nacos");
+        reference.setProtocol("dubbo");
         reference.setCheck(false);
+        //reference.setLoadbalance("gray");
+
         Map<String, String> parameters = new HashMap<>(2);
         parameters.put("dispatcher", "direct");
         reference.setParameters(parameters);
@@ -174,14 +215,15 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
             Optional.ofNullable(dubboParam.getRetries()).ifPresent(reference::setRetries);
             Optional.ofNullable(dubboParam.getSent()).ifPresent(reference::setSent);
         }
-        try {
-            Object obj = reference.get();
-            if (Objects.nonNull(obj)) {
-                logger.info("init apache dubbo reference success there meteData is :{}", metaData);
-                cache.put(metaData.getPath(), reference);
+        if (StringUtils.isNotBlank(namespace)) {
+            if (!registryConfig.getAddress().contains(DubboConstant.NAMESPACE)) {
+                reference.setRegistry(new RegistryConfig(registryConfig.getAddress() + "?" + DubboConstant.NAMESPACE + "=" + namespace));
+            } else {
+                String newAddress = registryConfig.getAddress().substring(0, registryConfig.getAddress().indexOf(DubboConstant.NAMESPACE) + 1) + DubboConstant.NAMESPACE + "=" + namespace;
+                reference.setRegistry(new RegistryConfig(newAddress));
             }
-        } catch (Exception e) {
-            logger.error("init apache dubbo reference exception", e);
+        } else {
+            reference.setRegistry(registryConfig);
         }
         return reference;
     }

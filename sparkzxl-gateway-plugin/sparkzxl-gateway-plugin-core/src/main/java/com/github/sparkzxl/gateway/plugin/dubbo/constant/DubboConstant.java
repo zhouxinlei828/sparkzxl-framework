@@ -13,4 +13,9 @@ public class DubboConstant {
      */
     public static final String DUBBO_RPC_RESULT_EMPTY = "dubbo has not return value!";
 
+    /**
+     * namespace,sush as nacos .
+     */
+    public static final String NAMESPACE = "namespace";
+
 }

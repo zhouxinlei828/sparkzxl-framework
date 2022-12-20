@@ -25,7 +25,7 @@ public class ApacheDubboMetaDataHandler extends AbstractDubboMetaDataHandler {
 
     @Override
     protected void updateReference(MetaData metaData) {
-        ApacheDubboConfigCache.getInstance().build(metaData);
+        ApacheDubboConfigCache.getInstance().build(metaData,"");
     }
 
     @Override
