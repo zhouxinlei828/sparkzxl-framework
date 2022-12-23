@@ -73,7 +73,6 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
         if (Objects.isNull(applicationConfig)) {
             applicationConfig = new ApplicationConfig("spring-gateway-proxy");
-            applicationConfig.setRegisterMode("instance");
         }
         if (needUpdateRegistryConfig(dubboRegisterConfig)) {
             RegistryConfig registryConfigTemp = new RegistryConfig();

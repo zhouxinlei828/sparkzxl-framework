@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.route;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.gateway.common.constant.enums.RpcTypeEnum;
@@ -8,11 +7,11 @@ import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.springframework.cloud.gateway.route.Route;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -21,6 +20,7 @@ import java.util.Map;
  * @author zhouxinlei
  * @since 2022-08-12 15:33:32
  */
+@SuppressWarnings(value = "unchecked")
 public class DefaultDubboMetaDataFactory implements DubboMetaDataFactory {
 
     /**
@@ -67,8 +67,13 @@ public class DefaultDubboMetaDataFactory implements DubboMetaDataFactory {
         if (dubboMetadata == null) {
             return null;
         }
-        DubboRoute dubboRoute = Convert.convert(DubboRoute.class, dubboMetadata);
-        String[] parameterTypes = dubboRoute.getParameterTypes();
+        Map<String, Object> metadataMap = (Map<String, Object>) dubboMetadata;
+        String[] parameterTypes = new String[]{};
+        Object parameterTypesMetadata = metadataMap.get("parameterTypes");
+        if (parameterTypesMetadata != null) {
+            Collection<String> parameterTypeList = ((Map<String, String>) parameterTypesMetadata).values();
+            parameterTypes = parameterTypeList.toArray(new String[]{});
+        }
         MetaData metaData = new MetaData();
         metaData.setId(IdUtil.fastSimpleUUID());
         metaData.setEnabled(Boolean.TRUE);
@@ -76,12 +81,11 @@ public class DefaultDubboMetaDataFactory implements DubboMetaDataFactory {
         metaData.setRpcType(RpcTypeEnum.DUBBO.getName());
         metaData.setServiceName(interfaceClass);
         metaData.setMethodName(method);
-        if (parameterTypes != null) {
-            String parameterTypeStr = ListUtils.arrayToString(parameterTypes);
-            metaData.setParameterTypes(parameterTypeStr);
-        }
-        if (StringUtils.isNotEmpty(dubboRoute.getRpcExt())) {
-            metaData.setRpcExt(dubboRoute.getRpcExt());
+        String parameterTypeStr = ListUtils.arrayToString(parameterTypes);
+        metaData.setParameterTypes(parameterTypeStr);
+        Object rpcExt = metadataMap.get("rpcExt");
+        if (ObjectUtils.isNotEmpty(rpcExt)) {
+            metaData.setRpcExt(String.valueOf(rpcExt));
         }
         return metaData;
     }
