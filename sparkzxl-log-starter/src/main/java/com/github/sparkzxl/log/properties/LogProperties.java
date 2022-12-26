@@ -132,6 +132,8 @@ public class LogProperties {
 
         private boolean enabled = false;
 
+        private String robotId;
+
         private boolean printStackTrace = false;
 
         private boolean simpleWarnInfo = false;
