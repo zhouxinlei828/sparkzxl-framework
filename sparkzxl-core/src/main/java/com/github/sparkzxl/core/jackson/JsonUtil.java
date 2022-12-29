@@ -1,5 +1,6 @@
 package com.github.sparkzxl.core.jackson;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
@@ -143,6 +144,31 @@ public class JsonUtil {
             map.forEach((key, value) -> result.put(key, toPojo(value, valueTypeRef)));
             return result;
         }).getOrElseThrow(e -> new JwtParseException(e.getMessage()));
+    }
+
+    public static Map toLinkedHashMap(String content) {
+        return Try.of(() -> {
+            if (StringUtils.isBlank(content)) {
+                return null;
+            }
+            return getInstance().readValue(content, LinkedHashMap.class);
+        }).getOrElseThrow(e ->
+                new JwtParseException(e.getMessage()));
+    }
+
+    public static <T> Map toLinkedHashMap(T val) {
+        return Try.of(() -> getInstance().readValue(getInstance().writeValueAsString(val), LinkedHashMap.class)).getOrElseThrow(e ->
+                new JwtParseException(e.getMessage()));
+    }
+
+    public static Map toTreeMap(String content) {
+        return Try.of(() -> {
+            if (StringUtils.isBlank(content)) {
+                return null;
+            }
+            return getInstance().readValue(content, TreeMap.class);
+        }).getOrElseThrow(e ->
+                new JwtParseException(e.getMessage()));
     }
 
     public static <T> T toPojo(Map fromValue, Class<T> toValueType) {

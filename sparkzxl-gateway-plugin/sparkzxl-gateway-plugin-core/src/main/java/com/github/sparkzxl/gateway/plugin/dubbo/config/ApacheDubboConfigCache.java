@@ -14,12 +14,13 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ConsumerConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
+import org.apache.dubbo.config.bootstrap.DubboBootstrap;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -180,20 +181,13 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      */
     private ReferenceConfig<GenericService> buildReference(final MetaData metaData, final String namespace) {
         ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
-        reference.setGeneric("true");
-        reference.setAsync(true);
-        reference.setApplication(applicationConfig);
-        reference.setRegistry(registryConfig);
-        reference.setConsumer(consumerConfig);
         reference.setInterface(metaData.getServiceName());
+        reference.setGeneric("true");
         reference.setProtocol("dubbo");
+        reference.setAsync(true);
         reference.setCheck(false);
-        //reference.setLoadbalance("gray");
-
-        Map<String, String> parameters = new HashMap<>(2);
-        parameters.put("dispatcher", "direct");
-        reference.setParameters(parameters);
-
+        reference.setApplication(applicationConfig);
+        reference.setConsumer(consumerConfig);
         String rpcExt = metaData.getRpcExt();
         DubboParam dubboParam = parserToDubboParam(rpcExt);
         if (Objects.nonNull(dubboParam)) {
@@ -213,16 +207,18 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
             Optional.ofNullable(dubboParam.getRetries()).ifPresent(reference::setRetries);
             Optional.ofNullable(dubboParam.getSent()).ifPresent(reference::setSent);
         }
+        RegistryConfig registryConfigTemp = new RegistryConfig();
+        BeanUtils.copyProperties(registryConfig, registryConfigTemp, "address");
         if (StringUtils.isNotBlank(namespace)) {
             if (!registryConfig.getAddress().contains(DubboConstant.NAMESPACE)) {
-                reference.setRegistry(new RegistryConfig(registryConfig.getAddress() + "?" + DubboConstant.NAMESPACE + "=" + namespace));
+                String newAddress = registryConfig.getAddress() + "?" + DubboConstant.NAMESPACE + "=" + namespace;
+                registryConfigTemp.setAddress(newAddress);
             } else {
                 String newAddress = registryConfig.getAddress().substring(0, registryConfig.getAddress().indexOf(DubboConstant.NAMESPACE) + 1) + DubboConstant.NAMESPACE + "=" + namespace;
-                reference.setRegistry(new RegistryConfig(newAddress));
+                registryConfigTemp.setAddress(newAddress);
             }
-        } else {
-            reference.setRegistry(registryConfig);
         }
+        reference.setRegistry(registryConfigTemp);
         return reference;
     }
 

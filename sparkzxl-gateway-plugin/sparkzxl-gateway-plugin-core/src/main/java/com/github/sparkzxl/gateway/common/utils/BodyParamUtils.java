@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.ReflectionUtil;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,18 +58,13 @@ public final class BodyParamUtils {
      * @return the parameters.
      */
     public static Pair<String[], Object[]> buildSingleParameter(final String body, final String parameterTypes) {
-        final Map<String, Object> paramMap = JSONObject.parseObject(body, new TypeReference<Map<String, Object>>() {});
+        final Map<String, Object> paramMap = JsonUtil.toLinkedHashMap(body);
         for (String key : paramMap.keySet()) {
             Object obj = paramMap.get(key);
             if (obj instanceof JSONObject) {
                 paramMap.put(key, Convert.toMap(String.class, Object.class, obj));
             } else if (obj instanceof JSONArray) {
-                paramMap.put(key, Convert.convert(new TypeReference<List<Object>>() {
-                    @Override
-                    public Type getType() {
-                        return super.getType();
-                    }
-                }, obj));
+                paramMap.put(key, Convert.convert(new TypeReference<List<Object>>() {}, obj));
             } else {
                 paramMap.put(key, obj);
             }
@@ -90,11 +85,11 @@ public final class BodyParamUtils {
         List<String> paramTypeList = new ArrayList<>();
 
         if (isNameMapping(parameterTypes)) {
-            Map<String, String> paramNameMap = JSONObject.parseObject(parameterTypes, new TypeReference<Map<String, String>>() {});
+            Map<String, String> paramNameMap = JsonUtil.toLinkedHashMap(parameterTypes);
             paramNameList.addAll(paramNameMap.keySet());
             paramTypeList.addAll(paramNameMap.values());
         } else {
-            Map<String, Object> paramMap = JSONObject.parseObject(body, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> paramMap = JsonUtil.toLinkedHashMap(body);
             paramNameList.addAll(paramMap.keySet());
             paramTypeList.addAll(Arrays.asList(StringUtils.split(parameterTypes, ",")));
         }
@@ -102,12 +97,11 @@ public final class BodyParamUtils {
         if (paramTypeList.size() == 1 && !isBaseType(paramTypeList.get(0))) {
             return buildSingleParameter(body, parameterTypes);
         }
-        Map<String, Object> paramMap = JSONObject.parseObject(body,
-                new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> paramMap = JsonUtil.toLinkedHashMap(body);
         Object[] objects = paramNameList.stream().map(key -> {
             Object obj = paramMap.get(key);
             if (obj instanceof JSONObject) {
-                return Convert.toMap(String.class, Object.class, obj);
+                return JsonUtil.toLinkedHashMap(obj);
             } else if (obj instanceof JSONArray) {
                 return Convert.convert(new TypeReference<List<Object>>() {}, obj);
             } else {
