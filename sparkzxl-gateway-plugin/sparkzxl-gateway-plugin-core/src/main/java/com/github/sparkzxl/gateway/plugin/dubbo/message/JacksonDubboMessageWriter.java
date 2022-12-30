@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.message;
 
-import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,7 +9,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * description: Jackson 消息写入
@@ -23,7 +23,7 @@ public class JacksonDubboMessageWriter implements DubboMessageWriter {
     public Mono<Void> write(ServerWebExchange exchange, Object result) {
         ServerHttpResponse response = exchange.getResponse();
         if (result != null) {
-            byte[] bytes = JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8);
+            byte[] bytes = Objects.requireNonNull(JsonUtils.toJson(result)).getBytes();
             DataBuffer dataBuffer = response.bufferFactory().wrap(bytes);
             response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             return response.writeWith(Flux.just(dataBuffer));

@@ -1,0 +1,2 @@
+noOps=com.github.sparkzxl.gateway.plugin.dubbo.message.NoOpsDubboMessageConverter
+response=com.github.sparkzxl.gateway.plugin.dubbo.message.ResponseDubboMessageConverter

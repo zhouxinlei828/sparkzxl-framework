@@ -53,9 +53,9 @@ public class JwtFilter extends AbstractGlobalFilter {
         String jsonConfig =
                 OptionalBean.ofNullable(filterData).getBean(FilterData::getConfig).orElseGet(() -> "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}");
         JwtConfig jwtConfig = JsonUtils.toJavaObject(jsonConfig, JwtConfig.class);
-        String dataHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
+        String ruleHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
                 () -> "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}");
-        JwtRuleHandle ruleHandle = JsonUtils.toJavaObject(dataHandle, JwtRuleHandle.class);
+        JwtRuleHandle jwtRuleHandle = JsonUtils.toJavaObject(ruleHandle, JwtRuleHandle.class);
         assert jwtConfig != null;
         if (needSkip) {
             return removeAuthorization(exchange, chain, jwtConfig.getTokenKey());
@@ -65,7 +65,7 @@ public class JwtFilter extends AbstractGlobalFilter {
         Map<String, Object> jsonMap = checkAuthorization(authToken, jwtConfig.getSecretKey());
         if (ObjectUtils.isNotEmpty(jsonMap)) {
             if (ObjectUtils.isNotEmpty(ruleHandle)) {
-                return chain.filter(converter(exchange, jsonMap, ruleHandle.getConverter()));
+                return chain.filter(converter(exchange, jsonMap, jwtRuleHandle.getConverter()));
             }
         }
         return ReactorHttpHelper.error(exchange.getResponse(), ResultErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
