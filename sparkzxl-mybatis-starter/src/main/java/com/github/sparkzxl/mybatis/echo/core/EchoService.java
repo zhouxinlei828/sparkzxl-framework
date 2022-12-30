@@ -7,7 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.database.echo.annotation.EchoField;
 import com.github.sparkzxl.entity.data.RemoteData;
@@ -274,7 +274,7 @@ public class EchoService {
 
             // feign 接口序列化 丢失类型
             if (echoValue instanceof Map && !Object.class.equals(echoField.beanClass())) {
-                echoValue = JsonUtil.parse(JsonUtil.toJson(echoValue), echoField.beanClass());
+                echoValue = JsonUtils.toJavaObject(echoValue, echoField.beanClass());
             }
 
             // 将新的值 反射 到指定字段

@@ -1,5 +1,6 @@
 package com.github.sparkzxl.core.support;
 
+import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.Getter;
 
@@ -17,8 +18,8 @@ public class JwtParseException extends BaseUncheckedException {
         super(ResultErrorCode.JSON_TRANSFORM_ERROR);
     }
 
-    public JwtParseException(String message) {
-        super(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), message);
+    public JwtParseException(String errorMsg) {
+        super(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), errorMsg);
     }
 
 

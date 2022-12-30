@@ -1,21 +1,15 @@
 package com.github.sparkzxl.gateway.common.utils;
 
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.TypeReference;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.github.sparkzxl.core.jackson.JsonUtil;
 import com.github.sparkzxl.core.util.ReflectionUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,20 +52,19 @@ public final class BodyParamUtils {
      * @return the parameters.
      */
     public static Pair<String[], Object[]> buildSingleParameter(final String body, final String parameterTypes) {
-        final Map<String, Object> paramMap = JsonUtil.toLinkedHashMap(body);
+        final Map<String, Object> paramMap = GsonUtils.getInstance().toObjectMap(body);
         for (String key : paramMap.keySet()) {
             Object obj = paramMap.get(key);
-            if (obj instanceof JSONObject) {
-                paramMap.put(key, Convert.toMap(String.class, Object.class, obj));
-            } else if (obj instanceof JSONArray) {
-                paramMap.put(key, Convert.convert(new TypeReference<List<Object>>() {}, obj));
+            if (obj instanceof JsonObject) {
+                paramMap.put(key, GsonUtils.getInstance().convertToMap(obj.toString()));
+            } else if (obj instanceof JsonArray) {
+                paramMap.put(key, GsonUtils.getInstance().fromList(obj.toString(), Object.class));
             } else {
                 paramMap.put(key, obj);
             }
         }
         return new ImmutablePair<>(new String[]{parameterTypes}, new Object[]{paramMap});
     }
-
 
     /**
      * build multi parameters.
@@ -85,11 +78,11 @@ public final class BodyParamUtils {
         List<String> paramTypeList = new ArrayList<>();
 
         if (isNameMapping(parameterTypes)) {
-            Map<String, String> paramNameMap = JsonUtil.toLinkedHashMap(parameterTypes);
+            Map<String, String> paramNameMap = GsonUtils.getInstance().toObjectMap(parameterTypes, String.class);
             paramNameList.addAll(paramNameMap.keySet());
             paramTypeList.addAll(paramNameMap.values());
         } else {
-            Map<String, Object> paramMap = JsonUtil.toLinkedHashMap(body);
+            Map<String, Object> paramMap = GsonUtils.getInstance().toObjectMap(body);
             paramNameList.addAll(paramMap.keySet());
             paramTypeList.addAll(Arrays.asList(StringUtils.split(parameterTypes, ",")));
         }
@@ -97,13 +90,13 @@ public final class BodyParamUtils {
         if (paramTypeList.size() == 1 && !isBaseType(paramTypeList.get(0))) {
             return buildSingleParameter(body, parameterTypes);
         }
-        Map<String, Object> paramMap = JsonUtil.toLinkedHashMap(body);
+        Map<String, Object> paramMap = GsonUtils.getInstance().toObjectMap(body);
         Object[] objects = paramNameList.stream().map(key -> {
             Object obj = paramMap.get(key);
-            if (obj instanceof JSONObject) {
-                return JsonUtil.toLinkedHashMap(obj);
-            } else if (obj instanceof JSONArray) {
-                return Convert.convert(new TypeReference<List<Object>>() {}, obj);
+            if (obj instanceof JsonObject) {
+                return GsonUtils.getInstance().convertToMap(obj.toString());
+            } else if (obj instanceof JsonArray) {
+                return GsonUtils.getInstance().fromList(obj.toString(), Object.class);
             } else {
                 return obj;
             }
@@ -129,5 +122,4 @@ public final class BodyParamUtils {
             return false;
         }
     }
-
 }

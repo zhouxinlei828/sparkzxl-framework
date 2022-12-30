@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.util;
 
 import com.github.sparkzxl.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResult;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -215,7 +215,7 @@ public class HttpRequestUtils {
             } else {
                 result = ApiResult.fail(errorCode, errorMsg);
             }
-            response.getWriter().println(JsonUtil.toJson(result));
+            response.getWriter().println(JsonUtils.toJson(result));
             response.getWriter().flush();
         } catch (IOException e) {
             log.error("IO异常：",e);

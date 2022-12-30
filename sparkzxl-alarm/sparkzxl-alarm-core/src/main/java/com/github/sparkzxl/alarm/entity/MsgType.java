@@ -3,7 +3,7 @@ package com.github.sparkzxl.alarm.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.sign.BaseSign;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import lombok.Data;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
@@ -42,6 +42,6 @@ public class MsgType implements Serializable {
     }
 
     public String toJson() {
-        return JsonUtil.toJson(this);
+        return JsonUtils.toJson(this);
     }
 }

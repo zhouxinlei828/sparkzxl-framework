@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 /**
@@ -18,7 +18,7 @@ public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
 
     public RedisObjectSerializer() {
         super(Object.class);
-        ObjectMapper objectMapper = JsonUtil.newInstance();
+        ObjectMapper objectMapper = JsonUtils.newInstance();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL,

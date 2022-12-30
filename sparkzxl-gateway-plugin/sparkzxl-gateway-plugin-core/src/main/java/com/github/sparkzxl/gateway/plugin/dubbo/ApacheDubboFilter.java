@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
@@ -114,7 +114,7 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     private void rpcContext(final ServerWebExchange exchange) {
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         Optional.ofNullable(gatewayContext)
-                .map(JsonUtil::toMap)
+                .map(JsonUtils::toMap)
                 .ifPresent(this::transmitRpcContext);
     }
 

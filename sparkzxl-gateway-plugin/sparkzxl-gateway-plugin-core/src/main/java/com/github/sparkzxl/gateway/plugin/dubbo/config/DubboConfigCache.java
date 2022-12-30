@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.config;
 
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 
 /**
  * description: DubboConfigCache
@@ -17,7 +17,7 @@ public class DubboConfigCache {
      * @return parsed dubbo param
      */
     protected DubboParam parserToDubboParam(final String rpcExt) {
-        return JsonUtil.toPojo(rpcExt, DubboParam.class);
+        return JsonUtils.toJavaObject(rpcExt, DubboParam.class);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.grpc.server;
 
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.jackson.JsonUtils;
 import com.github.sparkzxl.grpc.core.GrpcHeaderContextHolder;
 import io.grpc.Metadata;
 import io.grpc.ServerCall;
@@ -36,6 +36,6 @@ public class ServerContextInterceptor implements ServerInterceptor {
         if (ObjectUtils.isEmpty(threadLocalJsonString)) {
             return null;
         }
-        return JsonUtil.toMap(threadLocalJsonString);
+        return JsonUtils.toMap(threadLocalJsonString);
     }
 }
