@@ -41,14 +41,14 @@ public class JsonUtils {
 
 
     public static class JacksonObjectMapper extends ObjectMapper {
-        private static final long serialVersionUID = 1L;
+
+        private static final long serialVersionUID = -6119535000516578610L;
 
         public JacksonObjectMapper() {
             super();
             // 参考BaseConfig
             super.setLocale(Locale.CHINA)
                     .setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()))
-                    .findAndRegisterModules()
                     .enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature())
                     .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
                     .enable(JsonParser.Feature.ALLOW_COMMENTS)//该特性决定parser将是否允许解析使用Java/C++ 样式的注释（包括'/'+'*' 和'//' 变量）
@@ -59,8 +59,7 @@ public class JsonUtils {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, false)
                     .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-            super.registerModules(new BasicJacksonModule(), new CustomJavaTimeModule());
-            super.findAndRegisterModules();
+            super.registerModule(new JacksonEnhanceModule());
         }
 
         @Override

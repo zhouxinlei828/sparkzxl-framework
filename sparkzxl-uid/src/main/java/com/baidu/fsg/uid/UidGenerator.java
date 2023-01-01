@@ -20,7 +20,7 @@ import com.baidu.fsg.uid.exception.UidGenerateException;
 /**
  * Represents a unique id generator.
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 public interface UidGenerator {
 

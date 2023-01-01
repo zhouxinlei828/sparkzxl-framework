@@ -24,7 +24,7 @@ import java.util.Date;
 /**
  * Entity for M_WORKER_NODE
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 public class WorkerNodeEntity {
 

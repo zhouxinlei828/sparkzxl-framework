@@ -26,9 +26,9 @@ import java.time.format.DateTimeFormatter;
  *
  * @author zhouxinlei
  */
-public class LocalDateTimeCustomDeSerializer extends JSR310DateTimeDeserializerBase<LocalDateTime> {
+public class CustomLocalDateTimeDeSerializer extends JSR310DateTimeDeserializerBase<LocalDateTime> {
 
-    public static final LocalDateTimeCustomDeSerializer INSTANCE = new LocalDateTimeCustomDeSerializer();
+    public static final CustomLocalDateTimeDeSerializer INSTANCE = new CustomLocalDateTimeDeSerializer();
     public static final String DEFAULT_DATE_FORMAT_MATCHES = "^\\d{4}-\\d{1,2}-\\d{1,2}$";
     public static final String DEFAULT_DATE_TIME_FORMAT_MATCHES = "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$";
     public static final String DEFAULT_DATE_FORMAT_EN_MATCHES = "^\\d{4}年\\d{1,2}月\\d{1,2}日$";
@@ -50,21 +50,21 @@ public class LocalDateTimeCustomDeSerializer extends JSR310DateTimeDeserializerB
     private static final DateTimeFormatter SLASH_DATE_TIME_FORMAT_DTF = DateTimeFormatter.ofPattern(SLASH_DATE_TIME_FORMAT);
 
 
-    private LocalDateTimeCustomDeSerializer() {
+    private CustomLocalDateTimeDeSerializer() {
         this(DEFAULT_FORMATTER);
     }
 
-    public LocalDateTimeCustomDeSerializer(DateTimeFormatter formatter) {
+    public CustomLocalDateTimeDeSerializer(DateTimeFormatter formatter) {
         super(LocalDateTime.class, formatter);
     }
 
-    protected LocalDateTimeCustomDeSerializer(LocalDateTimeCustomDeSerializer base, Boolean leniency) {
+    protected CustomLocalDateTimeDeSerializer(CustomLocalDateTimeDeSerializer base, Boolean leniency) {
         super(base, leniency);
     }
 
     @Override
-    protected LocalDateTimeCustomDeSerializer withLeniency(Boolean leniency) {
-        return new LocalDateTimeCustomDeSerializer(this, leniency);
+    protected CustomLocalDateTimeDeSerializer withLeniency(Boolean leniency) {
+        return new CustomLocalDateTimeDeSerializer(this, leniency);
     }
 
     @Override

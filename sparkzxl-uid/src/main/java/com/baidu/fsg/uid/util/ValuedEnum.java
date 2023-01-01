@@ -19,7 +19,7 @@ package com.baidu.fsg.uid.util;
  * {@code ValuedEnum} defines an enumeration which is bounded to a value, you
  * may implements this interface when you defines such kind of enumeration
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 public interface ValuedEnum<T> {
     /**
