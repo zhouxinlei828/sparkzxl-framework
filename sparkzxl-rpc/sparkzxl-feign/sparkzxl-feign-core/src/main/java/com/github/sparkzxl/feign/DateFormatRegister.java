@@ -17,7 +17,7 @@ import java.util.Date;
  * 在feign调用方配置， 解决入参和出参是以下类型.
  * 1. @RequestParam("date") Date date
  * 2. @RequestParam("date") LocalDateTime date
- * 3. @RequestParam("date") LocalDate date
+ * 3. @RequestParam("date") LocalDateJsonSerializer date
  * 4. @RequestParam("date") LocalTime date
  *
  * @author zhouxinlei

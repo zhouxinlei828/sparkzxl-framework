@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.plugin.logging;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.gateway.common.condition.data.ParameterDataFactory;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
@@ -66,7 +66,7 @@ public class OptLogServiceImpl implements IOptLogService {
                 .setQueryParams(getQueryParams(exchange.getRequest()))
                 .setRespBody(Optional.ofNullable(logContext.getResponseBody()).orElse(StringUtils.EMPTY));
         if (MapUtil.isNotEmpty(logContext.getFormData())) {
-            logParam.setReqFormData(JsonUtils.toJson(logContext.getFormData()));
+            logParam.setReqFormData(JsonUtils.getJson().toJson(logContext.getFormData()));
         }
         return logParam;
     }
@@ -79,7 +79,7 @@ public class OptLogServiceImpl implements IOptLogService {
                 queryParamMap.put(key, StringUtils.join(value, ","));
             });
         }
-        return JsonUtils.toJson(queryParamMap);
+        return JsonUtils.getJson().toJson(queryParamMap);
     }
 
     private static String getHeaders(final HttpHeaders headers) {
@@ -90,7 +90,7 @@ public class OptLogServiceImpl implements IOptLogService {
             List<String> value = entry.getValue();
             headerMap.put(key, StringUtils.join(value, ","));
         });
-        return JsonUtils.toJson(headerMap);
+        return JsonUtils.getJson().toJson(headerMap);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.util;
 
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.BaseUncheckedException;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
@@ -30,7 +30,7 @@ public final class HttpParamConverter {
      * @return String string
      */
     public static String ofString(final Supplier<String> supplier) {
-        return JsonUtils.toJson(initQueryParams(supplier.get()));
+        return JsonUtils.getJson().toJson(initQueryParams(supplier.get()));
     }
 
     /**
@@ -42,7 +42,7 @@ public final class HttpParamConverter {
      * @return String string
      */
     public static <K, V> String toMap(final Supplier<MultiValueMap<K, V>> supplier) {
-        return JsonUtils.toJson(supplier.get().toSingleValueMap());
+        return JsonUtils.getJson().toJson(supplier.get().toSingleValueMap());
     }
 
     /**

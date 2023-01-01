@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.jackson;
+package com.github.sparkzxl.core.json.impl.jackson;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.databind.JsonDeserializer;

@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.plugin.dubbo;
 
 import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
@@ -109,7 +109,7 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
                     FilterData filterData = loadFilterData();
                     String ruleHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
                             () -> "{\"converter\":\"noOps\"}");
-                    DubboRuleHandle dubboRuleHandle = JsonUtils.toJavaObject(ruleHandle, DubboRuleHandle.class);
+                    DubboRuleHandle dubboRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, DubboRuleHandle.class);
                     assert dubboRuleHandle != null;
                     return dubboRuleHandle.convert(exchange, resp);
                 })
@@ -125,7 +125,7 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     private void rpcContext(final ServerWebExchange exchange) {
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         Optional.ofNullable(gatewayContext)
-                .map(JsonUtils::toMap)
+                .map(val -> JsonUtils.getJson().toMap(val))
                 .ifPresent(this::transmitRpcContext);
     }
 

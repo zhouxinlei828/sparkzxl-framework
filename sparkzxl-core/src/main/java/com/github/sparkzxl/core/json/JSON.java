@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.json;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import cn.hutool.core.lang.TypeReference;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -13,6 +13,13 @@ import java.util.Map;
  * @since 2022-12-30 14:32:35
  */
 public interface JSON {
+
+    /**
+     * json类型
+     *
+     * @return String
+     */
+    String named();
 
     /**
      * 是否支持
@@ -58,14 +65,14 @@ public interface JSON {
     <T> T toJavaObject(String json, TypeReference<T> typeReference);
 
     /**
-     * 将Map对象转换为实体对象
+     * 将对象转换为实体对象
      *
-     * @param val  Map对象
+     * @param val  对象
      * @param type 类型
      * @param <T>  泛型
      * @return T
      */
-    <T> T toJavaObject(Map val, Type type);
+    <T> T toJavaObject(Object val, Type type);
 
     /**
      * 将json字符串转换为list实体对象

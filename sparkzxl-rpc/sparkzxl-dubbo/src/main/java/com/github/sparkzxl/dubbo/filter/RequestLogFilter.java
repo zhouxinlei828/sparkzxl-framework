@@ -1,7 +1,7 @@
 package com.github.sparkzxl.dubbo.filter;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.dubbo.properties.DubboCustomProperties;
 import lombok.Getter;
@@ -66,7 +66,7 @@ public class RequestLogFilter implements Filter {
             if (properties.getLevel() == LogLevel.INFO) {
                 log.info("dubbo -> service response: {}, consume time: {}ms", baseLog, elapsed);
             } else if (properties.getLevel() == LogLevel.DEBUG) {
-                log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed, JsonUtils.toJson(new Object[]{result.getValue()}));
+                log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed, JsonUtils.getJson().toJson(new Object[]{result.getValue()}));
             }
         }
         return result;

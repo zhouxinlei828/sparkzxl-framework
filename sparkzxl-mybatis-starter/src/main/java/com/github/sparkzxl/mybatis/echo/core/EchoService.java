@@ -7,11 +7,10 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.database.echo.annotation.EchoField;
 import com.github.sparkzxl.entity.data.RemoteData;
-import com.github.sparkzxl.model.vo.EchoVO;
 import com.github.sparkzxl.mybatis.echo.manager.CacheLoadKeys;
 import com.github.sparkzxl.mybatis.echo.manager.ClassManager;
 import com.github.sparkzxl.mybatis.echo.manager.FieldParam;
@@ -274,14 +273,11 @@ public class EchoService {
 
             // feign 接口序列化 丢失类型
             if (echoValue instanceof Map && !Object.class.equals(echoField.beanClass())) {
-                echoValue = JsonUtils.toJavaObject(echoValue, echoField.beanClass());
+                echoValue = JsonUtils.getJson().toJavaObject(echoValue, echoField.beanClass());
             }
 
             // 将新的值 反射 到指定字段
-            if (obj instanceof EchoVO) {
-                EchoVO vo = Convert.convert(EchoVO.class, obj);
-                vo.getEchoMap().put(fieldName, echoValue);
-            } else if (originalValue instanceof RemoteData) {
+            if (originalValue instanceof RemoteData) {
                 RemoteData remoteData = Convert.convert(RemoteData.class, originalValue);
                 remoteData.setData(echoValue);
             } else if (StrUtil.isNotEmpty(ref)) {

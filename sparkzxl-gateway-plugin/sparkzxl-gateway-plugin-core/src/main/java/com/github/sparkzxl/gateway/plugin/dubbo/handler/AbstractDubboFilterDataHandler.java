@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.handler;
 
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.gateway.common.Singleton;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
@@ -25,7 +25,7 @@ public abstract class AbstractDubboFilterDataHandler implements FilterDataHandle
             if (StringUtils.isEmpty(dataConfig)) {
                 return;
             }
-            DubboRegisterConfig dubboRegisterConfig = JsonUtils.toJavaObject(dataConfig, DubboRegisterConfig.class);
+            DubboRegisterConfig dubboRegisterConfig = JsonUtils.getJson().toJavaObject(dataConfig, DubboRegisterConfig.class);
             DubboRegisterConfig exist = Singleton.INSTANCE.get(DubboRegisterConfig.class);
             if (Objects.isNull(dubboRegisterConfig)) {
                 return;

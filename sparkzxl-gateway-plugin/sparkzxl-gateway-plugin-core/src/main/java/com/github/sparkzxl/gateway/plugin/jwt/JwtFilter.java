@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.plugin.jwt;
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
 import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
@@ -52,10 +52,10 @@ public class JwtFilter extends AbstractGlobalFilter {
         boolean needSkip = (boolean) exchange.getAttributes().get(GatewayConstant.NEED_SKIP);
         String jsonConfig =
                 OptionalBean.ofNullable(filterData).getBean(FilterData::getConfig).orElseGet(() -> "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}");
-        JwtConfig jwtConfig = JsonUtils.toJavaObject(jsonConfig, JwtConfig.class);
+        JwtConfig jwtConfig = JsonUtils.getJson().toJavaObject(jsonConfig, JwtConfig.class);
         String ruleHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
                 () -> "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}");
-        JwtRuleHandle jwtRuleHandle = JsonUtils.toJavaObject(ruleHandle, JwtRuleHandle.class);
+        JwtRuleHandle jwtRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, JwtRuleHandle.class);
         assert jwtConfig != null;
         if (needSkip) {
             return removeAuthorization(exchange, chain, jwtConfig.getTokenKey());
@@ -96,7 +96,7 @@ public class JwtFilter extends AbstractGlobalFilter {
                     throw new JwtInvalidException("token验签失败");
                 }
             }
-            Map<String, Object> jsonMap = JsonUtils.toMap(jwsObject.getPayload().toString());
+            Map<String, Object> jsonMap = JsonUtils.getJson().toMap(jwsObject.getPayload().toString());
             long expire = (long) jsonMap.getOrDefault("exp", 0L);
             DateTime dateTime = DateUtils.date(expire * 1000);
             if (dateTime.getTime() < System.currentTimeMillis()) {

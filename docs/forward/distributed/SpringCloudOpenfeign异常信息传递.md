@@ -108,7 +108,7 @@ public class FeignErrorResult {
 package com.github.sparkzxl.feign.default_;
 
 import com.github.sparkzxl.constant.ExceptionConstant;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.ResponseResultUtils;
 import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
@@ -333,7 +333,7 @@ public class RemoteCallException extends RuntimeException {
 
 package com.github.sparkzxl.feign.default_;
 
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import feign.Response;

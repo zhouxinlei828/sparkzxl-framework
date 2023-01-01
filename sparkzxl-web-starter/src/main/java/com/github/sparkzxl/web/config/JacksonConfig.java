@@ -12,7 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.constant.enums.Enumerator;
-import com.github.sparkzxl.core.jackson.JacksonEnhanceModule;
+import com.github.sparkzxl.core.json.impl.jackson.JacksonEnhanceModule;
 import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
 import com.github.sparkzxl.core.serializer.EnumeratorSerializer;
 import com.github.sparkzxl.core.serializer.CustomLocalDateTimeDeSerializer;
@@ -78,7 +78,7 @@ public class JacksonConfig {
      * 3. BigDecimal -> string
      * 4. date -> string
      * 5. LocalDateTime -> "yyyy-MM-dd HH:mm:ss"
-     * 6. LocalDate -> "yyyy-MM-dd"
+     * 6. LocalDateJsonSerializer -> "yyyy-MM-dd"
      * 7. LocalTime -> "HH:mm:ss"
      * 8. BaseEnum -> {"code": "xxx", "desc": "xxx"}
      *
@@ -86,7 +86,7 @@ public class JacksonConfig {
      * addDeserializer: 反序列化 （前端调用接口时，传递到后台的json）
      * 1.  {"code": "xxx"} -> Enum
      * 2. "yyyy-MM-dd HH:mm:ss" -> LocalDateTime
-     * 3. "yyyy-MM-dd" -> LocalDate
+     * 3. "yyyy-MM-dd" -> LocalDateJsonSerializer
      * 4. "HH:mm:ss" -> LocalTime
      *
      * @param builder 构建
@@ -111,14 +111,11 @@ public class JacksonConfig {
                 .configure(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature(), true)
                 //在使用spring boot + jpa/hibernate，如果实体字段上加有FetchType.LAZY，并使用jackson序列化为json串时，会遇到SerializationFeature.FAIL_ON_EMPTY_BEANS异常
                 .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-                //忽略未知字段
+                //反序列化时，属性不存在的兼容处理,忽略未知字段
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 //单引号处理
                 .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
         ;
-        //反序列化时，属性不存在的兼容处理
-        objectMapper.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
         objectMapper.registerModule(new JacksonEnhanceModule());
         return objectMapper;
     }

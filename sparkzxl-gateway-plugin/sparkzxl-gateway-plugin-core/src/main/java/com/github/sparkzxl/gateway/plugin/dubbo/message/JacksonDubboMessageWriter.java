@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.message;
 
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ public class JacksonDubboMessageWriter implements DubboMessageWriter {
     public Mono<Void> write(ServerWebExchange exchange, Object result) {
         ServerHttpResponse response = exchange.getResponse();
         if (result != null) {
-            byte[] bytes = Objects.requireNonNull(JsonUtils.toJson(result)).getBytes();
+            byte[] bytes = Objects.requireNonNull(JsonUtils.getJson().toJson(result)).getBytes();
             DataBuffer dataBuffer = response.bufferFactory().wrap(bytes);
             response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             return response.writeWith(Flux.just(dataBuffer));

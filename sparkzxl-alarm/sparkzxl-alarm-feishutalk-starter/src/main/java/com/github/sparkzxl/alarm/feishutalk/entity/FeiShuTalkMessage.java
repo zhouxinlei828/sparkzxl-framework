@@ -3,7 +3,7 @@ package com.github.sparkzxl.alarm.feishutalk.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +28,6 @@ public class FeiShuTalkMessage extends MsgType {
 
     @Override
     public String toJson() {
-        return JsonUtils.toJson(this);
+        return JsonUtils.getJson().toJson(this);
     }
 }

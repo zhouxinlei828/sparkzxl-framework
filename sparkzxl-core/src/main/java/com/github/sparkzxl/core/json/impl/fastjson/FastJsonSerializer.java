@@ -1,17 +1,17 @@
-package com.github.sparkzxl.core.jackson;
+package com.github.sparkzxl.core.json.impl.fastjson;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
+import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.github.sparkzxl.spi.SPI;
 
 /**
- * The interface Jackson serializer.
+ * The interface fastjson serializer.
  *
  * @param <T> the type parameter
  * @author zhouxinlei
  */
 @SPI
-public interface JacksonSerializer<T> {
+public interface FastJsonSerializer<T> {
 
     /**
      * jackson serializer class type.
@@ -25,13 +25,13 @@ public interface JacksonSerializer<T> {
      *
      * @return json serializer
      */
-    JsonSerializer<T> serializer();
+    ObjectSerializer serializer();
 
     /**
      * Jackson custom deserializer
      *
      * @return json deserializer
      */
-    JsonDeserializer<? extends T> deserializer();
+    ObjectDeserializer deserializer();
 
 }

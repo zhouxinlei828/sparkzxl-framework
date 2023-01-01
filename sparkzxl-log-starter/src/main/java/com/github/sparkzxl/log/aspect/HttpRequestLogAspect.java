@@ -5,7 +5,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
@@ -79,7 +79,7 @@ public class HttpRequestLogAspect {
             }
             RequestInfoLog requestInfoLog = getRequestInfoLog();
             if (httpRequestLog.response() && ObjectUtils.isNotEmpty(ret)) {
-                requestInfoLog.setResult(JsonUtils.toJson(ret));
+                requestInfoLog.setResult(JsonUtils.getJson().toJson(ret));
             }
             publishEvent(requestInfoLog);
         });
@@ -179,7 +179,7 @@ public class HttpRequestLogAspect {
                 parameterMap.put(paramNames[i], value);
             }
         }
-        return JsonUtils.toJson(parameterMap);
+        return JsonUtils.getJson().toJson(parameterMap);
     }
 
     public void remove() {

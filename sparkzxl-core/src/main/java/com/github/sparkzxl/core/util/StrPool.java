@@ -114,7 +114,7 @@ public interface StrPool {
     String CHARACTER_TYPE_NAME = "java.lang.Character";
     String DATE_TYPE_NAME = "java.util.Date";
     String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
-    String LOCAL_DATE_TYPE_NAME = "java.time.LocalDate";
+    String LOCAL_DATE_TYPE_NAME = "java.time.LocalDateJsonSerializer";
     String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";
 
 }

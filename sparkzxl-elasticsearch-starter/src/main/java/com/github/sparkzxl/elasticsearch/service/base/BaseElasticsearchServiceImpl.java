@@ -1,7 +1,7 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
 import com.github.sparkzxl.constant.EntityConstant;
-import com.github.sparkzxl.core.jackson.JsonUtils;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
@@ -79,7 +79,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
      * @return {@link IndexRequest}
      */
     protected static IndexRequest buildIndexRequest(String index, String id, Object object) {
-        return new IndexRequest(index).id(id).source(JsonUtils.toJson(object), XContentType.JSON);
+        return new IndexRequest(index).id(id).source(JsonUtils.getJson().toJson(object), XContentType.JSON);
     }
 
     protected static SearchRequest buildSearchRequest(String index) {
@@ -141,7 +141,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
      * @param object request object
      */
     protected boolean updateRequest(String index, String id, Object object) throws Exception {
-        UpdateRequest updateRequest = new UpdateRequest(index, id).doc(JsonUtils.toJson(object), XContentType.JSON);
+        UpdateRequest updateRequest = new UpdateRequest(index, id).doc(JsonUtils.getJson().toJson(object), XContentType.JSON);
         UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, COMMON_OPTIONS);
         return updateResponse.status().equals(RestStatus.OK);
     }
@@ -230,7 +230,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             BulkRequest request = new BulkRequest();
             objectList.forEach(o -> {
                 IndexRequest indexRequest = new IndexRequest(index).id(getEsId(o))
-                        .source(JsonUtils.toJson(o), XContentType.JSON);
+                        .source(JsonUtils.getJson().toJson(o), XContentType.JSON);
                 request.add(indexRequest);
             });
             BulkResponse bulk = restHighLevelClient.bulk(request, COMMON_OPTIONS);
@@ -287,7 +287,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = Lists.newArrayList();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList.size() == 0 ? null : resultList.get(0);
@@ -304,7 +304,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = Lists.newArrayList();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList;
@@ -327,7 +327,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = Lists.newArrayList();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList.size() == 0 ? null : resultList.get(0);
@@ -350,7 +350,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = Lists.newArrayList();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList;
@@ -373,7 +373,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             Map<String, T> results = Maps.newHashMap();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
                 String id = sourceAsMap.get("id").toString();
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 results.put(id, resultObject);
             });
             return results;
@@ -392,7 +392,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchHit[] hits = searchResponse.getHits().getHits();
             List<T> resultList = new ArrayList<>();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 resultList.add(resultObject);
             });
             return resultList;
@@ -415,7 +415,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             Map<String, List<T>> results = Maps.newHashMap();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
                 String aggValue = sourceAsMap.get(aggName).toString();
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, tClass);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, tClass);
                 List<T> tList = results.get(aggValue);
                 if (CollectionUtils.isEmpty(tList)) {
                     tList = Lists.newArrayList();
@@ -462,7 +462,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             List<T> dataList = new ArrayList<>();
             SearchHit[] hits = response.getHits().getHits();
             Arrays.stream(hits).map(SearchHit::getSourceAsMap).forEach(sourceAsMap -> {
-                T resultObject = JsonUtils.toJavaObject(sourceAsMap, clazz);
+                T resultObject = JsonUtils.getJson().toJavaObject(sourceAsMap, clazz);
                 dataList.add(resultObject);
             });
             pageResponse.setList(dataList);
@@ -475,7 +475,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     }
 
     private String getEsId(Object obj) {
-        Map<String, Object> jsonMap = JsonUtils.toMap(obj);
+        Map<String, Object> jsonMap = JsonUtils.getJson().toMap(obj);
         assert jsonMap != null;
         return (String) jsonMap.getOrDefault("id", "");
     }
