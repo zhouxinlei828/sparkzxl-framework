@@ -1,7 +1,8 @@
-package com.github.sparkzxl.core.json.impl.fastjson;
+package com.github.sparkzxl.core.json.impl.fastjson.serializer;
 
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
+import com.github.sparkzxl.core.json.impl.fastjson.FastJsonSerializer;
 import com.github.sparkzxl.core.json.impl.fastjson.codec.LocalTimeCodec;
 import com.github.sparkzxl.spi.Join;
 

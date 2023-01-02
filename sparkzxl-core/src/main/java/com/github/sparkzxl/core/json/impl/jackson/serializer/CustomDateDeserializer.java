@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.serializer;
+package com.github.sparkzxl.core.json.impl.jackson.serializer;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;

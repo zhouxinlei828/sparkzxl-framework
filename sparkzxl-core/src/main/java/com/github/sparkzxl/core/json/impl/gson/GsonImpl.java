@@ -3,7 +3,6 @@ package com.github.sparkzxl.core.json.impl.gson;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.json.impl.AbstractJSONImpl;
-import com.github.sparkzxl.core.json.impl.jackson.JacksonEnhanceModule;
 import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.util.StrPool;
 import com.google.gson.*;
@@ -32,7 +31,7 @@ import java.util.*;
  */
 public class GsonImpl extends AbstractJSONImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(JacksonEnhanceModule.class);
+    private static final Logger logger = LoggerFactory.getLogger(GsonImpl.class);
     public static final String NAME = "gson";
     private static final String DOT = ".";
     private static final String E = "e";

@@ -10,15 +10,9 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.github.sparkzxl.core.json.impl.AbstractJSONImpl;
-import com.github.sparkzxl.core.json.impl.fastjson.codec.DateCodec;
-import com.github.sparkzxl.core.json.impl.fastjson.codec.LocalDateCodec;
-import com.github.sparkzxl.core.json.impl.fastjson.codec.LocalDateTimeCodec;
-import com.github.sparkzxl.core.json.impl.fastjson.codec.LocalTimeCodec;
-import com.github.sparkzxl.core.json.impl.jackson.JacksonEnhanceModule;
 import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.spi.ExtensionLoader;
-import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -41,7 +35,7 @@ import java.util.Map;
  */
 public class FastJsonImpl extends AbstractJSONImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(JacksonEnhanceModule.class);
+    private static final Logger logger = LoggerFactory.getLogger(FastJsonImpl.class);
 
     public static final String NAME = "fastjson";
     private final SerializeConfig serializeConfig = new SerializeConfig();

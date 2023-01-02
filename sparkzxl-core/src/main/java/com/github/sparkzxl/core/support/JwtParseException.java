@@ -1,6 +1,5 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.Getter;
 

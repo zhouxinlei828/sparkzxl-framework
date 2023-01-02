@@ -12,9 +12,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.github.sparkzxl.constant.enums.Enumerator;
-import com.github.sparkzxl.core.serializer.CustomDateDeserializer;
-import com.github.sparkzxl.core.serializer.EnumSerializer;
-import com.github.sparkzxl.core.serializer.CustomLocalDateTimeDeSerializer;
+import com.github.sparkzxl.core.json.impl.jackson.serializer.CustomDateDeserializer;
+import com.github.sparkzxl.core.json.impl.jackson.serializer.CustomLocalDateTimeDeSerializer;
+import com.github.sparkzxl.core.json.impl.jackson.serializer.EnumSerializer;
 import com.github.sparkzxl.spi.ExtensionLoader;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ import java.util.List;
 
 public class JacksonEnhanceModule extends SimpleModule {
 
-    private static final long serialVersionUID = -3836634752008167045L;
+    private static final long serialVersionUID = -591529679963948130L;
 
     private static final Logger logger = LoggerFactory.getLogger(JacksonEnhanceModule.class);
 

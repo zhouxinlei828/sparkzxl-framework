@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.github.sparkzxl.core.json.impl.AbstractJSONImpl;
-import com.github.sparkzxl.core.json.impl.jackson.JacksonEnhanceModule;
 import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.util.StrPool;
 import org.apache.commons.lang3.ObjectUtils;
@@ -31,7 +30,7 @@ import java.util.*;
  */
 public class JacksonImpl extends AbstractJSONImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(JacksonEnhanceModule.class);
+    private static final Logger logger = LoggerFactory.getLogger(JacksonImpl.class);
     public static final String NAME = "jackson";
     public final ObjectMapper objectMapper = new ObjectMapper();
 
