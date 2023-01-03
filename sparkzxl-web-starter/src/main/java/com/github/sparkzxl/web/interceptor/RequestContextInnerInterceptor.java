@@ -3,7 +3,7 @@ package com.github.sparkzxl.web.interceptor;
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.spi.Join;
 import com.github.sparkzxl.web.annotation.Response;
 import org.slf4j.MDC;
@@ -37,8 +37,8 @@ public class RequestContextInnerInterceptor extends AbstractInnerInterceptor {
         RequestLocalContextHolder.setVersion(request.getHeader(BaseContextConstants.VERSION));
         String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
         MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
-        MDC.put(BaseContextConstants.TENANT_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.TENANT_ID));
-        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextHolderUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        MDC.put(BaseContextConstants.TENANT_ID, RequestContextUtils.getHeader(request, BaseContextConstants.TENANT_ID));
+        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
         Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (feign) {
             return;

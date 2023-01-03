@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * description: HttpServlet工具类
+ * description: RequestContextUtils工具类
  *
  * @author zhouxinlei
  */
 @Slf4j
-public class RequestContextHolderUtils {
+public class RequestContextUtils {
 
     public static HttpServletRequest getRequest() {
         return getRequestAttributes().getRequest();

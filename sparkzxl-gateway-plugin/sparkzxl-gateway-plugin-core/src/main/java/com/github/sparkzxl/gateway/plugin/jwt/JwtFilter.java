@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.jwt;
 
-import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
@@ -8,14 +7,14 @@ import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.DateUtils;
-import com.github.sparkzxl.core.util.HuSecretUtil;
+import com.github.sparkzxl.core.util.SecretUtil;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
-import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.handle.JwtRuleHandle;
 import com.github.sparkzxl.gateway.rule.RuleData;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -49,11 +48,19 @@ public class JwtFilter extends AbstractGlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         FilterData filterData = loadFilterData();
         boolean needSkip = (boolean) exchange.getAttributes().get(GatewayConstant.NEED_SKIP);
-        String jsonConfig =
-                OptionalBean.ofNullable(filterData).getBean(FilterData::getConfig).orElseGet(() -> "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}");
+        String jsonConfig;
+        if (StringUtils.isEmpty(filterData.getConfig())) {
+            jsonConfig = "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}";
+        } else {
+            jsonConfig = filterData.getConfig();
+        }
         JwtConfig jwtConfig = JsonUtils.getJson().toJavaObject(jsonConfig, JwtConfig.class);
-        String ruleHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
-                () -> "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}");
+        String ruleHandle;
+        if (ObjectUtils.isEmpty(filterData.getRule())){
+            ruleHandle = "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}";
+        }else {
+            ruleHandle = filterData.getRule().getHandle();
+        }
         JwtRuleHandle jwtRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, JwtRuleHandle.class);
         assert jwtConfig != null;
         if (needSkip) {
@@ -91,7 +98,7 @@ public class JwtFilter extends AbstractGlobalFilter {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
             if (StringUtils.isNotEmpty(secretKey)) {
-                JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtil.encryptMd5(secretKey));
+                JWSVerifier jwsVerifier = new MACVerifier(SecretUtil.encryptMd5(secretKey));
                 if (!jwsObject.verify(jwsVerifier)) {
                     throw new JwtInvalidException("token验签失败");
                 }

@@ -1,10 +1,15 @@
-package com.github.sparkzxl.gateway.common.utils;
+package com.github.sparkzxl.core.util;
 
+import cn.hutool.core.util.URLUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.PathContainer;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
 
+import java.net.URL;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +44,21 @@ public class PathMatchUtils {
      */
     public static boolean match(final String matchUrls, final String realPath) {
         return MATCHER.match(matchUrls, realPath);
+    }
+
+    public static boolean matchUrl(List<String> list, String currentUrl) {
+        if (CollectionUtils.isEmpty(list)) {
+            return false;
+        }
+        String path = currentUrl;
+        if (StringUtils.startsWithAny(currentUrl, StrPool.HTTP, StrPool.HTTPS)) {
+            URL url = URLUtil.url(currentUrl);
+            path = url.getPath();
+        }
+        String finalPath = path;
+        return list.stream().anyMatch((url) ->
+                finalPath.startsWith(url) || MATCHER.match(url, finalPath)
+        );
     }
 
     /**

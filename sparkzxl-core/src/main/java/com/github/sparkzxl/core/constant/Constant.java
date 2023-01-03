@@ -1,15 +1,16 @@
-package com.github.sparkzxl.core.util;
+package com.github.sparkzxl.core.constant;
 
 import com.google.common.collect.Lists;
 
 import java.util.List;
 
 /**
- * description: 静态资源过滤
+ * description: Constant常量类
  *
  * @author zhouxinlei
+ * @since 2023-01-03 14:57:58
  */
-public class SwaggerStaticResource {
+public class Constant {
 
     public static List<String> EXCLUDE_STATIC_PATTERNS = Lists.newArrayList(
             "/swagger-ui.html",

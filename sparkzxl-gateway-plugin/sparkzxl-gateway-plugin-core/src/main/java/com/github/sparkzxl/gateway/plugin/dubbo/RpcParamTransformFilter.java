@@ -1,13 +1,13 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
-import com.github.sparkzxl.core.util.HttpParamConverter;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
-import com.github.sparkzxl.gateway.common.utils.BodyParamUtils;
-import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
+import com.github.sparkzxl.gateway.utils.BodyParamUtils;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.utils.HttpParamConverter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

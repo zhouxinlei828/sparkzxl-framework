@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.common.utils;
+package com.github.sparkzxl.gateway.utils;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import org.springframework.cloud.gateway.support.ipresolver.RemoteAddressResolver;

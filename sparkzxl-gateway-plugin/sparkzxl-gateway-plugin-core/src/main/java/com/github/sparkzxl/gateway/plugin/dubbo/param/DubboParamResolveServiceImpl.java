@@ -17,7 +17,7 @@
 
 package com.github.sparkzxl.gateway.plugin.dubbo.param;
 
-import com.github.sparkzxl.gateway.common.utils.BodyParamUtils;
+import com.github.sparkzxl.gateway.utils.BodyParamUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**

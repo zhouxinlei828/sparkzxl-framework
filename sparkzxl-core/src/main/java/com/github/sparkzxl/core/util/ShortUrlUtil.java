@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author charles.zhou
  */
-public class ShortUrlTool {
+public class ShortUrlUtil {
 
     private static final String CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final int SCALE = 62;

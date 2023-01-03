@@ -118,21 +118,10 @@ public class HttpRequestUtils {
     }
 
     /**
-     * 路径是否匹配
-     *
-     * @param pattern pattern
-     * @param path    路径
-     * @return boolean
-     */
-    public static boolean isMatchPath(String pattern, String path) {
-        return ANT_PATH_MATCHER.match(pattern, path);
-    }
-
-    /**
-     * 移除多余的 /
+     * 移除多余的/
      *
      * @param path 路径
-     * @return
+     * @return String
      */
     public static String sanitizedPath(final String path) {
         String sanitized = path;
@@ -149,7 +138,7 @@ public class HttpRequestUtils {
 
 
     /**
-     * URL 解码
+     * URL解码
      *
      * @param str 字符串
      * @return String

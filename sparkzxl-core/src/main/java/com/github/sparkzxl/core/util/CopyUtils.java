@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class CopyUtils {
 
-    public static <T extends Object> List<T> deepCopy(List<T> srcList) {
+    public static <T> List<T> deepCopy(List<T> srcList) {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out;
         try {
@@ -32,7 +32,8 @@ public class CopyUtils {
         }
     }
 
-    public static <T extends Object> T deepCopy(T data) {
+    @SuppressWarnings(value = "unchecked")
+    public static <T> T deepCopy(T data) {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out;
         try {

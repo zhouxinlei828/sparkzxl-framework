@@ -1,5 +1,6 @@
-package com.github.sparkzxl.gateway.common.utils;
+package com.github.sparkzxl.gateway.utils;
 
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.ReflectionUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -55,13 +56,13 @@ public final class BodyParamUtils {
      * @return the parameters.
      */
     public static Pair<String[], Object[]> buildSingleParameter(final String body, final String parameterTypes) {
-        final Map<String, Object> paramMap = GsonUtils.getInstance().toObjectMap(body);
+        final Map<String, Object> paramMap = JsonUtils.getJson().toMap(body);
         for (String key : paramMap.keySet()) {
             Object obj = paramMap.get(key);
             if (obj instanceof JsonObject) {
                 paramMap.put(key, GsonUtils.getInstance().convertToMap(obj.toString()));
             } else if (obj instanceof JsonArray) {
-                paramMap.put(key, GsonUtils.getInstance().fromList(obj.toString(), Object.class));
+                paramMap.put(key, JsonUtils.getJson().toJavaList(obj.toString(), Object.class));
             } else {
                 paramMap.put(key, obj);
             }
@@ -81,11 +82,11 @@ public final class BodyParamUtils {
         List<String> paramTypeList = new ArrayList<>();
 
         if (isNameMapping(parameterTypes)) {
-            Map<String, String> paramNameMap = GsonUtils.getInstance().toObjectMap(parameterTypes, String.class);
+            Map<String, String> paramNameMap = JsonUtils.getJson().toMap(parameterTypes, String.class);
             paramNameList.addAll(paramNameMap.keySet());
             paramTypeList.addAll(paramNameMap.values());
         } else {
-            Map<String, Object> paramMap = GsonUtils.getInstance().toObjectMap(body);
+            Map<String, Object> paramMap = JsonUtils.getJson().toMap(body);
             paramNameList.addAll(paramMap.keySet());
             paramTypeList.addAll(Arrays.asList(StringUtils.split(parameterTypes, ",")));
         }
@@ -93,13 +94,13 @@ public final class BodyParamUtils {
         if (paramTypeList.size() == 1 && !isBaseType(paramTypeList.get(0))) {
             return buildSingleParameter(body, parameterTypes);
         }
-        Map<String, Object> paramMap = GsonUtils.getInstance().toObjectMap(body);
+        Map<String, Object> paramMap = JsonUtils.getJson().toMap(body);
         Object[] objects = paramNameList.stream().map(key -> {
             Object obj = paramMap.get(key);
             if (obj instanceof JsonObject) {
                 return GsonUtils.getInstance().convertToMap(obj.toString());
             } else if (obj instanceof JsonArray) {
-                return GsonUtils.getInstance().fromList(obj.toString(), Object.class);
+                return JsonUtils.getJson().toJavaList(obj.toString(), Object.class);
             } else {
                 return obj;
             }

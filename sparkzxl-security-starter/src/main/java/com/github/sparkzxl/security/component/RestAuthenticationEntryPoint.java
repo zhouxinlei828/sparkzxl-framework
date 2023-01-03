@@ -24,9 +24,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException e) {
         log.warn("AuthenticationException：[{}]", e.getMessage());
         IErrorCode errorCode = ResultErrorCode.LOGIN_EXPIRE;
-        if (e instanceof AccountExpiredException) {
-            errorCode = ResultErrorCode.LOGIN_EXPIRE;
-        }
         HttpRequestUtils.failResponse(response, errorCode);
     }
 

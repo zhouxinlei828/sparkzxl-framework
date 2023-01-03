@@ -1,10 +1,10 @@
 package com.github.sparkzxl.alarm.handler;
 
 import cn.hutool.core.map.MapUtil;
-import com.alibaba.fastjson.JSONArray;
 import com.github.sparkzxl.alarm.annotation.Alarm;
 import com.github.sparkzxl.alarm.annotation.AlarmParam;
 import com.github.sparkzxl.alarm.entity.ExpressionTemplate;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.AopUtil;
 import com.google.common.collect.Maps;
 import org.aopalliance.intercept.MethodInvocation;
@@ -45,7 +45,7 @@ public class DefaultAlarmVariablesHandler implements IAlarmVariablesHandler {
         }
         String expressionJson = alarm.expressionJson();
         if (StringUtils.isNotBlank(expressionJson)) {
-            List<ExpressionTemplate> expressionTemplateList = JSONArray.parseArray(expressionJson, ExpressionTemplate.class);
+            List<ExpressionTemplate> expressionTemplateList = JsonUtils.getJson().toJavaList(expressionJson, ExpressionTemplate.class);
             for (ExpressionTemplate expressionTemplate : expressionTemplateList) {
                 String value = AopUtil.parseExpression(invocation, expressionTemplate.getExpression());
                 attributeMapping.put(expressionTemplate.getKey(), value);

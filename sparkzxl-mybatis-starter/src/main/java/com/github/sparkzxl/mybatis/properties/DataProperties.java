@@ -158,7 +158,7 @@ public class DataProperties {
         private Class<? extends RejectedPutBufferHandler> rejectedPutBufferHandlerClass;
         /**
          * 拒绝策略: 当环已空, 无法继续获取时
-         * 默认无需指定, 将记录日志, 并抛出UidGenerateException异常. 如有特殊需求, 请实现RejectedTakeBufferHandler接口(支持Lambda表达式)
+         * 默认无需指定, 将记录日志, 并抛出UidGenerateException 异常. 如有特殊需求, 请实现RejectedTakeBufferHandler接口(支持Lambda表达式)
          */
         private Class<? extends RejectedTakeBufferHandler> rejectedTakeBufferHandlerClass;
     }

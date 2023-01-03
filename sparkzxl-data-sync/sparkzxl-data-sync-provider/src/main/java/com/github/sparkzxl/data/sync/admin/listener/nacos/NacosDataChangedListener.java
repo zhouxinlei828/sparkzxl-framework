@@ -1,10 +1,9 @@
 package com.github.sparkzxl.data.sync.admin.listener.nacos;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
@@ -51,7 +50,7 @@ public class NacosDataChangedListener extends AbstractDataChangedListener {
             String group = watchConfigMap.get(dataId);
             MergeDataHandler mergeDataHandler = mergeDataHandlerMap.get(pushData.getConfigGroup().concat(StrPool.COLON).concat(DataSyncPushType.NACOS.name().toLowerCase(Locale.ROOT)));
             Object configData = mergeDataHandler.handle(pushData);
-            configService.publishConfig(dataId, group, JSON.toJSONString(configData, SerializerFeature.PrettyFormat), ConfigType.JSON.getType());
+            configService.publishConfig(dataId, group, JsonUtils.getJson().toJsonPretty(configData), ConfigType.JSON.getType());
         } catch (NacosException e) {
             LOG.error("Publish data to nacos error.", e);
             throw new BizException(e.getMessage());

@@ -21,13 +21,13 @@ public class AlarmExceptionHandler implements Ordered {
 
     @ExceptionHandler(AlarmException.class)
     public ApiResult<?> handleAlarmException(AlarmException e) {
-        log.error("AlarmException异常:", e);
+        log.error("AlarmException 异常:", e);
         return ApiResult.fail(e.getErrorCode(), e.getErrorMsg());
     }
 
     @ExceptionHandler(AsyncCallException.class)
     public ApiResult<?> handleAsyncCallException(AsyncCallException e) {
-        log.error("AsyncCallException异常:", e);
+        log.error("AsyncCallException 异常:", e);
         return ApiResult.fail(e.getErrorCode(), e.getErrorMsg());
     }
 

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mybatis.plugins;
 
-import com.github.sparkzxl.mybatis.echo.core.EchoService;
+import com.github.sparkzxl.mybatis.echo.core.EchoServiceImpl;
 import com.github.sparkzxl.mybatis.echo.properties.EchoProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,10 +35,10 @@ public class EchoDataInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Object proceed = invocation.proceed();
-        EchoService echoService = applicationContext.getBean(EchoService.class);
+        EchoServiceImpl echoServiceImpl = applicationContext.getBean(EchoServiceImpl.class);
         if (echoProperties.getEnabled()) {
             log.debug("查询数据回显注入开始======>");
-            echoService.action(proceed, echoProperties.getGuavaCache().getEnabled(), ArrayUtils.EMPTY_STRING_ARRAY);
+            echoServiceImpl.action(proceed, echoProperties.getGuavaCache().getEnabled(), ArrayUtils.EMPTY_STRING_ARRAY);
             log.debug("查询数据回显注入结束======>");
         }
         return proceed;

@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.AopUtil;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.core.util.NetworkUtil;
-import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import com.github.sparkzxl.log.entity.OptLogRecordDetail;
 import com.github.sparkzxl.log.event.OptLogEvent;
@@ -55,7 +55,7 @@ public class OptLogRecordInterceptor implements MethodInterceptor {
         OptLogRecord annotation = invocation.getMethod().getAnnotation(OptLogRecord.class);
         String userId = operatorService.getUserId();
         String name = operatorService.getUserName();
-        HttpServletRequest httpServletRequest = RequestContextHolderUtils.getRequest();
+        HttpServletRequest httpServletRequest = RequestContextUtils.getRequest();
         String bizNo = "";
         if (StringUtils.isNotBlank(annotation.bizNo())) {
             bizNo = AopUtil.parseExpression(invocation, annotation.bizNo());

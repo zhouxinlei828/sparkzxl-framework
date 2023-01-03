@@ -1,6 +1,6 @@
 package com.github.sparkzxl.data.sync.admin.listener.zookeeper;
 
-import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
 import com.github.sparkzxl.data.sync.admin.handler.MergeDataHandler;
@@ -61,7 +61,7 @@ public class ZookeeperDataChangedListener extends AbstractDataChangedListener {
     private void insertZkNode(final String path, final Object data) {
         String val = "";
         if (data != null) {
-            val = JSON.toJSONString(data);
+            val = JsonUtils.getJson().toJson(data);
         }
         try {
             curatorFramework.create().orSetData().creatingParentsIfNeeded()

@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
-import cn.hutool.core.bean.OptionalBean;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
@@ -8,7 +7,7 @@ import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
-import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageWriter;
@@ -16,6 +15,7 @@ import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
 import com.github.sparkzxl.gateway.plugin.dubbo.rule.DubboRuleHandle;
 import com.github.sparkzxl.gateway.rule.RuleData;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcServiceContext;
@@ -107,8 +107,12 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
 
         return result.map(resp -> {
                     FilterData filterData = loadFilterData();
-                    String ruleHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
-                            () -> "{\"converter\":\"noOps\"}");
+                    String ruleHandle;
+                    if (ObjectUtils.isEmpty(filterData.getRule())){
+                        ruleHandle = "{\"converter\":\"noOps\"}";
+                    }else {
+                        ruleHandle = filterData.getRule().getHandle();
+                    }
                     DubboRuleHandle dubboRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, DubboRuleHandle.class);
                     assert dubboRuleHandle != null;
                     return dubboRuleHandle.convert(exchange, resp);

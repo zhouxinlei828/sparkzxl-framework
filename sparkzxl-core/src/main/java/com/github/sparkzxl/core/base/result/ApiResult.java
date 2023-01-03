@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.slf4j.MDC;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -200,7 +200,7 @@ public class ApiResult<T> implements Serializable {
 
         public ApiResult<T> build() {
             Map<String, Object> map = this.extra == null ? Maps.newHashMap() : this.extra;
-            map.put(BaseContextConstants.LOG_TRACE_ID, TraceContext.traceId());
+            map.put(BaseContextConstants.LOG_TRACE_ID, MDC.get(BaseContextConstants.LOG_TRACE_ID));
             return new ApiResult<T>()
                     .setCode(this.code)
                     .setSuccess(this.code == HttpStatus.HTTP_OK)

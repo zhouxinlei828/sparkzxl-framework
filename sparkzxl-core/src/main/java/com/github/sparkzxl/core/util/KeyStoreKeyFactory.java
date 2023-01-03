@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.util.crypto;
+package com.github.sparkzxl.core.util;
 
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;

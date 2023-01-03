@@ -2,7 +2,7 @@ package com.github.sparkzxl.oauth.filter;
 
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.ListUtils;
-import com.github.sparkzxl.core.util.RequestPathHandlerUtil;
+import com.github.sparkzxl.core.util.PathMatchUtils;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
 import com.github.sparkzxl.oauth.util.WebFluxUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +24,6 @@ import java.util.List;
 public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
 
     private final ResourceProperties resourceProperties;
-
     public IgnoreUrlsRemoveJwtFilter(ResourceProperties resourceProperties) {
         this.resourceProperties = resourceProperties;
     }
@@ -42,7 +41,7 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
             //白名单路径移除JWT请求头
             String[] ignorePatterns = resourceProperties.getIgnore();
             List<String> ignoreUrls = ListUtils.arrayToList(ignorePatterns);
-            boolean match = RequestPathHandlerUtil.matchUrl(ignoreUrls, uri.getPath());
+            boolean match = PathMatchUtils.matchUrl(ignoreUrls, uri.getPath());
             if (match) {
                 request = exchange.getRequest().mutate().header(BaseContextConstants.JWT_TOKEN_HEADER, "").build();
                 exchange = exchange.mutate().request(request).build();

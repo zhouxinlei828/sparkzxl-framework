@@ -27,34 +27,34 @@ public class SentinelExceptionHandler implements Ordered {
 
     @ExceptionHandler(value = FlowException.class)
     public ApiResult<?> handleFlowException(FlowException e) {
-        log.error("FlowException异常:", e);
+        log.error("FlowException 异常:", e);
         return ApiResult.fail(ResultErrorCode.REQ_LIMIT.getErrorCode(), ResultErrorCode.REQ_LIMIT.getErrorMsg());
     }
 
     @ExceptionHandler(value = AuthorityException.class)
     public ApiResult<?> handleAuthorityException(AuthorityException e) {
-        log.error("AuthorityException异常:", e);
+        log.error("AuthorityException 异常:", e);
         return ApiResult.fail(
                 ResultErrorCode.REQ_BLACKLIST.getErrorCode(), ResultErrorCode.REQ_BLACKLIST.getErrorMsg());
     }
 
     @ExceptionHandler(value = SystemBlockException.class)
     public ApiResult<?> handleSystemBlockException(SystemBlockException e) {
-        log.error("SystemBlockException异常:", e);
+        log.error("SystemBlockException 异常:", e);
         return ApiResult.fail(
                 ResultErrorCode.SYSTEM_BLOCK.getErrorCode(), ResultErrorCode.SYSTEM_BLOCK.getErrorMsg());
     }
 
     @ExceptionHandler(value = ParamFlowException.class)
     public ApiResult<?> handleParamFlowException(ParamFlowException e) {
-        log.error("ParamFlowException异常:", e);
+        log.error("ParamFlowException 异常:", e);
         return ApiResult.fail(
                 ResultErrorCode.PARAM_FLOW.getErrorCode(), ResultErrorCode.PARAM_FLOW.getErrorMsg());
     }
 
     @ExceptionHandler(value = DegradeException.class)
     public ApiResult<?> handleDegradeException(DegradeException e) {
-        log.error("DegradeException异常:", e);
+        log.error("DegradeException 异常:", e);
         return ApiResult.fail(
                 ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
     }

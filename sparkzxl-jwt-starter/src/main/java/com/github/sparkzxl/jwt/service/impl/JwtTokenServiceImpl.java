@@ -3,12 +3,12 @@ package com.github.sparkzxl.jwt.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.util.DateUtils;
-import com.github.sparkzxl.core.util.HuSecretUtil;
+import com.github.sparkzxl.core.util.SecretUtil;
 import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
@@ -26,6 +26,7 @@ import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     public JwtUserInfo getJwtUserInfo(String token) throws Exception {
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
-        return JSONObject.parseObject(payload, JwtUserInfo.class);
+        return JsonUtils.getJson().toJavaObject(payload, JwtUserInfo.class);
     }
 
     @Override
@@ -97,27 +98,27 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         JwtUserInfo jwtUserInfo = new JwtUserInfo();
         JWSObject jwsObject = JWSObject.parse(token);
         String payload = jwsObject.getPayload().toString();
-        JSONObject jsonObject = JSONObject.parseObject(payload);
-        jwtUserInfo.setId(jsonObject.getString("id"));
-        String username = jsonObject.getString("user_name");
+        Map<String, Object> objectMap = JsonUtils.getJson().toMap(payload);
+        jwtUserInfo.setId((String) objectMap.getOrDefault("id", null));
+        String username = (String) objectMap.getOrDefault("user_name", null);
         jwtUserInfo.setUsername(username);
-        String name = jsonObject.getString("name");
+        String name = (String) objectMap.getOrDefault("name", null);
         jwtUserInfo.setName(name);
-        String clientId = jsonObject.getString("client_id");
+        String clientId = (String) objectMap.getOrDefault("client_id", null);
         jwtUserInfo.setClientId(clientId);
-        String sub = jsonObject.getString("sub");
+        String sub = (String) objectMap.getOrDefault("sub", null);
         jwtUserInfo.setSub(sub);
-        Long iat = jsonObject.getLong("iat");
+        Long iat = (Long) objectMap.getOrDefault("iat", null);
         jwtUserInfo.setIat(iat);
-        Long exp = jsonObject.getLong("exp");
+        Long exp = (Long) objectMap.getOrDefault("exp", null);
         if (ObjectUtils.isNotEmpty(exp)) {
             jwtUserInfo.setExpire(DateUtils.date(exp * 1000));
         }
-        String jti = jsonObject.getString("jti");
+        String jti = (String) objectMap.getOrDefault("jti", null);
         jwtUserInfo.setJti(jti);
-        String tenantId = jsonObject.getString("tenantId");
+        String tenantId = (String) objectMap.getOrDefault("tenantId", null);
         jwtUserInfo.setTenantId(tenantId);
-        List authorities = jsonObject.getObject("authorities", List.class);
+        List authorities = (List) objectMap.getOrDefault("authorities", null);
         jwtUserInfo.setAuthorities(authorities);
         return jwtUserInfo;
     }
@@ -135,7 +136,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             Payload payload = new Payload(payloadStr);
             //创建JWS对象
             jwsObject = new JWSObject(jwsHeader, payload);
-            JWSSigner jwsSigner = new MACSigner(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
+            JWSSigner jwsSigner = new MACSigner(SecretUtil.encryptMd5(jwtProperties.getSecret()));
             jwsObject.sign(jwsSigner);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +151,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         //从token中解析JWS对象
         JWSObject jwsObject = JWSObject.parse(token);
         //创建HMAC验证器
-        JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtil.encryptMd5(jwtProperties.getSecret()));
+        JWSVerifier jwsVerifier = new MACVerifier(SecretUtil.encryptMd5(jwtProperties.getSecret()));
         if (!jwsObject.verify(jwsVerifier)) {
             throw new JwtInvalidException("token签名不合法");
         }
@@ -167,7 +168,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         if (ObjectUtils.isNotEmpty(keyPair)) {
             return keyPair;
         }
-        keyPair = HuSecretUtil.keyPair(KeyStoreProperties.getPath(), "jwt", KeyStoreProperties.getPassword());
+        keyPair = SecretUtil.keyPair(KeyStoreProperties.getPath(), "jwt", KeyStoreProperties.getPassword());
         keyPairMap.put("keyPair", keyPair);
         return keyPair;
     }

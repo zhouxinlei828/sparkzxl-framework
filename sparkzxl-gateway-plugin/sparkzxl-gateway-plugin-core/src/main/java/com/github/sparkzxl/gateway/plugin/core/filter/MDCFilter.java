@@ -1,8 +1,8 @@
 package com.github.sparkzxl.gateway.plugin.core.filter;
 
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.gateway.common.utils.HostAddressUtils;
-import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
+import com.github.sparkzxl.gateway.utils.HostAddressUtils;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import org.slf4j.MDC;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;

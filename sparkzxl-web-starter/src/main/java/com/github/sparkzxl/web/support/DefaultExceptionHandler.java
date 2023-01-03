@@ -6,7 +6,6 @@ import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.ArgumentException;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.JwtParseException;
-import com.github.sparkzxl.core.support.ServiceDegradeException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -51,7 +50,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(BizException.class)
     public ApiResult<?> handleBizException(BizException e) {
-        log.error("BizException异常:", e);
+        log.error("BizException 异常:", e);
         return ApiResult.fail(e.getErrorCode(), e.getMessage());
     }
 
@@ -63,7 +62,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(ArgumentException.class)
     public ApiResult<?> handleArgumentException(ArgumentException e) {
-        log.warn("ArgumentException异常:", e);
+        log.warn("ArgumentException 异常:", e);
         return ApiResult.fail(e.getErrorCode(), e.getErrorMsg());
     }
 
@@ -104,13 +103,6 @@ public class DefaultExceptionHandler implements Ordered {
         return ApiResult.fail(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), ex.getMessage());
     }
 
-    @ExceptionHandler(ServiceDegradeException.class)
-    public ApiResult<?> handleServiceDegradeException(ServiceDegradeException e) {
-        log.error("服务降级:", e);
-        return ApiResult.fail(e.getErrorCode(), e.getMessage());
-    }
-
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.warn("方法参数无效异常:", e);
@@ -120,7 +112,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResult<?> handleIllegalArgumentException(IllegalArgumentException e) {
-        log.warn("IllegalArgumentException异常:", e);
+        log.warn("IllegalArgumentException 异常:", e);
         return ApiResult.fail(ResultErrorCode.PARAM_VALID_ERROR);
     }
 
@@ -183,7 +175,7 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResult<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException异常:", e);
+        log.error("HttpMessageNotReadableException 异常:", e);
         String prefix = "Could not read document:";
         String message = e.getMessage();
         if (StrUtil.containsAny(message, prefix)) {
@@ -194,14 +186,14 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
-        log.error("NoHandlerFoundException异常:", e);
+        log.error("NoHandlerFoundException 异常:", e);
         return ApiResult.fail(ResultErrorCode.NOT_FOUND.getErrorCode(), e.getMessage());
     }
 
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ApiResult<?> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        log.error("HttpMediaTypeNotSupportedException异常:", e);
+        log.error("HttpMediaTypeNotSupportedException 异常:", e);
         MediaType contentType = e.getContentType();
         if (contentType != null) {
             return ApiResult.fail(
@@ -221,19 +213,19 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(NullPointerException.class)
     public ApiResult<?> handleNullPointerException(NullPointerException e) {
-        log.error("NullPointerException异常:", e);
+        log.error("NullPointerException 异常:", e);
         return ApiResult.fail(ResultErrorCode.NULL_POINTER_EXCEPTION_ERROR);
     }
 
     @ExceptionHandler(MultipartException.class)
     public ApiResult<?> handleMultipartException(MultipartException e) {
-        log.error("MultipartException异常:", e);
+        log.error("MultipartException 异常:", e);
         return ApiResult.fail(ResultErrorCode.FILE_UPLOAD_EX);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ApiResult<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
-        log.error("MissingServletRequestParameterException异常:", e);
+        log.error("MissingServletRequestParameterException 异常:", e);
         return ApiResult.fail(
                 ResultErrorCode.PARAM_MISS.getErrorCode(),
                 "缺少必须的[" + e.getParameterType() + "]类型的参数[" + e.getParameterName() + "]");

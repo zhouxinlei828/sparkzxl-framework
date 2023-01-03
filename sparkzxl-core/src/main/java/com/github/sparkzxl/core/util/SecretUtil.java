@@ -9,7 +9,6 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.crypto.symmetric.DES;
-import com.github.sparkzxl.core.util.crypto.KeyStoreKeyFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.nio.charset.Charset;
@@ -22,7 +21,7 @@ import java.security.PublicKey;
  *
  * @author zhouxinlei
  */
-public class HuSecretUtil {
+public class SecretUtil {
 
     private static final AES AES;
 
@@ -40,7 +39,7 @@ public class HuSecretUtil {
         rsa = new RSA(privateKey, publicKey);
     }
 
-    private HuSecretUtil() {
+    private SecretUtil() {
 
     }
 

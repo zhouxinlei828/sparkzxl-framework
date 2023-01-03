@@ -1,7 +1,7 @@
 package com.guthub.sparkzxl.data.sync.websocket.handler;
 
 
-import com.alibaba.fastjson.JSONArray;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
@@ -23,7 +23,7 @@ public class MetaDataHandler extends AbstractDataHandler<MetaData> {
 
     @Override
     public List<MetaData> convert(final String json) {
-        return JSONArray.parseArray(json, MetaData.class);
+        return JsonUtils.getJson().toJavaList(json, MetaData.class);
     }
 
     @Override

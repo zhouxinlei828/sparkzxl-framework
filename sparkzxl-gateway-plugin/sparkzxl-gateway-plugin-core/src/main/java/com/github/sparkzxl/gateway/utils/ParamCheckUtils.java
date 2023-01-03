@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.plugin.dubbo;
+package com.github.sparkzxl.gateway.utils;
 
 /**
  * description: Param check utils

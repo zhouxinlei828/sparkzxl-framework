@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mybatis;
 
-import com.github.sparkzxl.mybatis.echo.core.EchoService;
+import com.github.sparkzxl.mybatis.echo.core.EchoServiceImpl;
 import com.github.sparkzxl.mybatis.echo.core.LoadService;
 import com.github.sparkzxl.mybatis.echo.properties.EchoProperties;
 import com.github.sparkzxl.mybatis.echo.typehandler.RemoteDataTypeHandler;
@@ -30,8 +30,8 @@ public class EchoAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = EchoProperties.DATA_ECHO_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
-    public EchoService echoService(Map<String, LoadService> loadServiceMap) {
-        return new EchoService(echoProperties, loadServiceMap);
+    public EchoServiceImpl echoService(Map<String, LoadService> loadServiceMap) {
+        return new EchoServiceImpl(echoProperties, loadServiceMap);
     }
 
     @Bean

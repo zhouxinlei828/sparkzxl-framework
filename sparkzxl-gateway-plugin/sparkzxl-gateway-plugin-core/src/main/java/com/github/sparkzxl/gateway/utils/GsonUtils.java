@@ -1,4 +1,4 @@
-package com.github.sparkzxl.gateway.common.utils;
+package com.github.sparkzxl.gateway.utils;
 
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.google.gson.*;

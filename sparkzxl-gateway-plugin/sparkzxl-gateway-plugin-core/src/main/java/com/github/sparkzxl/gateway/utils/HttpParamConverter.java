@@ -1,4 +1,4 @@
-package com.github.sparkzxl.core.util;
+package com.github.sparkzxl.gateway.utils;
 
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.BaseUncheckedException;

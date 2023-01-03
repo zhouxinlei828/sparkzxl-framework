@@ -1,11 +1,11 @@
 package com.github.sparkzxl.lock.executor;
 
-import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,22 +28,24 @@ public class RedissonLockExecutor extends AbstractLockExecutor<RLock> {
     @Override
     public RLock acquire(String lockKey, String lockValue, long expire, long acquireTimeout) {
         final RLock lockInstance = redissonClient.getLock(lockKey);
-        return Try.of(() -> {
+        try {
             final boolean locked = lockInstance.tryLock(acquireTimeout, expire, TimeUnit.MILLISECONDS);
             return obtainLockInstance(locked, lockInstance);
-        }).getOrElseGet(throwable -> {
-            log.error("Redisson lock failed：", throwable);
+        } catch (InterruptedException e) {
+            log.error("Redisson lock failed：", e);
             return null;
-        });
+        }
     }
 
     @Override
     public boolean releaseLock(String key, String value, RLock lockInstance) {
         if (lockInstance.isHeldByCurrentThread()) {
-            return Try.of(() -> lockInstance.forceUnlockAsync().get()).getOrElseGet(throwable -> {
-                log.error("Redisson releaseLock failed：", throwable);
+            try {
+                lockInstance.forceUnlockAsync().get();
+            } catch (InterruptedException | ExecutionException e) {
+                log.error("Redisson releaseLock failed：", e);
                 return false;
-            });
+            }
         }
         return false;
     }
