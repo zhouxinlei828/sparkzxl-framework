@@ -5,11 +5,11 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
@@ -142,11 +142,10 @@ public class HttpRequestLogAspect {
                 .setCategory(httpRequestLog.value())
                 .setUserId(userId)
                 .setUserName(name)
-                .setRequestIp(ServletUtil.getClientIP(request))
+                .setIp(ServletUtil.getClientIP(request))
                 .setRequestUrl(URLUtil.getPath(request.getRequestURI()))
                 .setHttpMethod(request.getMethod())
-                .setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(),
-                        signature.getName()))
+                .setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(), signature.getName()))
                 .setStartTime(LocalDateTime.now())
                 .setTenantId(RequestLocalContextHolder.getTenant());
         if (httpRequestLog.request()) {

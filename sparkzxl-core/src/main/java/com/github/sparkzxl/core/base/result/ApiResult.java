@@ -7,7 +7,6 @@ import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.base.ResponseCode;
 import com.google.common.collect.Maps;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -29,35 +28,46 @@ public class ApiResult<T> implements Serializable {
 
     private static final long serialVersionUID = -7545356835815831989L;
 
+    /**
+     * 响应编码
+     */
     @JsonProperty(index = 1)
-    @ApiModelProperty(value = "响应编码")
     private int code;
 
+    /**
+     * 响应信息
+     */
     @JsonProperty(index = 2)
-    @ApiModelProperty(value = "响应信息")
     private String msg;
 
+    /**
+     * 是否成功
+     */
     @JsonProperty(index = 3)
-    @ApiModelProperty(value = "是否成功")
     private boolean success;
 
+    /**
+     * 响应数据
+     */
     @JsonProperty(index = 4)
-    @ApiModelProperty(value = "响应数据")
     private T data;
 
+    /**
+     * 异常码
+     */
     @JsonProperty(index = 5)
-    @ApiModelProperty(value = "异常码")
     private String errorCode;
 
+    /**
+     * 异常信息
+     */
     @JsonProperty(index = 6)
-    @ApiModelProperty(value = "异常信息")
     private String errorMsg;
 
     /**
      * 附加数据
      */
     @JsonProperty(index = 8)
-    @ApiModelProperty(value = "附加数据")
     private Map<String, Object> extra;
 
     /**

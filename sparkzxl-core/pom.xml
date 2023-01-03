@@ -88,10 +88,6 @@
         </dependency>
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-spi</artifactId>
         </dependency>
         <!--敏感词处理-->
