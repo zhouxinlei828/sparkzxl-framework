@@ -2,7 +2,7 @@ package com.github.sparkzxl.mybatis.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.ReUtil;
-import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;

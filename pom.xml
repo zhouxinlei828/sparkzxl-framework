@@ -33,7 +33,6 @@
         <module>sparkzxl-annotations</module>
         <module>sparkzxl-boot-starter</module>
         <module>sparkzxl-cache-starter</module>
-        <module>sparkzxl-common</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-mybatis-starter</module>
         <module>sparkzxl-data-sync</module>

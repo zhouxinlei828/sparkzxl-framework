@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.plugin.logging;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.StrFormatter;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.gateway.common.condition.data.ParameterDataFactory;

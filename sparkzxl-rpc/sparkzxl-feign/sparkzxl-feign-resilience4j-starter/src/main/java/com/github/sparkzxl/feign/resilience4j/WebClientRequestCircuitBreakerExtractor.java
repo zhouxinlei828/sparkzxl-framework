@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.resilience4j;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.feign.resilience4j.utils.ServiceInstanceUtil;
 import com.google.common.collect.Lists;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;

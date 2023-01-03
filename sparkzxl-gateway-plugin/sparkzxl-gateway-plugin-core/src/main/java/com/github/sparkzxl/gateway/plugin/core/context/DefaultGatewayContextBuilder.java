@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.core.context;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.gateway.common.condition.data.ParameterDataFactory;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;

@@ -3,7 +3,7 @@ package com.github.sparkzxl.core.util;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.github.sparkzxl.core.json.JsonUtils;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.google.common.collect.Lists;
 
 import javax.crypto.IllegalBlockSizeException;

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.core.filter;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.gateway.common.utils.HostAddressUtils;
 import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
 import org.slf4j.MDC;

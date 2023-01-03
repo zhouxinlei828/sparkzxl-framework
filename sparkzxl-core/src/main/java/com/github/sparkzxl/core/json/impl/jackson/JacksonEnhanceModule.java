@@ -11,7 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.github.sparkzxl.constant.enums.Enumerator;
+import com.github.sparkzxl.core.constant.enums.Enumerator;
 import com.github.sparkzxl.core.json.impl.jackson.serializer.CustomDateDeserializer;
 import com.github.sparkzxl.core.json.impl.jackson.serializer.CustomLocalDateTimeDeSerializer;
 import com.github.sparkzxl.core.json.impl.jackson.serializer.EnumSerializer;

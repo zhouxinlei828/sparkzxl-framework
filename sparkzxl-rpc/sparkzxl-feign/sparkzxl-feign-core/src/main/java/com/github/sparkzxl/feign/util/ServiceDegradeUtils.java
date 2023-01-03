@@ -1,6 +1,6 @@
 package com.github.sparkzxl.feign.util;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 
 /**

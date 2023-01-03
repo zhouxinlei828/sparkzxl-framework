@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.plugin.jwt;
 
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
@@ -19,7 +19,6 @@ import com.github.sparkzxl.gateway.rule.RuleData;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -88,7 +87,8 @@ public class JwtFilter extends AbstractGlobalFilter {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        return Try.of(() -> {
+
+        try {
             JWSObject jwsObject = JWSObject.parse(token);
             if (StringUtils.isNotEmpty(secretKey)) {
                 JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtil.encryptMd5(secretKey));
@@ -103,9 +103,9 @@ public class JwtFilter extends AbstractGlobalFilter {
                 throw new JwtExpireException("token已过期");
             }
             return jsonMap;
-        }).getOrElseThrow(throwable -> {
-            throw new JwtInvalidException(throwable);
-        });
+        } catch (Exception e) {
+            throw new JwtInvalidException(e);
+        }
     }
 
     /**

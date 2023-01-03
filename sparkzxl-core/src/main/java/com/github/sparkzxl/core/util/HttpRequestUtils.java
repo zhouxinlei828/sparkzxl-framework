@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.util;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.IErrorCode;

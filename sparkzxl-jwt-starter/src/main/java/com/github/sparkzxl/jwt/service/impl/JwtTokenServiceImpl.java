@@ -10,7 +10,7 @@ import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.HuSecretUtil;
 import com.github.sparkzxl.core.util.TimeUtil;
-import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.properties.KeyStoreProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;

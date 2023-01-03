@@ -1,7 +1,7 @@
 package com.github.sparkzxl.web.interceptor;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
 import com.github.sparkzxl.spi.Join;

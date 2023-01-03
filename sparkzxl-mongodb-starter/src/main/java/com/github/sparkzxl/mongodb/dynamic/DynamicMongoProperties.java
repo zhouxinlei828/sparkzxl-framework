@@ -1,7 +1,7 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
-import com.github.sparkzxl.constant.enums.IdTypeEnum;
-import com.github.sparkzxl.constant.enums.MultiTenantType;
+import com.github.sparkzxl.core.constant.enums.IdTypeEnum;
+import com.github.sparkzxl.core.constant.enums.MultiTenantType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

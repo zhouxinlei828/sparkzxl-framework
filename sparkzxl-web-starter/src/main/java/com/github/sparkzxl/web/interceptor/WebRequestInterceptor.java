@@ -1,8 +1,8 @@
 package com.github.sparkzxl.web.interceptor;
 
 import cn.hutool.core.text.StrFormatter;
-import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.constant.enums.RpcType;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.enums.RpcType;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.spi.ExtensionLoader;
 import com.github.sparkzxl.web.properties.InterceptorProperties;

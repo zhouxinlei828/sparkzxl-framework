@@ -6,7 +6,7 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
-import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;

@@ -2,10 +2,10 @@ package com.github.sparkzxl.core.base.result;
 
 import cn.hutool.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
-import com.github.sparkzxl.entity.response.ResponseCode;
+import com.github.sparkzxl.core.base.ResponseCode;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

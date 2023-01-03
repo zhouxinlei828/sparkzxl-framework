@@ -1,6 +1,6 @@
 package com.github.sparkzxl.data.sync.admin;
 
-import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.data.sync.admin.config.DataSyncProviderProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

@@ -12,7 +12,7 @@ import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
-import com.github.sparkzxl.constant.enums.MultiTenantType;
+import com.github.sparkzxl.core.constant.enums.MultiTenantType;
 import com.github.sparkzxl.mybatis.annotation.DataScope;
 import com.github.sparkzxl.mybatis.aop.DataScopeAnnotationAdvisor;
 import com.github.sparkzxl.mybatis.aop.DataScopeInterceptor;

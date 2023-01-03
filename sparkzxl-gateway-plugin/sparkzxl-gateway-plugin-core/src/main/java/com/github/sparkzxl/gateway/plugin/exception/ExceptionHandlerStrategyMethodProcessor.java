@@ -1,7 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.exception;
 
 import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategyAdapter;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.aop.scope.ScopedObject;
@@ -27,10 +26,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * description: 异常处理方法处理器
@@ -61,29 +58,35 @@ public class ExceptionHandlerStrategyMethodProcessor implements ApplicationConte
         String[] beanNames = beanFactory.getBeanNamesForType(Object.class);
         for (String beanName : beanNames) {
             if (!ScopedProxyUtils.isScopedTarget(beanName)) {
-                Try.of(() -> AutoProxyUtils.determineTargetClass(beanFactory, beanName))
-                        .onFailure(Throwable.class, throwable -> {
+                Class<?> targetType = null;
+                try {
+                    targetType = AutoProxyUtils.determineTargetClass(beanFactory, beanName);
+                } catch (Throwable ex) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Could not resolve target class for bean with name '" + beanName + "'", ex);
+                    }
+                }
+                if (targetType != null) {
+                    if (ScopedObject.class.isAssignableFrom(targetType)) {
+                        try {
+                            Class<?> targetClass = AutoProxyUtils.determineTargetClass(
+                                    beanFactory, ScopedProxyUtils.getTargetBeanName(beanName));
+                            if (targetClass != null) {
+                                targetType = targetClass;
+                            }
+                        } catch (Throwable ex) {
                             if (log.isDebugEnabled()) {
-                                log.debug("Could not resolve target class for bean with name '" + beanName + "'", throwable);
+                                log.debug("Could not resolve target bean for scoped proxy '" + beanName + "'", ex);
                             }
-                        }).filter(Objects::nonNull)
-                        .map(type -> {
-                            AtomicReference<Class<?>> targetType = new AtomicReference<>(type);
-                            if (ScopedObject.class.isAssignableFrom(targetType.get())) {
-                                Try.of(() -> AutoProxyUtils.determineTargetClass(beanFactory, ScopedProxyUtils.getTargetBeanName(beanName)))
-                                        .filter(Objects::nonNull)
-                                        .andThen(targetType::set)
-                                        .onFailure(Throwable.class, throwable -> {
-                                            if (log.isDebugEnabled()) {
-                                                log.debug("Could not resolve target bean for scoped proxy '" + beanName + "'", throwable);
-                                            }
-                                        });
-                            }
-                            return targetType.get();
-                        })
-                        .andThenTry(type -> processBean(beanName, type))
-                        .getOrElseThrow(throwable -> new BeanInitializationException("Failed to process @MessageListener " +
-                                "annotation on bean with name '" + beanName + "'", throwable));
+                        }
+                    }
+                    try {
+                        processBean(beanName, targetType);
+                    } catch (Throwable ex) {
+                        throw new BeanInitializationException("Failed to process @MessageListener " +
+                                "annotation on bean with name '" + beanName + "'", ex);
+                    }
+                }
             }
         }
     }

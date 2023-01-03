@@ -3,7 +3,6 @@ package com.github.sparkzxl.boot.undertow;
 import io.undertow.connector.ByteBufferPool;
 import io.undertow.server.DefaultByteBufferPool;
 import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
-import io.vavr.control.Try;
 import org.springframework.boot.web.embedded.undertow.UndertowDeploymentInfoCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -11,6 +10,8 @@ import org.xnio.OptionMap;
 import org.xnio.Options;
 import org.xnio.Xnio;
 import org.xnio.XnioWorker;
+
+import java.io.IOException;
 
 /**
  * description: 设置Undertow服务器 XnioWorker Buffers
@@ -37,8 +38,11 @@ public class UndertowServerFactoryCustomizer implements WebServerFactoryCustomiz
     }
 
     private XnioWorker getXnioWorker() {
-        return Try.of(() -> Xnio.getInstance().createWorker(OptionMap.create(Options.THREAD_DAEMON, true)))
-                .getOrElseThrow(e -> new RuntimeException(e));
+        try {
+            return Xnio.getInstance().createWorker(OptionMap.create(Options.THREAD_DAEMON, true));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

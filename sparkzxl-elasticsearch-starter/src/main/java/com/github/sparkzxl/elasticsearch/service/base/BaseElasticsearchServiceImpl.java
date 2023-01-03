@@ -1,6 +1,5 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
-import com.github.sparkzxl.constant.EntityConstant;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
@@ -34,9 +33,9 @@ import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.xcontent.XContentType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -49,6 +48,8 @@ import java.util.*;
 @Slf4j
 public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
 
+    public static final String ES_ID = "_id";
+
     protected static final RequestOptions COMMON_OPTIONS;
 
     static {
@@ -58,7 +59,9 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         COMMON_OPTIONS = builder.build();
     }
 
+    @Resource
     public RestHighLevelClient restHighLevelClient;
+    @Resource
     private ElasticsearchProperties elasticsearchProperties;
 
     /**
@@ -86,18 +89,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         return new SearchRequest(index);
     }
 
-    @Autowired
-    public void setRestHighLevelClient(RestHighLevelClient restHighLevelClient) {
-        this.restHighLevelClient = restHighLevelClient;
-    }
-
-    @Autowired
-    public void setElasticsearchProperties(ElasticsearchProperties elasticsearchProperties) {
-        this.elasticsearchProperties = elasticsearchProperties;
-    }
-
     /**
-     * create elasticsearch index (asyc)
+     * create elasticsearch index (async)
      *
      * @param index elasticsearch index
      */
@@ -321,7 +314,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             SearchRequest searchRequest = buildSearchRequest(index);
             log.debug("DSL语句为：{}", searchRequest.source().toString());
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.query(QueryBuilders.termQuery(EntityConstant.ES_ID, id));
+            searchSourceBuilder.query(QueryBuilders.termQuery(ES_ID, id));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
@@ -344,7 +337,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         log.debug("DSL语句为：{}", searchRequest.source().toString());
         try {
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.query(QueryBuilders.termsQuery(EntityConstant.ES_ID, idList));
+            searchSourceBuilder.query(QueryBuilders.termsQuery(ES_ID, idList));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();
@@ -366,7 +359,7 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
         log.debug("DSL语句为：{}", searchRequest.source().toString());
         try {
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.query(QueryBuilders.termsQuery(EntityConstant.ES_ID, idList));
+            searchSourceBuilder.query(QueryBuilders.termsQuery(ES_ID, idList));
             searchRequest.source(searchSourceBuilder);
             SearchResponse searchResponse = search(searchRequest);
             SearchHit[] hits = searchResponse.getHits().getHits();

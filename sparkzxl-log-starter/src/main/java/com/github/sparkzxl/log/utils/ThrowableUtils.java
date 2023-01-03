@@ -2,7 +2,7 @@ package com.github.sparkzxl.log.utils;
 
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.entity.log.AlarmLogInfo;
+import com.github.sparkzxl.log.entity.AlarmLogInfo;
 import com.github.sparkzxl.log.AlarmLogContext;
 
 import java.util.HashMap;

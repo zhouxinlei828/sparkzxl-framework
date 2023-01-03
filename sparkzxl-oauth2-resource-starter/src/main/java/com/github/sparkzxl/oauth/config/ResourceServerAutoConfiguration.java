@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.config;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.SwaggerStaticResource;
 import com.github.sparkzxl.oauth.component.RestAuthenticationEntryPoint;
 import com.github.sparkzxl.oauth.component.RestfulAccessDeniedHandler;

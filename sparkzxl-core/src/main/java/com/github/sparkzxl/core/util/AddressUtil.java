@@ -1,8 +1,8 @@
 package com.github.sparkzxl.core.util;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lionsoul.ip2region.xdb.Searcher;
 
@@ -34,7 +34,7 @@ public class AddressUtil {
                 String classPath = "classpath:ip2region/ip2region.xdb";
                 InputStream resourceAsStream = ResourceUtil.getStreamSafe(classPath);
                 if (resourceAsStream != null) {
-                    FileUtils.copyInputStreamToFile(resourceAsStream, file);
+                    FileUtil.writeFromStream(resourceAsStream, file);
                 }
             }
             vIndex = Searcher.loadVectorIndexFromFile(dbPath);

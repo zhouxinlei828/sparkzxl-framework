@@ -5,7 +5,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.format.FastDateFormat;
-import com.github.sparkzxl.entity.core.DateInfo;
+import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;

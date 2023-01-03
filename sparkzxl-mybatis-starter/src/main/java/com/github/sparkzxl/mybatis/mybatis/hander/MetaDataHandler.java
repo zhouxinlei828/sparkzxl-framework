@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.github.sparkzxl.constant.EntityConstant;
+import com.github.sparkzxl.mybatis.constant.EntityConstant;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.ReflectionUtil;

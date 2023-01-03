@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mybatis.aop;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.mybatis.annotation.DataScope;
 import lombok.extern.slf4j.Slf4j;

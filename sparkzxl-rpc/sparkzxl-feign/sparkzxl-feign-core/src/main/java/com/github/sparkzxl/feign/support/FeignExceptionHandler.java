@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.support;
 
 import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.text.StrFormatter;
-import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;

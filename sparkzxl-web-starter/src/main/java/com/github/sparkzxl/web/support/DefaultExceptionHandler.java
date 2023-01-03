@@ -1,7 +1,7 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.ArgumentException;
 import com.github.sparkzxl.core.support.BizException;

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.manager;
 
-import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;

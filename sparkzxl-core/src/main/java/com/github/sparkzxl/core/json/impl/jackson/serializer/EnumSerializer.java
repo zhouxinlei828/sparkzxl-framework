@@ -3,7 +3,7 @@ package com.github.sparkzxl.core.json.impl.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.github.sparkzxl.constant.enums.Enumerator;
+import com.github.sparkzxl.core.constant.enums.Enumerator;
 
 import java.io.IOException;
 import java.util.HashMap;

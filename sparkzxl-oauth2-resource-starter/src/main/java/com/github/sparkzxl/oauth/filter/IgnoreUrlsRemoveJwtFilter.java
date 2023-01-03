@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.filter;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.core.util.RequestPathHandlerUtil;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;

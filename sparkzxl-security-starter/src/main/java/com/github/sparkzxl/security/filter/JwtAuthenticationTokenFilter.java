@@ -3,7 +3,7 @@ package com.github.sparkzxl.security.filter;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
-import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

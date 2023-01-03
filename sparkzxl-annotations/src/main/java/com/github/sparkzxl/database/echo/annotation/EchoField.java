@@ -1,7 +1,5 @@
 package com.github.sparkzxl.database.echo.annotation;
 
-import cn.hutool.core.text.CharSequenceUtil;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -33,7 +31,7 @@ public @interface EchoField {
      *
      * @return 回显到那个字段
      */
-    String ref() default CharSequenceUtil.EMPTY;
+    String ref() default "";
 
     /**
      * 提供自动注入值的 查询类
@@ -60,7 +58,7 @@ public @interface EchoField {
      *
      * @return 字典类型
      */
-    String dictType() default CharSequenceUtil.EMPTY;
+    String dictType() default "";
 
 
 }

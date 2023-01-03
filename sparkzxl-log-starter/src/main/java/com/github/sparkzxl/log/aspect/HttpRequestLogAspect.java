@@ -9,7 +9,7 @@ import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.RequestContextHolderUtils;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
