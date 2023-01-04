@@ -2,6 +2,7 @@ package com.github.sparkzxl.jwt.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,7 @@ public class JwtProperties implements Serializable {
 
     private static final long serialVersionUID = 8890136349889379042L;
 
-    public static final String JWT_PREFIX = "jwt";
+    public static final String JWT_PREFIX = "spring.jwt";
 
     /**
      * 过期时间 2h
@@ -34,6 +35,7 @@ public class JwtProperties implements Serializable {
 
     private String secret = "123456";
 
+    @NestedConfigurationProperty
     private KeyStoreProperties keyStore = new KeyStoreProperties();
 
 }
