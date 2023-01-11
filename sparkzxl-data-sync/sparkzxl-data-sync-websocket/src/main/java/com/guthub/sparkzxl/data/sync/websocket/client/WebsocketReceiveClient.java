@@ -32,7 +32,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
 
     private volatile boolean alreadySync = Boolean.FALSE;
 
-    private final WebsocketDataConsumerHandler websocketDataConsumerHandler;
+    private final WebsocketDataConsumerHandler consumerHandler;
 
     private final Timer timer;
 
@@ -47,7 +47,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
     public WebsocketReceiveClient(final URI serverUri,
                                   final List<DataHandler> dataHandlerList) {
         super(serverUri);
-        this.websocketDataConsumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
+        this.consumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
         this.timer = WheelTimerFactory.getSharedTimer();
         this.connection();
     }
@@ -62,7 +62,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
                                   final Map<String, String> headers,
                                   final List<DataHandler> dataHandlerList) {
         super(serverUri, headers);
-        this.websocketDataConsumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
+        this.consumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
         this.timer = WheelTimerFactory.getSharedTimer();
         this.connection();
     }
@@ -151,6 +151,6 @@ public class WebsocketReceiveClient extends WebSocketClient {
         PushData pushData = json.toJavaObject(result, PushData.class);
         String eventType = pushData.getEventType();
         String jsonData = json.toJson(pushData.getData());
-        websocketDataConsumerHandler.executor(pushData.getConfigGroup(), jsonData, eventType);
+        consumerHandler.executor(pushData.getConfigGroup(), jsonData, eventType);
     }
 }
