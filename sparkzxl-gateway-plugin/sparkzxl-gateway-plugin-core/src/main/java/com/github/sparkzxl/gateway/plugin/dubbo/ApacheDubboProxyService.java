@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * description: dubbo proxy service is  use GenericService.
+ * description: dubbo proxy service is use GenericService.
  *
  * @author zhouxinlei
  * @since 2022-08-12 17:33:28
