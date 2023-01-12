@@ -103,7 +103,7 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
                                         MetaData metaData,
                                         String param) {
         RpcContext.getServiceContext().setAttachment(RpcConstant.DUBBO_REMOTE_ADDRESS, Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
-        final Mono<Object> result = dubboProxyService.genericInvoker(param, metaData, exchange);
+        final Mono<Object> result = dubboProxyService.genericInvoker(param, metaData);
         return result.map(resp -> {
                     FilterData filterData = loadFilterData();
                     String ruleHandle;

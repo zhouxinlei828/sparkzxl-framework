@@ -42,11 +42,10 @@ public class ApacheDubboProxyService {
      *
      * @param body     the body
      * @param metaData the meta data
-     * @param exchange the exchange
      * @return the object
      * @throws RuntimeException the exception
      */
-    public Mono<Object> genericInvoker(final String body, final MetaData metaData, final ServerWebExchange exchange) throws RuntimeException {
+    public Mono<Object> genericInvoker(final String body, final MetaData metaData) throws RuntimeException {
         String referenceKey = metaData.getNamespace() + ":" + metaData.getPath();
         ReferenceConfig<GenericService> reference = ApacheDubboConfigCache.getInstance().get(referenceKey);
         if (Objects.isNull(reference) || StringUtils.isEmpty(reference.getInterface())) {
@@ -68,7 +67,7 @@ public class ApacheDubboProxyService {
                 log.debug("Invoke dubbo succeed service:{}, method:{}, parameters:{},result:{}", metaData.getServiceName(), metaData.getMethodName(), pair.getRight(), ret);
             }
             return ret;
-        })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException(ResultErrorCode.FAILURE.getErrorCode(), ((GenericException) exception).getExceptionMessage()) : new GatewayException(exception));
+        })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException(ResultErrorCode.RPC_SERVICE_EXCEPTION.getErrorCode(), ((GenericException) exception).getExceptionMessage()) : new GatewayException(exception));
     }
 
     @SuppressWarnings("unchecked")
