@@ -72,7 +72,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param dubboRegisterConfig the dubbo register config
      */
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
-        String applicationName = StringUtils.isEmpty(SpringContextUtils.getApplicationName())? "spring-gateway-proxy" : SpringContextUtils.getApplicationName();
+        String applicationName = StringUtils.isEmpty(SpringContextUtils.getApplicationName()) ? "spring-gateway-proxy" : SpringContextUtils.getApplicationName();
         if (Objects.isNull(applicationConfig)) {
             applicationConfig = new ApplicationConfig(applicationName);
             applicationConfig.setRegisterMode("instance");
@@ -134,7 +134,6 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param metaData the meta data
      * @return the reference config
      */
-    @SuppressWarnings("deprecation")
     public ReferenceConfig<GenericService> build(final MetaData metaData) {
         if (Objects.isNull(applicationConfig) || Objects.isNull(registryConfig)) {
             return new ReferenceConfig<>();
@@ -155,9 +154,10 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
     /**
      * buildReference param.
      *
-     * @param metaData  metaData
+     * @param metaData metaData
      * @return the reference config
      */
+    @SuppressWarnings(value = "all")
     private ReferenceConfig<GenericService> buildReference(final MetaData metaData) {
         ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
         reference.setInterface(metaData.getServiceName());
