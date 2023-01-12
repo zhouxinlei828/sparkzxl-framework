@@ -21,6 +21,8 @@ public class MetaData {
 
     private String rpcType;
 
+    private String namespace;
+
     private String serviceName;
 
     private String methodName;

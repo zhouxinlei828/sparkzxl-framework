@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.gateway.common.constant.enums.RpcTypeEnum;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
+import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.commons.lang3.ObjectUtils;
@@ -63,13 +64,13 @@ public class DefaultDubboMetaDataFactory implements DubboMetaDataFactory {
         String[] parts = path.split("/");
         String interfaceClass = parts[0];
         String method = parts[1];
-        Object dubboMetadata = route.getMetadata().get("dubbo");
+        Object dubboMetadata = route.getMetadata().get(DubboConstant.DUBBO);
         if (dubboMetadata == null) {
             return null;
         }
         Map<String, Object> metadataMap = (Map<String, Object>) dubboMetadata;
         String[] parameterTypes = new String[]{};
-        Object parameterTypesMetadata = metadataMap.get("parameterTypes");
+        Object parameterTypesMetadata = metadataMap.get(DubboConstant.PARAMETER_TYPES);
         if (parameterTypesMetadata != null) {
             Collection<String> parameterTypeList = ((Map<String, String>) parameterTypesMetadata).values();
             parameterTypes = parameterTypeList.toArray(new String[]{});
@@ -79,11 +80,13 @@ public class DefaultDubboMetaDataFactory implements DubboMetaDataFactory {
         metaData.setEnabled(Boolean.TRUE);
         metaData.setAppName(serviceName);
         metaData.setRpcType(RpcTypeEnum.DUBBO.getName());
+        String namespace = (String) metadataMap.getOrDefault(DubboConstant.NAMESPACE, DubboConstant.DEFAULT_NAMESPACE);
+        metaData.setNamespace(namespace);
         metaData.setServiceName(interfaceClass);
         metaData.setMethodName(method);
         String parameterTypeStr = ListUtils.arrayToString(parameterTypes);
         metaData.setParameterTypes(parameterTypeStr);
-        Object rpcExt = metadataMap.get("rpcExt");
+        Object rpcExt = metadataMap.get(DubboConstant.RPC_EXT);
         if (ObjectUtils.isNotEmpty(rpcExt)) {
             metaData.setRpcExt(String.valueOf(rpcExt));
         }

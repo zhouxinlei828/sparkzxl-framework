@@ -11,6 +11,11 @@ import lombok.Data;
 public class KeyStoreProperties {
 
     /**
+     * 是否启用
+     */
+    private boolean enabled;
+
+    /**
      * 密钥文件路径
      */
     private String path;

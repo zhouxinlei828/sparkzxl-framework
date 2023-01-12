@@ -4,11 +4,11 @@ import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.dubbo.config.ApacheDubboConfigCache;
 import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
+import com.github.sparkzxl.gateway.plugin.dubbo.entity.DubbboRequest;
 import com.github.sparkzxl.gateway.plugin.dubbo.param.DubboParamResolveService;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.utils.ParamCheckUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -47,16 +47,11 @@ public class ApacheDubboProxyService {
      * @throws RuntimeException the exception
      */
     public Mono<Object> genericInvoker(final String body, final MetaData metaData, final ServerWebExchange exchange) throws RuntimeException {
-        String referenceKey = metaData.getPath();
-        String namespace = "";
-        if (CollectionUtils.isNotEmpty(exchange.getRequest().getHeaders().get(DubboConstant.NAMESPACE))) {
-            namespace = Objects.requireNonNull(exchange.getRequest().getHeaders().get(DubboConstant.NAMESPACE)).get(0);
-            referenceKey = namespace + ":" + referenceKey;
-        }
+        String referenceKey = metaData.getNamespace() + ":" + metaData.getPath();
         ReferenceConfig<GenericService> reference = ApacheDubboConfigCache.getInstance().get(referenceKey);
         if (Objects.isNull(reference) || StringUtils.isEmpty(reference.getInterface())) {
             ApacheDubboConfigCache.getInstance().invalidate(metaData.getPath());
-            reference = ApacheDubboConfigCache.getInstance().initRef(metaData, namespace);
+            reference = ApacheDubboConfigCache.getInstance().initRef(metaData);
         }
         GenericService genericService = reference.get();
         Pair<String[], Object[]> pair;
@@ -87,4 +82,7 @@ public class ApacheDubboProxyService {
         return resultFromFuture instanceof CompletableFuture ? (CompletableFuture<Object>) resultFromFuture : CompletableFuture.completedFuture(resultFromFuture);
     }
 
+    public Mono<Object> genericInvoker(DubbboRequest dubbboRequest) {
+        return null;
+    }
 }

@@ -7,6 +7,7 @@ import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
+import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
 import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
@@ -61,8 +62,8 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String rpcType = ReactorHttpHelper.getHeader(exchange.getRequest(), "rpcType");
-        if (StringUtils.isBlank(rpcType) || !StringUtils.equals(rpcType, "dubbo")) {
+        String rpcType = ReactorHttpHelper.getHeader(exchange.getRequest(), GatewayConstant.RPC_TYPE);
+        if (StringUtils.isBlank(rpcType) || !StringUtils.equals(rpcType, DubboConstant.DUBBO)) {
             return chain.filter(exchange);
         }
         Route route = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
@@ -74,7 +75,6 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
         assert gatewayContext != null;
         // check filter config data
         FilterData filterData = loadFilterData();
-        String config = filterData.getConfig();
         getFilterDataHandler().handlerFilter(filterData);
         exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_ALREADY_ROUTED_ATTR, true);
         MetaData metaData = dubboMetaDataFactory.get(route);
@@ -104,7 +104,6 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
                                         String param) {
         RpcContext.getServiceContext().setAttachment(RpcConstant.DUBBO_REMOTE_ADDRESS, Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
         final Mono<Object> result = dubboProxyService.genericInvoker(param, metaData, exchange);
-
         return result.map(resp -> {
                     FilterData filterData = loadFilterData();
                     String ruleHandle;

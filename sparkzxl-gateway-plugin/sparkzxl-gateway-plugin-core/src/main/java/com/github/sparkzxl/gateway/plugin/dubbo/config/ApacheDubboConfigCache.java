@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.config;
 
+import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
@@ -71,14 +72,15 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param dubboRegisterConfig the dubbo register config
      */
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
+        String applicationName = StringUtils.isEmpty(SpringContextUtils.getApplicationName())? "spring-gateway-proxy" : SpringContextUtils.getApplicationName();
         if (Objects.isNull(applicationConfig)) {
-            applicationConfig = new ApplicationConfig("spring-gateway-proxy");
+            applicationConfig = new ApplicationConfig(applicationName);
             applicationConfig.setRegisterMode("instance");
         }
         if (needUpdateRegistryConfig(dubboRegisterConfig)) {
             RegistryConfig registryConfigTemp = new RegistryConfig();
             registryConfigTemp.setProtocol(dubboRegisterConfig.getProtocol());
-            registryConfigTemp.setId("spring-gateway-proxy");
+            registryConfigTemp.setId(applicationName);
             registryConfigTemp.setRegister(false);
             registryConfigTemp.setAddress(dubboRegisterConfig.getAddress());
             Optional.ofNullable(dubboRegisterConfig.getGroup()).ifPresent(registryConfigTemp::setGroup);
@@ -113,27 +115,6 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param metaData the meta data
      * @return the reference config
      */
-    public ReferenceConfig<GenericService> initRef(final MetaData metaData, final String namespace) {
-        if (StringUtils.isBlank(namespace)) {
-            return initRef(metaData);
-        }
-        try {
-            ReferenceConfig<GenericService> referenceConfig = cache.get(metaData.getPath());
-            if (StringUtils.isNoneBlank(referenceConfig.getInterface())) {
-                return referenceConfig;
-            }
-        } catch (ExecutionException e) {
-            logger.error("init dubbo ref exception", e);
-        }
-        return build(metaData, namespace);
-    }
-
-    /**
-     * Init ref reference config.
-     *
-     * @param metaData the meta data
-     * @return the reference config
-     */
     public ReferenceConfig<GenericService> initRef(final MetaData metaData) {
         try {
             ReferenceConfig<GenericService> referenceConfig = cache.get(metaData.getPath());
@@ -143,7 +124,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
         } catch (ExecutionException e) {
             logger.error("init dubbo ref exception", e);
         }
-        return build(metaData, "");
+        return build(metaData);
     }
 
 
@@ -154,16 +135,16 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @return the reference config
      */
     @SuppressWarnings("deprecation")
-    public ReferenceConfig<GenericService> build(final MetaData metaData, final String namespace) {
+    public ReferenceConfig<GenericService> build(final MetaData metaData) {
         if (Objects.isNull(applicationConfig) || Objects.isNull(registryConfig)) {
             return new ReferenceConfig<>();
         }
-        ReferenceConfig<GenericService> reference = buildReference(metaData, namespace);
+        ReferenceConfig<GenericService> reference = buildReference(metaData);
         try {
             Object obj = reference.get();
             if (Objects.nonNull(obj)) {
                 logger.info("build init apache dubbo reference success there meteData is :{}", metaData);
-                cache.put(namespace + ":" + metaData.getPath(), reference);
+                cache.put(metaData.getNamespace() + ":" + metaData.getPath(), reference);
             }
         } catch (Exception e) {
             logger.error("init apache dubbo reference exception", e);
@@ -175,10 +156,9 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * buildReference param.
      *
      * @param metaData  metaData
-     * @param namespace namespace
      * @return the reference config
      */
-    private ReferenceConfig<GenericService> buildReference(final MetaData metaData, final String namespace) {
+    private ReferenceConfig<GenericService> buildReference(final MetaData metaData) {
         ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
         reference.setInterface(metaData.getServiceName());
         reference.setGeneric("true");
@@ -207,6 +187,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
             Optional.ofNullable(dubboParam.getSent()).ifPresent(reference::setSent);
         }
         RegistryConfig registryConfigTemp = new RegistryConfig();
+        String namespace = metaData.getNamespace();
         BeanUtils.copyProperties(registryConfig, registryConfigTemp, "address");
         if (StringUtils.isNotBlank(namespace)) {
             if (!registryConfig.getAddress().contains(DubboConstant.NAMESPACE)) {
