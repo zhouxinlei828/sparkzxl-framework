@@ -61,6 +61,7 @@
         <module>sparkzxl-uid</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
+        <module>sparkzxl-trace-logger</module>
     </modules>
 
     <licenses>
