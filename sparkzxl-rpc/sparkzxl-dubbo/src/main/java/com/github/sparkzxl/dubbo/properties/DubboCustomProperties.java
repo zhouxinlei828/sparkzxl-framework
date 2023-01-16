@@ -16,6 +16,6 @@ public class DubboCustomProperties {
 
     private boolean requestLog;
 
-    private LogLevel level;
+    private LogLevel level = LogLevel.INFO;
 
 }

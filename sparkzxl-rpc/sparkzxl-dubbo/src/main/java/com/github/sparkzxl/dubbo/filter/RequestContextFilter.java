@@ -2,6 +2,7 @@ package com.github.sparkzxl.dubbo.filter;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.common.constants.CommonConstants;
@@ -18,38 +19,51 @@ import java.util.Map;
  */
 @Slf4j
 @Activate(group = {CommonConstants.PROVIDER, CommonConstants.CONSUMER}, order = -2)
-public class RequestLocalContextFilter implements Filter, Filter.Listener {
+public class RequestContextFilter implements Filter, Filter.Listener {
 
     private static final String REQUEST_LOCAL_CONTEXT = "request-local-context";
+
+    private final ThreadLocal<String> clientType = new TransmittableThreadLocal<String>() {
+        @Override
+        protected String initialValue() {
+            return "";
+        }
+    };
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         RpcServiceContext context = RpcContext.getServiceContext();
         if (context.isProviderSide()) {
+            clientType.set(CommonConstants.PROVIDER);
             Map<String, Object> attachmentMap = context.getObjectAttachments();
             Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {}, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
             attachmentMap.putAll(threadLocalMap);
             RequestLocalContextHolder.setLocalMap(attachmentMap);
-        } else if (RpcContext.getServiceContext().isConsumerSide()) {
+            log.info("Client[provider] Dubbo request starts setting to the context Map");
+        } else if (context.isConsumerSide()) {
+            clientType.set(CommonConstants.CONSUMER);
             Map<String, Object> threadLocalMap = RequestLocalContextHolder.getLocalMap();
             context.setObjectAttachment(REQUEST_LOCAL_CONTEXT, threadLocalMap);
+            log.info("Client[consumer] Dubbo request starts transfer the context Map");
         }
         return invoker.invoke(invocation);
     }
 
     @Override
     public void onResponse(Result appResponse, Invoker<?> invoker, Invocation invocation) {
-        RpcServiceContext context = RpcContext.getServiceContext();
-        if (context.isProviderSide()) {
+        if (CommonConstants.PROVIDER.equalsIgnoreCase(clientType.get())) {
+            log.info("Client[provider] [onResponse] Dubbo requests to clear the context map");
             RequestLocalContextHolder.remove();
         }
+        clientType.remove();
     }
 
     @Override
     public void onError(Throwable t, Invoker<?> invoker, Invocation invocation) {
-        RpcServiceContext context = RpcContext.getServiceContext();
-        if (context.isProviderSide()) {
+        if (CommonConstants.PROVIDER.equalsIgnoreCase(clientType.get())) {
+            log.info("Client[provider] [onError] Dubbo requests to clear the context map");
             RequestLocalContextHolder.remove();
         }
+        clientType.remove();
     }
 }
