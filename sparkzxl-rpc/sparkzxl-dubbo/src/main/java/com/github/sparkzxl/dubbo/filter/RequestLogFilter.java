@@ -44,10 +44,11 @@ public class RequestLogFilter implements Filter {
         if (RpcContext.getServiceContext().isConsumerSide()) {
             client = CommonConstants.CONSUMER;
         }
-        String baseLog = MessageFormat.format("client[{0}]], interfaceName: [{1}], methodName: [{2}]",
+        String baseLog = MessageFormat.format("client[{0}]], interfaceName: [{1}], methodName: [{2}], version: [{3}]",
                 client,
                 invocation.getInvoker().getInterface().getSimpleName(),
-                invocation.getMethodName());
+                invocation.getMethodName(),
+                RpcContext.getServiceContext().getVersion());
         if (properties.getLevel() == LogLevel.INFO) {
             log.info("dubbo -> service invocation: {}", baseLog);
         } else if (properties.getLevel() == LogLevel.DEBUG) {
@@ -62,12 +63,12 @@ public class RequestLogFilter implements Filter {
         // 如果发生异常 则打印异常日志
         if (result.hasException() && invoker.getInterface().equals(GenericService.class)) {
             log.error("dubbo -> service response: {},exception: {}", baseLog, ExceptionUtil.stacktraceToString(result.getException()));
-        } else {
-            if (properties.getLevel() == LogLevel.INFO) {
-                log.info("dubbo -> service response: {}, consume time: {}ms", baseLog, elapsed);
-            } else if (properties.getLevel() == LogLevel.DEBUG) {
-                log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed, JsonUtils.getJson().toJson(new Object[]{result.getValue()}));
-            }
+            return result;
+        }
+        if (properties.getLevel() == LogLevel.INFO) {
+            log.info("dubbo -> service response: {}, consume time: {}ms", baseLog, elapsed);
+        } else if (properties.getLevel() == LogLevel.DEBUG) {
+            log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed, JsonUtils.getJson().toJson(new Object[]{result.getValue()}));
         }
         return result;
     }
