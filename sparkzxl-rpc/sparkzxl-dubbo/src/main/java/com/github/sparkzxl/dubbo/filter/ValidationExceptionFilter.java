@@ -33,11 +33,12 @@ public class ValidationExceptionFilter implements Filter, Filter.Listener {
 
     @Override
     public void onResponse(Result appResponse, Invoker<?> invoker, Invocation invocation) {
+        // 发生异常，并且非泛化调用
         if (appResponse.hasException() && GenericService.class != invoker.getInterface()) {
             try {
                 Throwable exception = appResponse.getException();
 
-                // <1> 如果是 ServiceException 异常，直接返回
+                // <1> 如果是 BizException 异常，直接返回
                 if (exception instanceof BizException) {
                     return;
                 }
