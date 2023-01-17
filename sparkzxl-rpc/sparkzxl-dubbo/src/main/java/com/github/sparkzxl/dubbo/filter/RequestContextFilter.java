@@ -39,12 +39,10 @@ public class RequestContextFilter implements Filter, Filter.Listener {
             Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {}, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
             attachmentMap.putAll(threadLocalMap);
             RequestLocalContextHolder.setLocalMap(attachmentMap);
-            log.info("Client[provider] Dubbo request starts setting to the context Map");
         } else if (context.isConsumerSide()) {
             clientType.set(CommonConstants.CONSUMER);
             Map<String, Object> threadLocalMap = RequestLocalContextHolder.getLocalMap();
             context.setObjectAttachment(REQUEST_LOCAL_CONTEXT, threadLocalMap);
-            log.info("Client[consumer] Dubbo request starts transfer the context Map");
         }
         return invoker.invoke(invocation);
     }
@@ -52,7 +50,6 @@ public class RequestContextFilter implements Filter, Filter.Listener {
     @Override
     public void onResponse(Result appResponse, Invoker<?> invoker, Invocation invocation) {
         if (CommonConstants.PROVIDER.equalsIgnoreCase(clientType.get())) {
-            log.info("Client[provider] [onResponse] Dubbo requests to clear the context map");
             RequestLocalContextHolder.remove();
         }
         clientType.remove();
@@ -61,7 +58,6 @@ public class RequestContextFilter implements Filter, Filter.Listener {
     @Override
     public void onError(Throwable t, Invoker<?> invoker, Invocation invocation) {
         if (CommonConstants.PROVIDER.equalsIgnoreCase(clientType.get())) {
-            log.info("Client[provider] [onError] Dubbo requests to clear the context map");
             RequestLocalContextHolder.remove();
         }
         clientType.remove();
