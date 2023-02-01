@@ -20,11 +20,11 @@ public class AlarmTask implements Task {
     public void execute() {
         AlarmTaskInfo alarmTask = AlarmTaskQueue.getQueue().consume();
         if (alarmTask != null) {
-            AlarmClient alarmSender = SpringContextUtils.getBean(AlarmClient.class);
+            AlarmClient alarmClient = SpringContextUtils.getBean(AlarmClient.class);
             if (StringUtils.isBlank(alarmTask.getRobotId())) {
-                alarmSender.send(MessageSubType.MARKDOWN, alarmTask.getAlarmRequest());
+                alarmClient.send(MessageSubType.MARKDOWN, alarmTask.getAlarmRequest());
             } else {
-                alarmSender.designatedRobotSend(alarmTask.getRobotId(), MessageSubType.MARKDOWN, alarmTask.getAlarmRequest());
+                alarmClient.designatedRobotSend(alarmTask.getRobotId(), MessageSubType.MARKDOWN, alarmTask.getAlarmRequest());
             }
         }
     }
