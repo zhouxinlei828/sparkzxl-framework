@@ -85,6 +85,8 @@
         <tencentcloud-sdk-java-version>3.1.515</tencentcloud-sdk-java-version>
         <grpc-spring-boot-starter.version>2.13.1.RELEASE</grpc-spring-boot-starter.version>
         <commons-compress.version>1.21</commons-compress.version>
+        <commons-io.version>2.10.0</commons-io.version>
+        <xstream.version>1.4.20</xstream.version>
     </properties>
 
     <licenses>
@@ -756,6 +758,17 @@
                 <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-grpc-server-starter</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <!-- 警告修复，依赖版本升级-->
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>${xstream.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
