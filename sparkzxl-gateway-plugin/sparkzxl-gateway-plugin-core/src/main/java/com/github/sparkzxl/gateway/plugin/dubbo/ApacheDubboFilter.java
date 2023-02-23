@@ -1,18 +1,22 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
+import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
-import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
+import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
-import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageConverter;
+import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageWriter;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
-import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.plugin.dubbo.rule.DubboRuleHandle;
+import com.github.sparkzxl.gateway.rule.RuleData;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcServiceContext;
@@ -44,27 +48,24 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     private final DubboMetaDataFactory dubboMetaDataFactory;
     private final DubboRoutePredicate predicate;
     private final ApacheDubboProxyService dubboProxyService;
-    private final DubboMessageConverter dubboMessageConverter;
     private final DubboMessageWriter writer;
 
     public ApacheDubboFilter(DubboMetaDataFactory dubboMetaDataFactory,
                              DubboRoutePredicate predicate,
                              ApacheDubboProxyService dubboProxyService,
-                             DubboMessageConverter dubboMessageConverter, DubboMessageWriter writer) {
+                             DubboMessageWriter writer) {
         this.dubboMetaDataFactory = dubboMetaDataFactory;
         this.predicate = predicate;
         this.dubboProxyService = dubboProxyService;
-        this.dubboMessageConverter = dubboMessageConverter;
         this.writer = writer;
     }
 
     @Override
-    public String named() {
-        return FilterEnum.DUBBO.getName();
-    }
-
-    @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String rpcType = ReactorHttpHelper.getHeader(exchange.getRequest(), GatewayConstant.RPC_TYPE);
+        if (StringUtils.isBlank(rpcType) || !StringUtils.equals(rpcType, DubboConstant.DUBBO)) {
+            return chain.filter(exchange);
+        }
         Route route = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         boolean matched = predicate.test(exchange, route);
         if (!matched) {
@@ -73,7 +74,8 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         assert gatewayContext != null;
         // check filter config data
-        getFilterDataHandler().handlerFilter(loadFilterData());
+        FilterData filterData = loadFilterData();
+        getFilterDataHandler().handlerFilter(filterData);
         exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_ALREADY_ROUTED_ATTR, true);
         MetaData metaData = dubboMetaDataFactory.get(route);
         metaData.setPath(gatewayContext.getPath());
@@ -101,8 +103,19 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
                                         MetaData metaData,
                                         String param) {
         RpcContext.getServiceContext().setAttachment(RpcConstant.DUBBO_REMOTE_ADDRESS, Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
-        final Mono<Object> result = dubboProxyService.genericInvoker(param, metaData, exchange);
-        return result.map(resp -> dubboMessageConverter.convert(exchange, resp))
+        final Mono<Object> result = dubboProxyService.genericInvoker(param, metaData);
+        return result.map(resp -> {
+                    FilterData filterData = loadFilterData();
+                    String ruleHandle;
+                    if (ObjectUtils.isEmpty(filterData.getRule())){
+                        ruleHandle = "{\"converter\":\"noOps\"}";
+                    }else {
+                        ruleHandle = filterData.getRule().getHandle();
+                    }
+                    DubboRuleHandle dubboRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, DubboRuleHandle.class);
+                    assert dubboRuleHandle != null;
+                    return dubboRuleHandle.convert(exchange, resp);
+                })
                 .flatMap(resp -> this.writer.write(exchange, resp));
     }
 
@@ -115,7 +128,7 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     private void rpcContext(final ServerWebExchange exchange) {
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         Optional.ofNullable(gatewayContext)
-                .map(JsonUtil::toMap)
+                .map(val -> JsonUtils.getJson().toMap(val))
                 .ifPresent(this::transmitRpcContext);
     }
 
@@ -129,5 +142,10 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     @Override
     public int getOrder() {
         return FilterEnum.DUBBO.getCode();
+    }
+
+    @Override
+    public String named() {
+        return FilterEnum.DUBBO.getName();
     }
 }

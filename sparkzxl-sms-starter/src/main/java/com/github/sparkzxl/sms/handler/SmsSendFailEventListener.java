@@ -1,4 +1,3 @@
-
 package com.github.sparkzxl.sms.handler;
 
 import com.github.sparkzxl.sms.event.SmsSendFailEvent;
@@ -11,5 +10,5 @@ import org.springframework.context.ApplicationListener;
  * @since 2022-11-09 11:30:15
  */
 public interface SmsSendFailEventListener extends ApplicationListener<SmsSendFailEvent> {
-    
+
 }

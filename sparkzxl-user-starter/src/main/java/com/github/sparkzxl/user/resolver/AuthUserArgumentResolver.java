@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.resolver;
 
-import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.user.manager.UserStateManager;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

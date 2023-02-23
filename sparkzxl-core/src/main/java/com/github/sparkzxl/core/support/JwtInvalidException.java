@@ -23,6 +23,6 @@ public class JwtInvalidException extends BaseUncheckedException {
     }
 
     public JwtInvalidException(Throwable cause) {
-        super(cause);
+        super(ResultErrorCode.TOKEN_VALID_ERROR.getErrorCode(), cause);
     }
 }

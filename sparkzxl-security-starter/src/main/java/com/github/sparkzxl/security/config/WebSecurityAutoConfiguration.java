@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.config;
 
+import com.github.sparkzxl.core.constant.Constant;
 import com.github.sparkzxl.core.util.ListUtils;
-import com.github.sparkzxl.core.util.SwaggerStaticResource;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.authorization.DynamicAccessDecisionManager;
 import com.github.sparkzxl.security.component.RestAuthenticationEntryPoint;
@@ -73,7 +73,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        String[] excludeStaticPatterns = ListUtils.listToArray(SwaggerStaticResource.EXCLUDE_STATIC_PATTERNS);
+        String[] excludeStaticPatterns = ListUtils.listToArray(Constant.EXCLUDE_STATIC_PATTERNS);
         web.ignoring().antMatchers(excludeStaticPatterns);
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
@@ -82,8 +82,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
-                .authorizeRequests();
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
         List<String> excludePatterns = securityProperties.getIgnore();
         if (CollectionUtils.isNotEmpty(excludePatterns)) {
             for (String url : excludePatterns) {

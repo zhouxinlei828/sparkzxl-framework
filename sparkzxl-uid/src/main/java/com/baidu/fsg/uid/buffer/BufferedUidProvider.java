@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Buffered UID provider(Lambda supported), which provides UID in the same one second
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 @FunctionalInterface
 public interface BufferedUidProvider {

@@ -1,8 +1,8 @@
 package com.github.sparkzxl.mybatis.aop;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.database.DataScope;
+import com.github.sparkzxl.mybatis.annotation.DataScope;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * description: 数据权限aop处理器
+ * description: 多列数据权限aop处理器
  *
  * @author zhouxinlei
  * @since 2022-05-27 12:30:03
@@ -30,7 +30,7 @@ public class DataScopeInterceptor implements MethodInterceptor {
         }
         Method method = invocation.getMethod();
         DataScope annotation = method.getAnnotation(DataScope.class);
-        RequestLocalContextHolder.set(BaseContextConstants.DATA_SCOPE, annotation);
+        RequestLocalContextHolder.set(BaseContextConstants.MULTI_DATA_SCOPE, annotation);
         return invocation.proceed();
     }
 }

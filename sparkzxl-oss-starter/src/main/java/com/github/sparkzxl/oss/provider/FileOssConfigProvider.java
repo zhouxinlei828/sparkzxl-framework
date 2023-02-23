@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.URLUtil;
-import com.alibaba.fastjson.JSONArray;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.oss.properties.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,7 +37,7 @@ public class FileOssConfigProvider extends AbstractOssConfigProvider {
         } else {
             fileStr = ResourceUtil.readUtf8Str(path);
         }
-        List<Configuration> configList = JSONArray.parseArray(fileStr, Configuration.class);
+        List<Configuration> configList = JsonUtils.getJson().toJavaList(fileStr,Configuration.class);
         for (Configuration configInfo : configList) {
             if (StringUtils.isEmpty(configInfo.getClientType())) {
                 throw new RuntimeException("Oss client clientType cannot be empty.");

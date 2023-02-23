@@ -1,10 +1,9 @@
 package com.github.sparkzxl.security.filter;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
-import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -50,8 +49,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             try {
                 jwtUserInfo = jwtTokenService.verifyTokenByHmac(accessToken);
             } catch (Exception e) {
-                e.printStackTrace();
-                log.error("校验token发生异常：[{}]", ExceptionUtil.getMessage(e));
+                log.error("校验token发生异常：", e);
                 ExceptionAssert.failure(ResultErrorCode.LOGIN_EXPIRE);
             }
             String username = jwtUserInfo.getUsername();

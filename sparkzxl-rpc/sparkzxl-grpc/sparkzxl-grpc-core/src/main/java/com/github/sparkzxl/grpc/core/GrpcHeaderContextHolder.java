@@ -1,6 +1,6 @@
 package com.github.sparkzxl.grpc.core;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import io.grpc.Metadata;
 
 /**

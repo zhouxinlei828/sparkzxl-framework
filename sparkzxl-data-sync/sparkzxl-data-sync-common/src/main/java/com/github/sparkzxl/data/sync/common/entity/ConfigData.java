@@ -1,6 +1,6 @@
 package com.github.sparkzxl.data.sync.common.entity;
 
-import com.alibaba.fastjson.JSON;
+import com.github.sparkzxl.core.json.JsonUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -117,6 +117,6 @@ public class ConfigData<T> {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JsonUtils.getJson().toJson(this);
     }
 }

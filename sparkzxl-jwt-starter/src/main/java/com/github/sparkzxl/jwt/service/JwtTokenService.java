@@ -1,6 +1,6 @@
 package com.github.sparkzxl.jwt.service;
 
-import com.github.sparkzxl.entity.core.JwtUserInfo;
+import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.nimbusds.jose.jwk.RSAKey;
 
 /**

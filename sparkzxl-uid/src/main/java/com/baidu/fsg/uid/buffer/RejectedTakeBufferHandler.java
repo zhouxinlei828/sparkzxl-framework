@@ -19,7 +19,7 @@ package com.baidu.fsg.uid.buffer;
  * If cursor catches the tail it means that the ring buffer is empty, any more buffer take request will be rejected.
  * Specify the policy to handle the reject. This is a Lambda supported interface
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 @FunctionalInterface
 public interface RejectedTakeBufferHandler {

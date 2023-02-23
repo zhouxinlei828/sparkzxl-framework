@@ -18,7 +18,7 @@ package com.baidu.fsg.uid.exception;
 /**
  * UidGenerateException
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 public class UidGenerateException extends RuntimeException {
 

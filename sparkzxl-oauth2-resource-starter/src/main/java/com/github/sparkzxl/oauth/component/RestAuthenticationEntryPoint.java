@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oauth.component;
 
-import com.github.sparkzxl.core.base.result.Response;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -27,15 +26,12 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
 
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
-        log.error("AuthenticationException：[{}]", e.getMessage());
+        log.warn("AuthenticationException：[{}]", e.getMessage());
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         ResultErrorCode exceptionCode = ResultErrorCode.LOGIN_EXPIRE;
-        if (e instanceof InvalidBearerTokenException) {
-            exceptionCode = ResultErrorCode.LOGIN_EXPIRE;
-        }
-        String body = JsonUtil.toJson(Response.fail(exceptionCode));
+        String body = JsonUtils.getJson().toJson(ApiResult.fail(exceptionCode));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

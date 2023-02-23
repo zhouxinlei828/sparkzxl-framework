@@ -1,13 +1,16 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
-import com.github.sparkzxl.core.util.HttpParamConverter;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
-import com.github.sparkzxl.gateway.common.utils.BodyParamUtils;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
+import com.github.sparkzxl.gateway.utils.BodyParamUtils;
+import com.github.sparkzxl.gateway.utils.HttpParamConverter;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -34,6 +37,10 @@ public class RpcParamTransformFilter extends AbstractGlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        String rpcType = ReactorHttpHelper.getHeader(request, GatewayConstant.RPC_TYPE);
+        if (StringUtils.isBlank(rpcType) || !StringUtils.equals(rpcType, DubboConstant.DUBBO)) {
+            return chain.filter(exchange);
+        }
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         if (ObjectUtils.isNotEmpty(gatewayContext)) {
             MediaType mediaType = request.getHeaders().getContentType();
@@ -90,14 +97,13 @@ public class RpcParamTransformFilter extends AbstractGlobalFilter {
         return new String(bytes, StandardCharsets.UTF_8);
     }
 
+    @Override
+    public int getOrder() {
+        return FilterEnum.RPC_PARAM_TRANSFORM.getCode();
+    }
 
     @Override
     public String named() {
         return FilterEnum.RPC_PARAM_TRANSFORM.getName();
-    }
-
-    @Override
-    public int getOrder() {
-        return FilterEnum.RPC_PARAM_TRANSFORM.getCode();
     }
 }

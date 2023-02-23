@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.rule;
 
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.json.JsonUtils;
 
 /**
  * description: the RuleHandle interface
@@ -16,6 +16,6 @@ public interface RuleHandle {
      * @return json string.
      */
     default String toJson() {
-        return JsonUtil.toJson(this);
+        return JsonUtils.getJson().toJson(this);
     }
 }

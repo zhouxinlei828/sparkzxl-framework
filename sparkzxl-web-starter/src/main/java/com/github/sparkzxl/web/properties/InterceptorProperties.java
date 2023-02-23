@@ -1,9 +1,7 @@
 package com.github.sparkzxl.web.properties;
 
-import com.github.sparkzxl.web.interceptor.HeaderThreadLocalInterceptor;
 import com.google.common.collect.Lists;
 import lombok.Data;
-import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @Data
 public class InterceptorProperties {
 
-    private Class<? extends HandlerInterceptor> interceptor = HeaderThreadLocalInterceptor.class;
+    private String name;
 
     private List<String> includePatterns = Lists.newArrayList("/**");
 

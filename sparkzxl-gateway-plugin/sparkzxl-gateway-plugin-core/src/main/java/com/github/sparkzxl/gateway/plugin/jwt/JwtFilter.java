@@ -1,26 +1,23 @@
 package com.github.sparkzxl.gateway.plugin.jwt;
 
-import cn.hutool.core.bean.OptionalBean;
 import cn.hutool.core.date.DateTime;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.DateUtils;
-import com.github.sparkzxl.core.util.HuSecretUtil;
+import com.github.sparkzxl.core.util.SecretUtil;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
-import com.github.sparkzxl.gateway.common.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.handle.JwtRuleHandle;
 import com.github.sparkzxl.gateway.rule.RuleData;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +28,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: jwt filter
@@ -50,21 +48,30 @@ public class JwtFilter extends AbstractGlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         FilterData filterData = loadFilterData();
         boolean needSkip = (boolean) exchange.getAttributes().get(GatewayConstant.NEED_SKIP);
-        String jsonConfig =
-                OptionalBean.ofNullable(filterData).getBean(FilterData::getConfig).orElseGet(() -> "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}");
-        JwtConfig jwtConfig = JsonUtil.toPojo(jsonConfig, JwtConfig.class);
-        String dataHandle = OptionalBean.ofNullable(filterData.getRule()).getBean(RuleData::getHandle).orElseGet(
-                () -> "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}");
-        JwtRuleHandle ruleHandle = JsonUtil.toPojo(dataHandle, JwtRuleHandle.class);
+        String jsonConfig;
+        if (StringUtils.isEmpty(filterData.getConfig())) {
+            jsonConfig = "{\"secretKey\":\"\",\"tokenKey\":\"Authorization\"}";
+        } else {
+            jsonConfig = filterData.getConfig();
+        }
+        JwtConfig jwtConfig = JsonUtils.getJson().toJavaObject(jsonConfig, JwtConfig.class);
+        String ruleHandle;
+        if (ObjectUtils.isEmpty(filterData.getRule())){
+            ruleHandle = "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}";
+        }else {
+            ruleHandle = filterData.getRule().getHandle();
+        }
+        JwtRuleHandle jwtRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, JwtRuleHandle.class);
+        assert jwtConfig != null;
         if (needSkip) {
             return removeAuthorization(exchange, chain, jwtConfig.getTokenKey());
         }
         String token = exchange.getRequest().getHeaders().getFirst(jwtConfig.getTokenKey());
         String authToken = StringUtils.removeStartIgnoreCase(token, BaseContextConstants.BEARER_TOKEN);
-        JsonNode jwtBody = checkAuthorization(authToken, jwtConfig.getSecretKey());
-        if (ObjectUtils.isNotEmpty(jwtBody)) {
+        Map<String, Object> jsonMap = checkAuthorization(authToken, jwtConfig.getSecretKey());
+        if (ObjectUtils.isNotEmpty(jsonMap)) {
             if (ObjectUtils.isNotEmpty(ruleHandle)) {
-                return chain.filter(converter(exchange, jwtBody, ruleHandle.getConverter()));
+                return chain.filter(converter(exchange, jsonMap, jwtRuleHandle.getConverter()));
             }
         }
         return ReactorHttpHelper.error(exchange.getResponse(), ResultErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
@@ -82,30 +89,30 @@ public class JwtFilter extends AbstractGlobalFilter {
      * @param secretKey secretKey of authorization
      * @return Map
      */
-    private JsonNode checkAuthorization(final String token,
-                                        final String secretKey) {
+    private Map<String, Object> checkAuthorization(final String token,
+                                                   final String secretKey) {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        return Try.of(() -> {
+
+        try {
             JWSObject jwsObject = JWSObject.parse(token);
             if (StringUtils.isNotEmpty(secretKey)) {
-                JWSVerifier jwsVerifier = new MACVerifier(HuSecretUtil.encryptMd5(secretKey));
+                JWSVerifier jwsVerifier = new MACVerifier(SecretUtil.encryptMd5(secretKey));
                 if (!jwsObject.verify(jwsVerifier)) {
                     throw new JwtInvalidException("token验签失败");
                 }
             }
-            JsonNode jsonNode = JsonUtil.readTree(jwsObject.getPayload().toString());
-            long expire = jsonNode.get("exp").asLong(0);
+            Map<String, Object> jsonMap = JsonUtils.getJson().toMap(jwsObject.getPayload().toString());
+            long expire = (long) jsonMap.getOrDefault("exp", 0L);
             DateTime dateTime = DateUtils.date(expire * 1000);
             if (dateTime.getTime() < System.currentTimeMillis()) {
                 throw new JwtExpireException("token已过期");
             }
-            return jsonNode;
-        }).getOrElseThrow(throwable -> {
-            log.error("JSON转换异常：", throwable);
-            throw new JwtInvalidException(throwable);
-        });
+            return jsonMap;
+        } catch (Exception e) {
+            throw new JwtInvalidException(e);
+        }
     }
 
     /**
@@ -125,13 +132,15 @@ public class JwtFilter extends AbstractGlobalFilter {
     /**
      * The parameters in token are converted to request header.
      *
-     * @param exchange exchange
+     * @param exchange   exchange
+     * @param jsonMap    jsonMap
+     * @param converters converters
      * @return ServerWebExchange exchange.
      */
     private ServerWebExchange converter(final ServerWebExchange exchange,
-                                        final JsonNode jwtBody,
+                                        final Map<String, Object> jsonMap,
                                         final List<JwtRuleHandle.Convert> converters) {
-        ServerHttpRequest modifiedRequest = exchange.getRequest().mutate().headers(httpHeaders -> this.addHeader(httpHeaders, jwtBody, converters)).build();
+        ServerHttpRequest modifiedRequest = exchange.getRequest().mutate().headers(httpHeaders -> this.addHeader(httpHeaders, jsonMap, converters)).build();
         return exchange.mutate().request(modifiedRequest).build();
     }
 
@@ -139,14 +148,14 @@ public class JwtFilter extends AbstractGlobalFilter {
      * add header.
      *
      * @param headers    headers
-     * @param jsonNode   body
+     * @param jsonMap    jsonMap
      * @param converters converters
      */
     private void addHeader(final HttpHeaders headers,
-                           final JsonNode jsonNode,
+                           final Map<String, Object> jsonMap,
                            final List<JwtRuleHandle.Convert> converters) {
         for (JwtRuleHandle.Convert converter : converters) {
-            headers.add(converter.getHeaderVal(), jsonNode.get(converter.getJwtVal()).asText());
+            headers.add(converter.getHeaderVal(), (String) jsonMap.get(converter.getJwtVal()));
         }
     }
 }

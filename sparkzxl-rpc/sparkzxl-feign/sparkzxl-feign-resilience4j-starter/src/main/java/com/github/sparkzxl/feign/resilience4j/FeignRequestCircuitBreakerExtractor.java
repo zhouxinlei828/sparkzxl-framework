@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.resilience4j;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.feign.resilience4j.utils.ServiceInstanceUtil;
 import feign.RequestTemplate;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;

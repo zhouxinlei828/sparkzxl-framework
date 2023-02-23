@@ -1,11 +1,11 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
-import com.github.sparkzxl.core.util.RequestContextHolderUtils;
-import com.github.sparkzxl.entity.response.ResponseCode;
+import com.github.sparkzxl.core.util.RequestContextUtils;
+import com.github.sparkzxl.core.base.ResponseCode;
 import com.github.sparkzxl.web.annotation.IgnoreResponseWrap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable().getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
-        HttpServletRequest servletRequest = RequestContextHolderUtils.getRequest();
+        HttpServletRequest servletRequest = RequestContextUtils.getRequest();
         com.github.sparkzxl.web.annotation.Response response =
                 (com.github.sparkzxl.web.annotation.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
         Boolean supported = ObjectUtils.isNotEmpty(response) && declaredAnnotationsByType.length == 0;
@@ -48,26 +48,26 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<?
             extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        HttpServletResponse servletResponse = RequestContextHolderUtils.getResponse();
+        HttpServletResponse servletResponse = RequestContextUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (body instanceof Response) {
+        if (body instanceof ApiResult) {
             return body;
         }
-        Boolean fallback = Convert.toBool(RequestContextHolderUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
+        Boolean fallback = Convert.toBool(RequestContextUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         int status = servletResponse.getStatus();
-        Response<?> result;
+        ApiResult<?> result;
         if (fallback) {
-            result = Response.fail(ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
+            result = ApiResult.fail(ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
         } else if (body instanceof Boolean && !(Boolean) body) {
-            result = Response.fail(
+            result = ApiResult.fail(
                     ResultErrorCode.FAILURE.getErrorCode(), ResultErrorCode.FAILURE.getErrorMsg());
         } else if (status == ResponseCode.FAILURE.getCode()) {
-            result = Response.fail(
+            result = ApiResult.fail(
                     ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
             servletResponse.setStatus(ResponseCode.SUCCESS.getCode());
         } else {
-            result = Response.success(body);
+            result = ApiResult.success(body);
         }
         return result;
     }

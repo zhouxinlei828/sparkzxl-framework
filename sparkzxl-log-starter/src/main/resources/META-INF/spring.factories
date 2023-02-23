@@ -1,2 +1,2 @@
 org.springframework.context.ApplicationContextInitializer=\
-    com.github.sparkzxl.log.initializer.TransmittableThreadLocalMdcAdapterInitializer
+    com.github.sparkzxl.log.initializer.CustomMdcAdapterInitializer

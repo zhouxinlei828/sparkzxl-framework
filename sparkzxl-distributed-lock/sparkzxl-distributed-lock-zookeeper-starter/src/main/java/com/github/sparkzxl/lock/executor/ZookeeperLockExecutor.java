@@ -1,6 +1,5 @@
 package com.github.sparkzxl.lock.executor;
 
-import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -27,27 +26,26 @@ public class ZookeeperLockExecutor extends AbstractLockExecutor<InterProcessMute
             log.warn("instance must be started before calling this method");
             return null;
         }
-
         String nodePath = "/curator/distributed-lock/%s";
-        return Try.of(() -> {
+        try {
             InterProcessMutex mutex = new InterProcessMutex(curatorFramework, String.format(nodePath, lockKey));
             final boolean locked = mutex.acquire(acquireTimeout, TimeUnit.MILLISECONDS);
             return obtainLockInstance(locked, mutex);
-        }).getOrElseGet(throwable -> {
-            log.error("Zookeeper lock failed：", throwable);
+        } catch (Exception e) {
+            log.error("Zookeeper lock failed：", e);
             return null;
-        });
+        }
     }
 
     @Override
     public boolean releaseLock(String key, String value, InterProcessMutex lockInstance) {
-        return Try.of(() -> {
+        try {
             lockInstance.release();
             return true;
-        }).getOrElseGet(throwable -> {
-            log.error("zookeeper lock release error", throwable);
+        } catch (Exception e) {
+            log.error("zookeeper lock release error", e);
             return false;
-        });
+        }
     }
 
 }

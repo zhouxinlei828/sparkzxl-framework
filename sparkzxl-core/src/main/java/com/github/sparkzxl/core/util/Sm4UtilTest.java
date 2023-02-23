@@ -2,8 +2,8 @@ package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.github.sparkzxl.core.jackson.JsonUtil;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
+import com.github.sparkzxl.core.json.JsonUtils;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.google.common.collect.Lists;
 
 import javax.crypto.IllegalBlockSizeException;
@@ -55,7 +55,7 @@ public class Sm4UtilTest {
                     authUserInfo.setRoleList(Lists.newArrayList("admin"));
                     authUserInfos.add(authUserInfo);
                 }
-                String json = JsonUtil.toJson(authUserInfos);
+                String json = JsonUtils.getJson().toJson(authUserInfos);
                 System.out.println("SM4加密原始数据： " + json);
                 String encrypt = Sm4Util.encryptToBase64String(s, key.getBytes(), iv.getBytes(), json.getBytes());
                 System.out.println("SM4加密数据密文： " + encrypt);

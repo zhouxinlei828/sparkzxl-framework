@@ -22,7 +22,7 @@ import com.baidu.fsg.uid.util.ValuedEnum;
  * <li>CONTAINER: Such as Docker
  * <li>ACTUAL: Actual machine
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 public enum WorkerNodeType implements ValuedEnum<Integer> {
 

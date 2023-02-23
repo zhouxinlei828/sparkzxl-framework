@@ -1,7 +1,6 @@
 package com.github.sparkzxl.jwt.properties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: JWT属性类
@@ -9,13 +8,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = "sparkzxl.key-store")
 public class KeyStoreProperties {
 
     /**
      * 是否启用
      */
-    private boolean enable;
+    private boolean enabled;
 
     /**
      * 密钥文件路径

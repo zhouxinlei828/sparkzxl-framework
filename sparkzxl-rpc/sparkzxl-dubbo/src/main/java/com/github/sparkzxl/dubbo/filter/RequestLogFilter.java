@@ -1,6 +1,7 @@
 package com.github.sparkzxl.dubbo.filter;
 
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import cn.hutool.core.exceptions.ExceptionUtil;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.dubbo.properties.DubboCustomProperties;
 import lombok.Getter;
@@ -43,14 +44,15 @@ public class RequestLogFilter implements Filter {
         if (RpcContext.getServiceContext().isConsumerSide()) {
             client = CommonConstants.CONSUMER;
         }
-        String baseLog = MessageFormat.format("Client[{0}]],InterfaceName=[{1}],MethodName=[{2}]",
+        String baseLog = MessageFormat.format("client[{0}]], interfaceName: [{1}], methodName: [{2}], version: [{3}]",
                 client,
                 invocation.getInvoker().getInterface().getSimpleName(),
-                invocation.getMethodName());
+                invocation.getMethodName(),
+                RpcContext.getServiceContext().getVersion());
         if (properties.getLevel() == LogLevel.INFO) {
-            log.info("dubbo -> 服务调用: {}", baseLog);
+            log.info("dubbo -> service invocation: {}", baseLog);
         } else if (properties.getLevel() == LogLevel.DEBUG) {
-            log.debug("dubbo -> 服务调用: {}, Parameters={}", baseLog, invocation.getArguments());
+            log.debug("dubbo -> service invocation: {}, parameters={}", baseLog, invocation.getArguments());
         }
 
         long startTime = System.currentTimeMillis();
@@ -60,13 +62,13 @@ public class RequestLogFilter implements Filter {
         long elapsed = System.currentTimeMillis() - startTime;
         // 如果发生异常 则打印异常日志
         if (result.hasException() && invoker.getInterface().equals(GenericService.class)) {
-            log.error("dubbo -> 服务异常: {},Exception={}", baseLog, result.getException());
-        } else {
-            if (properties.getLevel() == LogLevel.INFO) {
-                log.info("dubbo -> 服务响应: {},consumeTime=[{}ms]", baseLog, elapsed);
-            } else if (properties.getLevel() == LogLevel.DEBUG) {
-                log.info("dubbo -> 服务响应: {},consumeTime=[{}ms],Response={}", baseLog, elapsed, JsonUtil.toJson(new Object[]{result.getValue()}));
-            }
+            log.error("dubbo -> service response: {},exception: {}", baseLog, ExceptionUtil.stacktraceToString(result.getException()));
+            return result;
+        }
+        if (properties.getLevel() == LogLevel.INFO) {
+            log.info("dubbo -> service response: {}, consume time: {}ms", baseLog, elapsed);
+        } else if (properties.getLevel() == LogLevel.DEBUG) {
+            log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed, JsonUtils.getJson().toJson(new Object[]{result.getValue()}));
         }
         return result;
     }

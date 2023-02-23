@@ -2,12 +2,11 @@ package com.github.sparkzxl.mybatis.plugins;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.alibaba.ttl.threadpool.TtlExecutors;
-import com.github.sparkzxl.constant.enums.EnvironmentEnum;
+import com.github.sparkzxl.core.constant.enums.EnvironmentEnum;
 import com.github.sparkzxl.mybatis.send.SendNoticeService;
 import com.github.sparkzxl.mybatis.send.SqlMonitorMessage;
 import com.google.common.base.Stopwatch;
 import com.google.common.base.Strings;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -130,53 +129,58 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     }
 
     private void doSomething(Invocation invocation, long executeTime, String exceptionMsg, Type type) {
-        Try.run(() -> {
+        try {
             //如果是慢sql检测，但是实际执行时间没有超时，不走结果检测
             if (ObjectUtils.nullSafeEquals(type, Type.SLOW_SQL) && executeTime <= longQueryTime) {
                 return;
             }
             CONTEXT.set(getStackTrace());
             assert THREAD_POOL != null;
-            THREAD_POOL.execute(() -> Try.run(() -> {
-                Stopwatch checkTime = Stopwatch.createStarted();
-                MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-                Object parameter = null;
-                if (invocation.getArgs().length > 1) {
-                    parameter = invocation.getArgs()[1];
+            THREAD_POOL.execute(() -> {
+                try {
+                    Stopwatch checkTime = Stopwatch.createStarted();
+                    MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
+                    Object parameter = null;
+                    if (invocation.getArgs().length > 1) {
+                        parameter = invocation.getArgs()[1];
+                    }
+                    String sqlId = mappedStatement.getId();
+                    /*
+                      这个boundSql会将XML里面所有的#{id,jdbcType=BIGINT} 都解析并替换成 ？
+                      select * from x where id = #{id,jdbcType=BIGINT}
+                      会被解析成 select * from x where id = ？，这个语句就可以用jdbc 的 PrepareStatement 进行编译执行了。
+                      然后将对应的javaType、jdbcType 保存起来，在执行SQL时传入statement中。
+                      PreparedStatement statement = connection.prepareStatement(sql)
+                      statement.setLong(1, excel.getUserId());
+                      statement.executeBatch();
+                      connection.commit();
+                     */
+                    BoundSql boundSql = mappedStatement.getBoundSql(parameter);
+                    Configuration configuration = mappedStatement.getConfiguration();
+                    // 主要耗时在这里，这里会根据parameter，
+                    // 将 select * from x where id = ？ 解析成 select * from x where id = 1
+                    // 对于 insert into X (1,2) values (?,?),(?,?),(?,?),(?,?)这种批量的SQL，这里的解析会特别慢。
+                    // 因为他是挨个挨个把 ？ 替换成对应的参数值。
+                    // 最后拼成SQL insert into X (1,2) values (1,2),(3,4)
+                    // 如果这个是复杂对象（自定义bean），会根据反射一个个进行操作。
+                    String sql = parseSql(configuration, boundSql);
+                    switch (type) {
+                        case SLOW_SQL:
+                            checkSlowSql(sqlId, sql, executeTime, checkTime.elapsed(TimeUnit.MILLISECONDS));
+                            break;
+                        case SQL_EXCEPTION:
+                            sendSqlExceptionMsg(sqlId, sql, exceptionMsg, checkTime.elapsed(TimeUnit.MILLISECONDS));
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                String sqlId = mappedStatement.getId();
-                /*
-                  这个boundSql会将XML里面所有的#{id,jdbcType=BIGINT} 都解析并替换成 ？
-                  select * from x where id = #{id,jdbcType=BIGINT}
-                  会被解析成 select * from x where id = ？，这个语句就可以用jdbc 的 PrepareStatement 进行编译执行了。
-                  然后将对应的javaType、jdbcType 保存起来，在执行SQL时传入statement中。
-
-                  PreparedStatement statement = connection.prepareStatement(sql)
-                  statement.setLong(1, excel.getUserId());
-                  statement.executeBatch();
-                  connection.commit();
-                 */
-                BoundSql boundSql = mappedStatement.getBoundSql(parameter);
-                Configuration configuration = mappedStatement.getConfiguration();
-                // 主要耗时在这里，这里会根据parameter，
-                // 将 select * from x where id = ？ 解析成 select * from x where id = 1
-                // 对于 insert into X (1,2) values (?,?),(?,?),(?,?),(?,?)这种批量的SQL，这里的解析会特别慢。
-                // 因为他是挨个挨个把 ？ 替换成对应的参数值。
-                // 最后拼成SQL insert into X (1,2) values (1,2),(3,4)
-                // 如果这个是复杂对象（自定义bean），会根据反射一个个进行操作。
-                String sql = parseSql(configuration, boundSql);
-                switch (type) {
-                    case SLOW_SQL:
-                        checkSlowSql(sqlId, sql, executeTime, checkTime.elapsed(TimeUnit.MILLISECONDS));
-                        break;
-                    case SQL_EXCEPTION:
-                        sendSqlExceptionMsg(sqlId, sql, exceptionMsg, checkTime.elapsed(TimeUnit.MILLISECONDS));
-                        break;
-                    default:
-                        break;
-                }
-            }).onFailure(Throwable::printStackTrace));
-        }).onFailure(Throwable::printStackTrace);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

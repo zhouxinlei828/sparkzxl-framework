@@ -33,7 +33,6 @@
         <module>sparkzxl-annotations</module>
         <module>sparkzxl-boot-starter</module>
         <module>sparkzxl-cache-starter</module>
-        <module>sparkzxl-common</module>
         <module>sparkzxl-core</module>
         <module>sparkzxl-mybatis-starter</module>
         <module>sparkzxl-data-sync</module>
@@ -62,6 +61,7 @@
         <module>sparkzxl-uid</module>
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
+        <module>sparkzxl-trace-logger</module>
     </modules>
 
     <licenses>
@@ -80,7 +80,7 @@
             <roles>
                 <role>Java Development Engineer</role>
             </roles>
-            <url>https://sparkzxl.github.io/sparkzxl-framework</url>
+            <url>https://zhouxinlei828.github.io/sparkzxl-framework</url>
         </developer>
     </developers>
     <scm>

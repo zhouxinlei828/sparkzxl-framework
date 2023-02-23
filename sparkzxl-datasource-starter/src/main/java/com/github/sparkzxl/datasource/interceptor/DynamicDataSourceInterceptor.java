@@ -2,8 +2,8 @@ package com.github.sparkzxl.datasource.interceptor;
 
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.util.RequestContextHolderUtils;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.datasource.provider.DataSourceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String tenantId = RequestContextHolderUtils.getHeader(BaseContextConstants.TENANT_ID);
+        String tenantId = RequestContextUtils.getHeader(BaseContextConstants.TENANT_ID);
         DynamicDataSourceContextHolder.poll();
         log.info("当前租户Id:{}", tenantId);
         if (StringUtils.isNotBlank(tenantId) && !dynamicRoutingDataSource.getDataSources().containsKey(tenantId)) {

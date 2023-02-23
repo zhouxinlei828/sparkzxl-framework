@@ -53,7 +53,7 @@ public enum FilterEnum {
     LOGGING(WRITE_RESPONSE_FILTER_ORDER - 1, "logging"),
 
     /**
-     * Global Filter enum.
+     * dubbo Filter enum.
      */
     DUBBO(9999, "dubbo"),
 

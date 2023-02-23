@@ -4,19 +4,19 @@ import com.baidu.fsg.uid.buffer.RejectedPutBufferHandler;
 import com.baidu.fsg.uid.buffer.RejectedTakeBufferHandler;
 import com.baidu.fsg.uid.buffer.RingBuffer;
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.github.sparkzxl.constant.ConfigurationConstant;
-import com.github.sparkzxl.constant.enums.IdTypeEnum;
-import com.github.sparkzxl.constant.enums.MultiTenantType;
-import com.github.sparkzxl.mybatis.constant.SqlConditions;
+import com.github.sparkzxl.core.constant.enums.IdTypeEnum;
+import com.github.sparkzxl.core.constant.enums.MultiTenantType;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.mapping.SqlCommandType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.List;
+
+import static com.github.sparkzxl.mybatis.properties.DataProperties.DATA_PREFIX;
 
 /**
  * description: CustomMybatisProperties配置属性类
@@ -25,9 +25,11 @@ import java.util.List;
  */
 @Data
 @ConfigurationProperties(
-        prefix = ConfigurationConstant.DATA_PREFIX
+        prefix = DATA_PREFIX
 )
 public class DataProperties {
+
+    public static final String DATA_PREFIX = "mybatis-plus.data";
 
     private long workerId = 0;
 
@@ -104,9 +106,10 @@ public class DataProperties {
     private boolean enableDataScope;
 
     /**
-     * 使用数据权限
+     * 多列数据权限
      */
-    private List<DataScope> dataScopeList;
+    @NestedConfigurationProperty
+    private List<DataScopeConfig> dataScopeList;
 
 
     @Data
@@ -155,7 +158,7 @@ public class DataProperties {
         private Class<? extends RejectedPutBufferHandler> rejectedPutBufferHandlerClass;
         /**
          * 拒绝策略: 当环已空, 无法继续获取时
-         * 默认无需指定, 将记录日志, 并抛出UidGenerateException异常. 如有特殊需求, 请实现RejectedTakeBufferHandler接口(支持Lambda表达式)
+         * 默认无需指定, 将记录日志, 并抛出UidGenerateException 异常. 如有特殊需求, 请实现RejectedTakeBufferHandler接口(支持Lambda表达式)
          */
         private Class<? extends RejectedTakeBufferHandler> rejectedTakeBufferHandlerClass;
     }
@@ -202,40 +205,6 @@ public class DataProperties {
     public static class GlobalMetaData {
 
         private String column;
-        private String loadKey;
-    }
-
-    /**
-     * 行级元数据
-     */
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class DataScope {
-        /**
-         * 数据权限id标识
-         */
-        private String scopeId;
-        /**
-         * 数据权限字段
-         */
-        private String column;
-        /**
-         * SQL类型
-         */
-        private SqlCommandType sqlCommandType;
-        /**
-         * 条件类型
-         */
-        private SqlConditions condition;
-        /**
-         * 表名
-         */
-        private String tableName;
-        /**
-         * 查询key值
-         * 查询key值
-         */
         private String loadKey;
     }
 

@@ -108,7 +108,7 @@ public class FeignErrorResult {
 package com.github.sparkzxl.feign.default_;
 
 import com.github.sparkzxl.constant.ExceptionConstant;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.ResponseResultUtils;
 import com.github.sparkzxl.feign.decoder.FeignExceptionHandlerContext;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
@@ -161,7 +161,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
         exceptionChains.add(exceptionChain);
         Integer status = (Integer) errorAttributes.get("status");
         ResponseResultUtils.clearResponseResult();
-        return response(status, message, exceptionChains);
+        return apiResult(status, message, exceptionChains);
     }
 
 
@@ -172,7 +172,7 @@ public class FeignExceptionHandler extends DefaultErrorAttributes {
      * @param errorMessage 异常信息
      * @return Map<String, Object>
      */
-    public static Map<String, Object> response(int status, String errorMessage, List<ExceptionChain> exceptionChains) {
+    public static Map<String, Object> apiResult(int status, String errorMessage, List<ExceptionChain> exceptionChains) {
         FeignErrorResult feignErrorResult = FeignErrorResult.feignErrorResult(status, errorMessage, exceptionChains);
         log.error("feign 请求拦截异常：[{}]", JsonUtil.toJson(feignErrorResult));
         return JsonUtil.toMap(feignErrorResult);
@@ -333,7 +333,7 @@ public class RemoteCallException extends RuntimeException {
 
 package com.github.sparkzxl.feign.default_;
 
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import com.github.sparkzxl.model.exception.FeignErrorResult;
 import feign.Response;
@@ -353,9 +353,9 @@ import java.nio.charset.StandardCharsets;
 public class FeignExceptionDecoder implements ErrorDecoder {
 
     @Override
-    public Exception decode(String methodKey, Response response) {
+    public Exception decode(String methodKey, Response apiResult) {
         try {
-            Reader reader = response.body().asReader(StandardCharsets.UTF_8);
+            Reader reader = apiResult.body().asReader(StandardCharsets.UTF_8);
             String body = Util.toString(reader);
             FeignErrorResult feignErrorResult = JsonUtil.parse(body, FeignErrorResult.class);
             return new RemoteCallException(feignErrorResult.getMsg(), feignErrorResult.getExceptionChains());

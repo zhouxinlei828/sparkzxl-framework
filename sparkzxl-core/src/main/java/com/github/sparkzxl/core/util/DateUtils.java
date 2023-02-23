@@ -5,7 +5,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.format.FastDateFormat;
-import com.github.sparkzxl.entity.core.DateInfo;
+import com.github.sparkzxl.core.entity.DateInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
@@ -60,8 +60,7 @@ public class DateUtils extends DateUtil {
         try {
             return fastDateFormat.parse(dateStr);
         } catch (ParseException e) {
-            log.error("格式化日期发生异常：[{}]", e.getMessage());
-            e.printStackTrace();
+            log.warn("格式化日期发生异常：[{}]", e.getMessage(),e);
         }
         return null;
     }
@@ -195,8 +194,8 @@ public class DateUtils extends DateUtil {
      * 计算时间差
      *
      * @param beginTime 开始时间
-     * @param endTime       结束时间
-     * @param level         格式化类型
+     * @param endTime   结束时间
+     * @param level     格式化类型
      * @return String
      */
     public static String formatBetween(LocalDateTime beginTime, LocalDateTime endTime, BetweenFormatter.Level level) {

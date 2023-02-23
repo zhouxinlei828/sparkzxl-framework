@@ -22,11 +22,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException e) {
-        log.error("AuthenticationException：[{}]", e.getMessage());
+        log.warn("AuthenticationException：[{}]", e.getMessage());
         IErrorCode errorCode = ResultErrorCode.LOGIN_EXPIRE;
-        if (e instanceof AccountExpiredException) {
-            errorCode = ResultErrorCode.LOGIN_EXPIRE;
-        }
         HttpRequestUtils.failResponse(response, errorCode);
     }
 

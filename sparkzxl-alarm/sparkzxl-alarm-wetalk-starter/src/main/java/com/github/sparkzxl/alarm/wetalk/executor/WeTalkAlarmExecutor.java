@@ -11,7 +11,6 @@ import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.exception.AsyncCallException;
 import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,7 +29,7 @@ public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
 
     @Override
     protected <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmProperties.AlarmConfig alarmConfig, T message) {
-        return Try.of(() -> {
+        try {
             StringBuilder webhook = new StringBuilder();
             webhook.append(alarmConfig.getRobotUrl()).append(alarmConfig.getTokenId());
             String jsonStr = JSONUtil.toJsonStr(message);
@@ -51,10 +50,10 @@ public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
                 log.debug("weTalk send message call [{}], param:{}, resp:{}", webhook, jsonStr, body);
             }
             return AlarmResponse.success(alarmId, body);
-        }).getOrElseThrow(throwable -> {
-            exceptionCallback(alarmId, message, new AlarmException(throwable));
-            return new AlarmException(throwable);
-        });
+        } catch (Exception e) {
+            exceptionCallback(alarmId, message, new AlarmException(e));
+            return AlarmResponse.failed(alarmId, e.getMessage());
+        }
     }
 
     @Override

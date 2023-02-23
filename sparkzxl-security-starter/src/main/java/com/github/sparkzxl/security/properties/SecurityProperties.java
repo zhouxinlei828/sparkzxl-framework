@@ -1,10 +1,11 @@
 package com.github.sparkzxl.security.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
+
+import static com.github.sparkzxl.security.properties.SecurityProperties.SECURITY_PREFIX;
 
 /**
  * description: security 自动装配属性配置
@@ -12,8 +13,10 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.SECURITY_PREFIX)
+@ConfigurationProperties(prefix = SECURITY_PREFIX)
 public class SecurityProperties {
+
+    public static final String SECURITY_PREFIX = "security";
 
     private List<String> ignore;
 

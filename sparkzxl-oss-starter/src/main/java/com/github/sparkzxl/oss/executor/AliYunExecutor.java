@@ -56,7 +56,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                 log.info("bucket [{}] already exists.", bucketName);
             }
         } catch (OSSException e) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
@@ -74,7 +74,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         try {
             ossClient.deleteBucket(bucketName);
         } catch (OSSException e) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
@@ -120,7 +120,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             s3Object.setKey(object.getKey());
             return s3Object;
         } catch (OSSException e) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
@@ -138,7 +138,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         try {
             return ossClient.doesObjectExist(bucketName, objectName);
         } catch (OSSException e) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
@@ -161,7 +161,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             putObjectRequest.setMetadata(objectMetadata);
             ossClient.putObject(putObjectRequest);
         } catch (OSSException e) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
@@ -194,7 +194,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             putObjectRequest.setMetadata(objectMetadata);
             ossClient.putObject(putObjectRequest);
         } catch (OSSException e) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
@@ -318,7 +318,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             CompleteMultipartUploadResult completeMultipartUploadResult = ossClient.completeMultipartUpload(completeMultipartUploadRequest);
             System.out.println(completeMultipartUploadResult.getETag());
         } catch (OSSException oe) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{}\n"
                             + "Error Message:{}\n"
@@ -330,7 +330,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     oe.getHostId());
             throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR);
         } catch (ClientException ce) {
-            log.error("Caught an ClientException, which means the client encountered "
+            log.warn("Caught an ClientException, which means the client encountered "
                             + "a serious internal problem while trying to communicate with OSS," +
                             "such as not being able to access the network.\n "
                             + "Error Message:{}",
@@ -348,7 +348,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         try {
             ossClient.deleteObject(bucketName, objectName);
         } catch (OSSException oe) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
+            log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{}\n"
                             + "Error Message:{}\n"
@@ -360,7 +360,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     oe.getHostId());
             throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR);
         } catch (ClientException ce) {
-            log.error("Caught an ClientException, which means the client encountered "
+            log.warn("Caught an ClientException, which means the client encountered "
                             + "a serious internal problem while trying to communicate with OSS," +
                             "such as not being able to access the network.\n "
                             + "Error Message:{}",

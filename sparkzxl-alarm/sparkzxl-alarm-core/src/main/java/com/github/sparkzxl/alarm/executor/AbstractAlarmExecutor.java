@@ -12,11 +12,10 @@ import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.send.AlarmCallback;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -31,78 +30,50 @@ import java.util.function.Function;
 @Slf4j
 public abstract class AbstractAlarmExecutor implements AlarmExecutor {
 
+    @Resource
     protected AlarmIdGenerator alarmIdGenerator;
+    @Resource
     protected AlarmProperties alarmProperties;
+    @Resource
     protected AlarmExceptionCallback alarmExceptionCallback;
+    @Resource
     protected AlarmAsyncCallback alarmAsyncCallback;
+    @Resource
     protected AlarmLoadBalancer alarmLoadBalancer;
+    @Resource
     protected ThreadPoolExecutor alarmThreadPoolExecutor;
 
     public AbstractAlarmExecutor() {
     }
 
-    @Autowired
-    public void setAlarmIdGenerator(AlarmIdGenerator alarmIdGenerator) {
-        this.alarmIdGenerator = alarmIdGenerator;
-    }
-
-    @Autowired
-    public void setAlarmProperties(AlarmProperties alarmProperties) {
-        this.alarmProperties = alarmProperties;
-    }
-
-    @Autowired
-    public void setAlarmExceptionCallback(AlarmExceptionCallback alarmExceptionCallback) {
-        this.alarmExceptionCallback = alarmExceptionCallback;
-    }
-
-    @Autowired
-    public void setAlarmAsyncCallback(AlarmAsyncCallback alarmAsyncCallback) {
-        this.alarmAsyncCallback = alarmAsyncCallback;
-    }
-
-    @Autowired
-    public void setAlarmLoadBalancer(AlarmLoadBalancer alarmLoadBalancer) {
-        this.alarmLoadBalancer = alarmLoadBalancer;
-    }
-
-    @Autowired
-    public void setAlarmThreadPoolExecutor(ThreadPoolExecutor alarmThreadPoolExecutor) {
-        this.alarmThreadPoolExecutor = alarmThreadPoolExecutor;
-    }
-
     @Override
     public <T extends MsgType> AlarmResponse send(T message, Map<String, Object> variables) {
-        return Try.of(() -> {
-            // 告警唯一id
-            String alarmId = alarmIdGenerator.nextAlarmId();
-            AlarmChannel alarmChannel = message.getAlarmChannel();
-            if (MapUtil.isNotEmpty(variables)) {
-                message.transfer(variables);
-            }
-            AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel, (configs) -> alarmLoadBalancer.choose(configs));
-            if (log.isDebugEnabled()) {
-                log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(), alarmConfig.getTokenId());
-            }
-            return sendAlarm(alarmId, alarmConfig, message);
-        }).get();
+        // 告警唯一id
+        String alarmId = alarmIdGenerator.nextAlarmId();
+        AlarmChannel alarmChannel = message.getAlarmChannel();
+        if (MapUtil.isNotEmpty(variables)) {
+            message.transfer(variables);
+        }
+        AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel, (configs) -> alarmLoadBalancer.choose(configs));
+        if (log.isDebugEnabled()) {
+            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(), alarmConfig.getTokenId());
+        }
+        return sendAlarm(alarmId, alarmConfig, message);
     }
 
     @Override
     public <T extends MsgType> AlarmResponse designatedRobotSend(String robotId, T message, Map<String, Object> variables) {
-        return Try.of(() -> {
-            // 告警唯一id
-            String alarmId = alarmIdGenerator.nextAlarmId();
-            AlarmChannel alarmChannel = message.getAlarmChannel();
-            if (MapUtil.isNotEmpty(variables)) {
-                message.transfer(variables);
-            }
-            AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel, (configs) -> alarmLoadBalancer.chooseDesignatedRobot(robotId, configs));
-            if (log.isDebugEnabled()) {
-                log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(), alarmConfig.getTokenId());
-            }
-            return sendAlarm(alarmId, alarmConfig, message);
-        }).get();
+        // 告警唯一id
+        String alarmId = alarmIdGenerator.nextAlarmId();
+        AlarmChannel alarmChannel = message.getAlarmChannel();
+        if (MapUtil.isNotEmpty(variables)) {
+            message.transfer(variables);
+        }
+        AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel, (configs) -> alarmLoadBalancer.chooseDesignatedRobot(robotId, configs));
+        if (log.isDebugEnabled()) {
+            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(), alarmConfig.getTokenId());
+        }
+        return sendAlarm(alarmId, alarmConfig, message);
     }
 
     public AlarmProperties.AlarmConfig getAlarmConfig(AlarmChannel alarmChannel, Function<List<AlarmProperties.AlarmConfig>, AlarmProperties.AlarmConfig> function) {

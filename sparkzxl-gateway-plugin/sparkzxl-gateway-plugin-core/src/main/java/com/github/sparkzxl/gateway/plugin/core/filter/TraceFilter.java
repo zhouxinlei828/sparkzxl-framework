@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.core.filter;
 
 import cn.hutool.core.util.IdUtil;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;

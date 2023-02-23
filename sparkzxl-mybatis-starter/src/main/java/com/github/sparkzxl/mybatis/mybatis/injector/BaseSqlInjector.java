@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.injector.methods.AlwaysUpdateSomeColumnById;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
-import com.github.sparkzxl.constant.EntityConstant;
+import com.github.sparkzxl.mybatis.constant.EntityConstant;
 import com.github.sparkzxl.mybatis.mybatis.method.UpdateAllById;
 
 import java.util.List;

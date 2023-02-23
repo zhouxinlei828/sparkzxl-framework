@@ -1,10 +1,9 @@
 package com.guthub.sparkzxl.data.sync.nacos.handler;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.google.common.collect.Maps;
@@ -54,7 +53,7 @@ public class NacosCacheHandler {
     protected void updateDataMap(final String dataId, final String configInfo) {
         try {
             List<DataSubscriber> subscribers = dataSubscriberMap.get(dataId);
-            Map<String, MetaData> metaDataMap = JSONObject.parseObject(configInfo, new TypeReference<Map<String, MetaData>>() {});
+            Map<String, MetaData> metaDataMap = JsonUtils.getJson().toMap(configInfo, MetaData.class);
             metaDataMap.values().forEach(metaData -> subscribers.forEach(subscriber -> {
                 subscriber.unSubscribe(metaData);
                 subscriber.onSubscribe(metaData);

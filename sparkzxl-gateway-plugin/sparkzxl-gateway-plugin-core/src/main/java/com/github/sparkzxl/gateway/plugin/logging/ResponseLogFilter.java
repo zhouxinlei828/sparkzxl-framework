@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * description: Response log 过滤器
+ * description: ApiResult log 过滤器
  *
  * @author zhouxinlei
  * @since 2022-01-10 15:41:53

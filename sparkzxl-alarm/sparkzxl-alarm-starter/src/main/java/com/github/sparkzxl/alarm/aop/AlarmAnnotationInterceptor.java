@@ -11,10 +11,10 @@ import com.github.sparkzxl.alarm.provider.AlarmTemplateProvider;
 import com.github.sparkzxl.alarm.send.AlarmClient;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopProxyUtils;
 
 import javax.annotation.Nonnull;
@@ -62,24 +62,28 @@ public class AlarmAnnotationInterceptor implements MethodInterceptor {
         } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
             templateContentBuilder.append(AlarmConstant.MARKDOWN_HTTP_STATUS_TEMPLATE);
         }
-        return Try.of(() -> {
+        try {
             alarmParamMap.put("state", "✅");
             return invocation.proceed();
-        }).onFailure(Throwable.class, throwable -> {
-            log.info("请求接口发生异常 : [{}]", throwable.getMessage());
+        } catch (Throwable e) {
+            log.info("请求接口发生异常 : [{}]", e.getMessage());
             if (messageSubType.equals(MessageSubType.TEXT)) {
                 templateContentBuilder.append(AlarmConstant.TEXT_ERROR_TEMPLATE);
             } else if (messageSubType.equals(MessageSubType.MARKDOWN)) {
                 templateContentBuilder.append(AlarmConstant.MARKDOWN_ERROR_TEMPLATE);
             }
             alarmParamMap.put("state", "❌");
-            alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(throwable));
-        }).andFinally(() -> {
+            alarmParamMap.put("exception", ExceptionUtil.stacktraceToString(e));
+            throw new Throwable(e);
+        } finally {
             alarmRequest.setContent(templateContentBuilder.toString());
             alarmRequest.setVariables(alarmParamMap);
-            alarmClient.send(messageSubType, alarmRequest);
-        }).get();
-
+            if (StringUtils.isEmpty(annotation.robotId())) {
+                alarmClient.send(messageSubType, alarmRequest);
+            } else {
+                alarmClient.designatedRobotSend(annotation.robotId(), messageSubType, alarmRequest);
+            }
+        }
     }
 
     private IAlarmVariablesHandler getVariablesHandler(String variablesBeanName) {

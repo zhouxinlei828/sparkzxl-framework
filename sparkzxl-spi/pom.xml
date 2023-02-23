@@ -13,8 +13,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.sparkzxl</groupId>
-            <artifactId>sparkzxl-core</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <!--测试依赖-->
         <dependency>

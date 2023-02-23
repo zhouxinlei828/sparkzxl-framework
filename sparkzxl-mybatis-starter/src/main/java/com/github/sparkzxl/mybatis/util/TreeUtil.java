@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mybatis.util;
 
-import com.github.sparkzxl.entity.data.TreeEntity;
+import com.github.sparkzxl.mybatis.entity.TreeEntity;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;

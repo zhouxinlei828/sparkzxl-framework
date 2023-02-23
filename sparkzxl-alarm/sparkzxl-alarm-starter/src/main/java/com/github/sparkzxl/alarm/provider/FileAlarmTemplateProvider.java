@@ -4,11 +4,11 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.URLUtil;
-import com.alibaba.fastjson.JSONArray;
 import com.github.sparkzxl.alarm.autoconfigure.TemplateConfig;
 import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.support.AlarmErrorCodeEnum;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.google.common.collect.Maps;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -43,16 +43,16 @@ public class FileAlarmTemplateProvider extends BaseAlarmTemplateProvider {
         AlarmTemplate alarmTemplate = configTemplateMap.get(templateId);
         if (ObjectUtils.isEmpty(alarmTemplate)) {
             String templatePath = templateConfig.getTemplatePath();
-            String templatePathStr;
+            String templateContent;
             if (StringUtils.startsWithIgnoreCase(templatePath, HTTP) || StringUtils.startsWithIgnoreCase(templatePath, HTTPS)) {
                 URL url = URLUtil.url(templatePath);
                 File file = FileUtil.file(url);
                 FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
-                templatePathStr = fileReader.readString();
+                templateContent = fileReader.readString();
             } else {
-                templatePathStr = ResourceUtil.readUtf8Str(templatePath);
+                templateContent = ResourceUtil.readUtf8Str(templatePath);
             }
-            List<AlarmTemplate> alarmTemplateList = JSONArray.parseArray(templatePathStr, AlarmTemplate.class);
+            List<AlarmTemplate> alarmTemplateList = JsonUtils.getJson().toJavaList(templateContent, AlarmTemplate.class);
             Map<String, AlarmTemplate> templateMap = alarmTemplateList.stream().collect(Collectors.toMap(AlarmTemplate::getTemplateId, k -> k));
             configTemplateMap.putAll(templateMap);
             alarmTemplate = templateMap.get(templateId);

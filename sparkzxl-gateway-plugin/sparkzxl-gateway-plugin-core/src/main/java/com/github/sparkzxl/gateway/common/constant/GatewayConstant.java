@@ -35,6 +35,11 @@ public class GatewayConstant {
     public static final String ENABLE_LOGGING = "enableLogging";
 
     /**
+     * enable logging out
+     */
+    public static final String RPC_TYPE = "rpcType";
+
+    /**
      * cache max count.
      */
     public static int CACHE_MAX_COUNT = 1000;

@@ -1,10 +1,13 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
+import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.dubbo.config.ApacheDubboConfigCache;
 import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
+import com.github.sparkzxl.gateway.plugin.dubbo.entity.DubbboRequest;
 import com.github.sparkzxl.gateway.plugin.dubbo.param.DubboParamResolveService;
 import com.github.sparkzxl.gateway.support.GatewayException;
+import com.github.sparkzxl.gateway.utils.ParamCheckUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -20,7 +23,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * description: dubbo proxy service is  use GenericService.
+ * description: dubbo proxy service is use GenericService.
  *
  * @author zhouxinlei
  * @since 2022-08-12 17:33:28
@@ -39,19 +42,19 @@ public class ApacheDubboProxyService {
      *
      * @param body     the body
      * @param metaData the meta data
-     * @param exchange the exchange
      * @return the object
      * @throws RuntimeException the exception
      */
-    public Mono<Object> genericInvoker(final String body, final MetaData metaData, final ServerWebExchange exchange) throws RuntimeException {
-        ReferenceConfig<GenericService> reference = ApacheDubboConfigCache.getInstance().get(metaData.getPath());
+    public Mono<Object> genericInvoker(final String body, final MetaData metaData) throws RuntimeException {
+        String referenceKey = metaData.getNamespace() + ":" + metaData.getPath();
+        ReferenceConfig<GenericService> reference = ApacheDubboConfigCache.getInstance().get(referenceKey);
         if (Objects.isNull(reference) || StringUtils.isEmpty(reference.getInterface())) {
             ApacheDubboConfigCache.getInstance().invalidate(metaData.getPath());
             reference = ApacheDubboConfigCache.getInstance().initRef(metaData);
         }
         GenericService genericService = reference.get();
         Pair<String[], Object[]> pair;
-        if (StringUtils.isBlank(metaData.getParameterTypes()) || ParamCheckUtils.dubboBodyIsEmpty(body)) {
+        if (StringUtils.isBlank(metaData.getParameterTypes()) || ParamCheckUtils.bodyIsEmpty(body)) {
             pair = new ImmutablePair<>(new String[]{}, new Object[]{});
         } else {
             pair = dubboParamResolveService.buildParameter(body, metaData.getParameterTypes());
@@ -64,7 +67,7 @@ public class ApacheDubboProxyService {
                 log.debug("Invoke dubbo succeed service:{}, method:{}, parameters:{},result:{}", metaData.getServiceName(), metaData.getMethodName(), pair.getRight(), ret);
             }
             return ret;
-        })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException("500", ((GenericException) exception).getExceptionMessage()) : new GatewayException(exception));
+        })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException(ResultErrorCode.RPC_SERVICE_EXCEPTION.getErrorCode(), ((GenericException) exception).getExceptionMessage()) : new GatewayException(exception));
     }
 
     @SuppressWarnings("unchecked")
@@ -78,4 +81,7 @@ public class ApacheDubboProxyService {
         return resultFromFuture instanceof CompletableFuture ? (CompletableFuture<Object>) resultFromFuture : CompletableFuture.completedFuture(resultFromFuture);
     }
 
+    public Mono<Object> genericInvoker(DubbboRequest dubbboRequest) {
+        return null;
+    }
 }

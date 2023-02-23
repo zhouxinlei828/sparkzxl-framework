@@ -17,8 +17,8 @@ public class JwtParseException extends BaseUncheckedException {
         super(ResultErrorCode.JSON_TRANSFORM_ERROR);
     }
 
-    public JwtParseException(String message) {
-        super(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), message);
+    public JwtParseException(String errorMsg) {
+        super(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), errorMsg);
     }
 
 

@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * <li><b>tail:</b> a sequence of the max slot position to produce
  * <li><b>cursor:</b> a sequence of the min slot position to consume
  *
- * @author yutianbao
+ * @author zhouxinlei
  */
 public class RingBuffer {
     public static final int DEFAULT_PADDING_PERCENT = 50;

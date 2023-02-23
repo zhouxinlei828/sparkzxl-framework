@@ -1,5 +1,6 @@
 package com.github.sparkzxl.log;
 
+import cn.hutool.cron.CronUtil;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import com.github.sparkzxl.log.aop.OptLogRecordAnnotationAdvisor;
 import com.github.sparkzxl.log.aop.OptLogRecordInterceptor;
@@ -11,7 +12,6 @@ import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.OperatorService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,15 +30,16 @@ import java.util.Optional;
 @EnableConfigurationProperties(value = {LogProperties.class})
 public class LogAutoConfiguration {
 
-    @Autowired
-    void setAlarmLogConfig(LogProperties logProperties) {
+    public LogAutoConfiguration(LogProperties logProperties) {
         LogProperties.AlarmProperties alarmProperties = logProperties.getAlarm();
         if (alarmProperties.isEnabled()) {
             Optional.ofNullable(alarmProperties.getDoWarnException()).ifPresent(AlarmLogContext::addDoWarnExceptionList);
             Optional.of(alarmProperties.isWarnExceptionExtend()).ifPresent(AlarmLogContext::setWarnExceptionExtend);
-            Optional.of(alarmProperties.isSimpleWarnInfo()).ifPresent(AlarmLogContext::setPrintStackTrace);
+            Optional.of(alarmProperties.isPrintStackTrace()).ifPresent(AlarmLogContext::setPrintStackTrace);
             Optional.of(alarmProperties.isSimpleWarnInfo()).ifPresent(AlarmLogContext::setSimpleWarnInfo);
         }
+        CronUtil.setMatchSecond(true);
+        CronUtil.start();
     }
 
     @Bean(name = "defaultOptOptLogVariablesHandler")

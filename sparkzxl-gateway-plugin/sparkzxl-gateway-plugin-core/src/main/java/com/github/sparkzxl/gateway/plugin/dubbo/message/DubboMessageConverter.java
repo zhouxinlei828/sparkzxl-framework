@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.message;
 
+import com.github.sparkzxl.spi.SPI;
 import org.springframework.web.server.ServerWebExchange;
 
 /**
@@ -8,6 +9,7 @@ import org.springframework.web.server.ServerWebExchange;
  * @author zhouxinlei
  * @since 2022-08-15 13:50:36
  */
+@SPI
 public interface DubboMessageConverter {
 
     /**

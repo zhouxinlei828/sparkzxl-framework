@@ -2,8 +2,8 @@ package com.github.sparkzxl.mybatis.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.ReUtil;
-import com.github.sparkzxl.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.base.result.Response;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
+import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
@@ -38,101 +38,100 @@ public class DataBaseExceptionHandler implements Ordered {
     private final static int DATABASE_ERROR_CODE = 1364;
 
     @ExceptionHandler(SQLSyntaxErrorException.class)
-    public Response<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
+    public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
         log.error("SQL异常：", e);
-        return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
     }
 
     @ExceptionHandler(TooManyResultsException.class)
-    public Response<?> handleTooManyResultsException(TooManyResultsException e) {
-        log.error("查询异常：", e);
-        return Response.fail(
+    public ApiResult<?> handleTooManyResultsException(TooManyResultsException e) {
+        log.error("SQL异常：", e);
+        return ApiResult.fail(
                 ResultErrorCode.SQL_MANY_RESULT_EX.getErrorCode(), ResultErrorCode.SQL_MANY_RESULT_EX.getErrorMsg());
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
-    public Response<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
+    public ApiResult<?> handleBadSqlGrammarException(BadSqlGrammarException e) {
         log.error("SQL异常：", e);
         String message = e.getSQLException().getMessage();
         if (message.startsWith(DATABASE_PREFIX)) {
-            return Response.fail(
+            return ApiResult.fail(
                     ResultErrorCode.UNKNOWN_DATABASE.getErrorCode(), ResultErrorCode.UNKNOWN_DATABASE.getErrorMsg());
         }
         if (ReUtil.isMatch(TABLE_PREFIX, message)) {
-            return Response.fail(
+            return ApiResult.fail(
                     ResultErrorCode.UNKNOWN_TABLE.getErrorCode(), ResultErrorCode.UNKNOWN_TABLE.getErrorMsg());
         }
         if (message.startsWith(COLUMN_PREFIX)) {
-            return Response.fail(
+            return ApiResult.fail(
                     ResultErrorCode.UNKNOWN_COLUMN.getErrorCode(), ResultErrorCode.UNKNOWN_COLUMN.getErrorMsg());
         }
-        return Response.fail(ResultErrorCode.FAILURE.getErrorCode(), e.getMessage());
+        return ApiResult.fail(ResultErrorCode.FAILURE.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public Response<?> handleSqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+    public ApiResult<?> handleSqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
         log.error("SQL完整性约束违反异常：", e);
         String message = e.getMessage();
         if (message.startsWith("Duplicate entry") && message.endsWith("for key 'PRIMARY'")) {
-            return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), "主键冲突");
+            return ApiResult.fail(ResultErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorCode(), ResultErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorMsg());
         }
-        return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public Response<?> handlerDuplicateKeyException(DuplicateKeyException e) {
+    public ApiResult<?> handlerDuplicateKeyException(DuplicateKeyException e) {
         log.error("数据重复输入: ", e);
-        return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), "数据重复冲突异常");
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), "数据重复冲突异常");
     }
 
     @ExceptionHandler(PersistenceException.class)
-    public Response<?> handlePersistenceException(PersistenceException e) {
+    public ApiResult<?> handlePersistenceException(PersistenceException e) {
         Throwable rootCause = ExceptionUtil.getRootCause(e);
-        if (rootCause instanceof SQLIntegrityConstraintViolationException){
+        if (rootCause instanceof SQLIntegrityConstraintViolationException) {
             return handleSqlIntegrityConstraintViolationException((SQLIntegrityConstraintViolationException) rootCause);
         }
         log.error("数据库异常：", e);
         if (rootCause instanceof BizException) {
             BizException cause = (BizException) e.getCause();
-            return Response.fail(cause.getErrorCode(), cause.getMessage());
+            return ApiResult.fail(cause.getErrorCode(), cause.getMessage());
         }
         String message = e.getMessage();
         if (message.startsWith("Field '") && message.endsWith("' doesn't have a default value")) {
-            return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), "字段没有默认值");
+            return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), "字段没有默认值");
         }
-        return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
     }
 
     @ExceptionHandler(SQLException.class)
-    public Response<?> handleSqlException(SQLException e) {
+    public ApiResult<?> handleSqlException(SQLException e) {
         log.error("SQL异常：", e);
-        return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), e.getMessage());
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(TenantException.class)
-    public Response<?> handleTenantException(TenantException e) {
+    public ApiResult<?> handleTenantException(TenantException e) {
         log.error("租户异常：", e);
-        return Response.fail(e.getErrorCode(), e.getMessage());
+        return ApiResult.fail(e.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public Response<?> handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
+    public ApiResult<?> handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.error("数据库操作异常:", e);
         String message = e.getMessage();
         String prefix = "Data too long";
         if (message.contains(prefix)) {
-            return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), "输入数据字段过长");
+            return ApiResult.fail(ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorCode(), ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorMsg());
         }
         Throwable cause = e.getCause();
         if (cause instanceof SQLException) {
             SQLException sqlException = (SQLException) cause;
             int errorCode = sqlException.getErrorCode();
             if (errorCode == DATABASE_ERROR_CODE) {
-                return Response.fail(ResultErrorCode.SQL_EX.getErrorCode(), "数据操作异常,输入参数为空");
+                return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), "数据操作异常,输入参数为空");
             }
         }
-        return Response.fail(
-                ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
     }
 
     @Override

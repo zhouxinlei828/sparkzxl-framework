@@ -1,8 +1,9 @@
 package com.github.sparkzxl.data.sync.admin.handler;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.sparkzxl.core.json.JSON;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
@@ -80,11 +81,13 @@ public class NacosMetaMergeDataHandler implements MergeDataHandler<MetaData> {
     }
 
     private void updateMetaDataMap(final String configInfo) {
-        JSONObject jsonObject = JSONObject.parseObject(configInfo);
+        JSON json = JsonUtils.getJson();
+        Map<String, Object> objectMap = json.toMap(configInfo);
         Set<String> set = new HashSet<>(META_DATA.keySet());
-        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
             set.remove(entry.getKey());
-            META_DATA.put(entry.getKey(), JSONObject.parseObject(JSONObject.toJSONString(entry.getValue()), MetaData.class));
+            MetaData metaData = json.toJavaObject(entry.getValue(), MetaData.class);
+            META_DATA.put(entry.getKey(), metaData);
         }
         META_DATA.keySet().removeAll(set);
     }

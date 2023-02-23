@@ -1,14 +1,13 @@
 package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.github.sparkzxl.constant.BaseContextConstants;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.util.TimeUtil;
-import com.github.sparkzxl.entity.core.AuthUserInfo;
-import com.github.sparkzxl.entity.core.CaptchaInfo;
-import com.github.sparkzxl.entity.core.JwtUserInfo;
-import com.github.sparkzxl.entity.security.AuthRequest;
-import com.github.sparkzxl.entity.security.AuthUserDetail;
-import com.github.sparkzxl.entity.security.UserToken;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.jwt.entity.JwtUserInfo;
+import com.github.sparkzxl.security.entity.AuthRequest;
+import com.github.sparkzxl.security.entity.AuthUserDetail;
+import com.github.sparkzxl.security.entity.UserToken;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
 import com.github.sparkzxl.jwt.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -110,16 +109,6 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @return AuthUserInfo<T>
      */
     public abstract AuthUserInfo getAuthUserInfo(String username);
-
-    /**
-     * 生成验证码
-     *
-     * @param type 验证码类型
-     * @return CaptchaInfo
-     */
-    public CaptchaInfo createCaptcha(String type) {
-        return null;
-    }
 
     /**
      * 校验验证码

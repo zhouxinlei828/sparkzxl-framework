@@ -1,16 +1,14 @@
 package com.github.sparkzxl.mongodb.config;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.mongodb.aware.AuditAwareImpl;
+import com.github.sparkzxl.mongodb.dynamic.DynamicMongoProperties;
 import com.github.sparkzxl.mongodb.event.MongoInsertEventListener;
-import com.github.sparkzxl.mongodb.properties.DataProperties;
 import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -29,7 +27,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({MongoClient.class})
 @EnableTransactionManagement
-@EnableConfigurationProperties(DataProperties.class)
 @EnableMongoAuditing
 public class MongoAutoConfig {
 
@@ -44,15 +41,16 @@ public class MongoAutoConfig {
     }
 
     /**
-     * 目的，就是为了移除 _class field 。参考博客 https://blog.csdn.net/bigtree_3721/article/details/82787411
+     * 目的，就是为了移除 _class field
+     * 参考博客 <a href="https://blog.csdn.net/bigtree_3721/article/details/82787411"></a>
      *
      * @param mongoDatabaseFactory 数据工厂
      * @param context              上下文
      * @param beanFactory          bean工厂
-     * @return
+     * @return MappingMongoConverter
      */
     @Bean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DYNAMIC_MONGO_PREFIX, name = "enabled", havingValue = "false")
+    @ConditionalOnProperty(prefix = DynamicMongoProperties.DYNAMIC_MONGO_PREFIX, name = "enabled", havingValue = "false")
     public MappingMongoConverter mappingMongoConverter(MongoDatabaseFactory mongoDatabaseFactory,
                                                        MongoMappingContext context,
                                                        BeanFactory beanFactory) {
@@ -71,7 +69,7 @@ public class MongoAutoConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = ConfigurationConstant.DYNAMIC_MONGO_PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = DynamicMongoProperties.DYNAMIC_MONGO_PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
     public MongoTransactionManager mongoTransactionManager(@Autowired MongoDatabaseFactory mongoDbFactory) {
         return new MongoTransactionManager(mongoDbFactory);
     }

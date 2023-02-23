@@ -1,6 +1,5 @@
 package com.github.sparkzxl.gateway.plugin.logging;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-@ApiModel(value = "LogParam", description = "日志参数实体类")
 public class LogParam implements Serializable {
 
     private static final long serialVersionUID = -3240153643271750465L;

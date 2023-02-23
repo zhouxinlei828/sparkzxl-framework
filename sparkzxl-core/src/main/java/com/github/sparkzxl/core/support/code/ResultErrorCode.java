@@ -52,13 +52,15 @@ public enum ResultErrorCode implements IErrorCode {
     REQ_LIMIT("B0210", "系统限流，请稍后再试"),
     //系统相关 end
 
+    // 三方服务
+    EXTERNAL_SERVICE_EXCEPTION("C0001", "调用第三方服务出错"),
+    MIDDLEWARE_SERVICE_EXCEPTION("C0100", "中间件服务出错"),
+    RPC_SERVICE_EXCEPTION("C0110", "RPC服务出错"),
+    RPC_SERVICE_NOT_FOUND_EXCEPTION("C0111", "RPC服务未找到"),
+    RPC_SERVICE_NOT_REGISTERED_EXCEPTION("C0112", "RPC服务未注册"),
     // 接口不存在
     NOT_FOUND("C0113", "接口不存在"),
-    SQL_EX("C0300", "运行SQL出现异常"),
-    SQL_MANY_RESULT_EX("C0300", "数据库查询出多条结果异常"),
-    UNKNOWN_DATABASE("C0300", "数据库不存在，请联系管理员！"),
-    UNKNOWN_TABLE("C0311", "表不存在，请联系管理员！"),
-    UNKNOWN_COLUMN("C0312", "字段不存在，请联系管理员！"),
+
     CLUSTER_REDIRECT_EXCEPTION("C0230", "Redis集群异常"),
     CLUSTER_STATE_FAILURE_EXCEPTION("C0230", "Redis集群状态故障异常"),
     REDIS_CONNECTION_FAILURE_EXCEPTION("C0230", "Redis连接失败异常"),
@@ -67,6 +69,15 @@ public enum ResultErrorCode implements IErrorCode {
     CLUSTER_COMMAND_EXECUTION_FAILURE_EXCEPTION("C0230", "Redis集群命令执行失败异常"),
     REDIS_SUBSCRIBED_CONNECTION_EXCEPTION("C0230", "Redis订阅连接异常"),
     DECODE_EXCEPTION("C0211", "Feign调用，解码异常"),
+
+    SQL_EX("C0300", "运行SQL出现异常"),
+    SQL_MANY_RESULT_EX("C0300", "数据库查询出多条结果异常"),
+    UNKNOWN_DATABASE("C0300", "数据库不存在，请联系管理员！"),
+    UNKNOWN_TABLE("C0311", "表不存在，请联系管理员！"),
+    UNKNOWN_COLUMN("C0312", "字段不存在，请联系管理员！"),
+    COLUMN_DATA_TO_LONG_EXCEPTION("C0313", "输入数据字段过长"),
+    PRIMARY_KEY_CONFLICT_EXCEPTION("C0341", "主键冲突"),
+    TOKEN_EXPIRE_EXCEPTION("401", "认证失败，请重新登录"),
 
     ;
 

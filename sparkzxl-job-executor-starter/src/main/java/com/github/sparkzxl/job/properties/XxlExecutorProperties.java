@@ -1,8 +1,9 @@
 package com.github.sparkzxl.job.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import static com.github.sparkzxl.job.properties.XxlExecutorProperties.XXL_JOB_PREFIX;
 
 /**
  * description: xxl job属性配置类
@@ -10,8 +11,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.XXL_JOB_PREFIX)
+@ConfigurationProperties(prefix = XXL_JOB_PREFIX)
 public class XxlExecutorProperties {
+
+    public static final String XXL_JOB_PREFIX = "xxl-job";
 
     private String accessToken;
 

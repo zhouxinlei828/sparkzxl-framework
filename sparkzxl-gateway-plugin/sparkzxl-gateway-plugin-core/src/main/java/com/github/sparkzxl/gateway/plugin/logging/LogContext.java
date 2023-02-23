@@ -29,7 +29,7 @@ public class LogContext implements Serializable {
      */
     protected String requestBody;
     /**
-     * cache Response Body
+     * cache ApiResult Body
      */
     protected String responseBody;
 

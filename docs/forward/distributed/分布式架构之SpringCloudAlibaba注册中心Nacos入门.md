@@ -556,9 +556,9 @@ public class TestController {
             throw new IllegalStateException("获取不到实例");
         }
         String targetUrl = instance.getUri() + "/echoField?name=" + name;
-        String response = restTemplate.getForObject(targetUrl, String.class);
+        String apiResult = restTemplate.getForObject(targetUrl, String.class);
         // 返回结果
-        return "consumer:" + response;
+        return "consumer:" + apiResult;
     }
 }
 ```

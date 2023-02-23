@@ -12,7 +12,6 @@ import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.feishutalk.sign.FeiShuTalkAlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.sign.SignResult;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +35,7 @@ public class FeiShuTalkAlarmExecutor extends AbstractAlarmExecutor {
 
     @Override
     protected <T extends MsgType> AlarmResponse sendAlarm(String alarmId, AlarmProperties.AlarmConfig alarmConfig, T message) {
-        return Try.of(() -> {
+        try {
             StringBuilder webhook = new StringBuilder();
             webhook.append(alarmConfig.getRobotUrl()).append(alarmConfig.getTokenId());
             // 处理签名问题
@@ -62,10 +61,10 @@ public class FeiShuTalkAlarmExecutor extends AbstractAlarmExecutor {
                 log.debug("FeiShuTalk send message call [{}], param:{}, resp:{}", webhook, json, body);
             }
             return AlarmResponse.success(alarmId, body);
-        }).getOrElseThrow(throwable -> {
-            exceptionCallback(alarmId, message, new AlarmException(throwable));
-            return new AlarmException(throwable);
-        });
+        } catch (Exception e) {
+            exceptionCallback(alarmId, message, new AlarmException(e));
+            return AlarmResponse.failed(alarmId, e.getMessage());
+        }
     }
 
     @Override

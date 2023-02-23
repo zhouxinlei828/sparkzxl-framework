@@ -7,7 +7,6 @@ import com.github.sparkzxl.lock.LockKeyBuilder;
 import com.github.sparkzxl.lock.LockTemplate;
 import com.github.sparkzxl.lock.annotation.DistributedLock;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
-import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -82,11 +81,13 @@ public class LockInterceptor implements MethodInterceptor {
     }
 
     public LockFailureStrategy getLockFailureStrategy(Class<? extends LockFailureStrategy> failureStrategyClass) {
-        return Option.of(lockFailureStrategyMap.get(failureStrategyClass)).getOrElse(() -> {
+        LockFailureStrategy strategy = lockFailureStrategyMap.get(failureStrategyClass);
+        if (Objects.isNull(strategy)) {
             LockFailureStrategy lockFailureStrategy = ReflectUtil.newInstance(failureStrategyClass);
             lockFailureStrategyMap.putIfAbsent(failureStrategyClass, lockFailureStrategy);
             return lockFailureStrategy;
-        });
+        }
+        return strategy;
     }
 
 }

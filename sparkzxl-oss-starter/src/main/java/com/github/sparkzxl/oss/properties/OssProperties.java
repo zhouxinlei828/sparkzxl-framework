@@ -1,11 +1,12 @@
 package com.github.sparkzxl.oss.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import com.github.sparkzxl.oss.enums.RegisterMode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
+
+import static com.github.sparkzxl.oss.properties.OssProperties.OSS_PREFIX;
 
 /**
  * description: oss属性注入
@@ -13,8 +14,10 @@ import java.util.List;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.OSS_PREFIX)
+@ConfigurationProperties(prefix = OSS_PREFIX)
 public class OssProperties {
+
+    public static final String OSS_PREFIX = "oss";
 
     private boolean enabled = false;
 

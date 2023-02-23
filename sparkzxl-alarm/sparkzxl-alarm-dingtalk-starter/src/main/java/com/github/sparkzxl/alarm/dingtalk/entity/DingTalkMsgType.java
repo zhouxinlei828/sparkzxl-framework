@@ -18,7 +18,7 @@ package com.github.sparkzxl.alarm.dingtalk.entity;
 /**
  * DingTalk支持的消息类型
  *
- * @author Jaemon
+ * @author zhouxinlei
  * @since 1.0
  */
 public enum DingTalkMsgType {

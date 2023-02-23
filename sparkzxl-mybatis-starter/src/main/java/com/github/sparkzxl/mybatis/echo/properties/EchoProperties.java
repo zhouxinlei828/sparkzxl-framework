@@ -1,8 +1,11 @@
 package com.github.sparkzxl.mybatis.echo.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
+
+import static com.github.sparkzxl.mybatis.echo.properties.EchoProperties.DATA_ECHO_PREFIX;
 
 /**
  * description: 回显配置类
@@ -10,13 +13,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.DATA_ECHO_PREFIX)
+@ConfigurationProperties(prefix = DATA_ECHO_PREFIX)
 public class EchoProperties {
+
+    public static final String DATA_ECHO_PREFIX = "mybatis-plus.echo";
 
     /**
      * 是否启用远程查询
      */
     private Boolean enabled = true;
+    /** 启动时扫描的包 */
+    private List<String> basePackages;
     /**
      * 是否启用aop注解方式
      */

@@ -24,7 +24,7 @@ public class LoggingProperties {
      */
     private boolean readRequestData;
     /**
-     * Enable Or Disable Read Response Data
+     * Enable Or Disable Read ApiResult Data
      */
     private boolean readResponseData;
 

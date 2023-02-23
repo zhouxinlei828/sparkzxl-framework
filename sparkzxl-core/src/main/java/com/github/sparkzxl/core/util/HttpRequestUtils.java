@@ -1,8 +1,8 @@
 package com.github.sparkzxl.core.util;
 
-import com.github.sparkzxl.constant.BaseContextConstants;
-import com.github.sparkzxl.core.base.result.Response;
-import com.github.sparkzxl.core.jackson.JsonUtil;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -118,21 +118,10 @@ public class HttpRequestUtils {
     }
 
     /**
-     * 路径是否匹配
-     *
-     * @param pattern pattern
-     * @param path    路径
-     * @return boolean
-     */
-    public static boolean isMatchPath(String pattern, String path) {
-        return ANT_PATH_MATCHER.match(pattern, path);
-    }
-
-    /**
-     * 移除多余的 /
+     * 移除多余的/
      *
      * @param path 路径
-     * @return
+     * @return String
      */
     public static String sanitizedPath(final String path) {
         String sanitized = path;
@@ -149,7 +138,7 @@ public class HttpRequestUtils {
 
 
     /**
-     * URL 解码
+     * URL解码
      *
      * @param str 字符串
      * @return String
@@ -209,16 +198,16 @@ public class HttpRequestUtils {
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            Response<?> result;
+            ApiResult<?> result;
             if (success) {
-                result = Response.success(message, data);
+                result = ApiResult.success(message, data);
             } else {
-                result = Response.fail(errorCode, errorMsg);
+                result = ApiResult.fail(errorCode, errorMsg);
             }
-            response.getWriter().println(JsonUtil.toJson(result));
+            response.getWriter().println(JsonUtils.getJson().toJson(result));
             response.getWriter().flush();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("IO异常：",e);
         }
     }
 }

@@ -1,0 +1,4 @@
+date=com.github.sparkzxl.core.json.impl.fastjson.serializer.DateJsonSerializer
+localDateTime=com.github.sparkzxl.core.json.impl.fastjson.serializer.LocalDateTimeJsonSerializer
+localDate=com.github.sparkzxl.core.json.impl.fastjson.serializer.LocalDateJsonSerializer
+localTime=com.github.sparkzxl.core.json.impl.fastjson.serializer.LocalTimeJsonSerializer

@@ -1,11 +1,13 @@
 package com.github.sparkzxl.jwt.properties;
 
-import com.github.sparkzxl.constant.ConfigurationConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
+
+import static com.github.sparkzxl.jwt.properties.JwtProperties.JWT_PREFIX;
 
 /**
  * description: JWT属性类
@@ -13,10 +15,12 @@ import java.util.concurrent.TimeUnit;
  * @author zhouxinlei
  */
 @Data
-@ConfigurationProperties(prefix = ConfigurationConstant.JWT_PREFIX)
+@ConfigurationProperties(prefix = JWT_PREFIX)
 public class JwtProperties implements Serializable {
 
     private static final long serialVersionUID = 8890136349889379042L;
+
+    public static final String JWT_PREFIX = "spring.jwt";
 
     /**
      * 过期时间 2h
@@ -31,6 +35,7 @@ public class JwtProperties implements Serializable {
 
     private String secret = "123456";
 
+    @NestedConfigurationProperty
     private KeyStoreProperties keyStore = new KeyStoreProperties();
 
 }
