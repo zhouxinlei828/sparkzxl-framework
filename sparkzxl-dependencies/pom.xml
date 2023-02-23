@@ -66,7 +66,7 @@
         <fastjson.version>1.2.83</fastjson.version>
         <easy-excel.version>3.1.4</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.3.10</retrofit-spring-boot-starter.version>
-        <xxl-job.version>2.3.0</xxl-job.version>
+        <xxl-job.version>2.3.1</xxl-job.version>
         <javax.el.version>3.0-b01</javax.el.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.2</seata.version>
