@@ -20,11 +20,11 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-version-->
-        <spring-boot-dependencies.version>2.7.0</spring-boot-dependencies.version>
-        <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
+        <spring-boot-dependencies.version>2.7.9</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>2021.0.6</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
-        <resilience4j-spring-boot2.version>1.7.0</resilience4j-spring-boot2.version>
-        <nacos.version>2.1.0</nacos.version>
+        <resilience4j.version>1.7.0</resilience4j.version>
+        <nacos.version>2.2.0</nacos.version>
 
         <servlet-api.version>4.0.1</servlet-api.version>
         <knife4j.version>2.0.8</knife4j.version>
@@ -36,6 +36,7 @@
         <!-- datasource-->
         <mybatis.version>3.5.7</mybatis.version>
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <mysql.version>8.0.32</mysql.version>
         <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
         <druid.version>1.2.8</druid.version>
         <p6spy.version>3.9.1</p6spy.version>
@@ -155,7 +156,12 @@
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-spring-boot2</artifactId>
-                <version>${resilience4j-spring-boot2.version}</version>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-cloud2</artifactId>
+                <version>${resilience4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.nacos</groupId>
@@ -200,6 +206,12 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <scope>runtime</scope>
+                <version>${mysql.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>

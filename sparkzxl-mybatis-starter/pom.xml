@@ -32,6 +32,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+            <version>8.0.32</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
