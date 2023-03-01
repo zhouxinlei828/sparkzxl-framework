@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.io.InputStream;
 import java.util.function.Consumer;
 
@@ -94,6 +95,15 @@ public interface OssExecutor {
      * @param filePath   文件路径
      */
     void putObject(String bucketName, String objectName, String filePath);
+
+    /**
+     * 上传文件
+     *
+     * @param bucketName bucket名称
+     * @param objectName 文件名称
+     * @param url        文件地址
+     */
+    void putObject(String bucketName, String objectName, URL url);
 
     /**
      * 分段上传
