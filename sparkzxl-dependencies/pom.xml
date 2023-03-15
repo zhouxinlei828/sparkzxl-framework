@@ -35,7 +35,7 @@
 
         <!-- datasource-->
         <mybatis.version>3.5.7</mybatis.version>
-        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3</mybatis-plus.version>
         <mysql.version>8.0.32</mysql.version>
         <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
         <druid.version>1.2.8</druid.version>

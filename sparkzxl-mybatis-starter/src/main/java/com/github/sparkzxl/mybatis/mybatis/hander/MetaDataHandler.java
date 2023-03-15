@@ -151,9 +151,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param field        字段属性
      */
     private void extractUserId(MetaObject metaObject, Object targetObject, String field) {
-        boolean userIdExistClass = ReflectionUtil.existProperty(targetObject, field);
-        if (userIdExistClass) {
-            Object userIdVal = ReflectionUtil.getValueByKey(targetObject, field);
+        boolean hasGetter = metaObject.hasGetter(field);
+        if (hasGetter) {
+            Object userIdVal = this.getFieldValByName(field,metaObject);
             if (ObjectUtils.isEmpty(userIdVal) || userIdVal.equals(0)) {
                 Class<?> userIdClass = metaObject.getGetterType(field);
                 userIdVal = RequestLocalContextHolder.getUserId(userIdClass);
@@ -170,9 +170,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param field        字段属性
      */
     private void extractUserName(MetaObject metaObject, Object targetObject, String field) {
-        boolean userNameExistClass = ReflectionUtil.existProperty(targetObject, field);
-        if (userNameExistClass) {
-            Object userNameVal = ReflectionUtil.getValueByKey(targetObject, field);
+        boolean hasGetter = metaObject.hasGetter(field);
+        if (hasGetter) {
+            Object userNameVal = this.getFieldValByName(field,metaObject);
             if (ObjectUtils.isEmpty(userNameVal)) {
                 userNameVal = RequestLocalContextHolder.getName();
                 this.setFieldValByName(field, userNameVal, metaObject);
@@ -188,9 +188,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param field        字段属性
      */
     private void extractDate(MetaObject metaObject, Object targetObject, String field) {
-        boolean dateExistClass = ReflectionUtil.existProperty(targetObject, field);
-        if (dateExistClass) {
-            Object dateVal = ReflectionUtil.getValueByKey(targetObject, field);
+        boolean hasGetter = metaObject.hasGetter(field);
+        if (hasGetter) {
+            Object dateVal = this.getFieldValByName(field,metaObject);
             if (ObjectUtils.isEmpty(dateVal)) {
                 Class<?> dateClass = metaObject.getGetterType(field);
                 dateVal = Date.class.equals(dateClass) ? new Date() : LocalDateTime.now();
