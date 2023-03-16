@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.github.sparkzxl.mybatis.constant.EntityConstant;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
-import com.github.sparkzxl.core.util.ReflectionUtil;
 import com.github.sparkzxl.core.util.StrPool;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,16 +48,15 @@ public class MetaDataHandler implements MetaObjectHandler {
      */
     public void insertCommonColumn(MetaObject metaObject) {
         log.debug("start update fill ....");
-        Object targetObject = metaObject.getOriginalObject();
         // 主键
-        extractId(metaObject, targetObject);
+        extractId(metaObject);
         // 创建人Id
-        extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER);
-        extractUserId(metaObject, targetObject, EntityConstant.CREATE_USER_ID);
+        extractUserId(metaObject, EntityConstant.CREATE_USER);
+        extractUserId(metaObject, EntityConstant.CREATE_USER_ID);
         // 创建人姓名
-        extractUserName(metaObject, targetObject, EntityConstant.CREATE_USER_NAME);
+        extractUserName(metaObject, EntityConstant.CREATE_USER_NAME);
         // 创建时间
-        extractDate(metaObject, targetObject, EntityConstant.CREATE_TIME);
+        extractDate(metaObject, EntityConstant.CREATE_TIME);
 
     }
 
@@ -81,11 +79,10 @@ public class MetaDataHandler implements MetaObjectHandler {
      * @param metaObject 元对象
      */
     public void updateCommonColumn(MetaObject metaObject) {
-        Object targetObject = metaObject.getOriginalObject();
         //更新人id
-        extractUserId(metaObject, targetObject, EntityConstant.UPDATE_USER);
+        extractUserId(metaObject, EntityConstant.UPDATE_USER);
         //更新时间
-        extractDate(metaObject, targetObject, EntityConstant.UPDATE_TIME);
+        extractDate(metaObject, EntityConstant.UPDATE_TIME);
 
     }
 
@@ -93,27 +90,21 @@ public class MetaDataHandler implements MetaObjectHandler {
      * id生成注入对象
      *
      * @param metaObject   元对象
-     * @param targetObject 目标对象
      */
-    private void extractId(MetaObject metaObject, Object targetObject) {
-        boolean idExistClass = ReflectionUtil.existProperty(targetObject, EntityConstant.ID);
-        if (idExistClass) {
-            if (uidGenerator == null) {
-                // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
-                uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
-            }
-            Long id = uidGenerator.getUid();
-            Object idVal = ReflectionUtil.getValueByKey(targetObject, EntityConstant.ID);
+    private void extractId(MetaObject metaObject) {
+        boolean hasGetter = metaObject.hasGetter(EntityConstant.ID);
+        if (uidGenerator == null) {
+            // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
+            uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
+        }
+        Long id = uidGenerator.getUid();// 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
+        if (hasGetter) {
+            Object idVal = this.getFieldValByName(EntityConstant.ID,metaObject);
             if (ObjectUtils.isEmpty(idVal)) {
                 idVal = String.class.getName().equals(metaObject.getGetterType(EntityConstant.ID).getTypeName()) ? String.valueOf(id) : id;
                 this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
             }
         } else {
-            if (uidGenerator == null) {
-                // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
-                uidGenerator = SpringContextUtils.getBean(UidGenerator.class);
-            }
-            Long id = uidGenerator.getUid();
             TableInfo tableInfo = TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
             if (tableInfo == null) {
                 return;
@@ -147,10 +138,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * 全局用户id注入对象
      *
      * @param metaObject   元对象
-     * @param targetObject 目标对象
      * @param field        字段属性
      */
-    private void extractUserId(MetaObject metaObject, Object targetObject, String field) {
+    private void extractUserId(MetaObject metaObject, String field) {
         boolean hasGetter = metaObject.hasGetter(field);
         if (hasGetter) {
             Object userIdVal = this.getFieldValByName(field,metaObject);
@@ -166,10 +156,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * 当前登录用户姓名自动注入
      *
      * @param metaObject   元对象
-     * @param targetObject 目标对象
      * @param field        字段属性
      */
-    private void extractUserName(MetaObject metaObject, Object targetObject, String field) {
+    private void extractUserName(MetaObject metaObject, String field) {
         boolean hasGetter = metaObject.hasGetter(field);
         if (hasGetter) {
             Object userNameVal = this.getFieldValByName(field,metaObject);
@@ -184,10 +173,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      * 时间扩展自动注入
      *
      * @param metaObject   元对象
-     * @param targetObject 目标对象
      * @param field        字段属性
      */
-    private void extractDate(MetaObject metaObject, Object targetObject, String field) {
+    private void extractDate(MetaObject metaObject, String field) {
         boolean hasGetter = metaObject.hasGetter(field);
         if (hasGetter) {
             Object dateVal = this.getFieldValByName(field,metaObject);
