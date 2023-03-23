@@ -1,6 +1,6 @@
 package com.github.sparkzxl.patterns.strategy;
 
-/***
+/**
  * description: 业务处理策略类
  *
  * @author zhouxinlei

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.patterns.factory;
 
-import com.github.sparkzxl.patterns.annonation.BusinessStrategy;
+import com.github.sparkzxl.patterns.strategy.BusinessStrategy;
 import com.github.sparkzxl.patterns.strategy.BusinessHandler;
 import com.github.sparkzxl.patterns.strategy.BusinessStrategyImpl;
 import com.google.common.collect.Maps;

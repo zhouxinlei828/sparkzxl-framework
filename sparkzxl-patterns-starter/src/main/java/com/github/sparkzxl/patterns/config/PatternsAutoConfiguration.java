@@ -1,11 +1,9 @@
 package com.github.sparkzxl.patterns.config;
 
-import com.github.sparkzxl.patterns.factory.BusinessStrategyFactory;
-import com.github.sparkzxl.patterns.factory.DefaultBusinessStrategyFactory;
-import com.github.sparkzxl.patterns.factory.DefaultHandlerInterceptorFactory;
-import com.github.sparkzxl.patterns.factory.HandlerInterceptorFactory;
-import com.github.sparkzxl.patterns.pipeline.HandlerInterceptor;
+import com.github.sparkzxl.patterns.pipeline.ChannelPipeline;
+import com.github.sparkzxl.patterns.pipeline.SupperPipeline;
 import com.github.sparkzxl.patterns.strategy.BusinessHandler;
+import com.github.sparkzxl.patterns.strategy.BusinessStrategyContext;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,20 +20,23 @@ import java.util.List;
 public class PatternsAutoConfiguration {
 
     @Bean
-    public BusinessStrategyFactory businessStrategyFactory(@Autowired(required = false) List<BusinessHandler> businessHandlers) {
-        DefaultBusinessStrategyFactory businessStrategyFactory = new DefaultBusinessStrategyFactory();
+    public BusinessStrategyContext businessStrategyContext(@Autowired(required = false) List<BusinessHandler> businessHandlers) {
+        BusinessStrategyContext businessStrategyContext = new BusinessStrategyContext();
         if (CollectionUtils.isNotEmpty(businessHandlers)) {
-            businessHandlers.forEach(businessStrategyFactory::addStrategy);
+            businessHandlers.forEach(businessStrategyContext::add);
         }
-        return businessStrategyFactory;
+        return businessStrategyContext;
     }
 
     @Bean
-    public HandlerInterceptorFactory handlerChainFactory(@Autowired(required = false) List<HandlerInterceptor> handlerInterceptorList) {
-        DefaultHandlerInterceptorFactory handlerChainFactory = new DefaultHandlerInterceptorFactory();
-        if (CollectionUtils.isNotEmpty(handlerInterceptorList)) {
-            handlerInterceptorList.forEach(handlerChainFactory::addInterceptor);
+    public ChannelPipeline channelPipeline(@Autowired(required = false) List<SupperPipeline> supperPipelineList) {
+        ChannelPipeline channelPipeline = new ChannelPipeline();
+        if (CollectionUtils.isNotEmpty(supperPipelineList)) {
+            for (SupperPipeline supperPipeline : supperPipelineList) {
+                channelPipeline.addLast(supperPipeline);
+            }
         }
-        return handlerChainFactory;
+        return channelPipeline;
     }
+
 }
