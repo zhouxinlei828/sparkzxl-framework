@@ -12,7 +12,7 @@ import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import java.util.Set;
 
 /**
- * description: 钉钉富文本消息
+ * description: 钉钉Markdown消息
  *
  * @author zhouxinlei
  * @since 2022-07-05 16:32:43
