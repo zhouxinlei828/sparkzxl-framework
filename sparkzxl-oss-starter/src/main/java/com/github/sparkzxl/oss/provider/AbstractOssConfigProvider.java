@@ -2,9 +2,8 @@ package com.github.sparkzxl.oss.provider;
 
 
 import com.github.sparkzxl.oss.properties.Configuration;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 抽象oss配置提供者

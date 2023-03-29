@@ -4,12 +4,11 @@ import com.github.sparkzxl.patterns.pipeline.ChannelPipeline;
 import com.github.sparkzxl.patterns.pipeline.SupperPipeline;
 import com.github.sparkzxl.patterns.strategy.BusinessHandler;
 import com.github.sparkzxl.patterns.strategy.BusinessStrategyContext;
+import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 /**
  * description: 设计模式自动注入配置

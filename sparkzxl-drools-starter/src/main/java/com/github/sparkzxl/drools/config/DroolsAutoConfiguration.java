@@ -4,11 +4,16 @@ import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
 import com.github.sparkzxl.drools.service.impl.DroolsRuleServiceImpl;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
-import org.kie.api.builder.*;
+import org.kie.api.builder.KieBuilder;
+import org.kie.api.builder.KieFileSystem;
+import org.kie.api.builder.KieRepository;
+import org.kie.api.builder.Message;
+import org.kie.api.builder.Results;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieContainerSessionsPool;
 import org.kie.api.runtime.KieSession;
@@ -21,8 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-
-import java.io.IOException;
 
 /**
  * description:
@@ -48,7 +51,8 @@ public class DroolsAutoConfiguration {
             Resource[] resources = resourcePatternResolver.getResources("classpath*:" + droolsProperties().getRulesPath() + "**/*.*");
             if (ArrayUtils.isNotEmpty(resources)) {
                 for (Resource file : resources) {
-                    kieFileSystem.write(ResourceFactory.newClassPathResource(droolsProperties().getRulesPath() + file.getFilename(), "UTF-8"));
+                    kieFileSystem.write(
+                            ResourceFactory.newClassPathResource(droolsProperties().getRulesPath() + file.getFilename(), "UTF-8"));
                 }
             }
         } catch (IOException e) {

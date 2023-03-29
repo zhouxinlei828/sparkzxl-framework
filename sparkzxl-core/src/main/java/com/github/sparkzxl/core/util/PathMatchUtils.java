@@ -1,17 +1,16 @@
 package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.util.URLUtil;
+import java.net.URL;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.PathContainer;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
-
-import java.net.URL;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * description: Path match utils.

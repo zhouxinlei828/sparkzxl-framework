@@ -2,11 +2,14 @@ package com.github.sparkzxl.mybatis.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.ReUtil;
-import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLSyntaxErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -17,10 +20,6 @@ import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.SQLSyntaxErrorException;
 
 /**
  * description: 数据库全局异常处理
@@ -74,7 +73,8 @@ public class DataBaseExceptionHandler implements Ordered {
         log.error("SQL完整性约束违反异常：", e);
         String message = e.getMessage();
         if (message.startsWith("Duplicate entry") && message.endsWith("for key 'PRIMARY'")) {
-            return ApiResult.fail(ResultErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorCode(), ResultErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorMsg());
+            return ApiResult.fail(ResultErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorCode(),
+                    ResultErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorMsg());
         }
         return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
     }
@@ -121,7 +121,8 @@ public class DataBaseExceptionHandler implements Ordered {
         String message = e.getMessage();
         String prefix = "Data too long";
         if (message.contains(prefix)) {
-            return ApiResult.fail(ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorCode(), ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorMsg());
+            return ApiResult.fail(ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorCode(),
+                    ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorMsg());
         }
         Throwable cause = e.getCause();
         if (cause instanceof SQLException) {

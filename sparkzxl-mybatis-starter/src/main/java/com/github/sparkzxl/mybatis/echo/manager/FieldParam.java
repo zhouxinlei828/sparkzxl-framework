@@ -1,12 +1,11 @@
 package com.github.sparkzxl.mybatis.echo.manager;
 
 import com.github.sparkzxl.database.echo.annotation.EchoField;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * description: 封装字段上标记了 EchoField 注解的字段
@@ -19,6 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 public class FieldParam {
+
     /**
      * 当前字段上的注解
      */

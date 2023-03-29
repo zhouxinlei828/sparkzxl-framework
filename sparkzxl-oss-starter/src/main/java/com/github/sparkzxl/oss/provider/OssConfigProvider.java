@@ -1,7 +1,6 @@
 package com.github.sparkzxl.oss.provider;
 
 import com.github.sparkzxl.oss.properties.Configuration;
-
 import java.util.List;
 
 /**

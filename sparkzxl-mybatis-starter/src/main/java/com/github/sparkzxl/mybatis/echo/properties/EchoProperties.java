@@ -1,11 +1,10 @@
 package com.github.sparkzxl.mybatis.echo.properties;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import static com.github.sparkzxl.mybatis.echo.properties.EchoProperties.DATA_ECHO_PREFIX;
 
 import java.util.List;
-
-import static com.github.sparkzxl.mybatis.echo.properties.EchoProperties.DATA_ECHO_PREFIX;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: 回显配置类
@@ -22,7 +21,9 @@ public class EchoProperties {
      * 是否启用远程查询
      */
     private Boolean enabled = true;
-    /** 启动时扫描的包 */
+    /**
+     * 启动时扫描的包
+     */
     private List<String> basePackages;
     /**
      * 是否启用aop注解方式
@@ -51,6 +52,7 @@ public class EchoProperties {
 
     @Data
     public static class GuavaCache {
+
         /**
          * 是否启用本地缓存
          * <p>

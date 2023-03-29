@@ -1,7 +1,6 @@
 package com.github.sparkzxl.core.json;
 
 import cn.hutool.core.lang.TypeReference;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;

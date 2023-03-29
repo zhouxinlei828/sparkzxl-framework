@@ -1,12 +1,11 @@
 package com.github.sparkzxl.mybatis.util;
 
 import com.github.sparkzxl.mybatis.entity.TreeEntity;
-import org.springframework.util.CollectionUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.util.CollectionUtils;
 
 /**
  * description：list列表 转换成tree列表

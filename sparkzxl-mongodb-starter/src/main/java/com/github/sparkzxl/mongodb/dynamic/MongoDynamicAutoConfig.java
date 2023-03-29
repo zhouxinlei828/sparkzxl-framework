@@ -1,5 +1,6 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -9,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import java.util.Map;
 
 /**
  * description: MongoDB多数据源管理-> 用于动态切库
@@ -40,7 +39,8 @@ public class MongoDynamicAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public MongoDatabaseFactoryContext mongoDatabaseFactoryContext(DynamicMongoDatabaseFactoryProvider dynamicMongoDatabaseFactoryProvider) {
+    public MongoDatabaseFactoryContext mongoDatabaseFactoryContext(
+            DynamicMongoDatabaseFactoryProvider dynamicMongoDatabaseFactoryProvider) {
         String primary = dynamicMongoProperties.getPrimary();
         MongoDatabaseFactoryContext mongoDatabaseFactoryContext = new MongoDatabaseFactoryContext(dynamicMongoDatabaseFactoryProvider);
         mongoDatabaseFactoryContext.setPrimary(primary);
@@ -56,7 +56,8 @@ public class MongoDynamicAutoConfig {
 
     @Bean
     public PlatformTransactionManager mongoTransactionManager(MongoDatabaseFactoryContext mongoDatabaseFactoryContext) {
-        return new DynamicMongoTransactionManager(mongoDatabaseFactoryContext.determinePrimaryMongoDatabaseFactory(), mongoDatabaseFactoryContext);
+        return new DynamicMongoTransactionManager(mongoDatabaseFactoryContext.determinePrimaryMongoDatabaseFactory(),
+                mongoDatabaseFactoryContext);
     }
 
 }

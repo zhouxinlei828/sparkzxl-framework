@@ -2,17 +2,16 @@ package com.github.sparkzxl.user.manager;
 
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import java.time.Duration;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
 
 /**
  * description: 用户状态管理实现

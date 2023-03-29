@@ -11,6 +11,7 @@ import org.springframework.lang.NonNull;
  * @author zhouxinlei
  */
 public class CustomMdcAdapterInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
     @Override
     public void initialize(@NonNull ConfigurableApplicationContext applicationContext) {
         //加载TtlMDCAdapter实例

@@ -1,9 +1,8 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.config;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Map;
+import lombok.Data;
 
 /**
  * description: dubbo 注册配置

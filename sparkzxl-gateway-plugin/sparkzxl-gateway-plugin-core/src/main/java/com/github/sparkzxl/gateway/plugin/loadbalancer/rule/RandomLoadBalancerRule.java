@@ -1,13 +1,12 @@
 package com.github.sparkzxl.gateway.plugin.loadbalancer.rule;
 
 import com.github.sparkzxl.gateway.common.constant.enums.RuleEnum;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * description: 随机负载均衡规则

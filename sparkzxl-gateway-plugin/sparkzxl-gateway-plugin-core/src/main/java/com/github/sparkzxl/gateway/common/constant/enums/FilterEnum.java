@@ -1,8 +1,8 @@
 package com.github.sparkzxl.gateway.common.constant.enums;
 
-import java.util.Arrays;
-
 import static org.springframework.cloud.gateway.filter.NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER;
+
+import java.util.Arrays;
 
 /**
  * description: FilterEnum

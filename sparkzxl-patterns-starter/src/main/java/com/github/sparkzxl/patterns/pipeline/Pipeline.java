@@ -1,8 +1,11 @@
 package com.github.sparkzxl.patterns.pipeline;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.springframework.stereotype.Service;
-
-import java.lang.annotation.*;
 
 /**
  * description: 责任链模式注解
@@ -15,5 +18,6 @@ import java.lang.annotation.*;
 @Documented
 @Service
 public @interface Pipeline {
+
     String value() default "";
 }

@@ -1,5 +1,10 @@
 package com.github.sparkzxl.swagger.config;
 
+import static com.github.sparkzxl.swagger.config.Swagger2Configuration.TRUE;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -12,15 +17,8 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.github.sparkzxl.swagger.config.Swagger2Configuration.TRUE;
-
 /**
- * description: 1，配置文件中： ${SwaggerProperties.PREFIX}.enable=true
- * 2，配置文件中不存在： ${SwaggerProperties.PREFIX}.enable 值
+ * description: 1，配置文件中： ${SwaggerProperties.PREFIX}.enable=true 2，配置文件中不存在： ${SwaggerProperties.PREFIX}.enable 值
  *
  * @author zhouxinlei
  */

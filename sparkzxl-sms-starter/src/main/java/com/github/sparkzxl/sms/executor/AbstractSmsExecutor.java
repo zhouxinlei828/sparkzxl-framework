@@ -21,7 +21,7 @@ public abstract class AbstractSmsExecutor<C> implements SmsExecutor, Initializin
     private C client;
 
     public AbstractSmsExecutor(SmsProperties smsProperties,
-                               ApplicationEventPublisher eventPublisher) {
+            ApplicationEventPublisher eventPublisher) {
         this.smsProperties = smsProperties;
         this.eventPublisher = eventPublisher;
     }

@@ -26,6 +26,7 @@ import java.util.Enumeration;
  * @author zhouxinlei
  */
 public final class NetUtils {
+
     /**
      * Pre-loaded local address
      */

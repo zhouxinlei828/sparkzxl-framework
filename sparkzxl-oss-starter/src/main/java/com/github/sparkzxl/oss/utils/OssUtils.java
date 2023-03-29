@@ -2,10 +2,9 @@ package com.github.sparkzxl.oss.utils;
 
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.URL;
 import java.nio.charset.Charset;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: oss工具类

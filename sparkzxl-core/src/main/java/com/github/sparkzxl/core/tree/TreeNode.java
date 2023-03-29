@@ -1,7 +1,6 @@
 package com.github.sparkzxl.core.tree;
 
 import com.google.common.collect.Lists;
-
 import java.io.Serializable;
 import java.util.List;
 

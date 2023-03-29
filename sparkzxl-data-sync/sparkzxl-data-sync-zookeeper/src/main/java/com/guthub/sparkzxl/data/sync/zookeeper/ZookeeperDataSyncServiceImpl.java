@@ -5,16 +5,15 @@ import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.api.DataSyncService;
 import com.google.common.collect.Maps;
 import com.guthub.sparkzxl.data.sync.zookeeper.config.ZkWatchProperties;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.CuratorCache;
 import org.apache.curator.framework.recipes.cache.CuratorCacheListener;
 import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * description: this cache data with zookeeper.
@@ -33,8 +32,8 @@ public class ZookeeperDataSyncServiceImpl implements DataSyncService {
     private final Map<String, TreeCacheListener> treeCacheListenerConcurrentMap = Maps.newConcurrentMap();
 
     public ZookeeperDataSyncServiceImpl(CuratorFramework curatorFramework,
-                                        List<DataSubscriber> dataSubscribers,
-                                        List<ZkWatchProperties> watchConfigs) {
+            List<DataSubscriber> dataSubscribers,
+            List<ZkWatchProperties> watchConfigs) {
         this.curatorFramework = curatorFramework;
         dataSubscriberMap.putAll(dataSubscribers.stream().collect(Collectors.groupingBy(DataSubscriber::group)));
         this.watchConfigs = watchConfigs;

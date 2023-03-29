@@ -74,7 +74,7 @@ public class OssAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(OssExecutorFactoryContext.class)
     public OssExecutorFactoryContext ossExecutorFactoryContext(OssClientManager ossClientManager,
-                                                               OssConfigProvider configProvider) {
+            OssConfigProvider configProvider) {
         return new OssExecutorFactoryContext(ossClientManager, configProvider);
     }
 

@@ -12,19 +12,18 @@ import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.logging.service.IOptLogService;
 import com.github.sparkzxl.gateway.properties.LoggingProperties;
 import com.google.common.collect.Maps;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.server.ServerWebExchange;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.server.ServerWebExchange;
 
 /**
  * description:
@@ -48,8 +47,10 @@ public class OptLogServiceImpl implements IOptLogService {
         LocalDateTime startTime = gatewayContext.getStartTime();
         ServerHttpRequest request = exchange.getRequest();
         String username =
-                HttpRequestUtils.urlDecode(ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.JWT_KEY_NAME, exchange));
-        String tenantId = HttpRequestUtils.urlDecode(ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.TENANT_ID, exchange));
+                HttpRequestUtils.urlDecode(
+                        ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.JWT_KEY_NAME, exchange));
+        String tenantId = HttpRequestUtils.urlDecode(
+                ParameterDataFactory.builderData(ParameterDataConstant.HEADER, BaseContextConstants.TENANT_ID, exchange));
         logParam.setIp(gatewayContext.getIp())
                 .setHost(gatewayContext.getHost())
                 .setPath(gatewayContext.getPath())

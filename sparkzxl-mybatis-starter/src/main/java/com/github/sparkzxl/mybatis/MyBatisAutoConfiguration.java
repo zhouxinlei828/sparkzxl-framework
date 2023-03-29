@@ -11,20 +11,32 @@ import com.baidu.fsg.uid.impl.HuToolUidGenerator;
 import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.*;
+import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.github.sparkzxl.core.constant.enums.MultiTenantType;
 import com.github.sparkzxl.mybatis.annotation.DataScope;
 import com.github.sparkzxl.mybatis.aop.DataScopeAnnotationAdvisor;
 import com.github.sparkzxl.mybatis.aop.DataScopeInterceptor;
 import com.github.sparkzxl.mybatis.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.mybatis.mybatis.injector.BaseSqlInjector;
-import com.github.sparkzxl.mybatis.plugins.*;
+import com.github.sparkzxl.mybatis.plugins.DataScopeInnerInterceptor;
+import com.github.sparkzxl.mybatis.plugins.DataScopeLineHandler;
+import com.github.sparkzxl.mybatis.plugins.DefaultDataScopeLineHandler;
+import com.github.sparkzxl.mybatis.plugins.DynamicSchemaInterceptor;
+import com.github.sparkzxl.mybatis.plugins.GlobalLineHandlerInterceptor;
+import com.github.sparkzxl.mybatis.plugins.SlowSqlMonitorInterceptor;
 import com.github.sparkzxl.mybatis.properties.DataProperties;
 import com.github.sparkzxl.mybatis.send.DefaultSendNoticeService;
 import com.github.sparkzxl.mybatis.send.SendNoticeService;
 import com.github.sparkzxl.mybatis.support.DataBaseExceptionHandler;
 import com.google.common.collect.Lists;
 import com.p6spy.engine.spy.P6DataSource;
+import java.util.Arrays;
+import java.util.List;
+import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -32,13 +44,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-
-import javax.sql.DataSource;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * description: mybatis全局配置
@@ -73,9 +85,10 @@ public class MyBatisAutoConfiguration {
             if (dataProperties.isEnableTenant()) {
                 List<String> ignoreTableList = ArrayUtils.isEmpty(dataProperties.getIgnoreTable()) ? Lists.newArrayList() :
                         Arrays.asList(dataProperties.getIgnoreTable());
-                dataProperties.getGlobalColumn().forEach(tenant -> interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new GlobalLineHandlerInterceptor(tenant.getColumn(),
-                        tenant.getLoadKey(),
-                        ignoreTableList))));
+                dataProperties.getGlobalColumn().forEach(tenant -> interceptor.addInnerInterceptor(
+                        new TenantLineInnerInterceptor(new GlobalLineHandlerInterceptor(tenant.getColumn(),
+                                tenant.getLoadKey(),
+                                ignoreTableList))));
             }
         } else if (multiTenantType.eq(MultiTenantType.SCHEMA)) {
             // 多租户插件

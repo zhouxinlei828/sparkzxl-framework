@@ -6,7 +6,6 @@ import com.github.sparkzxl.data.sync.api.DataSyncService;
 import com.google.common.collect.Maps;
 import com.guthub.sparkzxl.data.sync.nacos.config.NacosWatchProperties;
 import com.guthub.sparkzxl.data.sync.nacos.handler.NacosCacheHandler;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,10 +28,11 @@ public class NacosDataSyncServiceImpl extends NacosCacheHandler implements DataS
      * @param watchConfigs    the watch config list
      */
     public NacosDataSyncServiceImpl(final ConfigService configService,
-                                    final List<DataSubscriber> dataSubscribers,
-                                    List<NacosWatchProperties> watchConfigs) {
+            final List<DataSubscriber> dataSubscribers,
+            List<NacosWatchProperties> watchConfigs) {
         super(configService, dataSubscribers);
-        watchConfigMap.putAll(watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
+        watchConfigMap.putAll(
+                watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
         start();
     }
 

@@ -1,8 +1,7 @@
 package com.github.sparkzxl.alarm.strategy;
 
-import lombok.Data;
-
 import java.text.MessageFormat;
+import lombok.Data;
 
 /**
  * description: 消息类型来源

@@ -1,11 +1,10 @@
 package com.github.sparkzxl.core.spring;
 
 import cn.hutool.core.util.ArrayUtil;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-
-import java.util.Map;
 
 /**
  * description: 获取bean公用方法

@@ -4,12 +4,17 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.extension.Activate;
-import org.apache.dubbo.rpc.*;
-
-import java.util.Map;
+import org.apache.dubbo.rpc.Filter;
+import org.apache.dubbo.rpc.Invocation;
+import org.apache.dubbo.rpc.Invoker;
+import org.apache.dubbo.rpc.Result;
+import org.apache.dubbo.rpc.RpcContext;
+import org.apache.dubbo.rpc.RpcException;
+import org.apache.dubbo.rpc.RpcServiceContext;
 
 /**
  * description: dubbo 上下文传递过滤器
@@ -36,7 +41,8 @@ public class RequestContextFilter implements Filter, Filter.Listener {
         if (context.isProviderSide()) {
             clientType.set(CommonConstants.PROVIDER);
             Map<String, Object> attachmentMap = context.getObjectAttachments();
-            Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {}, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
+            Map<String, Object> threadLocalMap = Convert.convert(new TypeReference<Map<String, Object>>() {
+            }, context.getObjectAttachment(REQUEST_LOCAL_CONTEXT));
             attachmentMap.putAll(threadLocalMap);
             RequestLocalContextHolder.setLocalMap(attachmentMap);
         } else if (context.isConsumerSide()) {

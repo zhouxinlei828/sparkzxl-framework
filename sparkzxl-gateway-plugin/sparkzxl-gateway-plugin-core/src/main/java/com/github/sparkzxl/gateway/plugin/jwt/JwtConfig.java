@@ -1,8 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.jwt;
 
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * description: jwt配置

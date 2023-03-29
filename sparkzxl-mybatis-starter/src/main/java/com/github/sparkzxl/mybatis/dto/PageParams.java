@@ -3,11 +3,10 @@ package com.github.sparkzxl.mybatis.dto;
 import com.github.sparkzxl.mybatis.constant.EntityConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * description: 分页参数

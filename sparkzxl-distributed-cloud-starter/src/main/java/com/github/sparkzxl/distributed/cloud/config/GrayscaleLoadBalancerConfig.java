@@ -3,6 +3,7 @@ package com.github.sparkzxl.distributed.cloud.config;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.distributed.cloud.loadbalancer.GrayscaleVersionServiceInstanceListSupplier;
 import com.github.sparkzxl.distributed.cloud.loadbalancer.LoadBalancerVersionConfig;
+import java.util.Objects;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,8 +18,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
-import java.util.Objects;
 
 /**
  * description: 灰度负载均衡配置

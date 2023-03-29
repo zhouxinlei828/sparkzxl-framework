@@ -4,14 +4,12 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.github.sparkzxl.core.constant.enums.Enumerator;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * description: 继承了BaseEnum接口的枚举值，将会统一按照以下格式序列化
- * {"code": "XX","desc": "xxxx"}
+ * description: 继承了BaseEnum接口的枚举值，将会统一按照以下格式序列化 {"code": "XX","desc": "xxxx"}
  *
  * @author zhouxinlei
  */

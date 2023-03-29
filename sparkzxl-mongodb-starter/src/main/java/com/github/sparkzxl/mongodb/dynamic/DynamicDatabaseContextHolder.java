@@ -16,10 +16,9 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
-import org.springframework.util.StringUtils;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
+import org.springframework.util.StringUtils;
 
 /**
  * description: 核心基于ThreadLocal的切换数据源工具类

@@ -4,16 +4,15 @@ import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.github.sparkzxl.gateway.plugin.handler.FilterDataHandler;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import com.google.common.collect.Maps;
+import java.util.Collection;
+import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
-
-import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * description: abstract global filter
@@ -28,6 +27,7 @@ public abstract class AbstractGlobalFilter implements GlobalFilter, Ordered, Ini
     private final Map<String, FilterDataHandler> filterDataHandlerMap = Maps.newHashMap();
     @Resource
     protected GatewayPluginProperties gatewayPluginProperties;
+
     public AbstractGlobalFilter() {
     }
 

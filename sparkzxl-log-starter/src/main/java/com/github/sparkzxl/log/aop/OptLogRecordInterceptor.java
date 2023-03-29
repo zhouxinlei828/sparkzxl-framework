@@ -11,6 +11,11 @@ import com.github.sparkzxl.log.entity.OptLogRecordDetail;
 import com.github.sparkzxl.log.event.OptLogEvent;
 import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.store.OperatorService;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletRequest;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
@@ -18,12 +23,6 @@ import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-
-import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * description: 用户操作行为aop处理器

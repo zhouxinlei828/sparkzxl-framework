@@ -1,12 +1,11 @@
 package com.github.sparkzxl.sms.event;
 
+import java.util.Map;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.context.ApplicationEvent;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * description: 发送失败事件
@@ -40,8 +39,8 @@ public class SmsSendFailEvent extends ApplicationEvent {
     private final Throwable cause;
 
     public SmsSendFailEvent(String response, String smsRegister,
-                            Set<String> phones, Map<String, Object> params,
-                            Throwable cause) {
+            Set<String> phones, Map<String, Object> params,
+            Throwable cause) {
         super(response);
         this.smsRegister = smsRegister;
         this.phones = phones;

@@ -1,10 +1,9 @@
 package com.github.sparkzxl.gateway.plugin.logging;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * description: 日志参数实体类

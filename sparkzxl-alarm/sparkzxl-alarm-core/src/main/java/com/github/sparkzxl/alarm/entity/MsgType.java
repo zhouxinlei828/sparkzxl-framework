@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.sign.BaseSign;
 import com.github.sparkzxl.core.json.JsonUtils;
+import java.io.Serializable;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-
-import java.io.Serializable;
-import java.util.Map;
 
 /**
  * description: 消息体类型

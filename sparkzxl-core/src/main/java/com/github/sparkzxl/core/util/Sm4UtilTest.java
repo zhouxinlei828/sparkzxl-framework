@@ -2,14 +2,13 @@ package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.json.JsonUtils;
 import com.google.common.collect.Lists;
-
-import javax.crypto.IllegalBlockSizeException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import javax.crypto.IllegalBlockSizeException;
 
 /**
  * description: sm4 test

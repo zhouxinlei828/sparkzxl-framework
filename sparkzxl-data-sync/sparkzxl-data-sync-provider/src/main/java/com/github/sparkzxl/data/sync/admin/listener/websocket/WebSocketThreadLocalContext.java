@@ -2,7 +2,6 @@ package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
 import cn.hutool.core.convert.Convert;
 import com.alibaba.ttl.TransmittableThreadLocal;
-
 import java.util.HashMap;
 import java.util.Map;
 

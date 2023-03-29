@@ -4,15 +4,14 @@ import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.database.echo.annotation.EchoField;
 import com.github.sparkzxl.mybatis.echo.core.LoadService;
 import com.google.common.base.Objects;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * description: 封装 Echo 注解中解析出来的参数
@@ -32,9 +31,8 @@ public class CacheLoadKeys {
     /**
      * 执行查询任务的类
      * <p/>
-     * api()  和 feign() 任选其一,  使用 api时，请填写实现类， 使用feign时，填写接口即可
-     * 如： @Echo(api="userServiceImpl") 等价于 @Echo(feign=UserService.class)
-     * 如： @Echo(api="userController") 等价于 @Echo(feign=UserApi.class)
+     * api()  和 feign() 任选其一,  使用 api时，请填写实现类， 使用feign时，填写接口即可 如： @Echo(api="userServiceImpl") 等价于 @Echo(feign=UserService.class) 如：
+     * @Echo(api="userController") 等价于 @Echo(feign=UserApi.class)
      */
     private String api;
 

@@ -3,6 +3,11 @@ package com.github.sparkzxl.distributed.cloud.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.sparkzxl.distributed.cloud.http.RestTemplateHeaderInterceptor;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,12 +22,6 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * description: RestTemplate 相关的配置
  *
@@ -31,6 +30,7 @@ import java.util.List;
 @ConditionalOnClass(okhttp3.OkHttpClient.class)
 @AllArgsConstructor
 public class RestTemplateConfiguration {
+
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private final ObjectMapper objectMapper;
 
@@ -67,7 +67,7 @@ public class RestTemplateConfiguration {
     @Bean
     @ConditionalOnMissingBean(okhttp3.ConnectionPool.class)
     public okhttp3.ConnectionPool okHttp3ConnectionPool(FeignHttpClientProperties hcp,
-                                                        OkHttpClientConnectionPoolFactory connectionPoolFactory) {
+            OkHttpClientConnectionPoolFactory connectionPoolFactory) {
         return connectionPoolFactory.create(hcp.getMaxConnections(), hcp.getTimeToLive(), hcp.getTimeToLiveUnit());
     }
 

@@ -37,7 +37,8 @@ class TimingWheel {
      * @param taskCounter the task counter
      * @param queue       the queue
      */
-    TimingWheel(final Long tickMs, final Integer wheelSize, final Long startMs, final AtomicInteger taskCounter, final DelayQueue<TimerTaskList> queue) {
+    TimingWheel(final Long tickMs, final Integer wheelSize, final Long startMs, final AtomicInteger taskCounter,
+            final DelayQueue<TimerTaskList> queue) {
         this.tickMs = tickMs;
         this.wheelSize = wheelSize;
         this.taskCounter = taskCounter;

@@ -1,12 +1,15 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.core.constant.BaseContextConstants;
+import com.github.sparkzxl.core.base.ResponseCode;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.RequestContextUtils;
-import com.github.sparkzxl.core.base.ResponseCode;
 import com.github.sparkzxl.web.annotation.IgnoreResponseWrap;
+import java.nio.charset.StandardCharsets;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -17,10 +20,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
 
 /**
  * description: 判断是否需要返回值包装，如果需要就直接包装
@@ -33,7 +32,8 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable().getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
+        final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable()
+                .getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
         HttpServletRequest servletRequest = RequestContextUtils.getRequest();
         com.github.sparkzxl.web.annotation.Response response =
                 (com.github.sparkzxl.web.annotation.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);

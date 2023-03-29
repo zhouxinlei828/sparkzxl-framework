@@ -1,10 +1,13 @@
 package com.github.sparkzxl.mybatis.mybatis.hander;
 
 import com.github.sparkzxl.mybatis.entity.RemoteData;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-
-import java.sql.*;
 
 /**
  * description: 远程数据 类型转换器
@@ -12,6 +15,7 @@ import java.sql.*;
  * @author zhouxinlei
  */
 public class RemoteDataTypeHandler extends BaseTypeHandler<RemoteData> {
+
     /**
      * insert 、update 时执行该方法
      *

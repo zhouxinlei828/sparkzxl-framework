@@ -2,12 +2,11 @@ package com.github.sparkzxl.data.sync.admin.config.nacos;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * description: the nacos sync strategy properties.
@@ -138,7 +137,9 @@ public class NacosProviderProperties implements InitializingBean {
             return false;
         }
         NacosProviderProperties that = (NacosProviderProperties) o;
-        return Objects.equals(url, that.url) && Objects.equals(namespace, that.namespace) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(acm, that.acm) && Objects.equals(watchConfigs, that.watchConfigs);
+        return Objects.equals(url, that.url) && Objects.equals(namespace, that.namespace) && Objects.equals(username, that.username)
+                && Objects.equals(password, that.password) && Objects.equals(acm, that.acm) && Objects.equals(watchConfigs,
+                that.watchConfigs);
     }
 
     @Override

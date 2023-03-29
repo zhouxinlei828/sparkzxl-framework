@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = AlarmConstant.ALARM_THREAD_CONFIG_PREFIX)
 public class AlarmThreadPoolProperties {
+
     private static final int DEFAULT_CORE_SIZE = Runtime.getRuntime().availableProcessors() + 1;
     /**
      * 线程池维护线程的最小数量, 选填

@@ -8,7 +8,6 @@ import com.github.sparkzxl.alarm.enums.MessageSubType;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
-
 import java.text.MessageFormat;
 
 /**

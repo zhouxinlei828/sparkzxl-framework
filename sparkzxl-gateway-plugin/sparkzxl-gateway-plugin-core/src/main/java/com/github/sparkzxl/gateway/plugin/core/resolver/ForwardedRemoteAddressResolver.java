@@ -17,6 +17,10 @@
 
 package com.github.sparkzxl.gateway.plugin.core.resolver;
 
+import java.net.InetSocketAddress;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.support.ipresolver.RemoteAddressResolver;
@@ -25,18 +29,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
-import java.net.InetSocketAddress;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Parses the client address from the X-Forwarded-For header. If header is not present.
- * falls back to {@link RemoteAddressResolver} and
- * {@link ServerHttpRequest#getRemoteAddress()}. Use the static constructor methods which
- * meets your security requirements.
+ * Parses the client address from the X-Forwarded-For header. If header is not present. falls back to {@link RemoteAddressResolver} and
+ * {@link ServerHttpRequest#getRemoteAddress()}. Use the static constructor methods which meets your security requirements.
  */
 public class ForwardedRemoteAddressResolver implements RemoteAddressResolver {
+
     /**
      * Forwarded-For header name.
      */

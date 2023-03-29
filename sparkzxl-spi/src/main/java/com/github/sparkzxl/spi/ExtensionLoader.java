@@ -1,22 +1,27 @@
 package com.github.sparkzxl.spi;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * description: The type Extension loader.
- * This is done by loading the properties file.
- * 参考dubbo SPI机制
+ * description: The type Extension loader. This is done by loading the properties file. 参考dubbo SPI机制
  *
  * @author zhouxinlei
- * @see <a href="https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/extension/ExtensionLoader.java">ExtensionLoader</a>
+ * @see <a
+ * href="https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/extension/ExtensionLoader.java">ExtensionLoader</a>
  * @since 2022-01-10 10:40:11
  * <T> the type parameter
  */
@@ -246,7 +251,7 @@ public final class ExtensionLoader<T> {
     }
 
     private void loadClass(final Map<String, Class<?>> classes,
-                           final String name, final String classPath) throws ClassNotFoundException {
+            final String name, final String classPath) throws ClassNotFoundException {
         Class<?> subClass = Objects.nonNull(this.classLoader) ? Class.forName(classPath, true, this.classLoader) : Class.forName(classPath);
         if (!clazz.isAssignableFrom(subClass)) {
             throw new IllegalStateException("load extension resources error," + subClass + " subtype is not of " + clazz);
@@ -260,7 +265,8 @@ public final class ExtensionLoader<T> {
             classes.put(name, subClass);
         } else if (!Objects.equals(oldClass, subClass)) {
             throw new IllegalStateException(
-                    "load extension resources error,Duplicate class " + clazz.getName() + " name " + name + " on " + oldClass.getName() + " or "
+                    "load extension resources error,Duplicate class " + clazz.getName() + " name " + name + " on " + oldClass.getName()
+                            + " or "
                             + subClass.getName());
         }
     }

@@ -33,8 +33,7 @@ public interface UidGenerator {
     long getUid() throws UidGenerateException;
 
     /**
-     * Parse the UID into elements which are used to generate the UID. <br>
-     * Such as timestamp & workerId & sequence...
+     * Parse the UID into elements which are used to generate the UID. <br> Such as timestamp & workerId & sequence...
      *
      * @param uid uid
      * @return Parsed info

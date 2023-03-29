@@ -1,17 +1,16 @@
 package com.github.sparkzxl.feign.resilience4j.decoder;
 
+import static feign.FeignException.errorStatus;
+
 import com.github.sparkzxl.feign.annotation.RetryableMethod;
 import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import feign.Request;
 import feign.Response;
 import feign.RetryableException;
 import feign.codec.ErrorDecoder;
-import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Method;
 import java.util.Objects;
-
-import static feign.FeignException.errorStatus;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * description: 默认异常解码器
@@ -23,8 +22,7 @@ import static feign.FeignException.errorStatus;
 public class DefaultErrorDecoder implements ErrorDecoder {
 
     /**
-     * 判断一个 OpenFeign 的请求是否是可以重试类型的请求
-     * 根据方法是否为 GET，以及方法和方法所在类上面是否有 RetryableMethod 注解来判定
+     * 判断一个 OpenFeign 的请求是否是可以重试类型的请求 根据方法是否为 GET，以及方法和方法所在类上面是否有 RetryableMethod 注解来判定
      *
      * @param request 请求
      * @return boolean

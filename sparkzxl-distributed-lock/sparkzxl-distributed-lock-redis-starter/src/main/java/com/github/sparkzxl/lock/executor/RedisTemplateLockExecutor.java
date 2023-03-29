@@ -1,12 +1,11 @@
 package com.github.sparkzxl.lock.executor;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-
-import java.util.Collections;
 
 /**
  * description: 分布式锁原生RedisTemplate处理器

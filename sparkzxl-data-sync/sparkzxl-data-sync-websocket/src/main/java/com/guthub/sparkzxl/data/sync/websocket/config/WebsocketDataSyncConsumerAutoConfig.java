@@ -6,6 +6,8 @@ import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.guthub.sparkzxl.data.sync.websocket.WebsocketDataSyncServiceImpl;
 import com.guthub.sparkzxl.data.sync.websocket.handler.DataHandler;
 import com.guthub.sparkzxl.data.sync.websocket.handler.MetaDataHandler;
+import java.util.Collections;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -13,9 +15,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * description:
@@ -45,7 +44,7 @@ public class WebsocketDataSyncConsumerAutoConfig {
      */
     @Bean
     public DataSyncService websocketDataCallService(final ObjectProvider<WebsocketConsumerProperties> websocketConsumerProperties,
-                                                    final ObjectProvider<List<DataHandler>> dataHandlerList) {
+            final ObjectProvider<List<DataHandler>> dataHandlerList) {
         logger.info("websocket data sync initialization.");
         return new WebsocketDataSyncServiceImpl(websocketConsumerProperties.getIfAvailable(WebsocketConsumerProperties::new),
                 dataHandlerList.getIfAvailable(Collections::emptyList));

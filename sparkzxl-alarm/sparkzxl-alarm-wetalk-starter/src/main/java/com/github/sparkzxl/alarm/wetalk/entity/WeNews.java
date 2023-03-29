@@ -3,7 +3,6 @@ package com.github.sparkzxl.alarm.wetalk.entity;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.github.sparkzxl.alarm.entity.BaseImageText;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import java.util.Map;
  * @since 2022-05-19 10:21:27
  */
 public class WeNews extends WeTalkMessage {
+
     /**
      * 图文类型
      */
@@ -39,6 +39,7 @@ public class WeNews extends WeTalkMessage {
 
 
     public static class News implements Serializable {
+
         /**
          * 图文消息，一个图文消息支持1到8条图文
          */
@@ -60,6 +61,7 @@ public class WeNews extends WeTalkMessage {
         }
 
         public static class Article implements Serializable {
+
             /**
              * 标题，不超过128个字节，超过会自动截断
              */
@@ -126,9 +128,12 @@ public class WeNews extends WeTalkMessage {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {}, value);
+                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
+                }, value);
                 for (BaseImageText baseImageText : baseImageTexts) {
-                    this.news.articles.add(new News.Article(baseImageText.getTitle(), baseImageText.getDescription(), baseImageText.getUrl(), baseImageText.getPicUrl()));
+                    this.news.articles.add(
+                            new News.Article(baseImageText.getTitle(), baseImageText.getDescription(), baseImageText.getUrl(),
+                                    baseImageText.getPicUrl()));
                 }
             }
             break;

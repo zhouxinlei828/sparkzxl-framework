@@ -1,18 +1,21 @@
 package com.github.sparkzxl.lock.autoconfigure;
 
-import com.github.sparkzxl.lock.*;
+import com.github.sparkzxl.lock.DefaultLockFailureStrategy;
+import com.github.sparkzxl.lock.DefaultLockKeyBuilder;
+import com.github.sparkzxl.lock.LockFailureStrategy;
+import com.github.sparkzxl.lock.LockKeyBuilder;
+import com.github.sparkzxl.lock.LockTemplate;
 import com.github.sparkzxl.lock.annotation.DistributedLock;
 import com.github.sparkzxl.lock.aop.LockAnnotationAdvisor;
 import com.github.sparkzxl.lock.aop.LockInterceptor;
 import com.github.sparkzxl.lock.executor.LockExecutor;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-
-import java.util.List;
 
 /**
  * description: 分布式锁自动配置器

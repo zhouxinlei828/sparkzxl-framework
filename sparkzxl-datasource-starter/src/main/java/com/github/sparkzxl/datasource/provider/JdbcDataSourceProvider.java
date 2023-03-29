@@ -4,11 +4,10 @@ import cn.hutool.core.text.StrFormatter;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import lombok.RequiredArgsConstructor;
-
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.function.Function;
+import javax.sql.DataSource;
+import lombok.RequiredArgsConstructor;
 
 /**
  * description: 数据库加载数据源实现类

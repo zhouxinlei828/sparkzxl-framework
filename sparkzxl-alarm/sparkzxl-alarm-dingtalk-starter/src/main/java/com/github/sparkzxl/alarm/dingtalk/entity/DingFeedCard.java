@@ -3,7 +3,6 @@ package com.github.sparkzxl.alarm.dingtalk.entity;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.github.sparkzxl.alarm.entity.BaseImageText;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +38,7 @@ public class DingFeedCard extends DingTalkMessage {
     }
 
     public static class FeedCard implements Serializable {
+
         /**
          * {@link Link}
          */
@@ -60,6 +60,7 @@ public class DingFeedCard extends DingTalkMessage {
         }
 
         public static class Link implements Serializable {
+
             /**
              * 单条信息文本
              */
@@ -113,7 +114,8 @@ public class DingFeedCard extends DingTalkMessage {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {}, value);
+                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
+                }, value);
                 for (BaseImageText baseImageText : baseImageTexts) {
                     this.feedCard.links.add(new FeedCard.Link(baseImageText.getTitle(), baseImageText.getUrl(), baseImageText.getPicUrl()));
                 }

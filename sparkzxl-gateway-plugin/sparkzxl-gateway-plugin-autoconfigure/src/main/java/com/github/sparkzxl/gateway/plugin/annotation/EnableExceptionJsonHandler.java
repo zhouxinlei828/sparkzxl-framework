@@ -1,9 +1,12 @@
 package com.github.sparkzxl.gateway.plugin.annotation;
 
 import com.github.sparkzxl.gateway.plugin.autoconfigure.GatewayPluginConfigurationSelector;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
 
 /**
  * description: Enable Gateway Plugin

@@ -3,8 +3,7 @@ package com.github.sparkzxl.core.constant.enums;
 import lombok.Getter;
 
 /**
- * description: 多租户类型
- * NONE、COLUMN、SCHEMA,DATASOURCE
+ * description: 多租户类型 NONE、COLUMN、SCHEMA,DATASOURCE
  *
  * @author zhouxinlei
  * @since 2021-06-30 21:37:52
@@ -16,13 +15,11 @@ public enum MultiTenantType {
      */
     NONE("非租户模式"),
     /**
-     * 字段模式
-     * 在sql中拼接 tenant_code 字段
+     * 字段模式 在sql中拼接 tenant_code 字段
      */
     COLUMN("字段模式"),
     /**
-     * 独立schema模式
-     * 在sql中拼接 数据库 schema
+     * 独立schema模式 在sql中拼接 数据库 schema
      */
     SCHEMA("独立schema模式"),
     /**

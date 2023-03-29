@@ -7,18 +7,17 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.github.sparkzxl.mybatis.constant.EntityConstant;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.StrPool;
+import com.github.sparkzxl.mybatis.constant.EntityConstant;
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * description: mybatis-plus自动注入处理器
@@ -40,9 +39,7 @@ public class MetaDataHandler implements MetaObjectHandler {
 
 
     /**
-     * 所有的继承了Entity、SuperEntity的实体，在insert时，
-     * createUser: 自动赋予 当前线程上的登录人id
-     * createTime: 自动赋予 服务器的当前时间
+     * 所有的继承了Entity、SuperEntity的实体，在insert时， createUser: 自动赋予 当前线程上的登录人id createTime: 自动赋予 服务器的当前时间
      *
      * @param metaObject 元数据
      */
@@ -61,9 +58,7 @@ public class MetaDataHandler implements MetaObjectHandler {
     }
 
     /**
-     * 所有的继承了Entity、SuperEntity的实体，在update时，
-     * updateUser: 自动赋予 当前线程上的登录人id
-     * updateTime: 自动赋予 服务器的当前时间
+     * 所有的继承了Entity、SuperEntity的实体，在update时， updateUser: 自动赋予 当前线程上的登录人id updateTime: 自动赋予 服务器的当前时间
      *
      * @param metaObject 元数据
      */
@@ -89,7 +84,7 @@ public class MetaDataHandler implements MetaObjectHandler {
     /**
      * id生成注入对象
      *
-     * @param metaObject   元对象
+     * @param metaObject 元对象
      */
     private void extractId(MetaObject metaObject) {
         boolean hasGetter = metaObject.hasGetter(EntityConstant.ID);
@@ -99,7 +94,7 @@ public class MetaDataHandler implements MetaObjectHandler {
         }
         Long id = uidGenerator.getUid();// 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
         if (hasGetter) {
-            Object idVal = this.getFieldValByName(EntityConstant.ID,metaObject);
+            Object idVal = this.getFieldValByName(EntityConstant.ID, metaObject);
             if (ObjectUtils.isEmpty(idVal)) {
                 idVal = String.class.getName().equals(metaObject.getGetterType(EntityConstant.ID).getTypeName()) ? String.valueOf(id) : id;
                 this.setFieldValByName(EntityConstant.ID, idVal, metaObject);
@@ -137,13 +132,13 @@ public class MetaDataHandler implements MetaObjectHandler {
     /**
      * 全局用户id注入对象
      *
-     * @param metaObject   元对象
-     * @param field        字段属性
+     * @param metaObject 元对象
+     * @param field      字段属性
      */
     private void extractUserId(MetaObject metaObject, String field) {
         boolean hasGetter = metaObject.hasGetter(field);
         if (hasGetter) {
-            Object userIdVal = this.getFieldValByName(field,metaObject);
+            Object userIdVal = this.getFieldValByName(field, metaObject);
             if (ObjectUtils.isEmpty(userIdVal) || userIdVal.equals(0)) {
                 Class<?> userIdClass = metaObject.getGetterType(field);
                 userIdVal = RequestLocalContextHolder.getUserId(userIdClass);
@@ -155,13 +150,13 @@ public class MetaDataHandler implements MetaObjectHandler {
     /**
      * 当前登录用户姓名自动注入
      *
-     * @param metaObject   元对象
-     * @param field        字段属性
+     * @param metaObject 元对象
+     * @param field      字段属性
      */
     private void extractUserName(MetaObject metaObject, String field) {
         boolean hasGetter = metaObject.hasGetter(field);
         if (hasGetter) {
-            Object userNameVal = this.getFieldValByName(field,metaObject);
+            Object userNameVal = this.getFieldValByName(field, metaObject);
             if (ObjectUtils.isEmpty(userNameVal)) {
                 userNameVal = RequestLocalContextHolder.getName();
                 this.setFieldValByName(field, userNameVal, metaObject);
@@ -172,13 +167,13 @@ public class MetaDataHandler implements MetaObjectHandler {
     /**
      * 时间扩展自动注入
      *
-     * @param metaObject   元对象
-     * @param field        字段属性
+     * @param metaObject 元对象
+     * @param field      字段属性
      */
     private void extractDate(MetaObject metaObject, String field) {
         boolean hasGetter = metaObject.hasGetter(field);
         if (hasGetter) {
-            Object dateVal = this.getFieldValByName(field,metaObject);
+            Object dateVal = this.getFieldValByName(field, metaObject);
             if (ObjectUtils.isEmpty(dateVal)) {
                 Class<?> dateClass = metaObject.getGetterType(field);
                 dateVal = Date.class.equals(dateClass) ? new Date() : LocalDateTime.now();

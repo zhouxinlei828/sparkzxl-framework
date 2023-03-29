@@ -5,7 +5,6 @@ import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
-
 import java.util.List;
 
 /**

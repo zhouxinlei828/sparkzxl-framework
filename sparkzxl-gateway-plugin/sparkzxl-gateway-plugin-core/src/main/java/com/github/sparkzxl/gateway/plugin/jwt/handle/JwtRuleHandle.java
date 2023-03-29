@@ -1,7 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.jwt.handle;
 
 import com.github.sparkzxl.gateway.rule.RuleHandle;
-
 import java.util.List;
 
 /**

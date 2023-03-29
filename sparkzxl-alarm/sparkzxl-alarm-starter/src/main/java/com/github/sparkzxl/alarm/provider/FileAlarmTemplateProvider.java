@@ -10,15 +10,14 @@ import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.support.AlarmErrorCodeEnum;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.google.common.collect.Maps;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * description: 文件告警模板加载
@@ -53,7 +52,8 @@ public class FileAlarmTemplateProvider extends BaseAlarmTemplateProvider {
                 templateContent = ResourceUtil.readUtf8Str(templatePath);
             }
             List<AlarmTemplate> alarmTemplateList = JsonUtils.getJson().toJavaList(templateContent, AlarmTemplate.class);
-            Map<String, AlarmTemplate> templateMap = alarmTemplateList.stream().collect(Collectors.toMap(AlarmTemplate::getTemplateId, k -> k));
+            Map<String, AlarmTemplate> templateMap = alarmTemplateList.stream()
+                    .collect(Collectors.toMap(AlarmTemplate::getTemplateId, k -> k));
             configTemplateMap.putAll(templateMap);
             alarmTemplate = templateMap.get(templateId);
             if (ObjectUtils.isEmpty(alarmTemplate)) {

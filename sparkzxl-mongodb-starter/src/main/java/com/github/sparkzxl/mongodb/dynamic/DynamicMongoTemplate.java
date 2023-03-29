@@ -18,7 +18,8 @@ public class DynamicMongoTemplate extends MongoTemplate {
 
     private final MongoDatabaseFactoryContext mongoDatabaseFactoryContext;
 
-    public DynamicMongoTemplate(MongoDatabaseFactory mongoDbFactory, MongoDatabaseFactoryContext mongoDatabaseFactoryContext, boolean removeClass) {
+    public DynamicMongoTemplate(MongoDatabaseFactory mongoDbFactory, MongoDatabaseFactoryContext mongoDatabaseFactoryContext,
+            boolean removeClass) {
         super(mongoDbFactory);
         this.mongoDatabaseFactoryContext = mongoDatabaseFactoryContext;
         MongoConverter converter = getConverter();

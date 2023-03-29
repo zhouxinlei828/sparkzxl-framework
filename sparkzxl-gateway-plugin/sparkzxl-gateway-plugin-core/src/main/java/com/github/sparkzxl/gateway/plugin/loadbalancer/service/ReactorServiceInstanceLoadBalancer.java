@@ -4,6 +4,8 @@ import com.github.sparkzxl.gateway.plugin.loadbalancer.rule.ILoadBalancerRule;
 import com.github.sparkzxl.gateway.properties.ReactiveLoadBalancerProperties;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.cloud.client.ServiceInstance;
@@ -11,9 +13,6 @@ import org.springframework.cloud.client.loadbalancer.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 灰度版本负载均衡
@@ -27,7 +26,8 @@ public class ReactorServiceInstanceLoadBalancer implements IReactorServiceInstan
     private final ReactiveLoadBalancerProperties reactiveLoadBalancerProperties;
     private final Map<String, ILoadBalancerRule> loadBalancerRuleMap;
 
-    public ReactorServiceInstanceLoadBalancer(List<ILoadBalancerRule> loadBalancerRuleList, ReactiveLoadBalancerProperties reactiveLoadBalancerProperties) {
+    public ReactorServiceInstanceLoadBalancer(List<ILoadBalancerRule> loadBalancerRuleList,
+            ReactiveLoadBalancerProperties reactiveLoadBalancerProperties) {
         this.reactiveLoadBalancerProperties = reactiveLoadBalancerProperties;
         loadBalancerRuleMap = Maps.newHashMap();
         loadBalancerRuleList.forEach(rule -> loadBalancerRuleMap.put(rule.name(), rule));

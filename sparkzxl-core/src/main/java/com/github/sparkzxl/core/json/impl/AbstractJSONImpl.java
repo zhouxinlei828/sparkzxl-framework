@@ -1,7 +1,6 @@
 package com.github.sparkzxl.core.json.impl;
 
 import com.github.sparkzxl.core.json.JSON;
-
 import java.util.List;
 import java.util.Map;
 

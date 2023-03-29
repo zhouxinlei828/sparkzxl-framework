@@ -1,9 +1,8 @@
 package com.github.sparkzxl.log.entity;
 
+import java.io.Serializable;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * description: 操作日志实体类

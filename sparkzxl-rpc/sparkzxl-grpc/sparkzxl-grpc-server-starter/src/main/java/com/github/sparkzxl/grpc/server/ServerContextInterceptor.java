@@ -6,9 +6,8 @@ import io.grpc.Metadata;
 import io.grpc.ServerCall;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.util.Map;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * description: grpc 服务端请求拦截器
@@ -20,8 +19,8 @@ public class ServerContextInterceptor implements ServerInterceptor {
 
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall,
-                                                                 Metadata metadata,
-                                                                 ServerCallHandler<ReqT, RespT> serverCallHandler) {
+            Metadata metadata,
+            ServerCallHandler<ReqT, RespT> serverCallHandler) {
         return new ServerListenerProxy<>(getThreadLocalMap(metadata), serverCallHandler.startCall(serverCall, metadata));
     }
 

@@ -2,6 +2,7 @@ package com.github.sparkzxl.gateway.plugin.loadbalancer;
 
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.plugin.loadbalancer.service.IReactorServiceInstanceLoadBalancer;
+import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
@@ -14,8 +15,6 @@ import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.net.URI;
 
 /**
  * description: 网关路由负载均衡过滤器
@@ -31,7 +30,8 @@ public class GatewayLoadBalancerClientFilter extends ReactiveLoadBalancerClientF
     private final GatewayLoadBalancerProperties properties;
 
 
-    public GatewayLoadBalancerClientFilter(IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer, GatewayLoadBalancerProperties properties) {
+    public GatewayLoadBalancerClientFilter(IReactorServiceInstanceLoadBalancer serviceInstanceLoadBalancer,
+            GatewayLoadBalancerProperties properties) {
         super(null, properties, null);
         this.serviceInstanceLoadBalancer = serviceInstanceLoadBalancer;
         this.properties = properties;

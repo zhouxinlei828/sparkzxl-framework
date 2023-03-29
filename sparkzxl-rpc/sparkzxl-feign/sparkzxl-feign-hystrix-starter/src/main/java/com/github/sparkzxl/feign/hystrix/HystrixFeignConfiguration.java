@@ -5,14 +5,13 @@ import com.netflix.hystrix.HystrixCommand;
 import feign.Feign;
 import feign.RequestInterceptor;
 import feign.hystrix.HystrixFeign;
+import java.util.List;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-
-import java.util.List;
 
 /**
  * description: HystrixFeignConfiguration

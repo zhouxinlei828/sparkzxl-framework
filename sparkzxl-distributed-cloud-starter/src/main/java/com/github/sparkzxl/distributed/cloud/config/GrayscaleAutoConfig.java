@@ -6,4 +6,5 @@ import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClients;
 @ConditionalOnProperty(value = "spring.cloud.loadbalancer.grayscale.enabled", havingValue = "true", matchIfMissing = true)
 @LoadBalancerClients(defaultConfiguration = GrayscaleLoadBalancerConfig.class)
 public class GrayscaleAutoConfig {
+
 }

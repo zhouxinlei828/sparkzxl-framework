@@ -1,7 +1,6 @@
 package com.github.sparkzxl.lock;
 
 import com.github.sparkzxl.lock.exception.LockFailureException;
-
 import java.lang.reflect.Method;
 
 /**

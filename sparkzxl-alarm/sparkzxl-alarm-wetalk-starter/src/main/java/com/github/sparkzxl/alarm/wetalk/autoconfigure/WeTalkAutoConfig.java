@@ -1,7 +1,11 @@
 package com.github.sparkzxl.alarm.wetalk.autoconfigure;
 
 import com.github.sparkzxl.alarm.wetalk.executor.WeTalkAlarmExecutor;
-import com.github.sparkzxl.alarm.wetalk.strategy.*;
+import com.github.sparkzxl.alarm.wetalk.strategy.ActionCardMsgHandleStrategy;
+import com.github.sparkzxl.alarm.wetalk.strategy.ImageTextMsgHandleStrategy;
+import com.github.sparkzxl.alarm.wetalk.strategy.MarkdownMsgHandleStrategy;
+import com.github.sparkzxl.alarm.wetalk.strategy.MsgLinkHandleStrategy;
+import com.github.sparkzxl.alarm.wetalk.strategy.TextMsgHandleStrategy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

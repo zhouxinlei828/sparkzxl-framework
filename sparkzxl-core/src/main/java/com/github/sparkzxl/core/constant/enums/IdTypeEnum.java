@@ -18,8 +18,7 @@ public enum IdTypeEnum {
      */
     DEFAULT,
     /**
-     * 集群部署动态扩容时使用
-     * 采用RingBuffer来缓存已生成的UID, 并行化UID的生产和消费, 同时对CacheLine补齐，避免了由RingBuffer带来的硬件级「伪共享」问题
+     * 集群部署动态扩容时使用 采用RingBuffer来缓存已生成的UID, 并行化UID的生产和消费, 同时对CacheLine补齐，避免了由RingBuffer带来的硬件级「伪共享」问题
      * <p>
      * 600万/s的稳定吞吐量
      */

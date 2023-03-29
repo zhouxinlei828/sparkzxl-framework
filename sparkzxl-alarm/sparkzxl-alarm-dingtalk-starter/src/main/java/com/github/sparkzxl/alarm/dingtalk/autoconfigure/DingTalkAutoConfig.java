@@ -2,7 +2,11 @@ package com.github.sparkzxl.alarm.dingtalk.autoconfigure;
 
 import com.github.sparkzxl.alarm.dingtalk.executor.DingTalkAlarmExecutor;
 import com.github.sparkzxl.alarm.dingtalk.sign.DingTalkAlarmSignAlgorithm;
-import com.github.sparkzxl.alarm.dingtalk.strategy.*;
+import com.github.sparkzxl.alarm.dingtalk.strategy.ActionCardMsgHandleStrategy;
+import com.github.sparkzxl.alarm.dingtalk.strategy.ImageTextMsgHandleStrategy;
+import com.github.sparkzxl.alarm.dingtalk.strategy.MarkdownMsgHandleStrategy;
+import com.github.sparkzxl.alarm.dingtalk.strategy.MsgLinkHandleStrategy;
+import com.github.sparkzxl.alarm.dingtalk.strategy.TextMsgHandleStrategy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

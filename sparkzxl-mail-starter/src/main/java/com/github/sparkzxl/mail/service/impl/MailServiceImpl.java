@@ -1,16 +1,15 @@
 package com.github.sparkzxl.mail.service.impl;
 
 import com.github.sparkzxl.mail.service.MailService;
+import java.io.File;
+import java.lang.reflect.Array;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.lang.reflect.Array;
 
 /**
  * description: 邮件 服务实现类
@@ -73,7 +72,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendResourceMail(String to, String subject, String content, String rscPath, String rscId, String... cc) throws MessagingException {
+    public void sendResourceMail(String to, String subject, String content, String rscPath, String rscId, String... cc)
+            throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(mailProperties.getUsername());

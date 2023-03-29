@@ -1,11 +1,10 @@
 package com.github.sparkzxl.gateway.plugin.logging;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.util.MultiValueMap;
-
-import java.io.Serializable;
 
 /**
  * description: Context Use gateway Request Log

@@ -1,7 +1,6 @@
 package com.github.sparkzxl.feign.resilience4j.utils;
 
 import feign.Request;
-
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,13 +1,16 @@
 package com.github.sparkzxl.core.util;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.*;
-import java.util.Base64;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * description: Sm4Util
@@ -16,6 +19,7 @@ import java.util.Base64;
  * @since 2022-11-22 16:48:24
  */
 public class Sm4Util {
+
     static {
         Security.addProvider(new BouncyCastleProvider());
     }

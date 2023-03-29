@@ -1,10 +1,9 @@
 package com.github.sparkzxl.sms.request;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeMap;
+import lombok.Data;
 
 /**
  * description: 发送短信实体类

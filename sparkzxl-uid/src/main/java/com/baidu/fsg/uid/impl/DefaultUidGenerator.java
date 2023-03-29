@@ -22,12 +22,11 @@ import com.baidu.fsg.uid.BitsAllocator;
 import com.baidu.fsg.uid.UidGenerator;
 import com.baidu.fsg.uid.exception.UidGenerateException;
 import com.baidu.fsg.uid.worker.WorkerIdAssigner;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Represents an implementation of {@link UidGenerator}
@@ -59,6 +58,7 @@ import java.util.concurrent.TimeUnit;
  * @author zhouxinlei
  */
 public class DefaultUidGenerator implements UidGenerator, InitializingBean {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultUidGenerator.class);
 
     long epochSeconds = TimeUnit.MILLISECONDS.toSeconds(1600012800000L);
@@ -74,8 +74,7 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
     private int workerBits = 22;
     private int seqBits = 13;
     /**
-     * Customer epoch, unit as second. For example 2016-05-20 (ms: 1463673600000)
-     * 可以改成你的项目开始开始的时间
+     * Customer epoch, unit as second. For example 2016-05-20 (ms: 1463673600000) 可以改成你的项目开始开始的时间
      */
     private String epochStr = "2021-09-26";
     /**

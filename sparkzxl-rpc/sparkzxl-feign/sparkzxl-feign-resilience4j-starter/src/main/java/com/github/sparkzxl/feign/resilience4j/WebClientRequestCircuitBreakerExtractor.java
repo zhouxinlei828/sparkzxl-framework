@@ -8,15 +8,14 @@ import com.google.common.collect.Lists;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.core.ConfigurationNotFoundException;
+import java.text.MessageFormat;
+import java.util.List;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerRequestAdapter;
 import org.springframework.cloud.client.loadbalancer.Request;
 import org.springframework.cloud.client.loadbalancer.RequestData;
 import org.springframework.cloud.client.loadbalancer.RequestDataContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-
-import java.text.MessageFormat;
-import java.util.List;
 
 /**
  * description:
@@ -25,6 +24,7 @@ import java.util.List;
  * @since 2022-12-01 14:58:42
  */
 public class WebClientRequestCircuitBreakerExtractor implements CircuitBreakerExtractor {
+
     @Override
     public CircuitBreaker getCircuitBreaker(CircuitBreakerRegistry circuitBreakerRegistry, Request request, String host, int port) {
         RequestDataContext context = Convert.convert(RequestDataContext.class, request.getContext());
@@ -54,7 +54,8 @@ public class WebClientRequestCircuitBreakerExtractor implements CircuitBreakerEx
     public String getTraceId(Request request) {
         RequestDataContext context = Convert.convert(RequestDataContext.class, request.getContext());
         RequestData requestData = context.getClientRequest();
-        List<String> headers = ObjectUtils.isEmpty(requestData) ? Lists.newArrayList() : requestData.getHeaders().get(BaseContextConstants.TRACE_ID_HEADER);
+        List<String> headers = ObjectUtils.isEmpty(requestData) ? Lists.newArrayList()
+                : requestData.getHeaders().get(BaseContextConstants.TRACE_ID_HEADER);
         if (CollectionUtils.isEmpty(headers)) {
             return IdUtil.fastSimpleUUID();
         }

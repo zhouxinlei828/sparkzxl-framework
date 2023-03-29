@@ -3,11 +3,10 @@ package com.github.sparkzxl.oss.executor;
 import cn.hutool.core.net.url.UrlBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.net.URL;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.function.Consumer;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * description: oss 执行器

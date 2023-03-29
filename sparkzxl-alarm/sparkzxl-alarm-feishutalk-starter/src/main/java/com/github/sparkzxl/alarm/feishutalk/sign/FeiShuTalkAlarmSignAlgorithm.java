@@ -4,11 +4,10 @@ package com.github.sparkzxl.alarm.feishutalk.sign;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
 import com.github.sparkzxl.alarm.sign.AlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.sign.SignResult;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * description: FeiShuTalk签名接口

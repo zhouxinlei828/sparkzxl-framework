@@ -1,12 +1,11 @@
 package com.github.sparkzxl.alarm.loadbalancer;
 
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 /**
  * description: 随机选择算法

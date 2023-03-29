@@ -9,6 +9,10 @@ import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
 import com.github.sparkzxl.gateway.utils.BodyParamUtils;
 import com.github.sparkzxl.gateway.utils.HttpParamConverter;
 import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -20,11 +24,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 /**
  * description: Rpc参数转换过滤器
@@ -60,12 +59,14 @@ public class RpcParamTransformFilter extends AbstractGlobalFilter {
                 .flatMap(data -> Mono.just(Optional.of(data)))
                 .defaultIfEmpty(Optional.empty())
                 .flatMap(body -> {
-                    body.ifPresent(dataBuffer -> exchange.getAttributes().put(RpcConstant.PARAM_TRANSFORM, resolveBodyFromRequest(dataBuffer)));
+                    body.ifPresent(
+                            dataBuffer -> exchange.getAttributes().put(RpcConstant.PARAM_TRANSFORM, resolveBodyFromRequest(dataBuffer)));
                     return chain.filter(exchange);
                 }));
     }
 
-    private Mono<Void> formData(final ServerWebExchange exchange, final ServerHttpRequest serverHttpRequest, final GatewayFilterChain chain) {
+    private Mono<Void> formData(final ServerWebExchange exchange, final ServerHttpRequest serverHttpRequest,
+            final GatewayFilterChain chain) {
         return Mono.from(DataBufferUtils.join(serverHttpRequest.getBody())
                 .flatMap(data -> Mono.just(Optional.of(data)))
                 .defaultIfEmpty(Optional.empty())

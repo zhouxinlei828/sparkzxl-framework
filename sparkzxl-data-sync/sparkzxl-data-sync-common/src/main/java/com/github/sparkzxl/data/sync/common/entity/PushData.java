@@ -2,7 +2,6 @@ package com.github.sparkzxl.data.sync.common.entity;
 
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -15,20 +14,17 @@ import java.util.Objects;
 public class PushData<T> {
 
     /**
-     * config group.
-     * {@linkplain ConfigGroupEnum}
+     * config group. {@linkplain ConfigGroupEnum}
      */
     private String configGroup;
 
     /**
-     * event type.
-     * {@linkplain DataEventTypeEnum}
+     * event type. {@linkplain DataEventTypeEnum}
      */
     private String eventType;
 
     /**
-     * data list.
-     * {@link MetaData}.
+     * data list. {@link MetaData}.
      */
     private List<T> data;
 
@@ -109,7 +105,8 @@ public class PushData<T> {
             return false;
         }
         PushData<?> that = (PushData<?>) o;
-        return Objects.equals(configGroup, that.configGroup) && Objects.equals(eventType, that.eventType) && Objects.equals(data, that.data);
+        return Objects.equals(configGroup, that.configGroup) && Objects.equals(eventType, that.eventType) && Objects.equals(data,
+                that.data);
     }
 
     @Override

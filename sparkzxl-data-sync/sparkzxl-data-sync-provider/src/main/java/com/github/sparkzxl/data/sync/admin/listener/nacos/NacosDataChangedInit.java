@@ -7,13 +7,12 @@ import com.github.sparkzxl.data.sync.admin.config.nacos.NacosWatchProperties;
 import com.github.sparkzxl.data.sync.admin.listener.AbstractDataChangedInit;
 import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: NacosDataChangedInit
@@ -29,9 +28,10 @@ public class NacosDataChangedInit extends AbstractDataChangedInit {
     private final Map<String, String> watchConfigMap = Maps.newConcurrentMap();
 
     public NacosDataChangedInit(ConfigService configService,
-                                List<NacosWatchProperties> watchConfigs) {
+            List<NacosWatchProperties> watchConfigs) {
         this.configService = configService;
-        watchConfigMap.putAll(watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
+        watchConfigMap.putAll(
+                watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
     }
 
     @Override

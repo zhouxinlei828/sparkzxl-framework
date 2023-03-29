@@ -20,7 +20,7 @@ public class ValidationResult implements Serializable {
     private Object executableReturnValue;
 
     public ValidationResult(Object value, Object propertyPath, String message, String messageTemplate,
-                            Object[] executableParameters, Object executableReturnValue) {
+            Object[] executableParameters, Object executableReturnValue) {
         this.value = value;
         this.propertyPath = propertyPath;
         this.message = message;

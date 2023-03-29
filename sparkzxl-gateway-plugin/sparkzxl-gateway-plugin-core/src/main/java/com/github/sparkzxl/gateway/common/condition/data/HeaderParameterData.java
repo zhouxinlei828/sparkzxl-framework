@@ -1,10 +1,9 @@
 package com.github.sparkzxl.gateway.common.condition.data;
 
 import com.github.sparkzxl.spi.Join;
+import java.util.List;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
-
-import java.util.List;
 
 /**
  * description:  Header Parameter Data

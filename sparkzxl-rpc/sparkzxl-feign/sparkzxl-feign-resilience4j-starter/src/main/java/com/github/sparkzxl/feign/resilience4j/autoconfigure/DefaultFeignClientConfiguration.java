@@ -11,6 +11,7 @@ import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import io.vavr.control.Try;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,8 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
-
-import java.util.List;
 
 /**
  * description: 默认feign client 配置
@@ -42,7 +41,9 @@ public class DefaultFeignClientConfiguration {
         assert name != null;
         Retry retry = Try.of(() -> retryRegistry.retry(name, name)).getOrElseGet(throwable -> retryRegistry.retry(name));
         //覆盖其中的异常判断，只针对 feign.RetryableException 进行重试，所有需要重试的异常我们都在 DefaultErrorDecoder 以及 Resilience4jFeignClient 中封装成了 RetryableException
-        retry = Retry.of(name, RetryConfig.from(retry.getRetryConfig()).retryOnException(throwable -> throwable instanceof feign.RetryableException).build());
+        retry = Retry.of(name,
+                RetryConfig.from(retry.getRetryConfig()).retryOnException(throwable -> throwable instanceof feign.RetryableException)
+                        .build());
         return FeignDecorators.builder().withRetry(retry);
     }
 

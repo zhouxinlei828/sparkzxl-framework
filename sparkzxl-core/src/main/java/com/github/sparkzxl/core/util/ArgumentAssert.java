@@ -6,13 +6,12 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.support.ArgumentException;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 
 /**
  * description: 断言某些对象或值是否符合规定，否则抛出异常。经常用于做变量检查
@@ -35,7 +34,7 @@ public class ArgumentAssert {
      * @throws X if expression is {@code false}
      */
     public static <X extends Throwable> void isTrue(boolean expression,
-                                                    Supplier<? extends X> supplier) throws X {
+            Supplier<? extends X> supplier) throws X {
         if (!expression) {
             throw supplier.get();
         }
@@ -73,8 +72,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言是否为假，如果为 {@code true} 抛出指定类型异常<br>
-     * 并使用指定的函数获取错误信息返回
+     * 断言是否为假，如果为 {@code true} 抛出指定类型异常<br> 并使用指定的函数获取错误信息返回
      * <pre class="code">
      *  Assert.isFalse(i &gt; 0, ()-&gt;{
      *      // to query relation message
@@ -127,8 +125,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言对象是否为{@code null} ，如果不为{@code null} 抛出指定类型异常
-     * 并使用指定的函数获取错误信息返回
+     * 断言对象是否为{@code null} ，如果不为{@code null} 抛出指定类型异常 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.isNull(value, ()-&gt;{
      *      // to query relation message
@@ -183,8 +180,7 @@ public class ArgumentAssert {
     // ----------------------------------------------------------------------------------------------------------- Check not null
 
     /**
-     * 断言对象是否不为{@code null} ，如果为{@code null} 抛出指定类型异常
-     * 并使用指定的函数获取错误信息返回
+     * 断言对象是否不为{@code null} ，如果为{@code null} 抛出指定类型异常 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notNull(clazz, ()-&gt;{
      *      // to query relation message
@@ -247,8 +243,7 @@ public class ArgumentAssert {
     // ----------------------------------------------------------------------------------------------------------- Check List empty
 
     /**
-     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出指定类型异常
-     * 并使用指定的函数获取错误信息返回
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出指定类型异常 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notNull(clazz, ()-&gt;{
      *      // to query relation message
@@ -312,8 +307,7 @@ public class ArgumentAssert {
     // ----------------------------------------------------------------------------------------------------------- Check map empty
 
     /**
-     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出指定类型异常
-     * 并使用指定的函数获取错误信息返回
+     * 断言对象集合是否不为{@code null} ，如果为{@code null} 抛出指定类型异常 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notNull(clazz, ()-&gt;{
      *      // to query relation message
@@ -393,7 +387,7 @@ public class ArgumentAssert {
      * @since 5.4.5
      */
     public static <T extends CharSequence, X extends Throwable> T notEmpty(T text,
-                                                                           Supplier<X> errorSupplier)
+            Supplier<X> errorSupplier)
             throws X {
         if (StrUtil.isEmpty(text)) {
             throw errorSupplier.get();
@@ -417,8 +411,8 @@ public class ArgumentAssert {
      * @see StrUtil#isNotEmpty(CharSequence) StrUtil#isNotEmpty(CharSequence)
      */
     public static <T extends CharSequence> T notEmpty(T text,
-                                                      String errorMsgTemplate,
-                                                      Object... params) throws ArgumentException {
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         return notEmpty(text,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -442,8 +436,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 检查给定字符串是否为空白（null、空串或只包含空白符），为空抛出自定义异常。
-     * 并使用指定的函数获取错误信息返回
+     * 检查给定字符串是否为空白（null、空串或只包含空白符），为空抛出自定义异常。 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notBlank(name, ()-&gt;{
      *      // to query relation message
@@ -460,7 +453,7 @@ public class ArgumentAssert {
      * @see StrUtil#isNotBlank(CharSequence) StrUtil#isNotBlank(CharSequence)
      */
     public static <T extends CharSequence, X extends Throwable> T notBlank(T text,
-                                                                           Supplier<X> errorMsgSupplier)
+            Supplier<X> errorMsgSupplier)
             throws X {
         if (StrUtil.isBlank(text)) {
             throw errorMsgSupplier.get();
@@ -484,8 +477,8 @@ public class ArgumentAssert {
      * @see StrUtil#isNotBlank(CharSequence) StrUtil#isNotBlank(CharSequence)
      */
     public static <T extends CharSequence> T notBlank(T text,
-                                                      String errorMsgTemplate,
-                                                      Object... params) throws ArgumentException {
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         return notBlank(text,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -509,8 +502,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言给定字符串是否不被另一个字符串包含（即是否为子串）
-     * 并使用指定的函数获取错误信息返回
+     * 断言给定字符串是否不被另一个字符串包含（即是否为子串） 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notContain(name, "rod", ()-&gt;{
      *      // to query relation message
@@ -529,8 +521,8 @@ public class ArgumentAssert {
      * @since 5.4.5
      */
     public static <T extends CharSequence, X extends Throwable> T notContain(CharSequence textToSearch,
-                                                                             T substring,
-                                                                             Supplier<X> errorSupplier)
+            T substring,
+            Supplier<X> errorSupplier)
             throws X {
         if (StrUtil.contains(textToSearch, substring)) {
             throw errorSupplier.get();
@@ -553,9 +545,9 @@ public class ArgumentAssert {
      * @throws ArgumentException 非子串抛出异常
      */
     public static String notContain(String textToSearch,
-                                    String substring,
-                                    String errorMsgTemplate,
-                                    Object... params) throws ArgumentException {
+            String substring,
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         return notContain(textToSearch, substring,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -610,9 +602,9 @@ public class ArgumentAssert {
      * @throws ArgumentException 非子串抛出异常
      */
     public static <T> T contain(Collection<T> collection,
-                                T item,
-                                String errorMsgTemplate,
-                                Object... params) throws ArgumentException {
+            T item,
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         return contain(collection, item,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -630,8 +622,8 @@ public class ArgumentAssert {
      * @throws ArgumentException 非子串抛出异常
      */
     public static <T, X extends Throwable> T contain(Collection<T> collection,
-                                                     T item,
-                                                     Supplier<X> errorSupplier) throws X {
+            T item,
+            Supplier<X> errorSupplier) throws X {
         if (!CollUtil.contains(collection, item)) {
             throw errorSupplier.get();
         }
@@ -669,9 +661,9 @@ public class ArgumentAssert {
      * @throws ArgumentException 非子串抛出异常
      */
     public static <T> T notContain(Collection<T> collection,
-                                   T item,
-                                   String errorMsgTemplate,
-                                   Object... params) throws ArgumentException {
+            T item,
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         return notContain(collection, item,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -689,8 +681,8 @@ public class ArgumentAssert {
      * @throws ArgumentException 非子串抛出异常
      */
     public static <T, X extends Throwable> T notContain(Collection<T> collection,
-                                                        T item,
-                                                        Supplier<X> errorSupplier) throws X {
+            T item,
+            Supplier<X> errorSupplier) throws X {
         if (CollUtil.contains(collection, item)) {
             throw errorSupplier.get();
         }
@@ -698,8 +690,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言给定数组是否包含元素，数组必须不为 {@code null} 且至少包含一个元素
-     * 并使用指定的函数获取错误信息返回
+     * 断言给定数组是否包含元素，数组必须不为 {@code null} 且至少包含一个元素 并使用指定的函数获取错误信息返回
      * <p>
      * <pre class="code">
      * Assert.notEmpty(array, ()-&gt;{
@@ -763,8 +754,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言给定数组是否不包含{@code null}元素，如果数组为空或 {@code null}将被认为不包含
-     * 并使用指定的函数获取错误信息返回
+     * 断言给定数组是否不包含{@code null}元素，如果数组为空或 {@code null}将被认为不包含 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.noNullElements(array, ()-&gt;{
      *      // to query relation message
@@ -827,8 +817,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言给定集合非空
-     * 并使用指定的函数获取错误信息返回
+     * 断言给定集合非空 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notEmpty(collection, ()-&gt;{
      *      // to query relation message
@@ -847,7 +836,7 @@ public class ArgumentAssert {
      * @since 5.4.5
      */
     public static <E, T extends Iterable<E>, X extends Throwable> T notEmpty(T collection,
-                                                                             Supplier<X> errorSupplier)
+            Supplier<X> errorSupplier)
             throws X {
         if (CollUtil.isEmpty(collection)) {
             throw errorSupplier.get();
@@ -871,8 +860,8 @@ public class ArgumentAssert {
      * @throws ArgumentException if the collection is {@code null} or has no elements
      */
     public static <E, T extends Iterable<E>> T notEmpty(T collection,
-                                                        String errorMsgTemplate,
-                                                        Object... params) throws ArgumentException {
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         return notEmpty(collection,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -896,8 +885,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 断言给定Map非空
-     * 并使用指定的函数获取错误信息返回
+     * 断言给定Map非空 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.notEmpty(map, ()-&gt;{
      *      // to query relation message
@@ -917,7 +905,7 @@ public class ArgumentAssert {
      * @since 5.4.5
      */
     public static <K, V, T extends Map<K, V>, X extends Throwable> T notEmpty(T map,
-                                                                              Supplier<X> errorSupplier)
+            Supplier<X> errorSupplier)
             throws X {
         if (MapUtil.isEmpty(map)) {
             throw errorSupplier.get();
@@ -942,8 +930,8 @@ public class ArgumentAssert {
      * @throws ArgumentException if the map is {@code null} or has no entries
      */
     public static <K, V, T extends Map<K, V>> T notEmpty(T map,
-                                                         String errorMsgTemplate,
-                                                         Object... params)
+            String errorMsgTemplate,
+            Object... params)
             throws ArgumentException {
         return notEmpty(map, () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -1002,9 +990,9 @@ public class ArgumentAssert {
      * @see Class#isInstance(Object) Class#isInstance(Object)
      */
     public static <T> T isInstanceOf(Class<?> type,
-                                     T obj,
-                                     String errorMsgTemplate,
-                                     Object... params) throws ArgumentException {
+            T obj,
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         notNull(type, "Type to check against must not be null");
         if (!type.isInstance(obj)) {
             throw new ArgumentException(StrUtil.format(errorMsgTemplate, params));
@@ -1041,9 +1029,9 @@ public class ArgumentAssert {
      * @throws ArgumentException 如果子类非继承父类，抛出此异常
      */
     public static void isAssignable(Class<?> superType,
-                                    Class<?> subType,
-                                    String errorMsgTemplate,
-                                    Object... params) throws ArgumentException {
+            Class<?> subType,
+            String errorMsgTemplate,
+            Object... params) throws ArgumentException {
         notNull(superType, "Type to check against must not be null");
         if (subType == null || !superType.isAssignableFrom(subType)) {
             throw new ArgumentException(StrUtil.format(errorMsgTemplate, params));
@@ -1051,8 +1039,7 @@ public class ArgumentAssert {
     }
 
     /**
-     * 检查boolean表达式，当检查结果为false时抛出 {@code IllegalStateException}。
-     * 并使用指定的函数获取错误信息返回
+     * 检查boolean表达式，当检查结果为false时抛出 {@code IllegalStateException}。 并使用指定的函数获取错误信息返回
      * <pre class="code">
      * Assert.state(id == null, ()-&gt;{
      *      // to query relation message
@@ -1231,9 +1218,9 @@ public class ArgumentAssert {
      * @throws ArgumentException if expression is {@code false}
      */
     public static void equals(Object expected,
-                              Object actual,
-                              String errorMsgTemplate,
-                              Object... params) {
+            Object actual,
+            String errorMsgTemplate,
+            Object... params) {
         equals(expected, actual,
                 () -> new ArgumentException(StrUtil.format(errorMsgTemplate, params)));
     }
@@ -1247,8 +1234,8 @@ public class ArgumentAssert {
      * @throws X if expression is {@code false}
      */
     public static <X extends Throwable> void equals(Object expected,
-                                                    Object actual,
-                                                    Supplier<? extends X> supplier) throws X {
+            Object actual,
+            Supplier<? extends X> supplier) throws X {
         if (!ObjectUtil.equals(expected, actual)) {
             throw supplier.get();
         }

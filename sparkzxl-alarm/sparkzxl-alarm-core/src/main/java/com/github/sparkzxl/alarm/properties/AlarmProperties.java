@@ -3,17 +3,16 @@ package com.github.sparkzxl.alarm.properties;
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
+import java.security.InvalidParameterException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.CollectionUtils;
-
-import java.security.InvalidParameterException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 告警属性配置
@@ -86,8 +85,7 @@ public class AlarmProperties implements InitializingBean {
          */
         private String robotUrl;
         /**
-         * 获取 access_token, 必填
-         * 填写机器人设置中 webhook access_token | key后面的值
+         * 获取 access_token, 必填 填写机器人设置中 webhook access_token | key后面的值
          */
         private String tokenId;
         /**

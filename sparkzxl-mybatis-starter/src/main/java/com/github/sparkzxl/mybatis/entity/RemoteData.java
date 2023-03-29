@@ -1,12 +1,11 @@
 package com.github.sparkzxl.mybatis.entity;
 
 import cn.hutool.core.util.ObjectUtil;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * description: 远程数据对象

@@ -11,6 +11,7 @@ import com.baidu.fsg.uid.exception.UidGenerateException;
  * @author zhouxinlei
  */
 public class HuToolUidGenerator implements UidGenerator {
+
     private final Snowflake snowflake;
 
     public HuToolUidGenerator(long workerId, long datacenterId) {

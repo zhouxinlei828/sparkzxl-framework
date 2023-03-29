@@ -9,6 +9,11 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import javax.annotation.Nonnull;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.ApplicationConfig;
@@ -19,12 +24,6 @@ import org.apache.dubbo.rpc.service.GenericService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-
-import javax.annotation.Nonnull;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * description: The type Application config cache.
@@ -72,7 +71,8 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * @param dubboRegisterConfig the dubbo register config
      */
     public void init(final DubboRegisterConfig dubboRegisterConfig) {
-        String applicationName = StringUtils.isEmpty(SpringContextUtils.getApplicationName()) ? "spring-gateway-proxy" : SpringContextUtils.getApplicationName();
+        String applicationName = StringUtils.isEmpty(SpringContextUtils.getApplicationName()) ? "spring-gateway-proxy"
+                : SpringContextUtils.getApplicationName();
         if (Objects.isNull(applicationConfig)) {
             applicationConfig = new ApplicationConfig(applicationName);
             applicationConfig.setRegisterMode("instance");
@@ -194,7 +194,9 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
                 String newAddress = registryConfig.getAddress() + "?" + DubboConstant.NAMESPACE + "=" + namespace;
                 registryConfigTemp.setAddress(newAddress);
             } else {
-                String newAddress = registryConfig.getAddress().substring(0, registryConfig.getAddress().indexOf(DubboConstant.NAMESPACE) + 1) + DubboConstant.NAMESPACE + "=" + namespace;
+                String newAddress =
+                        registryConfig.getAddress().substring(0, registryConfig.getAddress().indexOf(DubboConstant.NAMESPACE) + 1)
+                                + DubboConstant.NAMESPACE + "=" + namespace;
                 registryConfigTemp.setAddress(newAddress);
             }
         }
@@ -236,6 +238,7 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
      * The type Application config cache instance.
      */
     static final class ApplicationConfigCacheInstance {
+
         /**
          * The Instance.
          */

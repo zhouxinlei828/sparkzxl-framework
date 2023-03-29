@@ -1,10 +1,9 @@
 package com.github.sparkzxl.patterns.pipeline;
 
 import com.google.common.collect.Maps;
-import org.springframework.core.annotation.AnnotationUtils;
-
 import java.util.Map;
 import java.util.Objects;
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * description: 责任链管理

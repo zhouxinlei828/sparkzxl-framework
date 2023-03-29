@@ -1,14 +1,31 @@
 package org.springframework.cloud.openfeign.loadbalancer;
 
+import static org.springframework.cloud.openfeign.loadbalancer.LoadBalancerUtils.executeWithLoadBalancerLifecycleProcessing;
+
 import com.google.common.collect.Maps;
 import feign.Client;
 import feign.Request;
 import feign.Response;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.*;
+import org.springframework.cloud.client.loadbalancer.CompletionContext;
+import org.springframework.cloud.client.loadbalancer.DefaultRequest;
+import org.springframework.cloud.client.loadbalancer.DefaultResponse;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerLifecycle;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerLifecycleValidator;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerProperties;
+import org.springframework.cloud.client.loadbalancer.RequestData;
+import org.springframework.cloud.client.loadbalancer.RequestDataContext;
+import org.springframework.cloud.client.loadbalancer.ResponseData;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -17,20 +34,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-
-import static org.springframework.cloud.openfeign.loadbalancer.LoadBalancerUtils.executeWithLoadBalancerLifecycleProcessing;
-
 
 /**
- * description: FeignBlockingLoadBalancerClient的改写
- * 将获取每个实例的断路器数据需要的信息填充到 lb 请求
- * 然后在负载均衡器进行获取从而拿到实例的负载均衡请求
+ * description: FeignBlockingLoadBalancerClient的改写 将获取每个实例的断路器数据需要的信息填充到 lb 请求 然后在负载均衡器进行获取从而拿到实例的负载均衡请求
  *
  * @author zhouxinlei
  * @since 2022-04-04 12:01:34
@@ -88,8 +94,7 @@ public class FeignBlockingLoadBalancerClientExtend implements Client {
     }
 
     /**
-     * 修改的就是这里，原来这个方法是在 LoadBalancerUtils 里面
-     * 这里就是将 Request 的额外信息放进去
+     * 修改的就是这里，原来这个方法是在 LoadBalancerUtils 里面 这里就是将 Request 的额外信息放进去
      *
      * @param request
      * @return

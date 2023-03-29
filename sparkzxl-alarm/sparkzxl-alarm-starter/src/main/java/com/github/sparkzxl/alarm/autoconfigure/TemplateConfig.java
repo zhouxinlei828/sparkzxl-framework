@@ -2,10 +2,9 @@ package com.github.sparkzxl.alarm.autoconfigure;
 
 import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.enums.TemplateChannel;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.Map;
 
 /**
  * description:

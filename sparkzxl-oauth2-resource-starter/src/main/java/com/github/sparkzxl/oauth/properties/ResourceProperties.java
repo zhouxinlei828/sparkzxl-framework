@@ -1,9 +1,9 @@
 package com.github.sparkzxl.oauth.properties;
 
+import static com.github.sparkzxl.oauth.properties.ResourceProperties.RESOURCE_PREFIX;
+
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import static com.github.sparkzxl.oauth.properties.ResourceProperties.RESOURCE_PREFIX;
 
 /**
  * description:  oauth resource属性

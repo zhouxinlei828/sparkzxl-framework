@@ -8,7 +8,17 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.*;
+import com.aliyun.oss.model.CompleteMultipartUploadRequest;
+import com.aliyun.oss.model.CompleteMultipartUploadResult;
+import com.aliyun.oss.model.GeneratePresignedUrlRequest;
+import com.aliyun.oss.model.InitiateMultipartUploadRequest;
+import com.aliyun.oss.model.InitiateMultipartUploadResult;
+import com.aliyun.oss.model.OSSObject;
+import com.aliyun.oss.model.ObjectMetadata;
+import com.aliyun.oss.model.PartETag;
+import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.UploadPartRequest;
+import com.aliyun.oss.model.UploadPartResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.StrPool;
@@ -18,10 +28,6 @@ import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * description: aliYun 执行器
@@ -300,7 +309,6 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                 // 每次上传分片之后，OSS的返回结果包含PartETag。PartETag将被保存在partETags中。
                 partTagList.add(uploadPartResult.getPartETag());
             }
-
 
             // 创建CompleteMultipartUploadRequest对象。
             // 在执行完成分片上传操作时，需要提供所有有效的partETags。OSS收到提交的partETags后，会逐一验证每个分片的有效性。当所有的数据分片验证通过后，OSS将把这些分片组合成一个完整的文件。

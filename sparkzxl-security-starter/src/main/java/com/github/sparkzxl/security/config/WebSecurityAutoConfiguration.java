@@ -11,6 +11,7 @@ import com.github.sparkzxl.security.filter.JwtAuthenticationTokenFilter;
 import com.github.sparkzxl.security.intercept.DynamicSecurityMetadataSource;
 import com.github.sparkzxl.security.properties.SecurityProperties;
 import com.github.sparkzxl.security.service.DynamicSecurityService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
-
-import java.util.List;
 
 /**
  * description: Spring Security 配置

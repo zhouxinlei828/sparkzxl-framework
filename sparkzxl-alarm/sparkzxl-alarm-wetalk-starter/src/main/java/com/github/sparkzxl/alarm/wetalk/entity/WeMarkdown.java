@@ -25,6 +25,7 @@ import java.util.Map;
  * @since 2022-05-19 10:16:43
  */
 public class WeMarkdown extends WeTalkMessage {
+
     private Markdown markdown;
 
     public WeMarkdown(Markdown markdown) {
@@ -41,6 +42,7 @@ public class WeMarkdown extends WeTalkMessage {
     }
 
     public static class Markdown implements Serializable {
+
         /**
          * markdown内容，最长不超过4096个字节，必须是utf8编码
          */

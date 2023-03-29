@@ -2,13 +2,12 @@ package com.github.sparkzxl.user.resolver;
 
 import com.github.sparkzxl.core.entity.AuthUserInfo;
 import com.github.sparkzxl.user.manager.UserStateManager;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * description: 全局获取用户信息

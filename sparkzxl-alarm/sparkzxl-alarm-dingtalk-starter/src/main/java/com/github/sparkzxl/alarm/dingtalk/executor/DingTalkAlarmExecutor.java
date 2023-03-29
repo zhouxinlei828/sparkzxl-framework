@@ -14,10 +14,9 @@ import com.github.sparkzxl.alarm.exception.AsyncCallException;
 import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.sign.BaseSign;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * description: 钉钉告警执行器

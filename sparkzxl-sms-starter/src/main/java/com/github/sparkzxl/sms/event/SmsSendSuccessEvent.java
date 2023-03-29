@@ -1,12 +1,11 @@
 package com.github.sparkzxl.sms.event;
 
+import java.util.Map;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.context.ApplicationEvent;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * description: 发送成功事件
@@ -37,8 +36,8 @@ public class SmsSendSuccessEvent extends ApplicationEvent {
     private final Map<String, Object> params;
 
     public SmsSendSuccessEvent(String response, String smsRegister,
-                               Set<String> phones, String msgContent,
-                               Map<String, Object> params) {
+            Set<String> phones, String msgContent,
+            Map<String, Object> params) {
         super(response);
         this.smsRegister = smsRegister;
         this.phones = phones;

@@ -3,8 +3,14 @@ package com.github.sparkzxl.grpc.client;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.grpc.core.GrpcHeaderContextHolder;
-import io.grpc.*;
-
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.ClientCall;
+import io.grpc.ClientInterceptor;
+import io.grpc.ForwardingClientCall;
+import io.grpc.ForwardingClientCallListener;
+import io.grpc.Metadata;
+import io.grpc.MethodDescriptor;
 import java.util.Map;
 
 /**
@@ -16,7 +22,8 @@ import java.util.Map;
 public class ContextClientGrpcInterceptor implements ClientInterceptor {
 
     @Override
-    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel channel) {
+    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions,
+            Channel channel) {
         Map<String, Object> threadLocalMap = RequestLocalContextHolder.getLocalMap();
         String threadLocalMapJsonString = JsonUtils.getJson().toJson(threadLocalMap);
         return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(method, callOptions)) {

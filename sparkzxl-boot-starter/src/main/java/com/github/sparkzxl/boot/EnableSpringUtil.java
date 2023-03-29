@@ -1,9 +1,12 @@
 package com.github.sparkzxl.boot;
 
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
 
 /**
  * description: 自动注入SpringUtil
@@ -15,4 +18,5 @@ import java.lang.annotation.*;
 @Documented
 @Import(SpringContextUtils.class)
 public @interface EnableSpringUtil {
+
 }

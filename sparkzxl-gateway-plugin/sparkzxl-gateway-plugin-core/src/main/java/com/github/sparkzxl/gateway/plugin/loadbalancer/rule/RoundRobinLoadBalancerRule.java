@@ -1,13 +1,12 @@
 package com.github.sparkzxl.gateway.plugin.loadbalancer.rule;
 
 import com.github.sparkzxl.gateway.common.constant.enums.RuleEnum;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * description: 轮询方式轮询选择服务实例

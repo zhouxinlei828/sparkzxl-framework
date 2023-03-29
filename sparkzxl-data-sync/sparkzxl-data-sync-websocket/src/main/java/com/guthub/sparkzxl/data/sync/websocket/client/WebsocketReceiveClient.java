@@ -10,15 +10,14 @@ import com.github.sparkzxl.data.sync.common.timer.TimerTask;
 import com.github.sparkzxl.data.sync.common.timer.WheelTimerFactory;
 import com.guthub.sparkzxl.data.sync.websocket.handler.DataHandler;
 import com.guthub.sparkzxl.data.sync.websocket.handler.WebsocketDataConsumerHandler;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: The type websocket client.
@@ -45,7 +44,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
      * @param dataHandlerList the dataHandlers
      */
     public WebsocketReceiveClient(final URI serverUri,
-                                  final List<DataHandler> dataHandlerList) {
+            final List<DataHandler> dataHandlerList) {
         super(serverUri);
         this.consumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
         this.timer = WheelTimerFactory.getSharedTimer();
@@ -59,8 +58,8 @@ public class WebsocketReceiveClient extends WebSocketClient {
      * @param dataHandlerList the dataHandlers
      */
     public WebsocketReceiveClient(final URI serverUri,
-                                  final Map<String, String> headers,
-                                  final List<DataHandler> dataHandlerList) {
+            final Map<String, String> headers,
+            final List<DataHandler> dataHandlerList) {
         super(serverUri, headers);
         this.consumerHandler = new WebsocketDataConsumerHandler(dataHandlerList);
         this.timer = WheelTimerFactory.getSharedTimer();
@@ -125,8 +124,7 @@ public class WebsocketReceiveClient extends WebSocketClient {
     }
 
     /**
-     * Now close.
-     * now close. will cancel the task execution.
+     * Now close. now close. will cancel the task execution.
      */
     public void nowClose() {
         this.close();

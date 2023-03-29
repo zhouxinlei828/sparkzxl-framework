@@ -9,6 +9,7 @@ import com.github.sparkzxl.alarm.enums.AlarmErrorEnum;
  * @since 2022-05-18 10:52:42
  */
 public class AlarmResponse {
+
     /**
      * 响应码
      */

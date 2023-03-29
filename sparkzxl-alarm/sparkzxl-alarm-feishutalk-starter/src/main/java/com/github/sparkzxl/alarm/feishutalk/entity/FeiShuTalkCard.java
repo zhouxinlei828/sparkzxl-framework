@@ -3,12 +3,11 @@ package com.github.sparkzxl.alarm.feishutalk.entity;
 
 import cn.hutool.core.convert.Convert;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 飞书活动卡片消息
@@ -40,6 +39,7 @@ public class FeiShuTalkCard extends Message {
     @NoArgsConstructor
     @Data
     public static class Card {
+
         @JsonProperty("config")
         private Config config;
         @JsonProperty("elements")
@@ -50,6 +50,7 @@ public class FeiShuTalkCard extends Message {
         @NoArgsConstructor
         @Data
         public static class Config {
+
             @JsonProperty("wide_screen_mode")
             private Boolean wideScreenMode;
             @JsonProperty("enable_forward")
@@ -59,12 +60,14 @@ public class FeiShuTalkCard extends Message {
         @NoArgsConstructor
         @Data
         public static class Header {
+
             @JsonProperty("title")
             private Title title;
 
             @NoArgsConstructor
             @Data
             public static class Title {
+
                 @JsonProperty("content")
                 private String content;
                 @JsonProperty("tag")
@@ -75,6 +78,7 @@ public class FeiShuTalkCard extends Message {
         @NoArgsConstructor
         @Data
         public static class Element {
+
             @JsonProperty("tag")
             private String tag;
             @JsonProperty("text")
@@ -85,6 +89,7 @@ public class FeiShuTalkCard extends Message {
             @NoArgsConstructor
             @Data
             public static class Text {
+
                 @JsonProperty("content")
                 private String content;
                 @JsonProperty("tag")
@@ -94,6 +99,7 @@ public class FeiShuTalkCard extends Message {
             @NoArgsConstructor
             @Data
             public static class Action {
+
                 @JsonProperty("tag")
                 private String tag;
                 @JsonProperty("text")

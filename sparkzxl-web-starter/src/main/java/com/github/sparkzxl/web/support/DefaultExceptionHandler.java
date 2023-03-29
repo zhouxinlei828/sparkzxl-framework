@@ -1,12 +1,21 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.ArgumentException;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.security.auth.login.AccountNotFoundException;
+import javax.servlet.ServletException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.core.Ordered;
@@ -27,16 +36,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.util.NestedServletException;
-
-import javax.security.auth.login.AccountNotFoundException;
-import javax.servlet.ServletException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * description: 全局异常处理

@@ -13,11 +13,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AlarmTaskInfo {
+
     private final String robotId;
     private final AlarmRequest alarmRequest;
 
     public AlarmTaskInfo(String robotId,
-                         AlarmRequest alarmRequest) {
+            AlarmRequest alarmRequest) {
         this.robotId = robotId;
         this.alarmRequest = alarmRequest;
     }

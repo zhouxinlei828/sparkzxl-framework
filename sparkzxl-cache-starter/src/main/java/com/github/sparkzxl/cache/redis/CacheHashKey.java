@@ -2,13 +2,12 @@ package com.github.sparkzxl.cache.redis;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.util.StrPool;
+import java.time.Duration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
-
-import java.time.Duration;
 
 /**
  * description: hash 缓存 key 封装
@@ -20,6 +19,7 @@ import java.time.Duration;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CacheHashKey extends CacheKey {
+
     /**
      * redis hash field
      */

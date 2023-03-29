@@ -1,17 +1,20 @@
 package com.github.sparkzxl.gateway.utils;
 
 import com.github.sparkzxl.gateway.support.GatewayException;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -19,10 +22,20 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: GsonUtils
@@ -45,8 +58,9 @@ public class GsonUtils {
             .registerTypeHierarchyAdapter(Duration.class, new DurationTypeAdapter())
             .create();
 
-    private static final Gson GSON_MAP = new GsonBuilder().serializeNulls().registerTypeHierarchyAdapter(new TypeToken<Map<String, Object>>() {
-    }.getRawType(), new MapDeserializer<String, Object>()).create();
+    private static final Gson GSON_MAP = new GsonBuilder().serializeNulls()
+            .registerTypeHierarchyAdapter(new TypeToken<Map<String, Object>>() {
+            }.getRawType(), new MapDeserializer<String, Object>()).create();
 
     private static final String DOT = ".";
 
@@ -223,7 +237,8 @@ public class GsonUtils {
      * @return the map
      */
     public <T> Map<String, List<T>> toObjectMapList(final String json, final Class<T> clazz) {
-        return GSON.fromJson(json, TypeToken.getParameterized(Map.class, String.class, TypeToken.getParameterized(List.class, clazz).getType()).getType());
+        return GSON.fromJson(json,
+                TypeToken.getParameterized(Map.class, String.class, TypeToken.getParameterized(List.class, clazz).getType()).getType());
     }
 
     /**
@@ -236,7 +251,7 @@ public class GsonUtils {
         return GSON_MAP.fromJson(json, new TypeToken<ConcurrentSkipListMap<String, Object>>() {
         }.getType());
     }
-    
+
     /**
      * Convert to map.
      *
@@ -304,6 +319,7 @@ public class GsonUtils {
     }
 
     private static class MapDeserializer<T, U> implements JsonDeserializer<Map<T, U>> {
+
         @SuppressWarnings("unchecked")
         @Override
         public Map<T, U> deserialize(final JsonElement json, final Type type, final JsonDeserializationContext context) {
@@ -377,6 +393,7 @@ public class GsonUtils {
     }
 
     private static class StringTypeAdapter extends TypeAdapter<String> {
+
         @Override
         public void write(final JsonWriter out, final String value) {
             try {
@@ -441,6 +458,7 @@ public class GsonUtils {
     }
 
     private static class DurationTypeAdapter extends TypeAdapter<Duration> {
+
         @Override
         public void write(final JsonWriter out, final Duration value) {
             try {

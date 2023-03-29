@@ -3,16 +3,15 @@ package com.github.sparkzxl.security.intercept;
 import cn.hutool.core.util.URLUtil;
 import com.github.sparkzxl.security.service.DynamicSecurityService;
 import com.google.common.collect.Lists;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
-
-import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 动态权限控制数据管理

@@ -1,10 +1,9 @@
 package com.guthub.sparkzxl.data.sync.nacos.config;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import java.util.List;
 import java.util.Objects;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: nacos client Properties

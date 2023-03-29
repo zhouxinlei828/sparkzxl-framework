@@ -8,14 +8,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 
 /**
  * description: 默认的缓存加载器
@@ -25,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class DefaultCacheLoader extends CacheLoader<CacheLoadKeys, Map<Serializable, Object>> {
+
     /**
      * 侦听执行器服务
      */

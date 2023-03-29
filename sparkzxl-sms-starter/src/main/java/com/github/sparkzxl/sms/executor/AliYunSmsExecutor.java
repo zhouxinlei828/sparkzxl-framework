@@ -15,12 +15,11 @@ import com.github.sparkzxl.sms.parser.TemplateParamParser;
 import com.github.sparkzxl.sms.request.SendSmsReq;
 import com.github.sparkzxl.sms.support.SmsException;
 import com.github.sparkzxl.sms.support.SmsExceptionCodeEnum;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.util.CollectionUtils;
-
-import java.util.Set;
 
 /**
  * description: 阿里云短信发送
@@ -43,7 +42,8 @@ public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
         }
         String phoneNumberListStr = StringUtils.join(phones, ",");
         try {
-            SendSmsRequest smsRequest = new SendSmsRequest().setSignName(sendSmsReq.getSign()).setTemplateCode(sendSmsReq.getTemplateId()).setTemplateParam(JSONUtil.toJsonStr(sendSmsReq.getTemplateParams())).setPhoneNumbers(phoneNumberListStr);
+            SendSmsRequest smsRequest = new SendSmsRequest().setSignName(sendSmsReq.getSign()).setTemplateCode(sendSmsReq.getTemplateId())
+                    .setTemplateParam(JSONUtil.toJsonStr(sendSmsReq.getTemplateParams())).setPhoneNumbers(phoneNumberListStr);
             SendSmsResponse response = obtainClient().sendSms(smsRequest);
             SendSmsResponseBody sendSmsResponseBody = response.getBody();
             String smsResponseBody = JSON.toJSONString(sendSmsResponseBody);
@@ -53,18 +53,21 @@ public class AliYunSmsExecutor extends AbstractSmsExecutor<Client> {
             SmsExceptionCodeEnum exceptionCodeEnum = SmsExceptionCodeEnum.SUCCESS;
             if (!success) {
                 exceptionCodeEnum = SmsExceptionCodeEnum.SMS_SEND_FAIL;
-                publishSendFailEvent(smsResponseBody, sendSmsReq, new SmsException(sendSmsResponseBody.getCode(), sendSmsResponseBody.getMessage()));
+                publishSendFailEvent(smsResponseBody, sendSmsReq,
+                        new SmsException(sendSmsResponseBody.getCode(), sendSmsResponseBody.getMessage()));
             }
             String content = sendSmsReq.getTemplateContent();
             if (MapUtil.isNotEmpty(sendSmsReq.getTemplateParams())) {
                 content = TemplateParamParser.replaceContent(content, sendSmsReq.getTemplateParams());
             }
             publishSendSuccessEvent(smsResponseBody, content, sendSmsReq);
-            return SmsResult.builder().code(exceptionCodeEnum.getErrorCode()).isSuccess(success).message(sendSmsResponseBody.getMessage()).response(smsResponseBody).build();
+            return SmsResult.builder().code(exceptionCodeEnum.getErrorCode()).isSuccess(success).message(sendSmsResponseBody.getMessage())
+                    .response(smsResponseBody).build();
         } catch (Exception e) {
             log.error("阿里云短信发送异常：", e);
             publishSendFailEvent(null, sendSmsReq, e);
-            return SmsResult.builder().code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode()).isSuccess(false).message(e.getMessage()).build();
+            return SmsResult.builder().code(SmsExceptionCodeEnum.SMS_SEND_FAIL.getErrorCode()).isSuccess(false).message(e.getMessage())
+                    .build();
         }
     }
 

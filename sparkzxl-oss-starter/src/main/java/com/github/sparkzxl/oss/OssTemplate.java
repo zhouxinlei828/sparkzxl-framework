@@ -5,15 +5,14 @@ import com.github.sparkzxl.oss.context.OssClientContextHolder;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.executor.OssExecutorFactoryContext;
 import com.github.sparkzxl.oss.properties.OssProperties;
+import java.io.InputStream;
+import java.util.function.Consumer;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.InputStream;
-import java.util.function.Consumer;
 
 /**
  * description:  文件操作模板类

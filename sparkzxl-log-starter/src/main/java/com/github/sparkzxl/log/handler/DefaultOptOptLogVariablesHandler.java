@@ -7,10 +7,9 @@ import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.log.annotation.OptLogParam;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Method;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 默认操作日志变量参数实现类

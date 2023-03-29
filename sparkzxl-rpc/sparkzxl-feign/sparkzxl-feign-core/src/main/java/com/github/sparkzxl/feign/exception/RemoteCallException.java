@@ -3,14 +3,13 @@ package com.github.sparkzxl.feign.exception;
 import feign.FeignException;
 import feign.Response;
 import feign.Util;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 
 /**
  * description: feign远程调用异常

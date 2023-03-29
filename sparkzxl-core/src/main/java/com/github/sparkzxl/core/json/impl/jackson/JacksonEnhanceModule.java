@@ -16,10 +16,6 @@ import com.github.sparkzxl.core.json.impl.jackson.serializer.CustomDateDeseriali
 import com.github.sparkzxl.core.json.impl.jackson.serializer.CustomLocalDateTimeDeSerializer;
 import com.github.sparkzxl.core.json.impl.jackson.serializer.EnumSerializer;
 import com.github.sparkzxl.spi.ExtensionLoader;
-import org.apache.commons.collections4.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -29,6 +25,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: Jackson增强模块
@@ -51,13 +50,15 @@ public class JacksonEnhanceModule extends SimpleModule {
         this.addSerializer(Enumerator.class, EnumSerializer.INSTANCE);
 
         // 时间序列化
-        this.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
+        this.addSerializer(LocalDateTime.class,
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
         this.addSerializer(Date.class, new DateSerializer(false, new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN)));
         this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)));
         this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)));
 
         // 时间反序列化
-        this.addDeserializer(LocalDateTime.class, new CustomLocalDateTimeDeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
+        this.addDeserializer(LocalDateTime.class,
+                new CustomLocalDateTimeDeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
         this.addDeserializer(Date.class, new CustomDateDeserializer(DatePattern.NORM_DATETIME_PATTERN));
         this.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)));
         this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)));

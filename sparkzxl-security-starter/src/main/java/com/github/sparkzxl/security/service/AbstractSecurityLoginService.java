@@ -2,14 +2,20 @@ package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
+import com.github.sparkzxl.jwt.properties.JwtProperties;
+import com.github.sparkzxl.jwt.service.JwtTokenService;
 import com.github.sparkzxl.security.entity.AuthRequest;
 import com.github.sparkzxl.security.entity.AuthUserDetail;
 import com.github.sparkzxl.security.entity.UserToken;
-import com.github.sparkzxl.jwt.properties.JwtProperties;
-import com.github.sparkzxl.jwt.service.JwtTokenService;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.security.auth.login.AccountNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -17,13 +23,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import javax.security.auth.login.AccountNotFoundException;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * description: 登录授权Service

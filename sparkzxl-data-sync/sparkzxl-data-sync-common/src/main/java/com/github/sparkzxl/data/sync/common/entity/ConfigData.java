@@ -1,7 +1,6 @@
 package com.github.sparkzxl.data.sync.common.entity;
 
 import com.github.sparkzxl.core.json.JsonUtils;
-
 import java.util.List;
 import java.util.Objects;
 

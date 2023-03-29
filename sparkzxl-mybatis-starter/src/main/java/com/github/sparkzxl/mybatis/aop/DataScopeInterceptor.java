@@ -3,14 +3,13 @@ package com.github.sparkzxl.mybatis.aop;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.mybatis.annotation.DataScope;
+import java.lang.reflect.Method;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.lang.NonNull;
-
-import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * description: 多列数据权限aop处理器

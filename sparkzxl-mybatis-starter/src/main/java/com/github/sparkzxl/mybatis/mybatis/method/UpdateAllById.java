@@ -2,9 +2,8 @@ package com.github.sparkzxl.mybatis.mybatis.method;
 
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.extension.injector.methods.AlwaysUpdateSomeColumnById;
-import lombok.NoArgsConstructor;
-
 import java.util.function.Predicate;
+import lombok.NoArgsConstructor;
 
 /**
  * description: 修改所有的字段

@@ -2,7 +2,6 @@ package com.github.sparkzxl.mybatis.plugins;
 
 
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
-
 import java.util.Collections;
 import java.util.List;
 

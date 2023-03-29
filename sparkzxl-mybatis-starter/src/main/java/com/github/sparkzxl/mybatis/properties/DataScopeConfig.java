@@ -1,11 +1,10 @@
 package com.github.sparkzxl.mybatis.properties;
 
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * description: 多列数据权限配置
@@ -17,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataScopeConfig {
+
     /**
      * 数据权限id标识
      */
@@ -38,6 +38,7 @@ public class DataScopeConfig {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DataColumn {
+
         /**
          * 数据权限字段
          */

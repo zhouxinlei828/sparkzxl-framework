@@ -4,8 +4,6 @@ package com.github.sparkzxl.mybatis.echo.manager;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.database.echo.annotation.EchoField;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -13,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * description: 类管理器

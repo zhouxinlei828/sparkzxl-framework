@@ -4,10 +4,9 @@ import com.github.sparkzxl.alarm.autoconfigure.TemplateConfig;
 import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.support.AlarmErrorCodeEnum;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
-
-import java.util.Map;
 
 /**
  * description: YAML告警模板加载

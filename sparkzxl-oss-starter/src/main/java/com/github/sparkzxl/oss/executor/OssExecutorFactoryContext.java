@@ -7,11 +7,10 @@ import com.github.sparkzxl.oss.client.OssClientManager;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.github.sparkzxl.spi.ExtensionLoader;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.DisposableBean;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 
 /**
  * description:
@@ -27,7 +26,7 @@ public class OssExecutorFactoryContext implements ConfigCache, DisposableBean {
     private final OssConfigProvider configProvider;
 
     public OssExecutorFactoryContext(OssClientManager ossClientManager,
-                                     OssConfigProvider configProvider) {
+            OssConfigProvider configProvider) {
         this.ossClientManager = ossClientManager;
         this.configProvider = configProvider;
     }

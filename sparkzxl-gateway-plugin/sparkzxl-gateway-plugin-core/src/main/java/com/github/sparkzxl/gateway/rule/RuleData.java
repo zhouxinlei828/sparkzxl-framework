@@ -1,8 +1,7 @@
 package com.github.sparkzxl.gateway.rule;
 
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * description: 规则数据

@@ -31,8 +31,8 @@ public class JwtExpireException extends BaseUncheckedException {
     }
 
     public JwtExpireException(IErrorCode errorCode,
-                              String message,
-                              Throwable cause) {
+            String message,
+            Throwable cause) {
         super(errorCode.getErrorCode(), message, cause);
     }
 }

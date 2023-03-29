@@ -61,9 +61,9 @@ public class GatewayPluginDubboAutoConfig {
     @RefreshScope
     @ConditionalOnMissingBean(ApacheDubboFilter.class)
     public GlobalFilter apacheDubboFilter(DubboMetaDataFactory dubboMetaDataFactory,
-                                          DubboRoutePredicate dubboRoutePredicate,
-                                          ApacheDubboProxyService apacheDubboProxyService,
-                                          DubboMessageWriter dubboMessageWriter) {
+            DubboRoutePredicate dubboRoutePredicate,
+            ApacheDubboProxyService apacheDubboProxyService,
+            DubboMessageWriter dubboMessageWriter) {
         return new ApacheDubboFilter(dubboMetaDataFactory, dubboRoutePredicate, apacheDubboProxyService, dubboMessageWriter);
     }
 

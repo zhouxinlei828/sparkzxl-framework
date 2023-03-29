@@ -1,7 +1,6 @@
 package com.github.sparkzxl.alarm.wetalk.entity;
 
 import com.google.common.collect.Lists;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import java.util.Set;
  * @since 2022-05-18 17:14:18
  */
 public class WeText extends WeTalkMessage {
+
     private Text text;
 
     public WeText(Text text) {
@@ -30,13 +30,13 @@ public class WeText extends WeTalkMessage {
     }
 
     public static class Text implements Serializable {
+
         /**
          * 文本内容，最长不超过2048个字节，必须是utf8编码
          */
         private String content;
         /**
-         * userid的列表，提醒群中的指定成员(@某个成员)，@all表示提醒所有人；
-         * 如果开发者获取不到userid，可以使用mentioned_mobile_list
+         * userid的列表，提醒群中的指定成员(@某个成员)，@all表示提醒所有人； 如果开发者获取不到userid，可以使用mentioned_mobile_list
          *
          * <p>
          * <code>["wangqing","@all"]</code>

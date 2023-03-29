@@ -1,7 +1,6 @@
 package com.github.sparkzxl.alarm.message;
 
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
-
 import java.text.MessageFormat;
 
 /**

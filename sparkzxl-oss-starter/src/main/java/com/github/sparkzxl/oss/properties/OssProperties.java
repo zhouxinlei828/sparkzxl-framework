@@ -1,12 +1,11 @@
 package com.github.sparkzxl.oss.properties;
 
+import static com.github.sparkzxl.oss.properties.OssProperties.OSS_PREFIX;
+
 import com.github.sparkzxl.oss.enums.RegisterMode;
+import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
-
-import static com.github.sparkzxl.oss.properties.OssProperties.OSS_PREFIX;
 
 /**
  * description: oss属性注入

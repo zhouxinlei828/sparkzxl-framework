@@ -2,14 +2,13 @@ package com.github.sparkzxl.cache.service;
 
 import com.github.sparkzxl.cache.redis.CacheHashKey;
 import com.github.sparkzxl.cache.redis.CacheKey;
-import org.springframework.lang.NonNull;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import org.springframework.lang.NonNull;
 
 /**
  * description: 缓存提供接口
@@ -162,11 +161,8 @@ public interface CacheService {
     /**
      * 查找所有符合给定模式 pattern 的 key 。
      * <p>
-     * 例子：
-     * KEYS * 匹配数据库中所有 key 。
-     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
-     * KEYS a*cde 匹配 acde 和 aeeeeecde 等。
-     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * 例子： KEYS * 匹配数据库中所有 key 。 KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。 KEYS a*cde 匹配 acde 和 aeeeeecde 等。 KEYS h[ae]llo 匹配 hello 和 hallo
+     * ，但不匹配 hillo 。
      * <p>
      * 特殊符号用 \ 隔开
      *
@@ -178,11 +174,8 @@ public interface CacheService {
     /**
      * 查找所有符合给定模式 pattern 的 key 。
      * <p>
-     * 例子：
-     * KEYS * 匹配数据库中所有 key 。
-     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
-     * KEYS a*cde 匹配 acde 和 aeeeeecde 等。
-     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * 例子： KEYS * 匹配数据库中所有 key 。 KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。 KEYS a*cde 匹配 acde 和 aeeeeecde 等。 KEYS h[ae]llo 匹配 hello 和 hallo
+     * ，但不匹配 hillo 。
      * <p>
      * 特殊符号用 \ 隔开
      *
@@ -194,11 +187,8 @@ public interface CacheService {
     /**
      * 查找所有符合给定模式 pattern 的 key ,并将其删除
      * <p>
-     * 例子：
-     * KEYS * 匹配数据库中所有 key 。
-     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
-     * KEYS a*cde 匹配 acde 和 aeeeeecde 等。
-     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * 例子： KEYS * 匹配数据库中所有 key 。 KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。 KEYS a*cde 匹配 acde 和 aeeeeecde 等。 KEYS h[ae]llo 匹配 hello 和 hallo
+     * ，但不匹配 hillo 。
      * <p>
      * 特殊符号用 \ 隔开
      *
@@ -342,8 +332,7 @@ public interface CacheService {
     List<Object> hVals(@NonNull CacheHashKey key);
 
     /**
-     * 返回哈希表 key 中，所有的域和值。
-     * 在返回值里，紧跟每个域名(field name)之后是域的值(value)，所以返回值的长度是哈希表大小的两倍。
+     * 返回哈希表 key 中，所有的域和值。 在返回值里，紧跟每个域名(field name)之后是域的值(value)，所以返回值的长度是哈希表大小的两倍。
      *
      * @param key 一定不能为 {@literal null}.
      * @return 以列表形式返回哈希表的域和域的值
@@ -351,8 +340,7 @@ public interface CacheService {
     <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key);
 
     /**
-     * 返回哈希表 key 中，所有的域和值。
-     * 在返回值里，紧跟每个域名(field name)之后是域的值(value)，所以返回值的长度是哈希表大小的两倍。
+     * 返回哈希表 key 中，所有的域和值。 在返回值里，紧跟每个域名(field name)之后是域的值(value)，所以返回值的长度是哈希表大小的两倍。
      *
      * @param key             一定不能为 {@literal null}.
      * @param loader          加载回调
@@ -362,9 +350,7 @@ public interface CacheService {
     <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues);
 
     /**
-     * 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。
-     * 假如 key 不存在，则创建一个只包含 member 元素作成员的集合。
-     * 当 key 不是集合类型时，返回一个错误。
+     * 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。 假如 key 不存在，则创建一个只包含 member 元素作成员的集合。 当 key 不是集合类型时，返回一个错误。
      *
      * @param key   一定不能为 {@literal null}.
      * @param value 值
@@ -373,8 +359,7 @@ public interface CacheService {
     Long sAdd(@NonNull CacheKey key, Object value);
 
     /**
-     * 移除集合 key 中的一个或多个 member 元素，不存在的 member 元素会被忽略。
-     * 当 key 不是集合类型，返回一个错误。
+     * 移除集合 key 中的一个或多个 member 元素，不存在的 member 元素会被忽略。 当 key 不是集合类型，返回一个错误。
      *
      * @param key     一定不能为 {@literal null}.
      * @param members 元素
@@ -383,8 +368,7 @@ public interface CacheService {
     Long sRem(@NonNull CacheKey key, Object... members);
 
     /**
-     * 返回集合 key 中的所有成员。
-     * 不存在的 key 被视为空集合。
+     * 返回集合 key 中的所有成员。 不存在的 key 被视为空集合。
      *
      * @param key 一定不能为 {@literal null}.
      * @return 集合中的所有成员。
@@ -392,8 +376,7 @@ public interface CacheService {
     Set<Object> sMembers(@NonNull CacheKey key);
 
     /**
-     * 移除并返回集合中的一个随机元素。
-     * 如果只想获取一个随机元素，但不想该元素从集合中被移除的话，可以使用 SRANDMEMBER 命令。
+     * 移除并返回集合中的一个随机元素。 如果只想获取一个随机元素，但不想该元素从集合中被移除的话，可以使用 SRANDMEMBER 命令。
      *
      * @param key 一定不能为 {@literal null}.
      * @return 被移除的随机元素。 当 key 不存在或 key 是空集时，返回 nil 。

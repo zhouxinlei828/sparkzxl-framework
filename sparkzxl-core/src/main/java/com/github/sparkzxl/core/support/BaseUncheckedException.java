@@ -46,8 +46,8 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
     }
 
     public BaseUncheckedException(final String errorCode,
-                                  final String errorMsg,
-                                  Throwable cause) {
+            final String errorMsg,
+            Throwable cause) {
         super(cause);
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;

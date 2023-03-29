@@ -9,4 +9,5 @@ import org.springframework.boot.CommandLineRunner;
  * @since 2022-09-05 09:47:40
  */
 public interface DataChangedInit extends CommandLineRunner {
+
 }

@@ -16,16 +16,14 @@
 package com.baidu.fsg.uid.buffer;
 
 import com.baidu.fsg.uid.util.PaddedAtomicLong;
+import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
- * Represents a ring buffer based on array.<br>
- * Using array could improve read element performance due to the CUP cache line. To prevent
- * the side effect of False Sharing, {@link PaddedAtomicLong} is using on 'tail' and 'cursor'<p>
+ * Represents a ring buffer based on array.<br> Using array could improve read element performance due to the CUP cache line. To prevent the
+ * side effect of False Sharing, {@link PaddedAtomicLong} is using on 'tail' and 'cursor'<p>
  * <p>
  * A ring buffer is consisted of:
  * <li><b>slots:</b> each element of the array is a slot, which is be set with a UID
@@ -36,6 +34,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author zhouxinlei
  */
 public class RingBuffer {
+
     public static final int DEFAULT_PADDING_PERCENT = 50;
     private static final Logger LOGGER = LoggerFactory.getLogger(RingBuffer.class);
     /**
@@ -91,9 +90,9 @@ public class RingBuffer {
      * Constructor with buffer size & padding factor
      *
      * @param bufferSize    must be positive & a power of 2
-     * @param paddingFactor percent in (0 - 100). When the count of rest available UIDs reach the threshold, it will trigger padding buffer<br>
-     *                      Sample: paddingFactor=20, bufferSize=1000 -> threshold=1000 * 20 /100,
-     *                      padding buffer will be triggered when tail-cursor<threshold
+     * @param paddingFactor percent in (0 - 100). When the count of rest available UIDs reach the threshold, it will trigger padding
+     *                      buffer<br> Sample: paddingFactor=20, bufferSize=1000 -> threshold=1000 * 20 /100, padding buffer will be
+     *                      triggered when tail-cursor<threshold
      */
     public RingBuffer(int bufferSize, int paddingFactor) {
         // check buffer size is positive & a power of 2; padding factor in (0, 100)
@@ -110,8 +109,8 @@ public class RingBuffer {
     }
 
     /**
-     * Put an UID in the ring & tail moved<br>
-     * We use 'synchronized' to guarantee the UID fill in slot & publish new tail sequence as atomic operations<br>
+     * Put an UID in the ring & tail moved<br> We use 'synchronized' to guarantee the UID fill in slot & publish new tail sequence as atomic
+     * operations<br>
      *
      * <b>Note that: </b> It is recommended to put UID in a serialize way, cause we once batch generate a series UIDs and put
      * the one by one into the buffer, so it is unnecessary put in multi-threads
@@ -152,9 +151,8 @@ public class RingBuffer {
     /**
      * Take an UID of the ring at the next cursor, this is a lock free operation by using atomic cursor<p>
      * <p>
-     * Before getting the UID, we also check whether reach the padding threshold,
-     * the padding buffer operation will be triggered in another thread<br>
-     * If there is no more available UID to be taken, the specified {@link RejectedTakeBufferHandler} will be applied<br>
+     * Before getting the UID, we also check whether reach the padding threshold, the padding buffer operation will be triggered in another
+     * thread<br> If there is no more available UID to be taken, the specified {@link RejectedTakeBufferHandler} will be applied<br>
      *
      * @return UID
      * @throws IllegalStateException if the cursor moved back

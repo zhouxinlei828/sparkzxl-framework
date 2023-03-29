@@ -3,14 +3,13 @@ package com.github.sparkzxl.security.authorization;
 import cn.hutool.core.collection.CollUtil;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import java.util.Collection;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
 
 /**
  * description: 决策认证管理器
@@ -21,7 +20,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object object,
-                       Collection<ConfigAttribute> configAttributes)
+            Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
         // 当接口未被配置资源时直接放行
         if (CollUtil.isEmpty(configAttributes)) {

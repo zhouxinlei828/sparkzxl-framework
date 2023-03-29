@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DefaultAlarmAsyncCallback implements AlarmAsyncCallback {
+
     @Override
     public void execute(String alarmId, String result) {
         if (log.isDebugEnabled()) {

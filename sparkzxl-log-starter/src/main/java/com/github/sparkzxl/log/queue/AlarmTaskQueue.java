@@ -14,6 +14,7 @@ public class AlarmTaskQueue {
     private static final Queue<AlarmTaskInfo> QUEUE = new ConcurrentLinkedQueue<>();
 
     private static class SingletonHolder {
+
         private static final AlarmTaskQueue SINGLETON = new AlarmTaskQueue();
     }
 

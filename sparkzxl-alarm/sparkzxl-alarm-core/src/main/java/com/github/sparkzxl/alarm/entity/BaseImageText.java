@@ -7,6 +7,7 @@ package com.github.sparkzxl.alarm.entity;
  * @since 2022-05-19 10:19:05
  */
 public class BaseImageText {
+
     /**
      * 标题
      */

@@ -3,11 +3,10 @@ package com.github.sparkzxl.alarm.strategy;
 import com.github.sparkzxl.alarm.enums.AlarmErrorEnum;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * description: 告警消息工厂

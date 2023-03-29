@@ -1,10 +1,9 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.entity;
 
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Map;
+import lombok.Data;
 
 /**
  * description: dubbo request entity

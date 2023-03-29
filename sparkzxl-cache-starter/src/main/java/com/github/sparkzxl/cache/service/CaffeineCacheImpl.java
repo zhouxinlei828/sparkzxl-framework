@@ -6,15 +6,14 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.sparkzxl.cache.redis.CacheHashKey;
 import com.github.sparkzxl.cache.redis.CacheKey;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: Caffeine本地缓存实现
@@ -188,7 +187,8 @@ public class CaffeineCacheImpl implements CacheService {
             return newCache;
         });
         assert cache != null;
-        return Convert.convert(new TypeReference<T>() {}, cache.getIfPresent(key), null);
+        return Convert.convert(new TypeReference<T>() {
+        }, cache.getIfPresent(key), null);
     }
 
 

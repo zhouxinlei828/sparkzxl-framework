@@ -12,13 +12,12 @@ import com.github.sparkzxl.data.sync.admin.handler.MergeDataHandler;
 import com.github.sparkzxl.data.sync.admin.listener.AbstractDataChangedListener;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: Use nacos to synchronized data changes.
@@ -35,11 +34,12 @@ public class NacosDataChangedListener extends AbstractDataChangedListener {
     private final Map<String, String> watchConfigMap = Maps.newConcurrentMap();
 
     public NacosDataChangedListener(ConfigService configService,
-                                    List<MergeDataHandler> mergeDataHandlerList,
-                                    List<NacosWatchProperties> watchConfigs) {
+            List<MergeDataHandler> mergeDataHandlerList,
+            List<NacosWatchProperties> watchConfigs) {
         this.configService = configService;
         mergeDataHandlerList.forEach(mergeDataHandler -> mergeDataHandlerMap.put(mergeDataHandler.configGroup(), mergeDataHandler));
-        watchConfigMap.putAll(watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
+        watchConfigMap.putAll(
+                watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));
     }
 
 
@@ -48,7 +48,8 @@ public class NacosDataChangedListener extends AbstractDataChangedListener {
         try {
             String dataId = pushData.getConfigGroup();
             String group = watchConfigMap.get(dataId);
-            MergeDataHandler mergeDataHandler = mergeDataHandlerMap.get(pushData.getConfigGroup().concat(StrPool.COLON).concat(DataSyncPushType.NACOS.name().toLowerCase(Locale.ROOT)));
+            MergeDataHandler mergeDataHandler = mergeDataHandlerMap.get(
+                    pushData.getConfigGroup().concat(StrPool.COLON).concat(DataSyncPushType.NACOS.name().toLowerCase(Locale.ROOT)));
             Object configData = mergeDataHandler.handle(pushData);
             configService.publishConfig(dataId, group, JsonUtils.getJson().toJsonPretty(configData), ConfigType.JSON.getType());
         } catch (NacosException e) {

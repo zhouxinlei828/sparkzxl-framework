@@ -6,6 +6,8 @@ import com.github.sparkzxl.gateway.plugin.exception.factory.DefaultExceptionHand
 import com.github.sparkzxl.gateway.plugin.exception.factory.ExceptionHandlerStrategyFactory;
 import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategy;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,9 +22,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.codec.support.DefaultServerCodecConfigurer;
 import org.springframework.web.reactive.result.view.ViewResolver;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * description: 网关全局异常配置
@@ -69,8 +68,8 @@ public class GlobalExceptionJsonHandlerConfig {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ErrorWebExceptionHandler errorWebExceptionHandler(ObjectProvider<List<ViewResolver>> viewResolversProvider,
-                                                             ServerCodecConfigurer serverCodecConfigurer,
-                                                             ExceptionHandlerStrategyFactory exceptionHandlerStrategyFactory) {
+            ServerCodecConfigurer serverCodecConfigurer,
+            ExceptionHandlerStrategyFactory exceptionHandlerStrategyFactory) {
 
         JsonExceptionHandler jsonExceptionHandler = new JsonExceptionHandler(exceptionHandlerStrategyFactory);
         jsonExceptionHandler.setViewResolvers(viewResolversProvider.getIfAvailable(Collections::emptyList));

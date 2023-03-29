@@ -7,13 +7,12 @@ import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.dubbo.common.utils.CollectionUtils;
-import org.springframework.cloud.gateway.route.Route;
-
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.dubbo.common.utils.CollectionUtils;
+import org.springframework.cloud.gateway.route.Route;
 
 /**
  * description: 用于构建Dubbo 元数据
@@ -48,8 +47,7 @@ public class DefaultDubboMetaDataFactory implements DubboMetaDataFactory {
     }
 
     /**
-     * 通过URI构建调用Meta对象
-     * dubbo://service-name/interface/method
+     * 通过URI构建调用Meta对象 dubbo://service-name/interface/method
      *
      * @param route 网关路由
      * @return MetaData

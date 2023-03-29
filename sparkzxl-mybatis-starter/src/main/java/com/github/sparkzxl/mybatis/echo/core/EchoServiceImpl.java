@@ -3,7 +3,12 @@ package com.github.sparkzxl.mybatis.echo.core;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.*;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.EnumUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
@@ -17,6 +22,19 @@ import com.github.sparkzxl.mybatis.entity.RemoteData;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import io.swagger.annotations.ApiModel;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -31,31 +49,21 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 /**
- * description: 字典数据回显工具类
- * 1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来
- * 2. 依次查询待回显的数据
- * 3. 将查询出来结果回显到obj的 @Echo注解的字段中
+ * description: 字典数据回显工具类 1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来 2. 依次查询待回显的数据 3. 将查询出来结果回显到obj的 @Echo注解的字段中
  *
  * @author zhouxinlei
  * @since 2022-10-14 16:27:00
  */
 @Slf4j
 public class EchoServiceImpl implements EchoService, EnvironmentCapable, InitializingBean {
+
     private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
     private static final int DEF_MAP_SIZE = 20;
     private static final String[] BASE_TYPES = {
             StrPool.INTEGER_TYPE_NAME, StrPool.BYTE_TYPE_NAME, StrPool.LONG_TYPE_NAME, StrPool.DOUBLE_TYPE_NAME,
-            StrPool.FLOAT_TYPE_NAME, StrPool.CHARACTER_TYPE_NAME, StrPool.SHORT_TYPE_NAME, StrPool.BOOLEAN_TYPE_NAME, StrPool.STRING_TYPE_NAME,
+            StrPool.FLOAT_TYPE_NAME, StrPool.CHARACTER_TYPE_NAME, StrPool.SHORT_TYPE_NAME, StrPool.BOOLEAN_TYPE_NAME,
+            StrPool.STRING_TYPE_NAME,
             RemoteData.class.getName()
     };
     private static final String[] COLL_TYPES = {StrPool.LIST_TYPE_NAME, StrPool.SET_TYPE_NAME, StrPool.COLLECTION_TYPE_NAME};
@@ -92,9 +100,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
     /**
      * 回显数据的3个步骤：（出现回显失败时，认真debug该方法）
      * <p>
-     * 1. parse: 通过反射将obj的字段上标记了 @Echo 注解的字段解析出来, 封装到typeMap中
-     * 2. load: 依次查询待回显的数据
-     * 3. write: 将查询出来的结果 反射或put 到obj的 字段或echoMap 中
+     * 1. parse: 通过反射将obj的字段上标记了 @Echo 注解的字段解析出来, 封装到typeMap中 2. load: 依次查询待回显的数据 3. write: 将查询出来的结果 反射或put 到obj的 字段或echoMap 中
      * <p>
      * 注意：若对象中需要回显的字段之间出现循环引用，很可能发生异常，所以请保证不要出现循环引用！！！
      *
@@ -317,10 +323,10 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
      * @return 已查询后的值
      */
     private Object getEchoValue(EchoField echoField,
-                                Object actualValue,
-                                Object originalValue,
-                                LoadKey loadKey,
-                                Map<LoadKey, Map<Serializable, Object>> typeMap) {
+            Object actualValue,
+            Object originalValue,
+            LoadKey loadKey,
+            Map<LoadKey, Map<Serializable, Object>> typeMap) {
         if (ObjectUtil.isEmpty(actualValue)) {
             return null;
         }
@@ -342,7 +348,8 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             List<String> codes = StrUtil.split(originalValue.toString(), echoProperties.getDictItemSeparator());
 
             newVal = codes.stream().map(item -> {
-                String val = valueMap.getOrDefault(echoField.dictType() + echoProperties.getDictSeparator() + item, StrPool.EMPTY).toString();
+                String val = valueMap.getOrDefault(echoField.dictType() + echoProperties.getDictSeparator() + item, StrPool.EMPTY)
+                        .toString();
                 return val == null ? StrPool.EMPTY : val;
             }).collect(Collectors.joining(echoProperties.getDictItemSeparator()));
         }
@@ -373,7 +380,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
      * @return 字段参数
      */
     private FieldParam getFieldParam(Object obj, Field field, Map<LoadKey, Map<Serializable, Object>> typeMap,
-                                     Consumer<Map<LoadKey, Map<Serializable, Object>>> consumer, String... ignoreFields) {
+            Consumer<Map<LoadKey, Map<Serializable, Object>>> consumer, String... ignoreFields) {
         String key = obj.getClass().getName() + "###" + field.getName();
         FieldParam fieldParam;
         // 是否排除
@@ -502,7 +509,8 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             MetadataReaderFactory metadata = new SimpleMetadataReaderFactory();
             for (String basePackage : basePackages) {
-                String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
+                String packageSearchPath =
+                        ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
                 Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
                 for (Resource resource : resources) {
                     MetadataReader metadataReader = metadata.getMetadataReader(resource);

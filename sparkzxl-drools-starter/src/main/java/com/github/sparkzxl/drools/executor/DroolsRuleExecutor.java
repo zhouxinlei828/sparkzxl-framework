@@ -2,6 +2,7 @@ package com.github.sparkzxl.drools.executor;
 
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.entity.DroolsRule;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +13,6 @@ import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
-
-import java.util.List;
 
 /**
  * description: drools 规则执行器

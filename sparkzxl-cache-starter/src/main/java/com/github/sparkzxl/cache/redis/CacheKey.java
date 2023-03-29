@@ -1,11 +1,10 @@
 package com.github.sparkzxl.cache.redis;
 
+import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
-
-import java.time.Duration;
 
 /**
  * description: 缓存 key 封装
@@ -17,6 +16,7 @@ import java.time.Duration;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CacheKey {
+
     /**
      * redis key
      */

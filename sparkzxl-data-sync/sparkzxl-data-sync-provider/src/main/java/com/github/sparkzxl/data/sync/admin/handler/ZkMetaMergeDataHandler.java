@@ -6,12 +6,11 @@ import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: ZK元数据合并处理

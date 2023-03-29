@@ -7,11 +7,10 @@ import com.github.sparkzxl.alarm.message.MarkDownMessageTemplate;
 import com.github.sparkzxl.alarm.message.MessageTemplate;
 import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
-import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.util.CollectionUtils;
 
 /**
  * description:  AbstractAlarmSender
@@ -27,9 +26,9 @@ public abstract class AbstractAlarmClient implements AlarmClient {
     protected final Map<String, AlarmExecutor> executorMap;
 
     public AbstractAlarmClient(AlarmProperties alarmProperties,
-                               TextMessageTemplate textMessage,
-                               MarkDownMessageTemplate markDownMessage,
-                               List<AlarmExecutor> alarmExecutorList) {
+            TextMessageTemplate textMessage,
+            MarkDownMessageTemplate markDownMessage,
+            List<AlarmExecutor> alarmExecutorList) {
         this.alarmProperties = alarmProperties;
         this.textMessage = textMessage;
         this.markDownMessage = markDownMessage;

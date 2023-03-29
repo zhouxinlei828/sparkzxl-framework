@@ -1,9 +1,8 @@
 package com.github.sparkzxl.gateway.common.entity;
 
 import com.github.sparkzxl.gateway.rule.RuleData;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * description: filter data

@@ -1,8 +1,7 @@
 package com.github.sparkzxl.core.entity;
 
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 
 /**

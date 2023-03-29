@@ -2,13 +2,16 @@ package com.github.sparkzxl.mybatis.plugins;
 
 import com.github.sparkzxl.mybatis.echo.core.EchoServiceImpl;
 import com.github.sparkzxl.mybatis.echo.properties.EchoProperties;
+import java.sql.Statement;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
-import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
 import org.springframework.context.ApplicationContext;
-
-import java.sql.Statement;
 
 /**
  * description: mybatis数据回显插件

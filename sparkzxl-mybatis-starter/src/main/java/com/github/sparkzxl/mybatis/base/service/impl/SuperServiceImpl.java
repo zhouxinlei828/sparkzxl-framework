@@ -10,6 +10,7 @@ import com.github.sparkzxl.mybatis.base.service.SuperService;
  * @author zhouxinlei
  */
 public class SuperServiceImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M, T> implements SuperService<T> {
+
     public SuperServiceImpl() {
     }
 

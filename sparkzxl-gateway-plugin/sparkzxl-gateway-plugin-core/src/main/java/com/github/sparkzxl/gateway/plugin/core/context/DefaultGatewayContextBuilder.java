@@ -5,12 +5,11 @@ import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.gateway.common.condition.data.ParameterDataFactory;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.common.constant.ParameterDataConstant;
+import java.util.Optional;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
-
-import java.util.Optional;
 
 /**
  * description:

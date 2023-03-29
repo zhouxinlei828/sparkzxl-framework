@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(DubboCustomProperties.class)
 public class DubboAutoConfig {
+
 }

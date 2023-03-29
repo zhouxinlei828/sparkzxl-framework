@@ -7,6 +7,9 @@ import com.github.sparkzxl.lock.LockKeyBuilder;
 import com.github.sparkzxl.lock.LockTemplate;
 import com.github.sparkzxl.lock.annotation.DistributedLock;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -14,10 +17,6 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -39,8 +38,8 @@ public class LockInterceptor implements MethodInterceptor {
     private final DistributedLockProperties distributedLockProperties;
 
     public LockInterceptor(LockTemplate lockTemplate,
-                           LockKeyBuilder lockKeyBuilder,
-                           DistributedLockProperties distributedLockProperties) {
+            LockKeyBuilder lockKeyBuilder,
+            DistributedLockProperties distributedLockProperties) {
         this.lockTemplate = lockTemplate;
         this.lockKeyBuilder = lockKeyBuilder;
         this.distributedLockProperties = distributedLockProperties;
@@ -58,7 +57,8 @@ public class LockInterceptor implements MethodInterceptor {
         LockInfo lockInfo = null;
         try {
             String prefix = distributedLockProperties.getLockKeyPrefix() + ":";
-            prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name() : invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
+            prefix += StringUtils.hasText(distributedLock.name()) ? distributedLock.name()
+                    : invocation.getMethod().getDeclaringClass().getName() + invocation.getMethod().getName();
             String key = prefix + "#" + lockKeyBuilder.buildKey(invocation, distributedLock.keys());
             lockInfo = lockTemplate.lock(key, distributedLock.expire(), distributedLock.acquireTimeout(), distributedLock.executor());
             if (null != lockInfo) {

@@ -8,19 +8,18 @@ import com.github.sparkzxl.spi.ExtensionLoader;
 import com.github.sparkzxl.web.properties.InterceptorProperties;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.google.common.collect.Lists;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * description: web request interceptor
@@ -55,7 +54,8 @@ public class WebRequestInterceptor implements AsyncHandlerInterceptor {
             interceptorList.add(innerInterceptor);
         }
         if (CollectionUtils.isNotEmpty(interceptorList)) {
-            this.innerInterceptorList.addAll(interceptorList.stream().sorted(Comparator.comparing(Ordered::getOrder)).collect(Collectors.toList()));
+            this.innerInterceptorList.addAll(
+                    interceptorList.stream().sorted(Comparator.comparing(Ordered::getOrder)).collect(Collectors.toList()));
         }
     }
 
@@ -75,7 +75,8 @@ public class WebRequestInterceptor implements AsyncHandlerInterceptor {
 
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+            throws Exception {
         try {
             for (InnerInterceptor innerInterceptor : innerInterceptorList) {
                 innerInterceptor.postHandle(request, response, handler, modelAndView);

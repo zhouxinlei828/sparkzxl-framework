@@ -1,9 +1,8 @@
 package com.github.sparkzxl.core.entity;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.List;
+import lombok.Data;
 
 /**
  * description: 认证用户实体类

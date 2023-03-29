@@ -2,10 +2,9 @@ package com.github.sparkzxl.mybatis.plugins;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
+import java.util.List;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
-
-import java.util.List;
 
 /**
  * description: 全局行级处理器

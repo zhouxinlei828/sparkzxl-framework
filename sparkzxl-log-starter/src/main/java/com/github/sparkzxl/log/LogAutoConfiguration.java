@@ -11,14 +11,13 @@ import com.github.sparkzxl.log.handler.DefaultOptOptLogVariablesHandler;
 import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.OperatorService;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-
-import java.util.Optional;
 
 /**
  * description: 日志增强自动装配

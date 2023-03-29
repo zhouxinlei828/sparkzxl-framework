@@ -1,12 +1,11 @@
 package com.github.sparkzxl.web.properties;
 
+import static com.github.sparkzxl.web.properties.WebProperties.WEB_PREFIX;
+
 import com.google.common.collect.Lists;
+import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
-
-import static com.github.sparkzxl.web.properties.WebProperties.WEB_PREFIX;
 
 /**
  * description: 拦截器自定义

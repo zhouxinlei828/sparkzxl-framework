@@ -2,11 +2,10 @@ package org.slf4j;
 
 import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.alibaba.ttl.TransmittableThreadLocal;
-import org.slf4j.spi.MDCAdapter;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.spi.MDCAdapter;
 
 /**
  * description: 重构{@link LogbackMDCAdapter}类，搭配TransmittableThreadLocal实现父子线程之间的数据传递
@@ -14,6 +13,7 @@ import java.util.Map;
  * @author zhouxinlei
  */
 public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
+
     private static final int WRITE_OPERATION = 1;
     private static final int READ_OPERATION = 2;
     private static final TransmittableThreadLocalMdcAdapter CUSTOM_MDC_ADAPTER;
@@ -63,8 +63,7 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
      * contrary to log4j, the <code>val</code> parameter can be null.
      * <p/>
      * <p/>
-     * If the current thread does not have a context map it is created as a side
-     * effect of this call.
+     * If the current thread does not have a context map it is created as a side effect of this call.
      *
      * @throws IllegalArgumentException in case the "key" parameter is null
      */
@@ -135,8 +134,7 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
     }
 
     /**
-     * Get the current thread's MDC as a map. This method is intended to be used
-     * internally.
+     * Get the current thread's MDC as a map. This method is intended to be used internally.
      */
     public Map<String, String> getPropertyMap() {
         lastOperation.set(READ_OPERATION);
@@ -144,8 +142,7 @@ public class TransmittableThreadLocalMdcAdapter implements MDCAdapter {
     }
 
     /**
-     * Return a copy of the current thread's context map. Returned value may be
-     * null.
+     * Return a copy of the current thread's context map. Returned value may be null.
      */
     @Override
     public Map<String, String> getCopyOfContextMap() {

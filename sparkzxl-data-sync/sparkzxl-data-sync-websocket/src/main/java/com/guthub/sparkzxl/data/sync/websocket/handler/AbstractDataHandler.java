@@ -2,9 +2,8 @@ package com.guthub.sparkzxl.data.sync.websocket.handler;
 
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * description: The type Abstract data handler.

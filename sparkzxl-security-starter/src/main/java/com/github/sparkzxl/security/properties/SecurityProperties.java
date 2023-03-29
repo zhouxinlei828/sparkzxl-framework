@@ -1,11 +1,10 @@
 package com.github.sparkzxl.security.properties;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import static com.github.sparkzxl.security.properties.SecurityProperties.SECURITY_PREFIX;
 
 import java.util.List;
-
-import static com.github.sparkzxl.security.properties.SecurityProperties.SECURITY_PREFIX;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: security 自动装配属性配置

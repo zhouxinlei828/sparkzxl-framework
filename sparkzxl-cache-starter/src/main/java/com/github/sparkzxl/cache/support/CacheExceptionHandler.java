@@ -1,11 +1,15 @@
 package com.github.sparkzxl.cache.support;
 
-import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
-import org.springframework.data.redis.*;
+import org.springframework.data.redis.ClusterRedirectException;
+import org.springframework.data.redis.ClusterStateFailureException;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.RedisSystemException;
+import org.springframework.data.redis.TooManyClusterRedirectionsException;
 import org.springframework.data.redis.connection.ClusterCommandExecutionFailureException;
 import org.springframework.data.redis.connection.RedisSubscribedConnectionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,14 +44,16 @@ public class CacheExceptionHandler implements Ordered {
     public ApiResult<?> handleClusterStateFailureException(ClusterStateFailureException e) {
         log.error("ClusterStateFailureException 异常:", e);
         return ApiResult.fail(
-                ResultErrorCode.CLUSTER_STATE_FAILURE_EXCEPTION.getErrorCode(), ResultErrorCode.CLUSTER_STATE_FAILURE_EXCEPTION.getErrorMsg());
+                ResultErrorCode.CLUSTER_STATE_FAILURE_EXCEPTION.getErrorCode(),
+                ResultErrorCode.CLUSTER_STATE_FAILURE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)
     public ApiResult<?> handleRedisConnectionFailureException(RedisConnectionFailureException e) {
         log.error("RedisConnectionFailureException 异常:", e);
         return ApiResult.fail(
-                ResultErrorCode.REDIS_CONNECTION_FAILURE_EXCEPTION.getErrorCode(), ResultErrorCode.REDIS_CONNECTION_FAILURE_EXCEPTION.getErrorMsg());
+                ResultErrorCode.REDIS_CONNECTION_FAILURE_EXCEPTION.getErrorCode(),
+                ResultErrorCode.REDIS_CONNECTION_FAILURE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RedisSystemException.class)

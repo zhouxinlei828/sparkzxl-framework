@@ -7,15 +7,13 @@ import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.core.util.StrPool;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
- * description: 获取当前域中的 用户id, 用户昵称
- * 注意： 用户id 和 用户昵称必须在前端 通过请求头的方法传入。 否则这里无法获取
+ * description: 获取当前域中的 用户id, 用户昵称 注意： 用户id 和 用户昵称必须在前端 通过请求头的方法传入。 否则这里无法获取
  *
  * @author zhouxinlei
  */

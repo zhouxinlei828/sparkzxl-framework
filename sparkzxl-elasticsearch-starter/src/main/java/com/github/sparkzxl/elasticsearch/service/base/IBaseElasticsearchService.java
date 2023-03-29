@@ -1,11 +1,10 @@
 package com.github.sparkzxl.elasticsearch.service.base;
 
 import com.github.sparkzxl.elasticsearch.page.PageResponse;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 /**
  * description: 通用es操作 服务类
@@ -178,5 +177,5 @@ public interface IBaseElasticsearchService {
      * @return PageResponse<T>
      */
     <T> PageResponse<T> search(String index, SearchSourceBuilder searchSourceBuilder, Class<T> clazz,
-                               Integer pageNum, Integer pageSize);
+            Integer pageNum, Integer pageSize);
 }

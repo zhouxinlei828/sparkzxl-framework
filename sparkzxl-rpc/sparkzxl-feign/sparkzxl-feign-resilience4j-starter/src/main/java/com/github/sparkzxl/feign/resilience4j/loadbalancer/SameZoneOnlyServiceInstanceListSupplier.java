@@ -1,16 +1,15 @@
 package com.github.sparkzxl.feign.resilience4j.loadbalancer;
 
 import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.loadbalancer.config.LoadBalancerZoneConfig;
 import org.springframework.cloud.loadbalancer.core.DelegatingServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.core.ZonePreferenceServiceInstanceListSupplier;
 import reactor.core.publisher.Flux;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 只返回与当前实例同一个 Zone 的服务实例，不同 zone 之间的服务不互相调用
@@ -25,7 +24,7 @@ public class SameZoneOnlyServiceInstanceListSupplier extends DelegatingServiceIn
     private String zone;
 
     public SameZoneOnlyServiceInstanceListSupplier(ServiceInstanceListSupplier delegate,
-                                                   LoadBalancerZoneConfig zoneConfig) {
+            LoadBalancerZoneConfig zoneConfig) {
         super(delegate);
         this.zoneConfig = zoneConfig;
     }
@@ -36,8 +35,7 @@ public class SameZoneOnlyServiceInstanceListSupplier extends DelegatingServiceIn
     }
 
     /**
-     * @see ZonePreferenceServiceInstanceListSupplier 在没有相同zone实例的时候返回的是所有实例
-     * 我们这里为了实现不同 zone 之间不互相调用需要返回空列表
+     * @see ZonePreferenceServiceInstanceListSupplier 在没有相同zone实例的时候返回的是所有实例 我们这里为了实现不同 zone 之间不互相调用需要返回空列表
      */
     private List<ServiceInstance> filteredByZone(List<ServiceInstance> serviceInstances) {
         if (zone == null) {

@@ -9,13 +9,12 @@ import feign.FeignException;
 import feign.Request;
 import feign.RetryableException;
 import feign.codec.DecodeException;
+import java.net.SocketTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.Ordered;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.net.SocketTimeoutException;
 
 /**
  * description: Springboot WEB应用全局异常处理

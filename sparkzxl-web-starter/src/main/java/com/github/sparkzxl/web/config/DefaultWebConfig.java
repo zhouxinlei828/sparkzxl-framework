@@ -5,6 +5,7 @@ import com.github.sparkzxl.web.interceptor.WebRequestInterceptor;
 import com.github.sparkzxl.web.properties.WebProperties;
 import com.github.sparkzxl.web.support.DefaultExceptionHandler;
 import com.github.sparkzxl.web.support.ResponseResultAdvice;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,8 +16,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 /**
  * description: WebConfig全局配置

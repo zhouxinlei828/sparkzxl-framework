@@ -3,7 +3,6 @@ package com.github.sparkzxl.grpc.server;
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import io.grpc.ServerCall;
-
 import java.util.Map;
 import java.util.Objects;
 

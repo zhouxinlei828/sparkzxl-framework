@@ -1,9 +1,8 @@
 package com.github.sparkzxl.sms.entity;
 
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
-
-import java.io.Serializable;
 
 /**
  * description: 短信结果

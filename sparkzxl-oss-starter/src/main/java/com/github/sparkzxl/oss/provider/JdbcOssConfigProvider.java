@@ -2,14 +2,13 @@ package com.github.sparkzxl.oss.provider;
 
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.google.common.collect.Lists;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * description: jdbc 加载oss 配置信息
@@ -27,7 +26,7 @@ public class JdbcOssConfigProvider extends AbstractOssConfigProvider {
     private final List<Configuration> configList;
 
     public JdbcOssConfigProvider(Function<String, Configuration> function,
-                                 Supplier<List<Configuration>> supplier) {
+            Supplier<List<Configuration>> supplier) {
         this.configList = Lists.newArrayList();
         this.function = function;
         this.supplier = supplier;

@@ -1,11 +1,10 @@
 package com.github.sparkzxl.log.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * description: 请求日志实体类
@@ -45,8 +44,7 @@ public class RequestInfoLog implements Serializable {
     private String requestUrl;
 
     /**
-     * 请求类型:GET:GET请求;POST:POST请求;PUT:PUT请求;DELETE:DELETE请求;PATCH:
-     * PATCH请求;TRACE:TRACE请求;HEAD:HEAD请求;OPTIONS:OPTIONS请求;
+     * 请求类型:GET:GET请求;POST:POST请求;PUT:PUT请求;DELETE:DELETE请求;PATCH: PATCH请求;TRACE:TRACE请求;HEAD:HEAD请求;OPTIONS:OPTIONS请求;
      */
     private String httpMethod;
 

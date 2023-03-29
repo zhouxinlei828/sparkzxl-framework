@@ -1,6 +1,10 @@
 package com.github.sparkzxl.boot.config;
 
+import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME;
+
 import com.alibaba.ttl.threadpool.TtlExecutors;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
@@ -12,11 +16,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME;
 
 /**
  * description: Spring 线程池配置
@@ -30,6 +29,7 @@ import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfi
 @AutoConfigureBefore(value = TaskExecutionAutoConfiguration.class)
 @Slf4j
 public class ThreadPoolAutoConfig {
+
     public ThreadPoolAutoConfig() {
         log.info("start init taskExecutor");
     }

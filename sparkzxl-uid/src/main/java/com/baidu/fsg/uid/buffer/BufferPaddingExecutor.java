@@ -17,24 +17,24 @@ package com.baidu.fsg.uid.buffer;
 
 import com.baidu.fsg.uid.util.NamingThreadFactory;
 import com.baidu.fsg.uid.util.PaddedAtomicLong;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 /**
- * Represents an executor for padding {@link RingBuffer}<br>
- * There are two kinds of executors: one for scheduled padding, the other for padding immediately.
+ * Represents an executor for padding {@link RingBuffer}<br> There are two kinds of executors: one for scheduled padding, the other for
+ * padding immediately.
  *
  * @author zhouxinlei
  */
 public class BufferPaddingExecutor {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RingBuffer.class);
 
     /**

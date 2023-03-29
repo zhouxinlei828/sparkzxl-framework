@@ -1,7 +1,6 @@
 package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import com.github.sparkzxl.alarm.entity.BaseLink;
-
 import java.io.Serializable;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import java.util.Map;
  * @since 2022-05-19 10:35:31
  */
 public class DingTalkLink extends DingTalkMessage {
+
     /**
      * {@link Link}
      */
@@ -35,6 +35,7 @@ public class DingTalkLink extends DingTalkMessage {
     }
 
     public static class Link implements Serializable {
+
         /**
          * 消息标题
          */

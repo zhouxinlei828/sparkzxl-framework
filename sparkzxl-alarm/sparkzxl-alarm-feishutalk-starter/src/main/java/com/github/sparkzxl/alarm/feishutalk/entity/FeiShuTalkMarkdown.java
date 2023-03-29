@@ -3,15 +3,14 @@ package com.github.sparkzxl.alarm.feishutalk.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.sparkzxl.core.util.StrPool;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 飞书markdown消息
@@ -106,6 +105,7 @@ public class FeiShuTalkMarkdown extends Message {
         @AllArgsConstructor
         @Data
         public static class Title {
+
             @JsonProperty("tag")
             private String tag;
 

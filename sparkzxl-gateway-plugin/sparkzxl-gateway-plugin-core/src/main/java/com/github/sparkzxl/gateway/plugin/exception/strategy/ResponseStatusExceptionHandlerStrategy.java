@@ -38,7 +38,8 @@ public class ResponseStatusExceptionHandlerStrategy implements ExceptionHandlerS
                 result = ApiResult.fail(ResultErrorCode.TIME_OUT_ERROR.getErrorCode(), ResultErrorCode.TIME_OUT_ERROR.getErrorMsg());
                 break;
             default:
-                result = ApiResult.fail(ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
+                result = ApiResult.fail(ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(),
+                        ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
                 break;
         }
         String response = JSON.toJSONString(result);

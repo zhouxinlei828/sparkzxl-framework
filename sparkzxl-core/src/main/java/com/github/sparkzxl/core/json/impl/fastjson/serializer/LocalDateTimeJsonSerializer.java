@@ -5,7 +5,6 @@ import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.github.sparkzxl.core.json.impl.fastjson.FastJsonSerializer;
 import com.github.sparkzxl.core.json.impl.fastjson.codec.LocalDateTimeCodec;
 import com.github.sparkzxl.spi.Join;
-
 import java.time.LocalDateTime;
 
 /**

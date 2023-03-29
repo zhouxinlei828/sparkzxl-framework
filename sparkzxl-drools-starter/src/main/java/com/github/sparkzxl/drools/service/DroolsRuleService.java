@@ -7,6 +7,7 @@ package com.github.sparkzxl.drools.service;
  * @author zhouxinlei
  */
 public interface DroolsRuleService {
+
     /**
      * 重新加载规则
      *

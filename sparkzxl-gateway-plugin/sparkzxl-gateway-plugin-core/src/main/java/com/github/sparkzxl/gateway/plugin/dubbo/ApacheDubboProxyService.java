@@ -8,6 +8,8 @@ import com.github.sparkzxl.gateway.plugin.dubbo.entity.DubbboRequest;
 import com.github.sparkzxl.gateway.plugin.dubbo.param.DubboParamResolveService;
 import com.github.sparkzxl.gateway.support.GatewayException;
 import com.github.sparkzxl.gateway.utils.ParamCheckUtils;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -16,11 +18,7 @@ import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.service.GenericException;
 import org.apache.dubbo.rpc.service.GenericService;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * description: dubbo proxy service is use GenericService.
@@ -59,26 +57,32 @@ public class ApacheDubboProxyService {
         } else {
             pair = dubboParamResolveService.buildParameter(body, metaData.getParameterTypes());
         }
-        return Mono.fromFuture(invokeAsync(genericService, metaData.getMethodName(), pair.getLeft(), pair.getRight(), metaData).thenApply(ret -> {
-            if (Objects.isNull(ret)) {
-                ret = DubboConstant.DUBBO_RPC_RESULT_EMPTY;
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("Invoke dubbo succeed service:{}, method:{}, parameters:{},result:{}", metaData.getServiceName(), metaData.getMethodName(), pair.getRight(), ret);
-            }
-            return ret;
-        })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException(ResultErrorCode.RPC_SERVICE_EXCEPTION.getErrorCode(), ((GenericException) exception).getExceptionMessage()) : new GatewayException(exception));
+        return Mono.fromFuture(
+                invokeAsync(genericService, metaData.getMethodName(), pair.getLeft(), pair.getRight(), metaData).thenApply(ret -> {
+                    if (Objects.isNull(ret)) {
+                        ret = DubboConstant.DUBBO_RPC_RESULT_EMPTY;
+                    }
+                    if (log.isDebugEnabled()) {
+                        log.debug("Invoke dubbo succeed service:{}, method:{}, parameters:{},result:{}", metaData.getServiceName(),
+                                metaData.getMethodName(), pair.getRight(), ret);
+                    }
+                    return ret;
+                })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException(
+                ResultErrorCode.RPC_SERVICE_EXCEPTION.getErrorCode(), ((GenericException) exception).getExceptionMessage())
+                : new GatewayException(exception));
     }
 
     @SuppressWarnings("unchecked")
-    private CompletableFuture<Object> invokeAsync(final GenericService genericService, final String method, final String[] parameterTypes, final Object[] args, final MetaData metaData) throws GenericException {
+    private CompletableFuture<Object> invokeAsync(final GenericService genericService, final String method, final String[] parameterTypes,
+            final Object[] args, final MetaData metaData) throws GenericException {
         //Compatible with asynchronous calls of lower Dubbo versions
         if (log.isDebugEnabled()) {
             log.debug("Async invoke dubbo succeed, service:{} , method:{}, parameters:{}", metaData.getServiceName(), method, args);
         }
         genericService.$invoke(method, parameterTypes, args);
         Object resultFromFuture = RpcContext.getServiceContext().getFuture();
-        return resultFromFuture instanceof CompletableFuture ? (CompletableFuture<Object>) resultFromFuture : CompletableFuture.completedFuture(resultFromFuture);
+        return resultFromFuture instanceof CompletableFuture ? (CompletableFuture<Object>) resultFromFuture
+                : CompletableFuture.completedFuture(resultFromFuture);
     }
 
     public Mono<Object> genericInvoker(DubbboRequest dubbboRequest) {

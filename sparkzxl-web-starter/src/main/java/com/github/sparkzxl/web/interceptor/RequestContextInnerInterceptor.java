@@ -6,13 +6,12 @@ import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.spi.Join;
 import com.github.sparkzxl.web.annotation.Response;
+import java.lang.reflect.Method;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 /**
  * description: 请求上下文拦截器
@@ -56,7 +55,8 @@ public class RequestContextInnerInterceptor extends AbstractInnerInterceptor {
     }
 
     @Override
-    public void doPostHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void doPostHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+            throws Exception {
 
     }
 

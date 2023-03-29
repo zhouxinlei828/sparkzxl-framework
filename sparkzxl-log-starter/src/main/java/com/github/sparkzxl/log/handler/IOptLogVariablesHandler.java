@@ -1,7 +1,6 @@
 package com.github.sparkzxl.log.handler;
 
 import com.github.sparkzxl.log.annotation.OptLogRecord;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 

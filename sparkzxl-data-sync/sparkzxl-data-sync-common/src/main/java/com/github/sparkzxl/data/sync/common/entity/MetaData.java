@@ -1,12 +1,11 @@
 package com.github.sparkzxl.data.sync.common.entity;
 
+import java.io.Serializable;
+import java.text.MessageFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.Serializable;
-import java.text.MessageFormat;
 
 /**
  * description:  租户元数据实体对象

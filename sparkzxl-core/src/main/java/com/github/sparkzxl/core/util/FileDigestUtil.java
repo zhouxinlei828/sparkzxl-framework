@@ -4,12 +4,11 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.Digester;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 文件摘要处理工具类

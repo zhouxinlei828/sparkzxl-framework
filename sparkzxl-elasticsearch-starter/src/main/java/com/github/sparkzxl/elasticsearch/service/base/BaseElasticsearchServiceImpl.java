@@ -5,6 +5,14 @@ import com.github.sparkzxl.elasticsearch.page.PageResponse;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,11 +43,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.xcontent.XContentType;
 import org.springframework.http.HttpStatus;
 
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
-
 /**
  * description: 通用es操作 服务实现类
  *
@@ -55,7 +58,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     static {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
         // 默认缓冲限制为100MB，此处修改为30MB。
-        builder.setHttpAsyncResponseConsumerFactory(new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(30 * 1024 * 1024));
+        builder.setHttpAsyncResponseConsumerFactory(
+                new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(30 * 1024 * 1024));
         COMMON_OPTIONS = builder.build();
     }
 
@@ -105,8 +109,9 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
             }
             CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request, COMMON_OPTIONS);
             log.debug(" whether all of the nodes have acknowledged the request : [{}]", createIndexResponse.isAcknowledged());
-            log.debug(" Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
-                    ":[{}]", createIndexResponse.isShardsAcknowledged());
+            log.debug(
+                    " Indicates whether the requisite number of shard copies were started for each shard in the index before timing out " +
+                            ":[{}]", createIndexResponse.isShardsAcknowledged());
         } catch (IOException e) {
             throw new ElasticsearchException("创建索引 {" + index + "} 失败：{}", e.getMessage());
         }
@@ -396,7 +401,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     }
 
     @Override
-    public <T> Map<String, List<T>> searchDocsGroupMap(String index, SearchSourceBuilder searchSourceBuilder, String aggName, Class<T> tClass) {
+    public <T> Map<String, List<T>> searchDocsGroupMap(String index, SearchSourceBuilder searchSourceBuilder, String aggName,
+            Class<T> tClass) {
         SearchRequest searchRequest = buildSearchRequest(index);
         if (log.isDebugEnabled()) {
             log.debug("DSL语句为：{}", searchRequest.source().toString());
@@ -442,7 +448,8 @@ public class BaseElasticsearchServiceImpl implements IBaseElasticsearchService {
     }
 
     @Override
-    public <T> PageResponse<T> search(String index, SearchSourceBuilder searchSourceBuilder, Class<T> clazz, Integer pageNum, Integer pageSize) {
+    public <T> PageResponse<T> search(String index, SearchSourceBuilder searchSourceBuilder, Class<T> clazz, Integer pageNum,
+            Integer pageSize) {
         SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
         log.info("DSL语句为：{}", searchRequest.source().toString());

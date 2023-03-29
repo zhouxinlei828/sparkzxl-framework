@@ -5,6 +5,12 @@ import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.properties.LoggingProperties;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -23,13 +29,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 请求处理过滤器
@@ -120,10 +119,12 @@ public class RequestLogFilter extends AbstractGlobalFilter {
                             entryValue = entry.getValue();
                             if (entryValue.size() > 1) {
                                 for (String value : entryValue) {
-                                    formDataBodyBuilder.append(entryKey).append("=").append(URLEncoder.encode(value, charsetName)).append("&");
+                                    formDataBodyBuilder.append(entryKey).append("=").append(URLEncoder.encode(value, charsetName))
+                                            .append("&");
                                 }
                             } else {
-                                formDataBodyBuilder.append(entryKey).append("=").append(URLEncoder.encode(entryValue.get(0), charsetName)).append("&");
+                                formDataBodyBuilder.append(entryKey).append("=").append(URLEncoder.encode(entryValue.get(0), charsetName))
+                                        .append("&");
                             }
                         }
                     } catch (UnsupportedEncodingException ignored) {

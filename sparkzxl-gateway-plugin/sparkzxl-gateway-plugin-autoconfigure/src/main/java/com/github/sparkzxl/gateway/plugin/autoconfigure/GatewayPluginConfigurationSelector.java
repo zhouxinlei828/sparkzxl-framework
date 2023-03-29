@@ -1,11 +1,10 @@
 package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Gateway Plugin Configuration Selector

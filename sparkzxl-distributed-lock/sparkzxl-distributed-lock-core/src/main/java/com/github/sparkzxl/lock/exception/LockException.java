@@ -7,6 +7,7 @@ package com.github.sparkzxl.lock.exception;
  * @since 2022-05-01 21:43:08
  */
 public class LockException extends RuntimeException {
+
     public LockException() {
         super();
     }

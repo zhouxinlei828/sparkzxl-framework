@@ -1,9 +1,8 @@
 package com.github.sparkzxl.core.util;
 
 import com.google.common.hash.Hashing;
-import org.apache.commons.lang3.StringUtils;
-
 import java.nio.charset.StandardCharsets;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 短链生成工具

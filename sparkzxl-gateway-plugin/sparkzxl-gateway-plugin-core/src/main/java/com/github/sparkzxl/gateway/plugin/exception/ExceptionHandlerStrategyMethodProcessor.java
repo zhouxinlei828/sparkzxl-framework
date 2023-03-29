@@ -1,6 +1,11 @@
 package com.github.sparkzxl.gateway.plugin.exception;
 
 import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategyAdapter;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.aop.scope.ScopedObject;
@@ -22,12 +27,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * description: 异常处理方法处理器
@@ -134,7 +133,8 @@ public class ExceptionHandlerStrategyMethodProcessor implements ApplicationConte
                         beanDefinitionBuilder.addConstructorArgValue(adaptClass);
                         beanDefinitionBuilder.setScope(BeanDefinition.SCOPE_SINGLETON);
                         adaptClassSimpleName = adaptClass.getSimpleName();
-                        beanFactory.registerBeanDefinition(adaptClassSimpleName + "HandlerStrategy", beanDefinitionBuilder.getBeanDefinition());
+                        beanFactory.registerBeanDefinition(adaptClassSimpleName + "HandlerStrategy",
+                                beanDefinitionBuilder.getBeanDefinition());
                         if (log.isDebugEnabled()) {
                             log.debug("Register ExceptionHandlerStrategy Bean :{} For Class :{} ", adaptClassSimpleName + "HandlerStrategy",
                                     adaptClassSimpleName);

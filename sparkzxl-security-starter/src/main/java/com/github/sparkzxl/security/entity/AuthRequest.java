@@ -1,8 +1,7 @@
 package com.github.sparkzxl.security.entity;
 
-import lombok.Data;
-
 import javax.validation.constraints.NotEmpty;
+import lombok.Data;
 
 /**
  * description: 登录请求

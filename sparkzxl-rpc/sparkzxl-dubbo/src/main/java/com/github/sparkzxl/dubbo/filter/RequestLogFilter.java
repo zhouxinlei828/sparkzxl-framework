@@ -4,17 +4,21 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.dubbo.properties.DubboCustomProperties;
+import java.text.MessageFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.extension.Activate;
-import org.apache.dubbo.rpc.*;
+import org.apache.dubbo.rpc.Filter;
+import org.apache.dubbo.rpc.Invocation;
+import org.apache.dubbo.rpc.Invoker;
+import org.apache.dubbo.rpc.Result;
+import org.apache.dubbo.rpc.RpcContext;
+import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.springframework.boot.logging.LogLevel;
-
-import java.text.MessageFormat;
 
 /**
  * description: dubbo日志过滤器
@@ -68,7 +72,8 @@ public class RequestLogFilter implements Filter {
         if (properties.getLevel() == LogLevel.INFO) {
             log.info("dubbo -> service response: {}, consume time: {}ms", baseLog, elapsed);
         } else if (properties.getLevel() == LogLevel.DEBUG) {
-            log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed, JsonUtils.getJson().toJson(new Object[]{result.getValue()}));
+            log.debug("dubbo -> service response: {},consume time: {}ms,result: {}", baseLog, elapsed,
+                    JsonUtils.getJson().toJson(new Object[]{result.getValue()}));
         }
         return result;
     }

@@ -2,13 +2,12 @@ package com.github.sparkzxl.distributed.cloud.loadbalancer;
 
 import com.google.common.collect.Lists;
 import io.seata.common.util.StringUtils;
+import java.util.List;
+import java.util.Map;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.loadbalancer.core.DelegatingServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import reactor.core.publisher.Flux;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: 只返回相同【version】的服务实例，不同【version】之间的服务不互相调用
@@ -22,7 +21,7 @@ public class GrayscaleVersionServiceInstanceListSupplier extends DelegatingServi
     private final LoadBalancerVersionConfig versionConfig;
 
     public GrayscaleVersionServiceInstanceListSupplier(ServiceInstanceListSupplier delegate,
-                                                       LoadBalancerVersionConfig versionConfig) {
+            LoadBalancerVersionConfig versionConfig) {
         super(delegate);
         this.versionConfig = versionConfig;
     }

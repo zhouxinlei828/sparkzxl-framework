@@ -8,6 +8,8 @@ import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.logging.decorator.LoggingResponseBodyDecorator;
 import com.github.sparkzxl.gateway.plugin.logging.service.IOptLogService;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.event.EnableBodyCachingEvent;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -16,9 +18,6 @@ import org.springframework.http.server.reactive.AbstractServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * description: ApiResult log 过滤器
@@ -43,10 +42,12 @@ public class ResponseLogFilter extends AbstractGlobalFilter {
         }
         GatewayContext gatewayContext = exchange.getAttribute(GatewayConstant.GATEWAY_CONTEXT_CONSTANT);
         boolean enableLogging =
-                Boolean.parseBoolean(ParameterDataFactory.builderData(ParameterDataConstant.ATTRIBUTE, GatewayConstant.ENABLE_LOGGING, exchange));
+                Boolean.parseBoolean(
+                        ParameterDataFactory.builderData(ParameterDataConstant.ATTRIBUTE, GatewayConstant.ENABLE_LOGGING, exchange));
         if (enableLogging) {
             sendCacheRequestBodyEvent(gatewayContext.getRouteId());
-            return chain.filter(exchange.mutate().response(new LoggingResponseBodyDecorator(exchange.getResponse(), exchange, optLogService)).build());
+            return chain.filter(
+                    exchange.mutate().response(new LoggingResponseBodyDecorator(exchange.getResponse(), exchange, optLogService)).build());
         }
         return chain.filter(exchange);
     }

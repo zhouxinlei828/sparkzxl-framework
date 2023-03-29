@@ -2,19 +2,18 @@ package com.github.sparkzxl.core.base.result;
 
 import cn.hutool.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.sparkzxl.core.base.ResponseCode;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
-import com.github.sparkzxl.core.base.ResponseCode;
 import com.google.common.collect.Maps;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.slf4j.MDC;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * description: web接口响应结果
@@ -108,7 +107,8 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult
      */
     public static ApiResult<?> fail(IErrorCode errorCode) {
-        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode.getErrorCode(), errorCode.getErrorMsg(), null);
+        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode.getErrorCode(),
+                errorCode.getErrorMsg(), null);
     }
 
     /**
@@ -119,7 +119,8 @@ public class ApiResult<T> implements Serializable {
      */
     public static ApiResult<?> fail(Throwable throwable) {
         String msg = throwable != null ? throwable.getMessage() : ResultErrorCode.FAILURE.getErrorMsg();
-        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, ResultErrorCode.FAILURE.getErrorCode(), msg, null);
+        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, ResultErrorCode.FAILURE.getErrorCode(),
+                msg, null);
     }
 
     /**
@@ -161,6 +162,7 @@ public class ApiResult<T> implements Serializable {
     }
 
     public static class ResponseBuilder<T> {
+
         private int code;
         private String msg;
         private T data;

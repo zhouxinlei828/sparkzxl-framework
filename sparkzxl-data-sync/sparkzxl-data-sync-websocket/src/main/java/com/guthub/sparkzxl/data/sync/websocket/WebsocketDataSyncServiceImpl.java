@@ -5,15 +5,14 @@ import com.google.common.collect.ImmutableMap;
 import com.guthub.sparkzxl.data.sync.websocket.client.WebsocketReceiveClient;
 import com.guthub.sparkzxl.data.sync.websocket.config.WebsocketConsumerProperties;
 import com.guthub.sparkzxl.data.sync.websocket.handler.DataHandler;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: WebsocketDataSyncServiceImpl implementation for SyncDataService
@@ -39,7 +38,7 @@ public class WebsocketDataSyncServiceImpl implements DataSyncService {
      * @param dataHandlerList             the dataHandlers
      */
     public WebsocketDataSyncServiceImpl(final WebsocketConsumerProperties websocketConsumerProperties,
-                                        final List<DataHandler> dataHandlerList) {
+            final List<DataHandler> dataHandlerList) {
         String[] urls = StringUtils.split(websocketConsumerProperties.getUrls(), ",");
         for (String url : urls) {
             try {

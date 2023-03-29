@@ -7,6 +7,7 @@ package com.github.sparkzxl.mybatis.send;
  * @since 2022-06-16 17:39:18
  */
 public class DefaultSendNoticeService extends AbstractSendNoticeService {
+
     @Override
     public void sendNotice(SqlMonitorMessage sqlMonitorMessage) {
 

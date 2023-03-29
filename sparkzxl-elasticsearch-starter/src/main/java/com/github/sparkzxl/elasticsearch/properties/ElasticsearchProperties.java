@@ -1,10 +1,9 @@
 package com.github.sparkzxl.elasticsearch.properties;
 
 import com.google.common.collect.Lists;
+import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
 
 /**
  * description: Elasticsearch 配置类
@@ -90,6 +89,7 @@ public class ElasticsearchProperties {
      */
     @Data
     public static class Account {
+
         /**
          * 认证用户
          */

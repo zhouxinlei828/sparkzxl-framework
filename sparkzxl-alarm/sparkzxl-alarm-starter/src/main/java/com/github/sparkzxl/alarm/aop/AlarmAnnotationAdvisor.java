@@ -1,5 +1,8 @@
 package com.github.sparkzxl.alarm.aop;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import lombok.NonNull;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -17,10 +20,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.Assert;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
 /**
  * description: 告警注解AOP通知
  *
@@ -36,8 +35,8 @@ public class AlarmAnnotationAdvisor extends AbstractPointcutAdvisor implements B
     private final Class<? extends Annotation> annotation;
 
     public AlarmAnnotationAdvisor(@NonNull MethodInterceptor advice,
-                                  @NonNull Class<? extends Annotation> annotation,
-                                  int order) {
+            @NonNull Class<? extends Annotation> annotation,
+            int order) {
         this.advice = advice;
         this.annotation = annotation;
         this.pointcut = buildPointcut();
@@ -90,6 +89,7 @@ public class AlarmAnnotationAdvisor extends AbstractPointcutAdvisor implements B
         }
 
         private static class AnnotationMethodMatcher extends StaticMethodMatcher {
+
             private final Class<? extends Annotation> annotationType;
 
             public AnnotationMethodMatcher(Class<? extends Annotation> annotationType) {

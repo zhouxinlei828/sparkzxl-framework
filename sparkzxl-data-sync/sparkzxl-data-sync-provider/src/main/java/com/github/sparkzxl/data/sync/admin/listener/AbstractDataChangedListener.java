@@ -1,10 +1,9 @@
 package com.github.sparkzxl.data.sync.admin.listener;
 
 import com.github.sparkzxl.data.sync.common.entity.PushData;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * description: AbstractDataChangedListener

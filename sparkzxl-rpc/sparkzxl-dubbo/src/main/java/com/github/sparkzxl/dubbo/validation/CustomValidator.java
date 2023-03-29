@@ -1,10 +1,46 @@
 package com.github.sparkzxl.dubbo.validation;
 
-import javassist.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.CtNewConstructor;
+import javassist.Modifier;
+import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
-import javassist.bytecode.annotation.*;
+import javassist.bytecode.annotation.ArrayMemberValue;
+import javassist.bytecode.annotation.BooleanMemberValue;
+import javassist.bytecode.annotation.ByteMemberValue;
+import javassist.bytecode.annotation.CharMemberValue;
+import javassist.bytecode.annotation.ClassMemberValue;
+import javassist.bytecode.annotation.DoubleMemberValue;
+import javassist.bytecode.annotation.EnumMemberValue;
+import javassist.bytecode.annotation.FloatMemberValue;
+import javassist.bytecode.annotation.IntegerMemberValue;
+import javassist.bytecode.annotation.LongMemberValue;
+import javassist.bytecode.annotation.MemberValue;
+import javassist.bytecode.annotation.ShortMemberValue;
+import javassist.bytecode.annotation.StringMemberValue;
+import javax.validation.Constraint;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidationException;
+import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
+import javax.validation.metadata.ConstraintDescriptor;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.bytecode.ClassGenerator;
 import org.apache.dubbo.common.logger.Logger;
@@ -13,16 +49,6 @@ import org.apache.dubbo.common.utils.ReflectUtils;
 import org.apache.dubbo.validation.MethodValidated;
 import org.apache.dubbo.validation.Validator;
 import org.apache.dubbo.validation.support.jvalidation.JValidator;
-
-import javax.validation.*;
-import javax.validation.groups.Default;
-import javax.validation.metadata.ConstraintDescriptor;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * description: 扩展JValidator，修复参数校验序列化异常
@@ -133,7 +159,8 @@ public class CustomValidator implements Validator {
                         }
                     }
                     String fieldName = method.getName() + "Argument" + i;
-                    CtField ctField = CtField.make("public " + type.getCanonicalName() + " " + fieldName + ";", pool.getCtClass(parameterClassName));
+                    CtField ctField = CtField.make("public " + type.getCanonicalName() + " " + fieldName + ";",
+                            pool.getCtClass(parameterClassName));
                     ctField.getFieldInfo().addAttribute(attribute);
                     ctClass.addField(ctField);
                 }
@@ -251,11 +278,14 @@ public class CustomValidator implements Validator {
                 List<ValidationResult> validationResults = new ArrayList<>();
                 for (ConstraintViolation<?> violation : violations) {
                     ValidationResult validationResult = new ValidationResult(violation.getInvalidValue(), violation.getPropertyPath(),
-                            violation.getMessage(), violation.getMessageTemplate(), violation.getExecutableParameters(), violation.getExecutableReturnValue());
+                            violation.getMessage(), violation.getMessageTemplate(), violation.getExecutableParameters(),
+                            violation.getExecutableReturnValue());
                     validationResults.add(validationResult);
                 }
                 logger.info("Failed to validate service: " + clazz.getName() + ", method: " + methodName + ", cause: " + validationResults);
-                throw new MethodValidatedException("Failed to validate service: " + clazz.getName() + ", method: " + methodName + ", cause: " + validationResults, validationResults);
+                throw new MethodValidatedException(
+                        "Failed to validate service: " + clazz.getName() + ", method: " + methodName + ", cause: " + validationResults,
+                        validationResults);
             }
 
         } catch (ValidationException e) {

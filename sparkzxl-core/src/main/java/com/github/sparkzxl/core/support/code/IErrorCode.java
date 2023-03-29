@@ -6,6 +6,7 @@ package com.github.sparkzxl.core.support.code;
  * @author zhouxinlei
  */
 public interface IErrorCode {
+
     /**
      * code
      *

@@ -1,5 +1,7 @@
 package com.github.sparkzxl.alarm.wetalk.strategy;
 
+import static com.github.sparkzxl.alarm.constant.AlarmConstant.WETALK_AT_ALL;
+
 import com.github.sparkzxl.alarm.entity.AlarmRequest;
 import com.github.sparkzxl.alarm.entity.MsgType;
 import com.github.sparkzxl.alarm.enums.AlarmChannel;
@@ -8,10 +10,7 @@ import com.github.sparkzxl.alarm.strategy.MessageSource;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.wetalk.entity.WeText;
 import com.google.common.collect.Sets;
-
 import java.util.Set;
-
-import static com.github.sparkzxl.alarm.constant.AlarmConstant.WETALK_AT_ALL;
 
 /**
  * description: 企业微信文本消息

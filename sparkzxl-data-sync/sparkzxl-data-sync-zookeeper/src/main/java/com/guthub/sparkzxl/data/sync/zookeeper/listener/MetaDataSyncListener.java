@@ -3,14 +3,13 @@ package com.guthub.sparkzxl.data.sync.zookeeper.listener;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
 import org.springframework.util.AntPathMatcher;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * description: 元数据同步监听

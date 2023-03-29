@@ -4,7 +4,6 @@ import com.github.sparkzxl.lock.DefaultLockFailureStrategy;
 import com.github.sparkzxl.lock.LockFailureStrategy;
 import com.github.sparkzxl.lock.autoconfigure.DistributedLockProperties;
 import com.github.sparkzxl.lock.executor.LockExecutor;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,6 +1,8 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
 import com.mongodb.MongoException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -8,9 +10,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.util.StringUtils;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * description: 动态数据源工厂应用上下文

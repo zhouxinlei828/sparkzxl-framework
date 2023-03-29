@@ -1,8 +1,12 @@
 package com.github.sparkzxl.data.sync.common.timer;
 
 import cn.hutool.core.thread.NamedThreadFactory;
-
-import java.util.concurrent.*;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -57,9 +61,9 @@ public class HierarchicalWheelTimer implements Timer {
      * @param startMs      the start ms
      */
     public HierarchicalWheelTimer(final String executorName,
-                                  final Long tickMs,
-                                  final Integer wheelSize,
-                                  final Long startMs) {
+            final Long tickMs,
+            final Integer wheelSize,
+            final Long startMs) {
         ThreadFactory threadFactory = new NamedThreadFactory(executorName, false);
         taskExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>(), threadFactory);

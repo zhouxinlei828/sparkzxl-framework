@@ -1,9 +1,8 @@
 package com.github.sparkzxl.oss.properties;
 
 import com.amazonaws.regions.Regions;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * description: oss属性配置信息
@@ -37,8 +36,7 @@ public class Configuration implements Serializable {
     private String domain;
 
     /**
-     * true path-style nginx 反向代理和S3默认支持 pathStyle false
-     * supports virtual-hosted-style 阿里云等需要配置为 virtual-hosted-style模式
+     * true path-style nginx 反向代理和S3默认支持 pathStyle false supports virtual-hosted-style 阿里云等需要配置为 virtual-hosted-style模式
      */
     private Boolean pathStyleAccess = true;
 

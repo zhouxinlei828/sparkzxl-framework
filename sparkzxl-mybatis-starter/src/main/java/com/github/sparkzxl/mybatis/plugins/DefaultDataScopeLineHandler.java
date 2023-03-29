@@ -7,14 +7,13 @@ import com.github.sparkzxl.mybatis.annotation.DataScope;
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
 import com.github.sparkzxl.mybatis.properties.DataScopeConfig;
 import com.google.common.collect.Maps;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 多列数据权限 行级处理器

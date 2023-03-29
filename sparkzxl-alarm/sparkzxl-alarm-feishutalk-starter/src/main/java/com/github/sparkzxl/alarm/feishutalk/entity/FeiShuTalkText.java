@@ -4,12 +4,11 @@ package com.github.sparkzxl.alarm.feishutalk.entity;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.github.sparkzxl.core.util.StrPool;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 飞书文本消息
@@ -42,7 +41,8 @@ public class FeiShuTalkText extends Message {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
             if (value instanceof List) {
-                List<FeiShuAt> atList = Convert.convert(new TypeReference<List<FeiShuAt>>() {}, value);
+                List<FeiShuAt> atList = Convert.convert(new TypeReference<List<FeiShuAt>>() {
+                }, value);
                 setAtList(atList);
                 break;
             }
@@ -68,6 +68,7 @@ public class FeiShuTalkText extends Message {
     }
 
     public static class Content implements Serializable {
+
         private String text;
 
         public Content() {

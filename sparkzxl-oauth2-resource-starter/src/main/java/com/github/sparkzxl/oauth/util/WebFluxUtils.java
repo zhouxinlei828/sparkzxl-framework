@@ -1,12 +1,11 @@
 package com.github.sparkzxl.oauth.util;
 
 import cn.hutool.core.util.StrUtil;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.MultiValueMap;
-
-import java.util.List;
 
 /**
  * description: WebFluxUtils工具类

@@ -5,6 +5,9 @@ import com.github.sparkzxl.gateway.plugin.exception.factory.ExceptionHandlerStra
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import com.github.sparkzxl.gateway.plugin.exception.strategy.DefaultExceptionHandlerStrategy;
 import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategy;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -21,10 +24,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.result.view.ViewResolver;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * description: Json Exception Handler {@link org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler}
@@ -111,7 +110,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
     }
 
     private Mono<? extends Void> write(ServerWebExchange exchange,
-                                       ServerResponse response) {
+            ServerResponse response) {
         exchange.getResponse().getHeaders()
                 .setContentType(response.headers().getContentType());
         return response.writeTo(exchange, new ResponseContext());
@@ -125,7 +124,8 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
      * @return String
      */
     private String buildMessage(ServerHttpRequest request, Throwable ex) {
-        return StrFormatter.format("Failed to handle request [{}] {} :[{}]", Objects.requireNonNull(request.getMethod()).name(), request.getPath(),
+        return StrFormatter.format("Failed to handle request [{}] {} :[{}]", Objects.requireNonNull(request.getMethod()).name(),
+                request.getPath(),
                 ex.getMessage());
     }
 

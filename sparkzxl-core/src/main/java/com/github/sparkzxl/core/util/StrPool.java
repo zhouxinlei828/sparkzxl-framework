@@ -6,6 +6,7 @@ package com.github.sparkzxl.core.util;
  * @author zhouxinlei
  */
 public interface StrPool {
+
     String AMPERSAND = "&";
     String AND = "and";
     String AT = "@";

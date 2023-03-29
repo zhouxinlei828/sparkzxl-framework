@@ -19,10 +19,9 @@ package com.github.sparkzxl.gateway.common.cache;
 
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
-import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.core.util.PathMatchUtils;
+import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.google.common.collect.Maps;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;

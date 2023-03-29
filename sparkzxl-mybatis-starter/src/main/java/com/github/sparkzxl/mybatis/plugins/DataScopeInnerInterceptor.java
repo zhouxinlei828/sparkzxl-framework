@@ -8,14 +8,40 @@ import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
 import com.google.common.collect.Lists;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.expression.BinaryExpression;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.Function;
+import net.sf.jsqlparser.expression.NotExpression;
+import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.ValueListExpression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.*;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.InExpression;
+import net.sf.jsqlparser.expression.operators.relational.ItemsList;
+import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.*;
+import net.sf.jsqlparser.statement.select.FromItem;
+import net.sf.jsqlparser.statement.select.Join;
+import net.sf.jsqlparser.statement.select.LateralSubSelect;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectBody;
+import net.sf.jsqlparser.statement.select.SelectExpressionItem;
+import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.statement.select.SetOperationList;
+import net.sf.jsqlparser.statement.select.SubJoin;
+import net.sf.jsqlparser.statement.select.SubSelect;
+import net.sf.jsqlparser.statement.select.ValuesList;
+import net.sf.jsqlparser.statement.select.WithItem;
 import net.sf.jsqlparser.util.cnfexpression.MultiAndExpression;
 import net.sf.jsqlparser.util.cnfexpression.MultiOrExpression;
 import org.apache.ibatis.executor.Executor;
@@ -23,10 +49,6 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-
-import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * description: 多列数据权限拦截器
@@ -47,7 +69,8 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     }
 
     @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler,
+            BoundSql boundSql) throws SQLException {
         if (dataScopeLineHandler.match()) {
             PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
             mpBs.sql(parserSingle(mpBs.sql(), null));
@@ -117,20 +140,9 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
     /**
      * 处理where条件内的子查询
      * <p>
-     * 支持如下:
-     * 1. in
-     * 2. =
-     * 3. >
-     * 4. <
-     * 5. >=
-     * 6. <=
-     * 7. <>
-     * 8. EXISTS
-     * 9. NOT EXISTS
+     * 支持如下: 1. in 2. = 3. > 4. < 5. >= 6. <= 7. <> 8. EXISTS 9. NOT EXISTS
      * <p>
-     * 前提条件:
-     * 1. 子查询必须放在小括号中
-     * 2. 子查询一般放在比较操作符的右边
+     * 前提条件: 1. 子查询必须放在小括号中 2. 子查询一般放在比较操作符的右边
      *
      * @param where where 条件
      */
@@ -299,7 +311,8 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                         function.setName(functionName);
                         // 创建参数表达式
                         ExpressionList expressionListCount = new ExpressionList();
-                        expressionListCount.setExpressions(Lists.newArrayList(new StringValue(scopeId), this.getAliasColumn(table, columnName)));
+                        expressionListCount.setExpressions(
+                                Lists.newArrayList(new StringValue(scopeId), this.getAliasColumn(table, columnName)));
                         // 设置参数
                         function.setParameters(expressionListCount);
                         functionList.add(function);

@@ -1,7 +1,6 @@
 package com.github.sparkzxl.core.constant;
 
 import com.google.common.collect.Lists;
-
 import java.util.List;
 
 /**

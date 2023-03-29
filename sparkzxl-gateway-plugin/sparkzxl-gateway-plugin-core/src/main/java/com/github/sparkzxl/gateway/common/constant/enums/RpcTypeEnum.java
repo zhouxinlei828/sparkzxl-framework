@@ -2,7 +2,6 @@ package com.github.sparkzxl.gateway.common.constant.enums;
 
 
 import com.github.sparkzxl.gateway.support.GatewayException;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +19,6 @@ public enum RpcTypeEnum {
      * Dubbo rpc type enum.
      */
     DUBBO("dubbo", true),
-
 
     /**
      * springCloud rpc type enum.

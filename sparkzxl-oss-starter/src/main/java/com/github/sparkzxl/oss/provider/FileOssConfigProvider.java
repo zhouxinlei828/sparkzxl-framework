@@ -6,13 +6,12 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.URLUtil;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.oss.properties.Configuration;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 文件 加载oss配置信息
@@ -21,6 +20,7 @@ import java.util.Optional;
  * @since 2022-05-05 13:56:54
  */
 public class FileOssConfigProvider extends AbstractOssConfigProvider {
+
     private final static String HTTP = "http";
     private final static String HTTPS = "https";
 
@@ -37,7 +37,7 @@ public class FileOssConfigProvider extends AbstractOssConfigProvider {
         } else {
             fileStr = ResourceUtil.readUtf8Str(path);
         }
-        List<Configuration> configList = JsonUtils.getJson().toJavaList(fileStr,Configuration.class);
+        List<Configuration> configList = JsonUtils.getJson().toJavaList(fileStr, Configuration.class);
         for (Configuration configInfo : configList) {
             if (StringUtils.isEmpty(configInfo.getClientType())) {
                 throw new RuntimeException("Oss client clientType cannot be empty.");

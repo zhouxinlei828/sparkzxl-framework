@@ -6,14 +6,6 @@ import com.github.sparkzxl.cache.redis.CacheHashKey;
 import com.github.sparkzxl.cache.redis.CacheKey;
 import com.github.sparkzxl.cache.redis.RedisOps;
 import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.lang.NonNull;
-
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -21,6 +13,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.lang.NonNull;
 
 /**
  * description: redis缓存提供接口实现类
@@ -65,7 +64,8 @@ public class RedisCacheImpl implements CacheService {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
-        T obj = Convert.convert(new TypeReference<T>() {}, valueOperations.get(key));
+        T obj = Convert.convert(new TypeReference<T>() {
+        }, valueOperations.get(key));
         if (obj == null && function != null) {
             obj = function.apply(funcParam);
             Optional.ofNullable(obj).ifPresent(value -> set(key, value, timeout));
@@ -128,7 +128,8 @@ public class RedisCacheImpl implements CacheService {
 
     @Override
     public boolean exists(String key) {
-        return Boolean.TRUE.equals(redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.exists(key.getBytes(StandardCharsets.UTF_8))));
+        return Boolean.TRUE.equals(redisTemplate.execute(
+                (RedisCallback<Boolean>) redisConnection -> redisConnection.exists(key.getBytes(StandardCharsets.UTF_8))));
     }
 
     @Override

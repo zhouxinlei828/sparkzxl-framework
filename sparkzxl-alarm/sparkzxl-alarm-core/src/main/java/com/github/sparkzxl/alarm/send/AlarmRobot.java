@@ -13,11 +13,10 @@ import com.github.sparkzxl.alarm.message.TextMessageTemplate;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.strategy.AlarmMessageFactory;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.text.MessageFormat;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * description: 告警机器人
@@ -31,9 +30,9 @@ public class AlarmRobot extends AbstractAlarmClient {
     private final AlarmMessageFactory alarmMessageFactory;
 
     public AlarmRobot(AlarmProperties alarmProperties,
-                      TextMessageTemplate textMessage,
-                      MarkDownMessageTemplate markDownMessage,
-                      List<AlarmExecutor> alarmExecutorList, AlarmMessageFactory alarmMessageFactory) {
+            TextMessageTemplate textMessage,
+            MarkDownMessageTemplate markDownMessage,
+            List<AlarmExecutor> alarmExecutorList, AlarmMessageFactory alarmMessageFactory) {
         super(alarmProperties, textMessage, markDownMessage, alarmExecutorList);
         this.alarmMessageFactory = alarmMessageFactory;
     }
@@ -69,7 +68,8 @@ public class AlarmRobot extends AbstractAlarmClient {
     }
 
     @Override
-    public AlarmResponse designatedRobotSend(String robotId, AlarmChannel alarmChannel, MessageSubType messageSubType, AlarmRequest request) {
+    public AlarmResponse designatedRobotSend(String robotId, AlarmChannel alarmChannel, MessageSubType messageSubType,
+            AlarmRequest request) {
         if (!messageSubType.isSupport()) {
             return AlarmResponse.failed(MessageFormat.format(AlarmErrorEnum.MESSAGE_TYPE_UNSUPPORTED.getErrorMsg(),
                     alarmChannel.getType(),

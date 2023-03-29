@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.elasticsearch.properties.ElasticsearchProperties;
 import com.google.common.collect.Lists;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
@@ -19,8 +20,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 /**
  * description: Elasticsearch自动装载配置类

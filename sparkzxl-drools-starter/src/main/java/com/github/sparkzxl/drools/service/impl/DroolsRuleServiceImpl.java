@@ -3,6 +3,7 @@ package com.github.sparkzxl.drools.service.impl;
 import com.github.sparkzxl.drools.KieClient;
 import com.github.sparkzxl.drools.properties.DroolsProperties;
 import com.github.sparkzxl.drools.service.DroolsRuleService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.KieServices;
@@ -14,8 +15,6 @@ import org.kie.internal.io.ResourceFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-
-import java.io.IOException;
 
 /**
  * description: 规则重载实现类

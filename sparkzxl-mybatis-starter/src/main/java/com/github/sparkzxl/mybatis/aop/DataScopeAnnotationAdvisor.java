@@ -1,5 +1,6 @@
 package com.github.sparkzxl.mybatis.aop;
 
+import java.lang.annotation.Annotation;
 import lombok.NonNull;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
@@ -8,8 +9,6 @@ import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-
-import java.lang.annotation.Annotation;
 
 /**
  * description: 多列数据权限aop通知
@@ -24,8 +23,8 @@ public class DataScopeAnnotationAdvisor extends AbstractPointcutAdvisor implemen
     private final Pointcut pointcut;
 
     public DataScopeAnnotationAdvisor(@NonNull DataScopeInterceptor dataScopeInterceptor,
-                                      Class<? extends Annotation> annotation,
-                                      int order) {
+            Class<? extends Annotation> annotation,
+            int order) {
         this.advice = dataScopeInterceptor;
         this.pointcut = AnnotationMatchingPointcut.forMethodAnnotation(annotation);
         setOrder(order);

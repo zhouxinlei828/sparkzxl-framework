@@ -1,9 +1,8 @@
 package com.github.sparkzxl.web.properties;
 
 import com.google.common.collect.Lists;
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * description: 拦截器配置

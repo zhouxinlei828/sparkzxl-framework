@@ -7,6 +7,7 @@ package com.github.sparkzxl.mybatis.send;
  * @since 2022-06-16 17:19:29
  */
 public interface SendNoticeService {
+
     /**
      * 发送消息
      *

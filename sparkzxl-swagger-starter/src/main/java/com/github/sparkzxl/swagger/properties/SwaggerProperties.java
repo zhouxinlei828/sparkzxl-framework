@@ -1,12 +1,15 @@
 package com.github.sparkzxl.swagger.properties;
 
-import lombok.*;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: swagger2 属性配置
@@ -103,6 +106,7 @@ public class SwaggerProperties {
     @Setter
     @Getter
     public static class GlobalOperationParameter {
+
         /**
          * 参数名
          **/
@@ -149,6 +153,7 @@ public class SwaggerProperties {
 
     @Data
     public static class DocketInfo {
+
         /**
          * 标题
          **/
@@ -263,6 +268,7 @@ public class SwaggerProperties {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Contact {
+
         /**
          * 联系人
          **/
@@ -282,6 +288,7 @@ public class SwaggerProperties {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ApiKey {
+
         private String name;
         private String keyName;
         private String passAs = "header";
@@ -292,6 +299,7 @@ public class SwaggerProperties {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class AllowableValues {
+
         private List<String> values;
         private String valueType;
     }

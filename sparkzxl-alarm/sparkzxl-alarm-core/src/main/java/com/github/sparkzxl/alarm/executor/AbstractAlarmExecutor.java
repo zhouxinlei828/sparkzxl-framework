@@ -12,14 +12,13 @@ import com.github.sparkzxl.alarm.loadbalancer.AlarmLoadBalancer;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.send.AlarmCallback;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Function;
+import javax.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * description:
@@ -56,7 +55,8 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
         }
         AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel, (configs) -> alarmLoadBalancer.choose(configs));
         if (log.isDebugEnabled()) {
-            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(), alarmConfig.getTokenId());
+            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(),
+                    alarmConfig.getTokenId());
         }
         return sendAlarm(alarmId, alarmConfig, message);
     }
@@ -69,14 +69,17 @@ public abstract class AbstractAlarmExecutor implements AlarmExecutor {
         if (MapUtil.isNotEmpty(variables)) {
             message.transfer(variables);
         }
-        AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel, (configs) -> alarmLoadBalancer.chooseDesignatedRobot(robotId, configs));
+        AlarmProperties.AlarmConfig alarmConfig = getAlarmConfig(alarmChannel,
+                (configs) -> alarmLoadBalancer.chooseDesignatedRobot(robotId, configs));
         if (log.isDebugEnabled()) {
-            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(), alarmConfig.getTokenId());
+            log.debug("alarmId={} send message and use alarm type ={}, tokenId={}.", alarmId, alarmChannel.getType(),
+                    alarmConfig.getTokenId());
         }
         return sendAlarm(alarmId, alarmConfig, message);
     }
 
-    public AlarmProperties.AlarmConfig getAlarmConfig(AlarmChannel alarmChannel, Function<List<AlarmProperties.AlarmConfig>, AlarmProperties.AlarmConfig> function) {
+    public AlarmProperties.AlarmConfig getAlarmConfig(AlarmChannel alarmChannel,
+            Function<List<AlarmProperties.AlarmConfig>, AlarmProperties.AlarmConfig> function) {
         Map<AlarmChannel, AlarmProperties.AlarmChannelConfig> alarms = alarmProperties.getChannel();
         if (alarmProperties.isEnabled() && !alarms.containsKey(alarmChannel)) {
             throw new AlarmException(AlarmErrorEnum.ALARM_DISABLED);

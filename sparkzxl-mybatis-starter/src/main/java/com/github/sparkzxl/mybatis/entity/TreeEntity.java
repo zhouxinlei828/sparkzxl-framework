@@ -1,7 +1,6 @@
 package com.github.sparkzxl.mybatis.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

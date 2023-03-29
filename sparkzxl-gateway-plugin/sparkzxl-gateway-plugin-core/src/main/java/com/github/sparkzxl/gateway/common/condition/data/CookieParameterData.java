@@ -1,11 +1,10 @@
 package com.github.sparkzxl.gateway.common.condition.data;
 
 import com.github.sparkzxl.spi.Join;
+import java.util.List;
 import org.springframework.http.HttpCookie;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
-
-import java.util.List;
 
 /**
  * description: cookie parameter data

@@ -2,9 +2,8 @@ package com.github.sparkzxl.log.utils;
 
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.sparkzxl.log.entity.AlarmLogInfo;
 import com.github.sparkzxl.log.AlarmLogContext;
-
+import com.github.sparkzxl.log.entity.AlarmLogInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,11 @@ public class ThrowableUtils {
             stringBuilder.append("错误信息:").append(context.getMessage()).append(separator);
             stringBuilder.append("线程信息:").append(context.getThreadName()).append(separator);
             stringBuilder.append("链路id:").append(context.getTraceId()).append(separator);
-            stringBuilder.append("位置信息:").append(context.getClassName()).append(".").append(context.getMethodName()).append(isNativeMethod(context.getLineNumber()) ? "(Native Method)" : context.getFileName() != null && context.getLineNumber() >= 0 ? "(" + context.getFileName() + ":" + context.getLineNumber() + ")" : context.getFileName() != null ? "(" + context.getFileName() + ")" : "(Unknown Source)");
+            stringBuilder.append("位置信息:").append(context.getClassName()).append(".").append(context.getMethodName())
+                    .append(isNativeMethod(context.getLineNumber()) ? "(Native Method)"
+                            : context.getFileName() != null && context.getLineNumber() >= 0 ? "(" + context.getFileName() + ":"
+                                    + context.getLineNumber() + ")"
+                                    : context.getFileName() != null ? "(" + context.getFileName() + ")" : "(Unknown Source)");
             stringBuilder.append(separator);
         } else {
             stringBuilder.append(context.getMessage()).append(separator);
@@ -61,10 +64,13 @@ public class ThrowableUtils {
     private static String defaultMarkDownContent(AlarmLogInfo context, Throwable throwable) {
         StringBuilder stringBuilder = new StringBuilder();
         if (!AlarmLogContext.getSimpleWarnInfo()) {
-            stringBuilder.append("> - 应用：<font color=\"#1890ff\">").append(context.getApplicationName()).append("</font>").append(ThrowableUtils.SEPARATOR);
-            stringBuilder.append("> - 环境：<font color=\"#81C784\">").append(context.getEnvironment()).append("</font>\n------").append(ThrowableUtils.SEPARATOR);
+            stringBuilder.append("> - 应用：<font color=\"#1890ff\">").append(context.getApplicationName()).append("</font>")
+                    .append(ThrowableUtils.SEPARATOR);
+            stringBuilder.append("> - 环境：<font color=\"#81C784\">").append(context.getEnvironment()).append("</font>\n------")
+                    .append(ThrowableUtils.SEPARATOR);
             stringBuilder.append("- 异常类：").append(context.getThrowableName()).append(ThrowableUtils.SEPARATOR);
-            stringBuilder.append("- 错误信息：<font color=\"#ff4837\">").append(context.getMessage()).append("</font>").append(ThrowableUtils.SEPARATOR);
+            stringBuilder.append("- 错误信息：<font color=\"#ff4837\">").append(context.getMessage()).append("</font>")
+                    .append(ThrowableUtils.SEPARATOR);
             stringBuilder.append("- 线程信息：").append(context.getThreadName()).append(ThrowableUtils.SEPARATOR);
             stringBuilder.append("- 链路id：").append(context.getTraceId()).append(ThrowableUtils.SEPARATOR);
             stringBuilder.append("- 位置信息：")
@@ -87,7 +93,7 @@ public class ThrowableUtils {
         if (throwable == null) {
             return "";
         }
-        return ExceptionUtil.stacktraceToString(throwable,1000);
+        return ExceptionUtil.stacktraceToString(throwable, 1000);
     }
 
     private static boolean isNativeMethod(int lineNumber) {

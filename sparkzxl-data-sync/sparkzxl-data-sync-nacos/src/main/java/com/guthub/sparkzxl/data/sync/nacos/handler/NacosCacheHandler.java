@@ -7,15 +7,14 @@ import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: Nacos cache handler.
@@ -35,7 +34,7 @@ public class NacosCacheHandler {
 
 
     public NacosCacheHandler(final ConfigService configService,
-                             final List<DataSubscriber> dataSubscribers) {
+            final List<DataSubscriber> dataSubscribers) {
         this.configService = configService;
         dataSubscriberMap.putAll(dataSubscribers.stream().collect(Collectors.groupingBy(DataSubscriber::group)));
     }
@@ -94,6 +93,7 @@ public class NacosCacheHandler {
     }
 
     protected interface OnChange {
+
         void change(String changeData);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.server.ServerWebExchange;
  */
 @Join
 public class URIParameterData implements ParameterData {
+
     @Override
     public String builder(String paramName, ServerWebExchange exchange) {
         return exchange.getRequest().getURI().getPath();

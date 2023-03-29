@@ -1,7 +1,6 @@
 package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import com.google.common.collect.Lists;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +12,7 @@ import java.util.Set;
  * @since 2022-05-18 13:49:46
  */
 public class Message extends DingTalkMessage implements Serializable {
+
     private At at;
 
     public Message() {
@@ -31,6 +31,7 @@ public class Message extends DingTalkMessage implements Serializable {
     }
 
     public static class At implements Serializable {
+
         /**
          * 被@人的手机号(在content里添加@人的手机号)
          */

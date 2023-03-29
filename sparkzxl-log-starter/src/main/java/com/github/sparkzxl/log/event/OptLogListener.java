@@ -3,14 +3,13 @@ package com.github.sparkzxl.log.event;
 
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.log.entity.OptLogRecordDetail;
+import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 
 /***

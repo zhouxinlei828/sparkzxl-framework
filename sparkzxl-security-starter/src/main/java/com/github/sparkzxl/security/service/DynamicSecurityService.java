@@ -1,9 +1,8 @@
 package com.github.sparkzxl.security.service;
 
 
-import org.springframework.security.access.ConfigAttribute;
-
 import java.util.Map;
+import org.springframework.security.access.ConfigAttribute;
 
 /**
  * description：动态权限 服务类

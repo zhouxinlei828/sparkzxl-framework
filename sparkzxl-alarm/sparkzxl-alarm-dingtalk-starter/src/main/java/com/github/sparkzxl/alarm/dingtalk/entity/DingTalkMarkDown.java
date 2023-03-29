@@ -30,6 +30,7 @@ public class DingTalkMarkDown extends Message {
     }
 
     public static class MarkDown implements Serializable {
+
         /**
          * 首屏会话透出的展示内容, 不会展示在具体的显示内容上
          */

@@ -1,12 +1,11 @@
 package com.github.sparkzxl.lock.executor;
 
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: 分布式锁zookeeper处理器

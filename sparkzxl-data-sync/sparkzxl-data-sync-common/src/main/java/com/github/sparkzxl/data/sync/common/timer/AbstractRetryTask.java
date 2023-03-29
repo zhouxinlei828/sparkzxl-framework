@@ -28,7 +28,7 @@ public abstract class AbstractRetryTask extends TimerTask {
      * @param delayMs the delay ms
      */
     public AbstractRetryTask(final String key,
-                             final long delayMs) {
+            final long delayMs) {
         this(key, delayMs, 1);
     }
 
@@ -40,14 +40,13 @@ public abstract class AbstractRetryTask extends TimerTask {
      * @param retryCount the retry count
      */
     public AbstractRetryTask(final String key,
-                             final long delayMs,
-                             final Integer retryCount) {
+            final long delayMs,
+            final Integer retryCount) {
         this(key, delayMs, retryCount, retryCount < 0);
     }
 
     /**
-     * Instantiates a new Abstract retry task.
-     * The retryCount parameter has no effect when retryLimit is true.
+     * Instantiates a new Abstract retry task. The retryCount parameter has no effect when retryLimit is true.
      *
      * @param key        the key
      * @param delayMs    the delay ms
@@ -55,9 +54,9 @@ public abstract class AbstractRetryTask extends TimerTask {
      * @param retryLimit the retry limit
      */
     public AbstractRetryTask(final String key,
-                             final long delayMs,
-                             final Integer retryCount,
-                             final boolean retryLimit) {
+            final long delayMs,
+            final Integer retryCount,
+            final boolean retryLimit) {
         super(delayMs);
         this.key = key;
         this.retryCount = retryCount;

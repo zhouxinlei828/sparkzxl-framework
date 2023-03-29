@@ -1,10 +1,9 @@
 package com.guthub.sparkzxl.data.sync.zookeeper.config;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import java.util.List;
 import java.util.Objects;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: zookeeper属性配置
@@ -98,7 +97,9 @@ public class CuratorProperties {
             return false;
         }
         CuratorProperties that = (CuratorProperties) o;
-        return Objects.equals(retryCount, that.retryCount) && Objects.equals(timeout, that.timeout) && Objects.equals(zkServers, that.zkServers) && Objects.equals(sessionTimeoutMs, that.sessionTimeoutMs) && Objects.equals(connectionTimeoutMs, that.connectionTimeoutMs) && Objects.equals(watchConfigs, that.watchConfigs);
+        return Objects.equals(retryCount, that.retryCount) && Objects.equals(timeout, that.timeout) && Objects.equals(zkServers,
+                that.zkServers) && Objects.equals(sessionTimeoutMs, that.sessionTimeoutMs) && Objects.equals(connectionTimeoutMs,
+                that.connectionTimeoutMs) && Objects.equals(watchConfigs, that.watchConfigs);
     }
 
     @Override

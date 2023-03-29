@@ -3,14 +3,13 @@ package com.github.sparkzxl.mybatis.base.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
-import com.github.sparkzxl.mybatis.entity.SuperEntity;
 import com.github.sparkzxl.mybatis.base.mapper.SuperMapper;
 import com.github.sparkzxl.mybatis.base.service.SuperCacheService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.github.sparkzxl.mybatis.entity.SuperEntity;
 import java.io.Serializable;
 import java.util.Collection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * description: 缓存接口父类实现类

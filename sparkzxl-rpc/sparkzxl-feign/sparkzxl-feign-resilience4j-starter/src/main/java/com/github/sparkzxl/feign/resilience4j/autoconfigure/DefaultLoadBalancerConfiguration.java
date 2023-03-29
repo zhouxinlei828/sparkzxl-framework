@@ -6,6 +6,7 @@ import com.github.sparkzxl.feign.resilience4j.WebClientRequestCircuitBreakerExtr
 import com.github.sparkzxl.feign.resilience4j.loadbalancer.SameZoneOnlyServiceInstanceListSupplier;
 import com.github.sparkzxl.feign.resilience4j.loadbalancer.TracedCircuitBreakerRoundRobinLoadBalancer;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import java.util.Objects;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -24,8 +25,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import java.util.Objects;
-
 /**
  * description: 默认负载均衡配置
  *
@@ -38,9 +37,8 @@ public class DefaultLoadBalancerConfiguration {
     /**
      * {@link @ConditionalOnClass(name = "org.springframework.web.servlet.DispatcherServlet")}代表有spring-mvc 依赖
      * <p>
-     * 这里的流程就是，首先通过 DiscoveryClientServiceInstanceListSupplier 使用 discoveryClient 获取对应微服务的实例列表
-     * 然后通过我们自定义的 SameZoneOnlyServiceInstanceListSupplier 进行筛选
-     * 最后通过 CachingServiceInstanceListSupplier 将结果缓存起来
+     * 这里的流程就是，首先通过 DiscoveryClientServiceInstanceListSupplier 使用 discoveryClient 获取对应微服务的实例列表 然后通过我们自定义的
+     * SameZoneOnlyServiceInstanceListSupplier 进行筛选 最后通过 CachingServiceInstanceListSupplier 将结果缓存起来
      * </p>
      *
      * @param discoveryClient 发现客户端
@@ -75,8 +73,8 @@ public class DefaultLoadBalancerConfiguration {
 
     /**
      * {@link @ConditionalOnMissingClass("org.springframework.web.servlet.DispatcherServlet")}代表没有spring-mvc 依赖
-     * {@link @ConditionalOnClass("org.springframework.web.reactive.DispatcherHandler")}代表spring-webflux 依赖
-     * 对于只包含 spring-webflux 依赖我们使用异步 Discovery 客户端
+     * {@link @ConditionalOnClass("org.springframework.web.reactive.DispatcherHandler")}代表spring-webflux 依赖 对于只包含 spring-webflux 依赖我们使用异步
+     * Discovery 客户端
      *
      * @param reactiveDiscoveryClient 对于只包含 spring-webflux 依赖我们使用异步 Discovery 客户端
      * @param env                     上下文环境

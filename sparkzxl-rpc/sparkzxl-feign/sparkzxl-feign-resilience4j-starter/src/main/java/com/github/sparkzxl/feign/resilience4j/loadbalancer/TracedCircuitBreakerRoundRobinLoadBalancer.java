@@ -7,6 +7,16 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
@@ -17,22 +27,11 @@ import org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoadBal
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 /**
  * description: 改进负载均衡算法
  * <p>
- * 思路： 针对每次请求，记录：
- * 1.本次请求已经调用过哪些实例 -> 请求调用过的实例缓存
- * 2.调用的实例，当前有多少请求在处理中 -> 实例运行请求数
- * 3.调用的实例，最近请求错误率 -> 实例请求错误率
- * 4.随机将实例列表打乱，防止在以上三个指标都相同时，总是将请求发给同一个实例。
- * 5.按照 当前请求没有调用过靠前 -> 错误率越小越靠前 的顺序排序 -> 实例运行请求数越小越靠前
- * 6.取排好序之后的列表第一个实例作为本次负载均衡的实例
+ * 思路： 针对每次请求，记录： 1.本次请求已经调用过哪些实例 -> 请求调用过的实例缓存 2.调用的实例，当前有多少请求在处理中 -> 实例运行请求数 3.调用的实例，最近请求错误率 -> 实例请求错误率
+ * 4.随机将实例列表打乱，防止在以上三个指标都相同时，总是将请求发给同一个实例。 5.按照 当前请求没有调用过靠前 -> 错误率越小越靠前 的顺序排序 -> 实例运行请求数越小越靠前 6.取排好序之后的列表第一个实例作为本次负载均衡的实例
  * <p>
  *
  * @author zhouxinlei
@@ -43,8 +42,7 @@ import java.util.stream.Collectors;
 public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
     /**
-     * 每次请求算上重试不会超过3分钟
-     * 对于超过3分钟的，这种请求肯定比较重，不应该重试
+     * 每次请求算上重试不会超过3分钟 对于超过3分钟的，这种请求肯定比较重，不应该重试
      */
     private final LoadingCache<String, AtomicInteger> positionCache = Caffeine.newBuilder()
             .expireAfterWrite(3, TimeUnit.MINUTES)
@@ -104,7 +102,8 @@ public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServic
         return getInstanceResponseByRoundRobin(traceId, serviceInstances, serviceInstanceCircuitBreakerMap);
     }
 
-    public Response<ServiceInstance> getInstanceResponseByRoundRobin(String traceId, List<ServiceInstance> serviceInstances, Map<ServiceInstance, CircuitBreaker> serviceInstanceCircuitBreakerMap) {
+    public Response<ServiceInstance> getInstanceResponseByRoundRobin(String traceId, List<ServiceInstance> serviceInstances,
+            Map<ServiceInstance, CircuitBreaker> serviceInstanceCircuitBreakerMap) {
         Collections.shuffle(serviceInstances);
         //需要先将所有参数缓存起来，否则 comparator 会调用多次，并且可能在排序过程中参数发生改变
         Map<ServiceInstance, Integer> used = Maps.newHashMap();
@@ -121,9 +120,11 @@ public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServic
                         //当前断路器没有打开的优先
                         .thenComparingInt(serviceInstance -> serviceInstanceCircuitBreakerMap.get(serviceInstance).getState().getOrder())
                         //当前错误率最少的
-                        .thenComparingDouble(serviceInstance -> serviceInstanceCircuitBreakerMap.get(serviceInstance).getMetrics().getFailureRate())
+                        .thenComparingDouble(
+                                serviceInstance -> serviceInstanceCircuitBreakerMap.get(serviceInstance).getMetrics().getFailureRate())
                         //当前负载请求最少的
-                        .thenComparingLong(serviceInstance -> serviceInstanceCircuitBreakerMap.get(serviceInstance).getMetrics().getNumberOfBufferedCalls())
+                        .thenComparingLong(serviceInstance -> serviceInstanceCircuitBreakerMap.get(serviceInstance).getMetrics()
+                                .getNumberOfBufferedCalls())
         ).collect(Collectors.toList());
         if (serviceInstances.isEmpty()) {
             log.warn("No servers available for service: " + this.serviceId);

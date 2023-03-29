@@ -8,7 +8,6 @@ import com.github.sparkzxl.alarm.feishutalk.entity.FeiShuTalkMarkdown;
 import com.github.sparkzxl.alarm.strategy.MessageSource;
 import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.google.common.collect.Lists;
-
 import java.util.List;
 
 /**

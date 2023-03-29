@@ -7,6 +7,7 @@ import com.github.sparkzxl.gateway.plugin.loadbalancer.rule.RoundRobinLoadBalanc
 import com.github.sparkzxl.gateway.plugin.loadbalancer.service.IReactorServiceInstanceLoadBalancer;
 import com.github.sparkzxl.gateway.plugin.loadbalancer.service.ReactorServiceInstanceLoadBalancer;
 import com.github.sparkzxl.gateway.properties.ReactiveLoadBalancerProperties;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,6 @@ import org.springframework.cloud.gateway.config.GatewayReactiveLoadBalancerClien
 import org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 /**
  * description: 网关路由负载模式自动装配
@@ -49,16 +48,18 @@ public class ReactiveLoadBalancerAutoConfig {
 
     @Bean
     public IReactorServiceInstanceLoadBalancer reactorServiceInstanceLoadBalancer(List<ILoadBalancerRule> loadBalancerRuleList,
-                                                                                  ReactiveLoadBalancerProperties reactiveLoadBalancerProperties) {
+            ReactiveLoadBalancerProperties reactiveLoadBalancerProperties) {
         return new ReactorServiceInstanceLoadBalancer(loadBalancerRuleList, reactiveLoadBalancerProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean(GatewayLoadBalancerClientFilter.class)
-    public ReactiveLoadBalancerClientFilter gatewayLoadBalancerClientFilter(IReactorServiceInstanceLoadBalancer reactorServiceInstanceLoadBalancer,
-                                                                            @Autowired(required = false) GatewayLoadBalancerProperties properties) {
+    public ReactiveLoadBalancerClientFilter gatewayLoadBalancerClientFilter(
+            IReactorServiceInstanceLoadBalancer reactorServiceInstanceLoadBalancer,
+            @Autowired(required = false) GatewayLoadBalancerProperties properties) {
         if (ObjectUtils.isEmpty(reactorServiceInstanceLoadBalancer)) {
-            throw new IllegalArgumentException("not found ReactorServiceInstanceLoadBalancer,please confirm whether it has been loaded routeLoadBalancer bean");
+            throw new IllegalArgumentException(
+                    "not found ReactorServiceInstanceLoadBalancer,please confirm whether it has been loaded routeLoadBalancer bean");
         }
         return new GatewayLoadBalancerClientFilter(reactorServiceInstanceLoadBalancer, properties);
     }

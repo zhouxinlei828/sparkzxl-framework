@@ -8,16 +8,10 @@ import java.lang.annotation.Target;
 /**
  * 在某个对象的字段上标记该注解，该字段的值将被主动注入
  * <p>
- * 如：
- * \@Echo(api = "dictionaryServiceImpl")
- * private String nation;
- * \@Echo(api = "dictionaryApi")
- * private String  nation;
- * \@Echo(api = "xxx.xxx.xxx.UserApi", b
- * private Long userId;
+ * 如： \@Echo(api = "dictionaryServiceImpl") private String nation; \@Echo(api = "dictionaryApi") private String  nation; \@Echo(api =
+ * "xxx.xxx.xxx.UserApi", b private Long userId;
  * <p>
- * 强烈建议：不要对象之间互相依赖
- * 如： User 想要注入 File， File也想注入User
+ * 强烈建议：不要对象之间互相依赖 如： User 想要注入 File， File也想注入User
  *
  * @author zhouxinlei
  * @since 2022-02-20 19:51:39
@@ -45,9 +39,8 @@ public @interface EchoField {
     /**
      * 自动注入值的类型， 用于强制转换
      * <p>
-     * api() 配置了FeignClient时，通过 api 调用的结果会因为序列化的关系丢失类型
-     * 如：实际返回值中 Map<Serializable, Object> 的value值为 User 对象，但由于通过FeignClient调用时，会自动进行序列化和房序列化，
-     * 导致返回值Map中Object类型的value值丢失类型，故通过该参数进行类型强制转换。
+     * api() 配置了FeignClient时，通过 api 调用的结果会因为序列化的关系丢失类型 如：实际返回值中 Map<Serializable, Object> 的value值为 User
+     * 对象，但由于通过FeignClient调用时，会自动进行序列化和房序列化， 导致返回值Map中Object类型的value值丢失类型，故通过该参数进行类型强制转换。
      *
      * @return 待强壮的类
      */

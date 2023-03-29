@@ -1,9 +1,14 @@
 package com.github.sparkzxl.security.entity;
 
-import lombok.*;
-import lombok.experimental.Accessors;
-
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * description: 登录态

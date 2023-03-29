@@ -3,11 +3,10 @@ package com.github.sparkzxl.data.sync.admin.event;
 import com.github.sparkzxl.data.sync.admin.DataChangedEventDispatcher;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
-import org.springframework.context.ApplicationEvent;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * description: Data change event.

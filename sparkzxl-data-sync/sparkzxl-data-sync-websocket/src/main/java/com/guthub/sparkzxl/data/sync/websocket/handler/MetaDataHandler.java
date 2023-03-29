@@ -6,7 +6,6 @@ import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
-
 import java.util.List;
 
 /**

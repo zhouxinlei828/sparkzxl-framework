@@ -1,9 +1,6 @@
 package com.github.sparkzxl.feign.resilience4j.client;
 
 import feign.Client;
-import okhttp3.*;
-import org.springframework.http.HttpHeaders;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -11,6 +8,13 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.springframework.http.HttpHeaders;
 
 /**
  * description: 和 feign.httpclient.ApacheHttpClient 一模一样，但是不是 final 的

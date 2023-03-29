@@ -13,11 +13,12 @@ import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
 import com.github.sparkzxl.gateway.plugin.jwt.handle.JwtRuleHandle;
-import com.github.sparkzxl.gateway.rule.RuleData;
 import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,9 +27,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: jwt filter
@@ -56,9 +54,9 @@ public class JwtFilter extends AbstractGlobalFilter {
         }
         JwtConfig jwtConfig = JsonUtils.getJson().toJavaObject(jsonConfig, JwtConfig.class);
         String ruleHandle;
-        if (ObjectUtils.isEmpty(filterData.getRule())){
+        if (ObjectUtils.isEmpty(filterData.getRule())) {
             ruleHandle = "{\"converter\":[{\"headerVal\":\"userid\",\"jwtVal\":\"id\"},{\"headerVal\":\"account\",\"jwtVal\":\"username\"},{\"headerVal\":\"name\",\"jwtVal\":\"name\"}]}";
-        }else {
+        } else {
             ruleHandle = filterData.getRule().getHandle();
         }
         JwtRuleHandle jwtRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, JwtRuleHandle.class);
@@ -90,7 +88,7 @@ public class JwtFilter extends AbstractGlobalFilter {
      * @return Map
      */
     private Map<String, Object> checkAuthorization(final String token,
-                                                   final String secretKey) {
+            final String secretKey) {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
@@ -138,9 +136,10 @@ public class JwtFilter extends AbstractGlobalFilter {
      * @return ServerWebExchange exchange.
      */
     private ServerWebExchange converter(final ServerWebExchange exchange,
-                                        final Map<String, Object> jsonMap,
-                                        final List<JwtRuleHandle.Convert> converters) {
-        ServerHttpRequest modifiedRequest = exchange.getRequest().mutate().headers(httpHeaders -> this.addHeader(httpHeaders, jsonMap, converters)).build();
+            final Map<String, Object> jsonMap,
+            final List<JwtRuleHandle.Convert> converters) {
+        ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+                .headers(httpHeaders -> this.addHeader(httpHeaders, jsonMap, converters)).build();
         return exchange.mutate().request(modifiedRequest).build();
     }
 
@@ -152,8 +151,8 @@ public class JwtFilter extends AbstractGlobalFilter {
      * @param converters converters
      */
     private void addHeader(final HttpHeaders headers,
-                           final Map<String, Object> jsonMap,
-                           final List<JwtRuleHandle.Convert> converters) {
+            final Map<String, Object> jsonMap,
+            final List<JwtRuleHandle.Convert> converters) {
         for (JwtRuleHandle.Convert converter : converters) {
             headers.add(converter.getHeaderVal(), (String) jsonMap.get(converter.getJwtVal()));
         }

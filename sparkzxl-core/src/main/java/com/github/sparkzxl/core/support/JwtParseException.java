@@ -23,7 +23,7 @@ public class JwtParseException extends BaseUncheckedException {
 
 
     public JwtParseException(String message,
-                             Throwable cause) {
+            Throwable cause) {
         super(ResultErrorCode.JSON_TRANSFORM_ERROR.getErrorCode(), message, cause);
     }
 }

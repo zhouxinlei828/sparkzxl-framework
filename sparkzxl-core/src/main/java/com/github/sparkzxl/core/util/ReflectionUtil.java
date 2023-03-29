@@ -2,7 +2,6 @@ package com.github.sparkzxl.core.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Arrays;

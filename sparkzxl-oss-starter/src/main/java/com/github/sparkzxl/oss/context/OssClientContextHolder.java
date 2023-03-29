@@ -1,10 +1,9 @@
 package com.github.sparkzxl.oss.context;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 获取当前线程client

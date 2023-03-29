@@ -3,7 +3,6 @@ package com.github.sparkzxl.mybatis.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.sparkzxl.mybatis.constant.EntityConstant;
-
 import java.time.LocalDateTime;
 
 /**

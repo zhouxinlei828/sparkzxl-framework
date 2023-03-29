@@ -12,12 +12,11 @@ import com.github.sparkzxl.log.entity.AlarmLogInfo;
 import com.github.sparkzxl.log.queue.AlarmTaskInfo;
 import com.github.sparkzxl.log.queue.AlarmTaskQueue;
 import com.github.sparkzxl.log.utils.ThrowableUtils;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.MDC;
-
-import java.util.Objects;
 
 /**
  * description: 日志告警Appender

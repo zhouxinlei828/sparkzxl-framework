@@ -21,7 +21,8 @@ public class NacosConfig {
 
     @Bean
     @ConditionalOnProperty(value = {"spring.cloud.nacos.discovery.watch.enabled"}, matchIfMissing = true)
-    public NacosWatch nacosWatch(NacosServiceManager nacosServiceManager, NacosDiscoveryProperties nacosDiscoveryProperties, ObjectProvider<ThreadPoolTaskScheduler> taskScheduler) {
+    public NacosWatch nacosWatch(NacosServiceManager nacosServiceManager, NacosDiscoveryProperties nacosDiscoveryProperties,
+            ObjectProvider<ThreadPoolTaskScheduler> taskScheduler) {
         //更改服务详情中的元数据，增加服务注册时间
         nacosDiscoveryProperties.getMetadata().put("startup.time", DateUtil.now());
         return new NacosWatch(nacosServiceManager, nacosDiscoveryProperties, taskScheduler);

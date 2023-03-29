@@ -3,13 +3,12 @@ package com.github.sparkzxl.oss.aop;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.oss.annotation.OSSUpload;
 import com.github.sparkzxl.oss.listener.UploadListener;
+import java.util.Objects;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.aop.framework.AopProxyUtils;
-
-import java.util.Objects;
 
 /**
  * description: OSS Upload Interceptor

@@ -22,12 +22,12 @@ import org.springframework.util.Assert;
 /**
  * 对SnowFlake 的ID进行位操作的共聚类
  * <p>
- * 为UID分配64位(long)<br>
- * sign (fixed 1bit) -> deltaSecond -> workerId -> sequence(within the same second)
+ * 为UID分配64位(long)<br> sign (fixed 1bit) -> deltaSecond -> workerId -> sequence(within the same second)
  *
  * @author zhouxinlei
  */
 public class BitsAllocator {
+
     /**
      * Total 64 bits
      */
@@ -36,8 +36,7 @@ public class BitsAllocator {
     private final int workerIdBits;
     private final int sequenceBits;
     /**
-     * Max value for workId & sequence
-     * 最大值
+     * Max value for workId & sequence 最大值
      */
     private final long maxDeltaSeconds;
     private final long maxWorkerId;
@@ -53,8 +52,8 @@ public class BitsAllocator {
     private int signBits = 1;
 
     /**
-     * Constructor with timestampBits, workerIdBits, sequenceBits<br>
-     * The highest bit used for sign, so <code>63</code> bits for timestampBits, workerIdBits, sequenceBits
+     * Constructor with timestampBits, workerIdBits, sequenceBits<br> The highest bit used for sign, so <code>63</code> bits for
+     * timestampBits, workerIdBits, sequenceBits
      */
     public BitsAllocator(final int timestampBits, final int workerIdBits, final int sequenceBits) {
         // make sure allocated 64 bits
@@ -81,10 +80,8 @@ public class BitsAllocator {
     }
 
     /**
-     * 这里就是把不同的字段放到相应的位上
-     * id的总体结构是：
-     * sign (fixed 1bit) -> deltaSecond -> workerId -> sequence(within the same second)
-     * deltaSecond 左移（workerIdBits + sequenceBits）位，workerId左移sequenceBits位，此时就完成了字节的分配
+     * 这里就是把不同的字段放到相应的位上 id的总体结构是： sign (fixed 1bit) -> deltaSecond -> workerId -> sequence(within the same second) deltaSecond
+     * 左移（workerIdBits + sequenceBits）位，workerId左移sequenceBits位，此时就完成了字节的分配
      * <p>
      * <p>
      * Allocate bits for UID according to delta seconds & workerId & sequence<br>

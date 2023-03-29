@@ -2,7 +2,11 @@ package com.github.sparkzxl.alarm.feishutalk.autoconfigure;
 
 import com.github.sparkzxl.alarm.feishutalk.executor.FeiShuTalkAlarmExecutor;
 import com.github.sparkzxl.alarm.feishutalk.sign.FeiShuTalkAlarmSignAlgorithm;
-import com.github.sparkzxl.alarm.feishutalk.strategy.*;
+import com.github.sparkzxl.alarm.feishutalk.strategy.ActionCardMsgHandleStrategy;
+import com.github.sparkzxl.alarm.feishutalk.strategy.ImageTextMsgHandleStrategy;
+import com.github.sparkzxl.alarm.feishutalk.strategy.MarkdownMsgHandleStrategy;
+import com.github.sparkzxl.alarm.feishutalk.strategy.MsgLinkHandleStrategy;
+import com.github.sparkzxl.alarm.feishutalk.strategy.TextMsgHandleStrategy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

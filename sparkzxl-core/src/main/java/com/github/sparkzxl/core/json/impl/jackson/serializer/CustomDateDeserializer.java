@@ -7,11 +7,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.time.DateTimeException;
 import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: 自定义Date时间反序列化
@@ -30,8 +29,7 @@ public class CustomDateDeserializer extends JsonDeserializer<Date> {
     public static final String SLASH_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
     /**
-     * Specific format to use, if non-null; if null will
-     * just use default format.
+     * Specific format to use, if non-null; if null will just use default format.
      */
     protected final FastDateFormat customFormat;
 

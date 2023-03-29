@@ -1,8 +1,7 @@
 package com.github.sparkzxl.mybatis.dto;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * description: 删除入参

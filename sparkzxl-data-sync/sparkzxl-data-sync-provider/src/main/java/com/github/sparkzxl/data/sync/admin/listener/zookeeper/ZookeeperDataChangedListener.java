@@ -9,15 +9,14 @@ import com.github.sparkzxl.data.sync.common.constant.ZookeeperPathConstants;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import com.google.common.collect.Maps;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.zookeeper.CreateMode;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
 
 /**
  * description: Use Zookeeper to synchronized data changes.
@@ -31,7 +30,7 @@ public class ZookeeperDataChangedListener extends AbstractDataChangedListener {
     private final Map<String, MergeDataHandler> mergeDataHandlerMap = Maps.newConcurrentMap();
 
     public ZookeeperDataChangedListener(CuratorFramework curatorFramework,
-                                        List<MergeDataHandler> mergeDataHandlerList) {
+            List<MergeDataHandler> mergeDataHandlerList) {
         this.curatorFramework = curatorFramework;
         mergeDataHandlerList.forEach(mergeDataHandler -> mergeDataHandlerMap.put(mergeDataHandler.configGroup(), mergeDataHandler));
     }
@@ -40,7 +39,8 @@ public class ZookeeperDataChangedListener extends AbstractDataChangedListener {
     public void publishConfig(PushData<?> pushData) {
         try {
             DataEventTypeEnum eventType = DataEventTypeEnum.acquireByName(pushData.getEventType());
-            MergeDataHandler mergeDataHandler = mergeDataHandlerMap.get(pushData.getConfigGroup().concat(StrPool.COLON).concat(DataSyncPushType.ZOOKEEPER.name().toLowerCase(Locale.ROOT)));
+            MergeDataHandler mergeDataHandler = mergeDataHandlerMap.get(
+                    pushData.getConfigGroup().concat(StrPool.COLON).concat(DataSyncPushType.ZOOKEEPER.name().toLowerCase(Locale.ROOT)));
             Map<String, ?> map = mergeDataHandler.handle(pushData);
             for (Map.Entry<String, ?> entry : map.entrySet()) {
                 String path = ZookeeperPathConstants.buildPath(URLEncoder.encode(pushData.getConfigGroup(), "UTF-8"),

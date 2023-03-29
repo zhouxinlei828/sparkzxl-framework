@@ -1,8 +1,12 @@
 package com.github.sparkzxl.gateway.plugin.logging.decorator;
 
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.ORIGINAL_RESPONSE_CONTENT_TYPE_ATTR;
+
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
 import com.github.sparkzxl.gateway.plugin.logging.LogContext;
 import com.github.sparkzxl.gateway.plugin.logging.service.IOptLogService;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -16,11 +20,6 @@ import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-
-import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.ORIGINAL_RESPONSE_CONTENT_TYPE_ATTR;
 
 /**
  * description: Http响应体装饰器
@@ -47,7 +46,8 @@ public class LoggingResponseBodyDecorator extends ServerHttpResponseDecorator {
         if (Objects.equals(getStatusCode(), HttpStatus.OK) && body instanceof Flux) {
             // 获取ContentType，判断是否返回JSON格式数据
             String originalResponseContentType = exchange.getAttribute(ORIGINAL_RESPONSE_CONTENT_TYPE_ATTR);
-            if (StringUtils.isNotBlank(originalResponseContentType) && originalResponseContentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
+            if (StringUtils.isNotBlank(originalResponseContentType) && originalResponseContentType.contains(
+                    MediaType.APPLICATION_JSON_VALUE)) {
                 Flux<? extends DataBuffer> fluxBody = Flux.from(body);
                 return super.writeWith(fluxBody.buffer().map(dataBuffers -> {
                     //解决返回体分段传输

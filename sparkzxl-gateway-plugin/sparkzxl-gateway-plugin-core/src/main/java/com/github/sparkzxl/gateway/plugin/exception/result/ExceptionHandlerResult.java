@@ -1,9 +1,12 @@
 package com.github.sparkzxl.gateway.plugin.exception.result;
 
-import lombok.*;
-import org.springframework.http.HttpStatus;
-
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
 /**
  * description: 异常处理结果

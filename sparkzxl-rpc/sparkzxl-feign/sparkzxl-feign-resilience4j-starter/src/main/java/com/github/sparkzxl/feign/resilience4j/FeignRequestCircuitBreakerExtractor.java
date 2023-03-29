@@ -7,15 +7,14 @@ import feign.RequestTemplate;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.core.ConfigurationNotFoundException;
+import java.lang.reflect.Method;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.loadbalancer.Request;
 import org.springframework.cloud.client.loadbalancer.RequestDataContext;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.loadbalancer.FeignBlockingLoadBalancerClientExtend;
 import org.springframework.util.CollectionUtils;
-
-import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * description:
@@ -44,7 +43,8 @@ public class FeignRequestCircuitBreakerExtractor implements CircuitBreakerExtrac
         } catch (ConfigurationNotFoundException e) {
             circuitBreaker = circuitBreakerRegistry.circuitBreaker(serviceInstanceMethodId);
         }
-        log.info("FeignRequestCircuitBreakerExtractor-getCircuitBreaker: {} -> {}", circuitBreaker.getName(), JSON.toJSONString(circuitBreaker.getMetrics()));
+        log.info("FeignRequestCircuitBreakerExtractor-getCircuitBreaker: {} -> {}", circuitBreaker.getName(),
+                JSON.toJSONString(circuitBreaker.getMetrics()));
         return circuitBreaker;
     }
 

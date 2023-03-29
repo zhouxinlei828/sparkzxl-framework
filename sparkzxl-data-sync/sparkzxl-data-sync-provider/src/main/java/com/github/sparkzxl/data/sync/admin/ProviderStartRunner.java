@@ -9,8 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 
 /**
- * description: Application启动后运行
- * 日志打印微服务关键配置信息(服务名、接口文档、访问地址)
+ * description: Application启动后运行 日志打印微服务关键配置信息(服务名、接口文档、访问地址)
  *
  * @author zhouxinlei
  */

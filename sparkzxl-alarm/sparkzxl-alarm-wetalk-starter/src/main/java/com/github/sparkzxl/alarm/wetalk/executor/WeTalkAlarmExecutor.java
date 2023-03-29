@@ -11,9 +11,8 @@ import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.exception.AsyncCallException;
 import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.concurrent.CompletableFuture;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * description: 企业微信告警执行器
@@ -23,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
+
     public WeTalkAlarmExecutor() {
         log.debug("WeTalk Alarm Executor has been loaded, className:{}", this.getClass().getName());
     }
@@ -36,7 +36,8 @@ public class WeTalkAlarmExecutor extends AbstractAlarmExecutor {
             if (alarmConfig.isAsync()) {
                 CompletableFuture<AlarmResponse> alarmResponseCompletableFuture = CompletableFuture.supplyAsync(() -> {
                     try {
-                        String body = HttpRequest.post(webhook.toString()).contentType(ContentType.JSON.getValue()).body(jsonStr).execute().body();
+                        String body = HttpRequest.post(webhook.toString()).contentType(ContentType.JSON.getValue()).body(jsonStr).execute()
+                                .body();
                         alarmAsyncCallback.execute(alarmId, body);
                     } catch (HttpException e) {
                         exceptionCallback(alarmId, message, new AsyncCallException(e));

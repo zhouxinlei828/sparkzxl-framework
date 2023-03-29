@@ -30,6 +30,7 @@ public class DingTalkText extends Message {
     }
 
     public static class Text implements Serializable {
+
         private String content;
 
         public Text() {

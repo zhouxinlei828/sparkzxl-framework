@@ -6,6 +6,7 @@ package com.github.sparkzxl.core.base;
  * @author zhouxinlei
  */
 public interface ICode {
+
     /**
      * code
      *

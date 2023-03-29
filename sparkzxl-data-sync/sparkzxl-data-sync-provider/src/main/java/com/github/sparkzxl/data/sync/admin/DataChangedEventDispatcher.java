@@ -2,11 +2,14 @@ package com.github.sparkzxl.data.sync.admin;
 
 import com.github.sparkzxl.data.sync.admin.event.DataChangedEvent;
 import com.github.sparkzxl.data.sync.admin.listener.DataChangedListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-
-import java.util.*;
 
 /**
  * description: Event forwarders, which forward the changed events to each ConfigEventListener.

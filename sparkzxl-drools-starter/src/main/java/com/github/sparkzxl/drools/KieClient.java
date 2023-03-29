@@ -12,6 +12,7 @@ import org.kie.api.runtime.KieSession;
  * @author zhouxinlei
  */
 public class KieClient {
+
     private KieServices kieServices;
 
     private KieBase kieBase;

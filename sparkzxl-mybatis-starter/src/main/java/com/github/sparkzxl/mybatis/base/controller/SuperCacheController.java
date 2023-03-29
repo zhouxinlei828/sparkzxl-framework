@@ -1,9 +1,8 @@
 package com.github.sparkzxl.mybatis.base.controller;
 
 import com.github.sparkzxl.mybatis.base.service.SuperCacheService;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.io.Serializable;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * description: super 缓存controller

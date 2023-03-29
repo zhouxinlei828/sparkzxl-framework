@@ -10,6 +10,7 @@ import com.github.sparkzxl.alarm.enums.AlarmChannel;
  * @since 2022-05-18 17:13:18
  */
 public class WeTalkMessage extends MsgType {
+
     public WeTalkMessage() {
         setAlarmChannel(AlarmChannel.WETALK);
     }

@@ -1,13 +1,12 @@
 package com.github.sparkzxl.jwt.properties;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import static com.github.sparkzxl.jwt.properties.JwtProperties.JWT_PREFIX;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
-
-import static com.github.sparkzxl.jwt.properties.JwtProperties.JWT_PREFIX;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * description: JWT属性类

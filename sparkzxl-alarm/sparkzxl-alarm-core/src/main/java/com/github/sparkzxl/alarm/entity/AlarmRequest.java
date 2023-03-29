@@ -1,10 +1,9 @@
 package com.github.sparkzxl.alarm.entity;
 
 import com.google.common.collect.Sets;
-import lombok.Data;
-
 import java.util.Map;
 import java.util.Set;
+import lombok.Data;
 
 /**
  * description: 告警请求对象

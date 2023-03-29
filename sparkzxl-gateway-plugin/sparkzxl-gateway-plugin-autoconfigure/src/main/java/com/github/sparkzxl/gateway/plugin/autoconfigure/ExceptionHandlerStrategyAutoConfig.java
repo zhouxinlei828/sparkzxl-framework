@@ -1,6 +1,10 @@
 package com.github.sparkzxl.gateway.plugin.autoconfigure;
 
-import com.github.sparkzxl.gateway.plugin.exception.strategy.*;
+import com.github.sparkzxl.gateway.plugin.exception.strategy.ConnectTimeoutExceptionHandlerStrategy;
+import com.github.sparkzxl.gateway.plugin.exception.strategy.DefaultExceptionHandlerStrategy;
+import com.github.sparkzxl.gateway.plugin.exception.strategy.ExceptionHandlerStrategy;
+import com.github.sparkzxl.gateway.plugin.exception.strategy.NotFoundExceptionHandlerStrategy;
+import com.github.sparkzxl.gateway.plugin.exception.strategy.ResponseStatusExceptionHandlerStrategy;
 import com.github.sparkzxl.gateway.properties.GatewayPluginProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

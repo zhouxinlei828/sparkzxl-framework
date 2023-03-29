@@ -3,10 +3,9 @@ package com.github.sparkzxl.core.json;
 import com.github.sparkzxl.core.json.impl.fastjson.FastJsonImpl;
 import com.github.sparkzxl.core.json.impl.gson.GsonImpl;
 import com.github.sparkzxl.core.json.impl.jackson.JacksonImpl;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * description: Json 工具类
@@ -15,6 +14,7 @@ import java.util.List;
  * @since 2023-01-01 11:49:09
  */
 public class JsonUtils {
+
     static String PREFER_JSON_FRAMEWORK_NAME = "spring.json-framework.prefer";
 
     private static volatile JSON json;

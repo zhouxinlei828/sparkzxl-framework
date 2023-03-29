@@ -1,9 +1,8 @@
 package com.github.sparkzxl.user.manager;
 
 import com.github.sparkzxl.core.entity.AuthUserInfo;
-
-import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * description: 用户状态管理

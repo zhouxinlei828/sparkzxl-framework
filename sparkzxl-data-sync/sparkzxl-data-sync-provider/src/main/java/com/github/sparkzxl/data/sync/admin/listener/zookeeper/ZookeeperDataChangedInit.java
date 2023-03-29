@@ -3,9 +3,8 @@ package com.github.sparkzxl.data.sync.admin.listener.zookeeper;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.data.sync.admin.config.zookeeper.ZkWatchProperties;
 import com.github.sparkzxl.data.sync.admin.listener.AbstractDataChangedInit;
-import org.apache.curator.framework.CuratorFramework;
-
 import java.util.List;
+import org.apache.curator.framework.CuratorFramework;
 
 /**
  * description: The type Zookeeper data changed init.
@@ -20,7 +19,7 @@ public class ZookeeperDataChangedInit extends AbstractDataChangedInit {
     private final List<ZkWatchProperties> watchConfigs;
 
     public ZookeeperDataChangedInit(CuratorFramework curatorFramework,
-                                    List<ZkWatchProperties> watchConfigs) {
+            List<ZkWatchProperties> watchConfigs) {
         this.curatorFramework = curatorFramework;
         this.watchConfigs = watchConfigs;
     }

@@ -8,6 +8,7 @@ import feign.Feign;
 import feign.Logger;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
+import java.util.List;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,8 +23,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * description: OpenFeign 配置

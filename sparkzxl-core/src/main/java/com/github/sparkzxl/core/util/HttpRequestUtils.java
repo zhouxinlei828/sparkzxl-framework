@@ -1,20 +1,9 @@
 package com.github.sparkzxl.core.util;
 
-import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.IErrorCode;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -24,6 +13,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 /**
  * description: Http请求工具
@@ -192,7 +191,8 @@ public class HttpRequestUtils {
         writeResponseOutMsg(response, true, message, data, null, null);
     }
 
-    public static <T> void writeResponseOutMsg(HttpServletResponse response, boolean success, String message, T data, String errorCode, String errorMsg) {
+    public static <T> void writeResponseOutMsg(HttpServletResponse response, boolean success, String message, T data, String errorCode,
+            String errorMsg) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
@@ -207,7 +207,7 @@ public class HttpRequestUtils {
             response.getWriter().println(JsonUtils.getJson().toJson(result));
             response.getWriter().flush();
         } catch (IOException e) {
-            log.error("IO异常：",e);
+            log.error("IO异常：", e);
         }
     }
 }

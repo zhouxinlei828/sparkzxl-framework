@@ -9,7 +9,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class Message extends FeiShuTalkMessage implements Serializable {
 
     @XStreamAlias("at")
     public static class FeiShuAt implements Serializable {
+
         /**
          * 被@人的openId(在content里添加@人的openId)
          */

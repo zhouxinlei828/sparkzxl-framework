@@ -2,7 +2,6 @@ package com.github.sparkzxl.oss.annotation;
 
 import com.github.sparkzxl.oss.listener.DefaultUploadListener;
 import com.github.sparkzxl.oss.listener.UploadListener;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

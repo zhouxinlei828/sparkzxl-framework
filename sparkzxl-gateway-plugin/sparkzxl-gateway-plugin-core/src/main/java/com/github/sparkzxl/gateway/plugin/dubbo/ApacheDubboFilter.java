@@ -7,15 +7,17 @@ import com.github.sparkzxl.gateway.common.constant.RpcConstant;
 import com.github.sparkzxl.gateway.common.constant.enums.FilterEnum;
 import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
-import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
-import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
 import com.github.sparkzxl.gateway.plugin.core.context.GatewayContext;
 import com.github.sparkzxl.gateway.plugin.core.filter.AbstractGlobalFilter;
+import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
 import com.github.sparkzxl.gateway.plugin.dubbo.message.DubboMessageWriter;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboMetaDataFactory;
 import com.github.sparkzxl.gateway.plugin.dubbo.route.DubboRoutePredicate;
 import com.github.sparkzxl.gateway.plugin.dubbo.rule.DubboRuleHandle;
-import com.github.sparkzxl.gateway.rule.RuleData;
+import com.github.sparkzxl.gateway.utils.ReactorHttpHelper;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.rpc.RpcContext;
@@ -28,10 +30,6 @@ import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * description: dubbo 过滤器
@@ -51,9 +49,9 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
     private final DubboMessageWriter writer;
 
     public ApacheDubboFilter(DubboMetaDataFactory dubboMetaDataFactory,
-                             DubboRoutePredicate predicate,
-                             ApacheDubboProxyService dubboProxyService,
-                             DubboMessageWriter writer) {
+            DubboRoutePredicate predicate,
+            ApacheDubboProxyService dubboProxyService,
+            DubboMessageWriter writer) {
         this.dubboMetaDataFactory = dubboMetaDataFactory;
         this.predicate = predicate;
         this.dubboProxyService = dubboProxyService;
@@ -99,17 +97,18 @@ public class ApacheDubboFilter extends AbstractGlobalFilter {
      * @return {@code Mono<Void>} to indicate when request handling is complete
      */
     protected Mono<Void> doDubboInvoker(ServerWebExchange exchange,
-                                        GatewayFilterChain chain,
-                                        MetaData metaData,
-                                        String param) {
-        RpcContext.getServiceContext().setAttachment(RpcConstant.DUBBO_REMOTE_ADDRESS, Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
+            GatewayFilterChain chain,
+            MetaData metaData,
+            String param) {
+        RpcContext.getServiceContext().setAttachment(RpcConstant.DUBBO_REMOTE_ADDRESS,
+                Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
         final Mono<Object> result = dubboProxyService.genericInvoker(param, metaData);
         return result.map(resp -> {
                     FilterData filterData = loadFilterData();
                     String ruleHandle;
-                    if (ObjectUtils.isEmpty(filterData.getRule())){
+                    if (ObjectUtils.isEmpty(filterData.getRule())) {
                         ruleHandle = "{\"converter\":\"noOps\"}";
-                    }else {
+                    } else {
                         ruleHandle = filterData.getRule().getHandle();
                     }
                     DubboRuleHandle dubboRuleHandle = JsonUtils.getJson().toJavaObject(ruleHandle, DubboRuleHandle.class);

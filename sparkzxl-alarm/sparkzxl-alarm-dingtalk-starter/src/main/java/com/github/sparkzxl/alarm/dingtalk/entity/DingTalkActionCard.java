@@ -1,12 +1,11 @@
 package com.github.sparkzxl.alarm.dingtalk.entity;
 
 import cn.hutool.core.convert.Convert;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * description: 钉钉 Link类型
@@ -15,6 +14,7 @@ import java.util.Map;
  * @since 2022-05-19 10:35:31
  */
 public class DingTalkActionCard extends DingTalkMessage {
+
     /**
      * {@link ActionCard}
      */
@@ -51,8 +51,7 @@ public class DingTalkActionCard extends DingTalkMessage {
         private String text;
 
         /**
-         * 0：按钮竖直排列
-         * 1：按钮横向排列
+         * 0：按钮竖直排列 1：按钮横向排列
          */
         private String btnOrientation;
         /**
@@ -86,11 +85,7 @@ public class DingTalkActionCard extends DingTalkMessage {
             private String title;
 
             /**
-             * 点击按钮触发的URL，打开方式如下：
-             * 1.移动端，在钉钉客户端内打开
-             * 2.PC端
-             * - 默认侧边栏打开
-             * 希望在外部浏览器打开，请参考消息链接说明
+             * 点击按钮触发的URL，打开方式如下： 1.移动端，在钉钉客户端内打开 2.PC端 - 默认侧边栏打开 希望在外部浏览器打开，请参考消息链接说明
              *
              * @see <a href="https://open.dingtalk.com/document/orgapp-server/message-link-description"/>
              */

@@ -1,13 +1,12 @@
 package com.github.sparkzxl.log.properties;
 
+import static com.github.sparkzxl.log.properties.LogProperties.LOG_PREFIX;
+
+import java.util.List;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
-
-import static com.github.sparkzxl.log.properties.LogProperties.LOG_PREFIX;
 
 /**
  * description: 日志配置类
@@ -112,8 +111,7 @@ public class LogProperties {
         private String acks;
 
         /**
-         * kafka topic
-         * 配置控制 <code>KafkaProducer.send()</code> 和 <code>KafkaProducer.partitionsFor()</code> 将阻塞多长时间。
+         * kafka topic 配置控制 <code>KafkaProducer.send()</code> 和 <code>KafkaProducer.partitionsFor()</code> 将阻塞多长时间。
          * 这些方法可能因为缓冲区已满或元数据不可用而被阻止。用户提供的序列化程序或分区程序中的阻塞将不计入此超时。
          */
         private int maxBlock;

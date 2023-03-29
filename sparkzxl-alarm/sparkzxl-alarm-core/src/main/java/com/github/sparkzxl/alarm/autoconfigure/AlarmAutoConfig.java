@@ -19,6 +19,10 @@ import com.github.sparkzxl.alarm.strategy.MsgHandleStrategy;
 import com.github.sparkzxl.alarm.support.AlarmExceptionHandler;
 import com.github.sparkzxl.alarm.support.AlarmIdGenerator;
 import com.github.sparkzxl.alarm.support.DefaultAlarmIdGenerator;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,11 +30,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * description: 告警自动装配
@@ -118,10 +117,10 @@ public class AlarmAutoConfig {
     @Bean
     @ConditionalOnMissingBean(AlarmClient.class)
     public AlarmClient alarmClient(AlarmProperties alarmProperties,
-                                   TextMessageTemplate textMessage,
-                                   MarkDownMessageTemplate markDownMessage,
-                                   List<AlarmExecutor> alarmExecutorList,
-                                   AlarmMessageFactory alarmMessageFactory) {
+            TextMessageTemplate textMessage,
+            MarkDownMessageTemplate markDownMessage,
+            List<AlarmExecutor> alarmExecutorList,
+            AlarmMessageFactory alarmMessageFactory) {
         return new AlarmRobot(alarmProperties, textMessage, markDownMessage, alarmExecutorList, alarmMessageFactory);
     }
 

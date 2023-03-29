@@ -1,9 +1,8 @@
 package com.github.sparkzxl.jwt.entity;
 
-import lombok.Data;
-
 import java.util.Date;
 import java.util.List;
+import lombok.Data;
 
 /**
  * description:JWT中存储的信息

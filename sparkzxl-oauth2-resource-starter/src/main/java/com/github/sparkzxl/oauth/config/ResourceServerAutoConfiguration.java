@@ -48,7 +48,7 @@ public class ResourceServerAutoConfiguration {
     @Bean
     @RefreshScope
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ResourceProperties resourceProperties,
-                                                            IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter) {
+            IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter) {
         String[] ignorePatterns = ArrayUtils.addAll(resourceProperties.getIgnore(),
                 Constant.EXCLUDE_STATIC_PATTERNS.toArray(new String[0]));
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());

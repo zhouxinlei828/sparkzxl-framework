@@ -1,8 +1,7 @@
 package com.github.sparkzxl.data.sync.common.timer;
 
 /**
- * description: WheelTimerFactory .
- * shared wheel time.
+ * description: WheelTimerFactory . shared wheel time.
  *
  * @author zhouxinlei
  * @since 2022-08-25 13:40:48
@@ -32,6 +31,7 @@ public class WheelTimerFactory {
     }
 
     private abstract static class Shared<T> {
+
         /**
          * The Shared.
          */

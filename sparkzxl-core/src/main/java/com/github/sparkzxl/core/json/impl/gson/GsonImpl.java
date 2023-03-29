@@ -5,23 +5,34 @@ import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.json.impl.AbstractJSONImpl;
 import com.github.sparkzxl.core.support.JwtParseException;
 import com.github.sparkzxl.core.util.StrPool;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Duration;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: GsonImpl
@@ -51,8 +62,9 @@ public class GsonImpl extends AbstractJSONImpl {
             .setPrettyPrinting()
             .create();
 
-    private static final Gson GSON_MAP = new GsonBuilder().serializeNulls().registerTypeHierarchyAdapter(new TypeToken<Map<String, Object>>() {
-    }.getRawType(), new MapDeserializer<String, Object>()).create();
+    private static final Gson GSON_MAP = new GsonBuilder().serializeNulls()
+            .registerTypeHierarchyAdapter(new TypeToken<Map<String, Object>>() {
+            }.getRawType(), new MapDeserializer<String, Object>()).create();
 
     @Override
     public String named() {
@@ -199,6 +211,7 @@ public class GsonImpl extends AbstractJSONImpl {
     }
 
     private static class MapDeserializer<T, U> implements JsonDeserializer<Map<T, U>> {
+
         @SuppressWarnings("unchecked")
         @Override
         public Map<T, U> deserialize(final JsonElement json, final Type type, final JsonDeserializationContext context) {
@@ -272,6 +285,7 @@ public class GsonImpl extends AbstractJSONImpl {
     }
 
     private static class StringTypeAdapter extends TypeAdapter<String> {
+
         @Override
         public void write(final JsonWriter out, final String value) {
             try {
@@ -332,6 +346,7 @@ public class GsonImpl extends AbstractJSONImpl {
     }
 
     private static class DurationTypeAdapter extends TypeAdapter<Duration> {
+
         @Override
         public void write(final JsonWriter out, final Duration value) {
             try {

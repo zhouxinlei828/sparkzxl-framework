@@ -1,8 +1,14 @@
 package org.springframework.cloud.netflix.ribbon;
 
+import static org.springframework.cloud.netflix.ribbon.RibbonUtils.updateToSecureConnectionIfNeeded;
+
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -11,16 +17,8 @@ import org.springframework.cloud.client.loadbalancer.Request;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collections;
-import java.util.Map;
-
-import static org.springframework.cloud.netflix.ribbon.RibbonUtils.updateToSecureConnectionIfNeeded;
-
 /**
- * description: RibbonLoadBalancerClient 重写
- * 兼容spring cloud 2020 新版本接口依赖
+ * description: RibbonLoadBalancerClient 重写 兼容spring cloud 2020 新版本接口依赖
  *
  * @author zhouxinlei
  * @since 2022-07-11 14:07:44
@@ -93,10 +91,9 @@ public class RibbonLoadBalancerClient implements LoadBalancerClient {
     }
 
     /**
-     * New: Execute a request by selecting server using a 'key'. The hint will have to be
-     * the last parameter to not mess with the `execute(serviceId, ServiceInstance,
-     * request)` method. This somewhat breaks the fluent coding style when using a lambda
-     * to define the LoadBalancerRequest.
+     * New: Execute a request by selecting server using a 'key'. The hint will have to be the last parameter to not mess with the
+     * `execute(serviceId, ServiceInstance, request)` method. This somewhat breaks the fluent coding style when using a lambda to define the
+     * LoadBalancerRequest.
      *
      * @param <T>       returned request execution result type
      * @param serviceId id of the service to execute the request to
@@ -121,7 +118,7 @@ public class RibbonLoadBalancerClient implements LoadBalancerClient {
 
     @Override
     public <T> T execute(String serviceId, ServiceInstance serviceInstance,
-                         LoadBalancerRequest<T> request) throws IOException {
+            LoadBalancerRequest<T> request) throws IOException {
         Server server = null;
         if (serviceInstance instanceof RibbonServer) {
             server = ((RibbonServer) serviceInstance).getServer();
@@ -204,7 +201,7 @@ public class RibbonLoadBalancerClient implements LoadBalancerClient {
         }
 
         public RibbonServer(String serviceId, Server server, boolean secure,
-                            Map<String, String> metadata) {
+                Map<String, String> metadata) {
             this.serviceId = serviceId;
             this.server = server;
             this.secure = secure;

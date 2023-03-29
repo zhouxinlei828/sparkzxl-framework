@@ -8,6 +8,16 @@ import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,14 +36,20 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.OAuth;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
+import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * description: swagger 包扫描配置
@@ -46,6 +62,7 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
+
     private static final String SEMICOLON = ";";
     private final SwaggerProperties swaggerProperties;
     private final OpenApiExtensionResolver openApiExtensionResolver;
@@ -103,15 +120,18 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .licenseUrl(docketInfo.getLicenseUrl().isEmpty() ? swaggerProperties.getLicenseUrl() : docketInfo.getLicenseUrl())
                     .contact(
                             new Contact(
-                                    docketInfo.getContact().getName().isEmpty() ? swaggerProperties.getContact().getName() : docketInfo.getContact().getName(),
-                                    docketInfo.getContact().getUrl().isEmpty() ? swaggerProperties.getContact().getUrl() : docketInfo.getContact().getUrl(),
+                                    docketInfo.getContact().getName().isEmpty() ? swaggerProperties.getContact().getName()
+                                            : docketInfo.getContact().getName(),
+                                    docketInfo.getContact().getUrl().isEmpty() ? swaggerProperties.getContact().getUrl()
+                                            : docketInfo.getContact().getUrl(),
                                     docketInfo.getContact().getEmail().isEmpty() ?
                                             swaggerProperties.getContact().getEmail() :
                                             docketInfo.getContact().getEmail()
                             )
                     )
                     .termsOfServiceUrl(
-                            docketInfo.getTermsOfServiceUrl().isEmpty() ? swaggerProperties.getTermsOfServiceUrl() : docketInfo.getTermsOfServiceUrl())
+                            docketInfo.getTermsOfServiceUrl().isEmpty() ? swaggerProperties.getTermsOfServiceUrl()
+                                    : docketInfo.getTermsOfServiceUrl())
                     .build();
 
             // base-path处理
@@ -141,7 +161,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .apis(basePackage(docketInfo.getBasePackage()))
                     .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(includePath)))
                     .build()
-                    .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(), swaggerProperties.getApiKeys(),
+                    .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(),
+                            swaggerProperties.getApiKeys(),
                             docketInfo.getApiKeys()))
                     .securityContexts(securityContexts(swaggerProperties.getAuthorization(), docketInfo.getAuthorization()))
                     .globalResponseMessage(RequestMethod.GET, getResponseMessages())
@@ -245,17 +266,16 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
     }
 
     /**
-     * 配置默认的全局鉴权策略的开关，通过正则表达式进行匹配；默认匹配所有URL
-     * 感觉这里设置了没什么卵用？
+     * 配置默认的全局鉴权策略的开关，通过正则表达式进行匹配；默认匹配所有URL 感觉这里设置了没什么卵用？
      */
     private List<SecurityContext> securityContexts(SwaggerProperties.Authorization globalAuthorization,
-                                                   SwaggerProperties.Authorization docketAuthorization) {
+            SwaggerProperties.Authorization docketAuthorization) {
         SwaggerProperties.Authorization authorization = docketAuthorization == null ? globalAuthorization : docketAuthorization;
         return authorization == null ? Collections.emptyList()
                 : Collections.singletonList(SecurityContext.builder()
-                .securityReferences(defaultAuth(authorization))
-                .forPaths(PathSelectors.regex(authorization.getAuthRegex()))
-                .build());
+                        .securityReferences(defaultAuth(authorization))
+                        .forPaths(PathSelectors.regex(authorization.getAuthRegex()))
+                        .build());
     }
 
     /**
@@ -263,9 +283,9 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
      */
 
     private List<SecurityScheme> securitySchemes(SwaggerProperties.Authorization globalAuthorization,
-                                                 SwaggerProperties.Authorization docketAuthorization,
-                                                 List<SwaggerProperties.ApiKey> globalApiKeys,
-                                                 List<SwaggerProperties.ApiKey> docketApiKeys) {
+            SwaggerProperties.Authorization docketAuthorization,
+            List<SwaggerProperties.ApiKey> globalApiKeys,
+            List<SwaggerProperties.ApiKey> docketApiKeys) {
         List<SecurityScheme> list = new ArrayList<>();
 
         SwaggerProperties.Authorization authorization = docketAuthorization == null ? globalAuthorization : docketAuthorization;
@@ -297,7 +317,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 }
             }
             List<ApiKey> apiKeyList =
-                    allApiKeys.stream().map(item -> new ApiKey(item.getName(), item.getKeyName(), item.getPassAs())).collect(Collectors.toList());
+                    allApiKeys.stream().map(item -> new ApiKey(item.getName(), item.getKeyName(), item.getPassAs()))
+                            .collect(Collectors.toList());
             list.addAll(apiKeyList);
         }
         return list;

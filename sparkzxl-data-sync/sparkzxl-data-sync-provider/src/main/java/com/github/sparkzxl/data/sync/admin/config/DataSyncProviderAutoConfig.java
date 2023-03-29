@@ -22,6 +22,9 @@ import com.github.sparkzxl.data.sync.admin.listener.zookeeper.ZookeeperDataChang
 import com.github.sparkzxl.data.sync.admin.listener.zookeeper.ZookeeperDataChangedListener;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -35,10 +38,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
 
 /**
  * description: The type Data sync configuration.
@@ -67,7 +66,8 @@ public class DataSyncProviderAutoConfig {
      * @since 2022-09-05 09:59:26
      */
     @Configuration
-    @ConditionalOnProperty(name = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "websocket.enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX
+            + "websocket.enabled", havingValue = "true", matchIfMissing = true)
     static class WebsocketListener {
 
         /**
@@ -156,7 +156,7 @@ public class DataSyncProviderAutoConfig {
         @Bean
         @ConditionalOnMissingBean(NacosDataChangedInit.class)
         public DataChangedInit nacosDataChangedInit(final ConfigService configService,
-                                                    final NacosProviderProperties nacosProviderProperties) {
+                final NacosProviderProperties nacosProviderProperties) {
             return new NacosDataChangedInit(configService, nacosProviderProperties.getWatchConfigs());
         }
 
@@ -169,8 +169,8 @@ public class DataSyncProviderAutoConfig {
         @Bean
         @ConditionalOnMissingBean(NacosDataChangedListener.class)
         public DataChangedListener nacosDataChangedListener(final ConfigService configService,
-                                                            final List<MergeDataHandler> mergeDataHandlerList,
-                                                            final NacosProviderProperties nacosProviderProperties) {
+                final List<MergeDataHandler> mergeDataHandlerList,
+                final NacosProviderProperties nacosProviderProperties) {
 
             return new NacosDataChangedListener(configService, mergeDataHandlerList, nacosProviderProperties.getWatchConfigs());
         }
@@ -178,7 +178,7 @@ public class DataSyncProviderAutoConfig {
         @Bean
         @ConditionalOnMissingBean(NacosMetaMergeDataHandler.class)
         public MergeDataHandler<MetaData> metaMergeDataHandler(final ConfigService configService,
-                                                               final NacosProviderProperties nacosProviderProperties) {
+                final NacosProviderProperties nacosProviderProperties) {
             return new NacosMetaMergeDataHandler(configService, nacosProviderProperties.getWatchConfigs());
         }
 
@@ -209,14 +209,14 @@ public class DataSyncProviderAutoConfig {
         @Bean
         @ConditionalOnMissingBean(ZookeeperDataChangedInit.class)
         public DataChangedInit zookeeperDataChangedInit(CuratorFramework curatorFramework,
-                                                        CuratorProperties curatorProperties) {
+                CuratorProperties curatorProperties) {
             return new ZookeeperDataChangedInit(curatorFramework, curatorProperties.getWatchConfigs());
         }
 
         @Bean
         @ConditionalOnMissingBean(ZookeeperDataChangedListener.class)
         public DataChangedListener zookeeperDataChangedListener(CuratorFramework curatorFramework,
-                                                                List<MergeDataHandler> mergeDataHandlerList) {
+                List<MergeDataHandler> mergeDataHandlerList) {
             return new ZookeeperDataChangedListener(curatorFramework, mergeDataHandlerList);
         }
 

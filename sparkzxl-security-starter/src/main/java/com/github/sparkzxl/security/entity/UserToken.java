@@ -1,9 +1,8 @@
 package com.github.sparkzxl.security.entity;
 
 import com.github.sparkzxl.core.entity.AuthUserInfo;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * description: token实体类

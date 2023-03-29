@@ -2,7 +2,6 @@ package com.github.sparkzxl.alarm.executor;
 
 import com.github.sparkzxl.alarm.entity.AlarmResponse;
 import com.github.sparkzxl.alarm.entity.MsgType;
-
 import java.util.Map;
 
 /**

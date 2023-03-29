@@ -12,10 +12,9 @@ import com.github.sparkzxl.alarm.executor.AbstractAlarmExecutor;
 import com.github.sparkzxl.alarm.feishutalk.sign.FeiShuTalkAlarmSignAlgorithm;
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
 import com.github.sparkzxl.alarm.sign.SignResult;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * description: 飞书告警执行器
@@ -47,7 +46,8 @@ public class FeiShuTalkAlarmExecutor extends AbstractAlarmExecutor {
             if (alarmConfig.isAsync()) {
                 CompletableFuture<AlarmResponse> alarmResponseCompletableFuture = CompletableFuture.supplyAsync(() -> {
                     try {
-                        String body = HttpRequest.post(webhook.toString()).contentType(ContentType.JSON.getValue()).body(json).execute().body();
+                        String body = HttpRequest.post(webhook.toString()).contentType(ContentType.JSON.getValue()).body(json).execute()
+                                .body();
                         alarmAsyncCallback.execute(alarmId, body);
                     } catch (HttpException e) {
                         exceptionCallback(alarmId, message, new AsyncCallException(e));

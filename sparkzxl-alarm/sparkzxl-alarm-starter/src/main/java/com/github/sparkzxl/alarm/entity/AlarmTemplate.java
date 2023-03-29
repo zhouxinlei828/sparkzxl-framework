@@ -1,8 +1,7 @@
 package com.github.sparkzxl.alarm.entity;
 
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * description: 告警模板实体类

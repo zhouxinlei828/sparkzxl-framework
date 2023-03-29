@@ -5,16 +5,15 @@ import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.core.util.PathMatchUtils;
 import com.github.sparkzxl.oauth.properties.ResourceProperties;
 import com.github.sparkzxl.oauth.util.WebFluxUtils;
+import java.net.URI;
+import java.util.List;
+import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-
-import javax.annotation.Nonnull;
-import java.net.URI;
-import java.util.List;
 
 /**
  * description: 白名单路径访问时需要移除JWT请求头
@@ -24,6 +23,7 @@ import java.util.List;
 public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
 
     private final ResourceProperties resourceProperties;
+
     public IgnoreUrlsRemoveJwtFilter(ResourceProperties resourceProperties) {
         this.resourceProperties = resourceProperties;
     }

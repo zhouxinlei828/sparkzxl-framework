@@ -2,8 +2,12 @@ package com.github.sparkzxl.alarm.annotation;
 
 import com.github.sparkzxl.alarm.constant.AlarmConstant;
 import com.github.sparkzxl.alarm.enums.MessageSubType;
-
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * description: 告警注解
@@ -18,6 +22,7 @@ public @interface Alarm {
 
     /**
      * 机器人id
+     *
      * @return String
      */
     String robotId() default "";

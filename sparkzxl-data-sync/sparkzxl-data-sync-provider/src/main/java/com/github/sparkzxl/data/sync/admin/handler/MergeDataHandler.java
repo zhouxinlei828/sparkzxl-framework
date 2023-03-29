@@ -1,7 +1,6 @@
 package com.github.sparkzxl.data.sync.admin.handler;
 
 import com.github.sparkzxl.data.sync.common.entity.PushData;
-
 import java.util.Map;
 
 /**

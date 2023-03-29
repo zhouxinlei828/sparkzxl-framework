@@ -1,8 +1,7 @@
 package com.github.sparkzxl.elasticsearch.page;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * description: es分页实体类

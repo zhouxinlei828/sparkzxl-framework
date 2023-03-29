@@ -3,10 +3,9 @@ package com.github.sparkzxl.alarm.provider;
 import com.github.sparkzxl.alarm.entity.AlarmTemplate;
 import com.github.sparkzxl.alarm.exception.AlarmException;
 import com.github.sparkzxl.alarm.support.AlarmErrorCodeEnum;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
-
-import java.util.function.Function;
 
 /**
  * description: 数据库告警模板加载

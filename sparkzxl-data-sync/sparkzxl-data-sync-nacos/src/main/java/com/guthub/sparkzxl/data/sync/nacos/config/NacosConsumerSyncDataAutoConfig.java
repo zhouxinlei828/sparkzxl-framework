@@ -7,6 +7,9 @@ import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.api.DataSyncService;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.guthub.sparkzxl.data.sync.nacos.NacosDataSyncServiceImpl;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +18,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * description: Nacos sync data configuration for spring boot.
@@ -42,8 +41,8 @@ public class NacosConsumerSyncDataAutoConfig {
      */
     @Bean
     public DataSyncService nacosSyncDataService(final ObjectProvider<ConfigService> configService,
-                                                final ObjectProvider<List<DataSubscriber>> dataSubscribers,
-                                                final NacosConsumerProperties nacosConsumerProperties) {
+            final ObjectProvider<List<DataSubscriber>> dataSubscribers,
+            final NacosConsumerProperties nacosConsumerProperties) {
         logger.info("nacos sync data initialization.");
         return new NacosDataSyncServiceImpl(configService.getIfAvailable(),
                 dataSubscribers.getIfAvailable(Collections::emptyList), nacosConsumerProperties.getWatchConfigs());

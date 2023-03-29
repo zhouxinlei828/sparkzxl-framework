@@ -19,36 +19,33 @@ import cn.hutool.core.util.RandomUtil;
 import com.baidu.fsg.uid.util.DockerUtils;
 import com.baidu.fsg.uid.util.NetUtils;
 import com.baidu.fsg.uid.worker.entity.WorkerNodeEntity;
+import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Consumer;
-
 /**
- * Represents an implementation of {@link WorkerIdAssigner},
- * the worker id will be discarded after assigned to the UidGenerator
+ * Represents an implementation of {@link WorkerIdAssigner}, the worker id will be discarded after assigned to the UidGenerator
  * <p>
  * 基于DB自增的worker id 分配器的实现
  * <p>
  * SnowFlake中，deltaSeconds依赖时间戳，可以通过系统获取；sequence可以通过自增来控制；这俩字段都是项目可以自给自足的，而WorkerId则必须还有一个策略来提供。
- * 这个策略要保证每次服务启动的时候拿到的WorkerId都能不重复，不然就有可能集群不同的机器拿到不同的workerid，会发重复的号了；
- * 而服务启动又是个相对低频的行为，也不影响发号性能，所以可以用DB自增ID来实现。
+ * 这个策略要保证每次服务启动的时候拿到的WorkerId都能不重复，不然就有可能集群不同的机器拿到不同的workerid，会发重复的号了； 而服务启动又是个相对低频的行为，也不影响发号性能，所以可以用DB自增ID来实现。
  * DatabaseWorkerIdAssigner就是依赖DB自增ID实现的workerId分配器。
  *
  * @author zhouxinlei
  */
 @RequiredArgsConstructor
 public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DisposableWorkerIdAssigner.class);
 
     private final Consumer<WorkerNodeEntity> consumer;
 
     /**
-     * Assign worker id base on database.<p>
-     * If there is host name & port in the environment, we considered that the node runs in Docker container<br>
-     * Otherwise, the node runs on an actual machine.
+     * Assign worker id base on database.<p> If there is host name & port in the environment, we considered that the node runs in Docker
+     * container<br> Otherwise, the node runs on an actual machine.
      *
      * @return assigned worker id
      */

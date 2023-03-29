@@ -1,5 +1,6 @@
 package com.github.sparkzxl.oss.aop;
 
+import java.lang.annotation.Annotation;
 import lombok.NonNull;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
@@ -8,8 +9,6 @@ import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-
-import java.lang.annotation.Annotation;
 
 /**
  * description: OSS Upload aop通知
@@ -24,8 +23,8 @@ public class OSSUploadAnnotationAdvisor extends AbstractPointcutAdvisor implemen
     private final Pointcut pointcut;
 
     public OSSUploadAnnotationAdvisor(@NonNull OSSUploadInterceptor ossUploadInterceptor,
-                                      Class<? extends Annotation> annotation,
-                                      int order) {
+            Class<? extends Annotation> annotation,
+            int order) {
         this.advice = ossUploadInterceptor;
         this.pointcut = AnnotationMatchingPointcut.forMethodAnnotation(annotation);
         setOrder(order);

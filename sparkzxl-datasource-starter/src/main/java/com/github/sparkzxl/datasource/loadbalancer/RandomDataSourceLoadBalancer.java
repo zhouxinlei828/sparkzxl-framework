@@ -1,7 +1,6 @@
 package com.github.sparkzxl.datasource.loadbalancer;
 
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 

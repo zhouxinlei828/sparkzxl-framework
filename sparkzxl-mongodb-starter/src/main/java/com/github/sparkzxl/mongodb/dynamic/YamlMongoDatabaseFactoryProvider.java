@@ -1,9 +1,8 @@
 package com.github.sparkzxl.mongodb.dynamic;
 
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
-
-import java.util.Map;
 
 /**
  * description: 通过yaml属性加载数据源工厂

@@ -1,7 +1,6 @@
 package com.github.sparkzxl.alarm.loadbalancer;
 
 import com.github.sparkzxl.alarm.properties.AlarmProperties;
-
 import java.util.List;
 
 /**

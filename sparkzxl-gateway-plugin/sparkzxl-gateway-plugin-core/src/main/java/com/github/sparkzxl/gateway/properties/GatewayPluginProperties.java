@@ -2,15 +2,14 @@ package com.github.sparkzxl.gateway.properties;
 
 import com.github.sparkzxl.gateway.common.entity.FilterData;
 import com.google.common.collect.Lists;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.AntPathMatcher;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * description: gateway plugin properties

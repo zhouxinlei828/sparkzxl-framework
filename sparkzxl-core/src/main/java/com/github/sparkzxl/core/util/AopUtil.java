@@ -3,6 +3,11 @@ package com.github.sparkzxl.core.util;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.map.MapUtil;
 import com.google.common.collect.Maps;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Map;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -14,12 +19,6 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.util.ReflectionUtils;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.Map;
 
 /**
  * description: 切面工具类
@@ -76,7 +75,8 @@ public class AopUtil {
         return parseExpression.getValue(context, String.class);
     }
 
-    public static Map<String, Object> generateMap(MethodInvocation invocation, Class<? extends Annotation> annotation, String propertyName) {
+    public static Map<String, Object> generateMap(MethodInvocation invocation, Class<? extends Annotation> annotation,
+            String propertyName) {
         return generateMap(invocation.getMethod(), invocation.getArguments(), annotation, propertyName);
     }
 
@@ -92,7 +92,8 @@ public class AopUtil {
         return generateMap(targetMethod, arguments, annotation, propertyName);
     }
 
-    public static Map<String, Object> generateMap(Method method, Object[] arguments, Class<? extends Annotation> annotation, String propertyName) {
+    public static Map<String, Object> generateMap(Method method, Object[] arguments, Class<? extends Annotation> annotation,
+            String propertyName) {
         Map<String, Object> alarmParamMap = Maps.newHashMap();
         final Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {

@@ -1,10 +1,9 @@
 package com.github.sparkzxl.mybatis.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import lombok.Data;
 
 /**
  * description: 分页入参
