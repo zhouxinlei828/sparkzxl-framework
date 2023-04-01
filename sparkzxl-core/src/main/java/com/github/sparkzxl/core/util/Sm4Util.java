@@ -20,17 +20,16 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  */
 public class Sm4Util {
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
-
     public static final String ALGORITHM_NAME = "SM4";
     public static final String DEFAULT_KEY = "random_seed";
-
     /**
      * 128-32位16进制；256-64位16进制
      */
     public static final int DEFAULT_KEY_SIZE = 128;
+
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     public static byte[] generateKey() throws NoSuchAlgorithmException, NoSuchProviderException {
         return generateKey(DEFAULT_KEY, DEFAULT_KEY_SIZE);

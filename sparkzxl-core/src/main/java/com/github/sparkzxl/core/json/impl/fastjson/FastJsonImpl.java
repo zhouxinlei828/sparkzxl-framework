@@ -34,9 +34,8 @@ import org.slf4j.LoggerFactory;
  */
 public class FastJsonImpl extends AbstractJSONImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(FastJsonImpl.class);
-
     public static final String NAME = "fastjson";
+    private static final Logger logger = LoggerFactory.getLogger(FastJsonImpl.class);
     private final SerializeConfig serializeConfig = new SerializeConfig();
     private final ParserConfig parserConfig = new ParserConfig();
 

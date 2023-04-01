@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
  */
 public class JacksonImpl extends AbstractJSONImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(JacksonImpl.class);
     public static final String NAME = "jackson";
+    private static final Logger logger = LoggerFactory.getLogger(JacksonImpl.class);
     public final ObjectMapper objectMapper = new ObjectMapper();
 
     public JacksonImpl() {

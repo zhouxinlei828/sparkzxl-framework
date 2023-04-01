@@ -22,8 +22,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CaffeineCacheImpl implements CacheService {
 
-    private final Cache<String, Cache<String, Object>> cacheMap;
     private static final long MAX_SIZE = 1000;
+    private final Cache<String, Cache<String, Object>> cacheMap;
 
     public CaffeineCacheImpl() {
         this.cacheMap = Caffeine.newBuilder().maximumSize(MAX_SIZE).build();

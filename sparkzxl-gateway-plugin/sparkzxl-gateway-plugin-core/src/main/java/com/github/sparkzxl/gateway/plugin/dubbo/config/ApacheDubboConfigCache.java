@@ -34,10 +34,6 @@ import org.springframework.beans.BeanUtils;
 public class ApacheDubboConfigCache extends DubboConfigCache {
 
     private static final Logger logger = LoggerFactory.getLogger(ApacheDubboConfigCache.class);
-    private ApplicationConfig applicationConfig;
-    private RegistryConfig registryConfig;
-    private ConsumerConfig consumerConfig;
-
     private final LoadingCache<String, ReferenceConfig<GenericService>> cache = CacheBuilder.newBuilder()
             .maximumSize(GatewayConstant.CACHE_MAX_COUNT)
             .removalListener((RemovalListener<Object, ReferenceConfig<GenericService>>) notification -> {
@@ -55,6 +51,9 @@ public class ApacheDubboConfigCache extends DubboConfigCache {
                     return new ReferenceConfig<>();
                 }
             });
+    private ApplicationConfig applicationConfig;
+    private RegistryConfig registryConfig;
+    private ConsumerConfig consumerConfig;
 
     /**
      * Gets instance.

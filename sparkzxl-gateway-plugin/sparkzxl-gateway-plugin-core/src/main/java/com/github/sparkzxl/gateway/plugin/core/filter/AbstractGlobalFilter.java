@@ -22,11 +22,11 @@ import org.springframework.core.Ordered;
  */
 public abstract class AbstractGlobalFilter implements GlobalFilter, Ordered, InitializingBean, ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
     private final Map<String, FilterData> filterDataMap = Maps.newHashMap();
     private final Map<String, FilterDataHandler> filterDataHandlerMap = Maps.newHashMap();
     @Resource
     protected GatewayPluginProperties gatewayPluginProperties;
+    private ApplicationContext applicationContext;
 
     public AbstractGlobalFilter() {
     }

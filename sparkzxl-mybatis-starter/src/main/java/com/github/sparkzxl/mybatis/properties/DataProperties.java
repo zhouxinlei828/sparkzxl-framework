@@ -29,39 +29,6 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class DataProperties {
 
     public static final String DATA_PREFIX = "mybatis-plus.data";
-
-    private long workerId = 0;
-
-    private long dataCenterId = 10;
-
-    /**
-     * 使用多租户
-     */
-    private boolean enableTenant;
-
-    /**
-     * 多租户模式
-     */
-    private MultiTenantType multiTenantType = MultiTenantType.COLUMN;
-
-    /**
-     * 租户库 前缀
-     */
-    private String tenantDatabasePrefix = "sparkzxl_auth";
-    /**
-     * 租户字段
-     */
-    private List<GlobalMetaData> globalColumn = Lists.newArrayList(new GlobalMetaData("tenant_id", "tenantId"));
-
-    /**
-     * 租户默认不填充数据表
-     */
-    private String[] ignoreTable;
-
-    /**
-     * 是否启用控制台sql记录
-     */
-    private Boolean p6spy = false;
     /**
      * 溢出总页数后是否进行处理
      */
@@ -70,6 +37,32 @@ public class DataProperties {
      * 生成 countSql 优化掉 join 现在只支持 left join
      */
     protected Boolean optimizeJoin = true;
+    private long workerId = 0;
+    private long dataCenterId = 10;
+    /**
+     * 使用多租户
+     */
+    private boolean enableTenant;
+    /**
+     * 多租户模式
+     */
+    private MultiTenantType multiTenantType = MultiTenantType.COLUMN;
+    /**
+     * 租户库 前缀
+     */
+    private String tenantDatabasePrefix = "sparkzxl_auth";
+    /**
+     * 租户字段
+     */
+    private List<GlobalMetaData> globalColumn = Lists.newArrayList(new GlobalMetaData("tenant_id", "tenantId"));
+    /**
+     * 租户默认不填充数据表
+     */
+    private String[] ignoreTable;
+    /**
+     * 是否启用控制台sql记录
+     */
+    private Boolean p6spy = false;
     /**
      * 数据库类型
      */

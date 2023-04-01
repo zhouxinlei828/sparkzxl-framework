@@ -42,8 +42,8 @@ import org.slf4j.LoggerFactory;
  */
 public class GsonImpl extends AbstractJSONImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(GsonImpl.class);
     public static final String NAME = "gson";
+    private static final Logger logger = LoggerFactory.getLogger(GsonImpl.class);
     private static final String DOT = ".";
     private static final String E = "e";
     private static final String LEFT = "left";

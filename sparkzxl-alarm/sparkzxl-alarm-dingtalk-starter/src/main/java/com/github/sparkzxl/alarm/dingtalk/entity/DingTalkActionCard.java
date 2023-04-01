@@ -37,6 +37,16 @@ public class DingTalkActionCard extends DingTalkMessage {
         this.actionCard = actionCard;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            if (entry.getValue() instanceof ActionCard) {
+                this.actionCard = Convert.convert(ActionCard.class, entry.getValue());
+                break;
+            }
+        }
+    }
+
     @Getter
     @Setter
     public static class ActionCard implements Serializable {
@@ -94,16 +104,6 @@ public class DingTalkActionCard extends DingTalkMessage {
             public Button(String title, String actionURL) {
                 this.title = title;
                 this.actionURL = actionURL;
-            }
-        }
-    }
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            if (entry.getValue() instanceof ActionCard) {
-                this.actionCard = Convert.convert(ActionCard.class, entry.getValue());
-                break;
             }
         }
     }

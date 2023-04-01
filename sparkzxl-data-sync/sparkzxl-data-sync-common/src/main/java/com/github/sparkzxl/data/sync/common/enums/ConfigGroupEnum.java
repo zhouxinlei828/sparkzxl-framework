@@ -18,10 +18,6 @@ public enum ConfigGroupEnum {
 
     private final String code;
 
-    public String getCode() {
-        return code;
-    }
-
     ConfigGroupEnum(String code) {
         this.code = code;
     }
@@ -48,5 +44,9 @@ public enum ConfigGroupEnum {
         return Arrays.stream(ConfigGroupEnum.values())
                 .filter(e -> Objects.equals(e.getCode(), code))
                 .findFirst().orElseThrow(() -> new RuntimeException(String.format(" this ConfigGroupEnum can not support %s", code)));
+    }
+
+    public String getCode() {
+        return code;
     }
 }

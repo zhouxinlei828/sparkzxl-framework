@@ -21,23 +21,23 @@ public class KeyStoreKeyFactory {
 
     private final Resource resource;
     private final char[] password;
-    private KeyStore store;
     private final Object lock = new Object();
     private final String type;
+    private KeyStore store;
 
     public KeyStoreKeyFactory(Resource resource, char[] password) {
         this(resource, password, type(resource));
-    }
-
-    private static String type(Resource resource) {
-        String ext = StringUtils.getFilenameExtension(resource.getFilename());
-        return ext == null ? "jks" : ext;
     }
 
     public KeyStoreKeyFactory(Resource resource, char[] password, String type) {
         this.resource = resource;
         this.password = password;
         this.type = type;
+    }
+
+    private static String type(Resource resource) {
+        String ext = StringUtils.getFilenameExtension(resource.getFilename());
+        return ext == null ? "jks" : ext;
     }
 
     public KeyPair getKeyPair(String alias) {

@@ -34,6 +34,18 @@ public class DingTalkLink extends DingTalkMessage {
         this.link = link;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            Object value = entry.getValue();
+            if (value instanceof BaseLink) {
+                BaseLink link = (BaseLink) value;
+                this.link = new Link(link.getTitle(), link.getText(), link.getMessageUrl(), link.getPicUrl());
+                break;
+            }
+        }
+    }
+
     public static class Link implements Serializable {
 
         /**
@@ -93,18 +105,6 @@ public class DingTalkLink extends DingTalkMessage {
 
         public void setPicUrl(String picUrl) {
             this.picUrl = picUrl;
-        }
-    }
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            Object value = entry.getValue();
-            if (value instanceof BaseLink) {
-                BaseLink link = (BaseLink) value;
-                this.link = new Link(link.getTitle(), link.getText(), link.getMessageUrl(), link.getPicUrl());
-                break;
-            }
         }
     }
 }

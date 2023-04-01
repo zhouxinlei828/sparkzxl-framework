@@ -9,11 +9,8 @@ package com.github.sparkzxl.data.sync.admin.listener;
 public class ConfigDataCache {
 
     private final String group;
-
-    private volatile String md5;
-
     private final String json;
-
+    private volatile String md5;
     private volatile long lastModifyTime;
 
     /**

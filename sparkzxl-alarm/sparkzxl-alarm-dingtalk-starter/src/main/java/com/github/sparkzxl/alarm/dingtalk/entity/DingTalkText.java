@@ -29,6 +29,11 @@ public class DingTalkText extends Message {
         this.text = text;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.text.content = replaceContent(this.text.content, params);
+    }
+
     public static class Text implements Serializable {
 
         private String content;
@@ -48,11 +53,6 @@ public class DingTalkText extends Message {
             this.content = content;
         }
 
-    }
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        this.text.content = replaceContent(this.text.content, params);
     }
 
 }

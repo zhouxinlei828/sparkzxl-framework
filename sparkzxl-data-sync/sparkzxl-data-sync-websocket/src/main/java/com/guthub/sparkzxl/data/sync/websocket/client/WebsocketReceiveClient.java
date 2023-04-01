@@ -28,13 +28,9 @@ import org.slf4j.LoggerFactory;
 public class WebsocketReceiveClient extends WebSocketClient {
 
     private static final Logger logger = LoggerFactory.getLogger(WebsocketReceiveClient.class);
-
-    private volatile boolean alreadySync = Boolean.FALSE;
-
     private final WebsocketDataConsumerHandler consumerHandler;
-
     private final Timer timer;
-
+    private volatile boolean alreadySync = Boolean.FALSE;
     private TimerTask timerTask;
 
     /**

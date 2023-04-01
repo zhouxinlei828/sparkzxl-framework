@@ -19,9 +19,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class LocalDateTimeCodec implements ObjectSerializer, ObjectDeserializer {
 
-    private final String pattern;
-
     public static final LocalDateTimeCodec INSTANCE = new LocalDateTimeCodec(DatePattern.NORM_DATETIME_PATTERN);
+    private final String pattern;
 
     public LocalDateTimeCodec(String pattern) {
         this.pattern = pattern;

@@ -19,9 +19,8 @@ import java.util.Date;
  */
 public class DateCodec implements ObjectSerializer, ObjectDeserializer {
 
-    private final String pattern;
-
     public static final DateCodec INSTANCE = new DateCodec(DatePattern.NORM_DATETIME_PATTERN);
+    private final String pattern;
 
     public DateCodec(String pattern) {
         this.pattern = pattern;

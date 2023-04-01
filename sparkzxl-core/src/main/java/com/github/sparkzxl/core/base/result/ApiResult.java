@@ -141,16 +141,16 @@ public class ApiResult<T> implements Serializable {
                 .build();
     }
 
+    public static <T> ResponseBuilder<T> builder() {
+        return new ResponseBuilder<>();
+    }
+
     public ApiResult<?> put(String key, Object value) {
         if (this.extra == null) {
             this.extra = new HashMap<>(16);
         }
         this.extra.put(key, value);
         return this;
-    }
-
-    public static <T> ResponseBuilder<T> builder() {
-        return new ResponseBuilder<>();
     }
 
     public ApiResult<?> putAll(Map<String, Object> extra) {

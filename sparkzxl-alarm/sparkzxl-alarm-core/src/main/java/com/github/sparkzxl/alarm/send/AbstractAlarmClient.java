@@ -20,10 +20,10 @@ import org.springframework.util.CollectionUtils;
  */
 public abstract class AbstractAlarmClient implements AlarmClient {
 
-    protected TextMessageTemplate textMessage;
-    protected MarkDownMessageTemplate markDownMessage;
     protected final AlarmProperties alarmProperties;
     protected final Map<String, AlarmExecutor> executorMap;
+    protected TextMessageTemplate textMessage;
+    protected MarkDownMessageTemplate markDownMessage;
 
     public AbstractAlarmClient(AlarmProperties alarmProperties,
             TextMessageTemplate textMessage,

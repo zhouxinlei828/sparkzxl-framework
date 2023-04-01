@@ -47,6 +47,32 @@ public class Message extends FeiShuTalkMessage implements Serializable {
         this.atList = atList;
     }
 
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    @Override
+    public void signAttributes(BaseSign sign) {
+        if (!(sign instanceof SignResult)) {
+            return;
+        }
+        SignResult signResult = (SignResult) sign;
+        this.timestamp = String.valueOf(signResult.getTimestamp());
+        this.sign = signResult.getSign();
+    }
+
     @XStreamAlias("at")
     public static class FeiShuAt implements Serializable {
 
@@ -96,31 +122,5 @@ public class Message extends FeiShuTalkMessage implements Serializable {
             xmlData = xmlData.replace("/>", ">".concat(userName).concat("</at>"));
             return xmlData;
         }
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
-
-    @Override
-    public void signAttributes(BaseSign sign) {
-        if (!(sign instanceof SignResult)) {
-            return;
-        }
-        SignResult signResult = (SignResult) sign;
-        this.timestamp = String.valueOf(signResult.getTimestamp());
-        this.sign = signResult.getSign();
     }
 }

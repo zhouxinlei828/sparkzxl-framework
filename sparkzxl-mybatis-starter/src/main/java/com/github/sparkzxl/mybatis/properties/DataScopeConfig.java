@@ -18,14 +18,13 @@ import lombok.NoArgsConstructor;
 public class DataScopeConfig {
 
     /**
-     * 数据权限id标识
-     */
-    private String scopeId;
-
-    /**
      * 数据权限列
      */
     List<DataColumn> columns;
+    /**
+     * 数据权限id标识
+     */
+    private String scopeId;
     /**
      * 表名
      */

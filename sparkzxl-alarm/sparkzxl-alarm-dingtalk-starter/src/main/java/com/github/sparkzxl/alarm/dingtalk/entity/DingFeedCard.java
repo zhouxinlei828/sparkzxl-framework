@@ -37,6 +37,21 @@ public class DingFeedCard extends DingTalkMessage {
         this.feedCard = feedCard;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            Object value = entry.getValue();
+            if (value instanceof List) {
+                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
+                }, value);
+                for (BaseImageText baseImageText : baseImageTexts) {
+                    this.feedCard.links.add(new FeedCard.Link(baseImageText.getTitle(), baseImageText.getUrl(), baseImageText.getPicUrl()));
+                }
+                break;
+            }
+        }
+    }
+
     public static class FeedCard implements Serializable {
 
         /**
@@ -105,21 +120,6 @@ public class DingFeedCard extends DingTalkMessage {
 
             public void setPicURL(String picURL) {
                 this.picURL = picURL;
-            }
-        }
-    }
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            Object value = entry.getValue();
-            if (value instanceof List) {
-                List<BaseImageText> baseImageTexts = Convert.convert(new TypeReference<List<BaseImageText>>() {
-                }, value);
-                for (BaseImageText baseImageText : baseImageTexts) {
-                    this.feedCard.links.add(new FeedCard.Link(baseImageText.getTitle(), baseImageText.getUrl(), baseImageText.getPicUrl()));
-                }
-                break;
             }
         }
     }

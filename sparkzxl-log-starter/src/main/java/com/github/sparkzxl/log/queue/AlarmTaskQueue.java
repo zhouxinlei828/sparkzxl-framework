@@ -13,11 +13,6 @@ public class AlarmTaskQueue {
 
     private static final Queue<AlarmTaskInfo> QUEUE = new ConcurrentLinkedQueue<>();
 
-    private static class SingletonHolder {
-
-        private static final AlarmTaskQueue SINGLETON = new AlarmTaskQueue();
-    }
-
     /**
      * 单例队列
      *
@@ -39,6 +34,11 @@ public class AlarmTaskQueue {
      */
     public AlarmTaskInfo consume() {
         return QUEUE.poll();
+    }
+
+    private static class SingletonHolder {
+
+        private static final AlarmTaskQueue SINGLETON = new AlarmTaskQueue();
     }
 
 }

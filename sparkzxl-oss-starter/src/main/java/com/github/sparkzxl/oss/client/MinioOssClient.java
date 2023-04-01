@@ -39,15 +39,15 @@ public class MinioOssClient implements OssClient<MinioClient> {
         return configuration;
     }
 
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
     public MinioClient getClient() {
         return client;
     }
 
     public void setClient(MinioClient client) {
         this.client = client;
-    }
-
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
     }
 }

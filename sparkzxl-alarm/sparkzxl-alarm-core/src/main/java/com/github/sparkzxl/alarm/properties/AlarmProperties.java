@@ -25,10 +25,8 @@ import org.springframework.util.CollectionUtils;
 @ConfigurationProperties(prefix = AlarmConstant.ALARM_CONFIG_PREFIX)
 public class AlarmProperties implements InitializingBean {
 
-    private boolean enabled;
-
     private final Map<AlarmChannel, AlarmChannelConfig> channel = new LinkedHashMap<>();
-
+    private boolean enabled;
     private AlarmChannel primaryAlarm;
 
     @Override

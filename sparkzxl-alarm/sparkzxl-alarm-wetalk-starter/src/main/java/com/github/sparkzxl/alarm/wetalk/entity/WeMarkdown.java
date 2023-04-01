@@ -41,12 +41,24 @@ public class WeMarkdown extends WeTalkMessage {
         this.markdown = markdown;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.markdown.content = replaceContent(this.markdown.content, params);
+    }
+
     public static class Markdown implements Serializable {
 
         /**
          * markdown内容，最长不超过4096个字节，必须是utf8编码
          */
         private String content;
+
+        public Markdown() {
+        }
+
+        public Markdown(String content) {
+            this.content = content;
+        }
 
         public String getContent() {
             return content;
@@ -55,18 +67,5 @@ public class WeMarkdown extends WeTalkMessage {
         public void setContent(String content) {
             this.content = content;
         }
-
-        public Markdown() {
-        }
-
-        public Markdown(String content) {
-            this.content = content;
-        }
-    }
-
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        this.markdown.content = replaceContent(this.markdown.content, params);
     }
 }

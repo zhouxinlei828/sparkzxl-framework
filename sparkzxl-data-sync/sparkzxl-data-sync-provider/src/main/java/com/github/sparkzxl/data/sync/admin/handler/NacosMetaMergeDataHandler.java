@@ -36,10 +36,9 @@ import org.slf4j.LoggerFactory;
 public class NacosMetaMergeDataHandler implements MergeDataHandler<MetaData> {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosMetaMergeDataHandler.class);
-
+    private static final ConcurrentMap<String, MetaData> META_DATA = Maps.newConcurrentMap();
     private final ConfigService configService;
     private final Map<String, String> watchConfigMap = Maps.newConcurrentMap();
-    private static final ConcurrentMap<String, MetaData> META_DATA = Maps.newConcurrentMap();
 
     public NacosMetaMergeDataHandler(ConfigService configService,
             List<NacosWatchProperties> watchConfigs) {

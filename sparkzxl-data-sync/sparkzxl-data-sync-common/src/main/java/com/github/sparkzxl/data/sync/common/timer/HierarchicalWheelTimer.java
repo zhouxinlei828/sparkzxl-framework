@@ -38,10 +38,8 @@ public class HierarchicalWheelTimer implements Timer {
     private final ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();
 
     private final ReentrantReadWriteLock.WriteLock writeLock = readWriteLock.writeLock();
-
-    private volatile int workerState;
-
     private final Thread workerThread;
+    private volatile int workerState;
 
     /**
      * Instantiates a new System timer.

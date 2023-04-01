@@ -29,6 +29,11 @@ public class WeText extends WeTalkMessage {
         this.text = text;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.text.content = replaceContent(this.text.content, params);
+    }
+
     public static class Text implements Serializable {
 
         /**
@@ -51,6 +56,13 @@ public class WeText extends WeTalkMessage {
          * </p>
          */
         private List<String> mentioned_mobile_list;
+
+        public Text() {
+        }
+
+        public Text(String content) {
+            this.content = content;
+        }
 
         public String getContent() {
             return content;
@@ -75,17 +87,5 @@ public class WeText extends WeTalkMessage {
         public void setMentioned_mobile_list(Set<String> mentionedMobileList) {
             this.mentioned_mobile_list = Lists.newArrayList(mentionedMobileList);
         }
-
-        public Text() {
-        }
-
-        public Text(String content) {
-            this.content = content;
-        }
-    }
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        this.text.content = replaceContent(this.text.content, params);
     }
 }

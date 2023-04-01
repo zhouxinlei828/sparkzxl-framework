@@ -37,18 +37,6 @@ public abstract class TimerTask {
     }
 
     /**
-     * Sets timer task entry.
-     *
-     * @param entry the entry
-     */
-    synchronized void setTimerTaskEntry(final TimerTaskList.TimerTaskEntry entry) {
-        if (timerTaskEntry != null && timerTaskEntry != entry) {
-            this.timerTaskEntry.remove();
-        }
-        timerTaskEntry = entry;
-    }
-
-    /**
      * Gets delay ms.
      *
      * @return the delay ms
@@ -64,6 +52,18 @@ public abstract class TimerTask {
      */
     TimerTaskList.TimerTaskEntry getTimerTaskEntry() {
         return timerTaskEntry;
+    }
+
+    /**
+     * Sets timer task entry.
+     *
+     * @param entry the entry
+     */
+    synchronized void setTimerTaskEntry(final TimerTaskList.TimerTaskEntry entry) {
+        if (timerTaskEntry != null && timerTaskEntry != entry) {
+            this.timerTaskEntry.remove();
+        }
+        timerTaskEntry = entry;
     }
 
     /**

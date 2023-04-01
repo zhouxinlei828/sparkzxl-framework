@@ -45,13 +45,26 @@ import org.springframework.util.Assert;
 @RequiredArgsConstructor
 public class FeignBlockingLoadBalancerClientExtend implements Client {
 
+    public static final String REQUEST_TEMPLATE = "request_template";
     private final Client delegate;
-
     private final LoadBalancerClient loadBalancerClient;
-
     private final LoadBalancerProperties properties;
-
     private final LoadBalancerClientFactory loadBalancerClientFactory;
+
+    /**
+     * 修改的就是这里，原来这个方法是在 LoadBalancerUtils 里面 这里就是将 Request 的额外信息放进去
+     *
+     * @param request
+     * @return
+     */
+    static RequestData buildRequestData(Request request) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        request.headers().forEach((key, value) -> requestHeaders.put(key, new ArrayList<>(value)));
+        Map<String, Object> attributes = Maps.newHashMap();
+        attributes.put(REQUEST_TEMPLATE, request.requestTemplate());
+        return new RequestData(HttpMethod.resolve(request.httpMethod().name()), URI.create(request.url()),
+                requestHeaders, null, attributes);
+    }
 
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
@@ -92,23 +105,6 @@ public class FeignBlockingLoadBalancerClientExtend implements Client {
         return executeWithLoadBalancerLifecycleProcessing(delegate, options, newRequest, lbRequest, lbResponse,
                 supportedLifecycleProcessors, loadBalancerProperties.isUseRawStatusCodeInResponseData());
     }
-
-    /**
-     * 修改的就是这里，原来这个方法是在 LoadBalancerUtils 里面 这里就是将 Request 的额外信息放进去
-     *
-     * @param request
-     * @return
-     */
-    static RequestData buildRequestData(Request request) {
-        HttpHeaders requestHeaders = new HttpHeaders();
-        request.headers().forEach((key, value) -> requestHeaders.put(key, new ArrayList<>(value)));
-        Map<String, Object> attributes = Maps.newHashMap();
-        attributes.put(REQUEST_TEMPLATE, request.requestTemplate());
-        return new RequestData(HttpMethod.resolve(request.httpMethod().name()), URI.create(request.url()),
-                requestHeaders, null, attributes);
-    }
-
-    public static final String REQUEST_TEMPLATE = "request_template";
 
     protected Request buildRequest(Request request, String reconstructedUrl) {
         return Request.create(request.httpMethod(), reconstructedUrl, request.headers(), request.body(),

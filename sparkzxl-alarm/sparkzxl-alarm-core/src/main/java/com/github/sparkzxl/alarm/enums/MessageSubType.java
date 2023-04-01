@@ -45,15 +45,15 @@ public enum MessageSubType {
         this.code = code;
     }
 
+    public static boolean contains(String value) {
+        return Arrays.stream(MessageSubType.values()).anyMatch(e -> Objects.equals(e.name(), value));
+    }
+
     public boolean isSupport() {
         return support;
     }
 
     public String getCode() {
         return code;
-    }
-
-    public static boolean contains(String value) {
-        return Arrays.stream(MessageSubType.values()).anyMatch(e -> Objects.equals(e.name(), value));
     }
 }

@@ -29,6 +29,11 @@ public class DingTalkMarkDown extends Message {
         this.markdown = markdown;
     }
 
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.markdown.text = replaceContent(this.markdown.text, params);
+    }
+
     public static class MarkDown implements Serializable {
 
         /**
@@ -39,6 +44,14 @@ public class DingTalkMarkDown extends Message {
          * markdown格式的消息
          */
         private String text;
+
+        public MarkDown() {
+        }
+
+        public MarkDown(String title, String text) {
+            this.title = title;
+            this.text = text;
+        }
 
         public String getTitle() {
             return title;
@@ -55,18 +68,5 @@ public class DingTalkMarkDown extends Message {
         public void setText(String text) {
             this.text = text;
         }
-
-        public MarkDown() {
-        }
-
-        public MarkDown(String title, String text) {
-            this.title = title;
-            this.text = text;
-        }
-    }
-
-    @Override
-    public void transfer(Map<String, Object> params) {
-        this.markdown.text = replaceContent(this.markdown.text, params);
     }
 }

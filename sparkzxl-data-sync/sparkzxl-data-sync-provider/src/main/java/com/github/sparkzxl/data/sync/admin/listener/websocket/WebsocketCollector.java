@@ -35,6 +35,46 @@ public class WebsocketCollector {
 
     private static final String SESSION_KEY = "sessionKey";
 
+    private static String getClientIp(final Session session) {
+        Map<String, Object> userProperties = session.getUserProperties();
+        if (MapUtils.isEmpty(userProperties)) {
+            return StringUtils.EMPTY;
+        }
+
+        return Optional.ofNullable(userProperties.get(WebsocketListener.CLIENT_IP_NAME))
+                .map(Object::toString)
+                .orElse(StringUtils.EMPTY);
+    }
+
+    /**
+     * Send.
+     *
+     * @param message the message
+     * @param type    the type
+     */
+    public static void send(final String message, final DataEventTypeEnum type) {
+        if (StringUtils.isBlank(message)) {
+            return;
+        }
+        if (DataEventTypeEnum.MYSELF == type) {
+            Session session = WebSocketThreadLocalContext.get(SESSION_KEY, Session.class);
+            if (Objects.nonNull(session)) {
+                sendMessageBySession(session, message);
+            }
+        } else {
+            SESSION_SET.forEach(session -> sendMessageBySession(session, message));
+        }
+
+    }
+
+    private static synchronized void sendMessageBySession(final Session session, final String message) {
+        try {
+            session.getBasicRemote().sendText(message);
+        } catch (IOException e) {
+            logger.error("websocket send result is exception: ", e);
+        }
+    }
+
     /**
      * On open.
      *
@@ -45,17 +85,6 @@ public class WebsocketCollector {
         logger.info("websocket on client[{}] open successful,maxTextMessageBufferSize:{}",
                 getClientIp(session), session.getMaxTextMessageBufferSize());
         SESSION_SET.add(session);
-    }
-
-    private static String getClientIp(final Session session) {
-        Map<String, Object> userProperties = session.getUserProperties();
-        if (MapUtils.isEmpty(userProperties)) {
-            return StringUtils.EMPTY;
-        }
-
-        return Optional.ofNullable(userProperties.get(WebsocketListener.CLIENT_IP_NAME))
-                .map(Object::toString)
-                .orElse(StringUtils.EMPTY);
     }
 
     /**
@@ -98,35 +127,6 @@ public class WebsocketCollector {
     public void onError(final Session session, final Throwable error) {
         clearSession(session);
         logger.error("websocket collection on client[{}] error: ", getClientIp(session), error);
-    }
-
-    /**
-     * Send.
-     *
-     * @param message the message
-     * @param type    the type
-     */
-    public static void send(final String message, final DataEventTypeEnum type) {
-        if (StringUtils.isBlank(message)) {
-            return;
-        }
-        if (DataEventTypeEnum.MYSELF == type) {
-            Session session = WebSocketThreadLocalContext.get(SESSION_KEY, Session.class);
-            if (Objects.nonNull(session)) {
-                sendMessageBySession(session, message);
-            }
-        } else {
-            SESSION_SET.forEach(session -> sendMessageBySession(session, message));
-        }
-
-    }
-
-    private static synchronized void sendMessageBySession(final Session session, final String message) {
-        try {
-            session.getBasicRemote().sendText(message);
-        } catch (IOException e) {
-            logger.error("websocket send result is exception: ", e);
-        }
     }
 
     private void clearSession(final Session session) {

@@ -26,10 +26,10 @@ public class ZookeeperDataSyncServiceImpl implements DataSyncService {
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperDataSyncServiceImpl.class);
 
     private final CuratorFramework curatorFramework;
-    private List<ZkWatchProperties> watchConfigs;
     private final Map<String, List<DataSubscriber>> dataSubscriberMap = Maps.newConcurrentMap();
     private final Map<String, CuratorCache> curatorCacheMap = Maps.newConcurrentMap();
     private final Map<String, TreeCacheListener> treeCacheListenerConcurrentMap = Maps.newConcurrentMap();
+    private List<ZkWatchProperties> watchConfigs;
 
     public ZookeeperDataSyncServiceImpl(CuratorFramework curatorFramework,
             List<DataSubscriber> dataSubscribers,

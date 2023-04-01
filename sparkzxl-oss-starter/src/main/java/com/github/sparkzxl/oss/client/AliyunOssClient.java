@@ -40,15 +40,15 @@ public class AliyunOssClient implements OssClient<OSSClient> {
         return configuration;
     }
 
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
     public OSSClient getClient() {
         return client;
     }
 
     public void setClient(OSSClient client) {
         this.client = client;
-    }
-
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
     }
 }

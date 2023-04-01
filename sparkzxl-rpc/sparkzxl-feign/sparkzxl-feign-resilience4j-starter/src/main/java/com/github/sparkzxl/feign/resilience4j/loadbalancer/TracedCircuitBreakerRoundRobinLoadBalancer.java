@@ -54,11 +54,10 @@ public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServic
     private final LoadingCache<String, Set<String>> calledIps = Caffeine.newBuilder()
             .expireAfterAccess(3, TimeUnit.MINUTES)
             .build(k -> Sets.newConcurrentHashSet());
-
+    private final CircuitBreakerExtractor circuitBreakerExtractor;
     private ServiceInstanceListSupplier serviceInstanceListSupplier;
     private String serviceId;
     private CircuitBreakerRegistry circuitBreakerRegistry;
-    private final CircuitBreakerExtractor circuitBreakerExtractor;
 
     public TracedCircuitBreakerRoundRobinLoadBalancer(
             ServiceInstanceListSupplier serviceInstanceListSupplier, String serviceId,

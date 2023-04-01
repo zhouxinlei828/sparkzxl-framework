@@ -71,10 +71,6 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
     public SlowSqlMonitorInterceptor() {
     }
 
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
     /**
      * 将对象转换为字符串
      *
@@ -95,6 +91,10 @@ public class SlowSqlMonitorInterceptor implements Interceptor {
         }
 
         return obj.toString();
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override

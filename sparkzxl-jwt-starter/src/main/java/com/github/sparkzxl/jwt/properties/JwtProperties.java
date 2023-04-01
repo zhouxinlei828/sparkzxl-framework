@@ -17,10 +17,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties(prefix = JWT_PREFIX)
 public class JwtProperties implements Serializable {
 
-    private static final long serialVersionUID = 8890136349889379042L;
-
     public static final String JWT_PREFIX = "spring.jwt";
-
+    private static final long serialVersionUID = 8890136349889379042L;
     /**
      * 过期时间 2h
      */
