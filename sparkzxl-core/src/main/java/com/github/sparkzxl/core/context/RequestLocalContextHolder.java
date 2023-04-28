@@ -113,11 +113,11 @@ public class RequestLocalContextHolder {
         set(BaseContextConstants.JWT_TOKEN_HEADER, token);
     }
 
-    public static String getTenant() {
+    public static String getTenantId() {
         return get(BaseContextConstants.TENANT_ID, String.class, StrPool.EMPTY);
     }
 
-    public static void setTenant(String val) {
+    public static void setTenantId(String val) {
         set(BaseContextConstants.TENANT_ID, val);
     }
 

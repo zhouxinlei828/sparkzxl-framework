@@ -1,5 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.jwt;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateTime;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
@@ -102,7 +103,7 @@ public class JwtFilter extends AbstractGlobalFilter {
                 }
             }
             Map<String, Object> jsonMap = JsonUtils.getJson().toMap(jwsObject.getPayload().toString());
-            long expire = (long) jsonMap.getOrDefault("exp", 0L);
+            long expire = Convert.toLong(jsonMap.get("exp"), 0L);
             DateTime dateTime = DateUtils.date(expire * 1000);
             if (dateTime.getTime() < System.currentTimeMillis()) {
                 throw new JwtExpireException("token已过期");

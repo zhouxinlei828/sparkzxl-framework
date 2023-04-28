@@ -151,7 +151,7 @@ public class HttpRequestLogAspect {
                 .setHttpMethod(request.getMethod())
                 .setClassMethod(String.format("%s.%s", signature.getDeclaringTypeName(), signature.getName()))
                 .setStartTime(LocalDateTime.now())
-                .setTenantId(RequestLocalContextHolder.getTenant());
+                .setTenantId(RequestLocalContextHolder.getTenantId());
         if (httpRequestLog.request()) {
             String requestParameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs());
             requestInfoLog.setRequestParams(requestParameterJson);

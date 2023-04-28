@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.StrPool;
@@ -54,6 +55,8 @@ public class MetaDataHandler implements MetaObjectHandler {
         extractUserName(metaObject, EntityConstant.CREATE_USER_NAME);
         // 创建时间
         extractDate(metaObject, EntityConstant.CREATE_TIME);
+        // 租户id
+        injectionField(metaObject, EntityConstant.TENANT_ID, BaseContextConstants.TENANT_ID);
 
     }
 
@@ -178,6 +181,25 @@ public class MetaDataHandler implements MetaObjectHandler {
                 Class<?> dateClass = metaObject.getGetterType(field);
                 dateVal = Date.class.equals(dateClass) ? new Date() : LocalDateTime.now();
                 this.setFieldValByName(field, dateVal, metaObject);
+            }
+        }
+    }
+
+    /**
+     * 公共字典自动注入
+     *
+     * @param metaObject 元对象
+     * @param field      字段属性
+     * @param key        查询key
+     */
+    protected void injectionField(MetaObject metaObject, String field, String key) {
+        boolean hasGetter = metaObject.hasGetter(field);
+        if (hasGetter) {
+            Object fieldVal = this.getFieldValByName(field, metaObject);
+            if (ObjectUtils.isEmpty(fieldVal)) {
+                Class<?> propertyTypeClass = metaObject.getGetterType(field);
+                fieldVal = RequestLocalContextHolder.get(key, propertyTypeClass);
+                this.setFieldValByName(field, fieldVal, metaObject);
             }
         }
     }

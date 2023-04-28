@@ -28,4 +28,7 @@ public class EntityConstant {
     public static final String UPDATE_TIME = "updateTime";
     public static final String COLUMN_UPDATE_TIME = "modify_time";
 
+    public static final String TENANT_ID = "tenantId";
+    public static final String COLUMN_TENANT_ID = "tenant_id";
+
 }

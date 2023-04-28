@@ -14,7 +14,7 @@ public class DefaultUploadListener implements UploadListener {
 
     @Override
     public void onListener(MethodInvocation invocation) {
-        OssClientContextHolder.push(RequestLocalContextHolder.getTenant());
+        OssClientContextHolder.push(RequestLocalContextHolder.getTenantId());
     }
 
     @Override

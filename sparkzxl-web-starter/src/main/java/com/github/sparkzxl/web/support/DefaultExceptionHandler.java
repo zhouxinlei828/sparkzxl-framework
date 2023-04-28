@@ -6,6 +6,8 @@ import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.ArgumentException;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.JwtParseException;
+import com.github.sparkzxl.core.support.TokenExpireException;
+import com.github.sparkzxl.core.support.UserNotFoundException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +21,7 @@ import javax.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -228,6 +231,28 @@ public class DefaultExceptionHandler implements Ordered {
         return ApiResult.fail(
                 ResultErrorCode.PARAM_MISS.getErrorCode(),
                 "缺少必须的[" + e.getParameterType() + "]类型的参数[" + e.getParameterName() + "]");
+    }
+
+    @ExceptionHandler(TokenExpireException.class)
+    public ApiResult<?> handleLoginExpireException(TokenExpireException e) {
+        log.error("TokenExpireException 异常:", e);
+        return ApiResult.builder()
+                .code(HttpStatus.UNAUTHORIZED.value())
+                .msg(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .errorCode(e.getErrorCode())
+                .errorMsg(e.getErrorMsg())
+                .build();
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ApiResult<?> handleUserNotFoundException(UserNotFoundException e) {
+        log.error("UserNotFoundException 异常:", e);
+        return ApiResult.builder()
+                .code(HttpStatus.UNAUTHORIZED.value())
+                .msg(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .errorCode(e.getErrorCode())
+                .errorMsg(e.getErrorMsg())
+                .build();
     }
 
     @Override

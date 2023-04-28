@@ -66,7 +66,7 @@ public class OptLogRecordInterceptor implements MethodInterceptor {
                 .setCategory(annotation.category())
                 .setUserId(userId)
                 .setOperator(name)
-                .setTenantId(RequestLocalContextHolder.getTenant());
+                .setTenantId(RequestLocalContextHolder.getTenantId());
         if (StringUtils.isNotBlank(annotation.template())) {
             Map<String, Object> alarmParamMap = getVariablesHandler(annotation.variablesBeanName()).getVariables(method, args, annotation);
             ExpressionParser parser = new SpelExpressionParser();

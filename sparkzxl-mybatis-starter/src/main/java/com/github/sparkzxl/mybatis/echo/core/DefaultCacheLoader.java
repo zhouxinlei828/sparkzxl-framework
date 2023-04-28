@@ -61,7 +61,7 @@ public class DefaultCacheLoader extends CacheLoader<CacheLoadKeys, Map<Serializa
     @Override
     public ListenableFuture<Map<Serializable, Object>> reload(@NonNull CacheLoadKeys key, @NonNull Map<Serializable, Object> oldValue) {
         return backgroundRefreshPools.submit(() -> {
-            RequestLocalContextHolder.setTenant(key.getTenant());
+            RequestLocalContextHolder.setTenantId(key.getTenantId());
             return load(key);
         });
     }

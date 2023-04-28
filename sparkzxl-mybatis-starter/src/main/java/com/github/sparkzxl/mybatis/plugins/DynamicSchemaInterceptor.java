@@ -32,7 +32,7 @@ public class DynamicSchemaInterceptor implements InnerInterceptor {
 
     protected String changeTable(String sql) {
         // 想要 执行sql时， 不切换到 sparkzxl_auth_{TENANT} 库, 请直接返回null
-        String tenantId = RequestLocalContextHolder.getTenant();
+        String tenantId = RequestLocalContextHolder.getTenantId();
         if (StrUtil.isEmpty(tenantId)) {
             return sql;
         }

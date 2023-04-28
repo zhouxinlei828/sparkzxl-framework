@@ -31,7 +31,7 @@ public class HttpRequestLogListener {
             log.warn("忽略请求日志记录");
             return;
         }
-        Optional.ofNullable(requestInfoLog.getTenantId()).ifPresent(RequestLocalContextHolder::setTenant);
+        Optional.ofNullable(requestInfoLog.getTenantId()).ifPresent(RequestLocalContextHolder::setTenantId);
         if (log.isDebugEnabled()) {
             log.debug("租户:【{}】 用户名:【{}】 请求接口:【{}】 请求耗时:【{}】",
                     requestInfoLog.getTenantId(), requestInfoLog.getUserName(),

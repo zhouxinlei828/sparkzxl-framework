@@ -31,7 +31,7 @@ public class OptLogListener {
             log.warn("忽略操作日志记录");
             return;
         }
-        Optional.ofNullable(optLogRecordDetail.getTenantId()).ifPresent(RequestLocalContextHolder::setTenant);
+        Optional.ofNullable(optLogRecordDetail.getTenantId()).ifPresent(RequestLocalContextHolder::setTenantId);
         if (log.isDebugEnabled()) {
             log.debug("用户行为记录：租户：【{}】 请求接口：【{}】 操作人【{}】 业务类型：【{}】 业务日志：【{}】",
                     optLogRecordDetail.getTenantId(), optLogRecordDetail.getRequestUrl(), optLogRecordDetail.getOperator(),

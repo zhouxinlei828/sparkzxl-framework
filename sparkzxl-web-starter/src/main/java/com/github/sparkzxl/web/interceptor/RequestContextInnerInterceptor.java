@@ -29,7 +29,7 @@ public class RequestContextInnerInterceptor extends AbstractInnerInterceptor {
         }
 
         //设置当前请求线程全局信息
-        RequestLocalContextHolder.setTenant(request.getHeader(BaseContextConstants.TENANT_ID));
+        RequestLocalContextHolder.setTenantId(request.getHeader(BaseContextConstants.TENANT_ID));
         RequestLocalContextHolder.setUserId(request.getHeader(BaseContextConstants.JWT_KEY_USER_ID));
         RequestLocalContextHolder.setAccount(request.getHeader(BaseContextConstants.JWT_KEY_ACCOUNT));
         RequestLocalContextHolder.setName(request.getHeader(BaseContextConstants.JWT_KEY_NAME));
