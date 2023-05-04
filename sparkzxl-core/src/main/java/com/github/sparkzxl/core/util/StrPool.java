@@ -113,7 +113,10 @@ public interface StrPool {
     String LIST_TYPE_NAME = "java.lang.List";
     String COLLECTION_TYPE_NAME = "java.lang.Collection";
     String CHARACTER_TYPE_NAME = "java.lang.Character";
-    String DATE_TYPE_NAME = "java.util.Date";
+    String JSON_OBJECT_TYPE_NAME = "com.alibaba.fastjson.JSONObject";
+    String JSON_ARRAY_TYPE_NAME = "com.alibaba.fastjson.JSONArray";
+    String MAP_TYPE_NAME = "java.util.Map";
+
     String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
     String LOCAL_DATE_TYPE_NAME = "java.time.LocalDateJsonSerializer";
     String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";

@@ -3,12 +3,7 @@ package com.github.sparkzxl.mybatis.echo.core;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.EnumUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.TypeUtil;
+import cn.hutool.core.util.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
@@ -18,25 +13,12 @@ import com.github.sparkzxl.mybatis.echo.manager.ClassManager;
 import com.github.sparkzxl.mybatis.echo.manager.FieldParam;
 import com.github.sparkzxl.mybatis.echo.manager.LoadKey;
 import com.github.sparkzxl.mybatis.echo.properties.EchoProperties;
-import com.github.sparkzxl.mybatis.entity.RemoteData;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import io.swagger.annotations.ApiModel;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.EnvironmentCapable;
@@ -48,6 +30,15 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.util.ClassUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * description: 字典数据回显工具类 1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来 2. 依次查询待回显的数据 3. 将查询出来结果回显到obj的 @Echo注解的字段中
@@ -63,10 +54,10 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
     private static final String[] BASE_TYPES = {
             StrPool.INTEGER_TYPE_NAME, StrPool.BYTE_TYPE_NAME, StrPool.LONG_TYPE_NAME, StrPool.DOUBLE_TYPE_NAME,
             StrPool.FLOAT_TYPE_NAME, StrPool.CHARACTER_TYPE_NAME, StrPool.SHORT_TYPE_NAME, StrPool.BOOLEAN_TYPE_NAME,
-            StrPool.STRING_TYPE_NAME,
-            RemoteData.class.getName()
+            StrPool.STRING_TYPE_NAME
     };
     private static final String[] COLL_TYPES = {StrPool.LIST_TYPE_NAME, StrPool.SET_TYPE_NAME, StrPool.COLLECTION_TYPE_NAME};
+    private static final String[] OBJECT_TYPES = {StrPool.JSON_OBJECT_TYPE_NAME, StrPool.JSON_ARRAY_TYPE_NAME, StrPool.MAP_TYPE_NAME};
     private static final Map<String, FieldParam> CACHE = new HashMap<>();
     private final Map<String, LoadService> strategyMap = new ConcurrentHashMap<>();
     /**
@@ -135,7 +126,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
             long echoStart = System.currentTimeMillis();
 
-            // 3. 将查询出来结果回显到obj的 @Echo注解的字段中
+            // 3. 将查询出来结果回显到obj的 @EchoField注解的字段中
             this.write(obj, typeMap, 1);
 
             long echoEnd = System.currentTimeMillis();
@@ -218,7 +209,8 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
      * <p>
      * 注意： 需要自行实现LoadService的2个方法
      *
-     * @param typeMap
+     * @param typeMap    map
+     * @param isUseCache 是否使用缓存
      */
     @SneakyThrows(value = Throwable.class)
     private void load(Map<LoadKey, Map<Serializable, Object>> typeMap, boolean isUseCache) {
@@ -229,7 +221,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
             LoadService loadService = strategyMap.get(type.getApi());
             if (loadService == null) {
-                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api：[{}]实例。" +
+                log.warn("处理字段的回显数据时，没有找到 @EchoField 中的api：[{}]实例。" +
                         "请确保你自定义的接口实现了 LoadService 中的 findByIds 方法。" +
                         "若api指定的是ServiceImpl，请确保在同一个服务内。", type.getApi());
                 continue;
@@ -286,7 +278,6 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             EchoField echoField = fieldParam.getEchoField();
             Object actualValue = fieldParam.getActualValue();
             Object originalValue = fieldParam.getOriginalValue();
-            String fieldName = fieldParam.getFieldName();
             String ref = echoField.ref();
             LoadKey loadKey = fieldParam.getLoadKey();
 
@@ -304,10 +295,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             }
 
             // 将新的值 反射 到指定字段
-            if (originalValue instanceof RemoteData) {
-                RemoteData remoteData = Convert.convert(RemoteData.class, originalValue);
-                remoteData.setData(echoValue);
-            } else if (StrUtil.isNotEmpty(ref)) {
+            if (StrUtil.isNotEmpty(ref)) {
                 ReflectUtil.setFieldValue(obj, ref, echoValue);
             } else {
                 ReflectUtil.setFieldValue(obj, field, echoValue);
@@ -323,10 +311,10 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
      * @return 已查询后的值
      */
     private Object getEchoValue(EchoField echoField,
-            Object actualValue,
-            Object originalValue,
-            LoadKey loadKey,
-            Map<LoadKey, Map<Serializable, Object>> typeMap) {
+                                Object actualValue,
+                                Object originalValue,
+                                LoadKey loadKey,
+                                Map<LoadKey, Map<Serializable, Object>> typeMap) {
         if (ObjectUtil.isEmpty(actualValue)) {
             return null;
         }
@@ -380,7 +368,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
      * @return 字段参数
      */
     private FieldParam getFieldParam(Object obj, Field field, Map<LoadKey, Map<Serializable, Object>> typeMap,
-            Consumer<Map<LoadKey, Map<Serializable, Object>>> consumer, String... ignoreFields) {
+                                     Consumer<Map<LoadKey, Map<Serializable, Object>>> consumer, String... ignoreFields) {
         String key = obj.getClass().getName() + "###" + field.getName();
         FieldParam fieldParam;
         // 是否排除
@@ -397,7 +385,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
         if (CACHE.containsKey(key)) {
             fieldParam = CACHE.get(key);
         } else {
-            // 是否标记@Echo注解
+            // 是否标记@EchoField注解
             EchoField echoField = field.getDeclaredAnnotation(EchoField.class);
 
             LoadKey loadKey = new LoadKey(echoField);
@@ -411,15 +399,23 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
         field.setAccessible(true);
         Object originalValue = ReflectUtil.getFieldValue(obj, field);
-        if (originalValue == null) {
-            log.debug("字段[{}]为空,跳过", field.getName());
-            return null;
+        EchoField echoField = fieldParam.getEchoField();
+        Serializable actualValue;
+        String bindKey = echoField.bindKey();
+        if (StringUtils.isNotEmpty(echoField.bindKey())) {
+            actualValue = Convert.toStr(ReflectUtil.getFieldValue(obj, bindKey));
+            originalValue = actualValue;
+        } else {
+            if (StringUtils.isEmpty(echoField.bindKey()) && originalValue == null) {
+                log.debug("字段[{}]为空,跳过", field.getName());
+                return null;
+            }
+            actualValue = getActualValue(echoField, obj, originalValue);
+            if (ObjectUtil.isEmpty(actualValue)) {
+                return null;
+            }
         }
 
-        Serializable actualValue = getActualValue(fieldParam.getEchoField(), originalValue);
-        if (ObjectUtil.isEmpty(actualValue)) {
-            return null;
-        }
         fieldParam.setOriginalValue(originalValue);
         fieldParam.setActualValue(actualValue);
         return fieldParam;
@@ -433,18 +429,15 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
      * @param originalValue 当前字段的具体值
      * @return 从当前字段的值构造出，调用api#method方法的参数
      */
-    private Serializable getActualValue(EchoField echoField, Object originalValue) {
-        Serializable actualValue;
-        if (originalValue instanceof RemoteData) {
-            RemoteData remoteData = (RemoteData) originalValue;
-            actualValue = (Serializable) remoteData.getKey();
-        } else {
-            actualValue = (Serializable) originalValue;
-        }
-
+    private Serializable getActualValue(EchoField echoField, Object obj, Object originalValue) {
+        Serializable actualValue = (Serializable) originalValue;
         String dictType = echoField.dictType();
         if (StrUtil.isNotEmpty(dictType)) {
             actualValue = dictType;
+        }
+        String bindKey = echoField.bindKey();
+        if (StringUtils.isNotEmpty(bindKey)) {
+            actualValue = (Serializable) ReflectUtil.getFieldValue(obj, bindKey);
         }
         return actualValue;
     }
@@ -477,13 +470,16 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
         if (EnumUtil.isEnum(field.getType())) {
             return true;
         }
-        // TODO 调试 单体对象、 集合对象
         // 简单集合参数
         if (ArrayUtil.contains(COLL_TYPES, typeName)) {
             Type type = TypeUtil.getTypeArgument(field.getGenericType());
             if (type != null) {
                 return ArrayUtil.contains(BASE_TYPES, type.getTypeName());
             }
+        }
+        // TODO Map,Json对象
+        if (ArrayUtil.contains(OBJECT_TYPES, typeName)) {
+            return true;
         }
 
         return false;

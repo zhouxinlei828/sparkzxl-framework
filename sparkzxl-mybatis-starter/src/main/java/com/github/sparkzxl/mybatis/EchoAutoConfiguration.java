@@ -3,7 +3,6 @@ package com.github.sparkzxl.mybatis;
 import com.github.sparkzxl.mybatis.echo.core.EchoServiceImpl;
 import com.github.sparkzxl.mybatis.echo.core.LoadService;
 import com.github.sparkzxl.mybatis.echo.properties.EchoProperties;
-import com.github.sparkzxl.mybatis.echo.typehandler.RemoteDataTypeHandler;
 import com.github.sparkzxl.mybatis.plugins.EchoDataInterceptor;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -36,14 +35,5 @@ public class EchoAutoConfiguration {
     @Bean
     public EchoDataInterceptor echoResultInterceptor(ApplicationContext applicationContext, EchoProperties echoProperties) {
         return new EchoDataInterceptor(applicationContext, echoProperties);
-    }
-
-    /**
-     * Mybatis 类型处理器： 处理 RemoteData 类型的字段
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RemoteDataTypeHandler getRemoteDataTypeHandler() {
-        return new RemoteDataTypeHandler();
     }
 }

@@ -28,6 +28,21 @@ public @interface EchoField {
     String ref() default "";
 
     /**
+     * 绑定查询的key(根据对象中的某个属性查询的字段key)
+     * 回显自身属性
+     *
+     * @return 查询
+     */
+    String bindKey() default "";
+
+    /**
+     * 分类过滤的key(根据某个分类查询数据，适用于字典，配置，业务分类表)
+     *
+     * @return 分类过滤的key
+     */
+    String filter() default "";
+
+    /**
      * 提供自动注入值的 查询类
      * <p/>
      * 注意： 用 @Echo(api = "xxxServiceImpl")时，要保证当前服务有 xxxServiceImpl 类. 没这个类就要用 xxxApi  (FeignClient)
