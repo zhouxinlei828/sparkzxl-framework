@@ -2,6 +2,7 @@ package com.github.sparkzxl.gateway.plugin.dubbo.endpoint;
 
 import com.github.sparkzxl.gateway.plugin.dubbo.ApacheDubboProxyService;
 import com.github.sparkzxl.gateway.plugin.dubbo.entity.DubbboRequest;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
  * @author zhouxinlei
  * @since 2023-01-11 16:37:57
  */
+@ConditionalOnProperty(prefix = "spring.cloud.gateway.plugin.filter.dubbo", value = "enabled", havingValue = "true")
 @RestController
 public class GatewayDubboEndPoint {
 
