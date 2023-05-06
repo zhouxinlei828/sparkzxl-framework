@@ -5,7 +5,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.DateUtils;
@@ -176,7 +176,7 @@ public class HttpRequestLogAspect {
                         || value instanceof ServletResponse) {
                     continue;
                 }
-                if (value instanceof AuthUserInfo) {
+                if (value instanceof LoginUserInfo) {
                     continue;
                 }
                 parameterMap.put(paramNames[i], value);

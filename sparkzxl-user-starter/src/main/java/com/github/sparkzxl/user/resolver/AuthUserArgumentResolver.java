@@ -1,6 +1,6 @@
 package com.github.sparkzxl.user.resolver;
 
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.user.manager.UserStateManager;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -25,7 +25,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         Class<?> clazz = parameter.getParameterType();
-        return clazz == AuthUserInfo.class;
+        return clazz == LoginUserInfo.class;
     }
 
     @Override

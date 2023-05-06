@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
@@ -44,17 +44,17 @@ public class Sm4UtilTest {
             try {
                 System.out.println("SM4加密算法： " + s);
 
-                List<AuthUserInfo> authUserInfos = Lists.newArrayList();
+                List<LoginUserInfo> loginUserInfos = Lists.newArrayList();
                 for (int i = 0; i < 10; i++) {
-                    AuthUserInfo<String> authUserInfo = new AuthUserInfo<>();
-                    authUserInfo.setId(IdUtil.getSnowflake().nextIdStr());
-                    authUserInfo.setName(RandomValueUtil.getChineseName());
-                    authUserInfo.setAccount(RandomUtil.randomString(5));
-                    authUserInfo.setStatus(Boolean.TRUE);
-                    authUserInfo.setRoleList(Lists.newArrayList("admin"));
-                    authUserInfos.add(authUserInfo);
+                    LoginUserInfo<String> loginUserInfo = new LoginUserInfo<>();
+                    loginUserInfo.setId(IdUtil.getSnowflake().nextIdStr());
+                    loginUserInfo.setName(RandomValueUtil.getChineseName());
+                    loginUserInfo.setUsername(RandomUtil.randomString(5));
+                    loginUserInfo.setStatus(Boolean.TRUE);
+                    loginUserInfo.setRoleList(Lists.newArrayList("admin"));
+                    loginUserInfos.add(loginUserInfo);
                 }
-                String json = JsonUtils.getJson().toJson(authUserInfos);
+                String json = JsonUtils.getJson().toJson(loginUserInfos);
                 System.out.println("SM4加密原始数据： " + json);
                 String encrypt = Sm4Util.encryptToBase64String(s, key.getBytes(), iv.getBytes(), json.getBytes());
                 System.out.println("SM4加密数据密文： " + encrypt);

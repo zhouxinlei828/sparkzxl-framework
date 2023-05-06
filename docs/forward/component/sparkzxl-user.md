@@ -57,19 +57,19 @@
 
 ```java
     private void accessToken(String username,OAuth2AccessToken oAuth2AccessToken){
-        AuthUserInfo<Long> authUserInfo=authUserService.getAuthUserInfo(username);
-        log.info("AuthUserInfo json is {}",JSONUtil.toJsonPrettyStr(authUserInfo));
+        AuthUserInfo<Long> loginUserInfo=authUserService.getAuthUserInfo(username);
+        log.info("AuthUserInfo json is {}",JSONUtil.toJsonPrettyStr(loginUserInfo));
         String buildKey=KeyUtils.generateKey(BaseContextConstant.AUTH_USER,oAuth2AccessToken.getValue());
-        cacheService.set(buildKey,authUserInfo,(long)oAuth2AccessToken.getExpiresIn());
+        cacheService.set(buildKey,loginUserInfo,(long)oAuth2AccessToken.getExpiresIn());
         }
 ```
 
-2. 在controller请求入参中加入AuthUserInfo<Long> authUserInfo：示例如下
+2. 在controller请求入参中加入AuthUserInfo<Long> loginUserInfo：示例如下
 
 ```java
 @PatchMapping("/role/{id}")
-public void updateAuthRoleStatus(@ApiIgnore AuthUserInfo<Long> authUserInfo){
-    log.info("当前登录信息为：{}",JSONUtil.toJsonPrettyStr(authUserInfo))
+public void updateAuthRoleStatus(@ApiIgnore AuthUserInfo<Long> loginUserInfo){
+    log.info("当前登录信息为：{}",JSONUtil.toJsonPrettyStr(loginUserInfo))
 }
 ```
 

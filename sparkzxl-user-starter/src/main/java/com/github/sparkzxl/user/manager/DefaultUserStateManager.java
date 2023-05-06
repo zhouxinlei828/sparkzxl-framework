@@ -2,7 +2,7 @@ package com.github.sparkzxl.user.manager;
 
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.core.support.TokenExpireException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.ArgumentAssert;
@@ -26,9 +26,9 @@ public class DefaultUserStateManager implements UserStateManager {
     private CacheService cacheService;
 
     @Override
-    public void addUser(String token, AuthUserInfo authUserInfo, Duration timeOut) {
+    public void addUser(String token, LoginUserInfo loginUserInfo, Duration timeOut) {
         if (ObjectUtils.isNotEmpty(cacheService)) {
-            cacheService.set(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token), authUserInfo, timeOut);
+            cacheService.set(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token), loginUserInfo, timeOut);
         }
     }
 
@@ -40,24 +40,24 @@ public class DefaultUserStateManager implements UserStateManager {
     }
 
     @Override
-    public AuthUserInfo getUser(String token) {
+    public LoginUserInfo getUser(String token) {
         log.info("user token : [{}]", token);
-        AuthUserInfo userInfo = null;
+        LoginUserInfo loginUserInfo = null;
         if (ObjectUtils.isNotEmpty(cacheService)) {
-            userInfo = cacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
+            loginUserInfo = cacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
-        ArgumentAssert.notNull(userInfo, () -> new TokenExpireException(ResultErrorCode.LOGIN_EXPIRE));
-        return userInfo;
+        ArgumentAssert.notNull(loginUserInfo, () -> new TokenExpireException(ResultErrorCode.LOGIN_EXPIRE));
+        return loginUserInfo;
     }
 
     @Override
-    public AuthUserInfo getUser(HttpServletRequest servletRequest) {
+    public LoginUserInfo getUser(HttpServletRequest servletRequest) {
         String token = HttpRequestUtils.getAuthHeader(servletRequest);
         return getUser(token);
     }
 
     @Override
-    public AuthUserInfo getUserCache(String key) {
+    public LoginUserInfo getUserCache(String key) {
         return cacheService.get(key);
     }
 }

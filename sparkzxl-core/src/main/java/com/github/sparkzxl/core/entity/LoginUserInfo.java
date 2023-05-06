@@ -10,9 +10,9 @@ import lombok.Data;
  * @author zhouxinlei
  */
 @Data
-public class AuthUserInfo<E> implements Serializable {
+public class LoginUserInfo<E> implements Serializable {
 
-    private static final long serialVersionUID = 7289539823055340191L;
+    private static final long serialVersionUID = 7146025746306184119L;
 
     /**
      * 用户id
@@ -22,7 +22,7 @@ public class AuthUserInfo<E> implements Serializable {
     /**
      * 账户
      */
-    private String account;
+    private String username;
 
     /**
      * 用户姓名
@@ -47,7 +47,7 @@ public class AuthUserInfo<E> implements Serializable {
     /**
      * 扩展数据
      */
-    private E extend;
+    private E customData;
 
     /**
      * 租户标识

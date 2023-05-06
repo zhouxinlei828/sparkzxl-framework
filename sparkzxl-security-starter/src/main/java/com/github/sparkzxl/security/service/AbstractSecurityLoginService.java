@@ -2,7 +2,7 @@ package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.entity.AuthUserInfo;
+import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
@@ -62,14 +62,14 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         String username = authUserDetail.getUsername();
-        AuthUserInfo authUserInfo = getAuthUserInfo(username);
+        LoginUserInfo loginUserInfo = getAuthUserInfo(username);
         UserToken userToken = new UserToken();
         userToken.setAccessToken(createJwtToken(authUserDetail));
         userToken.setExpiration(seconds);
-        userToken.setAuthUserInfo(authUserInfo);
+        userToken.setLoginUserInfo(loginUserInfo);
         userToken.setTokenType(BaseContextConstants.BEARER_TOKEN);
         //设置accessToken缓存
-        settingCacheToken(userToken, authUserInfo);
+        settingCacheToken(userToken, loginUserInfo);
         return userToken;
     }
 
@@ -105,9 +105,9 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * 获取全局用户
      *
      * @param username 用户名
-     * @return AuthUserInfo<T>
+     * @return LoginUserInfo<T>
      */
-    public abstract AuthUserInfo getAuthUserInfo(String username);
+    public abstract LoginUserInfo getAuthUserInfo(String username);
 
     /**
      * 校验验证码
@@ -124,9 +124,9 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * 设置accessToken缓存
      *
      * @param userToken    用户token
-     * @param authUserInfo 全局用户
+     * @param loginUserInfo 全局用户
      */
-    public abstract void settingCacheToken(UserToken userToken, AuthUserInfo authUserInfo);
+    public abstract void settingCacheToken(UserToken userToken, LoginUserInfo loginUserInfo);
 
     /**
      * 获取jwt配置属性
