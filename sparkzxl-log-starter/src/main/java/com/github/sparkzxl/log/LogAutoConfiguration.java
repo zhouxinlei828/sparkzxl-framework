@@ -7,7 +7,7 @@ import com.github.sparkzxl.log.aop.OptLogRecordInterceptor;
 import com.github.sparkzxl.log.aspect.HttpRequestLogAspect;
 import com.github.sparkzxl.log.event.HttpRequestLogListener;
 import com.github.sparkzxl.log.event.OptLogListener;
-import com.github.sparkzxl.log.handler.DefaultOptOptLogVariablesHandler;
+import com.github.sparkzxl.log.handler.DefaultOptLogVariablesHandler;
 import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.properties.LogProperties;
 import com.github.sparkzxl.log.store.OperatorService;
@@ -44,7 +44,7 @@ public class LogAutoConfiguration {
     @Bean(name = "defaultOptOptLogVariablesHandler")
     @ConditionalOnMissingBean
     public IOptLogVariablesHandler defaultOptOptLogVariablesHandler() {
-        return new DefaultOptOptLogVariablesHandler();
+        return new DefaultOptLogVariablesHandler();
     }
 
     @Bean

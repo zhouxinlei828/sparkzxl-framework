@@ -17,9 +17,9 @@ import org.apache.commons.lang3.StringUtils;
  * @author zhouxinlei
  * @since 2022-01-05 12:32:01
  */
-public class DefaultOptOptLogVariablesHandler implements IOptLogVariablesHandler {
+public class DefaultOptLogVariablesHandler implements IOptLogVariablesHandler {
 
-    public DefaultOptOptLogVariablesHandler() {
+    public DefaultOptLogVariablesHandler() {
     }
 
     @Override
