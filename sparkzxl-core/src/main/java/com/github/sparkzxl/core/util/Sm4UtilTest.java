@@ -46,7 +46,7 @@ public class Sm4UtilTest {
 
                 List<LoginUserInfo> loginUserInfos = Lists.newArrayList();
                 for (int i = 0; i < 10; i++) {
-                    LoginUserInfo<String> loginUserInfo = new LoginUserInfo<>();
+                    LoginUserInfo loginUserInfo = new LoginUserInfo();
                     loginUserInfo.setId(IdUtil.getSnowflake().nextIdStr());
                     loginUserInfo.setName(RandomValueUtil.getChineseName());
                     loginUserInfo.setUsername(RandomUtil.randomString(5));

@@ -1,8 +1,10 @@
 package com.github.sparkzxl.core.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
-import lombok.Data;
+import java.util.Map;
 
 /**
  * description: 认证用户实体类
@@ -10,9 +12,9 @@ import lombok.Data;
  * @author zhouxinlei
  */
 @Data
-public class LoginUserInfo<E> implements Serializable {
+public class LoginUserInfo implements Serializable {
 
-    private static final long serialVersionUID = 7146025746306184119L;
+    private static final long serialVersionUID = -7337377342697410134L;
 
     /**
      * 用户id
@@ -47,7 +49,7 @@ public class LoginUserInfo<E> implements Serializable {
     /**
      * 扩展数据
      */
-    private E customData;
+    private Map<String, Object> customData;
 
     /**
      * 租户标识
