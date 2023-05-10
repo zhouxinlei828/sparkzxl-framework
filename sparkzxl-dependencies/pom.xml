@@ -52,7 +52,7 @@
         <aws.version>1.12.2</aws.version>
         <!-- google-->
         <guava.version>30.1.1-jre</guava.version>
-        <hutool.version>5.8.11</hutool.version>
+        <hutool.version>5.8.18</hutool.version>
         <!-- redisson -->
         <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
