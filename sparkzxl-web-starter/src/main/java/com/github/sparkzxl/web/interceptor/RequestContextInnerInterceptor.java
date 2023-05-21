@@ -5,7 +5,7 @@ import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.spi.Join;
-import com.github.sparkzxl.web.annotation.Response;
+import com.github.sparkzxl.web.annotation.ResponseResult;
 import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,10 +46,10 @@ public class RequestContextInnerInterceptor extends AbstractInnerInterceptor {
             final HandlerMethod handlerMethod = (HandlerMethod) handler;
             final Class<?> classz = handlerMethod.getBeanType();
             final Method method = handlerMethod.getMethod();
-            if (classz.isAnnotationPresent(Response.class)) {
-                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, classz.getAnnotation(Response.class));
-            } else if (method.isAnnotationPresent(Response.class)) {
-                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(Response.class));
+            if (classz.isAnnotationPresent(ResponseResult.class)) {
+                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, classz.getAnnotation(ResponseResult.class));
+            } else if (method.isAnnotationPresent(ResponseResult.class)) {
+                request.setAttribute(BaseContextConstants.RESPONSE_RESULT_ANN, method.getAnnotation(ResponseResult.class));
             }
         }
     }

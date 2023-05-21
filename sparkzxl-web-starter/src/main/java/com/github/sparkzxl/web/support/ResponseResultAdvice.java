@@ -1,7 +1,7 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.core.base.ResponseCode;
+import com.github.sparkzxl.core.base.ResponseError;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
@@ -10,6 +10,8 @@ import com.github.sparkzxl.web.annotation.IgnoreResponseWrap;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.github.sparkzxl.web.annotation.ResponseResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -35,9 +37,9 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable()
                 .getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
         HttpServletRequest servletRequest = RequestContextUtils.getRequest();
-        com.github.sparkzxl.web.annotation.Response response =
-                (com.github.sparkzxl.web.annotation.Response) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        Boolean supported = ObjectUtils.isNotEmpty(response) && declaredAnnotationsByType.length == 0;
+        ResponseResult responseResult =
+                (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        Boolean supported = ObjectUtils.isNotEmpty(responseResult) && declaredAnnotationsByType.length == 0;
         if (log.isDebugEnabled()) {
             log.debug("判断是否需要全局统一API响应：{}", supported ? "是" : "否");
         }
@@ -62,10 +64,10 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         } else if (body instanceof Boolean && !(Boolean) body) {
             result = ApiResult.fail(
                     ResultErrorCode.FAILURE.getErrorCode(), ResultErrorCode.FAILURE.getErrorMsg());
-        } else if (status == ResponseCode.FAILURE.getCode()) {
+        } else if (status == ResponseError.FAILURE.getCode()) {
             result = ApiResult.fail(
                     ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
-            servletResponse.setStatus(ResponseCode.SUCCESS.getCode());
+            servletResponse.setStatus(ResponseError.SUCCESS.getCode());
         } else {
             result = ApiResult.success(body);
         }

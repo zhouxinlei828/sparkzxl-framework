@@ -1,4 +1,4 @@
-package com.github.sparkzxl.database.echo.annotation;
+package com.github.sparkzxl.mybatis.echo;
 
 
 import java.lang.annotation.ElementType;

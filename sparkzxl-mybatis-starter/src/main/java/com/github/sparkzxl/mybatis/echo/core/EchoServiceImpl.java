@@ -7,7 +7,7 @@ import cn.hutool.core.util.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
-import com.github.sparkzxl.database.echo.annotation.EchoField;
+import com.github.sparkzxl.mybatis.echo.EchoField;
 import com.github.sparkzxl.mybatis.echo.manager.CacheLoadKeys;
 import com.github.sparkzxl.mybatis.echo.manager.ClassManager;
 import com.github.sparkzxl.mybatis.echo.manager.FieldParam;

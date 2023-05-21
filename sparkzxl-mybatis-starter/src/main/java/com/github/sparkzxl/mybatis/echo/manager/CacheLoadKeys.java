@@ -1,7 +1,7 @@
 package com.github.sparkzxl.mybatis.echo.manager;
 
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.database.echo.annotation.EchoField;
+import com.github.sparkzxl.mybatis.echo.EchoField;
 import com.github.sparkzxl.mybatis.echo.core.LoadService;
 import com.google.common.base.Objects;
 import java.io.Serializable;

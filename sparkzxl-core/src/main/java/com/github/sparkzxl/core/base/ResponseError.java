@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ResponseCode implements ICode {
+public enum ResponseError {
 
     /**
      * 成功
@@ -22,7 +22,6 @@ public enum ResponseCode implements ICode {
      * 业务异常
      */
     FAILURE(HttpStatus.HTTP_INTERNAL_ERROR, "请求失败"),
-
     ;
 
     final int code;

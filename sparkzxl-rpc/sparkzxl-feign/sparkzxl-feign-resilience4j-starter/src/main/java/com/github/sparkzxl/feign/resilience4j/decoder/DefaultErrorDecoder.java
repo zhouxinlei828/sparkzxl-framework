@@ -2,7 +2,7 @@ package com.github.sparkzxl.feign.resilience4j.decoder;
 
 import static feign.FeignException.errorStatus;
 
-import com.github.sparkzxl.feign.annotation.RetryableMethod;
+import com.github.sparkzxl.feign.resilience4j.annotation.RetryableMethod;
 import com.github.sparkzxl.feign.resilience4j.enums.RetryableHttpStatus;
 import feign.Request;
 import feign.Response;

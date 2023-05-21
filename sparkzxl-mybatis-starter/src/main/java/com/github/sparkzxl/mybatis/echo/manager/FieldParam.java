@@ -1,6 +1,6 @@
 package com.github.sparkzxl.mybatis.echo.manager;
 
-import com.github.sparkzxl.database.echo.annotation.EchoField;
+import com.github.sparkzxl.mybatis.echo.EchoField;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package com.github.sparkzxl.core.base.result;
 
 import cn.hutool.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.sparkzxl.core.base.ResponseCode;
+import com.github.sparkzxl.core.base.ResponseError;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
@@ -25,7 +25,7 @@ import org.slf4j.MDC;
 @Accessors(chain = true)
 public class ApiResult<T> implements Serializable {
 
-    private static final long serialVersionUID = -7545356835815831989L;
+    private static final long serialVersionUID = -720885758850999950L;
 
     /**
      * 响应编码
@@ -76,7 +76,7 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult
      */
     public static <T> ApiResult<?> success(T data) {
-        return response(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), data, null, null, null);
+        return response(ResponseError.SUCCESS.getCode(), ResponseError.SUCCESS.getMessage(), data, null, null, null);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult
      */
     public static <T> ApiResult<?> success(String msg, T data) {
-        return response(ResponseCode.SUCCESS.getCode(), msg, data, null, null, null);
+        return response(ResponseError.SUCCESS.getCode(), msg, data, null, null, null);
     }
 
     /**
@@ -97,7 +97,7 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult
      */
     public static ApiResult<?> fail(String errorCode, String errorMsg) {
-        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode, errorMsg, null);
+        return response(ResponseError.FAILURE.getCode(), ResponseError.FAILURE.getMessage(), null, errorCode, errorMsg, null);
     }
 
     /**
@@ -107,7 +107,7 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult
      */
     public static ApiResult<?> fail(IErrorCode errorCode) {
-        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, errorCode.getErrorCode(),
+        return response(ResponseError.FAILURE.getCode(), ResponseError.FAILURE.getMessage(), null, errorCode.getErrorCode(),
                 errorCode.getErrorMsg(), null);
     }
 
@@ -119,7 +119,7 @@ public class ApiResult<T> implements Serializable {
      */
     public static ApiResult<?> fail(Throwable throwable) {
         String msg = throwable != null ? throwable.getMessage() : ResultErrorCode.FAILURE.getErrorMsg();
-        return response(ResponseCode.FAILURE.getCode(), ResponseCode.FAILURE.getMessage(), null, ResultErrorCode.FAILURE.getErrorCode(),
+        return response(ResponseError.FAILURE.getCode(), ResponseError.FAILURE.getMessage(), null, ResultErrorCode.FAILURE.getErrorCode(),
                 msg, null);
     }
 

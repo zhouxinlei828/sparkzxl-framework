@@ -3,7 +3,7 @@ package com.github.sparkzxl.mybatis.echo.manager;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.sparkzxl.database.echo.annotation.EchoField;
+import com.github.sparkzxl.mybatis.echo.EchoField;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
