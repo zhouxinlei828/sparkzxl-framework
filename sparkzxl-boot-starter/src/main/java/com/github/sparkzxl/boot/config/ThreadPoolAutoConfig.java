@@ -50,11 +50,8 @@ public class ThreadPoolAutoConfig {
         //线程名字前缀
         executor.setThreadNamePrefix(taskExecutionProperties.getThreadNamePrefix());
         TaskExecutionProperties.Shutdown shutdown = taskExecutionProperties.getShutdown();
-
         // 设置线程池关闭的时候等待所有任务都完成再继续销毁其他的Bean
         executor.setWaitForTasksToCompleteOnShutdown(shutdown.isAwaitTermination());
-        // 设置这个执行器在关闭时应该阻止的最大秒数
-        executor.setAwaitTerminationSeconds(30);
         // 线程池对拒绝任务的处理策略,当线程池没有处理能力的时候，该策略会直接在 execute 方法的调用线程中运行被拒绝的任务；如果执行程序已关闭，则会丢弃该任务
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();

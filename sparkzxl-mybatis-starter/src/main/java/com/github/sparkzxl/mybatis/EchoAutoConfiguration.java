@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * description: 回显自动装配
@@ -26,6 +27,7 @@ public class EchoAutoConfiguration {
     private final EchoProperties echoProperties;
 
     @Bean
+    @Lazy
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = EchoProperties.DATA_ECHO_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public EchoServiceImpl echoService(Map<String, LoadService> loadServiceMap) {

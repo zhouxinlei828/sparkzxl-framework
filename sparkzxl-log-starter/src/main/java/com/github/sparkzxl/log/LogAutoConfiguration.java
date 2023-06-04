@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 
 /**
@@ -42,6 +43,7 @@ public class LogAutoConfiguration {
     }
 
     @Bean(name = "defaultOptOptLogVariablesHandler")
+    @Lazy
     @ConditionalOnMissingBean
     public IOptLogVariablesHandler defaultOptOptLogVariablesHandler() {
         return new DefaultOptLogVariablesHandler();
@@ -66,16 +68,19 @@ public class LogAutoConfiguration {
     }
 
     @Bean
+    @Lazy
     public OptLogRecordInterceptor optLogRecordInterceptor(OperatorService operatorService) {
         return new OptLogRecordInterceptor(operatorService);
     }
 
     @Bean
+    @Lazy
     public OptLogRecordAnnotationAdvisor optLogRecordAnnotationAdvisor(OptLogRecordInterceptor optLogRecordInterceptor) {
         return new OptLogRecordAnnotationAdvisor(optLogRecordInterceptor, OptLogRecord.class, Ordered.HIGHEST_PRECEDENCE);
     }
 
     @Bean
+    @Lazy
     @ConditionalOnMissingBean
     public OptLogListener optLogListener() {
         return new OptLogListener(log -> {

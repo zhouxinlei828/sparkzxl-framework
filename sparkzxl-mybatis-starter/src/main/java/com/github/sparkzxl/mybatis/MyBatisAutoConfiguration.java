@@ -44,11 +44,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.core.Ordered;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -122,6 +118,7 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
+    @Lazy
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "id-type", havingValue = "DEFAULT")
     public UidGenerator getDefaultUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
@@ -132,6 +129,7 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
+    @Lazy
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "id-type", havingValue = "CACHE")
     public UidGenerator getCacheUidGenerator(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
@@ -151,6 +149,7 @@ public class MyBatisAutoConfiguration {
     }
 
     @Bean
+    @Lazy
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = DataProperties.DATA_PREFIX, name = "id-type", havingValue = "HU_TOOL", matchIfMissing = true)
     public UidGenerator getHuToolUidGenerator() {

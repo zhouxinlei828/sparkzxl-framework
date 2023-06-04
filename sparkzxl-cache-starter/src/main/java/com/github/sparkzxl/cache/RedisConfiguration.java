@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -73,6 +74,7 @@ public class RedisConfiguration {
 
     @Bean("redisCacheTemplate")
     @ConditionalOnBean(RedisTemplate.class)
+    @Lazy
     @Primary
     public CacheService redisCacheTemplate(RedisTemplate<String, Object> redisTemplate, RedisOps redisOps) {
         log.info("Autowired redisCacheTemplate success!");
