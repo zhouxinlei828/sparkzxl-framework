@@ -2,7 +2,6 @@ package com.github.sparkzxl.core.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class Sm4UtilTest {
         //algorithm.add(("SM4/PCBC/NOPADDING"));
         //algorithm.add(("SM4/PCBC/PKCS5PADDING"));
         //algorithm.add(("SM4/PCBC/ISO10126PADDING"));
-        for (String s : algorithm) {
+        /*for (String s : algorithm) {
             //SM4加密
             try {
                 System.out.println("SM4加密算法： " + s);
@@ -72,7 +71,7 @@ public class Sm4UtilTest {
                 System.err.println("---------------------------------------");
                 TimeUnit.SECONDS.sleep(1);
             }
-        }
+        }*/
     }
 
 

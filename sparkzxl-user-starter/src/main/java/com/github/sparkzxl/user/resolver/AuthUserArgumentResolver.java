@@ -1,8 +1,10 @@
 package com.github.sparkzxl.user.resolver;
 
-import com.github.sparkzxl.core.entity.LoginUserInfo;
+import com.github.sparkzxl.user.EnableLoginUser;
 import com.github.sparkzxl.user.manager.UserStateManager;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -24,8 +26,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        Class<?> clazz = parameter.getParameterType();
-        return clazz == LoginUserInfo.class;
+        return parameter.hasParameterAnnotation(EnableLoginUser.class);
     }
 
     @Override

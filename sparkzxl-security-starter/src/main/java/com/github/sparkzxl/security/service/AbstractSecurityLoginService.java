@@ -2,7 +2,6 @@ package com.github.sparkzxl.security.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.entity.LoginUserInfo;
 import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.jwt.entity.JwtUserInfo;
 import com.github.sparkzxl.jwt.properties.JwtProperties;
@@ -62,7 +61,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         long seconds = TimeUtil.toSeconds(getJwtProperties().getExpire(), getJwtProperties().getUnit());
         String username = authUserDetail.getUsername();
-        LoginUserInfo loginUserInfo = getAuthUserInfo(username);
+        Object loginUserInfo = getAuthUserInfo(username);
         UserToken userToken = new UserToken();
         userToken.setAccessToken(createJwtToken(authUserDetail));
         userToken.setExpiration(seconds);
@@ -107,7 +106,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param username 用户名
      * @return LoginUserInfo<T>
      */
-    public abstract LoginUserInfo getAuthUserInfo(String username);
+    public abstract Object getAuthUserInfo(String username);
 
     /**
      * 校验验证码
@@ -126,7 +125,7 @@ public abstract class AbstractSecurityLoginService<ID extends Serializable> {
      * @param userToken    用户token
      * @param loginUserInfo 全局用户
      */
-    public abstract void settingCacheToken(UserToken userToken, LoginUserInfo loginUserInfo);
+    public abstract void settingCacheToken(UserToken userToken, Object loginUserInfo);
 
     /**
      * 获取jwt配置属性

@@ -1,7 +1,5 @@
 package com.github.sparkzxl.user.manager;
 
-import com.github.sparkzxl.core.entity.LoginUserInfo;
-
 import java.time.Duration;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,10 +14,10 @@ public interface UserStateManager {
      * 获取请求用户信息
      *
      * @param token        用户token
-     * @param loginUserInfo 用户
+     * @param userinfo 用户
      * @param timeOut      有效期
      */
-    void addUser(String token, LoginUserInfo loginUserInfo, Duration timeOut);
+    void addUser(String token, Object userinfo, Duration timeOut);
 
     /**
      * 移除用户信息
@@ -34,7 +32,7 @@ public interface UserStateManager {
      * @param token 用户token
      * @return LoginUserInfo
      */
-    LoginUserInfo getUser(String token);
+    Object getUser(String token);
 
     /**
      * 获取用户信息
@@ -42,7 +40,7 @@ public interface UserStateManager {
      * @param servletRequest 用户查询key
      * @return LoginUserInfo
      */
-    LoginUserInfo getUser(HttpServletRequest servletRequest);
+    Object getUser(HttpServletRequest servletRequest);
 
     /**
      * 获取缓存用户信息
@@ -50,6 +48,6 @@ public interface UserStateManager {
      * @param key 用户查询key
      * @return LoginUserInfo
      */
-    LoginUserInfo getUserCache(String key);
+    Object getUserCache(String key);
 
 }
