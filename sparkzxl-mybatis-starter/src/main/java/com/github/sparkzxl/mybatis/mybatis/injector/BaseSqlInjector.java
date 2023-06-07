@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.injector.methods.AlwaysUpdateSomeColum
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
 import com.github.sparkzxl.mybatis.constant.EntityConstant;
 import com.github.sparkzxl.mybatis.mybatis.method.UpdateAllById;
+
 import java.util.List;
 
 /**
@@ -29,9 +30,7 @@ public class BaseSqlInjector extends DefaultSqlInjector {
         methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));
         methodList.add(new AlwaysUpdateSomeColumnById());
         methodList.add(new UpdateAllById(field -> !ArrayUtil.containsAny(new String[]{
-                EntityConstant.COLUMN_CREATE_TIME, EntityConstant.COLUMN_CREATE_USER,
-                EntityConstant.COLUMN_CREATE_USER_ID, EntityConstant.COLUMN_CREATE_USER_NAME
-        }, field.getColumn())));
+                EntityConstant.CREATED_AT_FIELD, EntityConstant.CREATED_BY_FIELD}, field.getColumn())));
         return methodList;
     }
 }

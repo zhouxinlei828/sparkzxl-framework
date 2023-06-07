@@ -3,6 +3,12 @@ package com.github.sparkzxl.mybatis.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.sparkzxl.mybatis.constant.EntityConstant;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 /**
@@ -10,46 +16,23 @@ import java.time.LocalDateTime;
  *
  * @author zhouxinlei
  */
+@Getter
+@Setter
+@ToString(callSuper = true)
 public class Entity<T> extends SuperEntity<T> {
 
-    private static final long serialVersionUID = 8002308415399326229L;
-    @TableField(value = EntityConstant.COLUMN_UPDATE_USER, fill = FieldFill.INSERT_UPDATE)
-    protected T modifyUser;
+    @ApiModelProperty("更新人id")
+    @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
+    private T updatedBy;
 
-    @TableField(value = EntityConstant.COLUMN_UPDATE_TIME, fill = FieldFill.INSERT_UPDATE)
-    protected LocalDateTime modifyTime;
+    @ApiModelProperty("更新时间")
+    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
 
-
-    public Entity(T id, LocalDateTime createTime, T createUser, LocalDateTime modifyTime, T modifyUser) {
-        super(id, createUser, createTime);
-        this.modifyTime = modifyTime;
-        this.modifyUser = modifyUser;
+    public Entity(T id, T createdBy, LocalDateTime createdAt,
+                  T updatedBy, LocalDateTime updatedAt) {
+        super(id, createdBy, createdAt);
+        this.updatedBy = updatedBy;
+        this.updatedAt = updatedAt;
     }
-
-    public Entity() {
-    }
-
-    public LocalDateTime getModifyTime() {
-        return this.modifyTime;
-    }
-
-    public Entity<T> setModifyTime(LocalDateTime modifyTime) {
-        this.modifyTime = modifyTime;
-        return this;
-    }
-
-    public T getModifyUser() {
-        return this.modifyUser;
-    }
-
-    public Entity<T> setModifyUser(T modifyUser) {
-        this.modifyUser = modifyUser;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Entity(super=" + super.toString() + ", modifyTime=" + this.getModifyTime() + ", modifyUser=" + this.getModifyUser() + ")";
-    }
-
 }

@@ -49,14 +49,11 @@ public class MetaDataHandler implements MetaObjectHandler {
         // 主键
         extractId(metaObject);
         // 创建人Id
-        extractUserId(metaObject, EntityConstant.CREATE_USER);
-        extractUserId(metaObject, EntityConstant.CREATE_USER_ID);
-        // 创建人姓名
-        extractUserName(metaObject, EntityConstant.CREATE_USER_NAME);
+        extractUserId(metaObject, EntityConstant.CREATED_BY_FIELD);
         // 创建时间
-        extractDate(metaObject, EntityConstant.CREATE_TIME);
+        extractDate(metaObject, EntityConstant.CREATED_AT_FIELD);
         // 租户id
-        injectionField(metaObject, EntityConstant.TENANT_ID, BaseContextConstants.TENANT_ID);
+        injectionField(metaObject, EntityConstant.TENANT_ID_FIELD, BaseContextConstants.TENANT_ID);
 
     }
 
@@ -78,9 +75,9 @@ public class MetaDataHandler implements MetaObjectHandler {
      */
     public void updateCommonColumn(MetaObject metaObject) {
         //更新人id
-        extractUserId(metaObject, EntityConstant.UPDATE_USER);
+        extractUserId(metaObject, EntityConstant.UPDATED_BY_FIELD);
         //更新时间
-        extractDate(metaObject, EntityConstant.UPDATE_TIME);
+        extractDate(metaObject, EntityConstant.UPDATED_AT_FIELD);
 
     }
 
