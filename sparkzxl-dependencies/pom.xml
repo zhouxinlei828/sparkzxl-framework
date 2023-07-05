@@ -20,7 +20,7 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-version-->
-        <spring-boot-dependencies.version>2.7.10</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.7.13</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>2021.0.6</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <resilience4j.version>1.7.0</resilience4j.version>
@@ -52,7 +52,7 @@
         <aws.version>1.12.2</aws.version>
         <!-- google-->
         <guava.version>30.1.1-jre</guava.version>
-        <hutool.version>5.8.18</hutool.version>
+        <hutool.version>5.8.20</hutool.version>
         <!-- redisson -->
         <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
         <zookeeper.version>3.6.2</zookeeper.version>
