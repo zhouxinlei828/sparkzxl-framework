@@ -5,9 +5,10 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourcePrope
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.sql.DataSource;
 
 /**
  * description: YAML data source

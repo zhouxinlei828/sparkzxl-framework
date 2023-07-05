@@ -4,15 +4,16 @@ import cn.hutool.core.text.StrFormatter;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.util.ArgumentAssert;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * description: 有JDBC缓存的数据源加载实现

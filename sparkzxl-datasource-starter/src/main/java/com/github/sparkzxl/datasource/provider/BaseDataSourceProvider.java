@@ -6,9 +6,10 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourcePrope
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.datasource.loadbalancer.DataSourceLoadBalancer;
-import java.util.List;
-import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.sql.DataSource;
+import java.util.List;
 
 /**
  * description: 抽象数据源策略实现
