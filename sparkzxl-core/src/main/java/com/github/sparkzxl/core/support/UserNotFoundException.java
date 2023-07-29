@@ -19,10 +19,6 @@ public class UserNotFoundException extends BaseUncheckedException {
         super(ResultErrorCode.USER_NOT_FOUND.getErrorCode(), errorMsg);
     }
 
-    public UserNotFoundException(IErrorCode errorCode) {
-        super(errorCode.getErrorCode(), errorCode.getErrorMsg());
-    }
-
     @Override
     public String toString() {
         return "UserNotFoundException [message=" + getMessage() + ", code=" + getErrorCode() + "]";
