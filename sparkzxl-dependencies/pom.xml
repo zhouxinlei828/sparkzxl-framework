@@ -797,33 +797,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- gpg插件 -->
-                <!--<plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${maven-gpg-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                &lt;!&ndash; sonatype自动release插件 &ndash;&gt;
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus-staging-maven-plugin.version}</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>-->
             </plugins>
         </pluginManagement>
         <plugins>
@@ -854,23 +827,11 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!--<plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                    </plugin>-->
                 </plugins>
             </build>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <gpg.executable>gpg</gpg.executable>
-                <gpg.passphrase>Zxl298828</gpg.passphrase>
-            </properties>
         </profile>
     </profiles>
 </project>
