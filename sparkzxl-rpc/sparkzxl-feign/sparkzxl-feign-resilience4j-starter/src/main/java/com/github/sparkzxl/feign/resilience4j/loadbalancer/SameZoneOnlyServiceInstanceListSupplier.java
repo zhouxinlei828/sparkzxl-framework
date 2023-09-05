@@ -53,7 +53,7 @@ public class SameZoneOnlyServiceInstanceListSupplier extends DelegatingServiceIn
                 return filteredInstances;
             }
         }
-        return Lists.newArrayList();
+        return serviceInstances;
     }
 
     private String getZone(ServiceInstance serviceInstance) {
