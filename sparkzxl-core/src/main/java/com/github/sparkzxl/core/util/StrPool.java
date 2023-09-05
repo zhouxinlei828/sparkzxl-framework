@@ -109,8 +109,8 @@ public interface StrPool {
     String BYTE_TYPE_NAME = "java.lang.Byte";
     String FLOAT_TYPE_NAME = "java.lang.Float";
     String BOOLEAN_TYPE_NAME = "java.lang.Boolean";
-    String SET_TYPE_NAME = "java.lang.Set";
-    String LIST_TYPE_NAME = "java.lang.List";
+    String SET_TYPE_NAME = "java.util.Set";
+    String LIST_TYPE_NAME = "java.util.List";
     String COLLECTION_TYPE_NAME = "java.lang.Collection";
     String CHARACTER_TYPE_NAME = "java.lang.Character";
     String JSON_OBJECT_TYPE_NAME = "com.alibaba.fastjson.JSONObject";
