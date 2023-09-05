@@ -61,7 +61,6 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-trace-logger</module>
-        <module>sparkzxl-mybatis-flex-starter</module>
     </modules>
 
     <licenses>
