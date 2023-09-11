@@ -20,7 +20,7 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- spring-version-->
-        <spring-boot-dependencies.version>2.7.13</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.7.15</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>2021.0.6</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <resilience4j.version>1.7.0</resilience4j.version>
@@ -42,7 +42,6 @@
         <p6spy.version>3.9.1</p6spy.version>
         <logstash.version>7.0.1</logstash.version>
         <vavr.version>0.10.4</vavr.version>
-        <logstash.version>7.0.1</logstash.version>
 
         <!-- common组件-->
         <commons-lang3.version>3.12.0</commons-lang3.version>
@@ -67,7 +66,7 @@
         <easy-excel.version>3.1.4</easy-excel.version>
         <retrofit-spring-boot-starter.version>2.3.13</retrofit-spring-boot-starter.version>
         <xxl-job.version>2.3.1</xxl-job.version>
-        <javax.el.version>3.0-b01</javax.el.version>
+        <javax.el.version>3.0.1-b11</javax.el.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <seata.version>1.4.2</seata.version>
         <protobuf-java.version>3.20.3</protobuf-java.version>
