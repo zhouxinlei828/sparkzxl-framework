@@ -14,25 +14,25 @@ import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
 import com.github.sparkzxl.log.utils.LogUtils;
 import com.google.common.collect.Maps;
-import java.lang.reflect.Method;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.function.Consumer;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * description: web请求日志切面
@@ -152,13 +152,13 @@ public class HttpRequestLogAspect {
                 .setStartTime(LocalDateTime.now())
                 .setTenantId(RequestLocalContextHolder.getTenantId());
         if (httpRequestLog.request()) {
-            String requestParameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs());
+            String requestParameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs(), httpRequestLog.excludeClass());
             requestInfoLog.setRequestParams(requestParameterJson);
         }
         return requestInfoLog;
     }
 
-    public String getRequestParameterJson(Signature signature, Object[] args) {
+    public String getRequestParameterJson(Signature signature, Object[] args, Class<?>[] excludeClass) {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
         String[] paramNames = parameterNameDiscoverer.getParameterNames(method);
@@ -170,10 +170,20 @@ public class HttpRequestLogAspect {
                     MultipartFile file = (MultipartFile) value;
                     //获取文件名
                     value = file.getOriginalFilename();
+                } else {
+                    value = args[i];
                 }
                 if (value instanceof ServletRequest
                         || value instanceof ServletResponse) {
                     continue;
+                }
+                List<Class<?>> classList = Arrays.asList(excludeClass);
+                if (CollectionUtils.isNotEmpty(classList)) {
+                    Object finalValue = value;
+                    boolean anyMatch = classList.stream().anyMatch(x -> x.getName().equals(finalValue.getClass().getName()));
+                    if (anyMatch) {
+                        continue;
+                    }
                 }
                 parameterMap.put(paramNames[i], value);
             }

@@ -40,4 +40,6 @@ public @interface HttpRequestLog {
      */
     boolean response() default true;
 
+    Class<?>[] excludeClass() default {};
+
 }
