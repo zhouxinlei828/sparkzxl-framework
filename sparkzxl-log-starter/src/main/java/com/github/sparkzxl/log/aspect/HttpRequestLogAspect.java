@@ -166,12 +166,14 @@ public class HttpRequestLogAspect {
         if (args != null && paramNames != null) {
             for (int i = 0; i < args.length; i++) {
                 Object value = args[i];
+                if (ObjectUtils.isEmpty(value)) {
+                    parameterMap.put(paramNames[i], value);
+                    continue;
+                }
                 if (value instanceof MultipartFile) {
                     MultipartFile file = (MultipartFile) value;
                     //获取文件名
                     value = file.getOriginalFilename();
-                } else {
-                    value = args[i];
                 }
                 if (value instanceof ServletRequest
                         || value instanceof ServletResponse) {
