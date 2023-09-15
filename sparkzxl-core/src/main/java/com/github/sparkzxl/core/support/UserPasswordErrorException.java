@@ -3,19 +3,19 @@ package com.github.sparkzxl.core.support;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 
 /**
- * description: 用户不存在异常
+ * description: 用户密码错误异常
  *
  * @author zhouxinlei
  * @since 2022-03-05 11:44:52
  */
-public class UserNotFoundException extends BaseUncheckedException {
+public class UserPasswordErrorException extends BaseUncheckedException {
 
-    public UserNotFoundException(Throwable cause) {
+    public UserPasswordErrorException(Throwable cause) {
         super(cause);
     }
 
-    public UserNotFoundException(String errorMsg) {
-        super(ResultErrorCode.USER_NOT_FOUND.getErrorCode(), errorMsg);
+    public UserPasswordErrorException(String errorMsg) {
+        super(ResultErrorCode.USER_PASSWORD_ERROR.getErrorCode(), errorMsg);
     }
 
     @Override

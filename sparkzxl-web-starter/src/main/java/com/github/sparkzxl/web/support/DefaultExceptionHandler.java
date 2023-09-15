@@ -3,11 +3,7 @@ package com.github.sparkzxl.web.support;
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.base.result.ApiResult;
 import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.support.ArgumentException;
-import com.github.sparkzxl.core.support.BizException;
-import com.github.sparkzxl.core.support.JwtParseException;
-import com.github.sparkzxl.core.support.TokenExpireException;
-import com.github.sparkzxl.core.support.UserNotFoundException;
+import com.github.sparkzxl.core.support.*;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import java.util.List;
 import java.util.Objects;
@@ -247,6 +243,17 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(UserNotFoundException.class)
     public ApiResult<?> handleUserNotFoundException(UserNotFoundException e) {
         log.error("UserNotFoundException 异常:", e);
+        return ApiResult.builder()
+                .code(HttpStatus.UNAUTHORIZED.value())
+                .msg(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .errorCode(e.getErrorCode())
+                .errorMsg(e.getErrorMsg())
+                .build();
+    }
+
+    @ExceptionHandler(UserPasswordErrorException.class)
+    public ApiResult<?> handleUserPasswordErrorException(UserPasswordErrorException e) {
+        log.error("UserPasswordErrorException 异常:", e);
         return ApiResult.builder()
                 .code(HttpStatus.UNAUTHORIZED.value())
                 .msg(HttpStatus.UNAUTHORIZED.getReasonPhrase())

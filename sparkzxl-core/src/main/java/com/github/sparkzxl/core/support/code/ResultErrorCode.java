@@ -36,8 +36,10 @@ public enum ResultErrorCode implements IErrorCode {
     USERNAME_EMPTY("A0110", "用户名不能为空"),
     PASSWORD_EMPTY("A0120", "密码不能为空"),
     TOKEN_VALID_ERROR("A0311", "token校验失败"),
-    USER_IDENTITY_VERIFICATION_ERROR("A0220", "用户身份校验失败"),
     USER_NOT_FOUND("A0201", "用户账户不存在"),
+    USER_PASSWORD_ERROR("A0210", "用户密码错误"),
+    USER_PASSWORD_LIMIT("A0211", "用户输入密码错误次数超限"),
+    USER_IDENTITY_VERIFICATION_ERROR("A0220", "用户身份校验失败"),
 
 
     //系统相关 start
