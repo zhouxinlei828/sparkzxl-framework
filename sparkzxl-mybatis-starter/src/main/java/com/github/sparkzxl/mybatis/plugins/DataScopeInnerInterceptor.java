@@ -8,47 +8,28 @@ import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
 import com.google.common.collect.Lists;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.expression.BinaryExpression;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Function;
-import net.sf.jsqlparser.expression.NotExpression;
-import net.sf.jsqlparser.expression.Parenthesis;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.ValueListExpression;
+import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.ItemsList;
-import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.FromItem;
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.LateralSubSelect;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectBody;
-import net.sf.jsqlparser.statement.select.SelectExpressionItem;
-import net.sf.jsqlparser.statement.select.SelectItem;
-import net.sf.jsqlparser.statement.select.SetOperationList;
-import net.sf.jsqlparser.statement.select.SubJoin;
-import net.sf.jsqlparser.statement.select.SubSelect;
-import net.sf.jsqlparser.statement.select.ValuesList;
-import net.sf.jsqlparser.statement.select.WithItem;
+import net.sf.jsqlparser.statement.delete.Delete;
+import net.sf.jsqlparser.statement.select.*;
+import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.cnfexpression.MultiAndExpression;
 import net.sf.jsqlparser.util.cnfexpression.MultiOrExpression;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * description: 多列数据权限拦截器
@@ -68,9 +49,80 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
         this.dbType = dbType;
     }
 
+    /**
+     * update 语句处理
+     */
+    @Override
+    protected void processUpdate(Update update, int index, String sql, Object obj) {
+        final Table table = update.getTable();
+        if (dataScopeLineHandler.ignoreTable(table.getName())) {
+            // 过滤退出执行
+            return;
+        }
+        if (!SqlCommandType.UPDATE.equals(dataScopeLineHandler.getSqlCommandType())) {
+            // 过滤退出执行
+            return;
+        }
+        Expression expression = this.andExpression(table, update.getWhere());
+        if (expression == null) {
+            return;
+        }
+        update.setWhere(expression);
+        dataScopeLineHandler.remove();
+    }
+
+    /**
+     * delete 语句处理
+     */
+    @Override
+    protected void processDelete(Delete delete, int index, String sql, Object obj) {
+        final Table table = delete.getTable();
+        if (dataScopeLineHandler.ignoreTable(delete.getTable().getName())) {
+            // 过滤退出执行
+            return;
+        }
+        if (!SqlCommandType.DELETE.equals(dataScopeLineHandler.getSqlCommandType())) {
+            // 过滤退出执行
+            return;
+        }
+        Expression expression = this.andExpression(table, delete.getWhere());
+        if (expression == null) {
+            return;
+        }
+        delete.setWhere(expression);
+        dataScopeLineHandler.remove();
+    }
+
+    /**
+     * delete update 语句 where 处理
+     */
+    protected Expression andExpression(Table table, Expression currentExpression) {
+        List<String> scopeIdColumnList = dataScopeLineHandler.getScopeIdColumnList();
+        List<Expression> expressionList = Lists.newArrayList();
+        for (String columnName : scopeIdColumnList) {
+            // 返回空即表示当前语句不需要拼接 scopeId
+            if (dataScopeLineHandler.getScopeId(columnName) == null) {
+                continue;
+            }
+            //获得where条件表达式
+            EqualsTo equalsTo = new EqualsTo();
+            equalsTo.setLeftExpression(this.getAliasColumn(table, columnName));
+            equalsTo.setRightExpression(new StringValue(dataScopeLineHandler.getScopeId(columnName)));
+            expressionList.add(equalsTo);
+        }
+        if (currentExpression == null) {
+            return new MultiAndExpression(expressionList);
+        }
+        if (currentExpression instanceof OrExpression) {
+            return new AndExpression(new Parenthesis(currentExpression), new MultiAndExpression(expressionList));
+        } else {
+            return new AndExpression(currentExpression, new MultiAndExpression(expressionList));
+        }
+    }
+
     @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler,
-            BoundSql boundSql) throws SQLException {
+                            BoundSql boundSql) throws SQLException {
         if (dataScopeLineHandler.match()) {
             PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
             mpBs.sql(parserSingle(mpBs.sql(), null));
@@ -281,7 +333,11 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                     equalsTo.setLeftExpression(this.getAliasColumn(table, columnName));
                     equalsTo.setRightExpression(new StringValue(scopeId));
                 } else {
-                    continue;
+                    if (dataScopeLineHandler.getForce(columnName)) {
+                        IsNullExpression isNullExpression = new IsNullExpression();
+                        isNullExpression.setLeftExpression(this.getAliasColumn(table, columnName));
+                        expressionList.add(isNullExpression);
+                    }
                 }
                 expressionList.add(equalsTo);
             } else if (sqlCondition == SqlConditions.IN) {
@@ -294,6 +350,12 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                     in.setLeftExpression(this.getAliasColumn(table, columnName));
                     in.setRightExpression(valueListExpression);
                     expressionList.add(in);
+                } else {
+                    if (dataScopeLineHandler.getForce(columnName)) {
+                        IsNullExpression isNullExpression = new IsNullExpression();
+                        isNullExpression.setLeftExpression(this.getAliasColumn(table, columnName));
+                        expressionList.add(isNullExpression);
+                    }
                 }
             } else if (sqlCondition == SqlConditions.LIST_IN) {
                 List<String> scopeIdList = dataScopeLineHandler.getScopeIdList(columnName);
@@ -318,6 +380,12 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                         functionList.add(function);
                     }
                     expressionList.add(new MultiOrExpression(functionList));
+                } else {
+                    if (dataScopeLineHandler.getForce(columnName)) {
+                        IsNullExpression isNullExpression = new IsNullExpression();
+                        isNullExpression.setLeftExpression(this.getAliasColumn(table, columnName));
+                        expressionList.add(isNullExpression);
+                    }
                 }
             } else if (sqlCondition == SqlConditions.LIKE) {
                 String scopeId = dataScopeLineHandler.getScopeId(columnName);
@@ -326,6 +394,12 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
                     likeExpression.setLeftExpression(this.getAliasColumn(table, columnName));
                     likeExpression.setRightExpression(new StringValue("%".concat(scopeId).concat("%")));
                     expressionList.add(likeExpression);
+                } else {
+                    if (dataScopeLineHandler.getForce(columnName)) {
+                        IsNullExpression isNullExpression = new IsNullExpression();
+                        isNullExpression.setLeftExpression(this.getAliasColumn(table, columnName));
+                        expressionList.add(isNullExpression);
+                    }
                 }
             }
         }
