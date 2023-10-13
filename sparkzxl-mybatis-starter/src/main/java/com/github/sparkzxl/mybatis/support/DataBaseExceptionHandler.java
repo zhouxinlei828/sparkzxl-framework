@@ -105,14 +105,15 @@ public class DataBaseExceptionHandler implements Ordered {
         if (rootCause instanceof SQLIntegrityConstraintViolationException) {
             return handleSqlIntegrityConstraintViolationException((SQLIntegrityConstraintViolationException) rootCause);
         }
-        log.error("数据库异常：", e);
         if (rootCause instanceof BizException) {
             BizException cause = (BizException) rootCause;
+            log.error("数据库异常：", e);
             return ApiResult.fail(cause.getErrorCode(), cause.getMessage());
         } else if (rootCause instanceof MysqlDataTruncation) {
             MysqlDataTruncation cause = (MysqlDataTruncation) rootCause;
             return handleMysqlDataTruncation(cause);
         }
+        log.error("数据库异常：", e);
         String message = e.getMessage();
         if (message.startsWith("Field '") && message.endsWith("' doesn't have a default value")) {
             return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), "字段没有默认值");
