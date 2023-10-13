@@ -7,9 +7,7 @@ import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.support.TenantException;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.SQLSyntaxErrorException;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -20,6 +18,10 @@ import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLSyntaxErrorException;
 
 /**
  * description: 数据库全局异常处理
@@ -35,6 +37,18 @@ public class DataBaseExceptionHandler implements Ordered {
     private final static String TABLE_PREFIX = "^Table.*doesn't exist$";
     private final static String COLUMN_PREFIX = "Unknown column";
     private final static int DATABASE_ERROR_CODE = 1364;
+
+    @ExceptionHandler(MysqlDataTruncation.class)
+    public ApiResult<?> handleMysqlDataTruncation(MysqlDataTruncation e) {
+        log.error("SQL异常：", e);
+        String message = e.getMessage();
+        String prefix = "Data too long for column";
+        if (message.contains(prefix)) {
+            return ApiResult.fail(ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorCode(),
+                    ResultErrorCode.COLUMN_DATA_TO_LONG_EXCEPTION.getErrorMsg());
+        }
+        return ApiResult.fail(ResultErrorCode.SQL_EX.getErrorCode(), ResultErrorCode.SQL_EX.getErrorMsg());
+    }
 
     @ExceptionHandler(SQLSyntaxErrorException.class)
     public ApiResult<?> handleSqlSyntaxErrorException(SQLSyntaxErrorException e) {
@@ -93,8 +107,11 @@ public class DataBaseExceptionHandler implements Ordered {
         }
         log.error("数据库异常：", e);
         if (rootCause instanceof BizException) {
-            BizException cause = (BizException) e.getCause();
+            BizException cause = (BizException) rootCause;
             return ApiResult.fail(cause.getErrorCode(), cause.getMessage());
+        } else if (rootCause instanceof MysqlDataTruncation) {
+            MysqlDataTruncation cause = (MysqlDataTruncation) rootCause;
+            return handleMysqlDataTruncation(cause);
         }
         String message = e.getMessage();
         if (message.startsWith("Field '") && message.endsWith("' doesn't have a default value")) {
