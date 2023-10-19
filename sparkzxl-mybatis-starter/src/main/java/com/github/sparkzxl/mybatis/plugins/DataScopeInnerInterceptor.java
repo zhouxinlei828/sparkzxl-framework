@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import com.github.sparkzxl.core.util.ListUtils;
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.cnfexpression.MultiAndExpression;
-import net.sf.jsqlparser.util.cnfexpression.MultiOrExpression;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -360,26 +360,18 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             } else if (sqlCondition == SqlConditions.LIST_IN) {
                 List<String> scopeIdList = dataScopeLineHandler.getScopeIdList(columnName);
                 if (scopeIdList != null) {
-                    List<Expression> functionList = Lists.newArrayList();
-                    String functionName = "";
-                    if (dbType == DbType.MYSQL) {
-                        functionName = "FIND_IN_SET";
-                    } else {
-                        log.debug("Check whether the FIND_IN_SET function is available in {}", dbType.getDb());
-                    }
-                    for (String scopeId : scopeIdList) {
-                        Function function = new Function();
-                        // 设置函数名
-                        function.setName(functionName);
-                        // 创建参数表达式
-                        ExpressionList expressionListCount = new ExpressionList();
-                        expressionListCount.setExpressions(
-                                Lists.newArrayList(new StringValue(scopeId), this.getAliasColumn(table, columnName)));
-                        // 设置参数
-                        function.setParameters(expressionListCount);
-                        functionList.add(function);
-                    }
-                    expressionList.add(new MultiOrExpression(functionList));
+                    String functionName = "IS_MIXED";
+                    log.debug("Check whether the IS_MIXED function is available in {}", dbType.getDb());
+                    Function function = new Function();
+                    // 设置函数名
+                    function.setName(functionName);
+                    // 创建参数表达式
+                    ExpressionList expressionListCount = new ExpressionList();
+                    expressionListCount.setExpressions(
+                            Lists.newArrayList(new StringValue(ListUtils.listToString(scopeIdList)), this.getAliasColumn(table, columnName)));
+                    // 设置参数
+                    function.setParameters(expressionListCount);
+                    expressionList.add(function);
                 } else {
                     if (dataScopeLineHandler.getForce(columnName)) {
                         IsNullExpression isNullExpression = new IsNullExpression();
