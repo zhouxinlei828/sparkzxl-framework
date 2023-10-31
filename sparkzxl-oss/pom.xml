@@ -15,6 +15,7 @@
         <module>sparkzxl-oss-core</module>
         <module>sparkzxl-oss-executor-aliyun-starter</module>
         <module>sparkzxl-oss-executor-minio-starter</module>
+        <module>sparkzxl-oss-starter</module>
     </modules>
 
     <properties>
