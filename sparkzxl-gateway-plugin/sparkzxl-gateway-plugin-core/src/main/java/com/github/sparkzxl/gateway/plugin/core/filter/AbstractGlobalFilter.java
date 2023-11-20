@@ -7,6 +7,8 @@ import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.Map;
 import javax.annotation.Resource;
+
+import lombok.Getter;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -26,13 +28,10 @@ public abstract class AbstractGlobalFilter implements GlobalFilter, Ordered, Ini
     private final Map<String, FilterDataHandler> filterDataHandlerMap = Maps.newHashMap();
     @Resource
     protected GatewayPluginProperties gatewayPluginProperties;
+    @Getter
     private ApplicationContext applicationContext;
 
     public AbstractGlobalFilter() {
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     @Override
