@@ -1,9 +1,21 @@
 package com.github.sparkzxl.core.util;
 
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.IErrorCode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -13,16 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 /**
  * description: Http请求工具
@@ -165,8 +167,9 @@ public class HttpRequestUtils {
     }
 
     public static void failResponse(HttpServletResponse response, IErrorCode errorCode) {
+        int status = response.getStatus();
         writeResponseOutMsg(response,
-                false,
+                status,
                 null,
                 null,
                 errorCode.getErrorCode(),
@@ -174,8 +177,9 @@ public class HttpRequestUtils {
     }
 
     public static void failResponse(HttpServletResponse response, String errorCode, String errorMsg) {
+        int status = response.getStatus();
         writeResponseOutMsg(response,
-                false,
+                status,
                 null,
                 null,
                 errorCode,
@@ -183,26 +187,28 @@ public class HttpRequestUtils {
     }
 
     public static void successResponse(HttpServletResponse response, String message) {
-        writeResponseOutMsg(response, true, message, null, null, null);
+        int status = response.getStatus();
+        writeResponseOutMsg(response, status, message, null, null, null);
     }
 
 
     public static <T> void successResponse(HttpServletResponse response, String message, T data) {
-        writeResponseOutMsg(response, true, message, data, null, null);
+        int status = response.getStatus();
+        writeResponseOutMsg(response, status, message, data, null, null);
     }
 
-    public static <T> void writeResponseOutMsg(HttpServletResponse response, boolean success, String message, T data, String errorCode,
-            String errorMsg) {
+    public static <T> void writeResponseOutMsg(HttpServletResponse response, int status, String message, T data, String errorCode,
+                                               String errorMsg) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            ApiResult<?> result;
-            if (success) {
-                result = ApiResult.success(message, data);
+            R<?> result;
+            if (status == HttpStatus.OK.value()) {
+                result = R.success(data);
             } else {
-                result = ApiResult.fail(errorCode, errorMsg);
+                result = R.failDetail(errorCode, errorMsg);
             }
             response.getWriter().println(JsonUtils.getJson().toJson(result));
             response.getWriter().flush();

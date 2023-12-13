@@ -1,6 +1,6 @@
 package com.github.sparkzxl.cache.support;
 
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -28,61 +28,61 @@ import redis.clients.jedis.exceptions.JedisException;
 public class CacheExceptionHandler implements Ordered {
 
     @ExceptionHandler(ClusterRedirectException.class)
-    public ApiResult<?> handleClusterRedirectException(ClusterRedirectException e) {
+    public R<?> handleClusterRedirectException(ClusterRedirectException e) {
         log.error("ClusterRedirectException 异常:", e);
-        return ApiResult.fail(ResultErrorCode.CLUSTER_REDIRECT_EXCEPTION.getErrorCode(),
+        return R.failDetail(ResultErrorCode.CLUSTER_REDIRECT_EXCEPTION.getErrorCode(),
                 ResultErrorCode.CLUSTER_REDIRECT_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(JedisException.class)
-    public ApiResult<?> handleJedisException(JedisException e) {
+    public R<?> handleJedisException(JedisException e) {
         log.error("JedisException 异常:", e);
-        return ApiResult.fail(ResultErrorCode.FAILURE.getErrorCode(), e.getMessage());
+        return R.failDetail(ResultErrorCode.FAILURE.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(ClusterStateFailureException.class)
-    public ApiResult<?> handleClusterStateFailureException(ClusterStateFailureException e) {
+    public R<?> handleClusterStateFailureException(ClusterStateFailureException e) {
         log.error("ClusterStateFailureException 异常:", e);
-        return ApiResult.fail(
+        return R.failDetail(
                 ResultErrorCode.CLUSTER_STATE_FAILURE_EXCEPTION.getErrorCode(),
                 ResultErrorCode.CLUSTER_STATE_FAILURE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)
-    public ApiResult<?> handleRedisConnectionFailureException(RedisConnectionFailureException e) {
+    public R<?> handleRedisConnectionFailureException(RedisConnectionFailureException e) {
         log.error("RedisConnectionFailureException 异常:", e);
-        return ApiResult.fail(
+        return R.failDetail(
                 ResultErrorCode.REDIS_CONNECTION_FAILURE_EXCEPTION.getErrorCode(),
                 ResultErrorCode.REDIS_CONNECTION_FAILURE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RedisSystemException.class)
-    public ApiResult<?> handleRedisSystemException(RedisSystemException e) {
+    public R<?> handleRedisSystemException(RedisSystemException e) {
         log.error("RedisSystemException 异常:", e);
-        return ApiResult.fail(
+        return R.failDetail(
                 ResultErrorCode.REDIS_SYSTEM_EXCEPTION.getErrorCode(), ResultErrorCode.REDIS_SYSTEM_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(TooManyClusterRedirectionsException.class)
-    public ApiResult<?> handleTooManyClusterRedirectionsException(TooManyClusterRedirectionsException e) {
+    public R<?> handleTooManyClusterRedirectionsException(TooManyClusterRedirectionsException e) {
         log.error("TooManyClusterRedirectionsException 异常:", e);
-        return ApiResult.fail(
+        return R.failDetail(
                 ResultErrorCode.TOO_MANY_CLUSTER_REDIRECTIONS_EXCEPTION.getErrorCode(),
                 ResultErrorCode.TOO_MANY_CLUSTER_REDIRECTIONS_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(ClusterCommandExecutionFailureException.class)
-    public ApiResult<?> handleTooManyClusterRedirectionsException(ClusterCommandExecutionFailureException e) {
+    public R<?> handleTooManyClusterRedirectionsException(ClusterCommandExecutionFailureException e) {
         log.error("ClusterCommandExecutionFailureException 异常:", e);
-        return ApiResult.fail(
+        return R.failDetail(
                 ResultErrorCode.CLUSTER_COMMAND_EXECUTION_FAILURE_EXCEPTION.getErrorCode(),
                 ResultErrorCode.CLUSTER_COMMAND_EXECUTION_FAILURE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RedisSubscribedConnectionException.class)
-    public ApiResult<?> handleTooManyClusterRedirectionsException(RedisSubscribedConnectionException e) {
+    public R<?> handleTooManyClusterRedirectionsException(RedisSubscribedConnectionException e) {
         log.error("RedisSubscribedConnectionException 异常:", e);
-        return ApiResult.fail(
+        return R.failDetail(
                 ResultErrorCode.REDIS_SUBSCRIBED_CONNECTION_EXCEPTION.getErrorCode(),
                 ResultErrorCode.REDIS_SUBSCRIBED_CONNECTION_EXCEPTION.getErrorMsg());
     }

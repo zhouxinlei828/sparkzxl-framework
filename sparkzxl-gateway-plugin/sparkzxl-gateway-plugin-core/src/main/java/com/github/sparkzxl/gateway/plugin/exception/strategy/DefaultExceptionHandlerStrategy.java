@@ -1,7 +1,7 @@
 package com.github.sparkzxl.gateway.plugin.exception.strategy;
 
 import com.alibaba.fastjson.JSON;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class DefaultExceptionHandlerStrategy implements ExceptionHandlerStrategy
     @Override
     public ExceptionHandlerResult handleException(Throwable throwable) {
         log.error("Throwable：", throwable);
-        ApiResult apiResult = ApiResult.fail(ResultErrorCode.FAILURE.getErrorCode(), throwable.getMessage());
-        return new ExceptionHandlerResult(HttpStatus.INTERNAL_SERVER_ERROR, JSON.toJSONString(apiResult));
+        R r = R.failDetail(ResultErrorCode.FAILURE.getErrorCode(), throwable.getMessage());
+        return new ExceptionHandlerResult(HttpStatus.INTERNAL_SERVER_ERROR, JSON.toJSONString(r));
     }
 }

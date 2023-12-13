@@ -44,7 +44,7 @@ Configuration cfg=new Configuration(Region.region0());
         String localFilePath="/home/qiniu/test.png";
         String key=null;Auth auth=Auth.create(accessKey,secretKey);
         String upToken=auth.uploadToken(bucket);
-        Response apiResult=uploadManager.put(localFilePath,key,upToken);
+        Response r=uploadManager.put(localFilePath,key,upToken);
 ```
 
 ## 2. 解决方案

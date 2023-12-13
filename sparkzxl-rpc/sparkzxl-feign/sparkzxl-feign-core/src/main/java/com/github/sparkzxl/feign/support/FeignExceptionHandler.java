@@ -1,7 +1,7 @@
 package com.github.sparkzxl.feign.support;
 
 import cn.hutool.core.text.StrFormatter;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class FeignExceptionHandler implements Ordered {
 
     @ExceptionHandler(SocketTimeoutException.class)
-    public ApiResult<?> handleSocketTimeoutException(SocketTimeoutException e) {
+    public R<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error("SocketTimeoutException 异常:", e);
-        return ApiResult.fail(ResultErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
+        return R.failDetail(ResultErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(RetryableException.class)
-    public ApiResult<?> handleRetryableException(RetryableException e) {
+    public R<?> handleRetryableException(RetryableException e) {
         log.error("RetryableException 异常:", e);
         Request request = e.request();
         String applicationName;
@@ -42,11 +42,11 @@ public class FeignExceptionHandler implements Ordered {
             applicationName = "unKnownServer";
         }
         String message = StrFormatter.format(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorMsg(), applicationName);
-        return ApiResult.fail(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
+        return R.failDetail(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
     }
 
     @ExceptionHandler(FeignException.ServiceUnavailable.class)
-    public ApiResult<?> handleServiceUnavailableException(FeignException.ServiceUnavailable e) {
+    public R<?> handleServiceUnavailableException(FeignException.ServiceUnavailable e) {
         log.error("ServiceUnavailable异常:", e);
         Request request = e.request();
         String applicationName;
@@ -56,17 +56,17 @@ public class FeignExceptionHandler implements Ordered {
             applicationName = "unKnownServer";
         }
         String message = StrFormatter.format(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
-        return ApiResult.fail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        return R.failDetail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
     }
 
     @ExceptionHandler(DecodeException.class)
-    public ApiResult<?> handleDecodeException(DecodeException e) {
+    public R<?> handleDecodeException(DecodeException e) {
         log.error("DecodeException 异常:", e);
-        return ApiResult.fail(ResultErrorCode.DECODE_EXCEPTION.getErrorCode(), ResultErrorCode.DECODE_EXCEPTION.getErrorMsg());
+        return R.failDetail(ResultErrorCode.DECODE_EXCEPTION.getErrorCode(), ResultErrorCode.DECODE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RemoteCallTransferException.class)
-    public ApiResult<?> handleRemoteCallException(RemoteCallTransferException e) {
+    public R<?> handleRemoteCallException(RemoteCallTransferException e) {
         log.error("RemoteCallTransferException 异常:", e);
         Request request = e.request();
         String applicationName;
@@ -76,7 +76,7 @@ public class FeignExceptionHandler implements Ordered {
             applicationName = "unKnownServer";
         }
         String message = StrFormatter.format("【{}】异常,{}", applicationName, e.getErrorMsg());
-        return ApiResult.fail(e.getErrorCode(), message);
+        return R.failDetail(e.getErrorCode(), message);
     }
 
     @Override

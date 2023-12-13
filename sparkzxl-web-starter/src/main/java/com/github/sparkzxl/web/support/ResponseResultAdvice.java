@@ -1,8 +1,8 @@
 package com.github.sparkzxl.web.support;
 
 import cn.hutool.core.convert.Convert;
-import com.github.sparkzxl.core.base.ResponseError;
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.HttpCode;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.core.util.RequestContextUtils;
@@ -53,23 +53,23 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = RequestContextUtils.getResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (body instanceof ApiResult) {
+        if (body instanceof R) {
             return body;
         }
         Boolean fallback = Convert.toBool(RequestContextUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         int status = servletResponse.getStatus();
-        ApiResult<?> result;
+        R<?> result;
         if (fallback) {
-            result = ApiResult.fail(ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
+            result = R.failDetail(ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
         } else if (body instanceof Boolean && !(Boolean) body) {
-            result = ApiResult.fail(
+            result = R.failDetail(
                     ResultErrorCode.FAILURE.getErrorCode(), ResultErrorCode.FAILURE.getErrorMsg());
-        } else if (status == ResponseError.FAILURE.getCode()) {
-            result = ApiResult.fail(
+        } else if (status == HttpCode.FAILURE.getCode()) {
+            result = R.failDetail(
                     ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
-            servletResponse.setStatus(ResponseError.SUCCESS.getCode());
+            servletResponse.setStatus(HttpCode.SUCCESS.getCode());
         } else {
-            result = ApiResult.success(body);
+            result = R.success(body);
         }
         return result;
     }
