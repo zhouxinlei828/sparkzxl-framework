@@ -6,6 +6,7 @@ import com.github.sparkzxl.core.base.HttpCode;
 import com.github.sparkzxl.core.support.BaseException;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -19,6 +20,7 @@ import java.util.Map;
  */
 @Setter
 @Getter
+@NoArgsConstructor
 @Accessors(chain = true)
 public class R<T> implements Serializable {
 
