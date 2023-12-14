@@ -62,8 +62,7 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         if (fallback) {
             result = R.failDetail(ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
         } else if (body instanceof Boolean && !(Boolean) body) {
-            result = R.failDetail(
-                    ResultErrorCode.FAILURE.getErrorCode(), ResultErrorCode.FAILURE.getErrorMsg());
+            result = R.fail(HttpCode.FAILURE,false);
         } else if (status == HttpCode.FAILURE.getCode()) {
             result = R.failDetail(
                     ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
