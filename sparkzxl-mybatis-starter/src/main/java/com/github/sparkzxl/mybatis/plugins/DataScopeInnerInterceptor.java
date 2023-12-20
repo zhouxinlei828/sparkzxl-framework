@@ -360,8 +360,8 @@ public class DataScopeInnerInterceptor extends JsqlParserSupport implements Inne
             } else if (sqlCondition == SqlConditions.LIST_IN) {
                 List<String> scopeIdList = dataScopeLineHandler.getScopeIdList(columnName);
                 if (scopeIdList != null) {
-                    String functionName = "IS_MIXED";
-                    log.debug("Check whether the IS_MIXED function is available in {}", dbType.getDb());
+                    String functionName = "find_in_set_multiple";
+                    log.debug("Check whether the [find_in_set_multiple] function is available in {}", dbType.getDb());
                     Function function = new Function();
                     // 设置函数名
                     function.setName(functionName);
