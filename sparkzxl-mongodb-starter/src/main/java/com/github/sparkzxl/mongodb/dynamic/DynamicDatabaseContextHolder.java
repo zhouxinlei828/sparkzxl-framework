@@ -35,11 +35,12 @@ public final class DynamicDatabaseContextHolder {
      * 传统的只设置当前线程的方式不能满足此业务需求，必须使用栈，后进先出。
      * </pre>
      */
-    private static final ThreadLocal<Deque<String>> LOOKUP_KEY_HOLDER = new TransmittableThreadLocal<>(true);
-
-    static {
-        LOOKUP_KEY_HOLDER.set(new ArrayDeque<>());
-    }
+    private static final ThreadLocal<Deque<String>> LOOKUP_KEY_HOLDER = new TransmittableThreadLocal<Deque<String>>() {
+        @Override
+        protected Deque<String> initialValue() {
+            return new ArrayDeque<>();
+        }
+    };
 
     private DynamicDatabaseContextHolder() {
     }
