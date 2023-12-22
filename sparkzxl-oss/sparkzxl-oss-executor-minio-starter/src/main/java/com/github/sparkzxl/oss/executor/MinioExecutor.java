@@ -263,8 +263,7 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
                     UploadSnowballObjectsArgs.builder().bucket(bucketName).object(objectName).objects(snowballObjects).build());
             log.info("objectName [{}] upload complete", objectName);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR);
+            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -322,7 +321,7 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
                     break;
             }
         } catch (Exception e) {
-            throw new OssException(OssErrorCode.SET_BUCKET_POLICY_ERROR.getErrorCode(),e.getMessage());
+            throw new OssException(OssErrorCode.SET_BUCKET_POLICY_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
