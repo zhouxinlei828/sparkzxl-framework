@@ -11,25 +11,25 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.DateUtils;
-import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.oss.client.OssClient;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
+import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -168,24 +168,17 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            e.printStackTrace();
             throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new OssException(OssErrorCode.OSS_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, String filePath) {
         OSSClient ossClient = obtainClient();
+        File tempFile = new File(filePath);
         try {
-            File tempFile;
-            if (StringUtils.startsWith(StrPool.HTTP, filePath) || StringUtils.startsWith(StrPool.HTTPS, filePath)) {
-                URL url = new URL(filePath);
-                tempFile = FileUtil.file(url);
-            } else {
-                tempFile = FileUtil.createTempFile(new File(filePath));
-            }
             String mimeType = FileUtil.getType(tempFile);
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(tempFile.length());
@@ -201,26 +194,51 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
+            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR.getErrorCode(), e.getErrorMessage());
+        } catch (Exception e) {
+            throw new OssException(OssErrorCode.OSS_ERROR.getErrorCode(), e.getMessage());
+        } finally {
+            if (!tempFile.delete()) {
+                log.info("无法删除临时文件:{}", tempFile);
+            }
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, URL url) {
         OSSClient ossClient = obtainClient();
+        long executeTime;
+        Stopwatch dbStopwatch = Stopwatch.createStarted();
+        File tempFile = null;
+        HttpURLConnection conn = null;
         try {
-            File tempFile = FileUtil.file(url);
-            String mimeType = FileUtil.getType(tempFile);
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(tempFile.length());
-            objectMetadata.setContentType(mimeType);
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile));
-            putObjectRequest.setMetadata(objectMetadata);
-            ossClient.putObject(putObjectRequest);
+            conn = (HttpURLConnection) url.openConnection();
+            System.out.println("HTTP下载文件开始======");
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
+                tempFile = FileUtil.createTempFile();
+                FileOutputStream fos = new FileOutputStream(tempFile);
+                int bytesRead;
+                byte[] buffer = new byte[4096];
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+                fos.close();
+                in.close();
+                System.out.println("HTTP下载文件结束，开始上传======");
+                String mimeType = FileUtil.getMimeType(url.getPath());
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(tempFile.length());
+                objectMetadata.setContentType(mimeType);
+                PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile));
+                putObjectRequest.setMetadata(objectMetadata);
+                ossClient.putObject(putObjectRequest);
+                executeTime = dbStopwatch.elapsed(TimeUnit.SECONDS);
+                System.out.println("上传耗时：[" + executeTime + "]秒");
+            } else {
+                log.error("文件无法下载:{}", url);
+            }
         } catch (OSSException e) {
             log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
@@ -229,10 +247,18 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
+            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR.getErrorCode(), e.getErrorMessage());
+        } catch (Exception e) {
+            throw new OssException(OssErrorCode.OSS_ERROR.getErrorCode(), e.getMessage());
+        } finally {
+            // 使用完毕后删除临时文件
+            if (conn != null) {
+                conn.disconnect();
+            }
+            if (tempFile != null && !tempFile.delete()) {
+                log.info("无法删除临时文件:{}", tempFile);
+            }
         }
-
     }
 
     @Override
@@ -346,25 +372,25 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         OSSClient ossClient = obtainClient();
         try {
             ossClient.deleteObject(bucketName, objectName);
-        } catch (OSSException oe) {
+        } catch (OSSException e) {
             log.warn("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{}\n"
                             + "Error Message:{}\n"
                             + "Request ID:{}\n"
                             + "Host ID:{}",
-                    oe.getErrorCode(),
-                    oe.getErrorMessage(),
-                    oe.getRequestId(),
-                    oe.getHostId());
-            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR);
-        } catch (ClientException ce) {
+                    e.getErrorCode(),
+                    e.getErrorMessage(),
+                    e.getRequestId(),
+                    e.getHostId());
+            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), e.getErrorMessage());
+        } catch (ClientException e) {
             log.warn("Caught an ClientException, which means the client encountered "
                             + "a serious internal problem while trying to communicate with OSS," +
                             "such as not being able to access the network.\n "
                             + "Error Message:{}",
-                    ce.getMessage());
-            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR);
+                    e.getMessage());
+            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
