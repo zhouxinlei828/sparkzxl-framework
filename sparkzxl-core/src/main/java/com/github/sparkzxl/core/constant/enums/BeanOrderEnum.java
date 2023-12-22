@@ -17,7 +17,7 @@ public enum BeanOrderEnum {
     ALARM_EXCEPTION_ORDER(Integer.MIN_VALUE + 6),
     APPLICATION_LOG_ORDER(Integer.MIN_VALUE + 7),
     BASE_EXCEPTION_ORDER(Integer.MIN_VALUE + 8),
-    ;
+    OSS_EXCEPTION_ORDER(-1);
 
     private final int order;
 

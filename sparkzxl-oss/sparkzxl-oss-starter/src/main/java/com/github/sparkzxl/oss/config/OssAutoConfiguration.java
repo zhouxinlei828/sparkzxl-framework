@@ -9,6 +9,7 @@ import com.github.sparkzxl.oss.provider.FileOssConfigProvider;
 import com.github.sparkzxl.oss.provider.JdbcOssConfigProvider;
 import com.github.sparkzxl.oss.provider.OssConfigProvider;
 import com.github.sparkzxl.oss.provider.YamlOssConfigProvider;
+import com.github.sparkzxl.oss.support.OssExceptionHandler;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * description: oss自动配置
@@ -26,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "oss.enabled", havingValue = "true")
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OssProperties.class)
+@Import(OssExceptionHandler.class)
 public class OssAutoConfiguration {
 
     private final OssProperties ossProperties;

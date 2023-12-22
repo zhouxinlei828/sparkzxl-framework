@@ -18,7 +18,7 @@ public class ArgumentException extends BaseUncheckedException {
         super(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), errorMsg);
     }
 
-    public ArgumentException(String errorMsg, Throwable cause) {
+    public ArgumentException( String errorMsg, Throwable cause) {
         super(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), errorMsg, cause);
     }
 
