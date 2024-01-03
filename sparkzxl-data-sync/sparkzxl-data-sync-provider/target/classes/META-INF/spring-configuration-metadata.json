@@ -1,0 +1,110 @@
+{
+  "groups": [
+    {
+      "name": "phoenix.data.sync",
+      "type": "com.github.sparkzxl.data.sync.admin.config.DataSyncProviderProperties",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.DataSyncProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.nacos",
+      "type": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.websocket",
+      "type": "com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper",
+      "type": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "phoenix.data.sync.provider.nacos.acm",
+      "type": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosACMProperties",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.nacos.namespace",
+      "type": "java.lang.String",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.nacos.password",
+      "type": "java.lang.String",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.nacos.url",
+      "type": "java.lang.String",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.nacos.username",
+      "type": "java.lang.String",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.nacos.watch-configs",
+      "type": "java.util.List<com.github.sparkzxl.data.sync.admin.config.nacos.NacosWatchProperties>",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.nacos.NacosProviderProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.websocket.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "phoenix.data.sync.provider.websocket.message-max-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper.connection-timeout-ms",
+      "type": "java.lang.Integer",
+      "description": "连接超时时间",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper.retry-count",
+      "type": "java.lang.Integer",
+      "description": "重试次数",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper.session-timeout-ms",
+      "type": "java.lang.Integer",
+      "description": "session超时时间",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper.timeout",
+      "type": "java.lang.Integer",
+      "description": "超时时间(毫秒)，默认1000",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties",
+      "defaultValue": 1000
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper.watch-configs",
+      "type": "java.util.List<com.github.sparkzxl.data.sync.admin.config.zookeeper.ZkWatchProperties>",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.provider.zookeeper.zk-servers",
+      "type": "java.lang.String",
+      "description": "zookeeper 地址",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.zookeeper.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.type",
+      "type": "com.github.sparkzxl.data.sync.admin.DataSyncPushType",
+      "sourceType": "com.github.sparkzxl.data.sync.admin.config.DataSyncProviderProperties"
+    }
+  ],
+  "hints": []
+}

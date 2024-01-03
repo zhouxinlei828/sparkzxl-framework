@@ -3,20 +3,21 @@ package com.github.sparkzxl.data.sync.admin.listener.zookeeper;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
-import com.github.sparkzxl.data.sync.admin.handler.MergeDataHandler;
-import com.github.sparkzxl.data.sync.admin.listener.AbstractDataChangedListener;
 import com.github.sparkzxl.data.sync.common.constant.ZookeeperPathConstants;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import com.google.common.collect.Maps;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
+import com.github.sparkzxl.data.sync.admin.handler.MergeDataHandler;
+import com.github.sparkzxl.data.sync.admin.listener.AbstractDataChangedListener;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.zookeeper.CreateMode;
 
 /**
  * description: Use Zookeeper to synchronized data changes.
@@ -30,7 +31,7 @@ public class ZookeeperDataChangedListener extends AbstractDataChangedListener {
     private final Map<String, MergeDataHandler> mergeDataHandlerMap = Maps.newConcurrentMap();
 
     public ZookeeperDataChangedListener(CuratorFramework curatorFramework,
-            List<MergeDataHandler> mergeDataHandlerList) {
+                                        List<MergeDataHandler> mergeDataHandlerList) {
         this.curatorFramework = curatorFramework;
         mergeDataHandlerList.forEach(mergeDataHandler -> mergeDataHandlerMap.put(mergeDataHandler.configGroup(), mergeDataHandler));
     }

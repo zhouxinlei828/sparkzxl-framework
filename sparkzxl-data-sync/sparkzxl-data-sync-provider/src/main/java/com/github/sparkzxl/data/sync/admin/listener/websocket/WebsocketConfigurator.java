@@ -1,19 +1,21 @@
 package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
-import static org.apache.tomcat.websocket.server.Constants.BINARY_BUFFER_SIZE_SERVLET_CONTEXT_INIT_PARAM;
-import static org.apache.tomcat.websocket.server.Constants.TEXT_BUFFER_SIZE_SERVLET_CONTEXT_INIT_PARAM;
-
+import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Configuration;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.context.annotation.Configuration;
+
+import static org.apache.tomcat.websocket.server.Constants.BINARY_BUFFER_SIZE_SERVLET_CONTEXT_INIT_PARAM;
+import static org.apache.tomcat.websocket.server.Constants.TEXT_BUFFER_SIZE_SERVLET_CONTEXT_INIT_PARAM;
 
 /**
  * description: The Websocket configurator.
@@ -21,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
  * @author zhouxinlei
  * @since 2022-08-25 15:25:59
  */
-@ConditionalOnProperty(name = "sparkzxl.data.sync.websocket.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "websocket.enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 public class WebsocketConfigurator extends ServerEndpointConfig.Configurator implements ServletContextInitializer {
 

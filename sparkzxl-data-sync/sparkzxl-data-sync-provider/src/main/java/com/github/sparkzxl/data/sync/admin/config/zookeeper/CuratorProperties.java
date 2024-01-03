@@ -1,15 +1,20 @@
 package com.github.sparkzxl.data.sync.admin.config.zookeeper;
 
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import java.util.List;
 import java.util.Objects;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * description: zookeeper属性配置
  *
  * @author zhouxinlei
  */
+@Setter
+@Getter
 @ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "zookeeper")
 public class CuratorProperties {
 
@@ -39,54 +44,6 @@ public class CuratorProperties {
     private Integer connectionTimeoutMs;
 
     private List<ZkWatchProperties> watchConfigs;
-
-    public Integer getRetryCount() {
-        return retryCount;
-    }
-
-    public void setRetryCount(Integer retryCount) {
-        this.retryCount = retryCount;
-    }
-
-    public Integer getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(Integer timeout) {
-        this.timeout = timeout;
-    }
-
-    public String getZkServers() {
-        return zkServers;
-    }
-
-    public void setZkServers(String zkServers) {
-        this.zkServers = zkServers;
-    }
-
-    public Integer getSessionTimeoutMs() {
-        return sessionTimeoutMs;
-    }
-
-    public void setSessionTimeoutMs(Integer sessionTimeoutMs) {
-        this.sessionTimeoutMs = sessionTimeoutMs;
-    }
-
-    public Integer getConnectionTimeoutMs() {
-        return connectionTimeoutMs;
-    }
-
-    public void setConnectionTimeoutMs(Integer connectionTimeoutMs) {
-        this.connectionTimeoutMs = connectionTimeoutMs;
-    }
-
-    public List<ZkWatchProperties> getWatchConfigs() {
-        return watchConfigs;
-    }
-
-    public void setWatchConfigs(List<ZkWatchProperties> watchConfigs) {
-        this.watchConfigs = watchConfigs;
-    }
 
     @Override
     public boolean equals(Object o) {

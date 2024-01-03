@@ -1,5 +1,7 @@
 package com.github.sparkzxl.data.sync.api;
 
+import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
+
 /**
  * description: The interface data subscriber.
  *
@@ -11,16 +13,18 @@ public interface DataSubscriber<T> {
     /**
      * On subscribe.
      *
-     * @param t the data
+     * @param syncId synchronization id
+     * @param t      the data
      */
-    void onSubscribe(T t);
+    void onSubscribe(String syncId, T t);
 
     /**
      * Un subscribe.
      *
-     * @param t the data
+     * @param syncId synchronization id
+     * @param t      the data
      */
-    void unSubscribe(T t);
+    void unSubscribe(String syncId, T t);
 
     /**
      * Refresh.
@@ -32,7 +36,7 @@ public interface DataSubscriber<T> {
      * data group
      *
      * @return String
-     * @see com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum
+     * @see ConfigGroupEnum
      */
     String group();
 }

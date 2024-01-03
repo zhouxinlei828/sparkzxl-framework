@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>sparkzxl-framework</artifactId>
+   <parent>
         <groupId>com.github.sparkzxl</groupId>
+        <artifactId>sparkzxl-framework</artifactId>
         <version>2.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,12 +14,26 @@
     <packaging>pom</packaging>
     <modules>
         <module>sparkzxl-data-sync-api</module>
-        <module>sparkzxl-data-sync-provider</module>
         <module>sparkzxl-data-sync-common</module>
+        <module>sparkzxl-data-sync-provider</module>
         <module>sparkzxl-data-sync-websocket</module>
         <module>sparkzxl-data-sync-nacos</module>
         <module>sparkzxl-data-sync-zookeeper</module>
     </modules>
 
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-data-sync-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-data-sync-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

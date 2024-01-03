@@ -1,6 +1,7 @@
 package com.github.sparkzxl.data.sync.common.constant;
 
-import com.github.sparkzxl.core.util.StrPool;
+
+import cn.hutool.core.text.StrPool;
 
 /**
  * description:
@@ -11,9 +12,9 @@ import com.github.sparkzxl.core.util.StrPool;
 public class ZookeeperPathConstants {
 
     public static String buildPath(String group, String path) {
-        if (!group.startsWith(StrPool.PATH_SEPARATOR)) {
-            return StrPool.PATH_SEPARATOR.concat(String.join(StrPool.PATH_SEPARATOR, group, path));
+        if (!group.startsWith(StrPool.SLASH)) {
+            return StrPool.SLASH.concat(String.join(StrPool.SLASH, group, path));
         }
-        return String.join(StrPool.PATH_SEPARATOR, group, path);
+        return String.join(StrPool.SLASH, group, path);
     }
 }

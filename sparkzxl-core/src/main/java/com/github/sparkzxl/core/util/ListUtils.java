@@ -3,18 +3,15 @@ package com.github.sparkzxl.core.util;
 import cn.hutool.core.convert.Convert;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * description: 集合工具类
@@ -181,7 +178,7 @@ public class ListUtils {
     }
 
     /**
-     * 差集（扣除）
+     * 交集（扣除）
      *
      * @param a 参数a
      * @param b 参数b
@@ -233,5 +230,16 @@ public class ListUtils {
             return list;
         }
         return list.stream().sorted(Comparator.comparing(keyExtractor).reversed()).collect(Collectors.toList());
+    }
+
+    /**
+     * 差集（扣除）
+     *
+     * @param a 参数a
+     * @param b 参数b
+     * @return List<T>
+     */
+    public static <T> List<T> differenceList(List<T> a, List<T> b) {
+        return a.stream().filter(x -> !b.contains(x)).collect(Collectors.toList());
     }
 }

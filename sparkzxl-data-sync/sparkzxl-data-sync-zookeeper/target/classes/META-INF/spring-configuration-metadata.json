@@ -1,0 +1,54 @@
+{
+  "groups": [
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper",
+      "type": "org.phoenix.data.sync.zookeeper.config.CuratorProperties",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.connection-timeout-ms",
+      "type": "java.lang.Integer",
+      "description": "连接超时时间",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.retry-count",
+      "type": "java.lang.Integer",
+      "description": "重试次数",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.session-timeout-ms",
+      "type": "java.lang.Integer",
+      "description": "session超时时间",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.timeout",
+      "type": "java.lang.Integer",
+      "description": "超时时间(毫秒)，默认1000",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties",
+      "defaultValue": 1000
+    },
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.watch-configs",
+      "type": "java.util.List<org.phoenix.data.sync.zookeeper.config.ZkWatchProperties>",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties"
+    },
+    {
+      "name": "phoenix.data.sync.consumer.zookeeper.zk-servers",
+      "type": "java.lang.String",
+      "description": "zookeeper 地址",
+      "sourceType": "org.phoenix.data.sync.zookeeper.config.CuratorProperties"
+    }
+  ],
+  "hints": []
+}

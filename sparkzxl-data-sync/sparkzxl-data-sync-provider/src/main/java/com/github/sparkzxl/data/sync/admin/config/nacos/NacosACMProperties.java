@@ -1,5 +1,7 @@
 package com.github.sparkzxl.data.sync.admin.config.nacos;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
 /**
@@ -8,26 +10,38 @@ import java.util.Objects;
  * @author zhouxinlei
  * @since 2022-09-06 10:00:07
  */
+@Getter
 public class NacosACMProperties {
 
+    /**
+     * -- GETTER --
+     * get enabled.
+     */
     private boolean enabled;
 
+    /**
+     * -- GETTER --
+     * get endpoint.
+     */
     private String endpoint;
 
+    /**
+     * -- GETTER --
+     * get namespace.
+     */
     private String namespace;
 
+    /**
+     * -- GETTER --
+     * get accessKey.
+     */
     private String accessKey;
 
-    private String secretKey;
-
     /**
-     * get enabled.
-     *
-     * @return enabled
+     * -- GETTER --
+     * get secretKey.
      */
-    public boolean isEnabled() {
-        return enabled;
-    }
+    private String secretKey;
 
     /**
      * set enabled.
@@ -36,15 +50,6 @@ public class NacosACMProperties {
      */
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
-    }
-
-    /**
-     * get endpoint.
-     *
-     * @return endpoint
-     */
-    public String getEndpoint() {
-        return endpoint;
     }
 
     /**
@@ -57,15 +62,6 @@ public class NacosACMProperties {
     }
 
     /**
-     * get namespace.
-     *
-     * @return namespace
-     */
-    public String getNamespace() {
-        return namespace;
-    }
-
-    /**
      * set namespace.
      *
      * @param namespace namespace
@@ -75,30 +71,12 @@ public class NacosACMProperties {
     }
 
     /**
-     * get accessKey.
-     *
-     * @return accessKey
-     */
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    /**
      * set accessKey.
      *
      * @param accessKey accessKey
      */
     public void setAccessKey(final String accessKey) {
         this.accessKey = accessKey;
-    }
-
-    /**
-     * get secretKey.
-     *
-     * @return secretKey
-     */
-    public String getSecretKey() {
-        return secretKey;
     }
 
     /**

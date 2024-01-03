@@ -2,11 +2,12 @@ package com.github.sparkzxl.data.sync.admin.listener;
 
 import com.github.sparkzxl.data.sync.admin.DataSyncService;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 public abstract class AbstractDataChangedInit implements DataChangedInit {
 
-    @Autowired
+    @Resource
     private DataSyncService dataSyncService;
 
     @Override

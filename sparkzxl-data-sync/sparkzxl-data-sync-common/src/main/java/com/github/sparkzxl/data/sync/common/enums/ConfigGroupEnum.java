@@ -1,5 +1,7 @@
 package com.github.sparkzxl.data.sync.common.enums;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -9,12 +11,15 @@ import java.util.Objects;
  * @author zhouxinlei
  * @since 2022-08-25 09:00:36
  */
+@Getter
 public enum ConfigGroupEnum {
 
     /**
      * Meta data config group enum.
      */
-    META_DATA("meta_data");
+    META_DATA("meta_data"),
+    BUSINESS_DATA("business_data"),
+    ;
 
     private final String code;
 
@@ -46,7 +51,4 @@ public enum ConfigGroupEnum {
                 .findFirst().orElseThrow(() -> new RuntimeException(String.format(" this ConfigGroupEnum can not support %s", code)));
     }
 
-    public String getCode() {
-        return code;
-    }
 }
