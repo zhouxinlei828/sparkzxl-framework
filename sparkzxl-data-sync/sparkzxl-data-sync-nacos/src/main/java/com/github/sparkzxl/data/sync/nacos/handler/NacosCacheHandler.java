@@ -4,11 +4,11 @@ import cn.hutool.core.util.IdUtil;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.google.common.collect.Maps;
+import lombok.Getter;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.data.sync.api.DataSubscriber;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
-import com.google.common.collect.Maps;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +31,6 @@ public class NacosCacheHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosCacheHandler.class);
 
-    /**
-     * -- GETTER --
-     *  get configService.
-     *
-     * @return ConfigService
-     */
     @Getter
     private final ConfigService configService;
 

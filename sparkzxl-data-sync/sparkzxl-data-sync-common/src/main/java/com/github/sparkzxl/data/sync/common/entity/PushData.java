@@ -1,11 +1,11 @@
 package com.github.sparkzxl.data.sync.common.entity;
 
-import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
+import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 
 import java.io.Serializable;
 import java.util.List;

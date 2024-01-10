@@ -1,4 +1,4 @@
-package com.github.sparkzxl.data.sync.admin.config.zookeeper;
+package com.github.sparkzxl.data.sync.zookeeper.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +15,10 @@ import java.util.Objects;
  */
 @Setter
 @Getter
-@ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "zookeeper")
+@ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_CONSUMER_PREFIX + "zookeeper")
 public class CuratorProperties {
 
+    private boolean enabled;
     /**
      * 重试次数
      */

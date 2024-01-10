@@ -1,5 +1,11 @@
 package com.github.sparkzxl.data.sync.websocket;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import com.github.sparkzxl.core.task.AbstractRoundTask;
 import com.github.sparkzxl.core.task.WheelTimerFactory;
 import com.github.sparkzxl.core.task.timer.Timer;
@@ -9,12 +15,6 @@ import com.github.sparkzxl.data.sync.api.BusinessDataSubscriber;
 import com.github.sparkzxl.data.sync.api.MetaDataSubscriber;
 import com.github.sparkzxl.data.sync.websocket.client.WebsocketReceiveClient;
 import com.github.sparkzxl.data.sync.websocket.config.WebsocketConsumerProperties;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.ServiceInstance;

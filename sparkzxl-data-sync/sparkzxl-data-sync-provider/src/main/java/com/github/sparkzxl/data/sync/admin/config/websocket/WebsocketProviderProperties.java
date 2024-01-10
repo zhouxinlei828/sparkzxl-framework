@@ -1,8 +1,8 @@
 package com.github.sparkzxl.data.sync.admin.config.websocket;
 
-import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import lombok.Getter;
 import lombok.Setter;
+import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -16,10 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_PROVIDER_PREFIX + "websocket")
 public class WebsocketProviderProperties {
 
-
     private boolean enabled = true;
 
     private int messageMaxSize;
-
 
 }

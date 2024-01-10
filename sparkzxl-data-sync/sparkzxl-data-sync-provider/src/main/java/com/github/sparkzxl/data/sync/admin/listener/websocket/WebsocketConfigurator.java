@@ -1,7 +1,7 @@
 package com.github.sparkzxl.data.sync.admin.listener.websocket;
 
-import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.github.sparkzxl.data.sync.admin.config.websocket.WebsocketProviderProperties;
+import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.ServletContextInitializer;

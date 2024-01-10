@@ -1,12 +1,11 @@
 package com.github.sparkzxl.data.sync.admin.config.nacos;
 
+import lombok.Getter;
+import lombok.Setter;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Objects;
-
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,7 +32,6 @@ public class NacosProviderProperties implements InitializingBean {
     private NacosACMProperties acm;
 
     private List<NacosWatchProperties> watchConfigs;
-
 
     @Override
     public boolean equals(Object o) {

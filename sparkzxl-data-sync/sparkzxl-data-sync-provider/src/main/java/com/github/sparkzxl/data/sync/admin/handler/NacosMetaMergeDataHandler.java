@@ -7,21 +7,25 @@ import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
+import com.github.sparkzxl.data.sync.admin.config.nacos.NacosWatchProperties;
 import com.github.sparkzxl.data.sync.common.constant.NacosPathConstants;
 import com.github.sparkzxl.data.sync.common.entity.MetaData;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
 import com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum;
 import com.github.sparkzxl.data.sync.common.enums.DataEventTypeEnum;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
-import com.github.sparkzxl.data.sync.admin.config.nacos.NacosWatchProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: Nacos元数据合并处理
@@ -37,7 +41,7 @@ public class NacosMetaMergeDataHandler implements MergeDataHandler<MetaData> {
     private final Map<String, String> watchConfigMap = Maps.newConcurrentMap();
 
     public NacosMetaMergeDataHandler(ConfigService configService,
-                                     List<NacosWatchProperties> watchConfigs) {
+            List<NacosWatchProperties> watchConfigs) {
         this.configService = configService;
         watchConfigMap.putAll(
                 watchConfigs.stream().collect(Collectors.toMap(NacosWatchProperties::getDataId, NacosWatchProperties::getGroup)));

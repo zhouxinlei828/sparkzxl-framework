@@ -1,5 +1,8 @@
 package com.github.sparkzxl.data.sync.nacos.config;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Objects;
 
 /**
@@ -8,6 +11,8 @@ import java.util.Objects;
  * @author zhouxinlei
  * @since 2022-09-06 10:00:07
  */
+@Setter
+@Getter
 public class NacosACMProperties {
 
     private boolean enabled;
@@ -19,96 +24,6 @@ public class NacosACMProperties {
     private String accessKey;
 
     private String secretKey;
-
-    /**
-     * get enabled.
-     *
-     * @return enabled
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * set enabled.
-     *
-     * @param enabled enabled
-     */
-    public void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /**
-     * get endpoint.
-     *
-     * @return endpoint
-     */
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    /**
-     * set endpoint.
-     *
-     * @param endpoint endpoint
-     */
-    public void setEndpoint(final String endpoint) {
-        this.endpoint = endpoint;
-    }
-
-    /**
-     * get namespace.
-     *
-     * @return namespace
-     */
-    public String getNamespace() {
-        return namespace;
-    }
-
-    /**
-     * set namespace.
-     *
-     * @param namespace namespace
-     */
-    public void setNamespace(final String namespace) {
-        this.namespace = namespace;
-    }
-
-    /**
-     * get accessKey.
-     *
-     * @return accessKey
-     */
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    /**
-     * set accessKey.
-     *
-     * @param accessKey accessKey
-     */
-    public void setAccessKey(final String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-    /**
-     * get secretKey.
-     *
-     * @return secretKey
-     */
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    /**
-     * set secretKey.
-     *
-     * @param secretKey secretKey
-     */
-    public void setSecretKey(final String secretKey) {
-        this.secretKey = secretKey;
-    }
 
     @Override
     public boolean equals(final Object o) {

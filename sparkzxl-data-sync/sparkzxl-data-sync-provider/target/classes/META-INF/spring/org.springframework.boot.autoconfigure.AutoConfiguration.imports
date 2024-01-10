@@ -1,3 +1,0 @@
-com.github.sparkzxl.data.sync.admin.config.DataSyncProviderAutoConfig
-com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketConfigurator
-com.github.sparkzxl.data.sync.admin.listener.websocket.WebsocketListener

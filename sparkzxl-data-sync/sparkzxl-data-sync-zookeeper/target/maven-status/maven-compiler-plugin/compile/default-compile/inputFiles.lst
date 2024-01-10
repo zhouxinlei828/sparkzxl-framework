@@ -1,6 +1,0 @@
-/Users/zhouxinlei/Projects/IdeaProjects/my-project/sparkzxl/sparkzxl-framework/sparkzxl-data-sync/sparkzxl-data-sync-zookeeper/src/main/java/org/phoenix/data/sync/zookeeper/listener/AbstractDataSyncListener.java
-/Users/zhouxinlei/Projects/IdeaProjects/my-project/sparkzxl/sparkzxl-framework/sparkzxl-data-sync/sparkzxl-data-sync-zookeeper/src/main/java/org/phoenix/data/sync/zookeeper/config/ZkWatchProperties.java
-/Users/zhouxinlei/Projects/IdeaProjects/my-project/sparkzxl/sparkzxl-framework/sparkzxl-data-sync/sparkzxl-data-sync-zookeeper/src/main/java/org/phoenix/data/sync/zookeeper/listener/MetaDataSyncListener.java
-/Users/zhouxinlei/Projects/IdeaProjects/my-project/sparkzxl/sparkzxl-framework/sparkzxl-data-sync/sparkzxl-data-sync-zookeeper/src/main/java/org/phoenix/data/sync/zookeeper/ZookeeperDataSyncServiceImpl.java
-/Users/zhouxinlei/Projects/IdeaProjects/my-project/sparkzxl/sparkzxl-framework/sparkzxl-data-sync/sparkzxl-data-sync-zookeeper/src/main/java/org/phoenix/data/sync/zookeeper/config/CuratorProperties.java
-/Users/zhouxinlei/Projects/IdeaProjects/my-project/sparkzxl/sparkzxl-framework/sparkzxl-data-sync/sparkzxl-data-sync-zookeeper/src/main/java/org/phoenix/data/sync/zookeeper/config/ZookeeperDataSyncAutoConfig.java

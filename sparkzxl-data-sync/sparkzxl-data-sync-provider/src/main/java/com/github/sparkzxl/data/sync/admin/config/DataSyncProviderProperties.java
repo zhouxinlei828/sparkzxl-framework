@@ -17,6 +17,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_PREFIX)
 public class DataSyncProviderProperties {
 
+    /**
+     * default: true.
+     */
     private DataSyncPushType type = DataSyncPushType.WEBSOCKET;
 
 }

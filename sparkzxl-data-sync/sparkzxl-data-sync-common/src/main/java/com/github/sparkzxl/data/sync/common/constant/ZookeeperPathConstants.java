@@ -1,7 +1,7 @@
 package com.github.sparkzxl.data.sync.common.constant;
 
 
-import cn.hutool.core.text.StrPool;
+import com.github.sparkzxl.core.util.StrPool;
 
 /**
  * description:

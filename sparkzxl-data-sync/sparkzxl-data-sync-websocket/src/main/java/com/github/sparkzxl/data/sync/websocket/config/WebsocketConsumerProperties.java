@@ -16,6 +16,9 @@ public class WebsocketConsumerProperties {
 
     private boolean enabled;
 
+    /**
+     * 使用服务发现
+     */
     private boolean useRegistry;
 
     /**
@@ -24,7 +27,7 @@ public class WebsocketConsumerProperties {
     private String serviceId;
 
     /**
-     * if you have more admin url,please config like this. ws//:127.0.0.1:8888,127.0.0.1:8889
+     * if you have more admin url,please config like this. 127.0.0.1:8888,127.0.0.1:8889
      */
     private String urls;
 
