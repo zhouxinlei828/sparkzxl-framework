@@ -120,5 +120,5 @@ public interface StrPool {
     String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
     String LOCAL_DATE_TYPE_NAME = "java.time.LocalDateJsonSerializer";
     String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";
-
+    String SLASH = "/";
 }
