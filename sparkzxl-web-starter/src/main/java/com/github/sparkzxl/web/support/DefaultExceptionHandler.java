@@ -141,7 +141,7 @@ public class DefaultExceptionHandler implements Ordered {
      */
     @ExceptionHandler(BindException.class)
     public R<?> handleBindException(BindException e) {
-        log.warn("form非法参数验证异常:", e);
+        log.warn("form非法参数验证异常:{}", e.getMessage());
         try {
             String msg = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
             if (StrUtil.isNotEmpty(msg)) {
@@ -162,13 +162,13 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler({AccountNotFoundException.class})
     public R<?> handleAccountNotFoundException(AccountNotFoundException e) {
-        log.warn("账户找不到异常:", e);
+        log.warn("AccountNotFoundException异常:{}", e.getMessage());
         return R.fail(ResultErrorCode.USER_NOT_FOUND);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public R<?> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.error("请求方法不支持异常:", e);
+        log.error("请求方法不支持异常:{}", e.getMessage());
         return R.fail(ResultErrorCode.METHOD_NOT_SUPPORTED);
     }
 
@@ -185,14 +185,14 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public R<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
-        log.error("NoHandlerFoundException 异常:", e);
+        log.error("NoHandlerFoundException 异常:{}", e.getMessage());
         return R.failDetail(ResultErrorCode.NOT_FOUND.getErrorCode(), e.getMessage());
     }
 
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public R<?> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        log.error("HttpMediaTypeNotSupportedException 异常:", e);
+        log.error("HttpMediaTypeNotSupportedException 异常:{}", e.getMessage());
         MediaType contentType = e.getContentType();
         if (contentType != null) {
             return R.failDetail(
@@ -232,19 +232,19 @@ public class DefaultExceptionHandler implements Ordered {
 
     @ExceptionHandler(TokenExpireException.class)
     public R<?> handleLoginExpireException(TokenExpireException e) {
-        log.error("TokenExpireException 异常:", e);
+        log.error("TokenExpireException 异常:{}", e.getMessage());
         return R.fail(HttpCode.UNAUTHORIZED, e.getErrorCode(), e.getErrorMsg());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public R<?> handleUserNotFoundException(UserNotFoundException e) {
-        log.error("UserNotFoundException 异常:", e);
+        log.error("UserNotFoundException 异常:{}", e.getMessage());
         return R.fail(HttpCode.UNAUTHORIZED, e.getErrorCode(), e.getErrorMsg());
     }
 
     @ExceptionHandler(UserPasswordErrorException.class)
     public R<?> handleUserPasswordErrorException(UserPasswordErrorException e) {
-        log.error("UserPasswordErrorException 异常:", e);
+        log.error("UserPasswordErrorException 异常:{}", e.getMessage());
         return R.fail(HttpCode.UNAUTHORIZED, e.getErrorCode(), e.getErrorMsg());
     }
 
