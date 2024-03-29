@@ -18,7 +18,7 @@ public enum ResultErrorCode implements IErrorCode {
     MEDIA_TYPE_NOT_SUPPORTED("415", "不支持当前媒体类型"),
 
     // 文件上传异常
-    FILE_UPLOAD_EX("A0700", "用户上传文件异常"),
+    FILE_UPLOAD_ERROR("A0700", "用户上传文件异常"),
     SIGNATURE_EX("A0340", "签名异常"),
     REQUEST_TIMESTAMP_EX("A0414", "请求时间戳验签不通过"),
     JSON_PARSE_ERROR("A0427", "JSON解析异常"),

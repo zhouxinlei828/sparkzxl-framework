@@ -77,7 +77,7 @@ public class DefaultExceptionHandler implements Ordered {
         log.warn("ServletException:", e);
         String msg = "UT010016: Not a multi part request";
         if (msg.equalsIgnoreCase(e.getMessage())) {
-            return R.fail(ResultErrorCode.FILE_UPLOAD_EX);
+            return R.fail(ResultErrorCode.FILE_UPLOAD_ERROR);
         }
         return R.failDetail(ResultErrorCode.FAILURE.getErrorCode(), e.getMessage());
     }
@@ -220,7 +220,7 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(MultipartException.class)
     public R<?> handleMultipartException(MultipartException e) {
         log.error("MultipartException 异常:", e);
-        return R.fail(ResultErrorCode.FILE_UPLOAD_EX);
+        return R.fail(ResultErrorCode.FILE_UPLOAD_ERROR);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
