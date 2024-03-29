@@ -32,6 +32,7 @@ import javax.servlet.ServletException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -246,6 +247,18 @@ public class DefaultExceptionHandler implements Ordered {
     public R<?> handleUserPasswordErrorException(UserPasswordErrorException e) {
         log.error("UserPasswordErrorException 异常:{}", e.getMessage());
         return R.fail(HttpCode.UNAUTHORIZED, e.getErrorCode(), e.getErrorMsg());
+    }
+
+    @ExceptionHandler(UnknownHostException.class)
+    public R<?> handleUnknownHostException(UnknownHostException e) {
+        log.warn("UnknownHostException:{}", e.getMessage());
+        return R.failDetail(ResultErrorCode.IP_OR_DOMAIN_NAME_UNREACHABLE.getErrorCode(), ResultErrorCode.IP_OR_DOMAIN_NAME_UNREACHABLE.getErrorMsg());
+    }
+
+    @ExceptionHandler(LimitException.class)
+    public R<?> handleLimitException(LimitException e) {
+        log.warn("LimitException:{}", e.getErrorMsg());
+        return R.failDetail(ResultErrorCode.REQ_LIMIT.getErrorCode(), e.getErrorMsg());
     }
 
     @Override

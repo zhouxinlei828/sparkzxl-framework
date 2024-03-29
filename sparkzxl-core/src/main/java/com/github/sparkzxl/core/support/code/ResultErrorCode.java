@@ -60,8 +60,8 @@ public enum ResultErrorCode implements IErrorCode {
     RPC_SERVICE_EXCEPTION("C0110", "RPC服务出错"),
     RPC_SERVICE_NOT_FOUND_EXCEPTION("C0111", "RPC服务未找到"),
     RPC_SERVICE_NOT_REGISTERED_EXCEPTION("C0112", "RPC服务未注册"),
-    // 接口不存在
     NOT_FOUND("C0113", "接口不存在"),
+    IP_OR_DOMAIN_NAME_UNREACHABLE("C0153", "IP/域名无法解析"),
 
     CLUSTER_REDIRECT_EXCEPTION("C0230", "Redis集群异常"),
     CLUSTER_STATE_FAILURE_EXCEPTION("C0230", "Redis集群状态故障异常"),
@@ -80,7 +80,6 @@ public enum ResultErrorCode implements IErrorCode {
     COLUMN_DATA_TO_LONG_EXCEPTION("C0313", "输入数据字段过长"),
     PRIMARY_KEY_CONFLICT_EXCEPTION("C0341", "主键冲突"),
     TOKEN_EXPIRE_EXCEPTION("401", "认证失败，请重新登录"),
-
     ;
 
     final String errorCode;
