@@ -2,6 +2,8 @@ package com.github.sparkzxl.mybatis.plugins;
 
 
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
+import org.apache.ibatis.mapping.SqlCommandType;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +27,15 @@ public interface DataScopeLineHandler {
     }
 
     /**
+     * 获取sql命令类型
+     *
+     * @return SqlCommandType
+     */
+    default SqlCommandType getSqlCommandType() {
+        return SqlCommandType.UNKNOWN;
+    }
+
+    /**
      * 获取sql条件类型
      *
      * @param columnName 字段名
@@ -32,6 +43,15 @@ public interface DataScopeLineHandler {
      */
     default SqlConditions getSqlCondition(String columnName) {
         return SqlConditions.EQ;
+    }
+
+    /**
+     * 获取sql条件类型
+     *
+     * @return SqlConditions
+     */
+    default boolean getForce(String columnName) {
+        return Boolean.FALSE;
     }
 
     /**

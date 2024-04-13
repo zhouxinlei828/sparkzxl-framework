@@ -1,9 +1,11 @@
 package com.github.sparkzxl.data.sync.admin.listener;
 
+import cn.hutool.core.util.IdUtil;
 import com.github.sparkzxl.data.sync.common.entity.PushData;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * description: AbstractDataChangedListener
@@ -17,8 +19,9 @@ public abstract class AbstractDataChangedListener implements DataChangedListener
 
     @Override
     public <T> void onChanged(String configGroup, String eventType, List<T> data) {
-        logger.info("onDataChanged，configGroup:{}，eventType:{}，size:{}", configGroup, eventType, data.size());
-        PushData<?> configData = new PushData<>(configGroup, eventType, data);
+        String syncId = IdUtil.fastSimpleUUID();
+        logger.info("onDataChanged，syncId:{}，configGroup:{}，eventType:{}，size:{}", syncId, configGroup, eventType, data.size());
+        PushData<?> configData = new PushData<>(syncId, configGroup, eventType, data);
         publishConfig(configData);
     }
 

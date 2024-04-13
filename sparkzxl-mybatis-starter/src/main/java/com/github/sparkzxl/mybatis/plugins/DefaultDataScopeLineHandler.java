@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.mapping.SqlCommandType;
 
 /**
  * description: 多列数据权限 行级处理器
@@ -52,8 +53,18 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
     }
 
     @Override
+    public SqlCommandType getSqlCommandType() {
+        return dataScopeThreadLocal.get().getSqlCommandType();
+    }
+
+    @Override
     public SqlConditions getSqlCondition(String columnName) {
         return columnThreadLocal.get().get(columnName).getCondition();
+    }
+
+    @Override
+    public boolean getForce(String columnName) {
+        return columnThreadLocal.get().get(columnName).isForce();
     }
 
     @Override

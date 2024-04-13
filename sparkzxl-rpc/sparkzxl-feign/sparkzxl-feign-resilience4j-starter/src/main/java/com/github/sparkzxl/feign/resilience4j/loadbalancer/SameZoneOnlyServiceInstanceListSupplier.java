@@ -49,11 +49,11 @@ public class SameZoneOnlyServiceInstanceListSupplier extends DelegatingServiceIn
                     filteredInstances.add(serviceInstance);
                 }
             }
-            if (filteredInstances.size() > 0) {
-                return filteredInstances;
-            }
+            return filteredInstances;
+        } else {
+            // 说明未配置，返回的是所有实例
+            return serviceInstances;
         }
-        return Lists.newArrayList();
     }
 
     private String getZone(ServiceInstance serviceInstance) {

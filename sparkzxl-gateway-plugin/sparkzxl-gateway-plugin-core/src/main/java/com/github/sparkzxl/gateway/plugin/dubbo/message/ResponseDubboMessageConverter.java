@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo.message;
 
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import com.github.sparkzxl.spi.Join;
 import org.springframework.web.server.ServerWebExchange;
@@ -16,13 +16,13 @@ public class ResponseDubboMessageConverter implements DubboMessageConverter {
 
     @Override
     public Object convert(ServerWebExchange exchange, Object source) {
-        if (source instanceof ApiResult) {
+        if (source instanceof R) {
             return source;
         } else if (source instanceof Boolean && !(Boolean) source) {
-            return ApiResult.fail(
+            return R.failDetail(
                     ResultErrorCode.FAILURE.getErrorCode(), ResultErrorCode.FAILURE.getErrorMsg());
         } else {
-            return ApiResult.success(source);
+            return R.success(source);
         }
     }
 }

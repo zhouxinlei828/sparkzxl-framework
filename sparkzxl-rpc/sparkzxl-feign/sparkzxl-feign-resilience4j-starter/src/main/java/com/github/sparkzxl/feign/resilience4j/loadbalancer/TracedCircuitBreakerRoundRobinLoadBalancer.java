@@ -7,16 +7,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
@@ -26,6 +16,12 @@ import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoadBalancer;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import reactor.core.publisher.Mono;
+
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * description: 改进负载均衡算法
@@ -102,7 +98,7 @@ public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServic
     }
 
     public Response<ServiceInstance> getInstanceResponseByRoundRobin(String traceId, List<ServiceInstance> serviceInstances,
-            Map<ServiceInstance, CircuitBreaker> serviceInstanceCircuitBreakerMap) {
+                                                                     Map<ServiceInstance, CircuitBreaker> serviceInstanceCircuitBreakerMap) {
         Collections.shuffle(serviceInstances);
         //需要先将所有参数缓存起来，否则 comparator 会调用多次，并且可能在排序过程中参数发生改变
         Map<ServiceInstance, Integer> used = Maps.newHashMap();
@@ -130,6 +126,7 @@ public class TracedCircuitBreakerRoundRobinLoadBalancer implements ReactorServic
             return new EmptyResponse();
         }
         ServiceInstance serviceInstance = serviceInstances.get(0);
+        log.info("本次请求机器：{}:{}", serviceInstance.getHost(), serviceInstance.getPort());
         //记录本次返回的网段
         calledIpPrefixes.get(traceId).add(serviceInstance.getHost().substring(0, serviceInstance.getHost().lastIndexOf(".")));
         calledIps.get(traceId).add(serviceInstance.getHost());

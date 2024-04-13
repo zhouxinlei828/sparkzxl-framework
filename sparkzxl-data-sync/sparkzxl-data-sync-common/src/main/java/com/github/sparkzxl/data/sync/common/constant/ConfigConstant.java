@@ -1,5 +1,6 @@
 package com.github.sparkzxl.data.sync.common.constant;
 
+
 import com.github.sparkzxl.core.util.StrPool;
 
 /**

@@ -1,6 +1,6 @@
 package com.github.sparkzxl.oauth.component;
 
-import com.github.sparkzxl.core.base.result.ApiResult;
+import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.ResultErrorCode;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +30,7 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         ResultErrorCode exceptionCode = ResultErrorCode.LOGIN_EXPIRE;
-        String body = JsonUtils.getJson().toJson(ApiResult.fail(exceptionCode));
+        String body = JsonUtils.getJson().toJson(R.fail(exceptionCode));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

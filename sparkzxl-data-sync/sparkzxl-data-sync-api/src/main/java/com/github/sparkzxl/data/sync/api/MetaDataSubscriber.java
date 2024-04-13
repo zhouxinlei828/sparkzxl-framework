@@ -16,7 +16,7 @@ public interface MetaDataSubscriber extends DataSubscriber<MetaData> {
      * data group
      *
      * @return String
-     * @see com.github.sparkzxl.data.sync.common.enums.ConfigGroupEnum
+     * @see ConfigGroupEnum
      */
     @Override
     default String group() {

@@ -49,7 +49,6 @@
         <module>sparkzxl-mail-starter</module>
         <module>sparkzxl-mongodb-starter</module>
         <module>sparkzxl-oauth2-resource-starter</module>
-        <module>sparkzxl-oss-starter</module>
         <module>sparkzxl-patterns-starter</module>
         <module>sparkzxl-rpc</module>
         <module>sparkzxl-security-starter</module>
@@ -61,6 +60,8 @@
         <module>sparkzxl-user-starter</module>
         <module>sparkzxl-web-starter</module>
         <module>sparkzxl-trace-logger</module>
+        <module>sparkzxl-oss</module>
+        <module>sparkzxl-annotation</module>
     </modules>
 
     <licenses>

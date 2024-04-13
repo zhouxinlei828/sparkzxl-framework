@@ -106,6 +106,14 @@ public class Resilience4jFeignClient implements Client {
                 return Response.builder().request(request).status(RetryableHttpStatus.CIRCUIT_BREAKER_ON.getValue())
                         .reason(cause.getLocalizedMessage()).requestTemplate(request.requestTemplate()).build();
             }
+
+            // 对于 IllegalArgumentException，则代表请求还未发出，出现不合法的请求，需要拦截处理
+            if (cause instanceof IllegalArgumentException) {
+                String message = cause.getMessage();
+                return Response.builder().request(request).status(RetryableHttpStatus.NOT_RETRYABLE_IO_EXCEPTION.getValue())
+                        .reason(message).requestTemplate(request.requestTemplate()).build();
+            }
+
             //对于 IOException，需要判断是否请求已经发送出去了
             //对于 connect time out 的异常，则可以重试，因为请求没发出去，但是例如 read time out 则不行，因为请求已经发出去了
             if (cause instanceof IOException) {

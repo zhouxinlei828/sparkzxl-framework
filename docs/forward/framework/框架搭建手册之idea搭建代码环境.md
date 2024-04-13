@@ -304,7 +304,7 @@ server:
     include-message: ALWAYS
   compression:
     enabled: true
-    min-apiResult-size: 1024
+    min-r-size: 1024
     mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
 spring:
   main:
@@ -433,7 +433,7 @@ feign:
       enabled: true
       mime-types: text/xml,application/xml,application/json
       min-request-size: 2048
-    apiResult: # 响应压缩
+    r: # 响应压缩
       enabled: true
 ribbon:
   httpclient:

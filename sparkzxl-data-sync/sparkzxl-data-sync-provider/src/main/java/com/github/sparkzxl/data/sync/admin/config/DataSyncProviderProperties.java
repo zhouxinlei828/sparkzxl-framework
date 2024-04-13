@@ -1,5 +1,7 @@
 package com.github.sparkzxl.data.sync.admin.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import com.github.sparkzxl.data.sync.admin.DataSyncPushType;
 import com.github.sparkzxl.data.sync.common.constant.ConfigConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,6 +12,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author zhouxinlei
  * @since 2022-08-25 11:16:33
  */
+@Setter
+@Getter
 @ConfigurationProperties(prefix = ConfigConstant.DATA_SYNC_PREFIX)
 public class DataSyncProviderProperties {
 
@@ -18,11 +22,4 @@ public class DataSyncProviderProperties {
      */
     private DataSyncPushType type = DataSyncPushType.WEBSOCKET;
 
-    public DataSyncPushType getType() {
-        return type;
-    }
-
-    public void setType(DataSyncPushType type) {
-        this.type = type;
-    }
 }

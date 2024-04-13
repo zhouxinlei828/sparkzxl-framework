@@ -1,10 +1,12 @@
 package com.github.sparkzxl.mybatis.properties;
 
 import com.github.sparkzxl.mybatis.constant.SqlConditions;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.mapping.SqlCommandType;
+
+import java.util.List;
 
 /**
  * description: 多列数据权限配置
@@ -29,6 +31,10 @@ public class DataScopeConfig {
      * 表名
      */
     private String tableName;
+    /**
+     * SQL类型
+     */
+    private SqlCommandType sqlCommandType;
 
     /**
      * 数据权限列
@@ -46,6 +52,10 @@ public class DataScopeConfig {
          * 条件类型
          */
         private SqlConditions condition;
+        /**
+         * 是否强制拼接条件
+         */
+        private boolean force;
         /**
          * 查询key值
          */

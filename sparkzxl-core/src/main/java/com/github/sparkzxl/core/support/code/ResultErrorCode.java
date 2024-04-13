@@ -18,7 +18,7 @@ public enum ResultErrorCode implements IErrorCode {
     MEDIA_TYPE_NOT_SUPPORTED("415", "不支持当前媒体类型"),
 
     // 文件上传异常
-    FILE_UPLOAD_EX("A0700", "用户上传文件异常"),
+    FILE_UPLOAD_ERROR("A0700", "用户上传文件异常"),
     SIGNATURE_EX("A0340", "签名异常"),
     REQUEST_TIMESTAMP_EX("A0414", "请求时间戳验签不通过"),
     JSON_PARSE_ERROR("A0427", "JSON解析异常"),
@@ -36,8 +36,10 @@ public enum ResultErrorCode implements IErrorCode {
     USERNAME_EMPTY("A0110", "用户名不能为空"),
     PASSWORD_EMPTY("A0120", "密码不能为空"),
     TOKEN_VALID_ERROR("A0311", "token校验失败"),
-    USER_IDENTITY_VERIFICATION_ERROR("A0220", "用户身份校验失败"),
     USER_NOT_FOUND("A0201", "用户账户不存在"),
+    USER_PASSWORD_ERROR("A0210", "用户密码错误"),
+    USER_PASSWORD_LIMIT("A0211", "用户输入密码错误次数超限"),
+    USER_IDENTITY_VERIFICATION_ERROR("A0220", "用户身份校验失败"),
 
 
     //系统相关 start
@@ -58,8 +60,8 @@ public enum ResultErrorCode implements IErrorCode {
     RPC_SERVICE_EXCEPTION("C0110", "RPC服务出错"),
     RPC_SERVICE_NOT_FOUND_EXCEPTION("C0111", "RPC服务未找到"),
     RPC_SERVICE_NOT_REGISTERED_EXCEPTION("C0112", "RPC服务未注册"),
-    // 接口不存在
     NOT_FOUND("C0113", "接口不存在"),
+    IP_OR_DOMAIN_NAME_UNREACHABLE("C0153", "IP/域名无法解析"),
 
     CLUSTER_REDIRECT_EXCEPTION("C0230", "Redis集群异常"),
     CLUSTER_STATE_FAILURE_EXCEPTION("C0230", "Redis集群状态故障异常"),
@@ -78,7 +80,6 @@ public enum ResultErrorCode implements IErrorCode {
     COLUMN_DATA_TO_LONG_EXCEPTION("C0313", "输入数据字段过长"),
     PRIMARY_KEY_CONFLICT_EXCEPTION("C0341", "主键冲突"),
     TOKEN_EXPIRE_EXCEPTION("401", "认证失败，请重新登录"),
-
     ;
 
     final String errorCode;
