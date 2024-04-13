@@ -17,7 +17,7 @@ package com.github.sparkzxl.datasource.dynamic.aop;
 
 import com.baomidou.dynamic.datasource.processor.DsProcessor;
 import com.baomidou.dynamic.datasource.support.DataSourceClassResolver;
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.github.sparkzxl.datasource.dynamic.DynamicDataSourceContextHolder;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
