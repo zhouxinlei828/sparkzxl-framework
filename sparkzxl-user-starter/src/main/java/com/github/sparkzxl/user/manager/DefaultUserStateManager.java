@@ -40,7 +40,7 @@ public class DefaultUserStateManager implements UserStateManager {
 
     @Override
     public Object getUser(String token) {
-        log.info("user token : [{}]", token);
+        log.debug("user token : [{}]", token);
         Object userinfo = null;
         if (ObjectUtils.isNotEmpty(cacheService)) {
             userinfo = cacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
