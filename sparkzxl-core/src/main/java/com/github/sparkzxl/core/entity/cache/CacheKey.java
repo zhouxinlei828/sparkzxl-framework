@@ -1,22 +1,22 @@
-package com.github.sparkzxl.cache.redis;
+package com.github.sparkzxl.core.entity.cache;
 
-import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
+import java.time.Duration;
+
 /**
  * description: 缓存 key 封装
  *
  * @author zhouxinlei
- * @since 2022-10-14 16:29:54
+ * @since 2024-04-18 09:13:10
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CacheKey {
-
     /**
      * redis key
      */
@@ -30,6 +30,4 @@ public class CacheKey {
     public CacheKey(final @NonNull String key) {
         this.key = key;
     }
-
-
 }

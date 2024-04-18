@@ -34,7 +34,7 @@ public class DefaultUserStateManager implements UserStateManager {
     @Override
     public void removeUser(String token) {
         if (ObjectUtils.isNotEmpty(cacheService)) {
-            cacheService.remove(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
+            cacheService.del(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
     }
 

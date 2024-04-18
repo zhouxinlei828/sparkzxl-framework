@@ -6,6 +6,8 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.entity.cache.CacheHashKey;
+import com.github.sparkzxl.core.entity.cache.CacheKey;
 import com.github.sparkzxl.core.support.ArgumentException;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.core.util.StrPool;

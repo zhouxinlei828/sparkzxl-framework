@@ -1,14 +1,16 @@
 package com.github.sparkzxl.cache.service;
 
-import com.github.sparkzxl.cache.redis.CacheHashKey;
-import com.github.sparkzxl.cache.redis.CacheKey;
+import com.github.sparkzxl.core.entity.cache.CacheHashKey;
+import com.github.sparkzxl.core.entity.cache.CacheKey;
+import org.springframework.lang.NonNull;
+
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import org.springframework.lang.NonNull;
 
 /**
  * description: 缓存提供接口
@@ -66,6 +68,44 @@ public interface CacheService {
      * @see TimeUnit
      **/
     <T, M> T get(String key, Function<M, T> function, M funcParam, Duration timeout);
+
+    /**
+     * 根据key获取对象
+     * 不存在时，调用function回调获取数据，并set进入，然后返回
+     *
+     * @param key             redis主键
+     * @param loader          加载器
+     * @param cacheNullValues 是否缓存null对象
+     * @return 值
+     */
+    <T> T get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues);
+
+    /**
+     * 根据key获取对象
+     *
+     * @param key             redis主键
+     * @param cacheNullValues 是否缓存null对象
+     * @return 值 不存在时，返回null
+     */
+    <T> T get(@NonNull CacheKey key, boolean... cacheNullValues);
+
+
+    /**
+     * 根据keys获取对象
+     *
+     * @param keys redis主键
+     * @return 值 不存在时，返回空集合
+     */
+    <T> List<T> find(@NonNull Collection<CacheKey> keys);
+
+    /**
+     * 添加到带有 过期时间的  缓存
+     *
+     * @param key             redis主键
+     * @param value           值
+     * @param cacheNullValues 是否缓存null对象
+     */
+    void set(@NonNull CacheKey key, Object value, boolean... cacheNullValues);
 
     /**
      * 设置缓存键值
@@ -139,11 +179,20 @@ public interface CacheService {
     Long decrement(String key, long delta);
 
     /**
-     * 移除缓存
+     * 删除指定的key
      *
-     * @param keys 缓存键 不可为空
+     * @param keys 多个key
+     * @return 删除个数
      */
-    void remove(String... keys);
+    Long del(@NonNull CacheKey... keys);
+
+    /**
+     * 删除指定的key
+     *
+     * @param keys 多个key
+     * @return 删除个数
+     */
+    Long del(@NonNull String... keys);
 
     /**
      * 是否存在缓存
@@ -390,6 +439,4 @@ public interface CacheService {
      * @return 集合的基数。 当 key 不存在时，返回 0 。
      */
     Long sCard(@NonNull CacheKey key);
-
-
 }

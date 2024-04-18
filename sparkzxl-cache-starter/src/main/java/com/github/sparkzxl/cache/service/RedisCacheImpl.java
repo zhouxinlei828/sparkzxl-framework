@@ -2,17 +2,9 @@ package com.github.sparkzxl.cache.service;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
-import com.github.sparkzxl.cache.redis.CacheHashKey;
-import com.github.sparkzxl.cache.redis.CacheKey;
 import com.github.sparkzxl.cache.redis.RedisOps;
-import com.google.common.collect.Lists;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
+import com.github.sparkzxl.core.entity.cache.CacheHashKey;
+import com.github.sparkzxl.core.entity.cache.CacheKey;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +12,11 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.lang.NonNull;
+
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * description: redis缓存提供接口实现类
@@ -74,6 +71,26 @@ public class RedisCacheImpl implements CacheService {
     }
 
     @Override
+    public <T> T get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues) {
+        return redisOps.get(key, loader, cacheNullValues);
+    }
+
+    @Override
+    public <T> T get(@NonNull CacheKey key, boolean... cacheNullValues) {
+        return redisOps.get(key, cacheNullValues);
+    }
+
+    @Override
+    public void set(@NonNull CacheKey key, Object value, boolean... cacheNullValues) {
+
+    }
+
+    @Override
+    public <T> List<T> find(@NonNull Collection<CacheKey> keys) {
+        return redisOps.mGetByCacheKey(keys);
+    }
+
+    @Override
     public void set(String key, Object value) {
         set(key, value, null);
     }
@@ -122,8 +139,13 @@ public class RedisCacheImpl implements CacheService {
     }
 
     @Override
-    public void remove(String... keys) {
-        redisTemplate.delete(Lists.newArrayList(keys));
+    public Long del(@NonNull CacheKey... keys) {
+        return redisOps.del(keys);
+    }
+
+    @Override
+    public Long del(String... keys) {
+        return redisOps.del(keys);
     }
 
     @Override

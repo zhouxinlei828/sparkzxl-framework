@@ -1,25 +1,27 @@
-package com.github.sparkzxl.cache.redis;
+package com.github.sparkzxl.core.entity.cache;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.util.StrPool;
-import java.time.Duration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
 
+import java.time.Duration;
+
+
 /**
  * description: hash 缓存 key 封装
  *
  * @author zhouxinlei
+ * @since 2024-04-18 09:50:42
  */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CacheHashKey extends CacheKey {
-
     /**
      * redis hash field
      */

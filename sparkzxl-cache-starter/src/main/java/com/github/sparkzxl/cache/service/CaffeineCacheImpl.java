@@ -4,16 +4,17 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.sparkzxl.cache.redis.CacheHashKey;
-import com.github.sparkzxl.cache.redis.CacheKey;
-import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Function;
+import com.github.sparkzxl.core.entity.cache.CacheHashKey;
+import com.github.sparkzxl.core.entity.cache.CacheKey;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.NonNull;
+
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * description: Caffeine本地缓存实现
@@ -23,27 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 public class CaffeineCacheImpl implements CacheService {
 
     private static final long MAX_SIZE = 1000;
-    private final Cache<String, Cache<String, Object>> cacheMap;
 
-    public CaffeineCacheImpl() {
-        this.cacheMap = Caffeine.newBuilder().maximumSize(MAX_SIZE).build();
-    }
+    private final Cache<String, Cache<String, Object>> cacheMap = Caffeine.newBuilder().maximumSize(MAX_SIZE).build();
 
-    @Override
-    public void set(String key, Object value) {
-        set(key, value, null);
-    }
-
-    @Override
-    public void set(String key, Object value, Duration timeout) {
-        Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
-        if (ObjectUtils.isNotEmpty(timeout)) {
-            builder.expireAfterWrite(timeout);
-        }
-        Cache<String, Object> cache = builder.build();
-        cache.put(key, value);
-        this.cacheMap.put(key, cache);
-    }
 
     @Override
     public boolean setIfAbsent(String key, Object value, Duration timeout) {
@@ -57,6 +40,9 @@ public class CaffeineCacheImpl implements CacheService {
 
     @Override
     public boolean setIfAbsent(String key, Object value) {
+        if (StringUtils.isEmpty(key)) {
+            return false;
+        }
         Cache<String, Object> ifPresent = this.cacheMap.getIfPresent(key);
         if (ObjectUtils.isEmpty(ifPresent)) {
             set(key, value);
@@ -140,10 +126,19 @@ public class CaffeineCacheImpl implements CacheService {
     }
 
     @Override
-    public void remove(String... keys) {
-        for (String key : keys) {
-            this.cacheMap.invalidate(key);
+    public Long del(@NonNull CacheKey... keys) {
+        for (CacheKey key : keys) {
+            cacheMap.invalidate(key.getKey());
         }
+        return (long) keys.length;
+    }
+
+    @Override
+    public Long del(@NonNull String... keys) {
+        for (String key : keys) {
+            cacheMap.invalidate(key);
+        }
+        return (long) keys.length;
     }
 
     @Override
@@ -191,6 +186,63 @@ public class CaffeineCacheImpl implements CacheService {
         }, cache.getIfPresent(key), null);
     }
 
+    @Override
+    public <T> T get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues) {
+        Cache<String, Object> ifPresent = cacheMap.getIfPresent(key);
+        if (ifPresent == null) {
+            return null;
+        }
+        return (T) ifPresent.getIfPresent(key);
+    }
+
+    @Override
+    public <T> T get(@NonNull CacheKey key, boolean... cacheNullValues) {
+        Cache<String, Object> ifPresent = cacheMap.getIfPresent(key.getKey());
+        if (ifPresent == null) {
+            return null;
+        }
+        return (T) ifPresent.getIfPresent(key.getKey());
+    }
+
+    @Override
+    public void set(@NonNull CacheKey key, Object value, boolean... cacheNullValues) {
+        if (value == null) {
+            return;
+        }
+        Caffeine<Object, Object> builder = Caffeine.newBuilder()
+                .maximumSize(MAX_SIZE);
+        if (key.getExpire() != null) {
+            builder.expireAfterWrite(key.getExpire());
+        }
+        Cache<String, Object> cache = builder.build();
+        cache.put(key.getKey(), value);
+        cacheMap.put(key.getKey(), cache);
+    }
+
+
+    @Override
+    public void set(String key, Object value) {
+        set(key, value, null);
+    }
+
+    @Override
+    public void set(String key, Object value, Duration timeout) {
+        if (value == null) {
+            return;
+        }
+        Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
+        if (ObjectUtils.isNotEmpty(timeout)) {
+            builder.expireAfterWrite(timeout);
+        }
+        Cache<String, Object> cache = builder.build();
+        cache.put(key, value);
+        this.cacheMap.put(key, cache);
+    }
+
+    @Override
+    public <T> List<T> find(@NonNull Collection<CacheKey> keys) {
+        return keys.stream().map(k -> (T) get(k, false)).filter(Objects::nonNull).collect(Collectors.toList());
+    }
 
     @Override
     public void flushDb() {

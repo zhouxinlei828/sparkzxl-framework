@@ -30,6 +30,7 @@ public enum ResultErrorCode implements IErrorCode {
     PARAM_TYPE_ERROR("A0421", "参数格式不匹配"),
     PARAM_VALID_ERROR("A0415", "参数校验失败"),
     PARAM_EX("A0416", "参数类型解析异常"),
+    SERVICE_MAPPER_ERROR("A0417", "Mapper类转换异常"),
     TOO_MUCH_DATA_ERROR("A0426", "批量新增数据过多"),
     REQ_BLACKLIST("A0323", "非法 IP 地址"),
     PARAM_FLOW("A0321", "热点参数访问频繁，请稍后再试"),
