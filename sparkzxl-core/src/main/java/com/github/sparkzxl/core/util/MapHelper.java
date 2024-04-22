@@ -31,7 +31,7 @@ public final class MapHelper {
     /**
      * 移除map中空key或者value空值
      *
-     * @param map
+     * @param map map
      */
     public static void removeNullEntry(Map<String, Object> map) {
         removeNullKey(map);
@@ -72,8 +72,8 @@ public final class MapHelper {
      * fail-fast 原则 Iterator 会马上抛出 java.util.ConcurrentModificationException 异常。 所以 Iterator 在工作的时候是不允许被迭代的对象被改变的。 但你可以使用 Iterator 本身的方法
      * remove() 来删除对象， Iterator.remove() 方法会在删除当前迭代对象的同时维护索引的一致性。
      *
-     * @param obj
-     * @param iterator
+     * @param obj 对象
+     * @param iterator 迭代器
      */
     private static void remove(Object obj, Iterator<String> iterator) {
         if (obj instanceof String) {

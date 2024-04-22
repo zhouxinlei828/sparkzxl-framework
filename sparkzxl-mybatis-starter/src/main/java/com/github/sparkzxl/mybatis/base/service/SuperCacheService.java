@@ -1,6 +1,5 @@
 package com.github.sparkzxl.mybatis.base.service;
 
-import com.github.sparkzxl.core.entity.cache.CacheKey;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;

@@ -13,7 +13,6 @@ import com.github.sparkzxl.core.util.StrPool;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
@@ -150,7 +149,8 @@ public class RedisOps {
         List<List<String>> partitionKeys = Lists.partition(keys, BATCH_SIZE);
         long count = 0;
         for (List<String> list : partitionKeys) {
-            count += redisTemplate.delete(list);
+            redisTemplate.delete(list);
+            count += list.size();
         }
         return count;
     }
@@ -218,7 +218,8 @@ public class RedisOps {
         List<List<String>> partitionKeys = Lists.partition(keys, BATCH_SIZE);
         long count = 0;
         for (List<String> list : partitionKeys) {
-            count += redisTemplate.unlink(list);
+            redisTemplate.unlink(list);
+            count += list.size();
         }
         return count;
     }
