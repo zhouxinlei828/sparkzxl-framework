@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 public @interface HttpRequestLog {
 
     /**
-     * 是否启用 操作日志 禁用控制优先级：lamp.log.enabled = false > 控制器类上@SysLog(enabled = false) > 控制器方法上@SysLog(enabled = false)
+     * 是否启用 操作日志 禁用控制优先级：spring.web.log.enabled = false > 控制器类上@HttpRequestLog(enabled = false) > 控制器方法上@HttpRequestLog(enabled = false)
      *
      * @return 是否启用
      */

@@ -6,7 +6,10 @@ import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.*;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.entity.cache.CacheKey;
@@ -15,11 +18,11 @@ import com.github.sparkzxl.mybatis.base.mapper.SuperMapper;
 import com.github.sparkzxl.mybatis.base.service.SuperCacheService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -71,6 +74,28 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
+    public List<T> listByKey(CacheKey key, Function<CacheKey, Set<Object>> loader) {
+        Set<Object> memberList = cacheService.sMembers(key);
+        List<Long> idList = Convert.toList(Long.class, memberList);
+        if (CollectionUtils.isEmpty(idList)) {
+            Set<Object> objectSet = loader.apply(key);
+            for (Object object : objectSet) {
+                cacheService.sAdd(key, object);
+                idList.add(Convert.toLong(object));
+            }
+        }
+        return listByIds(idList);
+    }
+
+    @Override
+    public List<T> listByIds(Collection<? extends Serializable> idList) {
+        if (idList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return findByIds(idList, missIds -> super.listByIds(missIds.stream().filter(Objects::nonNull).collect(Collectors.toList())));
+    }
+
+    @Override
     public List<T> findByIds(@NonNull Collection<? extends Serializable> ids, Function<Collection<? extends Serializable>, Collection<T>> loader) {
         if (ids.isEmpty()) {
             return Collections.emptyList();
@@ -111,7 +136,6 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
         boolean bool = super.removeById(id);
         delCache(id);
@@ -119,7 +143,6 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<?> idList) {
         if (CollUtil.isEmpty(idList)) {
             return true;
@@ -130,15 +153,6 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean save(T model) {
-        boolean save = super.save(model);
-        setCache(model);
-        return save;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateAllById(T model) {
         boolean updateBool = super.updateAllById(model);
         delCache(model);
@@ -146,28 +160,13 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateById(T model) {
         boolean updateBool = super.updateById(model);
         delCache(model);
         return updateBool;
     }
 
-
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveBatch(Collection<T> entityList, int batchSize) {
-        String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
-        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
-            sqlSession.insert(sqlStatement, entity);
-
-            // 设置缓存
-            setCache(entity);
-        });
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
         Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
@@ -189,15 +188,12 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         return SqlHelper.executeBatch(getEntityClass(), log, entityList, batchSize, (sqlSession, entity) -> {
             if (predicate.test(sqlSession, entity)) {
                 sqlSession.insert(sqlStatement, entity);
-                // 设置缓存
-                setCache(entity);
             } else {
                 consumer.accept(sqlSession, entity);
             }
         });
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateBatchById(Collection<T> entityList, int batchSize) {
         String sqlStatement = getSqlStatement(SqlMethod.UPDATE_BY_ID);
@@ -220,6 +216,40 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         list().forEach(this::delCache);
     }
 
+    @Override
+    public void delCache(Serializable... ids) {
+        delCache(Arrays.asList(ids));
+    }
+
+    @Override
+    public void delCache(CacheKey key) {
+        cacheService.del(key);
+    }
+
+    @Override
+    public void delCache(Collection<?> idList) {
+        CacheKey[] keys = idList.stream().map(id -> cacheKeyBuilder().key(id)).toArray(CacheKey[]::new);
+        cacheService.del(keys);
+    }
+
+    @Override
+    public void delCache(T model) {
+        Object id = getId(model);
+        if (id != null) {
+            CacheKey key = cacheKeyBuilder().key(id);
+            cacheService.del(key);
+        }
+    }
+
+    @Override
+    public void setCache(T model) {
+        Object id = getId(model);
+        if (id != null) {
+            CacheKey key = cacheKeyBuilder().key(id);
+            cacheService.set(key, model);
+        }
+    }
+
     /**
      * 获取主键ID值
      *
@@ -239,36 +269,8 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         }
         // id 字段名
         String keyProperty = tableInfo.getKeyProperty();
-
         // 反射得到 主键的值
         Field idField = ReflectUtil.getField(getEntityClass(), keyProperty);
         return ReflectUtil.getFieldValue(model, idField);
-    }
-
-
-    protected void delCache(Serializable... ids) {
-        delCache(Arrays.asList(ids));
-    }
-
-    protected void delCache(Collection<?> idList) {
-        CacheKey[] keys = idList.stream().map(id -> cacheKeyBuilder().key(id)).toArray(CacheKey[]::new);
-        cacheService.del(keys);
-    }
-
-
-    protected void delCache(T model) {
-        Object id = getId(model);
-        if (id != null) {
-            CacheKey key = cacheKeyBuilder().key(id);
-            cacheService.del(key);
-        }
-    }
-
-    protected void setCache(T model) {
-        Object id = getId(model);
-        if (id != null) {
-            CacheKey key = cacheKeyBuilder().key(id);
-            cacheService.set(key, model);
-        }
     }
 }

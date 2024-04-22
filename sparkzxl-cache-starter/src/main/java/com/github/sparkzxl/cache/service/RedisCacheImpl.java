@@ -82,7 +82,7 @@ public class RedisCacheImpl implements CacheService {
 
     @Override
     public void set(@NonNull CacheKey key, Object value, boolean... cacheNullValues) {
-
+        redisOps.set(key, value, cacheNullValues);
     }
 
     @Override
