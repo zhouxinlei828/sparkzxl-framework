@@ -3,7 +3,7 @@ package com.github.sparkzxl.feign.support;
 import cn.hutool.core.text.StrFormatter;
 import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.feign.exception.RemoteCallTransferException;
 import feign.FeignException;
 import feign.Request;
@@ -28,7 +28,7 @@ public class FeignExceptionHandler implements Ordered {
     @ExceptionHandler(SocketTimeoutException.class)
     public R<?> handleSocketTimeoutException(SocketTimeoutException e) {
         log.error("SocketTimeoutException 异常:", e);
-        return R.failDetail(ResultErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
+        return R.failDetail(ExceptionErrorCode.TIME_OUT_ERROR.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler(RetryableException.class)
@@ -41,8 +41,8 @@ public class FeignExceptionHandler implements Ordered {
         } else {
             applicationName = "unKnownServer";
         }
-        String message = StrFormatter.format(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorMsg(), applicationName);
-        return R.failDetail(ResultErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
+        String message = StrFormatter.format(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorMsg(), applicationName);
+        return R.failDetail(ExceptionErrorCode.RETRY_ABLE_EXCEPTION.getErrorCode(), message);
     }
 
     @ExceptionHandler(FeignException.ServiceUnavailable.class)
@@ -55,14 +55,14 @@ public class FeignExceptionHandler implements Ordered {
         } else {
             applicationName = "unKnownServer";
         }
-        String message = StrFormatter.format(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
-        return R.failDetail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        String message = StrFormatter.format(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
+        return R.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
     }
 
     @ExceptionHandler(DecodeException.class)
     public R<?> handleDecodeException(DecodeException e) {
         log.error("DecodeException 异常:", e);
-        return R.failDetail(ResultErrorCode.DECODE_EXCEPTION.getErrorCode(), ResultErrorCode.DECODE_EXCEPTION.getErrorMsg());
+        return R.failDetail(ExceptionErrorCode.DECODE_EXCEPTION.getErrorCode(), ExceptionErrorCode.DECODE_EXCEPTION.getErrorMsg());
     }
 
     @ExceptionHandler(RemoteCallTransferException.class)

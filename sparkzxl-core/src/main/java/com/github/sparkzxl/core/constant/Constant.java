@@ -12,18 +12,18 @@ import java.util.List;
 public class Constant {
 
     public static List<String> EXCLUDE_STATIC_PATTERNS = Lists.newArrayList(
-            "/swagger-ui.html",
-            "/swagger-resources/**",
-            "/swagger/**",
-            "/v2/api-docs",
-            "/v3/api-docs",
-            "/**/*.js",
-            "/**/*.css",
-            "/**/*.png",
-            "/**/*.ico",
             "/favicon.ico",
+            "/**/doc.html",
+            "/**/swagger-ui.html",
+            "/swagger-resources/**",
+            "/csrf",
             "/webjars/**",
-            "/doc.html",
+            "/v2/**",
+            "/v3/**",
+            "/resources/**",
+            "/static/**",
+            "/public/**",
+            "/classpath:*",
             "/actuator/**"
     );
 }

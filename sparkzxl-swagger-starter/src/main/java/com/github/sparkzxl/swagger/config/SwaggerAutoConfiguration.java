@@ -242,11 +242,10 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
     private List<ResponseMessage> getResponseMessages() {
         return Arrays.asList(
-                new ResponseMessageBuilder().code(200).message("成功").build(),
-                new ResponseMessageBuilder().code(500).message("哎呀，开了个小差，请稍后再试").build(),
-                new ResponseMessageBuilder().code(401).message("暂未登录或者token失效").build(),
-                new ResponseMessageBuilder().code(403).message("无权限访问").build(),
-                new ResponseMessageBuilder().code(230).message("Token过期").build()
+                new ResponseMessageBuilder().code(200).message("请求成功").build(),
+                new ResponseMessageBuilder().code(500).message("请求失败").build(),
+                new ResponseMessageBuilder().code(401).message("用户登录已过期").build(),
+                new ResponseMessageBuilder().code(403).message("访问未授权").build()
         );
     }
 

@@ -2,7 +2,7 @@ package com.github.sparkzxl.gateway.support;
 
 import com.github.sparkzxl.core.support.BaseUncheckedException;
 import com.github.sparkzxl.core.support.code.IErrorCode;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import lombok.Getter;
 
 /**
@@ -20,7 +20,7 @@ public class GatewayException extends BaseUncheckedException {
     }
 
     public GatewayException(Throwable cause) {
-        super(ResultErrorCode.FAILURE.getErrorCode(), cause.getMessage());
+        super(ExceptionErrorCode.FAILURE.getErrorCode(), cause.getMessage());
     }
 
     public GatewayException(IErrorCode errorCode, String errorMsg) {

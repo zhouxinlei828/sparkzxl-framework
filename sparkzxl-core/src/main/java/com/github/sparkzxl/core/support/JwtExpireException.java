@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.support;
 
 import com.github.sparkzxl.core.support.code.IErrorCode;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import lombok.Getter;
 
 /**
@@ -15,11 +15,11 @@ public class JwtExpireException extends BaseUncheckedException {
     private static final long serialVersionUID = -6710673514378835453L;
 
     public JwtExpireException() {
-        super(ResultErrorCode.LOGIN_EXPIRE);
+        super(ExceptionErrorCode.LOGIN_EXPIRE);
     }
 
     public JwtExpireException(String message) {
-        super(ResultErrorCode.LOGIN_EXPIRE.getErrorCode(), message);
+        super(ExceptionErrorCode.LOGIN_EXPIRE.getErrorCode(), message);
     }
 
     public JwtExpireException(IErrorCode errorCode) {

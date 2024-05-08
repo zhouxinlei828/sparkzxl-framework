@@ -1,7 +1,7 @@
 package com.github.sparkzxl.security.component;
 
 import com.github.sparkzxl.core.support.code.IErrorCode;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException e) {
         log.warn("AuthenticationException：[{}]", e.getMessage());
-        IErrorCode errorCode = ResultErrorCode.LOGIN_EXPIRE;
+        IErrorCode errorCode = ExceptionErrorCode.LOGIN_EXPIRE;
         HttpRequestUtils.failResponse(response, errorCode);
     }
 

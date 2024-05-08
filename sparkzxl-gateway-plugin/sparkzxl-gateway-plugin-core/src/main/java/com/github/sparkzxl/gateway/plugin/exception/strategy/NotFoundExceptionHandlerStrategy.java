@@ -3,7 +3,7 @@ package com.github.sparkzxl.gateway.plugin.exception.strategy;
 import cn.hutool.core.text.StrFormatter;
 import com.alibaba.fastjson.JSON;
 import com.github.sparkzxl.core.base.result.R;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.gateway.plugin.exception.result.ExceptionHandlerResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,9 +34,9 @@ public class NotFoundExceptionHandlerStrategy implements ExceptionHandlerStrateg
             int indexOf = message.lastIndexOf("for ") + 4;
             String serviceName = message.substring(indexOf);
             String applicationName = StringUtils.isEmpty(serviceName) ? "unKnownServer" : serviceName;
-            message = StrFormatter.format(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
+            message = StrFormatter.format(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorMsg(), applicationName);
         }
-        R<?> r = R.failDetail(ResultErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
+        R<?> r = R.failDetail(ExceptionErrorCode.OPEN_SERVICE_UNAVAILABLE.getErrorCode(), message);
         return new ExceptionHandlerResult(HttpStatus.NOT_FOUND, JSON.toJSONString(r));
     }
 }

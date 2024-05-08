@@ -1,6 +1,6 @@
 package com.github.sparkzxl.gateway.plugin.dubbo;
 
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.gateway.common.entity.MetaData;
 import com.github.sparkzxl.gateway.plugin.dubbo.config.ApacheDubboConfigCache;
 import com.github.sparkzxl.gateway.plugin.dubbo.constant.DubboConstant;
@@ -68,7 +68,7 @@ public class ApacheDubboProxyService {
                     }
                     return ret;
                 })).onErrorMap(exception -> exception instanceof GenericException ? new GatewayException(
-                ResultErrorCode.RPC_SERVICE_EXCEPTION.getErrorCode(), ((GenericException) exception).getExceptionMessage())
+                ExceptionErrorCode.RPC_SERVICE_EXCEPTION.getErrorCode(), ((GenericException) exception).getExceptionMessage())
                 : new GatewayException(exception));
     }
 

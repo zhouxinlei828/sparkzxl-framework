@@ -2,7 +2,7 @@ package com.github.sparkzxl.security.authorization;
 
 import cn.hutool.core.collection.CollUtil;
 import com.github.sparkzxl.core.support.ExceptionAssert;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import java.util.Collection;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,7 +35,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
                 }
             }
         }
-        ExceptionAssert.failure(ResultErrorCode.AUTHORIZED_DENIED);
+        ExceptionAssert.failure(ExceptionErrorCode.AUTHORIZED_DENIED);
     }
 
     @Override

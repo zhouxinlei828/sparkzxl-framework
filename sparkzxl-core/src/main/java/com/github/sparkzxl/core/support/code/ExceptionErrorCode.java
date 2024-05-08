@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ResultErrorCode implements IErrorCode {
+public enum ExceptionErrorCode implements IErrorCode {
 
     // 消息不能读取
     MSG_NOT_READABLE("405", "消息不能读取"),
@@ -51,7 +51,7 @@ public enum ResultErrorCode implements IErrorCode {
     RETRY_ABLE_EXCEPTION("B0100", "【{}】服务请求超时重试异常"),
     OPEN_SERVICE_UNAVAILABLE("B0200", "【{}】服务不可用，请联系管理员！"),
     SYSTEM_BLOCK("B0310", "系统负载过高，请稍后再试"),
-    SERVICE_DEGRADATION("B0220", "系统功能降级"),
+    FALLBACK_EXCEPTION("B0220", "系统功能降级"),
     REQ_LIMIT("B0210", "系统限流，请稍后再试"),
     //系统相关 end
 
@@ -80,7 +80,6 @@ public enum ResultErrorCode implements IErrorCode {
     UNKNOWN_COLUMN("C0312", "字段不存在，请联系管理员！"),
     COLUMN_DATA_TO_LONG_EXCEPTION("C0313", "输入数据字段过长"),
     PRIMARY_KEY_CONFLICT_EXCEPTION("C0341", "主键冲突"),
-    TOKEN_EXPIRE_EXCEPTION("401", "认证失败，请重新登录"),
     ;
 
     final String errorCode;

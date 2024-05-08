@@ -6,7 +6,7 @@ import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.SecretUtil;
 import com.github.sparkzxl.gateway.common.constant.GatewayConstant;
@@ -73,7 +73,7 @@ public class JwtFilter extends AbstractGlobalFilter {
                 return chain.filter(converter(exchange, jsonMap, jwtRuleHandle.getConverter()));
             }
         }
-        return ReactorHttpHelper.error(exchange.getResponse(), ResultErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
+        return ReactorHttpHelper.error(exchange.getResponse(), ExceptionErrorCode.USER_IDENTITY_VERIFICATION_ERROR);
     }
 
     @Override

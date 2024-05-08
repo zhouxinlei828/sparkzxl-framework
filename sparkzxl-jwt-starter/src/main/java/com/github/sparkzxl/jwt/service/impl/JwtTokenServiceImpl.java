@@ -7,6 +7,7 @@ import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.JwtExpireException;
 import com.github.sparkzxl.core.support.JwtInvalidException;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.SecretUtil;
 import com.github.sparkzxl.core.util.TimeUtil;
@@ -85,7 +86,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         JwtUserInfo jwtUserInfo = getJwtUserInfo(token);
         assert jwtUserInfo != null;
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new JwtExpireException("token已过期");
+            throw new JwtExpireException(ExceptionErrorCode.LOGIN_EXPIRE);
         }
         return jwtUserInfo;
     }
@@ -157,12 +158,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         //创建HMAC验证器
         JWSVerifier jwsVerifier = new MACVerifier(SecretUtil.encryptMd5(jwtProperties.getSecret()));
         if (!jwsObject.verify(jwsVerifier)) {
-            throw new JwtInvalidException("token签名不合法");
+            throw new JwtInvalidException(ExceptionErrorCode.TOKEN_VALID_ERROR);
         }
         jwtUserInfo = getJwtUserInfo(token);
         assert jwtUserInfo != null;
         if (jwtUserInfo.getExpire().getTime() < System.currentTimeMillis()) {
-            throw new JwtExpireException("token已过期");
+            throw new JwtExpireException(ExceptionErrorCode.LOGIN_EXPIRE);
         }
         return jwtUserInfo;
     }

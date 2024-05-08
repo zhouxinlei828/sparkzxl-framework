@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import lombok.Getter;
 
 /**
@@ -14,6 +14,6 @@ public class TenantException extends BaseUncheckedException {
     private static final long serialVersionUID = -2803534562798384761L;
 
     public TenantException(String message) {
-        super(ResultErrorCode.PARAM_VALID_ERROR.getErrorCode(), message);
+        super(ExceptionErrorCode.PARAM_VALID_ERROR.getErrorCode(), message);
     }
 }

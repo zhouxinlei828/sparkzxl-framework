@@ -24,9 +24,14 @@ public enum HttpCode {
     FAILURE(HttpStatus.INTERNAL_SERVER_ERROR.value(), "请求失败"),
 
     /**
-     * 业务异常
+     * 认证异常
      */
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "用户登录已过期"),
+
+    /**
+     * 认证异常
+     */
+    FORBIDDEN(HttpStatus.FORBIDDEN.value(), "用户访问未授权"),
     ;
 
     final int code;

@@ -4,7 +4,7 @@ import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.core.base.HttpCode;
 import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.web.annotation.IgnoreResponseWrap;
 import java.nio.charset.StandardCharsets;
@@ -60,12 +60,12 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
         int status = servletResponse.getStatus();
         R<?> result;
         if (fallback) {
-            result = R.failDetail(ResultErrorCode.SERVICE_DEGRADATION.getErrorCode(), ResultErrorCode.SERVICE_DEGRADATION.getErrorMsg());
+            result = R.failDetail(ExceptionErrorCode.FALLBACK_EXCEPTION.getErrorCode(), ExceptionErrorCode.FALLBACK_EXCEPTION.getErrorMsg());
         } else if (body instanceof Boolean && !(Boolean) body) {
             result = R.fail(HttpCode.FAILURE,false);
         } else if (status == HttpCode.FAILURE.getCode()) {
             result = R.failDetail(
-                    ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ResultErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
+                    ExceptionErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ExceptionErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
             servletResponse.setStatus(HttpCode.SUCCESS.getCode());
         } else {
             result = R.success(body);

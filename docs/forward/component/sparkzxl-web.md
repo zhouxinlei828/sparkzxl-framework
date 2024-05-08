@@ -154,7 +154,7 @@ public enum ResponseResultStatus implements BusinessEnumSysAssert {
 
     SERVICE_MAPPER_ERROR(-11, "Mapper类转换异常"),
 
-    SERVICE_DEGRADATION(HttpStatus.HTTP_UNAVAILABLE, "服务降级，请稍候再试"),
+    FALLBACK_EXCEPTION(HttpStatus.HTTP_UNAVAILABLE, "服务降级，请稍候再试"),
 
     UPLOAD_FAILURE(HttpStatus.HTTP_INTERNAL_ERROR, "上传文件失败了哦"),
 

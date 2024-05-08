@@ -1,6 +1,6 @@
 package com.github.sparkzxl.security.component;
 
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +21,6 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
             HttpServletResponse response,
             AccessDeniedException e) {
         log.warn("AccessDeniedException：[{}]", e.getMessage());
-        HttpRequestUtils.failResponse(response, ResultErrorCode.AUTHORIZED_DENIED);
+        HttpRequestUtils.failResponse(response, ExceptionErrorCode.AUTHORIZED_DENIED);
     }
 }

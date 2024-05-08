@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.ParameterizedType;
 
-import static com.github.sparkzxl.core.support.code.ResultErrorCode.SERVICE_MAPPER_ERROR;
+import static com.github.sparkzxl.core.support.code.ExceptionErrorCode.SERVICE_MAPPER_ERROR;
 
 /**
  * description:

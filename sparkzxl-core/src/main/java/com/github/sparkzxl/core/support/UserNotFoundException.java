@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 
 /**
  * description: 用户不存在异常
@@ -15,7 +15,7 @@ public class UserNotFoundException extends BaseUncheckedException {
     }
 
     public UserNotFoundException(String errorMsg) {
-        super(ResultErrorCode.USER_NOT_FOUND.getErrorCode(), errorMsg);
+        super(ExceptionErrorCode.USER_NOT_FOUND.getErrorCode(), errorMsg);
     }
 
     @Override

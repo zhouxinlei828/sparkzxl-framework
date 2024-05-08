@@ -2,8 +2,8 @@ package com.github.sparkzxl.user.manager;
 
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.support.TokenExpireException;
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.LoginExpireException;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
@@ -45,7 +45,7 @@ public class DefaultUserStateManager implements UserStateManager {
         if (ObjectUtils.isNotEmpty(cacheService)) {
             userinfo = cacheService.get(KeyGeneratorUtil.generateKey(BaseContextConstants.AUTH_USER_TOKEN, token));
         }
-        ArgumentAssert.notNull(userinfo, () -> new TokenExpireException(ResultErrorCode.LOGIN_EXPIRE));
+        ArgumentAssert.notNull(userinfo, LoginExpireException::new);
         return userinfo;
     }
 

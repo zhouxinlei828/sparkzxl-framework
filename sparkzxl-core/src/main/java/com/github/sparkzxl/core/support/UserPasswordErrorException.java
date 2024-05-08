@@ -1,6 +1,6 @@
 package com.github.sparkzxl.core.support;
 
-import com.github.sparkzxl.core.support.code.ResultErrorCode;
+import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 
 /**
  * description: 用户密码错误异常
@@ -15,7 +15,7 @@ public class UserPasswordErrorException extends BaseUncheckedException {
     }
 
     public UserPasswordErrorException(String errorMsg) {
-        super(ResultErrorCode.USER_PASSWORD_ERROR.getErrorCode(), errorMsg);
+        super(ExceptionErrorCode.USER_PASSWORD_ERROR.getErrorCode(), errorMsg);
     }
 
     @Override
