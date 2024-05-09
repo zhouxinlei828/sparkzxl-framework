@@ -1,9 +1,11 @@
 package com.github.sparkzxl.oss.executor;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
 import com.amazonaws.services.s3.model.S3Object;
+import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.oss.client.OssClient;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.Configuration;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -29,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
- * description: minio oss 执行器
+ * description: minio 执行器
  *
  * @author zhouxinlei
  * @since 2022-05-03 16:54:27
@@ -44,27 +47,15 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     /**
      * bucket权限-只读
      */
-    private static final String READ_ONLY =
-            "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::"
-                    + BUCKET_PARAM
-                    + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::"
-                    + BUCKET_PARAM + "/*\"]}]}";
+    private static final String READ_ONLY = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::" + BUCKET_PARAM + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::" + BUCKET_PARAM + "/*\"]}]}";
     /**
      * bucket权限-只读
      */
-    private static final String WRITE_ONLY =
-            "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucketMultipartUploads\"],\"Resource\":[\"arn:aws:s3:::"
-                    + BUCKET_PARAM
-                    + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:AbortMultipartUpload\",\"s3:DeleteObject\",\"s3:ListMultipartUploadParts\",\"s3:PutObject\"],\"Resource\":[\"arn:aws:s3:::"
-                    + BUCKET_PARAM + "/*\"]}]}";
+    private static final String WRITE_ONLY = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucketMultipartUploads\"],\"Resource\":[\"arn:aws:s3:::" + BUCKET_PARAM + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:AbortMultipartUpload\",\"s3:DeleteObject\",\"s3:ListMultipartUploadParts\",\"s3:PutObject\"],\"Resource\":[\"arn:aws:s3:::" + BUCKET_PARAM + "/*\"]}]}";
     /**
      * bucket权限-读写
      */
-    private static final String READ_WRITE =
-            "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\",\"s3:ListBucketMultipartUploads\"],\"Resource\":[\"arn:aws:s3:::"
-                    + BUCKET_PARAM
-                    + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:DeleteObject\",\"s3:GetObject\",\"s3:ListMultipartUploadParts\",\"s3:PutObject\",\"s3:AbortMultipartUpload\"],\"Resource\":[\"arn:aws:s3:::"
-                    + BUCKET_PARAM + "/*\"]}]}";
+    private static final String READ_WRITE = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\",\"s3:ListBucketMultipartUploads\"],\"Resource\":[\"arn:aws:s3:::" + BUCKET_PARAM + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:DeleteObject\",\"s3:GetObject\",\"s3:ListMultipartUploadParts\",\"s3:PutObject\",\"s3:AbortMultipartUpload\"],\"Resource\":[\"arn:aws:s3:::" + BUCKET_PARAM + "/*\"]}]}";
 
     public MinioExecutor(OssClient<MinioClient> client) {
         super(client);
@@ -81,8 +72,7 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
                 log.info("bucket [{}] already exists.", bucketName);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.CREATE_BUCKET_ERROR);
+            throw new OssException(OssErrorCode.CREATE_BUCKET_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -92,8 +82,7 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
         try {
             minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.DELETE_BUCKET_ERROR);
+            throw new OssException(OssErrorCode.DELETE_BUCKET_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -102,11 +91,9 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
         MinioClient minioClient = obtainClient();
         String objectUrl;
         try {
-            objectUrl = minioClient.getPresignedObjectUrl(
-                    GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(objectName).expiry(expire).build());
+            objectUrl = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(objectName).expiry(expire).build());
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
+            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR.getErrorCode(), e.getMessage());
         }
         Configuration configInfo = obtainConfigInfo();
         return OssUtils.replaceHttpDomain(objectUrl, configInfo.getDomain());
@@ -121,15 +108,14 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     public S3Object getObjectInfo(String bucketName, String objectName) {
         MinioClient minioClient = obtainClient();
         try {
-            GetObjectResponse getObject = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+            GetObjectResponse minioClientObject = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
             S3Object s3Object = new S3Object();
-            s3Object.setObjectContent(getObject);
-            s3Object.setBucketName(getObject.bucket());
-            s3Object.setKey(getObject.object());
+            s3Object.setObjectContent(minioClientObject);
+            s3Object.setBucketName(minioClientObject.bucket());
+            s3Object.setKey(minioClientObject.object());
             return s3Object;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
+            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -149,22 +135,24 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
 
     @Override
     public void putObject(String bucketName, String objectName, MultipartFile multipartFile) {
+        uploadFileLimit(objectName);
         MinioClient minioClient = obtainClient();
         try {
-            PutObjectArgs putObjectArgs = PutObjectArgs.builder().bucket(bucketName)
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .bucket(bucketName)
                     .object(objectName)
                     .stream(multipartFile.getInputStream(), multipartFile.getSize(), PutObjectArgs.MAX_PART_SIZE)
-                    .contentType(multipartFile.getContentType())
-                    .build();
+                    .contentType(multipartFile.getContentType()
+                    ).build();
             minioClient.putObject(putObjectArgs);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
+            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, String filePath) {
+        uploadFileLimit(objectName);
         MinioClient minioClient = obtainClient();
         File tempFile = new File(filePath);
         try {
@@ -178,15 +166,12 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
             minioClient.putObject(putObjectArgs);
         } catch (Exception e) {
             throw new OssException(OssErrorCode.PUT_OBJECT_ERROR.getErrorCode(), e.getMessage());
-        } finally {
-            if (!tempFile.delete()) {
-                log.info("无法删除临时文件:{}", tempFile);
-            }
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, URL url) {
+        uploadFileLimit(objectName);
         MinioClient minioClient = obtainClient();
         long executeTime;
         Stopwatch dbStopwatch = Stopwatch.createStarted();
@@ -195,6 +180,8 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
         try {
             conn = (HttpURLConnection) url.openConnection();
             System.out.println("HTTP下载文件开始======");
+            long millis = TimeUtil.toMillis(5, TimeUnit.SECONDS);
+            conn.setConnectTimeout((int) millis);
             int responseCode = conn.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
@@ -237,6 +224,7 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
 
     @Override
     public void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
+        uploadFileLimit(objectName);
         MinioClient minioClient = obtainClient();
         try {
             List<SnowballObject> snowballObjects = new ArrayList<>();
@@ -259,10 +247,10 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
                 snowballObjects.add(snowballObject);
             }
             log.info("objectName [{}] upload started", objectName);
-            minioClient.uploadSnowballObjects(
-                    UploadSnowballObjectsArgs.builder().bucket(bucketName).object(objectName).objects(snowballObjects).build());
+            minioClient.uploadSnowballObjects(UploadSnowballObjectsArgs.builder().bucket(bucketName).object(objectName).objects(snowballObjects).build());
             log.info("objectName [{}] upload complete", objectName);
         } catch (Exception e) {
+            log.error("上传minio失败：{}", ExceptionUtil.stacktraceToString(e));
             throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR.getErrorCode(), e.getMessage());
         }
     }
@@ -273,8 +261,7 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
         try {
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR);
+            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -306,16 +293,13 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
         try {
             switch (policy) {
                 case READ_ONLY:
-                    minioClient.setBucketPolicy(
-                            SetBucketPolicyArgs.builder().bucket(bucket).config(READ_ONLY.replace(BUCKET_PARAM, bucket)).build());
+                    minioClient.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(bucket).config(READ_ONLY.replace(BUCKET_PARAM, bucket)).build());
                     break;
                 case WRITE_ONLY:
-                    minioClient.setBucketPolicy(
-                            SetBucketPolicyArgs.builder().bucket(bucket).config(WRITE_ONLY.replace(BUCKET_PARAM, bucket)).build());
+                    minioClient.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(bucket).config(WRITE_ONLY.replace(BUCKET_PARAM, bucket)).build());
                     break;
                 case READ_WRITE:
-                    minioClient.setBucketPolicy(
-                            SetBucketPolicyArgs.builder().bucket(bucket).config(READ_WRITE.replace(BUCKET_PARAM, bucket)).build());
+                    minioClient.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(bucket).config(READ_WRITE.replace(BUCKET_PARAM, bucket)).build());
                     break;
                 default:
                     break;
@@ -328,5 +312,4 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     @Override
     public void showdown() {
     }
-
 }

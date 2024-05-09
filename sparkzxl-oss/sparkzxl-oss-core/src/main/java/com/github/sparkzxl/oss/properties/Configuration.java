@@ -61,4 +61,9 @@ public class Configuration implements Serializable {
      */
     private String bucketName = "sparkzxl";
 
+    /**
+     * 上传文件限制白名单，逗号分割
+     */
+    private String fileFormat;
+
 }

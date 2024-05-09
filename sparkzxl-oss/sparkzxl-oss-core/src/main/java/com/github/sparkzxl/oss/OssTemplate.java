@@ -153,7 +153,7 @@ public class OssTemplate implements InitializingBean {
         ossExecutor.downloadFile(bucketName, objectName, consumer);
     }
 
-    protected OssExecutor obtainExecutor() {
+    public OssExecutor obtainExecutor() {
         String clientId = OssClientContextHolder.peek();
         if (clientId == null) {
             return primaryExecutor;

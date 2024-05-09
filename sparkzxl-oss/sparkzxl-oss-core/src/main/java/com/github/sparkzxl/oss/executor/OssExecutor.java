@@ -3,6 +3,7 @@ package com.github.sparkzxl.oss.executor;
 import cn.hutool.core.net.url.UrlBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
+import com.github.sparkzxl.oss.properties.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -143,4 +144,8 @@ public interface OssExecutor {
      * 销毁
      */
     void showdown();
+
+    default Configuration obtainConfigInfo() {
+        return null;
+    }
 }

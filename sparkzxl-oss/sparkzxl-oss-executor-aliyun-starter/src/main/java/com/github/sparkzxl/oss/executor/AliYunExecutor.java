@@ -8,9 +8,11 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
+import com.aliyun.oss.internal.Mimetypes;
 import com.aliyun.oss.model.*;
 import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.DateUtils;
+import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.oss.client.OssClient;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.Configuration;
@@ -18,22 +20,28 @@ import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
 import com.google.common.base.Stopwatch;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
- * description: aliYun oss 执行器
+ * description: aliYun 执行器
  *
  * @author zhouxinlei
  * @since 2022-05-03 16:54:27
@@ -56,15 +64,14 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                 log.info("bucket [{}] already exists.", bucketName);
             }
         } catch (OSSException e) {
-            log.warn("Caught an OSSException, which means your request made it to OSS, "
+            log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.CREATE_BUCKET_ERROR);
+            throw new OssException(OssErrorCode.CREATE_BUCKET_ERROR.getErrorCode(), e.getErrorMessage());
         }
     }
 
@@ -74,15 +81,14 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         try {
             ossClient.deleteBucket(bucketName);
         } catch (OSSException e) {
-            log.warn("Caught an OSSException, which means your request made it to OSS, "
+            log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.DELETE_BUCKET_ERROR);
+            throw new OssException(OssErrorCode.DELETE_BUCKET_ERROR.getErrorCode(), e.getErrorMessage());
         }
     }
 
@@ -97,8 +103,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             URL signedUrl = ossClient.generatePresignedUrl(req);
             objectUrl = signedUrl.toString();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
+            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR.getErrorCode(), e.getMessage());
         }
         Configuration configInfo = obtainConfigInfo();
         return OssUtils.replaceHttpDomain(objectUrl, configInfo.getDomain());
@@ -120,15 +125,14 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             s3Object.setKey(object.getKey());
             return s3Object;
         } catch (OSSException e) {
-            log.warn("Caught an OSSException, which means your request made it to OSS, "
+            log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR);
+            throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR.getErrorCode(), e.getErrorMessage());
         }
     }
 
@@ -152,23 +156,23 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
 
     @Override
     public void putObject(String bucketName, String objectName, MultipartFile multipartFile) {
+        uploadFileLimit(objectName);
         OSSClient ossClient = obtainClient();
         try {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(multipartFile.getSize());
             objectMetadata.setContentType(multipartFile.getContentType());
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, multipartFile.getInputStream());
-            putObjectRequest.setMetadata(objectMetadata);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, multipartFile.getInputStream(),objectMetadata);
             ossClient.putObject(putObjectRequest);
         } catch (OSSException e) {
-            log.warn("Caught an OSSException, which means your request made it to OSS, "
+            log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{} Error Message:{} Request ID:{} Host ID:{}",
                     e.getErrorCode(),
                     e.getErrorMessage(),
                     e.getRequestId(),
                     e.getHostId());
-            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR);
+            throw new OssException(OssErrorCode.PUT_OBJECT_ERROR.getErrorCode(), e.getErrorMessage());
         } catch (Exception e) {
             throw new OssException(OssErrorCode.OSS_ERROR.getErrorCode(), e.getMessage());
         }
@@ -176,6 +180,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
 
     @Override
     public void putObject(String bucketName, String objectName, String filePath) {
+        uploadFileLimit(objectName);
         OSSClient ossClient = obtainClient();
         File tempFile = new File(filePath);
         try {
@@ -183,8 +188,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(tempFile.length());
             objectMetadata.setContentType(mimeType);
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile));
-            putObjectRequest.setMetadata(objectMetadata);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile),objectMetadata);
             ossClient.putObject(putObjectRequest);
         } catch (OSSException e) {
             log.warn("Caught an OSSException, which means your request made it to OSS, "
@@ -197,15 +201,12 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             throw new OssException(OssErrorCode.PUT_OBJECT_ERROR.getErrorCode(), e.getErrorMessage());
         } catch (Exception e) {
             throw new OssException(OssErrorCode.OSS_ERROR.getErrorCode(), e.getMessage());
-        } finally {
-            if (!tempFile.delete()) {
-                log.info("无法删除临时文件:{}", tempFile);
-            }
         }
     }
 
     @Override
     public void putObject(String bucketName, String objectName, URL url) {
+        uploadFileLimit(objectName);
         OSSClient ossClient = obtainClient();
         long executeTime;
         Stopwatch dbStopwatch = Stopwatch.createStarted();
@@ -213,6 +214,8 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) url.openConnection();
+            long millis = TimeUtil.toMillis(5, TimeUnit.SECONDS);
+            conn.setConnectTimeout((int) millis);
             System.out.println("HTTP下载文件开始======");
             int responseCode = conn.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -231,8 +234,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                 ObjectMetadata objectMetadata = new ObjectMetadata();
                 objectMetadata.setContentLength(tempFile.length());
                 objectMetadata.setContentType(mimeType);
-                PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile));
-                putObjectRequest.setMetadata(objectMetadata);
+                PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, FileUtil.getInputStream(tempFile),objectMetadata);
                 ossClient.putObject(putObjectRequest);
                 executeTime = dbStopwatch.elapsed(TimeUnit.SECONDS);
                 System.out.println("上传耗时：[" + executeTime + "]秒");
@@ -263,6 +265,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
 
     @Override
     public void multipartUpload(String bucketName, String objectName, MultipartFile multipartFile) {
+        uploadFileLimit(objectName);
         OSSClient ossClient = obtainClient();
         try {
             long fileLength = multipartFile.getSize();
@@ -271,7 +274,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(bucketName, objectName);
 
             // 如果需要在初始化分片时设置请求头，请参考以下示例代码。
-            // ObjectMetadata metadata = new ObjectMetadata();
+            ObjectMetadata metadata = new ObjectMetadata();
             // metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
             // 指定该Object的网页缓存行为。
             // metadata.setCacheControl("no-cache");
@@ -294,6 +297,9 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             // 指定Object的对象标签，可同时设置多个标签。
             // metadata.setHeader(OSSHeaders.OSS_TAGGING, "a:1");
             // request.setObjectMetadata(metadata);
+            if (metadata.getContentType() == null) {
+                metadata.setContentType(Mimetypes.getInstance().getMimetype(multipartFile.getOriginalFilename(), objectName));
+            }
             InitiateMultipartUploadResult upresult = ossClient.initiateMultipartUpload(request);
             // 返回uploadId，它是分片上传事件的唯一标识。您可以根据该uploadId发起相关的操作，例如取消分片上传、查询分片上传等。
             String uploadId = upresult.getUploadId();
@@ -327,6 +333,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                 partTagList.add(uploadPartResult.getPartETag());
             }
 
+
             // 创建CompleteMultipartUploadRequest对象。
             // 在执行完成分片上传操作时，需要提供所有有效的partETags。OSS收到提交的partETags后，会逐一验证每个分片的有效性。当所有的数据分片验证通过后，OSS将把这些分片组合成一个完整的文件。
             CompleteMultipartUploadRequest completeMultipartUploadRequest =
@@ -341,9 +348,9 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
             // headers.put("x-oss-complete-all","yes");
             // completeMultipartUploadRequest.setHeaders(headers);
             CompleteMultipartUploadResult completeMultipartUploadResult = ossClient.completeMultipartUpload(completeMultipartUploadRequest);
-            System.out.println(completeMultipartUploadResult.getETag());
+            log.info("分片上传结果：{}",completeMultipartUploadResult.getETag());
         } catch (OSSException oe) {
-            log.warn("Caught an OSSException, which means your request made it to OSS, "
+            log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{}\n"
                             + "Error Message:{}\n"
@@ -353,17 +360,16 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
                     oe.getErrorMessage(),
                     oe.getRequestId(),
                     oe.getHostId());
-            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR);
+            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR.getErrorCode(), oe.getErrorMessage());
         } catch (ClientException ce) {
             log.warn("Caught an ClientException, which means the client encountered "
                             + "a serious internal problem while trying to communicate with OSS," +
                             "such as not being able to access the network.\n "
                             + "Error Message:{}",
                     ce.getMessage());
-            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR);
+            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR.getErrorCode(), ce.getErrorMessage());
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR);
+            throw new OssException(OssErrorCode.MULTIPART_UPLOAD_ERROR.getErrorCode(), e.getMessage());
         }
     }
 
@@ -372,25 +378,25 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         OSSClient ossClient = obtainClient();
         try {
             ossClient.deleteObject(bucketName, objectName);
-        } catch (OSSException e) {
-            log.warn("Caught an OSSException, which means your request made it to OSS, "
+        } catch (OSSException oe) {
+            log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"
                             + "Error Code:{}\n"
                             + "Error Message:{}\n"
                             + "Request ID:{}\n"
                             + "Host ID:{}",
-                    e.getErrorCode(),
-                    e.getErrorMessage(),
-                    e.getRequestId(),
-                    e.getHostId());
-            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), e.getErrorMessage());
-        } catch (ClientException e) {
-            log.warn("Caught an ClientException, which means the client encountered "
+                    oe.getErrorCode(),
+                    oe.getErrorMessage(),
+                    oe.getRequestId(),
+                    oe.getHostId());
+            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), oe.getErrorMessage());
+        } catch (ClientException ce) {
+            log.error("Caught an ClientException, which means the client encountered "
                             + "a serious internal problem while trying to communicate with OSS," +
                             "such as not being able to access the network.\n "
                             + "Error Message:{}",
-                    e.getMessage());
-            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), e.getMessage());
+                    ce.getMessage());
+            throw new OssException(OssErrorCode.DELETE_OBJECT_ERROR.getErrorCode(), ce.getErrorMessage());
         }
     }
 

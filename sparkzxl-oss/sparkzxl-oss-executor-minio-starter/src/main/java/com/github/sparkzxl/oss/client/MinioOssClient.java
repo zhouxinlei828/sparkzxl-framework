@@ -24,7 +24,6 @@ public class MinioOssClient implements OssClient<MinioClient> {
         this.configuration = configuration;
         this.client = MinioClient.builder().endpoint(configuration.getEndpoint())
                 .credentials(configuration.getAccessKey(), configuration.getSecretKey())
-                .region(configuration.getRegion().getName())
                 .build();
         return this;
     }
