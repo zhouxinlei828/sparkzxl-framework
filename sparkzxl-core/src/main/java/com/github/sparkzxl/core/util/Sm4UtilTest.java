@@ -1,13 +1,7 @@
 package com.github.sparkzxl.core.util;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.RandomUtil;
-import com.github.sparkzxl.core.json.JsonUtils;
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import javax.crypto.IllegalBlockSizeException;
 
 /**
  * description: sm4 test
@@ -18,8 +12,8 @@ import javax.crypto.IllegalBlockSizeException;
 public class Sm4UtilTest {
 
     public static void main(String[] args) throws InterruptedException {
-        String key = RandomUtil.randomString(16);
-        String iv = RandomUtil.randomString(16);
+        String key = Sm4Util.generateKey();
+        String iv = Sm4Util.generateIv();
         System.out.println("SM4加密key： " + key);
         System.out.println("SM4加密iv： " + iv);
         List<String> algorithm = new ArrayList<>();
@@ -49,8 +43,6 @@ public class Sm4UtilTest {
                     loginUserInfo.setId(IdUtil.getSnowflake().nextIdStr());
                     loginUserInfo.setName(RandomValueUtil.getChineseName());
                     loginUserInfo.setUsername(RandomUtil.randomString(5));
-                    loginUserInfo.setStatus(Boolean.TRUE);
-                    loginUserInfo.setRoleList(Lists.newArrayList("admin"));
                     loginUserInfos.add(loginUserInfo);
                 }
                 String json = JsonUtils.getJson().toJson(loginUserInfos);

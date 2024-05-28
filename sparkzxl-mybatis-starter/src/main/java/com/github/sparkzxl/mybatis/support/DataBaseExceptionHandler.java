@@ -1,6 +1,7 @@
 package com.github.sparkzxl.mybatis.support;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.util.ReUtil;
 import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.enums.BeanOrderEnum;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.SQLSyntaxErrorException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * description: 数据库全局异常处理
@@ -36,6 +39,7 @@ public class DataBaseExceptionHandler implements Ordered {
     private final static String DATABASE_PREFIX = "Unknown database";
     private final static String TABLE_PREFIX = "^Table.*doesn't exist$";
     private final static String COLUMN_PREFIX = "Unknown column";
+    private final static String VIOLATION_DATABASE_REGEX = "Duplicate entry '(.*?)' for key '(.*?)'";
     private final static int DATABASE_ERROR_CODE = 1364;
 
     @ExceptionHandler(MysqlDataTruncation.class)
@@ -89,6 +93,14 @@ public class DataBaseExceptionHandler implements Ordered {
         if (message.startsWith("Duplicate entry") && message.endsWith("for key 'PRIMARY'")) {
             return R.failDetail(ExceptionErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorCode(),
                     ExceptionErrorCode.PRIMARY_KEY_CONFLICT_EXCEPTION.getErrorMsg());
+        }
+        Pattern pattern = Pattern.compile(VIOLATION_DATABASE_REGEX);
+        Matcher matcher = pattern.matcher(message);
+        if (matcher.find()) {
+            System.out.println("Found: " + matcher.group(1) + " | " + matcher.group(2));
+            String errorMsg = StrFormatter.format(ExceptionErrorCode.VIOLATION_DATABASE_CONSTRAINT_EXCEPTION.getErrorMsg(),
+                    matcher.group(2), matcher.group(1));
+            return R.failDetail(ExceptionErrorCode.VIOLATION_DATABASE_CONSTRAINT_EXCEPTION.getErrorCode(), errorMsg);
         }
         return R.failDetail(ExceptionErrorCode.SQL_EX.getErrorCode(), ExceptionErrorCode.SQL_EX.getErrorMsg());
     }

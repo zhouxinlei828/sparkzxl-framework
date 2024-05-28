@@ -80,6 +80,7 @@ public enum ExceptionErrorCode implements IErrorCode {
     UNKNOWN_COLUMN("C0312", "字段不存在，请联系管理员！"),
     COLUMN_DATA_TO_LONG_EXCEPTION("C0313", "输入数据字段过长"),
     PRIMARY_KEY_CONFLICT_EXCEPTION("C0341", "主键冲突"),
+    VIOLATION_DATABASE_CONSTRAINT_EXCEPTION("C0342", "违反数据库约束key：[{}]，value：[{}]"),
     ;
 
     final String errorCode;

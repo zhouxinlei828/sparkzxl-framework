@@ -1,16 +1,14 @@
 package com.github.sparkzxl.core.util;
 
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.util.Base64;
+import cn.hutool.core.util.RandomUtil;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import java.security.Key;
+import java.security.Security;
+import java.util.Base64;
 
 /**
  * description: Sm4Util
@@ -25,28 +23,48 @@ public class Sm4Util {
     /**
      * 128-32位16进制；256-64位16进制
      */
-    public static final int DEFAULT_KEY_SIZE = 128;
+    public static final int DEFAULT_KEY_SIZE = 16;
 
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static byte[] generateKey() throws NoSuchAlgorithmException, NoSuchProviderException {
-        return generateKey(DEFAULT_KEY, DEFAULT_KEY_SIZE);
+    /**
+     * 生成加密key
+     *
+     * @return String
+     */
+    public static String generateKey() {
+        return RandomUtil.randomString(DEFAULT_KEY_SIZE);
     }
 
-    public static byte[] generateKey(String seed) throws NoSuchAlgorithmException, NoSuchProviderException {
-        return generateKey(seed, DEFAULT_KEY_SIZE);
+    /**
+     * 生成加密key
+     *
+     * @param size 字符串的长度
+     * @return String
+     */
+    public static String generateKey(final int size) {
+        return RandomUtil.randomString(size);
     }
 
-    public static byte[] generateKey(String seed, int keySize) throws NoSuchAlgorithmException, NoSuchProviderException {
-        KeyGenerator kg = KeyGenerator.getInstance(ALGORITHM_NAME, BouncyCastleProvider.PROVIDER_NAME);
-        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-        if (null != seed && !"".equals(seed)) {
-            random.setSeed(seed.getBytes());
-        }
-        kg.init(keySize, random);
-        return kg.generateKey().getEncoded();
+    /**
+     * 生成加密向量
+     *
+     * @return String
+     */
+    public static String generateIv() {
+        return RandomUtil.randomString(DEFAULT_KEY_SIZE);
+    }
+
+    /**
+     * 生成加密向量
+     *
+     * @param size 字符串的长度
+     * @return String
+     */
+    public static String generateIv(final int size) {
+        return RandomUtil.randomString(size);
     }
 
     /**
