@@ -25,6 +25,7 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
     private String errorCode;
 
     public BaseUncheckedException(IErrorCode errorCode) {
+        super(errorCode.getErrorMsg());
         this.errorCode = errorCode.getErrorCode();
         this.errorMsg = errorCode.getErrorMsg();
     }
