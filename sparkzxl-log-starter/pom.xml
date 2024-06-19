@@ -8,6 +8,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <protobuf-java.version>3.20.1</protobuf-java.version>
+        <aliyun-log-logback.version>0.1.19</aliyun-log-logback.version>
+        <aliyun-log-producer.version>0.3.8</aliyun-log-producer.version>
+    </properties>
     <artifactId>sparkzxl-log-starter</artifactId>
     <dependencies>
         <dependency>
@@ -42,6 +47,17 @@
         <dependency>
             <groupId>com.github.sparkzxl</groupId>
             <artifactId>sparkzxl-alarm-core</artifactId>
+        </dependency>
+        <!-- 阿里云日志sls依赖-->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>aliyun-log-logback-appender</artifactId>
+            <version>${aliyun-log-logback.version}</version>
         </dependency>
         <!-- 自定义的元数据依赖 -->
         <dependency>

@@ -3,10 +3,13 @@ package com.github.sparkzxl.log.properties;
 import static com.github.sparkzxl.log.properties.LogProperties.LOG_PREFIX;
 
 import java.util.List;
+
+import cn.hutool.core.date.DatePattern;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * description: 日志配置类
@@ -139,6 +142,31 @@ public class LogProperties {
         private boolean warnExceptionExtend = false;
 
         private List<Class<? extends Throwable>> doWarnException;
+    }
+
+    @NestedConfigurationProperty
+    private AliYunLog aliYunLog = new AliYunLog();
+
+    @Getter
+    @Setter
+    public static class AliYunLog {
+        private boolean enabled;
+        private String endpoint;
+        private String accessKeyId;
+        private String accessKeySecret;
+        private String project = "phoenix";
+        private String logStore;
+        private int totalSizeInBytes = 104857600;
+        private int maxBlockMs = 0;
+        private int ioThreadCount = 8;
+        private int batchSizeThresholdInBytes = 524288;
+        private int batchCountThreshold = 4096;
+        private int lingerMs = 2000;
+        private int retries = 10;
+        private int baseRetryBackoffMs = 100;
+        private int maxRetryBackoffMs = 50000;
+        private String timeFormat = DatePattern.NORM_DATETIME_MS_PATTERN;
+        private String timeZone = "Asia/Shanghai";
     }
 
 }

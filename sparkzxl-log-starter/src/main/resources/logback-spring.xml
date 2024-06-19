@@ -30,6 +30,37 @@
 
     <springProperty scope="context" name="log.level.console" source="logging.level.console" defaultValue="INFO"/>
 
+    <!--阿里云日志服务配置 正式环境-->
+    <springProperty name="enableAliYunLog" scope="context" source="logging.aliYunLog.enabled"
+                    defaultValue="false"/>
+    <springProperty name="endpoint" scope="context" source="logging.aliYunLog.endpoint"
+                    defaultValue=""/>
+    <springProperty name="accessKeyId" scope="context" source="logging.aliYunLog.accessKeyId" defaultValue=""/>
+    <springProperty name="accessKeySecret" scope="context" source="logging.aliYunLog.accessKeySecret"
+                    defaultValue=""/>
+    <springProperty name="project" scope="context" source="logging.aliYunLog.project"
+                    defaultValue="gongbaojin"/>
+    <springProperty name="logStore" scope="context" source="logging.aliYunLog.logStore" defaultValue=""/>
+    <springProperty name="totalSizeInBytes" scope="context" source="aliYunLog.config.totalSizeInBytes"
+                    defaultValue="104857600"/>
+    <springProperty name="maxBlockMs" scope="context" source="logging.aliYunLog.maxBlockMs" defaultValue="0"/>
+    <springProperty name="ioThreadCount" scope="context" source="logging.aliYunLog.ioThreadCount"
+                    defaultValue="8"/>
+    <springProperty name="batchSizeThresholdInBytes" scope="context"
+                    source="logging.aliYunLog.batchSizeThresholdInBytes" defaultValue="524288"/>
+    <springProperty name="batchCountThreshold" scope="context" source="logging.aliYunLog.batchCountThreshold"
+                    defaultValue="4096"/>
+    <springProperty name="lingerMs" scope="context" source="logging.aliYunLog.lingerMs" defaultValue="2000"/>
+    <springProperty name="retries" scope="context" source="logging.aliYunLog.retries" defaultValue="10"/>
+    <springProperty name="baseRetryBackoffMs" scope="context" source="logging.aliYunLog.baseRetryBackoffMs"
+                    defaultValue="100"/>
+    <springProperty name="maxRetryBackoffMs" scope="context" source="logging.aliYunLog.maxRetryBackoffMs"
+                    defaultValue="50000"/>
+    <springProperty name="timeFormat" scope="context" source="logging.aliYunLog.timeFormat"
+                    defaultValue="yyyy-MM-dd HH:mm:ss.SSS"/>
+    <springProperty name="timeZone" scope="context" source="logging.aliYunLog.timeZone"
+                    defaultValue="Asia/Shanghai"/>
+
     <!-- 控制台 日志格式化 -->
     <property name="CONSOLE_LOG_PATTERN"
             value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %blue(tenantId:%X{tenantId:-N/A}) %boldMagenta(traceId:%X{traceId:-N/A}) %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} [%X{tid}] %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{15}){boldCyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
@@ -133,6 +164,68 @@
         </encoder>
     </appender>
 
+    <if condition='property("enableAliYunLog").contains("true")'>
+        <then>
+            <appender name="aliyun-sls-log" class="com.aliyun.openservices.log.logback.LoghubAppender">
+                <!--必选项-->
+                <!-- 账号及网络配置 -->
+                <endpoint>${endpoint}</endpoint>
+                <accessKeyId>${accessKeyId}</accessKeyId>
+                <accessKeySecret>${accessKeySecret}</accessKeySecret>
+
+                <!-- sls 项目配置 -->
+                <project>${project}</project>
+                <logStore>${logStore}</logStore>
+                <!--必选项 (end)-->
+
+                <!-- 可选项 -->
+                <!--<topic>lws-log</topic>-->
+
+                <!-- 可选项 详见 '参数说明'-->
+                <!--单个 producer 实例能缓存的日志大小上限，默认为 100MB。-->
+                <totalSizeInBytes>${totalSizeInBytes}</totalSizeInBytes>
+                <!--如果 producer 可用空间不足，调用者在 send 方法上的最大阻塞时间，默认为 60 秒。为了不阻塞打印日志的线程
+                ，强烈建议将该值设置成 0。-->
+                <maxBlockMs>${maxBlockMs}</maxBlockMs>
+                <!--执行日志发送任务的线程池大小，默认为可用处理器个数。-->
+                <ioThreadCount>${ioThreadCount}</ioThreadCount>
+                <!--当一个 ProducerBatch 中缓存的日志大小大于等于 batchSizeThresholdInBytes 时，
+                该 batch 将被发送，默认为 512 KB，最大可设置成 5MB。-->
+                <batchSizeThresholdInBytes>${batchSizeThresholdInBytes}</batchSizeThresholdInBytes>
+                <!--当一个 ProducerBatch 中缓存的日志条数大于等于 batchCountThreshold 时，
+                该 batch 将被发送，默认为 4096，最大可设置成 40960。-->
+                <batchCountThreshold>${batchCountThreshold}</batchCountThreshold>
+                <!-- 一个 ProducerBatch 从创建到可发送的逗留时间，默认为 2 秒，最小可设置成 100 毫秒。-->
+                <lingerMs>${lingerMs}</lingerMs>
+                <!--  如果某个 ProducerBatch 首次发送失败，能够对其重试的次数，默认为 10 次。
+                #如果 retries 小于等于 0，该 ProducerBatch 首次发送失败后将直接进入失败队列。-->
+                <retries>${retries}</retries>
+                <!-- 首次重试的退避时间，默认为 100 毫秒。-->
+                <baseRetryBackoffMs>${baseRetryBackoffMs}</baseRetryBackoffMs>
+                <!--重试的最大退避时间，默认为 50 秒。-->
+                <maxRetryBackoffMs>${maxRetryBackoffMs}</maxRetryBackoffMs>
+
+
+                <!-- 可选项 通过配置 encoder 的 pattern 自定义 log 的格式 -->
+                <encoder>
+                    <pattern>%d %-5level [%thread] %logger{0}: %msg</pattern>
+                </encoder>
+
+                <!-- 可选项 设置 time 字段呈现的格式 -->
+                <timeFormat>${timeFormat}</timeFormat>
+                <!-- 可选项 设置 time 字段呈现的时区 -->
+                <timeZone>${timeZone}</timeZone>
+                <mdcFields>THREAD_ID,MDC_KEY</mdcFields>
+            </appender>
+            <appender name="AsyncAaLiYunLog" class="ch.qos.logback.classic.AsyncAppender">
+                <discardingThreshold>0</discardingThreshold>
+                <queueSize>100</queueSize>
+                <neverBlock>true</neverBlock>
+                <appender-ref ref="aliyun-sls-log"/>
+            </appender>
+        </then>
+    </if>
+
     <!-- 异步控制台打印 -->
     <appender name="AsyncConsole" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
@@ -187,6 +280,11 @@
         <if condition='property("enableAlarm").contains("true")'>
             <then>
                 <appender-ref ref="AlarmLog"/>
+            </then>
+        </if>
+        <if condition='property("enableAliYunLog").contains("true")'>
+            <then>
+                <appender-ref ref="AsyncAaLiYunLog"/>
             </then>
         </if>
     </root>
