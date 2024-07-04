@@ -11,18 +11,23 @@ import com.github.sparkzxl.log.entity.OptLogRecordDetail;
 import com.github.sparkzxl.log.event.OptLogEvent;
 import com.github.sparkzxl.log.handler.IOptLogVariablesHandler;
 import com.github.sparkzxl.log.store.OperatorService;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.context.expression.MethodBasedEvaluationContext;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+
+import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * description: 用户操作行为aop处理器
@@ -31,6 +36,10 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  * @since 2022-05-27 14:21:13
  */
 public class OptLogRecordInterceptor implements MethodInterceptor {
+
+    private static final ParameterNameDiscoverer NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
+
+    private static final ExpressionParser PARSER = new SpelExpressionParser();
 
     private final OperatorService operatorService;
 
@@ -61,7 +70,7 @@ public class OptLogRecordInterceptor implements MethodInterceptor {
         }
         OptLogRecordDetail optLogRecordDetail = new OptLogRecordDetail()
                 .setIp(NetworkUtil.getIpAddress(httpServletRequest))
-                .setRequestUrl(httpServletRequest.getRequestURL().toString())
+                .setRequestUrl(httpServletRequest.getRequestURI())
                 .setBizNo(bizNo)
                 .setCategory(annotation.category())
                 .setUserId(userId)
@@ -69,9 +78,10 @@ public class OptLogRecordInterceptor implements MethodInterceptor {
                 .setTenantId(RequestLocalContextHolder.getTenantId());
         if (StringUtils.isNotBlank(annotation.template())) {
             Map<String, Object> alarmParamMap = getVariablesHandler(annotation.variablesBeanName()).getVariables(method, args, annotation);
-            ExpressionParser parser = new SpelExpressionParser();
             TemplateParserContext parserContext = new TemplateParserContext();
-            String message = parser.parseExpression(annotation.template(), parserContext).getValue(alarmParamMap, String.class);
+            EvaluationContext context = new MethodBasedEvaluationContext(alarmParamMap, method, args,
+                    NAME_DISCOVERER);
+            String message = PARSER.parseExpression(annotation.template(), parserContext).getValue(context, String.class);
             optLogRecordDetail.setDetail(message);
         }
         SpringContextUtils.publishEvent(new OptLogEvent(optLogRecordDetail));

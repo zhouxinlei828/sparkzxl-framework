@@ -7,30 +7,21 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
+import com.github.sparkzxl.core.util.AopUtil;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.log.annotation.HttpRequestLog;
 import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
 import com.github.sparkzxl.log.utils.LogUtils;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.DefaultParameterNameDiscoverer;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -45,10 +36,6 @@ public class HttpRequestLogAspect {
 
     public static final int MAX_LENGTH = 65535;
     private static final ThreadLocal<RequestInfoLog> THREAD_LOCAL = new ThreadLocal<>();
-    /**
-     * 用于获取方法参数定义名字.
-     */
-    private final DefaultParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
     @Pointcut("@within(com.github.sparkzxl.log.annotation.HttpRequestLog)|| @annotation(com.github.sparkzxl.log.annotation.HttpRequestLog)")
     public void pointCut() {
@@ -152,45 +139,12 @@ public class HttpRequestLogAspect {
                 .setStartTime(LocalDateTime.now())
                 .setTenantId(RequestLocalContextHolder.getTenantId());
         if (httpRequestLog.request()) {
-            String requestParameterJson = getRequestParameterJson(joinPoint.getSignature(), joinPoint.getArgs(), httpRequestLog.excludeClass());
-            requestInfoLog.setRequestParams(requestParameterJson);
-        }
-        return requestInfoLog;
-    }
-
-    public String getRequestParameterJson(Signature signature, Object[] args, Class<?>[] excludeClass) {
-        MethodSignature methodSignature = (MethodSignature) signature;
-        Method method = methodSignature.getMethod();
-        String[] paramNames = parameterNameDiscoverer.getParameterNames(method);
-        Map<String, Object> parameterMap = Maps.newHashMap();
-        if (args != null && paramNames != null) {
-            for (int i = 0; i < args.length; i++) {
-                Object value = args[i];
-                if (ObjectUtils.isEmpty(value)) {
-                    parameterMap.put(paramNames[i], value);
-                    continue;
-                }
-                if (value instanceof MultipartFile) {
-                    MultipartFile file = (MultipartFile) value;
-                    //获取文件名
-                    value = file.getOriginalFilename();
-                }
-                if (value instanceof ServletRequest
-                        || value instanceof ServletResponse) {
-                    continue;
-                }
-                List<Class<?>> classList = Arrays.asList(excludeClass);
-                if (CollectionUtils.isNotEmpty(classList)) {
-                    Object finalValue = value;
-                    boolean anyMatch = classList.stream().anyMatch(x -> x.getName().equals(finalValue.getClass().getName()));
-                    if (anyMatch) {
-                        continue;
-                    }
-                }
-                parameterMap.put(paramNames[i], value);
+            Map<String, Object> parameterMap = AopUtil.getParameterMap(joinPoint, joinPoint.getArgs(), httpRequestLog.excludeClass());
+            if (MapUtils.isNotEmpty(parameterMap)) {
+                requestInfoLog.setRequestParams(JsonUtils.getJson().toJson(parameterMap));
             }
         }
-        return JsonUtils.getJson().toJson(parameterMap);
+        return requestInfoLog;
     }
 
     public void remove() {

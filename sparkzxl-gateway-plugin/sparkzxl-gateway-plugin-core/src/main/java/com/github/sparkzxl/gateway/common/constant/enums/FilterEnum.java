@@ -1,8 +1,10 @@
 package com.github.sparkzxl.gateway.common.constant.enums;
 
-import static org.springframework.cloud.gateway.filter.NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER;
+import lombok.Getter;
 
 import java.util.Arrays;
+
+import static org.springframework.cloud.gateway.filter.NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER;
 
 /**
  * description: FilterEnum
@@ -10,6 +12,7 @@ import java.util.Arrays;
  * @author zhouxinlei
  * @since 2022-01-07 12:47:53
  */
+@Getter
 public enum FilterEnum {
 
     /**
@@ -26,6 +29,11 @@ public enum FilterEnum {
      * Jwt Filter enum.
      */
     JWT(Integer.MIN_VALUE + 20, "jwt"),
+
+    /**
+     * 外部认证.
+     */
+    FORWARD_AUTH(Integer.MIN_VALUE + 21, "forwardAuth"),
 
     /**
      * Param transform plugin enum.
@@ -65,14 +73,9 @@ public enum FilterEnum {
 
     private final int code;
 
+
     private final String name;
 
-    /**
-     * all args constructor.
-     *
-     * @param code code
-     * @param name name
-     */
     FilterEnum(final int code, final String name) {
         this.code = code;
         this.name = name;
@@ -90,21 +93,4 @@ public enum FilterEnum {
                 .findFirst().orElse(FilterEnum.CONTEXT);
     }
 
-    /**
-     * get code.
-     *
-     * @return code code
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * get name.
-     *
-     * @return name name
-     */
-    public String getName() {
-        return name;
-    }
 }

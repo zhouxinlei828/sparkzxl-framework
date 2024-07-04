@@ -3,7 +3,7 @@ package com.github.sparkzxl.alarm.handler;
 import cn.hutool.core.map.MapUtil;
 import com.github.sparkzxl.alarm.annotation.Alarm;
 import com.github.sparkzxl.alarm.annotation.AlarmParam;
-import com.github.sparkzxl.alarm.entity.ExpressionTemplate;
+import com.github.sparkzxl.core.entity.ExpressionTemplate;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.util.AopUtil;
 import com.google.common.collect.Maps;
@@ -31,7 +31,7 @@ public class DefaultAlarmVariablesHandler implements IAlarmVariablesHandler {
     public Map<String, Object> getVariables(MethodInvocation invocation, Alarm alarm) {
         Map<String, Object> attributeMapping = Maps.newHashMap();
         attributeMapping.put("title", alarm.name());
-        Map<String, Object> alarmParamMap = AopUtil.generateMap(invocation, AlarmParam.class, "value");
+        Map<String, Object> alarmParamMap = AopUtil.getParameterAnnotationMap(invocation, AlarmParam.class, "value");
         if (MapUtil.isNotEmpty(alarmParamMap)) {
             attributeMapping.putAll(alarmParamMap);
         }

@@ -1,4 +1,4 @@
-package com.github.sparkzxl.alarm.entity;
+package com.github.sparkzxl.core.entity;
 
 import java.io.Serializable;
 import lombok.Data;
