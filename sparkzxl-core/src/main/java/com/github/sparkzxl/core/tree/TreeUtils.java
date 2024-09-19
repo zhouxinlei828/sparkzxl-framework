@@ -1,11 +1,10 @@
 package com.github.sparkzxl.core.tree;
 
-import com.github.sparkzxl.core.util.CopyUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.util.CollectionUtils;
+import java.util.Map;
 
 /**
  * description：list列表转换成tree列表
@@ -21,36 +20,31 @@ public class TreeUtils {
      * @return List<E>
      */
     public static <E extends TreeNode<E, ? extends Serializable>> List<E> buildTree(List<E> treeList) {
-        if (CollectionUtils.isEmpty(treeList)) {
+        if (treeList == null || treeList.isEmpty()) {
             return treeList;
         }
         //记录自己是自己的父节点的id集合
-        List<Serializable> selfIdEqSelfParent = new ArrayList<>();
-        List<E> nodeList = CopyUtils.deepCopy(treeList);
-        // 为每一个节点找到子节点集合
-        for (E parent : nodeList) {
-            Serializable id = parent.getId();
-            for (E children : nodeList) {
-                if (parent != children) {
-                    //parent != children 这个来判断自己的孩子不允许是自己，因为有时候，根节点的parent会被设置成为自己
-                    if (id.equals(children.getParentId())) {
-                        parent.initChildren();
-                        parent.getChildren().add(children);
-                    }
-                } else if (id.equals(parent.getParentId())) {
-                    selfIdEqSelfParent.add(id);
-                }
-            }
+        // 使用HashMap来存储节点的ID与节点实例的映射
+        Map<Serializable, E> nodeMap = new HashMap<>();
+        for (E node : treeList) {
+            nodeMap.put(node.getId(), node);
         }
-        // 找出根节点集合
-        List<E> trees = new ArrayList<>();
+        // 初始化根节点列表
+        List<E> roots = new ArrayList<>();
 
-        List<? extends Serializable> allIds = nodeList.stream().map(node -> node.getId()).collect(Collectors.toList());
-        for (E baseNode : nodeList) {
-            if (!allIds.contains(baseNode.getParentId()) || selfIdEqSelfParent.contains(baseNode.getParentId())) {
-                trees.add(baseNode);
+        // 遍历节点列表，构建树结构
+        for (E node : treeList) {
+            Serializable parentId = node.getParentId();
+            // 如果父节点ID不存在于map中，或者节点是自己的父节点，则认为它是根节点
+            if (parentId == null || !nodeMap.containsKey(parentId) || parentId.equals(node.getId())) {
+                roots.add(node);
+            } else {
+                // 获取父节点实例，并将当前节点添加到其子节点列表中
+                E parent = nodeMap.get(parentId);
+                parent.initChildren();
+                parent.getChildren().add(node);
             }
         }
-        return trees;
+        return roots;
     }
 }
