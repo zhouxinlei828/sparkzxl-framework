@@ -240,13 +240,13 @@ public class DefaultExceptionHandler implements Ordered {
     @ExceptionHandler(UserNotFoundException.class)
     public R<?> handleUserNotFoundException(UserNotFoundException e) {
         log.error("UserNotFoundException 异常:{}", e.getMessage());
-        return R.fail(HttpCode.UNAUTHORIZED, e.getErrorCode(), e.getErrorMsg());
+        return R.failDetail(e.getErrorCode(), e.getErrorMsg());
     }
 
     @ExceptionHandler(UserPasswordErrorException.class)
     public R<?> handleUserPasswordErrorException(UserPasswordErrorException e) {
         log.error("UserPasswordErrorException 异常:{}", e.getMessage());
-        return R.fail(HttpCode.UNAUTHORIZED, e.getErrorCode(), e.getErrorMsg());
+        return R.failDetail(e.getErrorCode(), e.getErrorMsg());
     }
 
     @ExceptionHandler(UnknownHostException.class)
