@@ -107,7 +107,7 @@ public class HttpRequestLogAspect {
      * @return true 表示不需要记录日志
      */
     private boolean check(JoinPoint joinPoint, HttpRequestLog httpRequestLog) {
-        if (httpRequestLog == null || httpRequestLog.enabled()) {
+        if (httpRequestLog == null || !httpRequestLog.enabled()) {
             return true;
         }
         // 读取目标类上的注解
