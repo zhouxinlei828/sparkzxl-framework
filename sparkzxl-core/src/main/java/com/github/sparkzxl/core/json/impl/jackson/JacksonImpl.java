@@ -64,7 +64,7 @@ public class JacksonImpl extends AbstractJSONImpl {
     public boolean isSupport() {
         try {
             Class<?> aClass = Class.forName("com.fasterxml.jackson.databind.json.JsonMapper");
-            return aClass != null;
+            return ObjectUtils.isNotEmpty(aClass);
         } catch (Throwable t) {
             return false;
         }

@@ -2,6 +2,7 @@ package com.github.sparkzxl.log.aspect;
 
 import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
@@ -15,7 +16,6 @@ import com.github.sparkzxl.log.entity.RequestInfoLog;
 import com.github.sparkzxl.log.event.HttpRequestLogEvent;
 import com.github.sparkzxl.log.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -140,7 +140,7 @@ public class HttpRequestLogAspect {
                 .setTenantId(RequestLocalContextHolder.getTenantId());
         if (httpRequestLog.request()) {
             Map<String, Object> parameterMap = AopUtil.getParameterMap(joinPoint, joinPoint.getArgs(), httpRequestLog.excludeClass());
-            if (MapUtils.isNotEmpty(parameterMap)) {
+            if (MapUtil.isNotEmpty(parameterMap)) {
                 requestInfoLog.setRequestParams(JsonUtils.getJson().toJson(parameterMap));
             }
         }
