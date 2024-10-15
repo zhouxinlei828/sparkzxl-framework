@@ -41,7 +41,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * description: 字典数据回显工具类 1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来 2. 依次查询待回显的数据 3. 将查询出来结果回显到obj的 @Echo注解的字段中
+ * description: 字典数据回显工具类 1. 通过反射将obj的字段上标记了@EchoField注解的字段解析出来 2. 依次查询待回显的数据 3. 将查询出来结果回显到obj的 @EchoField注解的字段中
  *
  * @author zhouxinlei
  * @since 2022-10-14 16:27:00
@@ -91,7 +91,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
     /**
      * 回显数据的3个步骤：（出现回显失败时，认真debug该方法）
      * <p>
-     * 1. parse: 通过反射将obj的字段上标记了 @Echo 注解的字段解析出来, 封装到typeMap中 2. load: 依次查询待回显的数据 3. write: 将查询出来的结果 反射或put 到obj的 字段或echoMap 中
+     * 1. parse: 通过反射将obj的字段上标记了 @EchoField 注解的字段解析出来, 封装到typeMap中 2. load: 依次查询待回显的数据 3. write: 将查询出来的结果 反射或put 到obj的 字段或echoMap 中
      * <p>
      * 注意：若对象中需要回显的字段之间出现循环引用，很可能发生异常，所以请保证不要出现循环引用！！！
      *
@@ -112,7 +112,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
             long parseStart = System.currentTimeMillis();
 
-            //1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来
+            //1. 通过反射将obj的字段上标记了@EchoField注解的字段解析出来
             this.parse(obj, typeMap, 1, ignoreFields);
 
             long parseEnd = System.currentTimeMillis();
@@ -140,7 +140,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
     }
 
     /**
-     * 1，遍历字段，解析出那些字段上标记了@Echo注解
+     * 1，遍历字段，解析出那些字段上标记了@EchoField注解
      *
      * @param obj          对象
      * @param typeMap      数据
@@ -152,7 +152,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             return;
         }
         if (depth > echoProperties.getMaxDepth()) {
-            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", echoProperties.getMaxDepth(), depth);
+            log.info("递归回显层级过深 或 出现循环递归，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", echoProperties.getMaxDepth(), depth);
             return;
         }
 
@@ -221,15 +221,15 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
             LoadService loadService = strategyMap.get(type.getApi());
             if (loadService == null) {
-                log.warn("处理字段的回显数据时，没有找到 @EchoField 中的api：[{}]实例。" +
-                        "请确保你自定义的接口实现了 LoadService 中的 findByIds 方法。" +
-                        "若api指定的是ServiceImpl，请确保在同一个服务内。", type.getApi());
+                log.warn("处理字段的数据回显时，没有找到 @EchoField注解中api属性的实例：[{}]。" +
+                        "请确保[{}]实现了 LoadService，并注册到Spring容器中。\n\t" +
+                        "1. 若api指定的是ServiceImpl，请确保在同一个服务内。\n\t" +
+                        "2. 若api指定的是FeignClient，请确保被回显的服务能正常调用该Feign接口。", type.getApi(), type.getApi());
                 continue;
             }
 
             CacheLoadKeys lk = new CacheLoadKeys(type, loadService, keys);
             Map<Serializable, Object> value = echoProperties.getGuavaCache().getEnabled() && isUseCache ? caches.get(lk) : lk.loadMap();
-
             typeMap.put(type, value);
         }
     }
@@ -248,7 +248,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             return;
         }
         if (depth > echoProperties.getMaxDepth()) {
-            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", echoProperties.getMaxDepth(), depth);
+            log.info("递归回显层级过深 或 出现循环递归，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", echoProperties.getMaxDepth(), depth);
             return;
         }
 

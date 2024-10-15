@@ -5,11 +5,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 /**
  * 在某个对象的字段上标记该注解，该字段的值将被主动注入
  * <p>
- * 如： \@Echo(api = "dictionaryServiceImpl") private String nation; \@Echo(api = "dictionaryApi") private String  nation; \@Echo(api =
- * "xxx.xxx.xxx.UserApi", b private Long userId;
+ * 如： \@Echo(api = "dictionaryServiceImpl")
+ *      private String nation;
+ *     \@Echo(api = "dictionaryApi")
+ *      private String  nation;
+ *     \@Echo(api = "xxx.xxx.xxx.UserApi", beanClass = User.class)
+ *      private Long userId;
  * <p>
  * 强烈建议：不要对象之间互相依赖 如： User 想要注入 File， File也想注入User
  *
@@ -45,7 +51,7 @@ public @interface EchoField {
     /**
      * 提供自动注入值的 查询类
      * <p/>
-     * 注意： 用 @Echo(api = "xxxServiceImpl")时，要保证当前服务有 xxxServiceImpl 类. 没这个类就要用 xxxApi  (FeignClient)
+     * 注意： 用 @EchoField(api = "xxxServiceImpl")时，要保证当前服务有 xxxServiceImpl 类. 没这个类就要用 xxxApi  (FeignClient)
      *
      * @return 查询类的Spring Name
      */
@@ -66,7 +72,7 @@ public @interface EchoField {
      *
      * @return 字典类型
      */
-    String dictType() default "";
+    String dictType() default EMPTY;
 
 
 }
