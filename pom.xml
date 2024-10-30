@@ -171,6 +171,7 @@
                             <nonFilteredFileExtension>db</nonFilteredFileExtension>
                             <nonFilteredFileExtension>xdb</nonFilteredFileExtension>
                             <nonFilteredFileExtension>txt</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>jar</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
