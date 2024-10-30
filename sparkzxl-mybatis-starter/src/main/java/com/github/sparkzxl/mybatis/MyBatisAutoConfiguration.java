@@ -9,6 +9,8 @@ import com.baidu.fsg.uid.impl.CachedUidGenerator;
 import com.baidu.fsg.uid.impl.DefaultUidGenerator;
 import com.baidu.fsg.uid.impl.HuToolUidGenerator;
 import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
@@ -20,6 +22,7 @@ import com.github.sparkzxl.core.constant.enums.MultiTenantType;
 import com.github.sparkzxl.mybatis.annotation.DataScope;
 import com.github.sparkzxl.mybatis.aop.DataScopeAnnotationAdvisor;
 import com.github.sparkzxl.mybatis.aop.DataScopeInterceptor;
+import com.github.sparkzxl.mybatis.handler.KingbaseLocalDateTimeTypeHandler;
 import com.github.sparkzxl.mybatis.mybatis.hander.MetaDataHandler;
 import com.github.sparkzxl.mybatis.mybatis.injector.BaseSqlInjector;
 import com.github.sparkzxl.mybatis.plugins.DataScopeInnerInterceptor;
@@ -40,6 +43,7 @@ import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.ibatis.type.LocalDateTimeTypeHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -62,6 +66,15 @@ public class MyBatisAutoConfiguration {
 
     public static final String DATABASE_PREFIX = "default";
     private final DataProperties dataProperties;
+
+    @Bean
+    public ConfigurationCustomizer configurationCustomizer() {
+        return configuration -> {
+            if (DbType.KINGBASE_ES.equals(dataProperties.getDbType())) {
+                configuration.getTypeHandlerRegistry().register(new KingbaseLocalDateTimeTypeHandler());
+            }
+        };
+    }
 
     /**
      * 多租户插件配置,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存万一出现问题
@@ -93,7 +106,7 @@ public class MyBatisAutoConfiguration {
             interceptor.addInnerInterceptor(dynamicSchemaInterceptor);
         }
         // 分页插件
-        PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
+        PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor(dataProperties.getDbType());
         // 单页分页条数限制
         paginationInterceptor.setMaxLimit(dataProperties.getMaxLimit());
         // 数据库类型
