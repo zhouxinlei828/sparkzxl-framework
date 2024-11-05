@@ -30,11 +30,14 @@ import com.alibaba.druid.sql.ast.statement.SQLUnionQuery;
 import com.alibaba.druid.sql.ast.statement.SQLUnionQueryTableSource;
 import com.alibaba.druid.sql.ast.statement.SQLUpdateStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
+import com.alibaba.druid.sql.dialect.oracle.parser.OracleStatementParser;
+import com.alibaba.druid.sql.dialect.postgresql.parser.PGSQLStatementParser;
 import com.alibaba.druid.sql.dialect.sqlserver.parser.SQLServerStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.baomidou.mybatisplus.annotation.DbType;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.incrementer.PostgreSQLSequenceMaxValueIncrementer;
 
 /**
  * description: 替换SQL
@@ -55,6 +58,14 @@ public class ReplaceSql {
             case SQL_SERVER2005:
                 parser = new SQLServerStatementParser(sql);
                 break;
+            case ORACLE:
+                parser = new OracleStatementParser(sql);
+                break;
+            case POSTGRE_SQL:
+            case KINGBASE_ES:
+                parser = new PGSQLStatementParser(sql);
+                break;
+            case MYSQL:
             default:
                 parser = new MySqlStatementParser(sql);
                 break;
