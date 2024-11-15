@@ -97,7 +97,7 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
         OSSClient ossClient = obtainClient();
         String objectUrl;
         try {
-            DateTime expireDateTime = DateUtils.offsetDay(new Date(), expire);
+            DateTime expireDateTime = DateUtils.offsetSecond(new Date(), expire);
             GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, objectName, HttpMethod.GET);
             req.setExpiration(expireDateTime);
             URL signedUrl = ossClient.generatePresignedUrl(req);
