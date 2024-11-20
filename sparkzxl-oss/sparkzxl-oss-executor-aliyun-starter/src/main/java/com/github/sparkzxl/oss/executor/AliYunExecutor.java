@@ -10,33 +10,27 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.internal.Mimetypes;
 import com.aliyun.oss.model.*;
-import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.DateUtils;
 import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.oss.client.OssClient;
+import com.github.sparkzxl.oss.entity.OssObject;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.support.OssErrorCode;
 import com.github.sparkzxl.oss.support.OssException;
 import com.github.sparkzxl.oss.utils.OssUtils;
 import com.google.common.base.Stopwatch;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -115,15 +109,15 @@ public class AliYunExecutor extends AbstractOssExecutor<OSSClient> {
     }
 
     @Override
-    public S3Object getObjectInfo(String bucketName, String objectName) {
+    public OssObject getObjectInfo(String bucketName, String objectName) {
         OSSClient ossClient = obtainClient();
         try {
             OSSObject object = ossClient.getObject(bucketName, objectName);
-            S3Object s3Object = new S3Object();
-            s3Object.setObjectContent(object.getObjectContent());
-            s3Object.setBucketName(object.getBucketName());
-            s3Object.setKey(object.getKey());
-            return s3Object;
+            OssObject ossObject = new OssObject();
+            ossObject.setObjectContent(object.getObjectContent());
+            ossObject.setBucketName(object.getBucketName());
+            ossObject.setKey(object.getKey());
+            return ossObject;
         } catch (OSSException e) {
             log.error("Caught an OSSException, which means your request made it to OSS, "
                             + "but was rejected with an error response for some reason.\n"

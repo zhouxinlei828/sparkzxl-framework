@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oss;
 
-import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.oss.context.OssClientContextHolder;
+import com.github.sparkzxl.oss.entity.OssObject;
 import com.github.sparkzxl.oss.executor.OssExecutor;
 import com.github.sparkzxl.oss.executor.OssExecutorFactoryContext;
 import com.github.sparkzxl.oss.properties.OssProperties;
@@ -84,7 +84,7 @@ public class OssTemplate implements InitializingBean {
      * @return 二进制流
      * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/GetObject">API Documentation</a>
      */
-    public S3Object getObjectInfo(String bucketName, String objectName) {
+    public OssObject getObjectInfo(String bucketName, String objectName) {
         OssExecutor ossExecutor = obtainExecutor();
         return ossExecutor.getObjectInfo(bucketName, objectName);
     }

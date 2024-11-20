@@ -3,6 +3,7 @@ package com.github.sparkzxl.oss.client;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.spi.Join;
 import io.minio.MinioClient;
+import lombok.Setter;
 
 /**
  * description: MinioOssClient
@@ -10,6 +11,7 @@ import io.minio.MinioClient;
  * @author zhouxinlei
  * @since 2022-10-12 09:14:42
  */
+@Setter
 @Join
 public class MinioOssClient implements OssClient<MinioClient> {
 
@@ -38,15 +40,8 @@ public class MinioOssClient implements OssClient<MinioClient> {
         return configuration;
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
     public MinioClient getClient() {
         return client;
     }
 
-    public void setClient(MinioClient client) {
-        this.client = client;
-    }
 }

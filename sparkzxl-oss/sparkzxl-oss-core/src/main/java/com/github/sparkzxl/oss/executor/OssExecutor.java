@@ -1,7 +1,7 @@
 package com.github.sparkzxl.oss.executor;
 
 import cn.hutool.core.net.url.UrlBuilder;
-import com.amazonaws.services.s3.model.S3Object;
+import com.github.sparkzxl.oss.entity.OssObject;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.Configuration;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,10 +65,9 @@ public interface OssExecutor {
      *
      * @param bucketName bucket名称
      * @param objectName 文件名称
-     * @return 二进制流
-     * @see <a href="http://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/GetObject">API Documentation</a>
+     * @return OssObject 二进制流
      */
-    S3Object getObjectInfo(String bucketName, String objectName);
+    OssObject getObjectInfo(String bucketName, String objectName);
 
     /**
      * 判断文件是否存在

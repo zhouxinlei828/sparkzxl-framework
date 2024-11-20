@@ -4,9 +4,9 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.URLUtil;
-import com.amazonaws.services.s3.model.S3Object;
 import com.github.sparkzxl.core.util.TimeUtil;
 import com.github.sparkzxl.oss.client.OssClient;
+import com.github.sparkzxl.oss.entity.OssObject;
 import com.github.sparkzxl.oss.enums.BucketPolicyEnum;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.oss.support.OssErrorCode;
@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -105,15 +104,15 @@ public class MinioExecutor extends AbstractOssExecutor<MinioClient> {
     }
 
     @Override
-    public S3Object getObjectInfo(String bucketName, String objectName) {
+    public OssObject getObjectInfo(String bucketName, String objectName) {
         MinioClient minioClient = obtainClient();
         try {
             GetObjectResponse minioClientObject = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
-            S3Object s3Object = new S3Object();
-            s3Object.setObjectContent(minioClientObject);
-            s3Object.setBucketName(minioClientObject.bucket());
-            s3Object.setKey(minioClientObject.object());
-            return s3Object;
+            OssObject ossObject = new OssObject();
+            ossObject.setBucketName(minioClientObject.bucket());
+            ossObject.setKey(minioClientObject.object());
+            ossObject.setObjectContent(minioClientObject);
+            return ossObject;
         } catch (Exception e) {
             throw new OssException(OssErrorCode.GET_OBJECT_INFO_ERROR.getErrorCode(), e.getMessage());
         }

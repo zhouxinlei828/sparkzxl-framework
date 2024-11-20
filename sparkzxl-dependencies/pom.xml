@@ -48,7 +48,6 @@
         <!-- jwt组件-->
         <jwt.version>9.12.1</jwt.version>
 
-        <aws.version>1.12.2</aws.version>
         <!-- google-->
         <guava.version>33.0.0-jre</guava.version>
         <hutool.version>5.8.32</hutool.version>
@@ -290,12 +289,6 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${mybatis.version}</version>
-            </dependency>
-            <!-- 兼容 S3 协议 SDK-->
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk-s3</artifactId>
-                <version>${aws.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.logstash.logback</groupId>
