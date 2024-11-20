@@ -15,7 +15,6 @@ import lombok.Getter;
 @Join
 public class AliyunOssClient implements OssClient<OSSClient> {
 
-    @Getter
     private OSSClient client;
     private Configuration configuration;
 
@@ -33,15 +32,13 @@ public class AliyunOssClient implements OssClient<OSSClient> {
     }
 
     @Override
+    public OSSClient getClient() {
+        return this.client;
+    }
+
+    @Override
     public Configuration getConfiguration() {
         return configuration;
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
-    public void setClient(OSSClient client) {
-        this.client = client;
-    }
 }

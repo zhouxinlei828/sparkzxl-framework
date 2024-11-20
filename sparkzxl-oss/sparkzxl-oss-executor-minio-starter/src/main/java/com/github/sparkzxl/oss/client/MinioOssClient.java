@@ -16,7 +16,6 @@ import lombok.Setter;
 @Join
 public class MinioOssClient implements OssClient<MinioClient> {
 
-    @Getter
     private MinioClient client;
     private Configuration configuration;
 
@@ -33,8 +32,12 @@ public class MinioOssClient implements OssClient<MinioClient> {
     }
 
     @Override
+    public MinioClient getClient() {
+        return this.client;
+    }
+
+    @Override
     public Configuration getConfiguration() {
         return configuration;
     }
-
 }
