@@ -25,7 +25,7 @@ public interface OssClient<T> {
      *
      * @return T
      */
-    T get();
+    T getClient();
 
     /**
      * 获取配置

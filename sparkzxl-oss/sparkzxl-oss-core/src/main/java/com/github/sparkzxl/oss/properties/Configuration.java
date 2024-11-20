@@ -12,9 +12,7 @@ import java.io.Serializable;
 @Data
 public class Configuration implements Serializable {
 
-
-    private static final long serialVersionUID = -6310199657139774329L;
-
+    private static final long serialVersionUID = 3576218154929292921L;
     /**
      * Client Id
      */
@@ -34,11 +32,6 @@ public class Configuration implements Serializable {
      * 自定义域名
      */
     private String domain;
-
-    /**
-     * true path-style nginx 反向代理和S3默认支持 pathStyle false supports virtual-hosted-style 阿里云等需要配置为 virtual-hosted-style模式
-     */
-    private Boolean pathStyleAccess = true;
 
     /**
      * Access key就像用户ID，可以唯一标识你的账户

@@ -4,6 +4,7 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.spi.Join;
+import lombok.Getter;
 
 /**
  * description: MinioOssClient
@@ -14,6 +15,7 @@ import com.github.sparkzxl.spi.Join;
 @Join
 public class AliyunOssClient implements OssClient<OSSClient> {
 
+    @Getter
     private OSSClient client;
     private Configuration configuration;
 
@@ -31,21 +33,12 @@ public class AliyunOssClient implements OssClient<OSSClient> {
     }
 
     @Override
-    public OSSClient get() {
-        return client;
-    }
-
-    @Override
     public Configuration getConfiguration() {
         return configuration;
     }
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
-    }
-
-    public OSSClient getClient() {
-        return client;
     }
 
     public void setClient(OSSClient client) {

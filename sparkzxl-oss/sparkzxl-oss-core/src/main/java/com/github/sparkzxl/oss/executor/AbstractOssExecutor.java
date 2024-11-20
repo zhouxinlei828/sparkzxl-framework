@@ -40,7 +40,7 @@ public abstract class AbstractOssExecutor<T> implements OssExecutor {
      * @return T
      */
     protected T obtainClient() {
-        return client.get();
+        return client.getClient();
     }
 
     /**

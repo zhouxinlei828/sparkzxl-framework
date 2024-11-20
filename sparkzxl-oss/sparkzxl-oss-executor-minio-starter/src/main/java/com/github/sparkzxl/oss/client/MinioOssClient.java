@@ -3,6 +3,7 @@ package com.github.sparkzxl.oss.client;
 import com.github.sparkzxl.oss.properties.Configuration;
 import com.github.sparkzxl.spi.Join;
 import io.minio.MinioClient;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -15,6 +16,7 @@ import lombok.Setter;
 @Join
 public class MinioOssClient implements OssClient<MinioClient> {
 
+    @Getter
     private MinioClient client;
     private Configuration configuration;
 
@@ -31,17 +33,8 @@ public class MinioOssClient implements OssClient<MinioClient> {
     }
 
     @Override
-    public MinioClient get() {
-        return client;
-    }
-
-    @Override
     public Configuration getConfiguration() {
         return configuration;
-    }
-
-    public MinioClient getClient() {
-        return client;
     }
 
 }
