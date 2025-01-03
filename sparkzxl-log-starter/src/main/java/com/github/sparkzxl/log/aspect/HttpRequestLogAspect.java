@@ -5,6 +5,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
@@ -35,7 +36,7 @@ import java.util.function.Consumer;
 public class HttpRequestLogAspect {
 
     public static final int MAX_LENGTH = 65535;
-    private static final ThreadLocal<RequestInfoLog> THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<RequestInfoLog> THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     @Pointcut("@within(com.github.sparkzxl.log.annotation.HttpRequestLog)|| @annotation(com.github.sparkzxl.log.annotation.HttpRequestLog)")
     public void pointCut() {
