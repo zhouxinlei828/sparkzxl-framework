@@ -3,6 +3,7 @@ package com.github.sparkzxl.mybatis.base.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ReflectUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -19,6 +20,7 @@ import com.github.sparkzxl.mybatis.base.service.SuperCacheService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +155,39 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
+    public boolean deletePhysicalById(Serializable id) {
+        boolean deleted = super.deletePhysicalById(id);
+        delCache(id);
+        return deleted;
+    }
+
+    @Override
+    public boolean update(Wrapper<T> updateWrapper) {
+        List<T> list = list(updateWrapper);
+        boolean updated = super.update(updateWrapper);
+        for (T t : list) {
+            delCache(t);
+        }
+        return updated;
+    }
+
+    @Override
+    public boolean update(T entity, Wrapper<T> updateWrapper) {
+        Object id = getId(entity);
+        List<T> list = list(updateWrapper);
+        boolean updated = super.update(entity, updateWrapper);
+        if (ObjectUtils.isNotEmpty(id)) {
+            delCache(cacheKeyBuilder().key(id));
+        }
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T t : list) {
+                delCache(t);
+            }
+        }
+        return updated;
+    }
+
+    @Override
     public boolean updateAllById(T model) {
         boolean updateBool = super.updateAllById(model);
         delCache(model);
@@ -164,6 +199,16 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         boolean updateBool = super.updateById(model);
         delCache(model);
         return updateBool;
+    }
+
+    @Override
+    public boolean remove(Wrapper<T> queryWrapper) {
+        List<T> list = list(queryWrapper);
+        boolean removed = super.remove(queryWrapper);
+        for (T t : list) {
+            delCache(t);
+        }
+        return removed;
     }
 
     @Override
@@ -257,6 +302,9 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
      * @return Object
      */
     protected Object getId(T model) {
+        if (model == null) {
+            return null;
+        }
         // 实体没有继承 Entity 和 SuperEntity
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
         if (tableInfo == null) {
