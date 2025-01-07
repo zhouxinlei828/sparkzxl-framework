@@ -5,6 +5,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.github.sparkzxl.core.entity.cache.CacheExpireKey;
 import com.github.sparkzxl.core.entity.cache.CacheHashKey;
 import com.github.sparkzxl.core.entity.cache.CacheKey;
 import com.github.sparkzxl.core.util.ArgumentAssert;
@@ -299,6 +300,37 @@ public class RedisOps {
      */
     public Set<String> keys(@NonNull String pattern) {
         return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 查找所有符合给定模式 pattern 的 key 以及过期时间。
+     * <p>
+     * 例子：
+     * KEYS * 匹配数据库中所有 key 。
+     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
+     * KEYS h*llo 匹配 hllo 和 heeeeello 等。
+     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * <p>
+     * 特殊符号用 \ 隔开
+     *
+     * @param pattern 表达式
+     * @return 符合给定模式的 key 列表
+     * @see <a href="https://redis.io/commands/keys">Redis Documentation: KEYS</a>
+     */
+    public List<CacheExpireKey> keyExpires(@NonNull String pattern) {
+        List<CacheExpireKey> keyList = Lists.newArrayList();
+        Set<String> keys = redisTemplate.keys(pattern);
+        if (keys != null) {
+            for (String key : keys) {
+                Long expire = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+                DataType type = redisTemplate.type(key);
+                if (type == null) {
+                    type = DataType.NONE;
+                }
+                keyList.add(new CacheExpireKey(key, type.code(), expire));
+            }
+        }
+        return keyList;
     }
 
 
@@ -2438,6 +2470,13 @@ public class RedisOps {
      */
     public Long zRemRangeByScore(@NonNull String key, double min, double max) {
         return zSetOps.removeRangeByScore(key, min, max);
+    }
+
+    public boolean flushDb() {
+        return Boolean.TRUE.equals(redisTemplate.execute((RedisCallback<Boolean>) (connection) -> {
+            connection.flushDb();
+            return Boolean.TRUE;
+        }));
     }
 
 }
