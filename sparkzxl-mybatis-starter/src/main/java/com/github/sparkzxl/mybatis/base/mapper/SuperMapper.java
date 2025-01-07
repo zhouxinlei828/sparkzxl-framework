@@ -1,9 +1,12 @@
 package com.github.sparkzxl.mybatis.base.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * description: 公共mapper
@@ -29,4 +32,20 @@ public interface SuperMapper<T> extends BaseMapper<T> {
      * @return 插入数量
      */
     int insertBatchSomeColumn(List<T> entityList);
+
+    /**
+     * 物理删除
+     *
+     * @param queryWrapper 实体对象封装操作类（可以为 null,里面的 entity 用于生成 where 语句）
+     * @return int
+     */
+    int deletePhysical(@Param(Constants.WRAPPER) Wrapper<T> queryWrapper);
+
+    /**
+     * 根据ID物理删除
+     *
+     * @param id 主键ID
+     * @return int
+     */
+    int deletePhysicalById(Serializable id);
 }

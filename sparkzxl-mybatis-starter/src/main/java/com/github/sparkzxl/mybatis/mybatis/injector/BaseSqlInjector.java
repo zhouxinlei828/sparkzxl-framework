@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.injector.methods.AlwaysUpdateSomeColumnById;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
 import com.github.sparkzxl.mybatis.constant.EntityConstant;
+import com.github.sparkzxl.mybatis.mybatis.method.DeletePhysical;
+import com.github.sparkzxl.mybatis.mybatis.method.DeletePhysicalById;
 import com.github.sparkzxl.mybatis.mybatis.method.UpdateAllById;
 
 import java.util.List;
@@ -31,6 +33,9 @@ public class BaseSqlInjector extends DefaultSqlInjector {
         methodList.add(new AlwaysUpdateSomeColumnById());
         methodList.add(new UpdateAllById(field -> !ArrayUtil.containsAny(new String[]{
                 EntityConstant.CREATED_AT_FIELD, EntityConstant.CREATED_BY_FIELD}, field.getColumn())));
+
+        methodList.add(new DeletePhysical());
+        methodList.add(new DeletePhysicalById());
         return methodList;
     }
 }
