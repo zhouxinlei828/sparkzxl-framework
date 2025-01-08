@@ -1,14 +1,10 @@
 package com.github.sparkzxl.mybatis.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.sparkzxl.core.support.BizException;
 import com.github.sparkzxl.mybatis.base.mapper.SuperMapper;
 import com.github.sparkzxl.mybatis.base.service.SuperService;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
 import static com.github.sparkzxl.core.support.code.ExceptionErrorCode.SERVICE_MAPPER_ERROR;
@@ -40,30 +36,4 @@ public class SuperServiceImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M
         return this.entityClass;
     }
 
-
-    @Override
-    public boolean save(T model) {
-        return super.save(model);
-    }
-
-    @Override
-    public boolean updateById(T model) {
-        return super.updateById(model);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateAllById(T model) {
-        return SqlHelper.retBool(getSuperMapper().updateAllById(model));
-    }
-
-    @Override
-    public boolean deletePhysical(Wrapper<T> queryWrapper) {
-        return SqlHelper.retBool(getSuperMapper().deletePhysical(queryWrapper));
-    }
-
-    @Override
-    public boolean deletePhysicalById(Serializable id) {
-        return SqlHelper.retBool(getSuperMapper().deletePhysicalById(id));
-    }
 }

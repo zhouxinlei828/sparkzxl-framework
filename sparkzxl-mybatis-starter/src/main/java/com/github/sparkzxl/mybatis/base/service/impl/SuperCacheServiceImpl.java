@@ -162,11 +162,25 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
+    public boolean deletePhysical(Wrapper<T> queryWrapper) {
+        List<T> list = list(queryWrapper);
+        boolean deleted = super.deletePhysical(queryWrapper);
+        if (CollectionUtils.isNotEmpty(list)){
+            for (T t : list) {
+                delCache(t);
+            }
+        }
+        return deleted;
+    }
+
+    @Override
     public boolean update(Wrapper<T> updateWrapper) {
         List<T> list = list(updateWrapper);
         boolean updated = super.update(updateWrapper);
-        for (T t : list) {
-            delCache(t);
+        if (CollectionUtils.isNotEmpty(list)){
+            for (T t : list) {
+                delCache(t);
+            }
         }
         return updated;
     }
@@ -205,8 +219,10 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     public boolean remove(Wrapper<T> queryWrapper) {
         List<T> list = list(queryWrapper);
         boolean removed = super.remove(queryWrapper);
-        for (T t : list) {
-            delCache(t);
+        if (CollectionUtils.isNotEmpty(list)){
+            for (T t : list) {
+                delCache(t);
+            }
         }
         return removed;
     }

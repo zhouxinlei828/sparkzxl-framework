@@ -13,7 +13,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * description:
+ * description: 基于MP的 IService 新增了4个方法： saveBatchSomeColumn、updateAllById、deletePhysical、deletePhysicalById
+ * 1，saveBatchSomeColumn 批量插入
+ * 2，updateAllById 执行后，会清除缓存
+ * 2，deletePhysical 执行后，会物理删除
+ * 2，deletePhysicalById 执行后，会物理删除
  *
  * @author zhouxinlei
  */
@@ -43,15 +47,19 @@ public interface SuperService<T> extends IService<T> {
      * @param entity 实体对象
      * @return boolean
      */
-    boolean updateAllById(T entity);
+    default boolean updateAllById(T entity) {
+        return SqlHelper.retBool(((SuperMapper<T>) this.getBaseMapper()).updateAllById(entity));
+    }
 
     /**
      * 物理删除
      *
      * @param queryWrapper 实体对象封装操作类（可以为 null,里面的 entity 用于生成 where 语句）
-     * @return int
+     * @return boolean
      */
-    boolean deletePhysical(@Param(Constants.WRAPPER) Wrapper<T> queryWrapper);
+    default boolean deletePhysical(@Param(Constants.WRAPPER) Wrapper<T> queryWrapper) {
+        return SqlHelper.retBool(((SuperMapper<T>) this.getBaseMapper()).deletePhysical(queryWrapper));
+    }
 
     /**
      * 根据ID物理删除
@@ -59,6 +67,8 @@ public interface SuperService<T> extends IService<T> {
      * @param id 主键ID
      * @return int
      */
-    boolean deletePhysicalById(Serializable id);
+    default boolean deletePhysicalById(Serializable id) {
+        return SqlHelper.retBool(((SuperMapper<T>) this.getBaseMapper()).deletePhysicalById(id));
+    }
 
 }
