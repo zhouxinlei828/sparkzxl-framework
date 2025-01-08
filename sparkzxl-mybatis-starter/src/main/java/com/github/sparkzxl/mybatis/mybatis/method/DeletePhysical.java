@@ -15,7 +15,7 @@ import org.apache.ibatis.mapping.SqlSource;
 public class DeletePhysical extends AbstractMethod {
 
     public DeletePhysical() {
-        super(SqlMethod.DELETE.getMethod());
+        super("deletePhysical");
     }
 
     @Override

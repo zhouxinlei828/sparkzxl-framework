@@ -15,7 +15,7 @@ import org.apache.ibatis.mapping.SqlSource;
 public class DeletePhysicalById extends AbstractMethod {
 
     public DeletePhysicalById() {
-        super(SqlMethod.DELETE_BY_ID.getMethod());
+        super("deletePhysicalById");
     }
 
     @Override
