@@ -1,5 +1,6 @@
 package com.github.sparkzxl.security.filter;
 
+import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.ExceptionAssert;
 import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
@@ -42,7 +43,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        String accessToken = HttpRequestUtils.getAuthHeader(request);
+        String header = HttpRequestUtils.getHeader(request, BaseContextConstants.JWT_TOKEN_HEADER);
+        String accessToken = StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
         if (StringUtils.isNotEmpty(accessToken)) {
             JwtUserInfo jwtUserInfo = null;
             try {

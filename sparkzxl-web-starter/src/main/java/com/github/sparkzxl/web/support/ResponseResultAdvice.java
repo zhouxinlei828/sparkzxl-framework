@@ -5,13 +5,8 @@ import com.github.sparkzxl.core.base.HttpCode;
 import com.github.sparkzxl.core.base.result.R;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
-import com.github.sparkzxl.core.util.RequestContextUtils;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.web.annotation.IgnoreResponseWrap;
-import java.nio.charset.StandardCharsets;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.github.sparkzxl.web.annotation.ResponseResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -22,6 +17,10 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 
 /**
  * description: 判断是否需要返回值包装，如果需要就直接包装
@@ -36,10 +35,9 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         final IgnoreResponseWrap[] declaredAnnotationsByType = returnType.getExecutable()
                 .getDeclaredAnnotationsByType(IgnoreResponseWrap.class);
-        HttpServletRequest servletRequest = RequestContextUtils.getRequest();
-        ResponseResult responseResult =
-                (ResponseResult) servletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
-        Boolean supported = ObjectUtils.isNotEmpty(responseResult) && declaredAnnotationsByType.length == 0;
+        HttpServletRequest httpServletRequest = HttpRequestUtils.currentHttpServletRequest();
+        Object responseResult = httpServletRequest.getAttribute(BaseContextConstants.RESPONSE_RESULT_ANN);
+        boolean supported = ObjectUtils.isNotEmpty(responseResult) && declaredAnnotationsByType.length == 0;
         if (log.isDebugEnabled()) {
             log.debug("判断是否需要全局统一API响应：{}", supported ? "是" : "否");
         }
@@ -50,22 +48,22 @@ public class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<?
             extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        HttpServletResponse servletResponse = RequestContextUtils.getResponse();
+        HttpServletResponse servletResponse = HttpRequestUtils.currentHttpServletResponse();
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         if (body instanceof R) {
             return body;
         }
-        Boolean fallback = Convert.toBool(RequestContextUtils.getAttribute(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
+        HttpServletRequest httpServletRequest = HttpRequestUtils.currentHttpServletRequest();
+        Boolean fallback = Convert.toBool(HttpRequestUtils.getAttribute(httpServletRequest, BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         int status = servletResponse.getStatus();
         R<?> result;
         if (fallback) {
             result = R.failDetail(ExceptionErrorCode.FALLBACK_EXCEPTION.getErrorCode(), ExceptionErrorCode.FALLBACK_EXCEPTION.getErrorMsg());
         } else if (body instanceof Boolean && !(Boolean) body) {
-            result = R.fail(HttpCode.FAILURE,false);
+            result = R.fail(HttpCode.FAILURE, false);
         } else if (status == HttpCode.FAILURE.getCode()) {
-            result = R.failDetail(
-                    ExceptionErrorCode.INTERNAL_SERVER_ERROR.getErrorCode(), ExceptionErrorCode.INTERNAL_SERVER_ERROR.getErrorMsg());
+            result = R.fail(ExceptionErrorCode.INTERNAL_SERVER_ERROR);
             servletResponse.setStatus(HttpCode.SUCCESS.getCode());
         } else {
             result = R.success(body);

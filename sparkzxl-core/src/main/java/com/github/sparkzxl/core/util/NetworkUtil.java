@@ -1,6 +1,7 @@
 package com.github.sparkzxl.core.util;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * description：Network工具类
@@ -16,35 +17,62 @@ public class NetworkUtil {
      * @return String
      */
     public static String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
-            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
+        String ip = getHeaderOrNull(request, "X-Forwarded-For");
+        ip = validateAndGetIp(ip, request);
+        return ip;
+    }
+
+    /**
+     * 获取header参数
+     *
+     * @param request    请求
+     * @param headerName 请求header参数
+     * @return String
+     */
+    private static String getHeaderOrNull(HttpServletRequest request, String headerName) {
+        if (Objects.isNull(request)) {
+            return null;
+        }
+        return request.getHeader(headerName);
+    }
+
+    private static String validateAndGetIp(String ip, HttpServletRequest request) {
+        if (isInvalidIp(ip)) {
+            ip = getHeaderOrNull(request, "Proxy-Client-IP");
+            if (isInvalidIp(ip)) {
+                ip = getHeaderOrNull(request, "WL-Proxy-Client-IP");
             }
-            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
+            if (isInvalidIp(ip)) {
+                ip = getHeaderOrNull(request, "HTTP_CLIENT_IP");
             }
-            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_CLIENT_IP");
+            if (isInvalidIp(ip)) {
+                ip = getHeaderOrNull(request, "HTTP_X_FORWARDED_FOR");
             }
-            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            if (isInvalidIp(ip)) {
+                ip = getHeaderOrNull(request, "X-Real-IP");
             }
-            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
-                ip = request.getHeader("X-Real-IP");
-            }
-            if (ip == null || ip.length() == 0 || StrPool.UNKNOWN.equalsIgnoreCase(ip)) {
+            if (isInvalidIp(ip)) {
                 ip = request.getRemoteAddr();
             }
-        } else if (ip.length() > 15) {
-            String[] ips = ip.split(",");
-            for (String s : ips) {
-                if (!(StrPool.UNKNOWN.equalsIgnoreCase(s))) {
-                    ip = s;
-                    break;
-                }
-            }
+        }
+        if (ip != null && ip.length() > 15) {
+            // 使用 Stream API 筛选出第一个非 UNKNOWN 的 IP
+            ip = java.util.Arrays.stream(ip.split(","))
+                    .filter(s -> !StrPool.UNKNOWN.equalsIgnoreCase(s.trim()))
+                    .findFirst()
+                    .orElse(ip);
         }
         return ip;
     }
+
+    /**
+     * 校验是否有效ip地址
+     *
+     * @param ip ip地址
+     * @return boolean
+     */
+    private static boolean isInvalidIp(String ip) {
+        return Objects.isNull(ip) || ip.isEmpty() || StrPool.UNKNOWN.equalsIgnoreCase(ip);
+    }
+
 }

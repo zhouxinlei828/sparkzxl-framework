@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * 异常类
  *
- * @author Jaemon
+ * @author zhouxinlei
  * @since 1.0
  */
 @Setter

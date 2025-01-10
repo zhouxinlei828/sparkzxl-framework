@@ -1,7 +1,7 @@
 package com.github.sparkzxl.datasource.interceptor;
 
 import com.github.sparkzxl.core.constant.BaseContextConstants;
-import com.github.sparkzxl.core.util.RequestContextUtils;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.datasource.dynamic.DynamicDataSourceContextHolder;
 import com.github.sparkzxl.datasource.dynamic.DynamicRoutingDataSource;
 import com.github.sparkzxl.datasource.provider.DataSourceProvider;
@@ -39,7 +39,7 @@ public class DynamicDataSourceInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String ds = RequestContextUtils.getHeader(request, BaseContextConstants.TENANT_ID);
+        String ds = HttpRequestUtils.getHeader(request, BaseContextConstants.TENANT_ID);
         DynamicDataSourceContextHolder.poll();
         log.info("当前数据源code:{}", ds);
         if (StringUtils.isNotBlank(ds) && !dynamicRoutingDataSource.getDataSources().containsKey(ds)) {

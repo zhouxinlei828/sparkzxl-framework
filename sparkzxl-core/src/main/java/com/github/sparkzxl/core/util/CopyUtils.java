@@ -1,8 +1,8 @@
 package com.github.sparkzxl.core.util;
 
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.TypeReference;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -14,25 +14,24 @@ import java.util.List;
  *
  * @author zhouxinlei
  */
+@Slf4j
 public class CopyUtils {
 
-    public static <T> List<T> deepCopy(List<T> srcList) {
+    public static <T extends Object> List<T> deepCopy(List<T> dataList) {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out;
         try {
             out = new ObjectOutputStream(byteOut);
-            out.writeObject(srcList);
+            out.writeObject(dataList);
             ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
             ObjectInputStream inStream = new ObjectInputStream(byteIn);
-            return Convert.convert(new TypeReference<List<T>>() {
-            }, inStream.readObject());
+            return (List<T>) inStream.readObject();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("deep copy data list exception message:{}", e.getMessage());
             return Lists.newArrayList();
         }
     }
 
-    @SuppressWarnings(value = "unchecked")
     public static <T> T deepCopy(T data) {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out;
@@ -43,7 +42,7 @@ public class CopyUtils {
             ObjectInputStream inStream = new ObjectInputStream(byteIn);
             return (T) inStream.readObject();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("deep copy data exception message:{}", e.getMessage());
             return null;
         }
     }

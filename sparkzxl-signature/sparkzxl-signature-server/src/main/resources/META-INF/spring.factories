@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.github.sparkzxl.signature.config.SignatureAutoConfig, \
+    com.github.sparkzxl.signature.server.config.SignatureServerConfig, \
+    com.github.sparkzxl.signature.server.config.WebfluxConfig, \
+    com.github.sparkzxl.signature.server.config.WebMvcConfig

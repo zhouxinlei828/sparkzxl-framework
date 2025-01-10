@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * description: 操作日志注解
+ * 示例：@OptLogRecord(category = "查询流程目标BPMN任务顺序流列表", template = "查询流程#{[processDefinitionKey]}，任务#{[startTaskDefinitionKey]}跳转规则")
  *
  * @author zhouxinlei
  */

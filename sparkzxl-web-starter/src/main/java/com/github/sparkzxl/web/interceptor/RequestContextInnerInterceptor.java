@@ -3,15 +3,16 @@ package com.github.sparkzxl.web.interceptor;
 import cn.hutool.core.convert.Convert;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.util.RequestContextUtils;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.spi.Join;
 import com.github.sparkzxl.web.annotation.ResponseResult;
-import java.lang.reflect.Method;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 /**
  * description: 请求上下文拦截器
@@ -34,10 +35,10 @@ public class RequestContextInnerInterceptor extends AbstractInnerInterceptor {
         RequestLocalContextHolder.setAccount(request.getHeader(BaseContextConstants.JWT_KEY_ACCOUNT));
         RequestLocalContextHolder.setName(request.getHeader(BaseContextConstants.JWT_KEY_NAME));
         RequestLocalContextHolder.setVersion(request.getHeader(BaseContextConstants.VERSION));
-        String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
+        String traceId = HttpRequestUtils.getHeader(request, BaseContextConstants.TRACE_ID_HEADER);
         MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
-        MDC.put(BaseContextConstants.TENANT_ID, RequestContextUtils.getHeader(request, BaseContextConstants.TENANT_ID));
-        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, RequestContextUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        MDC.put(BaseContextConstants.TENANT_ID, HttpRequestUtils.getHeader(request, BaseContextConstants.TENANT_ID));
+        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, HttpRequestUtils.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
         Boolean feign = Convert.toBool(request.getHeader(BaseContextConstants.REMOTE_CALL), Boolean.FALSE);
         if (feign) {
             return;

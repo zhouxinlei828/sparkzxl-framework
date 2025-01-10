@@ -5,7 +5,7 @@ import com.github.sparkzxl.alarm.exception.AlarmException;
 /**
  * 异常回调信息实体
  *
- * @author Jaemon
+ * @author zhouxinlei
  * @since 1.0
  */
 public class AlarmCallback<T> {

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * description: 文件摘要处理工具类
@@ -16,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
  * @author zhouxinlei
  */
 public class FileDigestUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileDigestUtil.class);
 
     public static String extractChecksum(String filePath, DigestAlgorithm algorithm) {
         // 根据算法名称初始化摘要算法
@@ -25,7 +29,7 @@ public class FileDigestUtil {
             try (InputStream inputStream = url.openStream()) {
                 return digester.digestHex(inputStream);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
                 return null;
             }
         } else {
@@ -51,7 +55,7 @@ public class FileDigestUtil {
         try (InputStream inputStream = url.openStream()) {
             return digester.digestHex(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return null;
         }
     }

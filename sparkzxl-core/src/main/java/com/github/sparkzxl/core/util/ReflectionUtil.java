@@ -2,6 +2,9 @@ package com.github.sparkzxl.core.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -15,6 +18,8 @@ import java.util.Map;
  * @author zhouxinlei
  */
 public class ReflectionUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtil.class);
 
     /**
      * 单个对象的所有键值
@@ -37,7 +42,7 @@ public class ReflectionUtil {
                 val = field.get(obj);
                 map.putIfAbsent(field.getName(), val);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
     }
@@ -58,7 +63,7 @@ public class ReflectionUtil {
                     return field.get(obj);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
         return "";
@@ -99,7 +104,7 @@ public class ReflectionUtil {
                         list.add(field.get(obj));
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error(e.getMessage());
                 }
             }
         }
@@ -116,7 +121,7 @@ public class ReflectionUtil {
                     return field.getGenericType();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
         return null;
@@ -131,7 +136,7 @@ public class ReflectionUtil {
                     return true;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
         return false;

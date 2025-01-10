@@ -1,7 +1,7 @@
 package com.github.sparkzxl.core.util;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.sparkzxl.core.base.result.R;
-import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.json.JsonUtils;
 import com.github.sparkzxl.core.support.code.IErrorCode;
 import lombok.AccessLevel;
@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpRequestUtils {
 
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 
@@ -79,7 +81,10 @@ public class HttpRequestUtils {
     }
 
     public static String readFromRequestWrapper(ContentCachingRequestWrapper requestWrapper) {
-        String charEncoding = requestWrapper.getCharacterEncoding();
+        if (requestWrapper == null) {
+            return StringUtils.EMPTY;
+        }
+        String charEncoding = requestWrapper.getCharacterEncoding() != null ? requestWrapper.getCharacterEncoding() : StrPool.UTF8;
         try {
             return new String(requestWrapper.getContentAsByteArray(), charEncoding);
         } catch (UnsupportedEncodingException e) {
@@ -89,11 +94,12 @@ public class HttpRequestUtils {
 
     public static String parameterMapToString(Map<String, String[]> parameterMap) {
         return parameterMap.entrySet().stream()
-                .map(e -> e.getKey() + StrPool.EQUALS +
-                        Arrays.stream(e.getValue()).collect(Collectors.joining(StrPool.COMMA, StringUtils.EMPTY, StringUtils.EMPTY)))
+                .map(e ->
+                        e.getKey() + StrPool.EQUALS +
+                                Arrays.stream(e.getValue())
+                                        .collect(Collectors.joining(StrPool.COMMA, StringUtils.EMPTY, StringUtils.EMPTY)))
                 .collect(Collectors.joining(StrPool.AMPERSAND, StringUtils.EMPTY, StringUtils.EMPTY));
     }
-
 
     public static String readFromRequest(HttpServletRequest request) {
         String str;
@@ -119,7 +125,18 @@ public class HttpRequestUtils {
     }
 
     /**
-     * 移除多余的/
+     * 路径是否匹配
+     *
+     * @param pattern pattern
+     * @param path    路径
+     * @return boolean
+     */
+    public static boolean isMatchPath(String pattern, String path) {
+        return ANT_PATH_MATCHER.match(pattern, path);
+    }
+
+    /**
+     * 移除多余的 /
      *
      * @param path 路径
      * @return String
@@ -139,7 +156,7 @@ public class HttpRequestUtils {
 
 
     /**
-     * URL解码
+     * URL 解码
      *
      * @param str 字符串
      * @return String
@@ -152,7 +169,12 @@ public class HttpRequestUtils {
         }
     }
 
-
+    /**
+     * 读取请求body并转换为json
+     *
+     * @param request 请求
+     * @return String
+     */
     public static String readRequestBodyForJson(HttpServletRequest request) {
         if (request instanceof ContentCachingRequestWrapper) {
             return readFromRequestWrapper((ContentCachingRequestWrapper) request);
@@ -161,10 +183,62 @@ public class HttpRequestUtils {
         }
     }
 
-    public static String getAuthHeader(HttpServletRequest httpRequest) {
-        String header = httpRequest.getHeader(BaseContextConstants.JWT_TOKEN_HEADER);
-        return StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
+    public static String getHeader(HttpServletRequest httpRequest, String name) {
+        String header = httpRequest.getHeader(name);
+        if (StrUtil.isEmpty(header)) {
+            return StrPool.EMPTY;
+        }
+        return urlDecode(header);
     }
+
+    public static void setAttribute(HttpServletRequest httpRequest, String name, Object val) {
+        if (httpRequest != null) {
+            httpRequest.setAttribute(name, val);
+        }
+    }
+
+    public static void removeAttribute(HttpServletRequest httpRequest, String key) {
+        if (httpRequest != null) {
+            httpRequest.removeAttribute(key);
+        }
+    }
+
+    public static String getAttributeStr(HttpServletRequest httpRequest, String key) {
+        if (httpRequest != null) {
+            return String.valueOf(httpRequest.getAttribute(key));
+        }
+        return null;
+    }
+
+    public static Object getAttribute(HttpServletRequest httpRequest, String key) {
+        if (httpRequest != null) {
+            return httpRequest.getAttribute(key);
+        }
+        return null;
+    }
+
+    public static HttpServletRequest currentHttpServletRequest() {
+        ServletRequestAttributes requestAttributes = currentServletRequestAttributes();
+        return requestAttributes.getRequest();
+    }
+
+    public static HttpServletResponse currentHttpServletResponse() {
+        ServletRequestAttributes requestAttributes = currentServletRequestAttributes();
+        return requestAttributes.getResponse();
+    }
+
+    public static ServletRequestAttributes currentServletRequestAttributes() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        RequestContextHolder.setRequestAttributes(servletRequestAttributes, true);
+        return servletRequestAttributes;
+    }
+
+    public static RequestAttributes currentRequestAttributes() {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        RequestContextHolder.setRequestAttributes(requestAttributes, true);
+        return requestAttributes;
+    }
+
 
     public static void failResponse(HttpServletResponse response, IErrorCode errorCode) {
         int status = response.getStatus();

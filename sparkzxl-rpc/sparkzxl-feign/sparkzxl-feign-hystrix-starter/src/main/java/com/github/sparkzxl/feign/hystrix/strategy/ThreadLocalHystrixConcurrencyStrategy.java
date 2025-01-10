@@ -90,7 +90,7 @@ public class ThreadLocalHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         if (wrappedCallable instanceof WrappedCallable) {
             return wrappedCallable;
         }
-        RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         return new WrappedCallable<>(callable, requestAttributes);
     }
 

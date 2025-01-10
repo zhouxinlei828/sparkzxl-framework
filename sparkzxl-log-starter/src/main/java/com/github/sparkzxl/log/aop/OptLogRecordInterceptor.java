@@ -4,8 +4,8 @@ import com.github.sparkzxl.core.context.RequestLocalContextHolder;
 import com.github.sparkzxl.core.spring.SpringContextUtils;
 import com.github.sparkzxl.core.util.AopUtil;
 import com.github.sparkzxl.core.util.ArgumentAssert;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.NetworkUtil;
-import com.github.sparkzxl.core.util.RequestContextUtils;
 import com.github.sparkzxl.log.annotation.OptLogRecord;
 import com.github.sparkzxl.log.entity.OptLogRecordDetail;
 import com.github.sparkzxl.log.event.OptLogEvent;
@@ -63,7 +63,7 @@ public class OptLogRecordInterceptor implements MethodInterceptor {
         OptLogRecord annotation = invocation.getMethod().getAnnotation(OptLogRecord.class);
         String userId = operatorService.getUserId();
         String name = operatorService.getUserName();
-        HttpServletRequest httpServletRequest = RequestContextUtils.getRequest();
+        HttpServletRequest httpServletRequest = HttpRequestUtils.currentHttpServletRequest();
         String bizNo = "";
         if (StringUtils.isNotBlank(annotation.bizNo())) {
             bizNo = AopUtil.parseExpression(invocation, annotation.bizNo());
@@ -79,8 +79,7 @@ public class OptLogRecordInterceptor implements MethodInterceptor {
         if (StringUtils.isNotBlank(annotation.template())) {
             Map<String, Object> alarmParamMap = getVariablesHandler(annotation.variablesBeanName()).getVariables(method, args, annotation);
             TemplateParserContext parserContext = new TemplateParserContext();
-            EvaluationContext context = new MethodBasedEvaluationContext(alarmParamMap, method, args,
-                    NAME_DISCOVERER);
+            EvaluationContext context = new MethodBasedEvaluationContext(alarmParamMap, method, args, NAME_DISCOVERER);
             String message = PARSER.parseExpression(annotation.template(), parserContext).getValue(context, String.class);
             optLogRecordDetail.setDetail(message);
         }

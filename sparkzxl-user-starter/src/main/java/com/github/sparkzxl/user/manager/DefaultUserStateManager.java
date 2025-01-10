@@ -3,15 +3,16 @@ package com.github.sparkzxl.user.manager;
 import com.github.sparkzxl.cache.service.CacheService;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.support.LoginExpireException;
-import com.github.sparkzxl.core.support.code.ExceptionErrorCode;
 import com.github.sparkzxl.core.util.ArgumentAssert;
 import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.KeyGeneratorUtil;
-import java.time.Duration;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 
 /**
  * description: 用户状态管理实现
@@ -51,8 +52,10 @@ public class DefaultUserStateManager implements UserStateManager {
 
     @Override
     public Object getUser(HttpServletRequest servletRequest) {
-        String token = HttpRequestUtils.getAuthHeader(servletRequest);
-        return getUser(token);
+        String header = HttpRequestUtils.getHeader(servletRequest, BaseContextConstants.JWT_TOKEN_HEADER);
+        String accessToken = StringUtils.removeStartIgnoreCase(header, BaseContextConstants.BEARER_TOKEN);
+        ArgumentAssert.notEmpty(accessToken, () -> new LoginExpireException("Token为空"));
+        return getUser(accessToken);
     }
 
     @Override

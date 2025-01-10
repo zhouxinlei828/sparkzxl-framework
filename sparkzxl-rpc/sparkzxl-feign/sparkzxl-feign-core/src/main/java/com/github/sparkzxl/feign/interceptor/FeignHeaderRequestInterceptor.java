@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
+import com.github.sparkzxl.core.util.HttpRequestUtils;
 import com.github.sparkzxl.core.util.StrPool;
 import com.github.sparkzxl.feign.properties.FeignProperties;
 import com.google.common.net.HttpHeaders;
@@ -58,26 +59,26 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
                 template.header(RootContext.KEY_XID, xid);
             }
         }
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        RequestAttributes requestAttributes = HttpRequestUtils.currentRequestAttributes();
         if (requestAttributes == null) {
             Map<String, Object> localMap = RequestLocalContextHolder.getLocalMap();
             localMap.forEach((key, value) -> template.header(key, URLUtil.encode(Convert.toStr(value))));
             return;
         }
 
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        if (request == null) {
+        HttpServletRequest httpServletRequest = HttpRequestUtils.currentHttpServletRequest();
+        if (httpServletRequest == null) {
             log.warn("path={}, 在FeignClient API接口未配置FeignConfiguration类， 故而无法在远程调用时获取请求头中的参数!", template.path());
             return;
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
-            String header = request.getHeader(headerName);
+            String header = httpServletRequest.getHeader(headerName);
             template.header(headerName, StringUtils.isEmpty(header) ? RequestLocalContextHolder.get(headerName) : header);
         });
         List<String> headerList = feignProperties.getInterceptor().getHeaderList();
         if (CollectionUtils.isNotEmpty(headerList)) {
             headerList.forEach((headerName) -> {
-                String header = request.getHeader(headerName);
+                String header = httpServletRequest.getHeader(headerName);
                 template.header(headerName,
                         StringUtils.isEmpty(header) ? URLUtil.encode(RequestLocalContextHolder.get(headerName)) : header);
             });

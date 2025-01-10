@@ -63,6 +63,7 @@
         <module>sparkzxl-trace-logger</module>
         <module>sparkzxl-oss</module>
         <module>sparkzxl-annotation</module>
+        <module>sparkzxl-signature</module>
     </modules>
 
     <licenses>

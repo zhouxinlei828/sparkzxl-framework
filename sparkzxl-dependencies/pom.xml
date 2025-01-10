@@ -717,6 +717,16 @@
             </dependency>
             <dependency>
                 <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-signature-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
+                <artifactId>sparkzxl-signature-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sparkzxl</groupId>
                 <artifactId>sparkzxl-sms-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
