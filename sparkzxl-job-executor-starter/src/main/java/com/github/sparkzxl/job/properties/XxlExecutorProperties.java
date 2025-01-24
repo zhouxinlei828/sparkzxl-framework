@@ -1,9 +1,9 @@
 package com.github.sparkzxl.job.properties;
 
-import static com.github.sparkzxl.job.properties.XxlExecutorProperties.XXL_JOB_PREFIX;
-
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import static com.github.sparkzxl.job.properties.XxlExecutorProperties.XXL_JOB_PREFIX;
 
 /**
  * description: xxl job属性配置类
@@ -32,7 +32,7 @@ public class XxlExecutorProperties {
     /**
      * 日志路径
      */
-    private String logPath;
+    private String logPath = System.getProperty("user.home") + "/logs/xxl-job";
 
     /**
      * 日志保留天数
