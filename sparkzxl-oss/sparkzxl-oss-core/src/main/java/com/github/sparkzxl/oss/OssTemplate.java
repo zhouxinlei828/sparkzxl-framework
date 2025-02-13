@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.function.Consumer;
 
 /**
@@ -123,6 +124,18 @@ public class OssTemplate implements InitializingBean {
     public void putObject(String bucketName, String objectName, String filePath) {
         OssExecutor ossExecutor = obtainExecutor();
         ossExecutor.putObject(bucketName, objectName, filePath);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param bucketName bucket名称
+     * @param objectName 文件名称
+     * @param url        文件地址
+     */
+    public void putObject(String bucketName, String objectName, URL url) {
+        OssExecutor ossExecutor = obtainExecutor();
+        ossExecutor.putObject(bucketName, objectName, url);
     }
 
     /**
