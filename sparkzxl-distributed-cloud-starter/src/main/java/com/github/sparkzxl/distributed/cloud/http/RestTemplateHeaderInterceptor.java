@@ -2,7 +2,10 @@ package com.github.sparkzxl.distributed.cloud.http;
 
 import com.github.sparkzxl.core.constant.BaseContextConstants;
 import com.github.sparkzxl.core.context.RequestLocalContextHolder;
-import com.github.sparkzxl.core.util.HttpRequestUtils;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,11 +17,6 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * description: 通过 RestTemplate 调用时，传递请求头和线程变量
@@ -42,18 +40,18 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] bytes,
-                                        ClientHttpRequestExecution execution) throws IOException {
+            ClientHttpRequestExecution execution) throws IOException {
 
         HttpHeaders httpHeaders = request.getHeaders();
 
-        RequestAttributes requestAttributes = HttpRequestUtils.currentRequestAttributes();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             HEADER_NAME_LIST.forEach((headerName) -> httpHeaders.add(headerName, RequestLocalContextHolder.get(headerName)));
             return execution.execute(request, bytes);
         }
 
-        HttpServletRequest httpServletRequest = HttpRequestUtils.currentHttpServletRequest();
-        if (httpServletRequest == null) {
+        HttpServletRequest httpServletRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
+        if (request == null) {
             log.warn("path={}, 在FeignClient API接口未配置FeignConfiguration类， 故而无法在远程调用时获取请求头中的参数!", request.getURI());
             return execution.execute(request, bytes);
         }
