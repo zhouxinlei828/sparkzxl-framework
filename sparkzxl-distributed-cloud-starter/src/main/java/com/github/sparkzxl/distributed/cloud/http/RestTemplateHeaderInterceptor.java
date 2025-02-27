@@ -51,7 +51,7 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
         }
 
         HttpServletRequest httpServletRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
-        if (request == null) {
+        if (httpServletRequest == null) {
             log.warn("path={}, 在FeignClient API接口未配置FeignConfiguration类， 故而无法在远程调用时获取请求头中的参数!", request.getURI());
             return execution.execute(request, bytes);
         }
