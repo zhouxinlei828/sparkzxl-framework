@@ -38,15 +38,22 @@ public class DefaultWebConfig implements WebMvcConfigurer {
     private WebProperties webProperties;
 
 
+    /**
+     * 交换MappingJackson2HttpMessageConverter与第一位元素
+     * 让返回值类型为String的接口能正常返回包装结果
+     *
+     * @param converters initially an empty list of converters
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // 解决 String 统一封装RestBody的问题
-        HttpMessageConverter<?> httpMessageConverter = converters.get(7);
-        if (!(httpMessageConverter instanceof MappingJackson2HttpMessageConverter)) {
-            // 确保正确，如果有改动就重新debug
-            throw new RuntimeException("MappingJackson2HttpMessageConverter is not here");
+        for (int i = 0; i < converters.size(); i++) {
+            if (converters.get(i) instanceof MappingJackson2HttpMessageConverter) {
+                // 移除当前元素并插入到最前面
+                converters.remove(i);
+                converters.add(0, converters.get(i));
+                break;
+            }
         }
-        converters.add(0, httpMessageConverter);
     }
 
     @Bean
