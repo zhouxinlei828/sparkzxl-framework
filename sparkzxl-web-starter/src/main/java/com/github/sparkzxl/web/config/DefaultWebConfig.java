@@ -48,9 +48,9 @@ public class DefaultWebConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         for (int i = 0; i < converters.size(); i++) {
             if (converters.get(i) instanceof MappingJackson2HttpMessageConverter) {
-                // 移除当前元素并插入到最前面
-                converters.remove(i);
-                converters.add(0, converters.get(i));
+                MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = (MappingJackson2HttpMessageConverter) converters.get(i);
+                converters.set(i, converters.get(0));
+                converters.set(0, mappingJackson2HttpMessageConverter);
                 break;
             }
         }
